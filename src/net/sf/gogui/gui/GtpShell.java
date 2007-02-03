@@ -599,9 +599,11 @@ public class GtpShell
         if (m_disableCompletions)
             return;
         int size = completions.size();
-        if (text.length() > 0)
-            if (size > 1 || (size == 1 && ! text.equals(completions.get(0))))
-                m_comboBox.showPopup();
+        if (text.length() > 0
+            && (size > 1 || (size == 1 && ! text.equals(completions.get(0)))))
+            m_comboBox.showPopup();
+        else
+            m_comboBox.hidePopup();
     }
 
     private void save(JFrame parent, String s, int linesTruncated)
