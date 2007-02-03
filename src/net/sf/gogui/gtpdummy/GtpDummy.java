@@ -37,7 +37,6 @@ public class GtpDummy
         if (useRandomSeed)
             m_random.setSeed(randomSeed);
         initSize(GoPoint.DEFAULT_SIZE);
-        m_thread = Thread.currentThread();
     }
 
     public void cmdBWBoard(GtpCommand cmd)
@@ -325,7 +324,6 @@ public class GtpDummy
 
     public void interruptCommand()
     {
-        m_thread.interrupt();
         super.interruptCommand();
     }
 
@@ -347,8 +345,6 @@ public class GtpDummy
     private final Random m_random;
 
     private String m_nextResponse;
-
-    private final Thread m_thread;
 
     /** Editable point list for gtpdummy-eplist command. */
     private PointList m_ePList = new PointList();
