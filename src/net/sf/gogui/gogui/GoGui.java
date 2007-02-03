@@ -749,7 +749,7 @@ public class GoGui
         }
         if (m_gtp == null || m_gtp.isProgramDead())
             return;
-        if (Interrupt.run(this, m_gtp))
+        if (m_interrupt.run(this, m_gtp))
             showStatus("Interrupting...");
     }
 
@@ -1672,6 +1672,8 @@ public class GoGui
     private GuiGtpClient m_gtp;
 
     private final Comment m_comment;
+
+    private final Interrupt m_interrupt = new Interrupt();
 
     /** File corresponding to the current game. */
     private File m_file;

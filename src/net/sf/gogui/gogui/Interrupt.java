@@ -8,6 +8,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiGtpClient;
+import net.sf.gogui.gui.OptionalMessage;
 import net.sf.gogui.gui.SimpleDialogs;
 
 /** Interrupt command. */
@@ -18,7 +19,7 @@ public final class Interrupt
         supported by the program, otherwise kill the program.
         @return true if interrupt comment line was sent.
     */
-    public static boolean run(Component parent, GuiGtpClient gtp)
+    public boolean run(Component parent, GuiGtpClient gtp)
     {
         if (! gtp.isInterruptSupported())
         {
@@ -32,7 +33,10 @@ public final class Interrupt
                 gtp.destroyGtp();
             return false;
         }
-        if (! SimpleDialogs.showQuestion(parent, "Interrupt command?"))
+        if (m_question == null)
+            m_question = new OptionalMessage(parent);
+        if (! m_question.showQuestion("Interrupt " + gtp.getProgramName()
+                                      + "?"))
             return false;
         try
         {
@@ -46,9 +50,6 @@ public final class Interrupt
         return true;
     }
 
-    /** Make constructor unavailable; class is for namespace only. */
-    private Interrupt()
-    {
-    }
+    private OptionalMessage m_question;
 }
 
