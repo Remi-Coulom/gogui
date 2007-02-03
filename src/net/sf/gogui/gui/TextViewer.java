@@ -54,14 +54,6 @@ public class TextViewer
         initialize(text, highlight, listener);
     }
 
-    public Dimension getMinimumSize()
-    {
-        if (m_minimumSize == null)
-            return super.getMinimumSize();
-        else
-            return m_minimumSize;
-    }
-
     public Dimension getPreferredSize()
     {
         if (m_preferredSize == null)
@@ -78,9 +70,6 @@ public class TextViewer
     private GuiTextPane m_textPane;
 
     private Listener m_listener;
-
-    /** setMinimumSize() not yet available in Java 1,4 */
-    private Dimension m_minimumSize;
 
     /** setPreferredSize() not yet available in Java 1,4 */
     private Dimension m_preferredSize;
@@ -201,7 +190,8 @@ public class TextViewer
             size.width = Math.min(size.width, maxWidth);
             size.height = Math.min(size.height, maxHeight);
         }
-        m_minimumSize = new Dimension(128, 96);
+        // Not available in Java 1.4
+        //setMinimumSize(new Dimension(128, 96));
         size.height = Math.max(size.height, 96);
         size.width = Math.max(size.width, 128);
         m_preferredSize = size;

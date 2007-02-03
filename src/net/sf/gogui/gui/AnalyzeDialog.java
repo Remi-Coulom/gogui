@@ -73,7 +73,8 @@ public final class AnalyzeDialog
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
         int minWidth = commandPanel.getPreferredSize().width;
-        m_minimumSize = new Dimension(minWidth, 192);
+        // not supported in Java 1.4
+        //setMinimumSize(new Dimension(minWidth, 192));
         pack();
         addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent e) {
@@ -101,14 +102,6 @@ public final class AnalyzeDialog
             clearCommand();
         saveRecent();
         super.dispose();
-    }
-
-    public Dimension getMinimumSize()
-    {
-        if (m_minimumSize == null)
-            return super.getMinimumSize();
-        else
-            return m_minimumSize;
     }
 
     public GoColor getSelectedColor()
@@ -189,8 +182,6 @@ public final class AnalyzeDialog
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private Dimension m_minimumSize;
 
     private GoColor m_selectedColor = GoColor.EMPTY;
 

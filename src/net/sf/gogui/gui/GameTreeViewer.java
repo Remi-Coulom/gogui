@@ -79,21 +79,14 @@ public class GameTreeViewer
                     m_scrollPane.requestFocusInWindow();
                 }
             });
-        m_minimumSize = new Dimension(128, 96);
+        // not supported in Java 1.4
+        // setMinimumSize(new Dimension(128, 96));
         pack();
     }
 
     public void addNewSingleChild(ConstNode node)
     {
         m_panel.addNewSingleChild(node);
-    }
-
-    public Dimension getMinimumSize()
-    {
-        if (m_minimumSize == null)
-            return super.getMinimumSize();
-        else
-            return m_minimumSize;
     }
 
     public void redrawCurrentNode()
@@ -138,8 +131,6 @@ public class GameTreeViewer
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private Dimension m_minimumSize;
 
     private final GameTreePanel m_panel;
 
