@@ -360,25 +360,16 @@ public class GtpShell
         }
         else
         {
+            if (GtpUtil.isStateChangingCommand(c))
+            {
+                showError("Cannot send board changing command from GTP shell",
+                          false);
+                return false;
+            }
             if (m_commandInProgress)
             {
                 showError("Cannot execute while computer is thinking", false);
                 return false;
-            }
-            if (GtpUtil.isStateChangingCommand(c))
-            {
-                if (m_modifyWarning == null)
-                    m_modifyWarning = new OptionalMessage(this);
-                String message = 
-                    "State changing command\n\n" +
-                    "The command \"" + command + "\" " +
-                    "modifies the board state.\n" +
-                    "This will cause the graphical board to be out "
-                    +" of sync.\n" +
-                    "You should start a new game before using " +
-                    "the graphical board again.";
-                if (! m_modifyWarning.showWarning(message))
-                    return true;
             }
             try
             {
@@ -577,8 +568,6 @@ public class GtpShell
     private final JScrollPane m_scrollPane;
 
     private final GtpShellText m_gtpShellText;
-
-    private OptionalMessage m_modifyWarning;
 
     private final StringBuffer m_commands = new StringBuffer(4096);
 
