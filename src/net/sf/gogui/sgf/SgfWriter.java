@@ -6,6 +6,7 @@ package net.sf.gogui.sgf;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Iterator;
 import net.sf.gogui.game.ConstGameInformation;
@@ -35,7 +36,17 @@ public class SgfWriter
     public SgfWriter(OutputStream out, ConstGameTree gameTree,
                      String application, String version)
     {        
-        m_out = new PrintStream(out);
+        // Should be supported by every Java implementation
+        m_encoding = "UTF-8";
+        try
+        {
+            m_out = new PrintStream(out, false, m_encoding);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            m_out = new PrintStream(out);
+            m_encoding = StringUtil.getDefaultEncoding();
+        }
         print("(");
         ConstGameInformation gameInformation =
             gameTree.getGameInformationConst();
@@ -87,7 +98,9 @@ public class SgfWriter
 
     private final int m_size;
 
-    private final PrintStream m_out;
+    private PrintStream m_out;
+
+    private String m_encoding;
 
     private String getEscaped(String text)
     {
@@ -183,8 +196,8 @@ public class SgfWriter
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        print(";FF[4]CA[" + getEscaped(StringUtil.getDefaultEncoding())
-              + "]AP[" + getEscaped(appName) + "]");
+        print(";FF[4]CA[" + getEscaped(m_encoding) + "]AP["
+              + getEscaped(appName) + "]");
         if (m_size != 19)
             print("SZ[" + m_size + "]");
     }
