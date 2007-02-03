@@ -316,15 +316,11 @@ class SgfPreview
         previewPanel.setBorder(GuiUtil.createEmptyBorder());
         previewPanel.setLayout(new BoxLayout(previewPanel, BoxLayout.Y_AXIS));
         previewPanel.add(Box.createVerticalGlue());
-        Dimension dimension = new Dimension(140, 235);
+        Dimension dimension = new Dimension(140, 140);
         previewPanel.setPreferredSize(dimension);
         add(previewPanel);
         m_imagePanel = new ImagePanel();
         previewPanel.add(m_imagePanel);
-        m_description = new JLabel(" ");
-        m_description.setAlignmentX(Component.CENTER_ALIGNMENT);
-        previewPanel.add(m_description);
-        previewPanel.add(Box.createVerticalGlue());
         JPanel buttonPanel = new JPanel();
         add(buttonPanel, BorderLayout.SOUTH);
         m_auto = new JCheckBox("Automatic preview");
@@ -363,13 +359,11 @@ class SgfPreview
                     || ! name.toLowerCase(Locale.ENGLISH).endsWith(".sgf"))
                     file = null;
             }
+            m_file = file;
             if (file != null)
-            {
-                m_file = file;
                 m_preview.setEnabled(true);
-                if (m_auto.isSelected())
-                    preview();
-            }
+            if (m_auto.isSelected())
+                preview();
         }
     }
 
@@ -412,12 +406,12 @@ class SgfPreview
 
     private File m_file;
 
+    private File m_lastFailure;
+
     private final JButton m_preview;
 
     private final JCheckBox m_auto;
 
-    private final JLabel m_description;
-    
     private Image m_image;
 
     private final ImagePanel m_imagePanel;
@@ -431,21 +425,36 @@ class SgfPreview
     public void preview()
     {
         if (m_file == null)
-            return;
-        try
         {
-            m_thumbnailCreator.create(m_file);
-            File thumbnail = m_thumbnailCreator.getLastThumbnail();
-            ImageIcon icon = new ImageIcon(thumbnail.toString());
-            m_image = icon.getImage();
-            String description = m_thumbnailCreator.getLastDescription();
-            m_description.setText(description);
-        }
-        catch (ThumbnailCreator.Error e)
-        {
-            SimpleDialogs.showError(this, "Preview generation failed:\n" +
-                                    e.getMessage(), false);
             m_image = null;
+            m_imagePanel.setToolTipText(null);
+        }
+        else if (! m_file.equals(m_lastFailure))
+        {
+            try
+            {
+                m_thumbnailCreator.create(m_file);
+                File thumbnail = m_thumbnailCreator.getLastThumbnail();
+                ImageIcon icon = new ImageIcon(thumbnail.toString());
+                m_image = icon.getImage();
+                String description = m_thumbnailCreator.getLastDescription();
+                if (description != null && ! description.trim().equals(""))
+                    m_imagePanel.setToolTipText(description);
+                else
+                    m_imagePanel.setToolTipText(null);
+            }
+            catch (ThumbnailCreator.Error e)
+            {
+                m_image =
+                    GuiUtil.getIcon("image-missing", "No preview").getImage();
+                String message = e.getMessage();
+                if (e.getMessage() != null
+                    && ! e.getMessage().trim().equals(""))
+                    m_imagePanel.setToolTipText(e.getMessage());
+                else
+                    m_imagePanel.setToolTipText(null);
+                m_lastFailure = m_file;
+            }
         }
         m_imagePanel.repaint();
         m_preview.setEnabled(false);
