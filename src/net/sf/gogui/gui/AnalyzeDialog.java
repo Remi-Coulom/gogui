@@ -391,7 +391,7 @@ public final class AnalyzeDialog
         }
         catch (Exception e)
         {            
-            SimpleDialogs.showError(this, e.getMessage());
+            showError(e.getMessage());
         }
     }
 
@@ -399,15 +399,14 @@ public final class AnalyzeDialog
     {
         if (m_gtp.isCommandInProgress())
         {
-            SimpleDialogs.showError(this, "Command in progress", false);
+            showError("Cannot execute while computer is thinking", false);
             return;
         }
         int index = getSelectedCommand();
         if (index < 0)
         {
-            SimpleDialogs.showError(this, "Command not supported by "
-                                    + m_gtp.getProgramName(),
-                                    false);
+            showError("Command not supported by " + m_gtp.getProgramName(),
+                      false);
             return;
         }
         updateRecent(index);
@@ -439,7 +438,7 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                SimpleDialogs.showError(this, e.getMessage());
+                showError(e.getMessage());
                 return;
             }
         }
@@ -457,7 +456,7 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                SimpleDialogs.showError(this, e.getMessage());
+                showError(e.getMessage());
                 return;
             }
         }
@@ -519,6 +518,16 @@ public final class AnalyzeDialog
             m_comboBoxColor.setSelectedItem("Black");
         else if (m_selectedColor == GoColor.WHITE)
             m_comboBoxColor.setSelectedItem("White");
+    }
+
+    private void showError(String message)
+    {
+        showError(message, true);
+    }
+
+    private void showError(String message, boolean isSignificant)
+    {
+        SimpleDialogs.showError(this, message, isSignificant);
     }
 
     private void updateRecent(int index)
