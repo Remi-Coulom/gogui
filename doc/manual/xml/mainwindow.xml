@@ -11,8 +11,8 @@
 Clicking on an empty field in the Go board plays a move there.
 In setup mode, score mode or after certain analyze commands,
 clicking on a field has a special meaning (see
-<xref linkend="setupmode"/>, <xref linkend="score"/>, and
-<xref linkend="analyze"/>).
+<xref linkend="setupblack"/>, <xref linkend="setupwhite"/>,
+ <xref linkend="score"/>, and <xref linkend="analyze"/>).
 </para>
 <para>
 If <guimenuitem>Show Cursor</guimenuitem> is enabled in the
@@ -420,7 +420,7 @@ Truncate all children variations of the current node.
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="setupblack">
 <term><guimenuitem>Setup Black</guimenuitem></term>
 <listitem>
 <para>
@@ -430,17 +430,18 @@ In setup mode you can place or remove stones of the current color.
 It is also possible to place stones of the other than current color
 without switching the color, by pressing a modifier key while placing a stone
 (Ctrl, Alt or Meta) or using the right mouse button.
+See also: <xref linkend="setupwhite"/>
 </para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="setupwhite">
 <term><guimenuitem>Setup White</guimenuitem></term>
 <listitem>
 <para>
 Enter setup mode and set current color to White or leave setup mode if already
 in setup mode and current color is White.
-See also: <guimenuitem>Setup Black</guimenuitem>.
+See also: <xref linkend="setupblack"/>
 </para>
 </listitem>
 </varlistentry>
