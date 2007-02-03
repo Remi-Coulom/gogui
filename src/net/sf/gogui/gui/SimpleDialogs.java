@@ -410,6 +410,8 @@ class SgfPreview
 
     private File m_lastFailure;
 
+    private String m_lastError;
+
     private final JButton m_preview;
 
     private final JCheckBox m_auto;
@@ -424,6 +426,9 @@ class SgfPreview
     private final Preferences m_prefs =
         Preferences.userNodeForPackage(getClass());        
 
+    private static final Image m_missingImage =
+        GuiUtil.getIcon("image-missing", "No preview").getImage();
+
     public void preview()
     {
         if (m_file == null)
@@ -431,7 +436,12 @@ class SgfPreview
             m_image = null;
             m_imagePanel.setToolTipText(null);
         }
-        else if (! m_file.equals(m_lastFailure))
+        else if (m_file.equals(m_lastFailure))
+        {
+            m_image = m_missingImage;
+            m_imagePanel.setToolTipText(m_lastError);
+        }
+        else
         {
             try
             {
@@ -447,14 +457,11 @@ class SgfPreview
             }
             catch (ThumbnailCreator.Error e)
             {
-                m_image =
-                    GuiUtil.getIcon("image-missing", "No preview").getImage();
-                String message = e.getMessage();
-                if (e.getMessage() != null
-                    && ! e.getMessage().trim().equals(""))
-                    m_imagePanel.setToolTipText(e.getMessage());
-                else
-                    m_imagePanel.setToolTipText(null);
+                m_image = m_missingImage;
+                m_lastError = e.getMessage();
+                if (m_lastError != null && m_lastError.trim().equals(""))
+                    m_lastError = null;
+                m_imagePanel.setToolTipText(m_lastError);
                 m_lastFailure = m_file;
             }
         }
