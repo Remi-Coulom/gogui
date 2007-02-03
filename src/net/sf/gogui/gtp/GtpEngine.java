@@ -92,10 +92,10 @@ public class GtpEngine
     /** Callback for interrupting commands.
         This callback will be invoked if the special comment line
         "# interrupt" is received. It will be invoked from a different thread.
-        The default implementation does nothing.
     */
     public void interruptCommand()
     {
+        m_interrupted = true;
     }
 
     /** Handle command.
@@ -104,6 +104,7 @@ public class GtpEngine
     */
     public void handleCommand(GtpCommand cmd) throws GtpError
     {
+        m_interrupted = false;
         String name = cmd.getCommand();
         GtpCallback callback = (GtpCallback)m_commands.get(name);
         if (callback == null)
@@ -256,6 +257,13 @@ public class GtpEngine
         if (m_commands.containsKey(command))
             m_commands.remove(command);
     }
+
+    protected boolean isInterrupted()
+    {
+        return m_interrupted;
+    }
+
+    private volatile boolean m_interrupted;
 
     private boolean m_quit;
 
