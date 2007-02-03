@@ -76,9 +76,10 @@ public class GtpShell
     {
         String command = event.getActionCommand();
         if (command.equals("comboBoxEdited"))
-            comboBoxEdited();
+        {
+        }
         else if (command.equals("run"))
-            comboBoxEdited();
+            commandEntered();
         else if (command.equals("close"))
             setVisible(false);
     }
@@ -417,35 +418,19 @@ public class GtpShell
         m_history.add(command);
     }
 
-    private void comboBoxEdited()
-    {
-        Object selectedItem = m_comboBox.getSelectedItem();
-        if (selectedItem == null)
-            return;
-        String command = selectedItem.toString();        
-        if (command.trim().equals(""))
-            return;
-        commandEntered(command);
-        appendToHistory(command);
-        m_gtpShellText.setPositionToEnd();
-        m_comboBox.hidePopup();
-        addAllCompletions(m_history);
-        m_editor.setItem(null);
-    }
-
-    private void commandEntered(String command)
+    private void commandEntered()
     {
         assert(SwingUtilities.isEventDispatchThread());
-        String c = command.trim();
-        if (c.equals(""))
+        String command = m_textField.getText().trim();
+        if (command.trim().equals(""))
             return;
-        if (c.startsWith("#"))
+        if (command.startsWith("#"))
         {
             m_gtpShellText.appendComment(command + "\n");
         }
         else
         {
-            if (GtpUtil.isStateChangingCommand(c))
+            if (GtpUtil.isStateChangingCommand(command))
             {
                 showError("Cannot send board changing command from GTP shell",
                           false);
@@ -458,6 +443,11 @@ public class GtpShell
             }
             m_listener.actionSendCommand(command, false, false);
         }
+        appendToHistory(command);
+        m_gtpShellText.setPositionToEnd();
+        m_comboBox.hidePopup();
+        addAllCompletions(m_history);
+        m_editor.setItem(null);
     }
 
     private JPanel createCommandInput()
@@ -488,6 +478,9 @@ public class GtpShell
                     else if (c == KeyEvent.VK_PAGE_DOWN
                              && mod == ActionEvent.SHIFT_MASK)
                         scrollPage(false);
+                    else if (c == KeyEvent.VK_ENTER
+                             && ! m_comboBox.isPopupVisible())
+                        commandEntered();
                     else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED)
                         popupCompletions();
                 }
