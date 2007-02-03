@@ -193,22 +193,13 @@ public class GoGui
         GuiUtil.setGoIcon(this);
         RecentFileMenu.Listener recentListener = new RecentFileMenu.Listener()
             {
-                public void fileSelected(String label, File file)
-                {
-                    if (! checkSaveGame())
-                        return;
-                    loadFile(file, -1);
-                    boardChangedBegin(false, true);
+                public void fileSelected(String label, File file) {
+                    actionOpenFile(file);
                 }
             };
-        RecentFileMenu.Listener recentGtp = new RecentFileMenu.Listener()
-            {
-                public void fileSelected(String label, File file)
-                {
-                    if (m_shell == null)
-                        return;
-                    sendGtpFile(file);
-                    m_menuBar.addRecentGtp(file);
+        RecentFileMenu.Listener recentGtp = new RecentFileMenu.Listener() {
+                public void fileSelected(String label, File file) {
+                    actionShellSendFile(file);
                 }
             };
         m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
@@ -817,7 +808,17 @@ public class GoGui
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
             return;
-        m_menuBar.addRecent(file);
+        actionOpenFile(file);
+    }
+
+    public void actionOpenFile(File file)
+    {
+        if (file == null)
+            return;
+        if (! checkStateChangePossible())
+            return;
+        if (! checkSaveGame())
+            return;
         loadFile(file, -1);
         boardChangedBegin(false, true);
     }
@@ -1035,6 +1036,17 @@ public class GoGui
             return;
         File file = SimpleDialogs.showOpen(this, "Choose GTP file");
         if (file == null)
+            return;
+        actionShellSendFile(file);
+    }
+
+    public void actionShellSendFile(File file)
+    {
+        if (file == null)
+            return;
+        if (! checkStateChangePossible())
+            return;
+        if (m_shell == null)
             return;
         sendGtpFile(file);
         m_menuBar.addRecentGtp(file);
