@@ -4,21 +4,14 @@
 
 package net.sf.gogui.gogui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.JToggleButton;
-import javax.swing.Timer;
-import net.sf.gogui.gui.GuiUtil;
 
 
 /** Tool bar for GoGui. */

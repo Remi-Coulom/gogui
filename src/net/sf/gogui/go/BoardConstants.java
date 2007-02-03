@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.util.ArrayList;
-
 /** Some values that are constant for a given board size.
     Instances of this class are immutable.
  */

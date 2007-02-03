@@ -6,7 +6,6 @@ package net.sf.gogui.sgf;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Iterator;
 import net.sf.gogui.game.ConstGameInformation;

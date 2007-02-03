@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.util.ArrayList;
-
 /** Count the final score on a Go board.
     Allows to mark stones as dead and count the territory surrounded by
     alive stones of one color.

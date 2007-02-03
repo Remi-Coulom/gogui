@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.TreeMap;
-import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;

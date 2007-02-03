@@ -5,8 +5,6 @@
 package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
@@ -34,12 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Style;
-import net.sf.gogui.game.Clock;
 import net.sf.gogui.gtp.GtpClient;
-import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;

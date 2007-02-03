@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.util.ArrayList;
-
 /** Mark points on a Go board. */
 public class Marker
 {

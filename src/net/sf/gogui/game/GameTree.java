@@ -5,7 +5,6 @@
 package net.sf.gogui.game;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
