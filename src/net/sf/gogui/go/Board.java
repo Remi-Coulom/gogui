@@ -156,7 +156,7 @@ public final class Board
             GoColor otherColor = c.otherColor();
             m_killed = new PointList();
             m_suicide = new PointList();
-            GoPoint m_oldKoPoint = board.m_koPoint;
+            m_oldKoPoint = board.m_koPoint;
             board.m_koPoint = null;
             if (p != null)
             {

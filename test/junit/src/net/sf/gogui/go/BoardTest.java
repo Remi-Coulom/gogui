@@ -161,6 +161,30 @@ public final class BoardTest
         assertEquals(hashCode, board.getPositionHashCode());
     }
 
+    /** Test Board.isKo() */
+    public void testIsKo()
+    {
+        Board board = new Board(19);
+        // 3 . . . .
+        // 2 @ O . .
+        // 1 . @ O .
+        //   A B C D
+        PointList black = new PointList();
+        PointList white = new PointList();
+        black.add(GoPoint.get(0, 1));
+        black.add(GoPoint.get(1, 0));
+        white.add(GoPoint.get(1, 1));
+        white.add(GoPoint.get(2, 0));
+        board.setup(black, white);
+        assertFalse(board.isKo(GoPoint.get(0, 0)));
+        board.play(GoPoint.get(0, 0), GoColor.WHITE);
+        assertTrue(board.isKo(GoPoint.get(1, 0)));
+        board.play(GoPoint.get(5, 5), GoColor.BLACK);
+        assertFalse(board.isKo(GoPoint.get(1, 0)));
+        board.undo();
+        assertTrue(board.isKo(GoPoint.get(1, 0)));
+    }
+
     public void testIsSuicide()
     {
         Board board = new Board(19);
