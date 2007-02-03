@@ -469,9 +469,13 @@ public final class AnalyzeDialog
         m_comboBoxHistory.removeActionListener(this);
         if (m_firstIsTemp && m_comboBoxHistory.getItemCount() > 0)
             m_comboBoxHistory.removeItemAt(0);
-        m_comboBoxHistory.insertItemAt(label, 0);
-        m_firstIsTemp = true;
-        m_comboBoxHistory.setSelectedIndex(0);
+        if (m_comboBoxHistory.getItemCount() == 0
+            || ! getComboBoxItem(0).equals(label))
+        {
+            m_comboBoxHistory.insertItemAt(label, 0);
+            m_firstIsTemp = true;
+            m_comboBoxHistory.setSelectedIndex(0);
+        }
         m_comboBoxHistory.addActionListener(this);
     }
 
