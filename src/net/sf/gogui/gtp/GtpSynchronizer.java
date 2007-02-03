@@ -76,7 +76,6 @@ public class GtpSynchronizer
             return;
         }
         m_isOutOfSync = true;
-        ArrayList toExecuteAll = computeToExecuteAll(board);
         ArrayList toExecuteMissing = new ArrayList();
         int numberUndo = computeToExecuteMissing(toExecuteMissing, board);
         if (canUndo(numberUndo))
@@ -349,7 +348,6 @@ public class GtpSynchronizer
 
     private static int getHandicap(ConstBoard board)
     {
-        int handicap = 0;
         if (board.getNumberPlacements() == 0)
             return 0;
         Board.Placement placement = board.getPlacement(0);

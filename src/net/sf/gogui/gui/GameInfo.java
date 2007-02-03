@@ -180,7 +180,6 @@ class GuiClock
     public GuiClock(GoColor color)
     {
         super(11);
-        m_color = color;
         setEditable(false);
         setFocusable(false);
         setHorizontalAlignment(SwingConstants.CENTER);
@@ -196,8 +195,6 @@ class GuiClock
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private GoColor m_color;
 }
 
 class Prisoners

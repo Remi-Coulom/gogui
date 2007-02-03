@@ -846,7 +846,6 @@ public class GoGuiActions
         boolean commentMonoFont = m_goGui.getCommentMonoFont();
         m_actionToggleCommentMonoFont.setSelected(commentMonoFont);
         m_actionToggleCompletion.setSelected(m_goGui.getCompletion());
-        boolean isAnalyzeDialogShown = m_goGui.isAnalyzeDialogShown();
         m_actionToggleShowCursor.setSelected(guiBoard.getShowCursor());
         m_actionToggleShowGrid.setSelected(guiBoard.getShowGrid());
         m_actionToggleShowInfoPanel.setSelected(m_goGui.isInfoPanelShown());

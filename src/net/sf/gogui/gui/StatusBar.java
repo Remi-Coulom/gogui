@@ -45,7 +45,6 @@ public class StatusBar
         outerPanel.add(panel, BorderLayout.CENTER);
         m_iconBox = Box.createHorizontalBox();
         panel.add(m_iconBox, BorderLayout.WEST);
-        m_showToPlay = showToPlay;
         m_toPlayLabel = new JLabel();
         m_toPlayLabel.setMaximumSize(new Dimension(Short.MAX_VALUE,
                                                    Short.MAX_VALUE));
@@ -203,8 +202,6 @@ public class StatusBar
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private boolean m_showToPlay;
 
     private static final Icon m_iconBlack =
         GuiUtil.getIcon("gogui-black-16x16", "Black");

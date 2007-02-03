@@ -34,7 +34,6 @@ public class GameTreeViewer
     {
         super(owner, "Tree");
         Container contentPane = getContentPane();
-        m_listener = listener;
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.LABEL_NUMBER,
                                     GameTreePanel.SIZE_NORMAL);
@@ -145,8 +144,6 @@ public class GameTreeViewer
     private final GameTreePanel m_panel;
 
     private final JScrollPane m_scrollPane;
-
-    private final Listener m_listener;
 }
 
 

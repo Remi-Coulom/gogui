@@ -96,7 +96,6 @@ public final class Session
         }
         if (width == -1 || height == -1)
             return;
-        Point ownerLocation = owner.getLocation();
         setSizeChecked(window, width, height);
     }
 
