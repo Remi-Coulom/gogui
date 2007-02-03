@@ -125,7 +125,7 @@ public class Comment
         if (enable)
             GuiUtil.setMonospacedFont(m_textPane.get());
         else
-            m_textPane.get().setFont(UIManager.getFont("TextArea.font"));
+            m_textPane.get().setFont(UIManager.getFont("TextPane.font"));
         m_monoFont = enable;
         m_textPane.get().repaint();
     }
