@@ -18,6 +18,8 @@ import net.sf.gogui.util.Platform;
 /** Internally uses a JTextPane or JTextArea.
     JTextArea is more lightweight and better supported in GNU Classpath 0.90,
     but does not provide support for syntax highlighting.
+    This class will probably become obsolete if GNU Classpath supports
+    JTextPane better.
 */
 public class GuiTextPane
 {
