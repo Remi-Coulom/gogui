@@ -82,6 +82,7 @@ public final class ThumbnailCreator
                     && data.m_lastModified == lastModified)
                 {
                     m_lastThumbnail = file;
+                    m_description = data.m_description; 
                     return;
                 }
             }
