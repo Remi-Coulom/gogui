@@ -12,6 +12,8 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusAdapter;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -74,10 +76,8 @@ public final class AnalyzeDialog
         int minWidth = commandPanel.getPreferredSize().width;
         m_minimumSize = new Dimension(minWidth, 192);
         pack();
-        addWindowListener(new WindowAdapter()
-            {
-                public void windowActivated(WindowEvent e)
-                {
+        addWindowListener(new WindowAdapter() {
+                public void windowActivated(WindowEvent e) {
                     m_comboBoxHistory.requestFocusInWindow();
                 }
             });
@@ -126,7 +126,7 @@ public final class AnalyzeDialog
         if (! m_recentModified)
             return;
         int start = (m_firstIsTemp ? 1 : 0);
-        int max = Math.min(m_comboBoxHistory.getItemCount(), 20);
+        int max = Math.min(getComboBoxItemCount(), 20);
         ArrayList list = new ArrayList(max);
         for (int i = start; i < max; ++i)
             list.add(getComboBoxItem(i));
@@ -154,12 +154,26 @@ public final class AnalyzeDialog
         int index = m_list.getSelectedIndex();
         if (index >= 0)
             selectCommand(index);
-        else
+    }
+
+    /** Wrapper object for JComboBox items.
+        JComboBox can have focus and keyboard navigation problems if
+        duplicate String objects are added.
+        See JDK 1.4 doc for JComboBox.addItem.
+    */
+    private static class WrapperObject
+    {
+        WrapperObject(String item)
         {
-            if (m_runButton.hasFocus())
-                m_list.requestFocusInWindow();
-            m_runButton.setEnabled(false);
+            m_item = item;
         }
+
+        public String toString()
+        {
+            return m_item;
+        }
+
+        private final String m_item;
     }
 
     private boolean m_recentModified;
@@ -219,15 +233,10 @@ public final class AnalyzeDialog
 
     private void comboBoxChanged()
     {
-        String label = (String)m_comboBoxHistory.getSelectedItem();        
-        if (! m_labels.contains(label))
-        {
-            m_list.clearSelection();
-            return;
-        }
+        String label = m_comboBoxHistory.getSelectedItem().toString();
         String selectedValue = (String)m_list.getSelectedValue();
-        if (selectedValue == null || ! selectedValue.equals(label))
-            m_list.setSelectedValue(label, false);
+        if (selectedValue != null && ! selectedValue.equals(label))
+            m_list.clearSelection();
     }
 
     private JPanel createButtons()
@@ -270,13 +279,11 @@ public final class AnalyzeDialog
         m_list = new JList();
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         m_list.setVisibleRowCount(25);
-        MouseAdapter mouseAdapter = new MouseAdapter()
-            {
-                public void mouseClicked(MouseEvent event)
-                {
-                    int modifiers = event.getModifiers();
+        m_list.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    int modifiers = e.getModifiers();
                     int mask = ActionEvent.ALT_MASK;
-                    if (event.getClickCount() == 2
+                    if (e.getClickCount() == 2
                         || ((modifiers & mask) != 0))
                     {
                         //int index =
@@ -284,8 +291,14 @@ public final class AnalyzeDialog
                         runCommand();
                     }
                 }
-            };
-        m_list.addMouseListener(mouseAdapter);
+            });
+        m_list.addFocusListener(new FocusAdapter() {
+                public void focusGained(FocusEvent e) {
+                    int index = getSelectedCommand();
+                    if (index >= 0)
+                        m_list.setSelectedIndex(index);
+                }
+            });
         m_list.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -313,8 +326,7 @@ public final class AnalyzeDialog
         optionsPanel.add(leftPanel);
         m_autoRun = new JCheckBox("Auto run");
         m_autoRun.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e)
-                {
+                public void itemStateChanged(ItemEvent e) {
                     if (! m_autoRun.isSelected())
                         m_listener.actionClearAnalyzeCommand();
                 }
@@ -336,7 +348,25 @@ public final class AnalyzeDialog
 
     private String getComboBoxItem(int i)
     {
-        return (String)m_comboBoxHistory.getItemAt(i);
+        return m_comboBoxHistory.getItemAt(i).toString();
+    }
+
+    private int getComboBoxItemCount()
+    {
+        return m_comboBoxHistory.getItemCount();
+    }
+
+    private int getSelectedCommand()
+    {
+        Object item = m_comboBoxHistory.getSelectedItem();
+        if (item == null)
+            return -1;
+        return m_labels.indexOf(item.toString());
+    }
+
+    private void insertComboBoxItem(String label, int index)
+    {
+        m_comboBoxHistory.insertItemAt(new WrapperObject(label), index);
     }
 
     private void loadRecent()
@@ -345,7 +375,7 @@ public final class AnalyzeDialog
         ArrayList list =
             PrefUtil.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
         for (int i = 0; i < list.size(); ++i)
-            m_comboBoxHistory.addItem((String)list.get(i));
+            m_comboBoxHistory.addItem(new WrapperObject((String)list.get(i)));
         m_firstIsTemp = false;
     }
 
@@ -372,9 +402,14 @@ public final class AnalyzeDialog
             SimpleDialogs.showError(this, "Command in progress", false);
             return;
         }
-        int index = m_list.getSelectedIndex();        
+        int index = getSelectedCommand();
         if (index < 0)
+        {
+            SimpleDialogs.showError(this, "Command not supported by "
+                                    + m_gtp.getProgramName(),
+                                    false);
             return;
+        }
         updateRecent(index);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
@@ -467,12 +502,11 @@ public final class AnalyzeDialog
         m_runButton.setEnabled(true);
         String label = (String)m_labels.get(index);
         m_comboBoxHistory.removeActionListener(this);
-        if (m_firstIsTemp && m_comboBoxHistory.getItemCount() > 0)
+        if (m_firstIsTemp && getComboBoxItemCount() > 0)
             m_comboBoxHistory.removeItemAt(0);
-        if (m_comboBoxHistory.getItemCount() == 0
-            || ! getComboBoxItem(0).equals(label))
+        if (getComboBoxItemCount() == 0 || ! getComboBoxItem(0).equals(label))
         {
-            m_comboBoxHistory.insertItemAt(label, 0);
+            insertComboBoxItem(label, 0);
             m_firstIsTemp = true;
             m_comboBoxHistory.setSelectedIndex(0);
         }
@@ -489,17 +523,14 @@ public final class AnalyzeDialog
 
     private void updateRecent(int index)
     {
-        m_comboBoxHistory.removeActionListener(this);
         String label = (String)m_labels.get(index);
-        if (m_comboBoxHistory.getItemCount() == 0
-            || ! getComboBoxItem(0).equals(label))
-            m_comboBoxHistory.insertItemAt(label, 0);
-        for (int i = 1; i < m_comboBoxHistory.getItemCount(); ++i)
+        if (getComboBoxItemCount() == 0 || ! getComboBoxItem(0).equals(label))
+            insertComboBoxItem(label, 0);
+        for (int i = 1; i < getComboBoxItemCount(); ++i)
             if (getComboBoxItem(i).equals(label))
                 m_comboBoxHistory.removeItemAt(i);
         m_comboBoxHistory.setSelectedIndex(0);
         m_firstIsTemp = false;        
         m_recentModified = true;
-        m_comboBoxHistory.addActionListener(this);
     }
 }
