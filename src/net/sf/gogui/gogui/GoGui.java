@@ -1468,21 +1468,14 @@ public class GoGui
         return m_setupMode;
     }
 
-    public boolean sendGtpCommand(String command, boolean sync)
-        throws GtpError
+    public boolean sendGtpCommand(String command, final boolean isSignificant,
+                                  final boolean showError)
     {
         if (! checkProgramReady())
             return false;
-        if (sync)
-        {
-            m_gtp.send(command);
-            return true;
-        }
-        Runnable callback = new Runnable()
-            {
-                public void run()
-                {
-                    sendGtpCommandContinue();
+        Runnable callback = new Runnable() {
+                public void run() {
+                    sendGtpCommandContinue(isSignificant, showError);
                 }
             };
         m_gtp.send(command, callback);
@@ -1490,9 +1483,18 @@ public class GoGui
         return true;
     }
 
-    public void sendGtpCommandContinue()
+    public boolean sendGtpCommandSync(String command) throws GtpError
     {
-        endLengthyCommand();
+        if (! checkProgramReady())
+            return false;
+        m_gtp.send(command);
+        return true;
+    }
+
+    public void sendGtpCommandContinue(boolean isSignificant,
+                                       boolean showError)
+    {
+        endLengthyCommand(isSignificant, showError);
     }
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
@@ -2396,10 +2398,16 @@ public class GoGui
 
     private boolean endLengthyCommand()
     {
-        return endLengthyCommand(true);
+        return endLengthyCommand(true, true);
     }
 
     private boolean endLengthyCommand(boolean isSignificant)
+    {
+        return endLengthyCommand(isSignificant, true);
+    }
+
+    private boolean endLengthyCommand(boolean isSignificant,
+                                      boolean showError)
     {
         m_statusBar.clearProgress();
         clearStatus();
@@ -2409,7 +2417,7 @@ public class GoGui
         if (m_gtp == null)
             return false;
         GtpError error = m_gtp.getException();
-        if (error != null)
+        if (error != null && showError)
         {
             showError(error, isSignificant);
             return false;
@@ -3109,12 +3117,22 @@ public class GoGui
                     String line = in.readLine();
                     if (line == null)
                         break;
-                    if (! m_shell.send(line, this, true))
+                    if (GtpUtil.isStateChangingCommand(line))
+                    {
+                        showError("Board changing commands not allowed");
+                        break;
+                    }
+                    if (! sendGtpCommandSync(line))
                         break;
                 }
                 catch (IOException e)
                 {
                     showError("Error reading file");
+                    break;
+                }
+                catch (GtpError e)
+                {
+                    showError(e);
                     break;
                 }
             }
