@@ -17,7 +17,7 @@ import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;
 
 /** Base class for Go programs and tools implementing GTP. */
-public abstract class GtpEngine
+public class GtpEngine
 {
     public GtpEngine(PrintStream log)
     {
@@ -93,8 +93,11 @@ public abstract class GtpEngine
     /** Callback for interrupting commands.
         This callback will be invoked if the special comment line
         "# interrupt" is received. It will be invoked from a different thread.
+        The default implementation does nothing.
     */
-    public abstract void interruptCommand();
+    public void interruptCommand()
+    {
+    }
 
     /** Handle command.
         The default implementation looks up the command within the registered
