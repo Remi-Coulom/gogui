@@ -8,6 +8,11 @@
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
+<simpara>
+The coming version 1.0 (and the bugfix branch 1.0.N with N&gt;0) is the last
+version that will be compatible with Java 1.4.
+Future versions are going to require Java 1.5.
+</simpara>
 <itemizedlist>
 <listitem>
 <simpara>
