@@ -122,28 +122,28 @@ class GameTreeNode
             int numberAddEmpty = m_node.getNumberAddEmpty();
             if (numberAddBlack > 0)
             {
-                toolTip.append("b ");
+                toolTip.append("B ");
                 toolTip.append(numberAddBlack);
             }
             if (numberAddWhite > 0)
             {
                 if (numberAddBlack > 0)
                     toolTip.append(", ");
-                toolTip.append("w ");
+                toolTip.append("W ");
                 toolTip.append(numberAddWhite);
             }
             if (numberAddEmpty > 0)
             {
                 if (numberAddBlack + numberAddWhite > 0)
                     toolTip.append(", ");
-                toolTip.append("remove ");
+                toolTip.append("E ");
                 toolTip.append(numberAddEmpty);
             }
             if (player != null)
             {
                 if (numberAddBlack + numberAddWhite + numberAddEmpty > 0)
                     toolTip.append(", ");
-                toolTip.append("player ");
+                toolTip.append("Player ");
                 toolTip.append(player == GoColor.BLACK ? 'B' : 'W');
             }
             toolTip.append(")");
