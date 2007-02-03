@@ -292,7 +292,7 @@ public class GtpDummy
         long showProgressInterval = Math.max(millis / 100, 1000);
         long steps = millis / showProgressInterval;
         long remaining = millis - steps * showProgressInterval;
-        for (long i = 0; i < steps; ++i)
+        for (long i = 0; i < steps && ! isInterrupted(); ++i)
         {
             System.err.println("gogui-gfx: PROGRESS " + (100L * i / steps));
             sleep(showProgressInterval);
@@ -326,6 +326,7 @@ public class GtpDummy
     public void interruptCommand()
     {
         m_thread.interrupt();
+        super.interruptCommand();
     }
 
     private boolean m_nextResponseFixed;
