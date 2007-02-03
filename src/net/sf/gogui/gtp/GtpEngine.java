@@ -44,8 +44,7 @@ public class GtpEngine
 
     public void cmdKnownCommand(GtpCommand cmd) throws GtpError
     {
-        cmd.checkNuArg(1);
-        String name = cmd.getCommand();
+        String name = cmd.getArg();
         cmd.setResponse(m_commands.containsKey(name) ? "true" : "false");
     }
 
