@@ -1340,6 +1340,11 @@ public class GoGui
         return (m_analyzeDialog != null);
     }
 
+    public boolean isCommandInProgress()
+    {
+        return (m_gtp != null && m_gtp.isCommandInProgress());
+    }
+
     /** Check if computer plays a color (or both). */
     public boolean isComputerColor(GoColor color)
     {
@@ -1522,6 +1527,11 @@ public class GoGui
             setBoardCursor(Cursor.HAND_CURSOR);
             showStatusSelectPointList();
         }
+    }
+
+    public boolean isInterruptSupported()
+    {
+        return (m_gtp != null && m_gtp.isInterruptSupported());
     }
 
     public boolean isModified()
@@ -1953,6 +1963,7 @@ public class GoGui
         m_progressBarTimer.restart();
         m_shell.setCommandInProgess(true);
         showStatus("Thinking...");
+        updateViews(false);
     }
 
     private void boardChangedBegin(boolean doCheckComputerMove,
@@ -2413,7 +2424,7 @@ public class GoGui
     private boolean endLengthyCommand(boolean isSignificant,
                                       boolean showError)
     {
-        m_statusBar.clearProgress();
+        m_statusBar.clearProgress();     
         clearStatus();
         if (m_shell != null)
             m_shell.setCommandInProgess(false);
@@ -2421,6 +2432,7 @@ public class GoGui
         if (m_gtp == null)
             return false;
         GtpError error = m_gtp.getException();
+        updateViews(false);
         if (error != null && showError)
         {
             showError(error, isSignificant);
@@ -2762,13 +2774,6 @@ public class GoGui
         {
             System.err.println("InvocationTargetException");
         }
-    }
-
-    private boolean isCommandInProgress()
-    {
-        if (m_gtp == null)
-            return false;
-        return m_gtp.isCommandInProgress();
     }
 
     private boolean isComputerBoth()

@@ -776,7 +776,9 @@ public class GoGuiActions
             (NodeUtil.getPreviousEarlierVariation(node) != null);
         boolean isInMain = NodeUtil.isInMainVariation(node);
         boolean treeHasVariations = game.getTree().hasVariations();
+        boolean isCommandInProgress = m_goGui.isCommandInProgress();
         boolean isProgramAttached = m_goGui.isProgramAttached();
+        boolean isInterruptSupported = m_goGui.isInterruptSupported();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
         boolean hasPattern = (m_goGui.getPattern() != null);
@@ -823,14 +825,16 @@ public class GoGuiActions
         m_actionHandicap7.setSelected(handicap == 7);
         m_actionHandicap8.setSelected(handicap == 8);
         m_actionHandicap9.setSelected(handicap == 9);
-        m_actionInterrupt.setEnabled(isProgramAttached);
+        updateActionInterrupt(isProgramAttached, isInterruptSupported,
+                              isCommandInProgress, name);
         m_actionKeepOnlyPosition.setEnabled(hasFather || hasChildren);
         m_actionMakeMainVariation.setEnabled(! isInMain);
         m_actionNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_actionNextVariation.setEnabled(hasNextVariation);
-        m_actionPlay.setEnabled(isProgramAttached);
+        updateActionPlay(toMove, isProgramAttached, name);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
+        updateActionSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == GoColor.BLACK);
         m_actionSetupWhite.setSelected(setupMode
@@ -871,11 +875,6 @@ public class GoGuiActions
                     m_goGui.getTreeSize() == GameTreePanel.SIZE_TINY);
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
-        updateFile(file, isModified);
-        if (toMove == GoColor.BLACK)
-            m_actionPlay.setDescription("Make " + name + " play Black");
-        else
-            m_actionPlay.setDescription("Make " + name + " play White");
     }
 
     private final GoGui m_goGui;
@@ -900,7 +899,44 @@ public class GoGuiActions
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     }
 
-    private void updateFile(File file, boolean isModified)
+
+    private void updateActionInterrupt(boolean isProgramAttached,
+                                       boolean isInterruptSupported,
+                                       boolean isCommandInProgress,
+                                       String name)
+    {
+        String desc;
+        if (! isProgramAttached)
+            desc = "Interrupt (no program attached)";
+        else
+        {
+            if (! isInterruptSupported)
+                desc = "Interrupt (not supported by " + name + ")";
+            else if (! isCommandInProgress)
+                desc = "Interrupt " + name + " (no command running)";
+            else
+                desc = "Interrupt " + name;
+        }
+        m_actionInterrupt.setDescription(desc);
+        m_actionInterrupt.setEnabled(isProgramAttached
+                                     && isInterruptSupported);
+    }
+
+    private void updateActionPlay(GoColor toMove, boolean isProgramAttached,
+                                  String name)
+    {
+        m_actionPlay.setEnabled(isProgramAttached);
+        String desc;
+        if (toMove == GoColor.BLACK)
+            desc = "Make " + name + " play Black";
+        else
+            desc = "Make " + name + " play White";
+        if (! isProgramAttached)
+            desc = desc + " (no program attached)";
+        m_actionPlay.setDescription(desc);
+    }
+
+    private void updateActionSave(File file, boolean isModified)
     {
         String desc = "Save game";
         if (file != null)
