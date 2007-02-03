@@ -130,8 +130,8 @@ public class GameInfo
                                      String color)
     {
         StringBuffer buffer = new StringBuffer(128);
-        buffer.append("Player ");
         buffer.append(color);
+        buffer.append(" player");
         buffer.append(" (");
         if (player != null && ! player.trim().equals(""))
         {
