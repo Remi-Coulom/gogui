@@ -947,6 +947,25 @@ public class GoGui
         updateViews(false);
     }
 
+    public void actionSendCommand(String command, final boolean isSignificant,
+                                  final boolean showError)
+    {
+        if (GtpUtil.isStateChangingCommand(command))
+        {
+            showError("Cannot send board changing command", false);
+            return;
+        }
+        if (! checkProgramReady())
+            return;
+        Runnable callback = new Runnable() {
+                public void run() {
+                    sendGtpCommandContinue(isSignificant, showError);
+                }
+            };
+        m_gtp.send(command, callback);
+        beginLengthyCommand();
+    }
+
     public void actionSetAnalyzeCommand(AnalyzeCommand command,
                                         boolean autoRun, boolean clearBoard,
                                         boolean oneRunOnly)
@@ -1477,21 +1496,6 @@ public class GoGui
     public boolean isInSetupMode()
     {
         return m_setupMode;
-    }
-
-    public boolean sendGtpCommand(String command, final boolean isSignificant,
-                                  final boolean showError)
-    {
-        if (! checkProgramReady())
-            return false;
-        Runnable callback = new Runnable() {
-                public void run() {
-                    sendGtpCommandContinue(isSignificant, showError);
-                }
-            };
-        m_gtp.send(command, callback);
-        beginLengthyCommand();
-        return true;
     }
 
     public boolean sendGtpCommandSync(String command) throws GtpError
