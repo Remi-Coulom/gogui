@@ -113,7 +113,7 @@ public class GoGuiMenuBar
                 toolTip.append(bookmark.m_file.toString());
                 if (bookmark.m_move > 0)
                 {
-                    toolTip.append(" after move ");
+                    toolTip.append(" move ");
                     toolTip.append(bookmark.m_move);
                 }
                 if (! bookmark.m_variation.trim().equals(""))

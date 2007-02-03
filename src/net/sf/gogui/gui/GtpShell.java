@@ -370,9 +370,11 @@ public class GtpShell
                 if (m_modifyWarning == null)
                     m_modifyWarning = new OptionalMessage(this);
                 String message = 
-                    "The command '" + command + "' " +
-                    "will modify the board state " +
-                    "and cause the graphical board to be out of sync. " +
+                    "State changing command\n\n" +
+                    "The command \"" + command + "\" " +
+                    "modifies the board state.\n" +
+                    "This will cause the graphical board to be out "
+                    +" of sync.\n" +
                     "You should start a new game before using " +
                     "the graphical board again.";
                 if (! m_modifyWarning.showWarning(message))

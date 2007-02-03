@@ -162,8 +162,7 @@ public final class GtpSynchronizerTest
         createSynchronizer();
         expect("list_commands",
                "gogui-setup\n" +
-               "gogui-undo_setup\n" +
-               "undo");
+               "gogui-undo_setup\n");
         m_gtp.querySupportedCommands();
         assertExpectQueueEmpty();
         expect("boardsize 19", "");
@@ -194,8 +193,7 @@ public final class GtpSynchronizerTest
         expect("list_commands",
                "gogui-setup\n" +
                "gogui-setup_player\n" +
-               "gogui-undo_setup\n" +
-               "undo\n");
+               "gogui-undo_setup\n");
         m_gtp.querySupportedCommands();
         assertExpectQueueEmpty();
         expect("boardsize 19", "");

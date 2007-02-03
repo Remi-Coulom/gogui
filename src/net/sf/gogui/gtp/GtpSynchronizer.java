@@ -79,7 +79,7 @@ public class GtpSynchronizer
         ArrayList toExecuteAll = computeToExecuteAll(board);
         ArrayList toExecuteMissing = new ArrayList();
         int numberUndo = computeToExecuteMissing(toExecuteMissing, board);
-        if (m_isSupportedUndo || m_isSupportedGGUndo || numberUndo == 0)
+        if (canUndo(numberUndo))
         {
             undoPlacements(numberUndo);
             doPlacements(toExecuteMissing);
@@ -143,6 +143,8 @@ public class GtpSynchronizer
 
     private boolean m_isSupportedUndo;
 
+    private boolean m_isSupportedUndoSetup;
+
     private boolean m_isSupportedSetup;
 
     /** Board representing the engine state. */
@@ -151,6 +153,29 @@ public class GtpSynchronizer
     private final Listener m_listener;
 
     private GtpClientBase m_gtp;
+
+    private boolean canUndo(int n)
+    {
+        assert(n >= 0);
+        boolean undoMove = false;
+        boolean undoSetup = false;
+        int size = m_board.getNumberPlacements();
+        for (int i = size - 1; i >= size - n; --i)
+        {
+            Board.Placement placement = m_board.getPlacement(i);
+            if (placement instanceof Board.Setup)
+                undoSetup = true;
+            else if (placement instanceof Board.Play)
+                undoMove = true;
+            else
+                assert(false);
+        }
+        if (undoMove && ! m_isSupportedUndo && ! m_isSupportedGGUndo)
+            return false;
+        if (undoSetup && ! m_isSupportedUndoSetup)
+            return false;
+        return true;
+    }
 
     /** Computes all placements to execute.
         Replaces setup stones by moves, if setup is not supported.
@@ -340,6 +365,7 @@ public class GtpSynchronizer
         m_isSupportedUndo = isSupported("undo");
         m_isSupportedGGUndo = isSupported("gg-undo");
         m_isSupportedSetup = isSupported("gogui-setup");
+        m_isSupportedUndoSetup = isSupported("gogui-undo_setup");
         m_isSupportedSetupPlayer = isSupported("gogui-setup_player");
         m_isSupportedHandicap = isSupported("set_free_handicap");
     }

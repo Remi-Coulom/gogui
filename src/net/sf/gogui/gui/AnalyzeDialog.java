@@ -499,4 +499,3 @@ public final class AnalyzeDialog
         m_comboBoxHistory.addActionListener(this);
     }
 }
-
