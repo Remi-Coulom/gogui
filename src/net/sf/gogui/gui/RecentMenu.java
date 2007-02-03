@@ -80,6 +80,7 @@ public final class RecentMenu
                 }
             };
         get();
+        updateEnabled();
     }
 
     public void add(String label, String value)
@@ -96,7 +97,7 @@ public final class RecentMenu
 
     public int getCount()
     {
-        return m_menu.getItemCount();
+        return m_menu.getMenuComponentCount();
     }
 
     /** Don't modify the items in this menu! */
@@ -124,7 +125,8 @@ public final class RecentMenu
     /** Set menu enabled if not empty, disabled otherwise. */
     public void updateEnabled()
     {
-        m_menu.setEnabled(getCount() > 0);
+        int count = getCount();
+        m_menu.setEnabled(count > 0);
     }
 
     private static final int MAX_ITEMS = 20;
@@ -169,7 +171,7 @@ public final class RecentMenu
         return getItem(i).getRecentMenuLabel();
     }
 
-    public void put()
+    private void put()
     {
         Preferences prefs = PrefUtil.createNode(m_path);
         if (prefs == null)
