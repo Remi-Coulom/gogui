@@ -124,7 +124,7 @@ public class ContextMenu
             m_analyzeMenu = new JMenu("Analyze " + point);
             // For com.jgoodies.looks
             m_analyzeMenu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
-            add(m_analyzeMenu);
+            add(m_analyzeMenu);            
             for (int i = 0; i < commands.size(); ++i)
             {
                 String line = (String)commands.get(i);
@@ -134,7 +134,14 @@ public class ContextMenu
                 else if (command.needsOnlyPointAndColorArg())
                     addColorCommand(command);
             }
-            add(createItem("Analyze Clear", "analyze-clear"));
+            JMenuItem analyzeClear =
+                createItem("Analyze Clear", "analyze-clear");
+            add(analyzeClear);
+            if (m_analyzeMenu.getMenuComponentCount() == 0)
+            {
+                m_analyzeMenu.setEnabled(false);
+                analyzeClear.setEnabled(false);
+            }
             addSeparator();
         }
         else
