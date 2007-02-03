@@ -800,8 +800,7 @@ public class TwoGtp
 
     private void komi(GtpCommand cmd) throws GtpError
     {
-        cmd.checkNuArg(1);
-        String arg = cmd.getArg(0);
+        String arg = cmd.getArg();
         try
         {
             Komi komi = Komi.parseKomi(arg);
