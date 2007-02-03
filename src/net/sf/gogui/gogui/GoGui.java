@@ -943,16 +943,7 @@ public class GoGui
     {
         if (! m_scoreMode)
             return;
-        saveLocation(m_scoreDialog, "score");
-        m_scoreDialog.setVisible(false);
-        if (accepted)
-        {
-            Komi komi = getGameInformation().getKomi();
-            setResult(m_countScore.getScore(komi, getRules()).formatResult());
-        }
-        clearStatus();
-        m_guiBoard.clearAll();
-        m_scoreMode = false;
+        scoreDone(accepted);
         updateViews(false);
     }
 
@@ -1005,11 +996,9 @@ public class GoGui
             resetBoard();
             m_setupMode = true;
             m_setupColor = color;
-            m_setupNodeCreated = false;
             if (node.getMove() != null)
             {
                 m_game.createNewChild();
-                m_setupNodeCreated = true;
                 currentNodeChanged();
                 updateViews(true);
             }
@@ -1634,8 +1623,6 @@ public class GoGui
 
     private boolean m_setupMode;
 
-    private boolean m_setupNodeCreated;
-
     private boolean m_showInfoPanel;
 
     private boolean m_showLastMove;
@@ -2120,17 +2107,10 @@ public class GoGui
     {
         if (! checkCommandInProgress())
             return false;
-        // TODO: maybe automatically leave setup or score mode instead?
         if (m_setupMode)
-        {
-            showError("Cannot execute while in setup mode", false);
-            return false;
-        }
+            setupDone();
         if (m_scoreMode)
-        {
-            showError("Cannot execute while in score mode", false);
-            return false;
-        }
+            scoreDone(false);
         return true;
     }
 
@@ -3098,6 +3078,22 @@ public class GoGui
         updateViews(false);
     }    
 
+    private void scoreDone(boolean accepted)
+    {
+        if (! m_scoreMode)
+            return;
+        m_scoreMode = false;
+        saveLocation(m_scoreDialog, "score");
+        m_scoreDialog.setVisible(false);
+        clearStatus();
+        m_guiBoard.clearAll();
+        if (accepted)
+        {
+            Komi komi = getGameInformation().getKomi();
+            setResult(m_countScore.getScore(komi, getRules()).formatResult());
+        }
+    }
+
     private void sendGtp(Reader reader)
     {
         if (m_gtp == null)
@@ -3309,11 +3305,7 @@ public class GoGui
         if (! m_setupMode)
             return;
         m_setupMode = false;
-        boolean hasSetup =
-            (getCurrentNode().hasSetup() || m_setupColor != getToMove());
-        if (m_setupNodeCreated && ! hasSetup)
-            m_game.truncate();
-        else if (hasSetup)
+        if (getCurrentNode().hasSetup() || m_setupColor != getToMove())
             m_game.setToMove(m_setupColor);
         currentNodeChanged();
     }
