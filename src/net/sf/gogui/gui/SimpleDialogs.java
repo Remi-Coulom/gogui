@@ -321,6 +321,7 @@ class SgfPreview
         add(previewPanel);
         m_imagePanel = new ImagePanel();
         previewPanel.add(m_imagePanel);
+        previewPanel.add(Box.createVerticalGlue());
         JPanel buttonPanel = new JPanel();
         add(buttonPanel, BorderLayout.SOUTH);
         m_auto = new JCheckBox("Automatic preview");
