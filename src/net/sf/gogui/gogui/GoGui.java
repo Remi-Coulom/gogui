@@ -1767,7 +1767,8 @@ public class GoGui
     {
         if (m_analyzeClearBoard)
             resetBoard();
-        if (! endLengthyCommand(false))
+        boolean isSignificant = m_gtp.isProgramDead();
+        if (! endLengthyCommand(isSignificant))
             return;
         clearStatus();
         if (m_analyzeCommand == null)
