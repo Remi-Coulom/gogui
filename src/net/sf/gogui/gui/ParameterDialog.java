@@ -5,12 +5,14 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -116,7 +118,8 @@ public class ParameterDialog
             {
                 m_bool = false;
             }
-            m_panel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
+            m_panel = new JPanel(new FlowLayout(FlowLayout.LEFT,
+                                                GuiUtil.SMALL_PAD, 0));
             m_checkBox = new JCheckBox(getLabel(), m_bool);
             m_panel.add(m_checkBox);
         }
@@ -151,9 +154,11 @@ public class ParameterDialog
         public StringParameter(String key, String value)
         {
             super(key, value);
-            m_panel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
+            m_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,
+                                                GuiUtil.SMALL_PAD, 0));
             m_panel.add(new JLabel(getLabel() + ":"));
-            m_textField = new JTextField(value);
+            m_textField = new JTextField(12);
+            m_textField.setText(value);
             m_panel.add(m_textField);
         }
 
