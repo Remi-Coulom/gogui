@@ -601,12 +601,7 @@ public class GoGui
         GameInformation info = new GameInformation(getGameInformation());
         if (! GameInfoDialog.show(this, info))
             return;
-        m_game.setDate(info.getDate());
-        m_game.setPlayer(GoColor.BLACK, info.getPlayer(GoColor.BLACK));
-        m_game.setPlayer(GoColor.WHITE, info.getPlayer(GoColor.WHITE));
-        m_game.setResult(info.getResult());
-        m_game.setRank(GoColor.BLACK, info.getRank(GoColor.BLACK));
-        m_game.setRank(GoColor.WHITE, info.getRank(GoColor.WHITE));
+        m_game.setGameInformation(info, getCurrentNode());
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))
@@ -620,7 +615,12 @@ public class GoGui
             m_prefs.put("rules", info.getRules());
             setRules();
         }
-        m_timeSettings = info.getTimeSettings();
+        if (info.getTimeSettings() != null
+            && ! info.getTimeSettings().equals(m_timeSettings))
+        {
+            m_timeSettings = info.getTimeSettings();
+            setTimeSettings();
+        }
         setTitle();
         updateViews(false);
     }

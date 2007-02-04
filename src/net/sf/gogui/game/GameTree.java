@@ -64,16 +64,22 @@ public class GameTree
         which has a game information (the root node is always guaranteed
         to have one).
     */
-    public GameInformation getGameInformation(Node node)
+    public GameInformation getGameInformation(ConstNode node)
     {
         assert(NodeUtil.getRoot(node) == getRoot());
-        while (true)
-        {
-            GameInformation info = node.getGameInformation();
-            if (info != null)
-                return info;
-            node = node.getFather();
-        }
+        return getGameInformationNode(node).getGameInformation();
+    }
+
+    /** Find the node with game information valid for this node.
+        @return The nearest ancestor node which has a game information
+        (the root node is always guaranteed to have one).
+    */
+    public Node getGameInformationNode(ConstNode node)
+    {
+        assert(NodeUtil.getRoot(node) == getRoot());
+        while (node.getGameInformationConst() == null)
+            node = node.getFatherConst();
+        return (Node)node;
     }
 
     /** @see #getGameInformation() */

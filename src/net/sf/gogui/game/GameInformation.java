@@ -8,6 +8,7 @@ import java.util.Locale;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
+import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
 /** Game information.
@@ -20,18 +21,42 @@ public class GameInformation
     {
     }
 
-    public GameInformation(ConstGameInformation gameInformation)
+    public GameInformation(ConstGameInformation info)
     {
-        m_handicap = gameInformation.getHandicap();
-        m_komi = gameInformation.getKomi();
-        m_date = gameInformation.getDate();
-        m_playerBlack = gameInformation.getPlayer(GoColor.BLACK);
-        m_playerWhite = gameInformation.getPlayer(GoColor.WHITE);
-        m_result = gameInformation.getResult();
-        m_rules = gameInformation.getRules();
-        m_rankBlack = gameInformation.getRank(GoColor.BLACK);
-        m_rankWhite = gameInformation.getRank(GoColor.WHITE);
-        m_timeSettings = gameInformation.getTimeSettings();
+        copyFrom(info);
+    }
+
+    public void copyFrom(ConstGameInformation info)
+    {
+        m_handicap = info.getHandicap();
+        m_komi = info.getKomi();
+        m_date = info.getDate();
+        m_playerBlack = info.getPlayer(GoColor.BLACK);
+        m_playerWhite = info.getPlayer(GoColor.WHITE);
+        m_result = info.getResult();
+        m_rules = info.getRules();
+        m_rankBlack = info.getRank(GoColor.BLACK);
+        m_rankWhite = info.getRank(GoColor.WHITE);
+        m_timeSettings = info.getTimeSettings();
+    }
+
+    public boolean equals(Object object)
+    {
+        if (object == null || object.getClass() != getClass())
+            return false;        
+        GameInformation info = (GameInformation)object;
+        return (m_handicap == info.getHandicap()
+                && ObjectUtil.equals(m_komi, info.getKomi())
+                && ObjectUtil.equals(m_date, info.getDate())
+                && ObjectUtil.equals(m_playerBlack,
+                                     info.getPlayer(GoColor.BLACK))
+                && ObjectUtil.equals(m_playerWhite,
+                                     info.getPlayer(GoColor.WHITE))
+                && ObjectUtil.equals(m_result, info.getResult())
+                && ObjectUtil.equals(m_rules, info.getRules())
+                && ObjectUtil.equals(m_rankBlack, info.getRank(GoColor.BLACK))
+                && ObjectUtil.equals(m_rankWhite, info.getRank(GoColor.WHITE))
+                && ObjectUtil.equals(m_timeSettings, info.getTimeSettings()));
     }
 
     public String getDate()

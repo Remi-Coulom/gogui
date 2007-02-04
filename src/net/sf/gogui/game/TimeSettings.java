@@ -42,6 +42,17 @@ public final class TimeSettings
         m_byoyomiMoves = byoyomiMoves;
     }
 
+    public boolean equals(Object object)
+    {
+        if (object == null || object.getClass() != getClass())
+            return false;        
+        TimeSettings settings = (TimeSettings)object;
+        return (settings.m_preByoyomi == m_preByoyomi
+                && settings.m_byoyomi == m_byoyomi
+                && settings.m_byoyomiMoves == m_byoyomiMoves);
+
+    }
+
     /** Get time for overtime period.
         @return Time for overtime period in milliseconds; undefined if there
         are no overtime periods in this time settings.

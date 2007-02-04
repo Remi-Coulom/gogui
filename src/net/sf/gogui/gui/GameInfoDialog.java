@@ -105,7 +105,9 @@ public final class GameInfoDialog
             = getTextFieldContent(gameInfoDialog.m_byoyomi);
         String byoyomiMovesContent
             = getTextFieldContent(gameInfoDialog.m_byoyomiMoves);
-        if (preByoyomiContent.equals(""))
+        if (preByoyomiContent.equals("")
+            && byoyomiContent.equals("")
+            && byoyomiMovesContent.equals(""))
         {
             if (gameInformation.getTimeSettings() != null)
             {
@@ -260,6 +262,11 @@ public final class GameInfoDialog
         return textField.getText().trim();
     }
 
+    private boolean isEmpty(JTextField textField)
+    {
+        return getTextFieldContent(textField).equals("");
+    }
+
     private boolean validate(Component parent)
     {
         if (! validateKomi(parent, m_komi, "Invalid komi"))
@@ -273,6 +280,11 @@ public final class GameInfoDialog
         if (! validatePosIntOrEmpty(parent, m_byoyomiMoves,
                                     "Invalid time settings"))
             return false;
+        if (isEmpty(m_byoyomi) != isEmpty(m_byoyomiMoves))
+        {
+            SimpleDialogs.showError(parent, "Invalid byoyomi settings");
+            return false;
+        }
         return true;
     }
 
@@ -299,7 +311,7 @@ public final class GameInfoDialog
         try
         {
             String content = getTextFieldContent(textField);
-            if (content.equals(""))
+            if (content.trim().equals(""))
                 return true;
             int value = Integer.parseInt(content);
             if (value <= 0)

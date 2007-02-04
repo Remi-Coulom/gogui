@@ -272,18 +272,23 @@ public class Game
         ((Node)node).setComment(comment);
     }
 
-    public void setDate(String date)
+    public void setGameInformation(ConstGameInformation info, ConstNode node)
     {
-        GameInformation info = m_tree.getGameInformation(m_current);
-        m_modified = ! ObjectUtil.equals(date, info.getDate());
-        info.setDate(date);
+        assert(NodeUtil.getRoot(node) == getRoot());
+        ((Node)node).createGameInformation();
+        if (! ((Node)node).getGameInformation().equals(info))
+        {
+            ((Node)node).getGameInformation().copyFrom(info);
+            m_modified = true;
+        }
     }
 
     public void setKomi(Komi komi)
     {
-        GameInformation info = m_tree.getGameInformation(m_current);
-        m_modified = ! ObjectUtil.equals(komi, info.getKomi());
+        Node node = m_tree.getGameInformationNode(m_current);
+        GameInformation info = node.getGameInformation();
         info.setKomi(komi);
+        setGameInformation(info, node); // updates m_modified
     }
 
     /** Set label in current node. */
@@ -295,25 +300,18 @@ public class Game
 
     public void setPlayer(GoColor c, String name)
     {
-        assert(c.isBlackWhite());
-        GameInformation info = m_tree.getGameInformation(m_current);
-        m_modified = ! ObjectUtil.equals(name, info.getPlayer(c));
+        Node node = m_tree.getGameInformationNode(m_current);
+        GameInformation info = node.getGameInformation();
         info.setPlayer(c, name);
-    }
-
-    public void setRank(GoColor c, String rank)
-    {
-        assert(c.isBlackWhite());
-        GameInformation info = m_tree.getGameInformation(m_current);
-        m_modified = ! ObjectUtil.equals(rank, info.getRank(c));
-        info.setRank(c, rank);
+        setGameInformation(info, node); // updates m_modified
     }
 
     public void setResult(String result)
     {
-        GameInformation info = m_tree.getGameInformation(m_current);
-        m_modified = ! ObjectUtil.equals(result, info.getResult());
+        Node node = m_tree.getGameInformationNode(m_current);
+        GameInformation info = node.getGameInformation();
         info.setResult(result);
+        setGameInformation(info, node); // updates m_modified
     }
 
     public void setToMove(GoColor color)
@@ -328,6 +326,7 @@ public class Game
 
     public void setTimeSettings(TimeSettings timeSettings)
     {
+        // TODO: update game information in root node?
         m_clock.setTimeSettings(timeSettings);
     }
 
