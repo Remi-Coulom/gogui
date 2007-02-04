@@ -36,7 +36,7 @@ public final class SgfReaderTest
 
     public void testFF4Example() throws Exception
     {
-        SgfReader reader = getReader("ff4_ex.sgf");
+        SgfReader reader = getReader("ff4_ex.1.sgf");
         checkFF4Example(reader);
     }
 
@@ -79,7 +79,7 @@ public final class SgfReaderTest
     */
     public void testWriter() throws Exception
     {
-        SgfReader reader = getReader("ff4_ex.sgf");
+        SgfReader reader = getReader("ff4_ex.1.sgf");
         File file = File.createTempFile("gogui", null);
         OutputStream out = new FileOutputStream(file);
         new SgfWriter(out, reader.getGameTree(), "GoGui", Version.get());

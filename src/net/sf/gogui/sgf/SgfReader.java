@@ -279,10 +279,7 @@ public final class SgfReader
             m_tokenizer.nextToken();
             int t = m_tokenizer.ttype;
             if (t == '(')
-            {
-                setWarning("Multiple SGF trees; only first one was read");
-                return;
-            }
+                throw getError("Multiple SGF trees not supported");
             else if (t == StreamTokenizer.TT_EOF)
                 return;
             else if (t != ' ' && t != '\t' && t != '\n' && t != '\r')
