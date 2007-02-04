@@ -186,8 +186,8 @@ public final class SgfReader
 
     private final boolean m_isFile;
 
-    /** Has current node inconsistent time settings properties. */
-    private boolean m_ignoreTimeSettings;
+    /** Has current node inconsistent FF3 overtime settings properties. */
+    private boolean m_ignoreOvertime;
 
     private int m_lastPercent;
 
@@ -428,7 +428,26 @@ public final class SgfReader
         return i;
     }
 
-    private void parseOverTime(String value)
+    private void parseKomi(Node node, String value) throws SgfError
+    {
+        try
+        {
+            createGameInformation(node).setKomi(Komi.parseKomi(value));
+        }
+        catch (Komi.InvalidKomi e)
+        {
+            setWarning("Invalid value for komi");
+        }
+    }
+
+    private void parseMarked(Node node, MarkType type) throws SgfError
+    {
+        parsePointList();
+        for (int i = 0; i < m_pointList.size(); ++i)
+            node.addMarked(getPointList(i), type);
+    }
+
+    private void parseOverTime(Node node, String value)
     {
         /* Used by SgfWriter */
         if (parseOverTime(value,
@@ -455,8 +474,8 @@ public final class SgfReader
                           "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
                           true, 1000L))
             return;
-        setWarning("Discarded overtime settings in unknown format");
-        m_ignoreTimeSettings = true;
+        setWarning("overtime settings in unknown format");
+        addSgfProperty(node, "OT");
     }
 
     private boolean parseOverTime(String value, String regex,
@@ -465,6 +484,8 @@ public final class SgfReader
     {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(value);
+        long byoyomi;
+        int byoyomiMoves;
         if (matcher.matches())
         {
             assert(matcher.groupCount() == 2);
@@ -482,19 +503,20 @@ public final class SgfReader
                     group1 = matcher.group(2);
                     group2 = matcher.group(1);
                 }
-                m_byoyomiMoves = Integer.parseInt(group1);
-                m_byoyomi = (long)(Double.parseDouble(group2)
-                                   * timeUnitFactor);
+                byoyomiMoves = Integer.parseInt(group1);
+                byoyomi = (long)(Double.parseDouble(group2) * timeUnitFactor);
             }
             catch (NumberFormatException e)
             {
-                setWarning("Invalid byoyomi values");
-                m_ignoreTimeSettings = true;
+                // should not happen if patterns match only integerr
+                assert(false);
                 return false;
             }
         }
         else
             return false;
+        m_byoyomi = byoyomi;
+        m_byoyomiMoves = byoyomiMoves;
         return true;
     }
 
@@ -508,7 +530,7 @@ public final class SgfReader
         catch (NumberFormatException e)
         {
             setWarning("Invalid value for byoyomi moves");
-            m_ignoreTimeSettings = true;
+            m_ignoreOvertime = true;
         }
     }
 
@@ -522,7 +544,7 @@ public final class SgfReader
         catch (NumberFormatException e)
         {
             setWarning("Invalid value for byoyomi time");
-            m_ignoreTimeSettings = true;
+            m_ignoreOvertime = true;
         }
     }
 
@@ -650,26 +672,6 @@ public final class SgfReader
             return;
         }
         setWarning("Invalid value for time");
-        m_ignoreTimeSettings = true;
-    }
-
-    private void readKomi(Node node, String value) throws SgfError
-    {
-        try
-        {
-            createGameInformation(node).setKomi(Komi.parseKomi(value));
-        }
-        catch (Komi.InvalidKomi e)
-        {
-            setWarning("Invalid value for komi");
-        }
-    }
-
-    private void readMarked(Node node, MarkType type) throws SgfError
-    {
-        parsePointList();
-        for (int i = 0; i < m_pointList.size(); ++i)
-            node.addMarked(getPointList(i), type);
     }
 
     private Node readNext(Node father, boolean isRoot)
@@ -710,7 +712,7 @@ public final class SgfReader
         Node son = new Node();
         if (father != null)
             father.append(son);
-        m_ignoreTimeSettings = false;
+        m_ignoreOvertime = false;
         m_byoyomiMoves = -1;
         m_byoyomi = -1;
         m_preByoyomi = -1;
@@ -792,7 +794,7 @@ public final class SgfReader
                 }
             }
             else if (p == "CR")
-                readMarked(node, MarkType.CIRCLE);
+                parseMarked(node, MarkType.CIRCLE);
             else if (p == "DT")
                 createGameInformation(node).setDate(v);
             else if (p == "FF")
@@ -837,7 +839,7 @@ public final class SgfReader
                 }
             }
             else if (p == "KM")
-                readKomi(node, v);
+                parseKomi(node, v);
             else if (p == "LB")
             {
                 for (int i = 0; i < m_values.size(); ++i)
@@ -853,7 +855,7 @@ public final class SgfReader
                 }
             }
             else if (p == "MA" || p == "M")
-                readMarked(node, MarkType.MARK);
+                parseMarked(node, MarkType.MARK);
             else if (p == "OB")
             {
                 try
@@ -869,7 +871,7 @@ public final class SgfReader
             else if (p == "OP")
                 parseOverTimePeriod(v);
             else if (p == "OT")
-                parseOverTime(v);
+                parseOverTime(node, v);
             else if (p == "OW")
             {
                 try
@@ -891,9 +893,9 @@ public final class SgfReader
             else if (p == "RU")
                 createGameInformation(node).setRules(v);
             else if (p == "SQ")
-                readMarked(node, MarkType.SQUARE);
+                parseMarked(node, MarkType.SQUARE);
             else if (p == "SL")
-                readMarked(node, MarkType.SELECT);
+                parseMarked(node, MarkType.SELECT);
             else if (p == "SZ")
             {
                 if (! isRoot)
@@ -915,17 +917,15 @@ public final class SgfReader
                 }
             }
             else if (p == "TB")
-                readMarked(node, MarkType.TERRITORY_BLACK);
+                parseMarked(node, MarkType.TERRITORY_BLACK);
             else if (p == "TM")
                 parseTime(v);
             else if (p == "TR")
-                readMarked(node, MarkType.TRIANGLE);
+                parseMarked(node, MarkType.TRIANGLE);
             else if (p == "W")
-            {
                 node.setMove(Move.get(parsePoint(v), GoColor.WHITE));
-            }
             else if (p == "TW")
-                readMarked(node, MarkType.TERRITORY_WHITE);
+                parseMarked(node, MarkType.TERRITORY_WHITE);
             else if (p == "V")
             {
                 try
@@ -1050,14 +1050,18 @@ public final class SgfReader
 
     private void setTimeSettings(Node node)
     {
-        if (m_ignoreTimeSettings || m_preByoyomi <= 0)
-            return;
-        TimeSettings s;
-        if (m_byoyomi <= 0 || m_byoyomiMoves <= 0)
+        TimeSettings s = null;
+        if (m_preByoyomi > 0
+            && (m_ignoreOvertime || m_byoyomi <= 0 || m_byoyomiMoves <= 0))
             s = new TimeSettings(m_preByoyomi);
-        else
+        else if (m_preByoyomi <= 0 && ! m_ignoreOvertime && m_byoyomi > 0
+                 && m_byoyomiMoves > 0)
+            s = new TimeSettings(0, m_byoyomi, m_byoyomiMoves);
+        else if (m_preByoyomi > 0  && ! m_ignoreOvertime && m_byoyomi > 0
+                 && m_byoyomiMoves > 0)
             s = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
-        node.createGameInformation().setTimeSettings(s);
+        if (s != null)
+            node.createGameInformation().setTimeSettings(s);
     }
 
     private void setWarning(String message)

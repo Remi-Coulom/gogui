@@ -152,7 +152,16 @@ public class SgfWriter
             buffer.append(getPointValue(v.get(i)));
         return buffer.toString();
     }
-    
+
+    private boolean hasByoyomiInformation(ConstNode node)
+    {
+        ConstGameInformation info = node.getGameInformationConst();
+        if (info == null)
+            return false;
+        TimeSettings settings = info.getTimeSettings();
+        return (settings != null && settings.getUseByoyomi());
+    }
+
     private void print(String text)
     {
         if (text.indexOf('\n') > 0)
@@ -360,6 +369,8 @@ public class SgfWriter
             {
                 Map.Entry entry = (Map.Entry)it.next();
                 String label = (String)entry.getKey();
+                if (label.equals("OT") && hasByoyomiInformation(node))
+                    continue;
                 String value = (String)entry.getValue();
                 print(label + value);
             }

@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Map;
+import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
@@ -44,8 +47,8 @@ public final class SgfReaderTest
     public void testHumanReadable() throws Exception
     {
         SgfReader reader = getReader("human-readable.sgf");
-        GameTree gameTree = reader.getGameTree();
-        Node node = gameTree.getRoot();
+        GameTree tree = reader.getGameTree();
+        Node node = tree.getRoot();
         assertNull(node.getMove());
         node = node.getChild();
         assertEquals(Move.get(16, 15, GoColor.BLACK), node.getMove());
@@ -73,6 +76,49 @@ public final class SgfReaderTest
         readSgfFile("verbose-property-names.sgf", false, true);
         checkTimeSettings("time-settings-1.sgf", 1800000, 60000, 5);
         checkTimeSettings("time-settings-kgs.sgf", 1800000, 30000, 5);
+    }
+
+    /** Test that OT property in unknown format is preserved if not changed. */
+    public void testTimeSettingsPreserveOvertime() throws Exception
+    {
+        SgfReader reader = getReader("time-settings-unknown-ot.sgf");
+        ConstGameTree tree = reader.getGameTree();
+        ConstNode root = tree.getRootConst();
+        ConstGameInformation info = root.getGameInformationConst();
+        TimeSettings settings = info.getTimeSettings();
+        assertNotNull(settings);
+        assertFalse(settings.getUseByoyomi());
+        assertEquals(1800000L, settings.getPreByoyomi());
+        Map sgf = root.getSgfPropertiesConst();
+        assertNotNull(sgf);
+        assertEquals("[8 xyz 16]", sgf.get("OT"));
+    }
+
+    /** Test that OT property in unknown format is replaced if changed. */
+    public void testTimeSettingsReplaceOvertime() throws Exception
+    {
+        SgfReader reader = getReader("time-settings-unknown-ot.sgf");
+        GameTree tree = reader.getGameTree();
+        Node root = tree.getRoot();
+        TimeSettings settings = new TimeSettings(1800000, 30000, 5);
+        root.getGameInformation().setTimeSettings(settings);
+        File file = File.createTempFile("gogui", null);
+        OutputStream out = new FileOutputStream(file);
+        new SgfWriter(out, tree, "GoGui", Version.get());
+        out.close();
+        reader = new SgfReader(new FileInputStream(file), file, null, 0);
+        tree = reader.getGameTree();
+        root = tree.getRoot();
+        file.delete();
+        settings = root.getGameInformation().getTimeSettings();
+        assertNotNull(settings);
+        assertTrue(settings.getUseByoyomi());
+        assertEquals(1800000L, settings.getPreByoyomi());
+        assertEquals(30000L, settings.getByoyomi());
+        assertEquals(5, settings.getByoyomiMoves());
+        Map sgf = root.getSgfPropertiesConst();
+        if (sgf != null)
+            assertEquals(null, sgf.get("OT"));
     }
 
     /** Test FF4 example after writing and reading again.
