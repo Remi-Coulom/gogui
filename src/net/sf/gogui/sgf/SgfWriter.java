@@ -26,7 +26,7 @@ import net.sf.gogui.util.StringUtil;
 /** Write in SGF format. */
 public class SgfWriter
 {
-    public final String ENCODING = "UTF-8";
+    public static final String ENCODING = "UTF-8";
 
     /** Write game tree in SGF format.
         @param out Output stream.
@@ -186,13 +186,26 @@ public class SgfWriter
 
     private void printHeader(String application, String version)
     {
-        String appName = application;
-        if (version != null && ! version.equals(""))
-            appName = appName + ":" + version;
-        print(";FF[4]CA[" + getEscaped(ENCODING) + "]AP["
-              + getEscaped(appName) + "]");
+        StringBuffer header = new StringBuffer(128);
+        header.append(";FF[4]CA[");
+        header.append(getEscaped(ENCODING));
+        header.append("]");
+        if (application != null && ! application.equals(""))
+        {
+            String appName = application;
+            if (version != null && ! version.equals(""))
+                appName = appName + ":" + version;
+            header.append("AP[");
+            header.append(getEscaped(appName));
+            header.append("]");
+        }
         if (m_size != 19)
-            print("SZ[" + m_size + "]");
+        {
+            header.append("SZ[");
+            header.append(m_size);
+            header.append("]");
+        }
+        print(header.toString());
     }
 
     private void printGameInformation(ConstGameInformation info)
