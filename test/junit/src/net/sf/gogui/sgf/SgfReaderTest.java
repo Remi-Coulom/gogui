@@ -72,6 +72,7 @@ public final class SgfReaderTest
     {
         readSgfFile("verbose-property-names.sgf", false, true);
         checkTimeSettings("time-settings-1.sgf", 1800000, 60000, 5);
+        checkTimeSettings("time-settings-kgs.sgf", 1800000, 30000, 5);
     }
 
     /** Test FF4 example after writing and reading again.
