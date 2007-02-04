@@ -598,10 +598,11 @@ public class GoGui
         if (! checkCommandInProgress())
             // Changes in game info may send GTP commands
             return;
-        GameInformation info = new GameInformation(getGameInformation());
-        if (! GameInfoDialog.show(this, info))
-            return;
-        m_game.setGameInformation(info, getCurrentNode());
+        ConstNode node = m_game.getGameInformationNode();
+        GameInformation info =
+            new GameInformation(node.getGameInformationConst());
+        GameInfoDialog.show(this, info);
+        m_game.setGameInformation(info, node);
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))

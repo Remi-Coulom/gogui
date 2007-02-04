@@ -110,6 +110,11 @@ public class Game
         return m_tree.getGameInformationConst(node);
     }
 
+    public ConstNode getGameInformationNode()
+    {
+        return m_tree.getGameInformationNode(m_current);
+    }
+
     public int getMoveNumber()
     {
         return NodeUtil.getMoveNumber(getCurrentNode());

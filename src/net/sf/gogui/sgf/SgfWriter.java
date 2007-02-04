@@ -258,6 +258,7 @@ public class SgfWriter
             print("DT[" + getEscaped(date) + "]");
         if (result != null && ! result.equals(""))
             print("RE[" + result + "]");
+        printNewLine();
     }
 
     private void printLabels(ConstNode node)
