@@ -44,7 +44,7 @@ public class ScoreDialog
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         JPanel panelDetails =
-            new JPanel(new GridLayout(0, 2, 0, GuiUtil.SMALL_PAD));
+            new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.SMALL_PAD));
         m_territoryBlack = createEntry(panelDetails, "Territory Black:");
         m_territoryWhite = createEntry(panelDetails, "Territory White:");
         m_areaBlack = createEntry(panelDetails, "Area Black:");
@@ -55,7 +55,7 @@ public class ScoreDialog
         m_resultChinese = createEntry(panelDetails, "Result Chinese:");
         m_resultJapanese = createEntry(panelDetails, "Result Japanese:");
         m_rules = createEntry(panelDetails, "Rules:");
-        JPanel panelResult = new JPanel(new GridLayout(0, 2, 0, 0));
+        JPanel panelResult = new JPanel(new GridLayout(0, 2, GuiUtil.PAD, 0));
         m_result = createEntry(panelResult, "Game result:");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -137,7 +137,7 @@ public class ScoreDialog
     private JTextField createEntry(JPanel panel, String text)
     {
         JLabel label = new JLabel(text);
-        label.setHorizontalAlignment(SwingConstants.LEFT);
+        label.setHorizontalAlignment(SwingConstants.RIGHT);
         panel.add(label);
         JTextField entry = new JTextField("        ");
         entry.setEditable(false);
