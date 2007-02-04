@@ -2813,7 +2813,7 @@ public class GoGui
             setFile(file);
             String warnings = reader.getWarnings();
             if (warnings != null)
-                showWarning("File " + file.getName() + ":\n" + warnings);
+                showWarning(warnings);
             SimpleDialogs.setLastFile(file);
             m_computerBlack = false;
             m_computerWhite = false;
@@ -2821,12 +2821,12 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found:\n" + file);
+            showError("File not found");
             return false;
         }
         catch (SgfReader.SgfError e)
         {
-            showError("Could not read file:", e);
+            showError("Could not read file", e);
             return false;
         }
         catch (Throwable t)

@@ -373,7 +373,7 @@ public final class SgfReader
             return new SgfError(lineNumber + ": " + message);
         else
         {
-            String s = m_file + ":" + lineNumber + ": " + message;
+            String s = m_file.getName() + ":" + lineNumber + ": " + message;
             return new SgfError(s);
         }
     }

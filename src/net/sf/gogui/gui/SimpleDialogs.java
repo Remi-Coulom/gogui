@@ -71,7 +71,7 @@ public final class SimpleDialogs
 
     public static void showError(Component frame, String message, Exception e)
     {
-        showError(frame, message + "\n" + StringUtil.getErrorMessage(e));
+        showError(frame, message + "\n\n" + StringUtil.getErrorMessage(e));
     }
 
     public static void showInfo(Component frame, String message)
