@@ -353,7 +353,7 @@ class SgfPreview
             m_file = null;
             m_preview.setEnabled(false);
             File file = (File)event.getNewValue();
-            if (! file.exists()) // user entered new filename
+            if (file != null && ! file.exists()) // user entered new filename
                 file = null;
             if (file != null)
             {
