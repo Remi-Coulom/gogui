@@ -152,7 +152,7 @@ public final class SgfReader
     /** Get game tree of loaded SGF file.
         @return The game tree.
     */
-    public GameTree getGameTree()
+    public GameTree getTree()
     {
         return m_tree;
     }

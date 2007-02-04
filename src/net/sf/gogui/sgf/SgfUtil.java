@@ -31,7 +31,7 @@ public final class SgfUtil
         {
             FileInputStream fileStream = new FileInputStream(file);
             SgfReader reader = new SgfReader(fileStream, file, null, 0);
-            GameTree tree = reader.getGameTree();
+            GameTree tree = reader.getTree();
             Game game = new Game(tree);
             ConstNode node = tree.getRoot();
             int moveNumber = 0;

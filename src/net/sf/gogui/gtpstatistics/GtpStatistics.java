@@ -311,7 +311,7 @@ public class GtpStatistics
         InputStream in = new FileInputStream(file);
         SgfReader reader = new SgfReader(in, file, null, 0);
         ++m_numberGames;
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         checkGame(tree, name);
         int size = tree.getBoardSize();
         m_gtp.sendBoardsize(size);

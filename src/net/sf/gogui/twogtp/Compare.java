@@ -101,7 +101,7 @@ public final class Compare
             File file = new File(filename);
             FileInputStream fileStream = new FileInputStream(file);
             SgfReader reader = new SgfReader(fileStream, file, null, 0);
-            GameTree tree = reader.getGameTree();
+            GameTree tree = reader.getTree();
             int size = tree.getBoardSize();
             if (board == null)
                 board = new Board(size);

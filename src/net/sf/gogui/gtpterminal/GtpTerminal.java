@@ -260,7 +260,7 @@ public class GtpTerminal
             String warnings = reader.getWarnings();
             if (warnings != null)
                 System.out.print(warnings);
-            GameTree tree = reader.getGameTree();
+            GameTree tree = reader.getTree();
             GameInformation info = tree.getGameInformation(tree.getRoot());
             if (info.getHandicap() > 0)
             {

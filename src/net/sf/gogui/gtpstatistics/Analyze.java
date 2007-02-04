@@ -666,7 +666,7 @@ public class Analyze
         {
             InputStream in = new FileInputStream(new File(game));
             SgfReader reader = new SgfReader(in, new File(game), null, 0);
-            GameTree tree = reader.getGameTree();
+            GameTree tree = reader.getTree();
             GameInformation info = tree.getGameInformation(tree.getRoot());
             String playerBlack = info.getPlayer(GoColor.BLACK);
             if (playerBlack == null)

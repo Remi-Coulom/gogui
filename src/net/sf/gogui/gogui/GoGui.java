@@ -2802,7 +2802,7 @@ public class GoGui
             else
                 runnable.run(null);
             SgfReader reader = runnable.getReader();
-            GameTree tree = reader.getGameTree();
+            GameTree tree = reader.getTree();
             initGame(tree.getBoardSize());
             m_menuBar.addRecent(file);
             m_game.init(tree);

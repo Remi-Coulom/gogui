@@ -217,7 +217,7 @@ public final class ThumbnailCreator
                 log(e.getMessage());
             }
         }
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         GameInformation info = tree.getGameInformation(tree.getRoot());
         int size = tree.getBoardSize();
         m_description = info.suggestGameName();

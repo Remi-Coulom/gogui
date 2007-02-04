@@ -47,7 +47,7 @@ public final class SgfReaderTest
     public void testHumanReadable() throws Exception
     {
         SgfReader reader = getReader("human-readable.sgf");
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         Node node = tree.getRoot();
         assertNull(node.getMove());
         node = node.getChild();
@@ -82,7 +82,7 @@ public final class SgfReaderTest
     public void testTimeSettingsPreserveOvertime() throws Exception
     {
         SgfReader reader = getReader("time-settings-unknown-ot.sgf");
-        ConstGameTree tree = reader.getGameTree();
+        ConstGameTree tree = reader.getTree();
         ConstNode root = tree.getRootConst();
         ConstGameInformation info = root.getGameInformationConst();
         TimeSettings settings = info.getTimeSettings();
@@ -98,7 +98,7 @@ public final class SgfReaderTest
     public void testTimeSettingsReplaceOvertime() throws Exception
     {
         SgfReader reader = getReader("time-settings-unknown-ot.sgf");
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         Node root = tree.getRoot();
         TimeSettings settings = new TimeSettings(1800000, 30000, 5);
         root.getGameInformation().setTimeSettings(settings);
@@ -107,7 +107,7 @@ public final class SgfReaderTest
         new SgfWriter(out, tree, "GoGui", Version.get());
         out.close();
         reader = new SgfReader(new FileInputStream(file), file, null, 0);
-        tree = reader.getGameTree();
+        tree = reader.getTree();
         root = tree.getRoot();
         file.delete();
         settings = root.getGameInformation().getTimeSettings();
@@ -129,7 +129,7 @@ public final class SgfReaderTest
         SgfReader reader = getReader("ff4_ex.1.sgf");
         File file = File.createTempFile("gogui", null);
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, reader.getGameTree(), "GoGui", Version.get());
+        new SgfWriter(out, reader.getTree(), "GoGui", Version.get());
         out.close();
         reader = new SgfReader(new FileInputStream(file), file, null, 0);
         checkFF4Example(reader);
@@ -147,7 +147,7 @@ public final class SgfReaderTest
 
     public void checkFF4Example(SgfReader reader) throws Exception
     {
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         assertEquals(tree.getBoardSize(), 19);
         ConstNode root = tree.getRoot();
         assertEquals(NodeUtil.subtreeSize(root), 54);
@@ -259,7 +259,7 @@ public final class SgfReaderTest
                                    int byoyomiMoves) throws Exception
     {
         SgfReader reader = getReader(name);
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         GameInformation info = tree.getGameInformation(tree.getRoot());
         TimeSettings timeSettings = info.getTimeSettings();
         assertNotNull(timeSettings);

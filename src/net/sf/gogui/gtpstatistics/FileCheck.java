@@ -50,7 +50,7 @@ public class FileCheck
             throwError("file not found");
         }
         SgfReader reader = new SgfReader(in, m_file, null, 0);
-        GameTree tree = reader.getGameTree();
+        GameTree tree = reader.getTree();
         if (tree.getBoardSize() != m_size)
             throwError("size is not " + m_size);
         ConstNode root = tree.getRoot();

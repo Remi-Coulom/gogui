@@ -78,7 +78,7 @@ public class Openings
         File file = m_files[i];
         FileInputStream fileStream = new FileInputStream(file);
         SgfReader reader = new SgfReader(fileStream, file, null, 0);
-        m_tree = reader.getGameTree();
+        m_tree = reader.getTree();
         m_currentFile = i;
     }
 

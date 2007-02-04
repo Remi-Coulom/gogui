@@ -101,7 +101,7 @@ public final class SgfToTex
         throws SgfReader.SgfError
     {
         SgfReader reader = new SgfReader(in, new File(name), null, 0);
-        new TexWriter(title, out, reader.getGameTree(), usePass);
+        new TexWriter(title, out, reader.getTree(), usePass);
     }
 
     private static void printUsage(PrintStream out)
