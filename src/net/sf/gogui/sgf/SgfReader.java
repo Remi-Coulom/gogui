@@ -450,7 +450,7 @@ public final class SgfReader
                           "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
                           true, 1000L))
             return;
-        setWarning("Discarded unknown format for overtime settings");
+        setWarning("Discarded overtime settings in unknown format");
         m_ignoreTimeSettings = true;
     }
 
