@@ -26,6 +26,8 @@ import net.sf.gogui.util.StringUtil;
 /** Write in SGF format. */
 public class SgfWriter
 {
+    public final String ENCODING = "UTF-8";
+
     /** Write game tree in SGF format.
         @param out Output stream.
         @param tree Game tree to write.
@@ -36,16 +38,14 @@ public class SgfWriter
     public SgfWriter(OutputStream out, ConstGameTree tree, String application,
                      String version)
     {        
-        // Should be supported by every Java implementation
-        m_encoding = "UTF-8";
         try
         {
-            m_out = new PrintStream(out, false, m_encoding);
+            m_out = new PrintStream(out, false, ENCODING);
         }
         catch (UnsupportedEncodingException e)
         {
-            m_out = new PrintStream(out);
-            m_encoding = StringUtil.getDefaultEncoding();
+            // UTF-8 should be supported by every Java implementation
+            assert(false);
         }
         print("(");
         m_size = tree.getBoardSize();
@@ -85,8 +85,6 @@ public class SgfWriter
     private final int m_size;
 
     private PrintStream m_out;
-
-    private String m_encoding;
 
     private String getEscaped(String text)
     {
@@ -191,7 +189,7 @@ public class SgfWriter
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        print(";FF[4]CA[" + getEscaped(m_encoding) + "]AP["
+        print(";FF[4]CA[" + getEscaped(ENCODING) + "]AP["
               + getEscaped(appName) + "]");
         if (m_size != 19)
             print("SZ[" + m_size + "]");
