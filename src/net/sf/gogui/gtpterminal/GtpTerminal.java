@@ -103,7 +103,7 @@ public class GtpTerminal
 
     private Board m_board;
 
-    private GameTree m_gameTree;
+    private GameTree m_tree;
 
     private final GtpClient m_gtp;
 
@@ -225,8 +225,8 @@ public class GtpTerminal
     private void initGame(int size)
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size, null, null, null, null);
-        setCurrentNode(m_gameTree.getRoot());
+        m_tree = new GameTree(size, null, null, null, null);
+        setCurrentNode(m_tree.getRoot());
     }
 
     private void listCommands()
@@ -260,17 +260,17 @@ public class GtpTerminal
             String warnings = reader.getWarnings();
             if (warnings != null)
                 System.out.print(warnings);
-            GameTree gameTree = reader.getGameTree();
-            GameInformation gameInformation = gameTree.getGameInformation();
-            if (gameInformation.getHandicap() > 0)
+            GameTree tree = reader.getGameTree();
+            GameInformation info = tree.getGameInformation(tree.getRoot());
+            if (info.getHandicap() > 0)
             {
                 System.out.println("Handicap games not supported");
                 return;
             }
-            if (! newGame(gameInformation.getBoardSize()))
+            if (! newGame(tree.getBoardSize()))
                 return;
-            send("komi " + gameInformation.getKomi());
-            ConstNode node = gameTree.getRoot();
+            send("komi " + info.getKomi());
+            ConstNode node = tree.getRoot();
             while (node != null)
             {
                 for (int i = 0; i < node.getNumberAddBlack(); ++i)
@@ -359,7 +359,7 @@ public class GtpTerminal
         try
         {
             OutputStream out = new FileOutputStream(file);
-            new SgfWriter(out, m_gameTree, "GtpTerminal", Version.get());
+            new SgfWriter(out, m_tree, "GtpTerminal", Version.get());
         }
         catch (FileNotFoundException e) 
         {
@@ -391,7 +391,7 @@ public class GtpTerminal
 
     private void setCurrentNode(ConstNode node)
     {
-        m_currentNode = m_gameTree.getNode(node);
+        m_currentNode = m_tree.getNode(node);
     }
 
     private void undo()

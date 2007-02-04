@@ -37,6 +37,11 @@ public class Openings
         m_currentFile = -1;
     }
 
+    public int getBoardSize()
+    {
+        return getTree().getBoardSize();
+    }
+
     /** Get name of directory. */
     public String getDirectory()
     {
@@ -52,13 +57,13 @@ public class Openings
     /** Get game information of currently loaded file. */
     public GameInformation getGameInformation()
     {
-        return m_gameTree.getGameInformation();
+        return m_tree.getGameInformation(m_tree.getRoot());
     }
 
     /** Get game tree of currently loaded file. */
     public GameTree getTree()
     {
-        return m_gameTree;
+        return m_tree;
     }
 
     /** Get number of opening files in directory. */
@@ -73,7 +78,7 @@ public class Openings
         File file = m_files[i];
         FileInputStream fileStream = new FileInputStream(file);
         SgfReader reader = new SgfReader(fileStream, file, null, 0);
-        m_gameTree = reader.getGameTree();
+        m_tree = reader.getGameTree();
         m_currentFile = i;
     }
 
@@ -83,7 +88,7 @@ public class Openings
 
     private File[] m_files;
 
-    private GameTree m_gameTree;
+    private GameTree m_tree;
 
     private void sortFiles()
     {

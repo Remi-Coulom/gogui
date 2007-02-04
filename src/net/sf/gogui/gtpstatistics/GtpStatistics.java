@@ -175,8 +175,7 @@ public class GtpStatistics
 
     private void checkGame(GameTree tree, String name) throws ErrorMessage
     {
-        GameInformation info = tree.getGameInformation();
-        int size = info.getBoardSize();
+        int size = tree.getBoardSize();
         if (size != m_size)
             throw new ErrorMessage(name + " has not size " + m_size);
         ConstNode root = tree.getRoot();
@@ -314,8 +313,7 @@ public class GtpStatistics
         ++m_numberGames;
         GameTree tree = reader.getGameTree();
         checkGame(tree, name);
-        GameInformation info = tree.getGameInformation();
-        int size = info.getBoardSize();
+        int size = tree.getBoardSize();
         m_gtp.sendBoardsize(size);
         m_gtp.sendClearBoard(size);
         ConstNode root = tree.getRoot();

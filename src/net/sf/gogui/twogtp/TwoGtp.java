@@ -761,7 +761,7 @@ public class TwoGtp
             m_openingFile = m_openings.getFilename();
             if (m_verbose)
                 System.err.println("Loaded opening " + m_openingFile);
-            if (m_openings.getGameInformation().getBoardSize() != size)
+            if (m_openings.getBoardSize() != size)
                 throw new GtpError("Wrong board size: " + m_openingFile);
             m_game.init(m_openings.getTree());
             m_game.setKomi(m_komi);

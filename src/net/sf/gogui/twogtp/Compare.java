@@ -101,15 +101,14 @@ public final class Compare
             File file = new File(filename);
             FileInputStream fileStream = new FileInputStream(file);
             SgfReader reader = new SgfReader(fileStream, file, null, 0);
-            GameTree gameTree = reader.getGameTree();
-            GameInformation gameInformation = gameTree.getGameInformation();
-            int size = gameInformation.getBoardSize();
+            GameTree tree = reader.getGameTree();
+            int size = tree.getBoardSize();
             if (board == null)
                 board = new Board(size);
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
-            ArrayList moves = getAllAsMoves(gameTree.getRoot());
+            ArrayList moves = getAllAsMoves(tree.getRoot());
             String duplicate =
                 checkDuplicate(board, moves, games, false, false);
             System.out.println(Integer.toString(gameNumber) + " " +

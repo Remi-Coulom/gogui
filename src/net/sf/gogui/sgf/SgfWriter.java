@@ -28,13 +28,13 @@ public class SgfWriter
 {
     /** Write game tree in SGF format.
         @param out Output stream.
-        @param gameTree Game tree to write.
+        @param tree Game tree to write.
         @param application Application name for AP property.
         @param version If not null, version appended to application name in
         AP property.
     */
-    public SgfWriter(OutputStream out, ConstGameTree gameTree,
-                     String application, String version)
+    public SgfWriter(OutputStream out, ConstGameTree tree, String application,
+                     String version)
     {        
         // Should be supported by every Java implementation
         m_encoding = "UTF-8";
@@ -48,24 +48,10 @@ public class SgfWriter
             m_encoding = StringUtil.getDefaultEncoding();
         }
         print("(");
-        ConstGameInformation gameInformation =
-            gameTree.getGameInformationConst();
-        m_size = gameInformation.getBoardSize();
-        String result = gameInformation.getResult();
-        String playerBlack = gameInformation.getPlayer(GoColor.BLACK);
-        String playerWhite = gameInformation.getPlayer(GoColor.WHITE);
-        String rankBlack = gameInformation.getRank(GoColor.BLACK);
-        String rankWhite = gameInformation.getRank(GoColor.WHITE);
-        String date = gameInformation.getDate();
-        String rules = gameInformation.getRules();
-        int handicap = gameInformation.getHandicap();
-        Komi komi = gameInformation.getKomi();
-        TimeSettings timeSettings = gameInformation.getTimeSettings();
-        printHeader(application, version, handicap, date, playerBlack,
-                    playerWhite, rankBlack, rankWhite, result, komi, rules,
-                    timeSettings);
+        m_size = tree.getBoardSize();
+        printHeader(application, version);
         printNewLine();
-        printNode(gameTree.getRootConst(), true);
+        printNode(tree.getRootConst(), true);
         print(")");
         m_out.println(m_buffer.toString());
         m_out.close();
@@ -202,13 +188,18 @@ public class SgfWriter
             print("SZ[" + m_size + "]");
     }
 
-    private void printHeader(String application, String version, int handicap,
-                             String date, String playerBlack,
-                             String playerWhite, String rankBlack,
-                             String rankWhite, String result, Komi komi,
-                             String rules, TimeSettings timeSettings)
+    private void printGameInformation(ConstGameInformation info)
     {
-        printHeader(application, version);
+        String result = info.getResult();
+        String playerBlack = info.getPlayer(GoColor.BLACK);
+        String playerWhite = info.getPlayer(GoColor.WHITE);
+        String rankBlack = info.getRank(GoColor.BLACK);
+        String rankWhite = info.getRank(GoColor.WHITE);
+        String date = info.getDate();
+        String rules = info.getRules();
+        int handicap = info.getHandicap();
+        Komi komi = info.getKomi();
+        TimeSettings timeSettings = info.getTimeSettings();
         if (handicap > 0)
             print("HA[" + handicap + "]");
         else if (komi != null)
@@ -283,6 +274,9 @@ public class SgfWriter
             }
             print(";");
         }
+        ConstGameInformation info = node.getGameInformationConst();
+        if (info != null)
+            printGameInformation(info);
         if (move != null)
         {
             String point = getPointValue(move.getPoint());

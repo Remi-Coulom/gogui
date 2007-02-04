@@ -2523,7 +2523,7 @@ public class GoGui
 
     private ConstGameInformation getGameInformation()
     {
-        return m_game.getGameInformation();
+        return m_game.getGameInformation(getCurrentNode());
     }
 
     private Komi getPrefsKomi()
@@ -2802,11 +2802,10 @@ public class GoGui
             else
                 runnable.run(null);
             SgfReader reader = runnable.getReader();
-            GameInformation gameInformation =
-                reader.getGameTree().getGameInformation();
-            initGame(gameInformation.getBoardSize());
+            GameTree tree = reader.getGameTree();
+            initGame(tree.getBoardSize());
             m_menuBar.addRecent(file);
-            m_game.init(reader.getGameTree());
+            m_game.init(tree);
             initGtp();
             if (move > 0)
                 forward(move);            

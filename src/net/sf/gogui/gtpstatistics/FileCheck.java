@@ -51,8 +51,7 @@ public class FileCheck
         }
         SgfReader reader = new SgfReader(in, m_file, null, 0);
         GameTree tree = reader.getGameTree();
-        GameInformation info = tree.getGameInformation();
-        if (info.getBoardSize() != m_size)
+        if (tree.getBoardSize() != m_size)
             throwError("size is not " + m_size);
         ConstNode root = tree.getRoot();
         GoColor toMove = GoColor.BLACK;

@@ -42,6 +42,8 @@ final class MoreExtraInfo
     public TreeMap m_sgfProperties;
 
     public Map m_label;
+
+    public GameInformation m_gameInformation;
 }
 
 final class SetupInfo
@@ -171,6 +173,15 @@ public final class Node
         createSetupInfo().m_white.add(point);
     }
 
+    /** Create game information or return it if already existing. */
+    public GameInformation createGameInformation()
+    {
+        MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
+        if (moreExtraInfo.m_gameInformation == null)
+            moreExtraInfo.m_gameInformation = new GameInformation();
+        return moreExtraInfo.m_gameInformation;
+    }
+
     /** Get black setup stone.
         @param i The index of the setup stone in [0...getNumberAddBlack() - 1]
         @return The black setup stone
@@ -283,6 +294,18 @@ public final class Node
     public ConstNode getFatherConst()
     {
         return m_father;
+    }
+
+    public GameInformation getGameInformation()
+    {
+        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
+            return null;
+        return m_extraInfo.m_moreExtraInfo.m_gameInformation;
+    }
+
+    public ConstGameInformation getGameInformationConst()
+    {
+        return getGameInformation();
     }
 
     /** Get label for a location on the board.

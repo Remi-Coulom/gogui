@@ -49,7 +49,7 @@ public class TexWriter
         printBeginDocument();
         if (title != null && ! title.trim().equals(""))
             m_out.println("\\section*{" + escape(title) + "}");
-        printBeginPSGo(tree.getGameInformationConst().getBoardSize());
+        printBeginPSGo(tree.getBoardSize());
         String comment = printTree(tree);
         printEndPSGo();
         if (! comment.equals(""))
@@ -151,9 +151,8 @@ public class TexWriter
 
     private String printTree(ConstGameTree tree)
     {
-        ConstGameInformation gameInformation = tree.getGameInformationConst();
         StringBuffer comment = new StringBuffer();
-        int size = gameInformation.getBoardSize();
+        int size = tree.getBoardSize();
         ConstNode firstMoveAtPoint[][] = new ConstNode[size][size];
         ArrayList needsComment = new ArrayList();
         boolean blackToMove = true;

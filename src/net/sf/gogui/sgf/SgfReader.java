@@ -154,7 +154,7 @@ public final class SgfReader
     */
     public GameTree getGameTree()
     {
-        return m_gameTree;
+        return m_tree;
     }
 
     /** Get warnings that occurred during loading SGF file.
@@ -184,29 +184,30 @@ public final class SgfReader
         private static final long serialVersionUID = 0L; // SUID
     }
 
-    private boolean m_ignoreTimeSettings;
-
     private final boolean m_isFile;
 
-    private boolean m_sizeFixed;
-
-    private int m_byoyomiMoves = -1;
+    /** Has current node inconsistent time settings properties. */
+    private boolean m_ignoreTimeSettings;
 
     private int m_lastPercent;
 
-    private long m_byoyomi = -1;
+    private int m_boardSize;
 
-    private long m_preByoyomi = -1;
+    private int m_byoyomiMoves;
 
     private long m_size;
+
+    private long m_byoyomi;
+
+    private long m_preByoyomi;
 
     private ByteCountInputStream m_byteCountInputStream;
 
     private java.io.Reader m_reader;
 
-    private GameInformation m_gameInformation;
+    private GameInformation m_gameInformationRoot;
 
-    private GameTree m_gameTree;
+    private GameTree m_tree;
 
     private final ProgressShow m_progressShow;
 
@@ -241,12 +242,12 @@ public final class SgfReader
     /** Apply some fixes for broken SGF files. */
     private void applyFixes()
     {
-        Node root = m_gameTree.getRoot();
-        GameInformation gameInformation = m_gameTree.getGameInformation();
+        Node root = m_tree.getRoot();
+        GameInformation info = m_tree.getGameInformation(root);
         if ((root.getNumberAddWhite() + root.getNumberAddBlack() > 0)
             && root.getPlayer() == null)
         {
-            if (gameInformation.getHandicap() > 0)
+            if (info.getHandicap() > 0)
             {
                 root.setPlayer(GoColor.WHITE);
             }
@@ -340,6 +341,11 @@ public final class SgfReader
         return property;
     }
 
+    private GameInformation createGameInformation(Node node)
+    {
+        return node.createGameInformation();
+    }
+
     private void findRoot() throws SgfError, IOException
     {
         while (true)
@@ -364,6 +370,13 @@ public final class SgfReader
             else
                 setWarning("Extra text before SGF tree");
         }
+    }
+
+    private int getBoardSize()
+    {
+        if (m_boardSize == -1)
+            m_boardSize = 19; // Default size for Go in the SGF standard
+        return m_boardSize;
     }
 
     private SgfError getError(String message)
@@ -415,34 +428,35 @@ public final class SgfReader
         return i;
     }
 
-    private void parseOverTimeProp(String value)
+    private void parseOverTime(String value)
     {
         /* Used by SgfWriter */
-        if (parseOverTimeProp(value,
-                              "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*",
-                              true, 1000L))
+        if (parseOverTime(value,
+                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*",
+                          true, 1000L))
             return;
         /* Used by Smart Go */
-        if (parseOverTimeProp(value,
-                              "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min\\s*",
-                              true, 60000L))
+        if (parseOverTime(value,
+                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min\\s*",
+                          true, 60000L))
             return;
         /* Used by Kiseido Game Server, CGoban 2 */
-        if (parseOverTimeProp(value,
-                              "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
-                              true, 1000L))
+        if (parseOverTime(value,
+                          "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
+                          true, 1000L))
             return;
-        /* Used Quarry, CGoban 2*/
-        if (parseOverTimeProp(value,
-                              "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
-                              true, 1000L))
+        /* Used by Quarry, CGoban 2 */
+        if (parseOverTime(value,
+                          "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
+                          true, 1000L))
             return;
+        setWarning("Discarded unknown format for overtime settings");
         m_ignoreTimeSettings = true;
     }
 
-    private boolean parseOverTimeProp(String value, String regex,
-                                      boolean byoyomiMovesFirst,
-                                      long timeUnitFactor)
+    private boolean parseOverTime(String value, String regex,
+                                  boolean byoyomiMovesFirst,
+                                  long timeUnitFactor)
     {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(value);
@@ -464,8 +478,8 @@ public final class SgfReader
                     group2 = matcher.group(1);
                 }
                 m_byoyomiMoves = Integer.parseInt(group1);
-                m_byoyomi
-                    = (long)(Double.parseDouble(group2) * timeUnitFactor);
+                m_byoyomi = (long)(Double.parseDouble(group2)
+                                   * timeUnitFactor);
             }
             catch (NumberFormatException e)
             {
@@ -479,6 +493,34 @@ public final class SgfReader
         return true;
     }
 
+    /** FF3 OM property */
+    private void parseOverTimeMoves(String value)
+    {
+        try
+        {
+            m_byoyomiMoves = Integer.parseInt(value);
+        }
+        catch (NumberFormatException e)
+        {
+            setWarning("Invalid value for byoyomi moves");
+            m_ignoreTimeSettings = true;
+        }
+    }
+
+    /** FF3 OP property */
+    private void parseOverTimePeriod(String value)
+    {
+        try
+        {
+            m_byoyomi = (long)(Double.parseDouble(value) * 1000);
+        }
+        catch (NumberFormatException e)
+        {
+            setWarning("Invalid value for byoyomi time");
+            m_ignoreTimeSettings = true;
+        }
+    }
+
     /** Parse point value.
         @return Point or null, if pass move
         @throw SgfError On invalid value
@@ -488,7 +530,7 @@ public final class SgfReader
         s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals(""))
             return null;
-        int boardSize = m_gameInformation.getBoardSize();
+        int boardSize = getBoardSize();
         if (s.length() > 2
             || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
         {
@@ -556,11 +598,61 @@ public final class SgfReader
         }
     }
     
-    private void readKomi(String value) throws SgfError
+    /** FF4 TM property */
+    private void parseTime(String value)
+    {
+        value = value.trim();
+        if (value.equals("") || value.equals("-"))
+            return;
+        try
+        {
+            m_preByoyomi = (long)(Double.parseDouble(value) * 1000);
+            return;
+        }
+        catch (NumberFormatException e1)
+        {
+        }
+        try
+        {
+            Pattern pattern;
+            Matcher matcher;
+            // Pattern as written by CGoban 1.9.12
+            pattern = Pattern.compile("(\\d{1,2}+):(\\d\\d)");
+            matcher = pattern.matcher(value.trim());
+            if (matcher.matches())
+            {
+                assert(matcher.groupCount() == 2);
+                m_preByoyomi =
+                    (Integer.parseInt(matcher.group(1)) * 60L
+                     + Integer.parseInt(matcher.group(2))) * 1000L;
+                return;
+            }
+            pattern = Pattern.compile("(\\d+):(\\d\\d):(\\d\\d)");
+            matcher = pattern.matcher(value.trim());
+            if (matcher.matches())
+            {
+                assert(matcher.groupCount() == 3);
+                m_preByoyomi =
+                    (Integer.parseInt(matcher.group(1)) * 3600L
+                     + Integer.parseInt(matcher.group(2)) * 60L
+                     + Integer.parseInt(matcher.group(3))) * 1000L;
+                return;
+            }
+        }
+        catch (NumberFormatException e2)
+        {
+            assert(false); // patterns should match only valid integers
+            return;
+        }
+        setWarning("Invalid value for time");
+        m_ignoreTimeSettings = true;
+    }
+
+    private void readKomi(Node node, String value) throws SgfError
     {
         try
         {
-            m_gameInformation.setKomi(Komi.parseKomi(value));
+            createGameInformation(node).setKomi(Komi.parseKomi(value));
         }
         catch (Komi.InvalidKomi e)
         {
@@ -611,8 +703,14 @@ public final class SgfReader
         if (ttype != ';')
             throw getError("Next node expected");
         Node son = new Node();
-        father.append(son);
+        if (father != null)
+            father.append(son);
+        m_ignoreTimeSettings = false;
+        m_byoyomiMoves = -1;
+        m_byoyomi = -1;
+        m_preByoyomi = -1;
         while (readProp(son, isRoot));
+        setTimeSettings(son);
         return son;
     }
 
@@ -638,26 +736,22 @@ public final class SgfReader
                 parsePointList();
                 for (int i = 0; i < m_pointList.size(); ++i)
                     node.addBlack(getPointList(i));
-                m_sizeFixed = true;
             }
             else if (p == "AE")
             {
                 parsePointList();
                 for (int i = 0; i < m_pointList.size(); ++i)
                     node.addEmpty(getPointList(i));
-                m_sizeFixed = true;
             }
             else if (p == "AW")
             {
                 parsePointList();
                 for (int i = 0; i < m_pointList.size(); ++i)
                     node.addWhite(getPointList(i));
-                m_sizeFixed = true;
             }
             else if (p == "B")
             {
                 node.setMove(Move.get(parsePoint(v), GoColor.BLACK));
-                m_sizeFixed = true;
             }
             else if (p == "BL")
             {
@@ -670,7 +764,7 @@ public final class SgfReader
                 }
             }
             else if (p == "BR")
-                m_gameInformation.setRank(GoColor.BLACK, v);
+                createGameInformation(node).setRank(GoColor.BLACK, v);
             else if (p == "C")
             {
                 String comment;
@@ -695,7 +789,7 @@ public final class SgfReader
             else if (p == "CR")
                 readMarked(node, MarkType.CIRCLE);
             else if (p == "DT")
-                m_gameInformation.setDate(v);
+                createGameInformation(node).setDate(v);
             else if (p == "FF")
             {
                 int format = -1;
@@ -728,7 +822,8 @@ public final class SgfReader
                 {
                     try
                     {
-                        m_gameInformation.setHandicap(Integer.parseInt(v));
+                        int handicap = Integer.parseInt(v);
+                        createGameInformation(node).setHandicap(handicap);
                     }
                     catch (NumberFormatException e)
                     {
@@ -737,7 +832,7 @@ public final class SgfReader
                 }
             }
             else if (p == "KM")
-                readKomi(v);
+                readKomi(node, v);
             else if (p == "LB")
             {
                 for (int i = 0; i < m_values.size(); ++i)
@@ -765,33 +860,11 @@ public final class SgfReader
                 }
             }
             else if (p == "OM")
-            {
-                try
-                {
-                    m_byoyomiMoves = Integer.parseInt(v);
-                }
-                catch (NumberFormatException e)
-                {
-                    setWarning("Invalid value for byoyomi moves");
-                    m_ignoreTimeSettings = true;
-                }
-            }
+                parseOverTimeMoves(v);
             else if (p == "OP")
-            {
-                try
-                {
-                    m_byoyomi = (long)(Double.parseDouble(v) * 1000);
-                }
-                catch (NumberFormatException e)
-                {
-                    setWarning("Invalid value for byoyomi time");
-                    m_ignoreTimeSettings = true;
-                }
-            }
+                parseOverTimePeriod(v);
             else if (p == "OT")
-            {
-                parseOverTimeProp(v);
-            }
+                parseOverTime(v);
             else if (p == "OW")
             {
                 try
@@ -803,15 +876,15 @@ public final class SgfReader
                 }
             }
             else if (p == "PB")
-                m_gameInformation.setPlayer(GoColor.BLACK, v);
+                createGameInformation(node).setPlayer(GoColor.BLACK, v);
             else if (p == "PW")
-                m_gameInformation.setPlayer(GoColor.WHITE, v);
+                createGameInformation(node).setPlayer(GoColor.WHITE, v);
             else if (p == "PL")
                 node.setPlayer(parseColor(v));
             else if (p == "RE")
-                m_gameInformation.setResult(v);
+                createGameInformation(node).setResult(v);
             else if (p == "RU")
-                m_gameInformation.setRules(v);
+                createGameInformation(node).setRules(v);
             else if (p == "SQ")
                 readMarked(node, MarkType.SQUARE);
             else if (p == "SL")
@@ -820,30 +893,31 @@ public final class SgfReader
             {
                 if (! isRoot)
                 {
-                    if (m_sizeFixed)
-                        throw getError("Size property outside root node");
                     setWarning("Size property not in root node");
                 }
-                try
+                else
                 {
-                    m_gameInformation.setBoardSize(parseInt(v));
+                    if (m_boardSize != -1)
+                        throw getError("Size property after point properties");
+                    try
+                    {
+                        m_boardSize = parseInt(v);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        setWarning("Invalid board size value");
+                    }
                 }
-                catch (NumberFormatException e)
-                {
-                    setWarning("Invalid board size value");
-                }
-                m_sizeFixed = true;
             }
             else if (p == "TB")
                 readMarked(node, MarkType.TERRITORY_BLACK);
             else if (p == "TM")
-                readTime(v);
+                parseTime(v);
             else if (p == "TR")
                 readMarked(node, MarkType.TRIANGLE);
             else if (p == "W")
             {
                 node.setMove(Move.get(parsePoint(v), GoColor.WHITE));
-                m_sizeFixed = true;
             }
             else if (p == "TW")
                 readMarked(node, MarkType.TERRITORY_WHITE);
@@ -868,7 +942,7 @@ public final class SgfReader
                 }
             }
             else if (p == "WR")
-                m_gameInformation.setRank(GoColor.WHITE, v);
+                createGameInformation(node).setRank(GoColor.WHITE, v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 addSgfProperty(node, p);
             return true;
@@ -884,8 +958,7 @@ public final class SgfReader
     {
         try
         {
-            m_gameInformation = new GameInformation(GoPoint.DEFAULT_SIZE);
-            m_sizeFixed = false;
+            m_boardSize = -1;
             if (m_progressShow != null)
             {
                 m_byteCountInputStream = new ByteCountInputStream(in);
@@ -909,18 +982,13 @@ public final class SgfReader
             m_reader = new BufferedReader(reader);
             m_tokenizer = new StreamTokenizer(m_reader);
             findRoot();
-            Node root = new Node();
-            Node node = readNext(root, true);
+            Node root = readNext(null, true);
+            Node node = root;
             while (node != null)
                 node = readNext(node, false);
             checkEndOfFile();
-            if (root.getNumberChildren() == 1)
-            {
-                root = root.getChild();
-                root.setFather(null);
-            }
-            setTimeSettings();
-            m_gameTree = new GameTree(m_gameInformation, root);
+            getBoardSize(); // Set to default value if still unknown
+            m_tree = new GameTree(m_boardSize, root);
             applyFixes();
         }
         catch (FileNotFoundException e)
@@ -975,66 +1043,16 @@ public final class SgfReader
         return m_buffer.toString();
     }
 
-    private void readTime(String value)
-    {
-        value = value.trim();
-        if (value.equals("") || value.equals("-"))
-            return;
-        try
-        {
-            m_preByoyomi = (long)(Double.parseDouble(value) * 1000);
-            return;
-        }
-        catch (NumberFormatException e)
-        {
-        }
-        try
-        {
-            Pattern pattern;
-            Matcher matcher;
-            // Pattern as written by CGoban 1.9.12
-            pattern = Pattern.compile("(\\d{1,2}+):(\\d\\d)");
-            matcher = pattern.matcher(value.trim());
-            if (matcher.matches())
-            {
-                assert(matcher.groupCount() == 2);
-                m_preByoyomi =
-                    (Integer.parseInt(matcher.group(1)) * 60L
-                     + Integer.parseInt(matcher.group(2))) * 1000L;
-                return;
-            }
-            pattern = Pattern.compile("(\\d+):(\\d\\d):(\\d\\d)");
-            matcher = pattern.matcher(value.trim());
-            if (matcher.matches())
-            {
-                assert(matcher.groupCount() == 3);
-                m_preByoyomi =
-                    (Integer.parseInt(matcher.group(1)) * 3600L
-                     + Integer.parseInt(matcher.group(2)) * 60L
-                     + Integer.parseInt(matcher.group(3))) * 1000L;
-                return;
-            }
-        }
-        catch (NumberFormatException e)
-        {
-            assert(false);
-        }
-        setWarning("Invalid value for time");
-        m_ignoreTimeSettings = true;
-    }
-
-    private void setTimeSettings()
+    private void setTimeSettings(Node node)
     {
         if (m_ignoreTimeSettings || m_preByoyomi <= 0)
             return;
+        TimeSettings s;
         if (m_byoyomi <= 0 || m_byoyomiMoves <= 0)
-        {
-            m_gameInformation.setTimeSettings(new TimeSettings(m_preByoyomi));
-            return;
-        }
-        m_gameInformation.setTimeSettings(new TimeSettings(m_preByoyomi,
-                                                           m_byoyomi,
-                                                           m_byoyomiMoves));
+            s = new TimeSettings(m_preByoyomi);
+        else
+            s = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+        node.createGameInformation().setTimeSettings(s);
     }
 
     private void setWarning(String message)

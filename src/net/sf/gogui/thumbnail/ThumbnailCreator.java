@@ -218,9 +218,9 @@ public final class ThumbnailCreator
             }
         }
         GameTree tree = reader.getGameTree();
-        GameInformation gameInformation = tree.getGameInformation();
-        int size = gameInformation.getBoardSize();
-        m_description = gameInformation.suggestGameName();
+        GameInformation info = tree.getGameInformation(tree.getRoot());
+        int size = tree.getBoardSize();
+        m_description = info.suggestGameName();
         if (m_description == null)
             m_description = "";
         Board board = new Board(size);

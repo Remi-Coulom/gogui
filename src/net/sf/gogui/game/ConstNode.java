@@ -31,6 +31,8 @@ public interface ConstNode
 
     int getChildIndex(ConstNode child);
 
+    ConstGameInformation getGameInformationConst();
+
     String getLabel(GoPoint point);
 
     Map getLabelsConst();

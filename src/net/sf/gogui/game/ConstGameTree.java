@@ -9,7 +9,9 @@ package net.sf.gogui.game;
 */
 public interface ConstGameTree
 {
-    ConstGameInformation getGameInformationConst();
+    int getBoardSize();
+
+    ConstGameInformation getGameInformationConst(ConstNode node);
 
     ConstNode getRootConst();
 

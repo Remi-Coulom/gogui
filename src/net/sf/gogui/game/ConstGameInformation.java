@@ -12,8 +12,6 @@ import net.sf.gogui.go.Komi;
 */
 public interface ConstGameInformation
 {
-    int getBoardSize();
-
     String getDate();
 
     int getHandicap();

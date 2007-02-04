@@ -11,19 +11,17 @@ import net.sf.gogui.go.Komi;
 import net.sf.gogui.util.StringUtil;
 
 /** Game information.
-    Contains information about the board size, handicap, rules and players.
+    Contains information about handicap, rules and players.
 */
 public class GameInformation
     implements ConstGameInformation
 {
-    public GameInformation(int boardSize)
+    public GameInformation()
     {
-        m_boardSize = boardSize;
     }
 
     public GameInformation(ConstGameInformation gameInformation)
     {
-        m_boardSize = gameInformation.getBoardSize();
         m_handicap = gameInformation.getHandicap();
         m_komi = gameInformation.getKomi();
         m_date = gameInformation.getDate();
@@ -34,11 +32,6 @@ public class GameInformation
         m_rankBlack = gameInformation.getRank(GoColor.BLACK);
         m_rankWhite = gameInformation.getRank(GoColor.WHITE);
         m_timeSettings = gameInformation.getTimeSettings();
-    }
-
-    public int getBoardSize()
-    {
-        return m_boardSize;
     }
 
     public String getDate()
@@ -119,11 +112,6 @@ public class GameInformation
         return result;
     }
 
-    public void setBoardSize(int boardSize)
-    {
-        m_boardSize = boardSize;
-    }
-
     public void setDate(String date)
     {
         m_date = date;
@@ -199,8 +187,6 @@ public class GameInformation
             playerWhite = "Unknown";
         return playerWhite + " vs " + playerBlack + " (B)";
     }
-
-    private int m_boardSize;
 
     private int m_handicap;
 

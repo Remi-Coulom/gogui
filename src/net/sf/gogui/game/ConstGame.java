@@ -18,7 +18,7 @@ public interface ConstGame
 
     ConstNode getCurrentNode();
 
-    ConstGameInformation getGameInformation();
+    ConstGameInformation getGameInformation(ConstNode node);
 
     int getMoveNumber();
 

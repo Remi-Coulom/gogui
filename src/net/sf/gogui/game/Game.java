@@ -34,7 +34,7 @@ public class Game
 
     public Game(GameTree tree)
     {
-        int boardSize = tree.getGameInformation().getBoardSize();
+        int boardSize = tree.getBoardSize();
         m_board = new Board(boardSize);
         m_clock = new Clock();
         init(tree);
@@ -105,9 +105,9 @@ public class Game
         return m_current;
     }
 
-    public ConstGameInformation getGameInformation()
+    public ConstGameInformation getGameInformation(ConstNode node)
     {
-        return m_tree.getGameInformation();
+        return m_tree.getGameInformationConst(node);
     }
 
     public int getMoveNumber()
@@ -181,7 +181,8 @@ public class Game
 
     public void keepOnlyPosition()
     {
-        m_tree = NodeUtil.makeTreeFromPosition(getGameInformation(), m_board);
+        ConstGameInformation info = getGameInformation(m_current);
+        m_tree = NodeUtil.makeTreeFromPosition(info, m_board);
         m_board.init(m_board.getSize());
         m_current = m_tree.getRoot();
         updateBoard();
@@ -273,16 +274,16 @@ public class Game
 
     public void setDate(String date)
     {
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(date, gameInformation.getDate());
-        gameInformation.setDate(date);
+        GameInformation info = m_tree.getGameInformation(m_current);
+        m_modified = ! ObjectUtil.equals(date, info.getDate());
+        info.setDate(date);
     }
 
     public void setKomi(Komi komi)
     {
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(komi, gameInformation.getKomi());
-        gameInformation.setKomi(komi);
+        GameInformation info = m_tree.getGameInformation(m_current);
+        m_modified = ! ObjectUtil.equals(komi, info.getKomi());
+        info.setKomi(komi);
     }
 
     /** Set label in current node. */
@@ -295,24 +296,24 @@ public class Game
     public void setPlayer(GoColor c, String name)
     {
         assert(c.isBlackWhite());
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(name, gameInformation.getPlayer(c));
-        gameInformation.setPlayer(c, name);
+        GameInformation info = m_tree.getGameInformation(m_current);
+        m_modified = ! ObjectUtil.equals(name, info.getPlayer(c));
+        info.setPlayer(c, name);
     }
 
     public void setRank(GoColor c, String rank)
     {
         assert(c.isBlackWhite());
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(rank, gameInformation.getRank(c));
-        m_tree.getGameInformation().setRank(c, rank);
+        GameInformation info = m_tree.getGameInformation(m_current);
+        m_modified = ! ObjectUtil.equals(rank, info.getRank(c));
+        info.setRank(c, rank);
     }
 
     public void setResult(String result)
     {
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(result, gameInformation.getResult());
-        gameInformation.setResult(result);
+        GameInformation info = m_tree.getGameInformation(m_current);
+        m_modified = ! ObjectUtil.equals(result, info.getResult());
+        info.setResult(result);
     }
 
     public void setToMove(GoColor color)

@@ -55,12 +55,7 @@ Selected text in the comment is also used as a default text for
 Open a game from a file in
 <ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
 format.
-<note>
-<simpara>
-Only a subset of the SGF definition is supported.
-Most notably game collections are not supported.
-</simpara>
-</note>
+Game collections are not supported.
 </para>
 </listitem>
 </varlistentry>

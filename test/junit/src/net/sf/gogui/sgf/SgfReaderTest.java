@@ -100,10 +100,9 @@ public final class SgfReaderTest
 
     public void checkFF4Example(SgfReader reader) throws Exception
     {
-        GameTree gameTree = reader.getGameTree();
-        GameInformation info = gameTree.getGameInformation();
-        assertEquals(info.getBoardSize(), 19);
-        ConstNode root = gameTree.getRoot();
+        GameTree tree = reader.getGameTree();
+        assertEquals(tree.getBoardSize(), 19);
+        ConstNode root = tree.getRoot();
         assertEquals(NodeUtil.subtreeSize(root), 54);
         assertEquals(root.getNumberChildren(), 5);
         ConstNode node;
@@ -213,9 +212,9 @@ public final class SgfReaderTest
                                    int byoyomiMoves) throws Exception
     {
         SgfReader reader = getReader(name);
-        GameTree gameTree = reader.getGameTree();
-        GameInformation gameInformation = gameTree.getGameInformation();
-        TimeSettings timeSettings = gameInformation.getTimeSettings();
+        GameTree tree = reader.getGameTree();
+        GameInformation info = tree.getGameInformation(tree.getRoot());
+        TimeSettings timeSettings = info.getTimeSettings();
         assertNotNull(timeSettings);
         assertEquals(timeSettings.getPreByoyomi(), preByoyomi);
         assertEquals(timeSettings.getByoyomi(), byoyomi);

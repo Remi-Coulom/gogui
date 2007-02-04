@@ -75,7 +75,7 @@ public class GameInfo
         ConstBoard board = game.getBoard();
         ConstNode node = game.getCurrentNode();
         ConstGameTree tree = game.getTree();
-        ConstGameInformation info = tree.getGameInformationConst();
+        ConstGameInformation info = tree.getGameInformationConst(node);
         updatePlayerToolTip(m_iconBlack, info.getPlayer(GoColor.BLACK),
                             info.getRank(GoColor.BLACK), "Black");
         updatePlayerToolTip(m_iconWhite, info.getPlayer(GoColor.WHITE),

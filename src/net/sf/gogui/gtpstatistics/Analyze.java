@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.text.DecimalFormat;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameTree;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
@@ -665,7 +666,8 @@ public class Analyze
         {
             InputStream in = new FileInputStream(new File(game));
             SgfReader reader = new SgfReader(in, new File(game), null, 0);
-            GameInformation info = reader.getGameTree().getGameInformation();
+            GameTree tree = reader.getGameTree();
+            GameInformation info = tree.getGameInformation(tree.getRoot());
             String playerBlack = info.getPlayer(GoColor.BLACK);
             if (playerBlack == null)
                 playerBlack = "?";

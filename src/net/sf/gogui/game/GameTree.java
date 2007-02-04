@@ -17,24 +17,26 @@ public class GameTree
 {
     public GameTree()
     {
-        m_gameInformation = new GameInformation(GoPoint.DEFAULT_SIZE);
-        setDate();
+        m_boardSize = GoPoint.DEFAULT_SIZE;
         m_root = new Node();
+        m_root.createGameInformation();
+        setDate();
     }
 
     public GameTree(int boardSize, Komi komi, ConstPointList handicap,
                     String rules, TimeSettings timeSettings)
     {
-        m_gameInformation = new GameInformation(boardSize);
-        setDate();
+        m_boardSize = boardSize;
         m_root = new Node();
-        m_gameInformation.setKomi(komi);
-        m_gameInformation.setRules(rules);
+        GameInformation info = m_root.createGameInformation();
+        setDate();
+        info.setKomi(komi);
+        info.setRules(rules);
         if (timeSettings != null)
-            m_gameInformation.setTimeSettings(timeSettings);
+            info.setTimeSettings(timeSettings);
         if (handicap != null)
         {
-            m_gameInformation.setHandicap(handicap.size());
+            info.setHandicap(handicap.size());
             if (handicap.size() > 0)
             {
                 m_root.setPlayer(GoColor.WHITE);
@@ -44,20 +46,40 @@ public class GameTree
         }
     }
 
-    public GameTree(GameInformation gameInformation, Node root)
+    /** Probably only needed by SgfReader. */
+    public GameTree(int boardSize, Node root)
     {
-        m_gameInformation = gameInformation;
+        m_boardSize = boardSize;
+        root.createGameInformation();
         m_root = root;
     }
 
-    public GameInformation getGameInformation()
+    public int getBoardSize()
     {
-        return m_gameInformation;
+        return m_boardSize;
     }
 
-    public ConstGameInformation getGameInformationConst()
+    /** Find the game information valid for this node.
+        @return The game information from the nearest ancestor node,
+        which has a game information (the root node is always guaranteed
+        to have one).
+    */
+    public GameInformation getGameInformation(Node node)
     {
-        return m_gameInformation;
+        assert(NodeUtil.getRoot(node) == getRoot());
+        while (true)
+        {
+            GameInformation info = node.getGameInformation();
+            if (info != null)
+                return info;
+            node = node.getFather();
+        }
+    }
+
+    /** @see #getGameInformation() */
+    public ConstGameInformation getGameInformationConst(ConstNode node)
+    {
+        return getGameInformation((Node)node);
     }
 
     /** Get a non-const reference to a const node.
@@ -101,7 +123,7 @@ public class GameTree
         }
     }
 
-    private final GameInformation m_gameInformation;
+    private final int m_boardSize;
 
     private final Node m_root;
 
@@ -112,9 +134,10 @@ public class GameTree
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
         DecimalFormat format = new DecimalFormat("00");
-        m_gameInformation.setDate(Integer.toString(year) + "-"
-                                  + format.format(month) + "-"
-                                  + format.format(day));
+        GameInformation info = m_root.getGameInformation();
+        info.setDate(Integer.toString(year) + "-"
+                     + format.format(month) + "-"
+                     + format.format(day));
     }
 }
 

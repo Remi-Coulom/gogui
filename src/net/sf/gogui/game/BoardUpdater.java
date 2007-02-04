@@ -20,9 +20,9 @@ public class BoardUpdater
 
     public void update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
-        ConstGameInformation gameInformation = tree.getGameInformationConst();
-        int size = gameInformation.getBoardSize();
-        int handicap = gameInformation.getHandicap();
+        ConstGameInformation info = tree.getGameInformationConst(currentNode);
+        int size = tree.getBoardSize();
+        int handicap = info.getHandicap();
         m_nodes.clear();
         NodeUtil.getPathToRoot(currentNode, m_nodes);
         board.init(size);
