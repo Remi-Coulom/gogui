@@ -35,50 +35,11 @@ public final class KomiTest
         assertFalse((new Komi(6.5)).hashCode() == (new Komi(6)).hashCode());
     }
 
-    public void testInvalid1()
-    {
-        try
-        {
-            new Komi(-0.4);
-        }
-        catch (Komi.InvalidKomi e)
-        {
-            return;
-        }
-        fail();
-    }
-
-    public void testInvalid2()
-    {
-        try
-        {
-            new Komi(-10);
-        }
-        catch (Komi.InvalidKomi e)
-        {
-            return;
-        }
-        fail();
-    }
-
     public void testParseKomi() throws Komi.InvalidKomi
     {
         assertEquals(new Komi(5.5), Komi.parseKomi("5.5"));
         assertEquals(new Komi(0), Komi.parseKomi("0"));
         assertNull(Komi.parseKomi(""));
-    }
-
-    public void testParseKomiInvalidNegative()
-    {
-        try
-        {
-            Komi.parseKomi("-5");
-        }
-        catch (Komi.InvalidKomi e)
-        {
-            return;
-        }
-        fail();
     }
 
     public void testParseKomiInvalidNotANumber()
@@ -110,6 +71,8 @@ public final class KomiTest
     public void testToDouble() throws Komi.InvalidKomi
     {
         double delta = 1e-10;
+        assertEquals(-0.5, (new Komi(-0.5)).toDouble(), delta);
+        assertEquals(-2, (new Komi(-2)).toDouble(), delta);
         assertEquals(0, (new Komi(0)).toDouble(), delta);
         assertEquals(5, (new Komi(5)).toDouble(), delta);
         assertEquals(0.5, (new Komi(0.5)).toDouble(), delta);
@@ -121,6 +84,8 @@ public final class KomiTest
         assertEquals(5.5, (new Komi(5.4)).toDouble(), delta);
         assertEquals(5.5, (new Komi(5.6)).toDouble(), delta);
         assertEquals(0, (new Komi(-0.002)).toDouble(), delta);
+        assertEquals(-0.5, (new Komi(-0.3)).toDouble(), delta);
+        assertEquals(-1, (new Komi(-1.2)).toDouble(), delta);
     }
 
     public void testToString() throws Komi.InvalidKomi

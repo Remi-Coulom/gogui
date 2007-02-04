@@ -14,11 +14,6 @@ public final class Komi
     public static class InvalidKomi
         extends ErrorMessage
     {
-        public InvalidKomi(double komi)
-        {
-            super("Invalid komi: " + komi);
-        }
-
         public InvalidKomi(String s)
         {
             super("Invalid komi: " + s);
@@ -31,15 +26,12 @@ public final class Komi
     }
 
     /** Constructor.
-        @param komi The value for the komi. Has to be positive and will
-        be rounded to a multiple of 0.5
-        @throws Komi.InvalidKomi If value is not positive after rounding.
+        @param komi The value for the komi. Will be rounded to a multiple of
+        0.5
     */
-    public Komi(double komi) throws InvalidKomi
+    public Komi(double komi)
     {
         m_value = (int)(Math.round(komi * 2.0));
-        if (m_value < 0)
-            throw new InvalidKomi(komi);
     }
 
     public boolean equals(Object object)
