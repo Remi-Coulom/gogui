@@ -445,6 +445,11 @@ public final class SgfReader
                           "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
                           true, 1000L))
             return;
+        /* Used by ? */
+        if (parseOverTime(value,
+                          "\\s*(\\d+)x(\\d+)\\s*",
+                          true, 1000L))
+            return;
         /* Used by Quarry, CGoban 2 */
         if (parseOverTime(value,
                           "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
