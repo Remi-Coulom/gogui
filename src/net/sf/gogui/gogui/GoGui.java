@@ -829,7 +829,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! m_optionalMessages.showQuestion("pass", "Really pass?"))
+        if (! showOptionalQuestion("pass", "Really pass?"))
             return;
         humanMoved(Move.getPass(getToMove()));
     }
@@ -1009,6 +1009,12 @@ public class GoGui
         }
         else
         {
+            if (node.getMove() != null)
+            {
+                String message = "Create new setup node in game tree?";
+                if (! showOptionalQuestion("create-setup-node", message))
+                    return;
+            }
             resetBoard();
             m_setupMode = true;
             m_setupColor = color;
@@ -3389,6 +3395,11 @@ public class GoGui
         }
         m_splitPane.resetToPreferredSizes();
         pack();
+    }
+
+    private boolean showOptionalQuestion(String id, String message)
+    {
+        return m_optionalMessages.showQuestion(id, message);
     }
 
     private boolean showQuestion(String message)
