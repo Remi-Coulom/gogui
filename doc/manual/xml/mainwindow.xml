@@ -597,6 +597,8 @@ Save the sent GTP commands to a file.
 <listitem>
 <para>
 Send GTP commands from a file to the engine.
+The file is not allowed to contain any GTP command that change the
+board state.
 </para>
 </listitem>
 </varlistentry>
@@ -606,6 +608,8 @@ Send GTP commands from a file to the engine.
 <listitem>
 <para>
 Send GTP commands from a recently opened file to the engine.
+The file is not allowed to contain any GTP command that change the
+board state.
 </para>
 </listitem>
 </varlistentry>
