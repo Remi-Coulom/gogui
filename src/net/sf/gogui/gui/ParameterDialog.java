@@ -34,7 +34,7 @@ public class ParameterDialog
         int numberParameters = parameters.size();
         int cols = Math.max(1, numberParameters / 25);
         JPanel panel =
-            new JPanel(new GridLayout(0, cols, 0, GuiUtil.SMALL_PAD));
+            new JPanel(new GridLayout(0, cols, 0, GuiUtil.PAD));
         for (int i = 0; i < numberParameters; ++i)
             panel.add(((Parameter)parameters.get(i)).getComponent());
         Object options[] = { "Ok", "Cancel" };

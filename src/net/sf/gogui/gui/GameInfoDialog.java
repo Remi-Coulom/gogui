@@ -6,11 +6,14 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,14 +48,19 @@ public final class GameInfoDialog
         gameInfo.updateGameInfo(info);
     }
 
+    private static class PlayerInfo
+    {
+        public Box m_box;
+
+        public JTextField m_name;
+        
+        public JTextField m_rank;
+    }
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private final JPanel m_panelLeft;
-
-    private final JPanel m_panelRight;
 
     private TimeField m_byoyomi;
 
@@ -62,15 +70,15 @@ public final class GameInfoDialog
 
     private JTextField m_komi;
 
-    private JTextField m_playerBlack;
+    private PlayerInfo m_black;
 
-    private JTextField m_playerWhite;
+    private PlayerInfo m_white;
 
     private TimeField m_preByoyomi;
 
-    private final JTextField m_rankBlack;
+    private JTextField m_rankBlack;
 
-    private final JTextField m_rankWhite;
+    private JTextField m_rankWhite;
 
     private JTextField m_result;
 
@@ -78,69 +86,121 @@ public final class GameInfoDialog
 
     private GameInfoDialog(GameInformation info)
     {
-        JPanel panel = new JPanel(new BorderLayout());
-        m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
-        panel.add(m_panelLeft, BorderLayout.WEST);
-        m_panelRight =
-            new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
-        panel.add(m_panelRight, BorderLayout.CENTER);
-        m_playerBlack = createEntry("Black player:",
-                                    info.getPlayer(GoColor.BLACK));
-        m_rankBlack = createEntry("Black rank:",
-                                  info.getRank(GoColor.BLACK));
-        m_playerWhite = createEntry("White player:",
-                                    info.getPlayer(GoColor.WHITE));
-        m_rankWhite = createEntry("White rank:",
-                                  info.getRank(GoColor.WHITE));
-        m_date = createEntry("Date:", info.getDate());
-        m_rules = createEntry("Rules:", info.getRules());
-        Komi komi = info.getKomi();
-        m_komi = createEntry("Komi:", komi == null ? "" : komi.toString());
-        m_result = createEntry("Result:", info.getResult());
-        createTimeEntry(info.getTimeSettings());
-        setMessage(panel);
+        Box outerBox = Box.createVerticalBox();
+        m_black = createPlayerInfo(GoColor.BLACK, "gogui-black-16x16",
+                                   "Black", info);
+        m_black.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
+        outerBox.add(m_black.m_box);
+        outerBox.add(GuiUtil.createFiller());
+        m_white = createPlayerInfo(GoColor.WHITE, "gogui-white-16x16",
+                                   "White", info);
+        m_white.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
+        outerBox.add(m_white.m_box);
+        outerBox.add(GuiUtil.createFiller());
+        outerBox.add(GuiUtil.createFiller());
+        Box box = Box.createHorizontalBox();
+        box.setAlignmentX(Component.LEFT_ALIGNMENT);
+        outerBox.add(box);
+        JPanel labels =
+            new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
+        box.add(labels);
+        box.add(GuiUtil.createSmallFiller());
+        JPanel values =
+            new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
+        box.add(values);
+        m_result = createEntry("Result", 5, info.getResult(),
+                               "Result of the game", labels, values);
+        m_date = createEntry("Date", 10, info.getDate(),
+                             "Date when the game was played", labels, values);
+        m_rules = createEntry("Rules", 10, info.getRules(),
+                              "Used rules for the game", labels, values);
+        String komi = "";
+        if (info.getKomi() != null)
+            komi = info.getKomi().toString();
+        m_komi = createEntry("Komi", 5, komi,
+                             "Komi value (compensation for first move)",
+                             labels, values);
+        createTime(info.getTimeSettings(), labels, values);
+
+        setMessage(outerBox);
         setOptionType(OK_CANCEL_OPTION);
     }
 
-    private JTextField createEntry(String labelText, String text)
+    private JTextField createEntry(String labelText, int cols, String text,
+                                   String toolTipText, JComponent labels,
+                                   JComponent values)
     {
-        JLabel label = new JLabel(labelText);
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
-        m_panelLeft.add(label);
-        JPanel panel = new JPanel();
-        m_panelRight.add(panel);
-        JTextField textField = new JTextField(25);
-        textField.setText(text);
-        panel.add(textField);
-        return textField;
+        Box boxLabel = Box.createHorizontalBox();
+        boxLabel.add(Box.createHorizontalGlue());
+        JLabel label = new JLabel(labelText + ":");
+        label.setAlignmentY(Component.CENTER_ALIGNMENT);
+        boxLabel.add(label);
+        labels.add(boxLabel);
+        JPanel fieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JTextField field = new JTextField(cols);
+        field.setToolTipText(toolTipText);
+        field.setText(text);
+        fieldPanel.add(field);
+        values.add(fieldPanel);
+        return field;
     }
 
-    private void createTimeEntry(TimeSettings timeSettings)
+    private void createTime(TimeSettings timeSettings, JComponent labels,
+                            JComponent values)
     {
+        Box boxLabel = Box.createHorizontalBox();
+        boxLabel.add(Box.createHorizontalGlue());
         JLabel label = new JLabel("Time:");
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
-        m_panelLeft.add(label);
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        m_preByoyomi = new TimeField();
+        label.setAlignmentY(Component.CENTER_ALIGNMENT);
+        boxLabel.add(label);
+        labels.add(boxLabel);
+        Box boxValue = Box.createHorizontalBox();
+        m_preByoyomi = new TimeField("Main time");
         if (timeSettings != null)
             m_preByoyomi.setTime(timeSettings.getPreByoyomi());
-        panel.add(m_preByoyomi);
-        panel.add(new JLabel(" + "));
-        m_byoyomi = new TimeField();
+        boxValue.add(m_preByoyomi);
+        boxValue.add(new JLabel(" + "));
+        m_byoyomi = new TimeField("Byoyomi (overtime) period");
         if (timeSettings != null && timeSettings.getUseByoyomi())
             m_byoyomi.setTime(timeSettings.getByoyomi());
-        panel.add(m_byoyomi);
-        panel.add(new JLabel(" / "));
+        boxValue.add(m_byoyomi);
+        boxValue.add(new JLabel(" / "));
         m_byoyomiMoves = new JTextField(2);
+        m_byoyomiMoves.setToolTipText("Moves per byoyomi (overtime) period");
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
         {
             int byoyomiMoves = timeSettings.getByoyomiMoves();
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
-        panel.add(m_byoyomiMoves);
-        panel.add(new JLabel(" moves"));
-        m_panelRight.add(panel);
+        boxValue.add(m_byoyomiMoves);
+        boxValue.add(new JLabel(" moves"));
+        values.add(boxValue);
+    }
+
+    private PlayerInfo createPlayerInfo(GoColor c, String icon, String name,
+                                        GameInformation info)
+    {
+        PlayerInfo playerInfo = new PlayerInfo();
+        Box box = Box.createHorizontalBox();
+        JLabel label = new JLabel(GuiUtil.getIcon(icon, name));
+        label.setAlignmentY(Component.CENTER_ALIGNMENT);
+        box.add(label);
+        box.add(GuiUtil.createFiller());
+        playerInfo.m_box = box;
+        playerInfo.m_name = new JTextField(15);
+        playerInfo.m_name.setText(info.getPlayer(c));
+        box.add(playerInfo.m_name);
+        playerInfo.m_name.setHorizontalAlignment(JTextField.CENTER);
+        playerInfo.m_name.setToolTipText(name + " player name");
+        box.add(GuiUtil.createFiller());
+        playerInfo.m_rank = new JTextField(4);
+        playerInfo.m_rank.setHorizontalAlignment(JTextField.CENTER);
+        playerInfo.m_rank.setToolTipText(name + " player rank");
+        box.add(playerInfo.m_rank);
+        playerInfo.m_rank.setText(info.getRank(c));
+        box.setAlignmentY(Component.CENTER_ALIGNMENT);
+        return playerInfo;
     }
 
     private static String getTextFieldContent(JTextField textField)
@@ -153,12 +213,18 @@ public final class GameInfoDialog
         return getTextFieldContent(textField).equals("");
     }
 
+    private void setUnlimitedSize(JComponent component)
+    {
+        Dimension size = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
+        component.setMaximumSize(size);
+    }
+
     private void updateGameInfo(GameInformation info)
     {
-        info.setPlayer(GoColor.BLACK, getTextFieldContent(m_playerBlack));
-        info.setPlayer(GoColor.WHITE, getTextFieldContent(m_playerWhite));
-        info.setRank(GoColor.BLACK, getTextFieldContent(m_rankBlack));
-        info.setRank(GoColor.WHITE, getTextFieldContent(m_rankWhite));
+        info.setPlayer(GoColor.BLACK, getTextFieldContent(m_black.m_name));
+        info.setPlayer(GoColor.WHITE, getTextFieldContent(m_white.m_name));
+        info.setRank(GoColor.BLACK, getTextFieldContent(m_black.m_rank));
+        info.setRank(GoColor.WHITE, getTextFieldContent(m_white.m_rank));
         info.setRules(getTextFieldContent(m_rules));
         info.setResult(getTextFieldContent(m_result));
         info.setDate(getTextFieldContent(m_date));
@@ -257,13 +323,16 @@ public final class GameInfoDialog
 }
 
 class TimeField
-    extends JPanel
+    extends Box
 {
-    public TimeField()
-    {
+    public TimeField(String toolTipText)
+    {        
+        super(BoxLayout.X_AXIS);
         m_textField = new JTextField(2);
         m_textField.setHorizontalAlignment(JTextField.RIGHT);
+        m_textField.setToolTipText(toolTipText);
         add(m_textField);
+        add(GuiUtil.createSmallFiller());
         String[] units = { "min", "sec" };
         m_comboBox = new JComboBox(units);
         add(m_comboBox);
