@@ -61,16 +61,27 @@ public class ScoreDialog
         JPanel values = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);        
 
-        m_territory = createColorEntry("Territory", 3, null, labels, values);
-        m_prisoners = createColorEntry("Prisoners", 3, null, labels, values);
-        m_area = createColorEntry("Area", 3, null, labels, values);
+        String toolTipTerritory = "Points surrounded by %c";
+        m_territory = createColorEntry("Territory", 3, toolTipTerritory,
+                                       labels, values);
+        String toolTypPrisoners =
+            "Stones captured by %c (including dead stones on board)";
+        m_prisoners = createColorEntry("Prisoners", 3, toolTypPrisoners,
+                                       labels, values);
+        String toolTipArea =
+            "Points surrounded by %c (including border stones)";
+        m_area = createColorEntry("Area", 3, toolTipArea, labels, values);
         m_komi = createKomiEntry(3, labels, values);
-        m_resultChinese = createEntry("Result Chinese", 8, null, labels,
-                                      values);
-        m_resultJapanese = createEntry("Result Japanese", 8, null, labels,
-                                       values);
+        m_resultChinese = createEntry("Result Area", 8,
+                                      "Area score (area and komi)",
+                                      labels, values);
+        m_resultJapanese = createEntry("Result Territory", 8,
+                                       "Territory score " +
+                                       "(territory, prisoners, and komi)",
+                                       labels, values);
         createRulesEntry(labels, values);
-        m_result = createEntry("Result", 8, null, labels, values);
+        m_result = createEntry("Result", 8, "Score used for game result",
+                               labels, values);
 
         JButton okButton = new JButton("Ok");
         okButton.addActionListener(new ActionListener() {
@@ -181,19 +192,21 @@ public class ScoreDialog
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         panel.add(new JLabel(m_iconBlack));
         panel.add(GuiUtil.createSmallFiller());
-        colorFields.m_black = new JTextField(cols);
-        colorFields.m_black.setEditable(false);
+        JTextField black = new JTextField(cols);
+        colorFields.m_black = black;
+        black.setEditable(false);
         if (toolTip != null)
-            colorFields.m_black.setToolTipText(toolTip + " Black");
-        panel.add(colorFields.m_black);
+            black.setToolTipText(toolTip.replaceAll("%c", "Black"));
+        panel.add(black);
         panel.add(GuiUtil.createFiller());
         panel.add(new JLabel(m_iconWhite));
         panel.add(GuiUtil.createSmallFiller());
-        colorFields.m_white = new JTextField(cols);
-        colorFields.m_white.setEditable(false);
+        JTextField white = new JTextField(cols);
+        colorFields.m_white = white;
+        white.setEditable(false);
         if (toolTip != null)
-            colorFields.m_white.setToolTipText(toolTip + " White");
-        panel.add(colorFields.m_white);
+            white.setToolTipText(toolTip.replaceAll("%c", "White"));
+        panel.add(white);
         values.add(panel);
         return colorFields;
     }
@@ -216,15 +229,15 @@ public class ScoreDialog
 
     private void createRulesEntry(JComponent labels, JComponent values)
     {
-        labels.add(createEntryLabel("Rules"));
+        labels.add(createEntryLabel("Scoring method"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        Object[] options = { "Chinese", "Japanese" };
+        Object[] options = { "Area", "Territory" };
         m_rules = new JComboBox(options);
         m_rules.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
                     {
-                        if (m_rules.getSelectedItem().equals("Japanese"))
+                        if (m_rules.getSelectedItem().equals("Territory"))
                             m_score.updateRules(Board.RULES_JAPANESE);
                         else
                             m_score.updateRules(Board.RULES_CHINESE);
@@ -232,8 +245,7 @@ public class ScoreDialog
                     }
                 }
             });
-        m_rules.setToolTipText("Select Chinese (area scoring) " +
-                               "or Japanese (territory scoring)");
+        m_rules.setToolTipText("Scoring method used for game result");
         panel.add(m_rules);
         values.add(panel);
     }
@@ -258,7 +270,7 @@ public class ScoreDialog
         m_resultChinese.setText(Score.formatResult(m_score.m_resultChinese));
         m_resultJapanese.setText(Score.formatResult(m_score.m_resultJapanese));
         m_rules.setSelectedItem(m_score.m_rules == Board.RULES_JAPANESE ?
-                                "Japanese" : "Chinese");
+                                "Territory" : "Area");
         m_result.setText(m_score.formatResult());
     }
 }
