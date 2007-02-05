@@ -6,8 +6,10 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.io.File;
+import javax.swing.Box;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -50,22 +52,22 @@ public class BookmarkDialog
 
     public BookmarkDialog(Bookmark bookmark)
     {
-        JPanel panel = new JPanel(new BorderLayout(GuiUtil.PAD, 0));
-        m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
+        JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
+        m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelLeft, BorderLayout.WEST);
         m_panelRight =
-            new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
+            new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("Name:", bookmark.m_name);
+        m_name = createEntry("Name", 25, bookmark.m_name);
         String file = "";
         if (bookmark.m_file != null)
             file = bookmark.m_file.toString();
-        m_file = createEntry("File:", file);
+        m_file = createEntry("File", 25, file);
         String move = "";
         if (bookmark.m_move > 0)
             move = Integer.toString(bookmark.m_move);
-        m_move = createEntry("Move:", move);
-        m_variation = createEntry("Variation:", bookmark.m_variation);
+        m_move = createEntry("Move", 3, move);
+        m_variation = createEntry("Variation", 10, bookmark.m_variation);
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
     }
@@ -87,15 +89,20 @@ public class BookmarkDialog
 
     private JTextField m_variation;
 
-    private JTextField createEntry(String labelText, String text)
+    private JTextField createEntry(String labelText, int cols, String text)
     {
-        JLabel label = new JLabel(labelText);
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        m_panelLeft.add(label);
-        JTextField textField = new JTextField(text);
-        textField.setColumns(25);
-        m_panelRight.add(textField);
-        return textField;
+        Box boxLabel = Box.createHorizontalBox();
+        boxLabel.add(Box.createHorizontalGlue());
+        JLabel label = new JLabel(labelText + ":");
+        label.setAlignmentY(Component.CENTER_ALIGNMENT);
+        boxLabel.add(label);
+        m_panelLeft.add(boxLabel);
+        JPanel fieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JTextField field = new JTextField(cols);
+        field.setText(text);
+        fieldPanel.add(field);
+        m_panelRight.add(fieldPanel);
+        return field;
     }
 
     private int getMove()
