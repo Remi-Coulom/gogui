@@ -28,7 +28,7 @@ public class OptionalMessage
     {
         if (m_disabled)
             return;
-        show(message, JOptionPane.INFORMATION_MESSAGE, false);
+        show(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_OPTION);
         m_disabled = m_disabledCheckBox.isSelected();
     }
 
@@ -36,18 +36,28 @@ public class OptionalMessage
     {
         if (m_disabled)
             return true;
-        show(message, JOptionPane.QUESTION_MESSAGE, false);
+        show(message, JOptionPane.QUESTION_MESSAGE,
+             JOptionPane.OK_CANCEL_OPTION);
         boolean result = (m_optionPane.getValue() == m_options[0]);
         if (result)
             m_disabled = m_disabledCheckBox.isSelected();
         return result;
     }
 
-    public boolean showWarning(String message)
+    public void showWarning(String message)
+    {
+        if (m_disabled)
+            return;
+        show(message, JOptionPane.WARNING_MESSAGE, JOptionPane.OK_OPTION);
+        m_disabled = m_disabledCheckBox.isSelected();
+    }
+
+    public boolean showWarningQuestion(String message)
     {
         if (m_disabled)
             return true;
-        show(message, JOptionPane.WARNING_MESSAGE, false);
+        show(message, JOptionPane.WARNING_MESSAGE,
+             JOptionPane.OK_CANCEL_OPTION);
         boolean result = (m_optionPane.getValue() == m_options[0]);
         if (result)
             m_disabled = m_disabledCheckBox.isSelected();
@@ -58,7 +68,8 @@ public class OptionalMessage
     {
         if (m_disabled)
             return 1;
-        show(message, JOptionPane.QUESTION_MESSAGE, true);
+        show(message, JOptionPane.QUESTION_MESSAGE,
+             JOptionPane.YES_NO_CANCEL_OPTION);
         Object value = m_optionPane.getValue();
         int result;
         if (value == m_options[0])
@@ -94,7 +105,7 @@ public class OptionalMessage
         false if buttons should be "ok", "cancel"
         @return true, if message was not shown or confirmed
     */
-    private void show(String message, int type, boolean isYesNoCancel)
+    private void show(String message, int messageType, int optionType)
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
@@ -115,19 +126,17 @@ public class OptionalMessage
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
         String title;
         Object defaultOption;
-        int optionType;
-        if (type == JOptionPane.QUESTION_MESSAGE)
+        if (messageType == JOptionPane.QUESTION_MESSAGE)
         {
             m_disabledCheckBox = new JCheckBox("Do not ask again");
             title = "Question";
-            if (isYesNoCancel)
+            if (optionType == JOptionPane.YES_NO_CANCEL_OPTION)
             {
                 m_options = new Object[3];
                 m_options[0] = "Yes";
                 m_options[1] = "No";
                 m_options[2] = "Cancel";
                 defaultOption = m_options[2];
-                optionType = JOptionPane.YES_NO_CANCEL_OPTION;
             }
             else
             {
@@ -135,19 +144,26 @@ public class OptionalMessage
                 m_options[0] = "Ok";
                 m_options[1] = "Cancel";
                 defaultOption = m_options[1];
-                optionType = JOptionPane.OK_CANCEL_OPTION;
             }
         }
-        else if (type == JOptionPane.WARNING_MESSAGE)
+        else if (messageType == JOptionPane.WARNING_MESSAGE)
         {
             m_disabledCheckBox =
                 new JCheckBox("Do not show this warning again");
             title = "Warning";
-            m_options = new Object[2];
-            m_options[0] = "Ok";
-            m_options[1] = "Cancel";
-            defaultOption = m_options[1];
-            optionType = JOptionPane.OK_CANCEL_OPTION;
+            if (optionType == JOptionPane.OK_CANCEL_OPTION)
+            {
+                m_options = new Object[2];
+                m_options[0] = "Ok";
+                m_options[1] = "Cancel";
+                defaultOption = m_options[1];
+            }
+            else
+            {
+                m_options = new Object[1];
+                m_options[0] = "Ok";
+                defaultOption = m_options[0];
+            }
         }
         else
         {
@@ -157,7 +173,6 @@ public class OptionalMessage
             m_options = new Object[1];
             m_options[0] = "Ok";
             defaultOption = m_options[0];
-            optionType = JOptionPane.OK_OPTION;
         }
         m_disabledCheckBox.setSelected(m_disabled);
         String toolTipText =
@@ -165,7 +180,7 @@ public class OptionalMessage
         m_disabledCheckBox.setToolTipText(toolTipText);
         checkBoxPanel.add(m_disabledCheckBox, BorderLayout.WEST);
         panel.add(checkBoxPanel);
-        m_optionPane = new JOptionPane(panel, type, optionType, null,
+        m_optionPane = new JOptionPane(panel, messageType, optionType, null,
                                        m_options, defaultOption);
         JDialog dialog = m_optionPane.createDialog(m_parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)

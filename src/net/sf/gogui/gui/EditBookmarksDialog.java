@@ -146,7 +146,8 @@ public class EditBookmarksDialog
         String name = bookmark.m_name;
         if (m_removeWarning == null)
             m_removeWarning = new OptionalMessage(this);
-        if (! m_removeWarning.showWarning("Really remove '" + name + "'?"))
+        if (! m_removeWarning.showWarningQuestion("Really remove '" + name
+                                                  + "'?"))
             return;
         m_bookmarks.remove(bookmark);
         if (selectedIndex >= m_bookmarks.size())

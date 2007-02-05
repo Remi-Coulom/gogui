@@ -25,9 +25,14 @@ public class OptionalMessageSession
         return get(id).showQuestion(message);
     }
 
-    public boolean showWarning(String id, String message)
+    public void showWarning(String id, String message)
     {
-        return get(id).showWarning(message);
+        get(id).showWarning(message);
+    }
+
+    public boolean showWarningQuestion(String id, String message)
+    {
+        return get(id).showWarningQuestion(message);
     }
 
     public int showYesNoCancelQuestion(String id, String message)

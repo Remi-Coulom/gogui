@@ -890,7 +890,8 @@ public class GoGui
             if (m_file.exists())
             {
                 String message = "Overwrite " + m_file + "?";
-                if (! m_optionalMessages.showWarning("overwrite", message))
+                if (! m_optionalMessages.showWarningQuestion("overwrite",
+                                                             message))
                     return;
             }
             save(m_file);
