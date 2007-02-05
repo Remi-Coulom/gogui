@@ -87,7 +87,7 @@ import net.sf.gogui.gui.GuiGtpUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
-import net.sf.gogui.gui.OptionalMessage;
+import net.sf.gogui.gui.OptionalMessageSession;
 import net.sf.gogui.gui.ParameterDialog;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.SelectProgram;
@@ -829,9 +829,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (m_passWarning == null)
-            m_passWarning = new OptionalMessage(this);
-        if (! m_passWarning.showQuestion("Really pass?"))
+        if (! m_optionalMessages.showQuestion("pass", "Really pass?"))
             return;
         humanMoved(Move.getPass(getToMove()));
     }
@@ -891,10 +889,8 @@ public class GoGui
         {
             if (m_file.exists())
             {
-                if (m_overwriteWarning == null)
-                    m_overwriteWarning = new OptionalMessage(this);
                 String message = "Overwrite " + m_file + "?";
-                if (! m_overwriteWarning.showWarning(message))
+                if (! m_optionalMessages.showWarning("overwrite", message))
                     return;
             }
             save(m_file);
@@ -1698,13 +1694,8 @@ public class GoGui
 
     private GoColor m_setupColor;
 
-    private OptionalMessage m_gameFinishedMessage;
-
-    private OptionalMessage m_overwriteWarning;
-
-    private OptionalMessage m_passWarning;
-
-    private OptionalMessage m_saveQuestion;
+    private OptionalMessageSession m_optionalMessages =
+        new OptionalMessageSession(this);
 
     private Pattern m_pattern;
 
@@ -2096,11 +2087,8 @@ public class GoGui
         String message = "Save current game?";
         int result;
         if (! isProgramTerminating)
-        {
-            if (m_saveQuestion == null)
-                m_saveQuestion = new OptionalMessage(this);
-            result = m_saveQuestion.showYesNoCancelQuestion(message);
-        }
+            result =
+                m_optionalMessages.showYesNoCancelQuestion("save", message);
         else
             result = SimpleDialogs.showYesNoCancelQuestion(this, message);
         switch (result)
@@ -3366,9 +3354,7 @@ public class GoGui
 
     private void showGameFinished()
     {
-        if (m_gameFinishedMessage == null)
-            m_gameFinishedMessage = new OptionalMessage(this);
-        m_gameFinishedMessage.showMessage("Game finished");
+        m_optionalMessages.showMessage("game-finished", "Game finished");
     }
 
     private void showInfo(String message)
