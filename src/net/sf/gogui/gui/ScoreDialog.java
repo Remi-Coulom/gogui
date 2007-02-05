@@ -69,7 +69,7 @@ public class ScoreDialog
         m_prisoners = createColorEntry("Prisoners", 3, toolTypPrisoners,
                                        labels, values);
         String toolTipArea =
-            "Points surrounded by %c (including border stones)";
+            "Points owned by %c (surrounded points and border stones)";
         m_area = createColorEntry("Area", 3, toolTipArea, labels, values);
         m_komi = createKomiEntry(3, labels, values);
         m_resultChinese = createEntry("Result Area", 8,
