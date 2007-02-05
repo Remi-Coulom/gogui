@@ -2204,7 +2204,9 @@ public class GoGui
                 m_game.play(move);
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
-                    showInfo(getProgramName() + " passes");
+                    m_optionalMessages.showMessage("computer-passed",
+                                                   getProgramName() +
+                                                   " passes");
                 m_resigned = false;
                 gameTreeChanged = true;
                 ConstNode currentNode = getCurrentNode();
