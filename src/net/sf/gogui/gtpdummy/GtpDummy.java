@@ -159,6 +159,7 @@ public class GtpDummy
             "none/File Save/gtpdummy-file_save %w\n" +
             "gfx/Gfx/gtpdummy-gfx\n" +
             "none/Invalid/gtpdummy-invalid\n" +
+            "none/Invalid Empty/gtpdummy-invalid_empty\n" +
             "none/Live Gfx/gtpdummy-live_gfx\n" +
             "string/Long Response/gtpdummy-long_response %s\n" +
             "none/Next Failure/gtpdummy-next_failure %s\n" +
@@ -205,10 +206,17 @@ public class GtpDummy
         cmd.checkArgNone();
     }
 
-    public void cmdInvalid(GtpCommand cmd)
+    public void cmdInvalid(GtpCommand cmd) throws GtpError
     {        
+        cmd.checkArgNone();
         printInvalidResponse("This is an invalid GTP response.\n" +
                              "It does not start with a status character.\n");
+    }
+
+    public void cmdInvalidEmpty(GtpCommand cmd) throws GtpError
+    {        
+        cmd.checkArgNone();
+        printInvalidResponse("\n");
     }
 
     public void cmdLiveGfx(GtpCommand cmd) throws GtpError
@@ -392,6 +400,9 @@ public class GtpDummy
         register("gtpdummy-invalid", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdInvalid(cmd); } });
+        register("gtpdummy-invalid_empty", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdInvalidEmpty(cmd); } });
         register("gtpdummy-live_gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLiveGfx(cmd); } });

@@ -200,6 +200,16 @@ Print an invalid GTP response which does not start with a status character.
 </varlistentry>
 
 <varlistentry>
+<term><command>gtpdummy-invalid_empty</command></term>
+<listitem>
+<para>
+Print an invalid GTP response which has an addition empty line before
+the status character.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <command>gtpdummy-live_gfx</command>
 </term>
