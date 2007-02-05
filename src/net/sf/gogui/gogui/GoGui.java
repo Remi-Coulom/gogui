@@ -59,6 +59,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.go.Score;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
@@ -921,10 +922,8 @@ public class GoGui
         }
         if (m_gtp.isSupported("final_status_list"))
         {
-            Runnable callback = new Runnable()
-                {
-                    public void run()
-                    {
+            Runnable callback = new Runnable() {
+                    public void run() {
                         scoreContinue();
                     }
                 };
@@ -940,11 +939,11 @@ public class GoGui
         }
     }
 
-    public void actionScoreDone(boolean accepted)
+    public void actionScoreDone(Score score)
     {
         if (! m_scoreMode)
             return;
-        scoreDone(accepted);
+        scoreDone(score);
         updateViews(false);
     }
 
@@ -1437,7 +1436,7 @@ public class GoGui
         {
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
             Komi komi = getGameInformation().getKomi();
-            m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
+            m_scoreDialog.showScore(m_countScore, komi);
             return;
         }
         else if (modifiedSelect)
@@ -2130,7 +2129,7 @@ public class GoGui
         if (m_setupMode)
             setupDone();
         if (m_scoreMode)
-            scoreDone(false);
+            scoreDone(null);
         return true;
     }
 
@@ -2755,10 +2754,10 @@ public class GoGui
                                 deadStones);
         m_scoreMode = true;
         if (m_scoreDialog == null)
-            m_scoreDialog = new ScoreDialog(this, this);
+            m_scoreDialog = new ScoreDialog(this, this, getRules());
         restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInformation().getKomi();
-        m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
+        m_scoreDialog.showScore(m_countScore, komi);
         m_scoreDialog.setVisible(true);
         showStatus("Please mark dead groups");
     }
@@ -3097,7 +3096,7 @@ public class GoGui
         updateViews(false);
     }    
 
-    private void scoreDone(boolean accepted)
+    private void scoreDone(Score score)
     {
         if (! m_scoreMode)
             return;
@@ -3106,10 +3105,10 @@ public class GoGui
         m_scoreDialog.setVisible(false);
         clearStatus();
         m_guiBoard.clearAll();
-        if (accepted)
+        if (score != null)
         {
             Komi komi = getGameInformation().getKomi();
-            setResult(m_countScore.getScore(komi, getRules()).formatResult());
+            setResult(score.formatResult());
         }
     }
 

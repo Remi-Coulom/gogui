@@ -53,5 +53,14 @@ public class Score
         else
             return "0";
     }
+
+    public void updateRules(int rules)
+    {
+        m_rules = rules;
+        if (rules == Board.RULES_JAPANESE)
+            m_result = m_resultJapanese;
+        else
+            m_result = m_resultChinese;
+    }
 }
 
