@@ -55,8 +55,6 @@ public final class GtpClient
         but continue to wait for a valid response line.
         This is necessary for some Go programs with broken GTP implementation
         which write debug data to standard output (e.g. Wallyplus 0.1.2).
-        This callback will only be called at the first invalid response,
-        subsequent invalid responses will be ignored quietly.
     */
     public interface InvalidResponseCallback
     {

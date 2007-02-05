@@ -1567,9 +1567,19 @@ public class GoGui
         public void run()
         {
             if (m_line.trim().equals(""))
-                showWarning("Invalid empty response line");
+                m_optionalMessages.showWarning("invalid-empty-response",
+                                               getProgramName() +
+                                               " sent a malformed GTP " +
+                                               "response\n" +
+                                               "(empty line before " +
+                                               "response start)");
             else
-                showWarning("Invalid response:\n" + m_line);
+                m_optionalMessages.showWarning("invalid-response",
+                                               getProgramName() +
+                                               " sent a malformed GTP " +
+                                               "response\n(first line not " +
+                                               "starting with status " +
+                                               "character)");
         }
         
         private final String m_line;
@@ -1621,8 +1631,6 @@ public class GoGui
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
-
-    private boolean m_ignoreInvalidResponses;
 
     /** State variable used between cbInterrupt and computerMoved. */
     private boolean m_interruptComputerBoth;
@@ -1848,15 +1856,11 @@ public class GoGui
         m_shell.setProgramCommand(program);
         m_shell.setTimeStamp(m_timeStamp);
         m_shell.setCommandCompletion(m_commandCompletion);
-        m_ignoreInvalidResponses = false;
         GtpClient.InvalidResponseCallback invalidResponseCallback =
             new GtpClient.InvalidResponseCallback()
             {
                 public void show(String line)
                 {
-                    if (m_ignoreInvalidResponses)
-                        return;
-                    m_ignoreInvalidResponses = true;
                     Runnable runnable = new ShowInvalidResponse(line);
                     if (SwingUtilities.isEventDispatchThread())
                         runnable.run();
