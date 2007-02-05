@@ -11,11 +11,11 @@ Also, it allows to enter any command and send it to the Go program.
 <warning>
 <title>Commands Altering the Board State</title>
 <para>
-It is not advisable to send GTP commands that alter the board state
-directly to the Go program, since it will cause
-the graphical board to be out of sync with the Go program.
-For standard GTP commands that alter the board state, GoGui will
-show a warning.
+GoGui supports to send GTP commands directly from a file or entered in the
+GTP shell. However, this is only allowed for commands that don't change the
+board state, for instance for sending configuration commands from a file or
+for querying the state with commands that are not configured as analyze
+commands yet.
 </para>
 </warning>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
@@ -25,10 +25,8 @@ show a warning.
 <para>
 From the menu of the GTP shell window, it is possible to save
 the GTP commands and responses, or only the commands to a file.
-Note that the history of the GTP streams will be truncated,
-depending on the values of <userinput>gtpshell-history-min</userinput>
-and <userinput>gtpshell-history-max</userinput> in the configuration
-file <filename>~/.gogui/config</filename>.
+Note that the history of the GTP streams will be truncated if it becomes
+too long.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
