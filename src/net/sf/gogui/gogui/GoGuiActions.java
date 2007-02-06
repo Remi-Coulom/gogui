@@ -465,6 +465,13 @@ public class GoGuiActions
              "Keep Only Position",
              "Delete variations and moves and keep only the current position");
 
+    public final GoGuiAction m_actionMainWindowActivate =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionMainWindowActivate(); } },
+             "Main Window", "Activate main window",
+              KeyEvent.VK_F6, getFunctionKeyShortcut());
+
     public final GoGuiAction m_actionMakeMainVariation =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -571,27 +578,6 @@ public class GoGuiActions
                     m_goGui.actionSetup(GoColor.WHITE); } },
              "Setup White", "Setup white stones", "gogui-setup-white");
 
-    public final GoGuiAction m_actionShowAnalyzeDialog =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionShowAnalyzeDialog(); } },
-             "Analyze", "Show window with analyze commands",
-             KeyEvent.VK_F9, getFunctionKeyShortcut());
-
-    public final GoGuiAction m_actionShowShell =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionShowShell(); } },
-             "Shell", "Show GTP shell window",
-             KeyEvent.VK_F8, getFunctionKeyShortcut());
-
-    public final GoGuiAction m_actionShowTree =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionShowTree(); } },
-             "Tree", "Show game tree window",
-             KeyEvent.VK_F7, getFunctionKeyShortcut());
-
     public final GoGuiAction m_actionToggleAutoNumber =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -646,6 +632,27 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowSubtreeSizes(); } },
              "Subtree Sizes", null);
+
+    public final GoGuiAction m_actionToggleShowAnalyzeDialog =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowAnalyzeDialog(); } },
+             "Analyze", "Show window with analyze commands",
+             KeyEvent.VK_F9, getFunctionKeyShortcut());
+
+    public final GoGuiAction m_actionToggleShowShell =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowShell(); } },
+             "Shell", "Show GTP shell window",
+             KeyEvent.VK_F8, getFunctionKeyShortcut());
+
+    public final GoGuiAction m_actionToggleShowTree =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowTree(); } },
+             "Tree", "Show game tree window",
+             KeyEvent.VK_F7, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowToolbar =
         new GoGuiAction(new ActionListener() {
@@ -779,6 +786,9 @@ public class GoGuiActions
         boolean isCommandInProgress = m_goGui.isCommandInProgress();
         boolean isProgramAttached = m_goGui.isProgramAttached();
         boolean isInterruptSupported = m_goGui.isInterruptSupported();
+        boolean isAnalyzeDialogShown = m_goGui.isAnalyzeDialogShown();
+        boolean isShellShown = m_goGui.isShellShown();
+        boolean isTreeShown = m_goGui.isTreeShown();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
         boolean hasPattern = (m_goGui.getPattern() != null);
@@ -842,21 +852,24 @@ public class GoGuiActions
         m_actionShellSave.setEnabled(isProgramAttached);
         m_actionShellSaveCommands.setEnabled(isProgramAttached);
         m_actionShellSendFile.setEnabled(isProgramAttached);
-        m_actionShowAnalyzeDialog.setEnabled(isProgramAttached);
-        m_actionShowShell.setEnabled(isProgramAttached);
         m_actionToggleAutoNumber.setSelected(m_goGui.getAutoNumber());
         m_actionToggleBeepAfterMove.setEnabled(isProgramAttached);
         m_actionToggleBeepAfterMove.setSelected(m_goGui.getBeepAfterMove());
         boolean commentMonoFont = m_goGui.getCommentMonoFont();
         m_actionToggleCommentMonoFont.setSelected(commentMonoFont);
         m_actionToggleCompletion.setSelected(m_goGui.getCompletion());
+        m_actionToggleShowAnalyzeDialog.setEnabled(isProgramAttached);
+        m_actionToggleShowAnalyzeDialog.setSelected(isAnalyzeDialogShown);
         m_actionToggleShowCursor.setSelected(guiBoard.getShowCursor());
         m_actionToggleShowGrid.setSelected(guiBoard.getShowGrid());
         m_actionToggleShowInfoPanel.setSelected(m_goGui.isInfoPanelShown());
         m_actionToggleShowLastMove.setSelected(m_goGui.getShowLastMove());
+        m_actionToggleShowShell.setEnabled(isProgramAttached);
+        m_actionToggleShowShell.setSelected(isShellShown);
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
         m_actionToggleShowToolbar.setSelected(m_goGui.isToolbarShown());
+        m_actionToggleShowTree.setSelected(isTreeShown);
         m_actionToggleShowVariations.setSelected(m_goGui.getShowVariations());
         m_actionToggleTimeStamp.setSelected(m_goGui.getTimeStamp());
         m_actionTreeLabelsNumber.setSelected(

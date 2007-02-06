@@ -754,16 +754,9 @@ Edit bookmarks.
 <term><guimenuitem>Tree</guimenuitem></term>
 <listitem>
 <para>
-Show the game tree window.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Shell</guimenuitem></term>
-<listitem>
-<para>
-Show the GTP shell window.
+Show or hide the game tree window.
+The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
+the main window.
 </para>
 </listitem>
 </varlistentry>
@@ -772,7 +765,20 @@ Show the GTP shell window.
 <term><guimenuitem>Analyze</guimenuitem></term>
 <listitem>
 <para>
-Show the Analyze window.
+Show or hide the Analyze window.
+The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
+the main window.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Shell</guimenuitem></term>
+<listitem>
+<para>
+Show or hide the GTP shell window.
+The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
+the main window.
 </para>
 </listitem>
 </varlistentry>

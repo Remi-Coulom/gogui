@@ -766,6 +766,11 @@ public class GoGui
         boardChangedBegin(false, true);
     }
 
+    public void actionMainWindowActivate()
+    {
+        requestFocus();
+    }
+
     public void actionMakeMainVariation()
     {
         if (! checkStateChangePossible())
@@ -1082,43 +1087,6 @@ public class GoGui
         m_menuBar.addRecentGtp(file);
     }
 
-    public void actionShowAnalyzeDialog()
-    {        
-        if (m_gtp == null)
-            return;
-        if (m_analyzeDialog == null)
-            createAnalyzeDialog();
-        else if (GuiUtil.isActiveWindow(m_analyzeDialog))
-            requestFocus();
-        else
-            m_analyzeDialog.requestFocus();
-    }
-
-    public void actionShowShell()
-    {
-        if (m_gtp == null)
-            return;
-        if (! m_shell.isVisible())
-        {
-            restoreSize(m_shell, "shell");
-            m_shell.setVisible(true);
-        }
-        else if (GuiUtil.isActiveWindow(m_shell))
-            requestFocus();
-        else
-            m_shell.requestFocus();
-    }
-
-    public void actionShowTree()
-    {
-        if (m_gameTreeViewer == null)
-            createTree();
-        else if (GuiUtil.isActiveWindow(m_gameTreeViewer))
-            requestFocus();
-        else
-            m_gameTreeViewer.requestFocus();
-    }
-
     public void actionToggleBeepAfterMove()
     {
         m_beepAfterMove = ! m_beepAfterMove;
@@ -1146,6 +1114,16 @@ public class GoGui
             m_shell.setCommandCompletion(m_commandCompletion);
         m_prefs.putBoolean("gtpshell-disable-completions",
                            ! m_commandCompletion);
+    }
+
+    public void actionToggleShowAnalyzeDialog()
+    {        
+        if (m_gtp == null)
+            return;
+        if (m_analyzeDialog == null)
+            createAnalyzeDialog();
+        else
+            actionDisposeAnalyzeDialog();
     }
 
     public void actionToggleShowCursor()
@@ -1182,6 +1160,19 @@ public class GoGui
         updateViews(false);
     }
 
+    public void actionToggleShowShell()
+    {
+        if (m_gtp == null)
+            return;
+        if (! m_shell.isVisible())
+        {
+            restoreSize(m_shell, "shell");
+            m_shell.setVisible(true);
+        }
+        else
+            m_shell.setVisible(false);
+    }
+
     public void actionToggleShowSubtreeSizes()
     {
         m_showSubtreeSizes = ! m_showSubtreeSizes;
@@ -1205,6 +1196,14 @@ public class GoGui
         }
         showToolbar(! m_showToolbar);
         updateViews(false);
+    }
+
+    public void actionToggleShowTree()
+    {
+        if (m_gameTreeViewer == null)
+            createTree();
+        else
+            actionDisposeTree();
     }
 
     public void actionToggleShowVariations()
