@@ -1009,19 +1009,23 @@ public class GoGui
         }
         else
         {
+            resetBoard();
+            m_setupMode = true;
+            m_setupColor = color;
+            // Update views with setup enabled before the following dialog,
+            // otherwise toggle buttons and menus will stay selected, if
+            // entering setup mode was cancelled
+            updateViews(false);
             if (node.getMove() != null)
             {
                 String message = "Create new setup node in game tree?";
                 if (! showOptionalQuestion("create-setup-node", message))
                 {
-                    // see GoGuiToolBar.setToggleButtonsSelectedFalse()
-                    m_toolBar.setToggleButtonsSelectedFalse();
+                    m_setupMode = false;
+                    updateViews(false);
                     return;
                 }
             }
-            resetBoard();
-            m_setupMode = true;
-            m_setupColor = color;
             if (node.getMove() != null)
             {
                 m_game.createNewChild();

@@ -50,17 +50,6 @@ public class GoGuiToolBar
         putClientProperty("jgoodies.headerStyle", "Both");
     }
 
-    /** Workaround for bug in Java 1.6.
-        Toggle buttons are not reset to unselected state correctly if the
-        button lost its focus in the action handler (modal dialog in
-        GoGui.actionSetup())
-    */
-    public void setToggleButtonsSelectedFalse()
-    {
-        m_setupBlack.setSelected(false);
-        m_setupWhite.setSelected(false);
-    }
-
     public void update()
     {
         GoGuiActions actions = m_goGui.getActions();
