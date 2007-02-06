@@ -24,6 +24,17 @@ public final class NodeUtilTest
         return new junit.framework.TestSuite(NodeUtilTest.class);
     }
 
+    public void testCanRestoreTime()
+    {
+        Clock clock = new Clock();
+        Node node = new Node();
+        node.setTimeLeftBlack(5);
+        // Clock has not time settings
+        assertFalse(NodeUtil.canRestoreTime(node, clock));
+        clock.setTimeSettings(new TimeSettings(10));
+        assertTrue(NodeUtil.canRestoreTime(node, clock));
+    }
+
     public void testFindByMoveNumber()
     {
         assertTrue(NodeUtil.findByMoveNumber(m_node0, 1) == m_node2);

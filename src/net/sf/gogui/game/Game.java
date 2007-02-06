@@ -246,10 +246,12 @@ public class Game
 
     public void restoreClock()
     {        
+        if (! getClock().isInitialized())
+            return;
         GoColor color = getToMove();
-        ConstNode currentNode = getCurrentNode();
-        restoreClock(currentNode, color.otherColor());
-        ConstNode father = currentNode.getFatherConst();
+        ConstNode node = getCurrentNode();
+        restoreClock(node, color.otherColor());
+        ConstNode father = node.getFatherConst();
         if (father != null)
             restoreClock(father, color);
     }
