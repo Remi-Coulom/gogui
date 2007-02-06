@@ -4,13 +4,16 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -104,24 +107,27 @@ public class ContextMenu
                     }
                 }
             };
-        m_mark = createCheckBox("Mark " + point, "mark");
+        JLabel label = new JLabel("Point " + point);
+        label.setFont(UIManager.getFont("Label.font").deriveFont(Font.BOLD));
+        add(label);
+        addSeparator();
+        m_mark = createCheckBox("Mark", "mark");
         m_mark.setSelected(mark);
         add(m_mark);
-        m_markCircle = createCheckBox("Mark Circle " + point, "mark-circle");
+        m_markCircle = createCheckBox("Mark Circle", "mark-circle");
         m_markCircle.setSelected(markCircle);
         add(m_markCircle);
-        m_markSquare = createCheckBox("Mark Square " + point, "mark-square");
+        m_markSquare = createCheckBox("Mark Square", "mark-square");
         m_markSquare.setSelected(markSquare);
         add(m_markSquare);
-        m_markTriangle = createCheckBox("Mark Triangle " + point,
-                                        "mark-triangle");
+        m_markTriangle = createCheckBox("Mark Triangle", "mark-triangle");
         m_markTriangle.setSelected(markTriangle);
         add(m_markTriangle);
-        add(createItem("Edit Label " + point, "edit-label"));
+        add(createItem("Edit Label", "edit-label"));
         addSeparator();
         if (! noProgram && commands.size() > 0)
         {
-            m_analyzeMenu = new JMenu("Analyze " + point);
+            m_analyzeMenu = new JMenu("Analyze at " + point);
             // For com.jgoodies.looks
             m_analyzeMenu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
             add(m_analyzeMenu);            
