@@ -23,15 +23,19 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -43,6 +47,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.PrefUtil;
 
 /** Dialog for selecting an AnalyzeCommand. */
@@ -106,11 +111,10 @@ public final class AnalyzeDialog
 
     public GoColor getSelectedColor()
     {
-        String selectedItem = (String)m_comboBoxColor.getSelectedItem();
-        if (selectedItem.equals("White"))
+        if (m_black.isSelected())
+            return GoColor.BLACK;
+        else
             return GoColor.WHITE;
-        assert(selectedItem.equals("Black"));
-        return GoColor.BLACK;
     }
 
     public void saveRecent()
@@ -197,13 +201,15 @@ public final class AnalyzeDialog
 
     private JComboBox m_comboBoxHistory;
 
-    private JComboBox m_comboBoxColor;
-
     private JLabel m_labelColor;
 
     private JList m_list;
 
-    private JPanel m_colorPanel;
+    private Box m_colorBox;
+
+    private JRadioButton m_black;
+
+    private JRadioButton m_white;
 
     private final ArrayList m_commands = new ArrayList(128);
 
@@ -250,17 +256,19 @@ public final class AnalyzeDialog
         return outerPanel;
     }
 
-    private JPanel createColorPanel()
+    private JComponent createColorPanel()
     {
-        m_colorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        m_labelColor = new JLabel("Color:");
-        m_labelColor.setHorizontalAlignment(SwingConstants.LEFT);
-        m_colorPanel.add(m_labelColor);
-        String[] colors = { "Black", "White" };
-        m_comboBoxColor = new JComboBox(colors);
-        m_comboBoxColor.setToolTipText("Color argument for command");
-        m_colorPanel.add(m_comboBoxColor);
-        return m_colorPanel;
+        m_colorBox = Box.createVerticalBox();
+        ButtonGroup group = new ButtonGroup();
+        m_black = new JRadioButton("Black");
+        m_black.setToolTipText("Run selected command for color Black");
+        group.add(m_black);
+        m_colorBox.add(m_black);
+        m_white = new JRadioButton("White");
+        m_white.setToolTipText("Run selected command for color White");
+        group.add(m_white);
+        m_colorBox.add(m_white);
+        return m_colorBox;
     }
 
     private JPanel createCommandPanel()
@@ -312,8 +320,9 @@ public final class AnalyzeDialog
             = new JPanel(new GridLayout(0, 2, GuiUtil.PAD, 0));
         lowerPanel.add(optionsPanel);
         JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         optionsPanel.add(leftPanel);
+        Box leftBox = Box.createVerticalBox();
+        leftPanel.add(leftBox);
         m_autoRun = new JCheckBox("Auto run");
         m_autoRun.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
@@ -322,10 +331,10 @@ public final class AnalyzeDialog
                 }
             });
         m_autoRun.setToolTipText("Automatically run after changes on board");
-        leftPanel.add(m_autoRun);
+        leftBox.add(m_autoRun);
         m_clearBoard = new JCheckBox("Clear board");
         m_clearBoard.setToolTipText("Clear board before displaying result");
-        leftPanel.add(m_clearBoard);
+        leftBox.add(m_clearBoard);
         m_clearBoard.setSelected(true);
         JPanel rightPanel = new JPanel();
         rightPanel.add(createColorPanel());
@@ -484,8 +493,9 @@ public final class AnalyzeDialog
     {
         AnalyzeCommand command =
             new AnalyzeCommand((String)m_commands.get(index));
-        m_labelColor.setEnabled(command.needsColorArg());
-        m_comboBoxColor.setEnabled(command.needsColorArg());
+        boolean needsColorArg = command.needsColorArg();
+        m_black.setEnabled(needsColorArg);
+        m_white.setEnabled(needsColorArg);
         m_autoRun.setEnabled(command.getType() != AnalyzeCommand.PARAM);
         m_clearBoard.setEnabled(command.getType() != AnalyzeCommand.PARAM);
         m_runButton.setEnabled(true);
@@ -505,9 +515,9 @@ public final class AnalyzeDialog
     private void selectColor()
     {
         if (m_selectedColor == GoColor.BLACK)
-            m_comboBoxColor.setSelectedItem("Black");
+            m_black.setSelected(true);
         else if (m_selectedColor == GoColor.WHITE)
-            m_comboBoxColor.setSelectedItem("White");
+            m_white.setSelected(true);
     }
 
     private void showError(String message)
