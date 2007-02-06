@@ -53,7 +53,8 @@ public class SelectProgram
         else if (command.equals("ok"))
         {
             m_command = m_comboBox.getSelectedItem().toString();
-            m_comboBox.insertItemAt(m_command, 0);
+            if (! m_command.trim().equals(""))
+                m_comboBox.insertItemAt(m_command, 0);
             putHistory();
             dispose();
         }
@@ -133,12 +134,9 @@ public class SelectProgram
         m_comboBox.setEditable(true);
         ComboBoxEditor editor = m_comboBox.getEditor();
         m_textField = (JTextField)editor.getEditorComponent();
-        //m_textField.setColumns(40);
         m_textField.selectAll();
-        KeyListener keyListener = new KeyAdapter()
-            {
-                public void keyPressed(KeyEvent e)
-                {
+        KeyListener keyListener = new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
                     int c = e.getKeyCode();
                     if (c == KeyEvent.VK_ESCAPE
                         && ! m_comboBox.isPopupVisible())
