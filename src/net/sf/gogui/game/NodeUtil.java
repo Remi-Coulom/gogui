@@ -594,6 +594,34 @@ public final class NodeUtil
         }
         if (! Float.isNaN(node.getValue()))
             appendInfo(buffer, "Value", Float.toString(node.getValue()));
+        ConstGameInformation info = node.getGameInformationConst();
+        if (info != null)
+        {
+            buffer.append("GameInfo:\n");
+            if (info.getDate() != null)
+                appendInfo(buffer, "Date", info.getDate());
+            if (info.getHandicap() != 0)
+                appendInfo(buffer, "Handicap", info.getHandicap());
+            if (info.getKomi() != null)
+                appendInfo(buffer, "Komi", info.getKomi().toString());
+            if (info.getPlayer(GoColor.BLACK) != null)
+                appendInfo(buffer, "PlayerBlack",
+                           info.getPlayer(GoColor.BLACK));
+            if (info.getPlayer(GoColor.WHITE) != null)
+                appendInfo(buffer, "PlayerWhite",
+                           info.getPlayer(GoColor.WHITE));
+            if (info.getRank(GoColor.BLACK) != null)
+                appendInfo(buffer, "RankBlack", info.getRank(GoColor.BLACK));
+            if (info.getRank(GoColor.WHITE) != null)
+                appendInfo(buffer, "RankWhite", info.getRank(GoColor.WHITE));
+            if (info.getResult() != null)
+                appendInfo(buffer, "Result", info.getResult());
+            if (info.getRules() != null)
+                appendInfo(buffer, "Rules", info.getRules());
+            if (info.getTimeSettings() != null)
+                appendInfo(buffer, "TimeSettings",
+                           info.getTimeSettings().toString());
+        }
         Map sgfProperties = node.getSgfPropertiesConst();
         if (sgfProperties != null)
         {
