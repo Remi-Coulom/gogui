@@ -14,14 +14,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.go.Board;
@@ -61,6 +62,9 @@ public class ScoreDialog
         JPanel values = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);        
 
+        String toolTipArea =
+            "Points owned by %c (surrounded points and border stones)";
+        m_area = createColorEntry("Area", 3, toolTipArea, labels, values);
         String toolTipTerritory = "Points surrounded by %c";
         m_territory = createColorEntry("Territory", 3, toolTipTerritory,
                                        labels, values);
@@ -68,9 +72,6 @@ public class ScoreDialog
             "Stones captured by %c (including dead stones on board)";
         m_prisoners = createColorEntry("Prisoners", 3, toolTypPrisoners,
                                        labels, values);
-        String toolTipArea =
-            "Points owned by %c (surrounded points and border stones)";
-        m_area = createColorEntry("Area", 3, toolTipArea, labels, values);
         m_komi = createKomiEntry(3, labels, values);
         m_resultArea = createEntry("Result Area", 8,
                                       "Area score (area and komi)",
@@ -139,7 +140,9 @@ public class ScoreDialog
 
     private final JTextField m_resultTerritory;
 
-    private JComboBox m_rules;
+    private JRadioButton m_useArea;
+
+    private JRadioButton m_useTerritory;
 
     private final JTextField m_result;
 
@@ -161,11 +164,12 @@ public class ScoreDialog
 
     private JComponent createEntryLabel(String text)
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        Box box = Box.createHorizontalBox();
+        box.add(Box.createHorizontalGlue());
         JLabel label = new JLabel(text + ":");
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
-        panel.add(label);
-        return panel;
+        box.add(label);
+        return box;
     }
 
     private JTextField createEntry(String labelText, int cols, String toolTip,
@@ -234,22 +238,35 @@ public class ScoreDialog
     {
         labels.add(createEntryLabel("Scoring method"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        Object[] options = { "Area", "Territory" };
-        m_rules = new JComboBox(options);
-        m_rules.addActionListener(new ActionListener() {
+
+        ButtonGroup group = new ButtonGroup();
+        m_useArea = new JRadioButton("Area");
+        m_useArea.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
                     {
-                        if (m_rules.getSelectedItem().equals("Territory"))
-                            m_score.updateRules(Score.TERRITORY);
-                        else
-                            m_score.updateRules(Score.AREA);
+                        m_score.updateRules(Score.AREA);
                         showScore();
                     }
                 }
             });
-        m_rules.setToolTipText("Scoring method used for game result");
-        panel.add(m_rules);
+        m_useArea.setToolTipText("Use area score for game result");
+        group.add(m_useArea);
+        panel.add(m_useArea);
+        panel.add(GuiUtil.createFiller());
+        m_useTerritory = new JRadioButton("Territory");
+        m_useTerritory.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (m_score != null)
+                    {
+                        m_score.updateRules(Score.TERRITORY);
+                        showScore();
+                    }
+                }
+            });
+        m_useTerritory.setToolTipText("Use territory score for game result");
+        group.add(m_useTerritory);
+        panel.add(m_useTerritory);
         values.add(panel);
     }
 
@@ -270,10 +287,14 @@ public class ScoreDialog
         setTextInteger(m_prisoners.m_white, m_score.m_capturedBlack);
         if (m_score.m_komi != null)
             m_komi.setText(m_score.m_komi.toString());
-        m_resultArea.setText(Score.formatResult(m_score.m_resultArea));
-        m_resultTerritory.setText(Score.formatResult(m_score.m_resultTerritory));
-        m_rules.setSelectedItem(m_score.m_rules == Score.TERRITORY ?
-                                "Territory" : "Area");
+        double resultArea = m_score.m_resultArea;
+        m_resultArea.setText(Score.formatResult(resultArea));
+        double resultTerritory = m_score.m_resultTerritory;
+        m_resultTerritory.setText(Score.formatResult(resultTerritory));
+        if (m_score.m_rules == Score.TERRITORY)
+            m_useTerritory.setSelected(true);
+        else
+            m_useArea.setSelected(true);
         m_result.setText(m_score.formatResult());
     }
 }
