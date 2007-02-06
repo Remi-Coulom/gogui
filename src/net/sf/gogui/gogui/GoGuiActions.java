@@ -840,6 +840,7 @@ public class GoGuiActions
         m_actionMakeMainVariation.setEnabled(! isInMain);
         m_actionNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_actionNextVariation.setEnabled(hasNextVariation);
+        updateActionPass(toMove);
         updateActionPlay(toMove, isProgramAttached, name);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
@@ -932,6 +933,15 @@ public class GoGuiActions
         m_actionInterrupt.setDescription(desc);
         m_actionInterrupt.setEnabled(isProgramAttached
                                      && isInterruptSupported);
+    }
+
+    private void updateActionPass(GoColor toMove)
+    {
+        assert(toMove.isBlackWhite());
+        if (toMove == GoColor.BLACK)
+            m_actionPass.setDescription("Play a pass for Black");
+        else
+            m_actionPass.setDescription("Play a pass for White");
     }
 
     private void updateActionPlay(GoColor toMove, boolean isProgramAttached,
