@@ -30,7 +30,6 @@ public class GoGuiToolBar
         addButton(actions.m_actionPass);
         addSeparator();
         addButton(actions.m_actionPlay);
-        addButton(actions.m_actionInterrupt);
         addSeparator();
         m_setupBlack = addToggleButton(actions.m_actionSetupBlack);
         m_setupWhite = addToggleButton(actions.m_actionSetupWhite);

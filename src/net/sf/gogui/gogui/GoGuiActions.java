@@ -455,8 +455,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionInterrupt(); } },
-             "Interrupt", "Interrupt", KeyEvent.VK_ESCAPE,
-                        "gogui-interrupt");
+             "Interrupt", "Interrupt", "gogui-interrupt");
 
     public final GoGuiAction m_actionKeepOnlyPosition =
         new GoGuiAction(new ActionListener() {
