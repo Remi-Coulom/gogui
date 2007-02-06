@@ -15,6 +15,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import java.util.Locale;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.PrefUtil;
 
 /** Dialog for selecting a Go engine. */
@@ -124,14 +126,14 @@ public class SelectProgram
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
         m_comboBox = new JComboBox(getHistory().toArray());
-        StringBuffer prototype = new StringBuffer(70);
-        for (int i = 0; i < 70; ++i)
+        StringBuffer prototype = new StringBuffer(65);
+        for (int i = 0; i < 65; ++i)
             prototype.append('-');
         m_comboBox.setPrototypeDisplayValue(prototype.toString());
         m_comboBox.setEditable(true);
         ComboBoxEditor editor = m_comboBox.getEditor();
         m_textField = (JTextField)editor.getEditorComponent();
-        m_textField.setColumns(40);
+        //m_textField.setColumns(40);
         m_textField.selectAll();
         KeyListener keyListener = new KeyAdapter()
             {
@@ -145,12 +147,15 @@ public class SelectProgram
             };
         m_textField.addKeyListener(keyListener);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
+        Box buttonBox = Box.createHorizontalBox();
+        buttonBox.add(GuiUtil.createSmallFiller());
         JButton button = new JButton();
+        buttonBox.add(button);
         button.setIcon(GuiUtil.getIcon("document-open", "Browse"));
         button.setToolTipText("Browse for Go program");
         button.setActionCommand("open");
         button.addActionListener(this);
-        innerPanel.add(button, BorderLayout.EAST);
+        innerPanel.add(buttonBox, BorderLayout.EAST);
         outerPanel.add(innerPanel, BorderLayout.NORTH);
         return outerPanel;
     }
