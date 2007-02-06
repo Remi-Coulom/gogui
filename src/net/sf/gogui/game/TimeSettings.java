@@ -93,6 +93,7 @@ public final class TimeSettings
     /** Parse time settings from a string.
         The string is expected to be in the format: basetime[+byoyomi/moves]
         with base and overtime in minutes.
+        @todo Should also parse units (min or sec)
         @param s The string.
         @return TimeSettings The time settings corresponding to this string.
         @throws ErrorMessage On syntax error or invalid values.
@@ -142,12 +143,45 @@ public final class TimeSettings
             return new TimeSettings(preByoyomi);
     }
 
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer(64);
+        buffer.append(toString(m_preByoyomi));
+        if (getUseByoyomi())
+        {
+            buffer.append(" + ");
+            buffer.append(toString(m_byoyomi));
+            buffer.append(" / ");
+            buffer.append(m_byoyomiMoves);
+            buffer.append(" moves");
+        }
+        return buffer.toString();
+    }
+
     private static final long MSEC_PER_MIN = 60000L;
+
+    private static final long MSEC_PER_SEC = 1000L;
 
     private final long m_preByoyomi;
 
     private final long m_byoyomi;
 
     private final int m_byoyomiMoves;
+
+    private static String toString(long millisec)
+    {
+        StringBuffer buffer = new StringBuffer(64);
+        if (millisec % MSEC_PER_MIN == 0)
+        {
+            buffer.append(millisec / MSEC_PER_MIN);
+            buffer.append(" min");
+        }
+        else
+        {
+            buffer.append(millisec / MSEC_PER_SEC);
+            buffer.append(" sec");
+        }
+        return buffer.toString();        
+    }
 }
 
