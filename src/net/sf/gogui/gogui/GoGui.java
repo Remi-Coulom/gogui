@@ -939,8 +939,10 @@ public class GoGui
             return;
         if (m_gtp == null)
         {
-            showInfo("No program is attached.\n" +
-                     "Please mark dead groups manually.");
+            m_optionalMessages.showMessage("score-no-program",
+                                           "Please mark dead groups "
+                                           + "manually.\n"
+                                           + "(no program is attached)");
             initScore(null);
             updateViews(false);
             return;
@@ -957,8 +959,10 @@ public class GoGui
         }
         else
         {
-            showInfo(getProgramName() + " does not support scoring.\n" +
-                     "Please mark dead groups manually.");
+            m_optionalMessages.showMessage("score-not-supported",
+                                           "Please mark dead groups "
+                                           + "manually.\n(" + getProgramName()
+                                           + " does not support scoring)");
             initScore(null);
             updateViews(false);
         }
