@@ -41,11 +41,11 @@ public class GoGuiMenuBar
         m_menuBar.add(createMenuFile(actions, recentListener));
         m_menuBar.add(createMenuGame(actions));
         m_menuBar.add(createMenuEdit(actions));
+        m_menuBar.add(createMenuView(actions));
         m_menuBar.add(createMenuGo(actions));
-        m_menuBar.add(createMenuShell(actions, recentGtpListener));
         m_menuBookmarks = createMenuBookMarks(actions);
         m_menuBar.add(m_menuBookmarks);
-        m_menuBar.add(createMenuSettings(actions));
+        m_menuBar.add(createMenuTools(actions, recentGtpListener));
         m_menuBar.add(createMenuHelp(actions));
         setHeaderStyleSingle(true);
     }
@@ -215,34 +215,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuConfigureBoard(GoGuiActions actions)
-    {
-        JMenuChecked menu = new JMenuChecked("Configure Board");
-        menu.setMnemonic(KeyEvent.VK_B);
-        GoGuiCheckBoxMenuItem itemShowCursor =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowCursor);
-        menu.addItem(itemShowCursor, KeyEvent.VK_C);
-        GoGuiCheckBoxMenuItem itemShowGrid =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowGrid);
-        menu.addItem(itemShowGrid, KeyEvent.VK_G);
-        GoGuiCheckBoxMenuItem itemShowLastMove =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowLastMove);
-        menu.addItem(itemShowLastMove, KeyEvent.VK_L);
-        GoGuiCheckBoxMenuItem itemShowVariations =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowVariations);
-        menu.addItem(itemShowVariations, KeyEvent.VK_V);
-        GoGuiCheckBoxMenuItem itemBeepAfterMove =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
-        menu.addItem(itemBeepAfterMove, KeyEvent.VK_B);
-        GoGuiCheckBoxMenuItem itemToggleCommentMonoFont =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleCommentMonoFont);
-        menu.addItem(itemToggleCommentMonoFont, KeyEvent.VK_F);
-        return menu;
-    }
-
     private JMenuChecked createMenuConfigureShell(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Configure Shell");
+        JMenuChecked menu = new JMenuChecked("Shell Window");
         menu.setMnemonic(KeyEvent.VK_H);
         GoGuiCheckBoxMenuItem itemCompletion =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleCompletion);
@@ -258,7 +233,7 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuConfigureTree(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Configure Tree");
+        JMenuChecked menu = new JMenuChecked("Tree Window");
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
@@ -340,6 +315,7 @@ public class GoGuiMenuBar
         menu.addSeparator();
         menu.addItem(actions.m_actionAttachProgram, KeyEvent.VK_T);
         menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
+        menu.addSeparator();
         menu.addItem(actions.m_actionQuit, KeyEvent.VK_Q);
         return menu;
     }
@@ -398,10 +374,14 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuShell(GoGuiActions actions,
+    private JMenuChecked createMenuTools(GoGuiActions actions,
                                          RecentFileMenu.Listener listener)
     {
-        JMenuChecked menu = createMenu("Shell", KeyEvent.VK_L);
+        JMenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
+        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
+        menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
+        menu.addSeparator();
         menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
         menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);
         menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
@@ -413,9 +393,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuSettings(GoGuiActions actions)
+    private JMenuChecked createMenuView(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Settings", KeyEvent.VK_S);
+        JMenuChecked menu = createMenu("View", KeyEvent.VK_V);
         GoGuiCheckBoxMenuItem itemToggleShowToolbar =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowToolbar);
         menu.addItem(itemToggleShowToolbar, KeyEvent.VK_T);
@@ -423,11 +403,25 @@ public class GoGuiMenuBar
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowInfoPanel);
         menu.addItem(itemToggleShowInfoPanel, KeyEvent.VK_I);
         menu.addSeparator();
-        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_R);
-        menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
-        menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
+        GoGuiCheckBoxMenuItem itemShowCursor =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowCursor);
+        menu.addItem(itemShowCursor, KeyEvent.VK_C);
+        GoGuiCheckBoxMenuItem itemShowGrid =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowGrid);
+        menu.addItem(itemShowGrid, KeyEvent.VK_G);
+        GoGuiCheckBoxMenuItem itemShowLastMove =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowLastMove);
+        menu.addItem(itemShowLastMove, KeyEvent.VK_L);
+        GoGuiCheckBoxMenuItem itemShowVariations =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowVariations);
+        menu.addItem(itemShowVariations, KeyEvent.VK_V);
+        GoGuiCheckBoxMenuItem itemBeepAfterMove =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
+        menu.addItem(itemBeepAfterMove, KeyEvent.VK_P);
+        GoGuiCheckBoxMenuItem itemToggleCommentMonoFont =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleCommentMonoFont);
+        menu.addItem(itemToggleCommentMonoFont, KeyEvent.VK_F);
         menu.addSeparator();
-        menu.add(createMenuConfigureBoard(actions));
         menu.add(createMenuConfigureTree(actions));
         menu.add(createMenuConfigureShell(actions));
         return menu;

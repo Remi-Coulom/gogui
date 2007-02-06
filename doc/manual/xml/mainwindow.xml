@@ -570,9 +570,212 @@ Go to the start node of a certain variation.
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
+
 <section>
-<title>Shell Menu</title>
+<title>View Menu</title>
 <variablelist>
+
+<varlistentry>
+<term><guimenuitem>Toolbar</guimenuitem></term>
+<listitem>
+<para>
+Show or hide toolbar.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Info Panel</guimenuitem></term>
+<listitem>
+<para>
+Show or hide panel on the right side of the board containing game information.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Cursor</guimenuitem></term>
+<listitem>
+<para>
+Show cursor on board for keyboard navigation.
+Fields can be selected on with the <keycap>Enter</keycap> key.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Grid Labels</guimenuitem></term>
+<listitem>
+<para>
+Show grid labels for board columns and rows.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Last Move</guimenuitem></term>
+<listitem>
+<para>
+Mark the last move with a grey dot.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Variation Labels</guimenuitem></term>
+<listitem>
+<para>
+Mark the moves of all variations from this position with letters
+starting with 'A' ('+' will be used after 'Z').
+If multiple variations start with the same move, a '.' is appended.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play Sound</guimenuitem></term>
+<listitem>
+<para>
+Beep after each computer move.
+With most versions of Java the PC speaker is used for the beep.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Monospace Comment Font</guimenuitem></term>
+<listitem>
+<para>
+Use fixed-width font for comment.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Tree Window</guisubmenu> / <guimenuitem>Labels</guimenuitem></term>
+<listitem>
+<para>
+Configure the labels on the tree nodes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Tree Window</guisubmenu> / <guimenuitem>Size</guimenuitem></term>
+<listitem>
+<para>
+Configure the size of the tree nodes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Tree Window</guisubmenu> / <guimenuitem>Subtree Sizes</guimenuitem></term>
+<listitem>
+<para>
+Show the number of nodes in the subtree for nodes that are not expanded.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Shell Window</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
+<listitem>
+<para>
+Popup a window with command completions while entering a command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Shell Window</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
+<listitem>
+<para>
+<indexterm>
+<primary>Auto Number</primary>
+</indexterm>
+<indexterm>
+<primary>Unknown command</primary>
+</indexterm>
+Automatically number GTP commands.
+Note that some Go programs don't comply to the GTP standard by not supporting
+GTP commands with a numerical ID.
+They will usually answer with "Unknown command", because they try to parse
+the ID as a command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Shell Window</guisubmenu> / <guimenuitem>Timestamp</guimenuitem></term>
+<listitem>
+<para>
+Prepend each sent or received line with a time stamp.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+
+<section>
+<title>Bookmarks Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Add Bookmark</guimenuitem></term>
+<listitem>
+<para>
+Add a new bookmark.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Edit Bookmarks</guimenuitem></term>
+<listitem>
+<para>
+Edit bookmarks.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Tools Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Tree</guimenuitem></term>
+<listitem>
+<para>
+Show the game tree window.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Shell</guimenuitem></term>
+<listitem>
+<para>
+Show the GTP shell window.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Analyze</guimenuitem></term>
+<listitem>
+<para>
+Show the Analyze window.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Save Log</guimenuitem></term>
@@ -614,206 +817,6 @@ board state.
 </listitem>
 </varlistentry>
 
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Bookmarks Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Add Bookmark</guimenuitem></term>
-<listitem>
-<para>
-Add a new bookmark.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Edit Bookmarks</guimenuitem></term>
-<listitem>
-<para>
-Edit bookmarks.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Settings Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Show Toolbar</guimenuitem></term>
-<listitem>
-<para>
-Show toolbar.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Info Panel</guimenuitem></term>
-<listitem>
-<para>
-Show panel on the right side of the board containing game information.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Tree</guimenuitem></term>
-<listitem>
-<para>
-Show the game tree window.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Shell</guimenuitem></term>
-<listitem>
-<para>
-Show the GTP shell window.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Analyze</guimenuitem></term>
-<listitem>
-<para>
-Show the Analyze window.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Cursor</guimenuitem></term>
-<listitem>
-<para>
-Show cursor on board for keyboard navigation.
-Fields can be selected on with the <keycap>Enter</keycap> key.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Grid</guimenuitem></term>
-<listitem>
-<para>
-Show grid.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Last Move</guimenuitem></term>
-<listitem>
-<para>
-Mark the last move with a red circle.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Variations</guimenuitem></term>
-<listitem>
-<para>
-Mark the moves of all variations from this position with letters
-starting with 'A' ('+' will be used after 'Z').
-If multiple variations start with the same move, a '.' is appended.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Beep After Move</guimenuitem></term>
-<listitem>
-<para>
-Beep after each computer move.
-With most versions of Java the PC speaker is used for the beep.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Fixed Size Comment Font</guimenuitem></term>
-<listitem>
-<para>
-Use fixed-width font for comment.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Labels</guimenuitem></term>
-<listitem>
-<para>
-Configure the labels on the tree nodes.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Size</guimenuitem></term>
-<listitem>
-<para>
-Configure the size of the tree nodes.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Show Subtree Sizes</guimenuitem></term>
-<listitem>
-<para>
-Show the number of nodes in the subtree for nodes that are not expanded.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
-<listitem>
-<para>
-Popup a window with command completions while entering a command.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
-<listitem>
-<para>
-<indexterm>
-<primary>Auto Number</primary>
-</indexterm>
-<indexterm>
-<primary>Unknown command</primary>
-</indexterm>
-Automatically number GTP commands.
-Note that some Go programs don't comply to the GTP standard by not supporting
-GTP commands with a numerical ID.
-They will usually answer with "Unknown command", because they try to parse
-the ID as a command.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Timestamp</guimenuitem></term>
-<listitem>
-<para>
-Prepend each sent or received line with a time stamp.
-</para>
-</listitem>
-</varlistentry>
 
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>

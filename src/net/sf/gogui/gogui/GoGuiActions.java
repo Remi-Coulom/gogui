@@ -275,14 +275,14 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionDeleteSideVariations(); } },
-             "Delete side variations",
+             "Delete Side variations",
              "Delete all variations but the main variation");
 
     public final GoGuiAction m_actionDetachProgram =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionDetachProgram(); } },
-             "Detach Program...",
+             "Detach Program",
              "Detach Go program from current game and terminate it");
 
     public final GoGuiAction m_actionDocumentation =
@@ -462,7 +462,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionKeepOnlyPosition(); } },
-             "Keep only Position",
+             "Keep Only Position",
              "Delete variations and moves and keep only the current position");
 
     public final GoGuiAction m_actionMakeMainVariation =
@@ -575,21 +575,21 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionShowAnalyzeDialog(); } },
-             "Show Analyze", "Show window with analyze commands",
+             "Analyze", "Show window with analyze commands",
              KeyEvent.VK_F9, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionShowShell =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionShowShell(); } },
-             "Show Shell", "Show GTP shell window",
+             "Shell", "Show GTP shell window",
              KeyEvent.VK_F8, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionShowTree =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionShowTree(); } },
-             "Show Tree", "Show game tree window",
+             "Tree", "Show game tree window",
              KeyEvent.VK_F7, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleAutoNumber =
@@ -602,7 +602,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleBeepAfterMove(); } },
-             "Beep After Move", "Beep after computer played a move");
+             "Play Sound", "Play a sound after computer played a move");
 
     public final GoGuiAction m_actionToggleCompletion =
         new GoGuiAction(new ActionListener() {
@@ -620,44 +620,44 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowCursor(); } },
-             "Show Cursor", "Show cursor on board");
+             "Cursor", "Show cursor on board");
 
     public final GoGuiAction m_actionToggleShowGrid =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowGrid(); } },
-             "Show Grid", "Show board grid labels");
+             "Grid Labels", "Show board grid labels");
 
     public final GoGuiAction m_actionToggleShowInfoPanel =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowInfoPanel(); } },
-             "Show Info Panel",
+             "Info Panel",
              "Show panel with comment and game information");
 
     public final GoGuiAction m_actionToggleShowLastMove =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowLastMove(); } },
-             "Show Last Move", "Mark last move on board");
+             "Last Move", "Mark last move on board");
 
     public final GoGuiAction m_actionToggleShowSubtreeSizes =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowSubtreeSizes(); } },
-             "Show Subtree Sizes", null);
+             "Subtree Sizes", null);
 
     public final GoGuiAction m_actionToggleShowToolbar =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowToolbar(); } },
-             "Show Tool Bar", "Show tool bar");
+             "Toolbar", "Show tool bar");
 
     public final GoGuiAction m_actionToggleShowVariations =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowVariations(); } },
-             "Show Variations",
+             "Variation Labels",
              "Label children moves with letters on board");
 
     public final GoGuiAction m_actionToggleTimeStamp =
