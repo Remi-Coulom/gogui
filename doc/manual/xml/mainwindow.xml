@@ -187,25 +187,6 @@ analyze commands.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Attach Program</guimenuitem></term>
-<listitem>
-<para>
-Attach a Go program to the current game at the current position.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Detach Program</guimenuitem></term>
-<listitem>
-<para>
-Detach currently attached Go program from game and terminate
-the Go program.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Quit</guimenuitem></term>
 <listitem>
 <para>
@@ -227,46 +208,6 @@ Quit GoGui.
 <listitem>
 <para>
 Start a new game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Computer Color</guisubmenu></term>
-<listitem>
-<para>
-Choose what side the Go program plays.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Play</guimenuitem></term>
-<listitem>
-<para>
-Change the computer color to the color to move and make the computer
-start playing.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Play Single Move</guimenuitem></term>
-<listitem>
-<para>
-Make the computer play a move, but do not change the computer color.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Interrupt</guimenuitem></term>
-<listitem>
-<para>
-Interrupt the command that is currently running.
-This menu item is only active if a lengthy command (like move
-generation) is running and if the Go program supports interrupting
-(see <xref linkend="interrupt"/>).
 </para>
 </listitem>
 </varlistentry>
@@ -445,131 +386,6 @@ See also: <xref linkend="setupblack"/>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
-<section>
-<title>Go Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Beginning</guimenuitem></term>
-<listitem>
-<para>
-Go to beginning of game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Backward 10</guimenuitem></term>
-<listitem>
-<para>
-Go backward 10 moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Backward</guimenuitem></term>
-<listitem>
-<para>
-Go backward one move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Forward</guimenuitem></term>
-<listitem>
-<para>
-Go forward one move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Forward 10</guimenuitem></term>
-<listitem>
-<para>
-Go forward 10 moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>End</guimenuitem></term>
-<listitem>
-<para>
-Go to end of the current variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Go to Move</guimenuitem></term>
-<listitem>
-<para>
-Go to a certain move number in the current variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Next Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the next variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Previous Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the previous variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the next variation earlier in the game tree.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the previous variation earlier in the game tree.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Back to Main Variation</guimenuitem></term>
-<listitem>
-<para>
-Go back to the main variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Go to Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the start node of a certain variation.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
 
 <section>
 <title>View Menu</title>
@@ -721,6 +537,243 @@ Prepend each sent or received line with a time stamp.
 
 
 <section>
+<title>Go Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Beginning</guimenuitem></term>
+<listitem>
+<para>
+Go to beginning of game.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward 10</guimenuitem></term>
+<listitem>
+<para>
+Go backward 10 moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward</guimenuitem></term>
+<listitem>
+<para>
+Go backward one move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward</guimenuitem></term>
+<listitem>
+<para>
+Go forward one move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward 10</guimenuitem></term>
+<listitem>
+<para>
+Go forward 10 moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>End</guimenuitem></term>
+<listitem>
+<para>
+Go to end of the current variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Go to Move</guimenuitem></term>
+<listitem>
+<para>
+Go to a certain move number in the current variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Next Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Back to Main Variation</guimenuitem></term>
+<listitem>
+<para>
+Go back to the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Go to Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the start node of a certain variation.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+
+<section>
+<title>Program Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Attach</guimenuitem></term>
+<listitem>
+<para>
+Attach a Go program to the current game at the current position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Detach</guimenuitem></term>
+<listitem>
+<para>
+Detach currently attached Go program from game and terminate
+the Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Computer Color</guisubmenu></term>
+<listitem>
+<para>
+Choose what side the Go program plays.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play</guimenuitem></term>
+<listitem>
+<para>
+Change the computer color to the color to move and make the computer
+start playing.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play Single Move</guimenuitem></term>
+<listitem>
+<para>
+Make the computer play a move, but do not change the computer color.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Interrupt</guimenuitem></term>
+<listitem>
+<para>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and if the Go program supports interrupting
+(see <xref linkend="interrupt"/>).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save Log</guimenuitem></term>
+<listitem>
+<para>
+Save the GTP streams to a log file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save Commands</guimenuitem></term>
+<listitem>
+<para>
+Save the sent GTP commands to a file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="sendfile">
+<term><guimenuitem>Send File</guimenuitem></term>
+<listitem>
+<para>
+Send GTP commands from a file to the engine.
+This can be used to send a file containing GTp commands that configure
+parameters of the engine.
+The file is not allowed to contain any GTP command that change the
+board state.
+All commands are expected to succeed, sending will be aborted with an
+error message if a command fails.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Send Recent</guimenuitem></term>
+<listitem>
+<para>
+Send GTP commands from a recently opened file to the engine.
+See <xref linkend="sendfile"/>.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+
+<section>
 <title>Bookmarks Menu</title>
 <variablelist>
 
@@ -782,50 +835,6 @@ the main window.
 </para>
 </listitem>
 </varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Save Log</guimenuitem></term>
-<listitem>
-<para>
-Save the GTP streams to a log file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Save Commands</guimenuitem></term>
-<listitem>
-<para>
-Save the sent GTP commands to a file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="sendfile">
-<term><guimenuitem>Send File</guimenuitem></term>
-<listitem>
-<para>
-Send GTP commands from a file to the engine.
-This can be used to send a file containing GTp commands that configure
-parameters of the engine.
-The file is not allowed to contain any GTP command that change the
-board state.
-All commands are expected to succeed, sending will be aborted with an
-error message if a command fails.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Send Recent</guimenuitem></term>
-<listitem>
-<para>
-Send GTP commands from a recently opened file to the engine.
-See <xref linkend="sendfile"/>.
-</para>
-</listitem>
-</varlistentry>
-
 
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>

@@ -136,7 +136,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionAttachProgram(); } },
-             "Attach Program...", "Attach Go program to current game",
+             "Attach...", "Attach Go program to current game",
              KeyEvent.VK_A, null);
 
     public final GoGuiAction m_actionBackToMainVariation =
@@ -282,7 +282,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionDetachProgram(); } },
-             "Detach Program",
+             "Detach",
              "Detach Go program from current game and terminate it");
 
     public final GoGuiAction m_actionDocumentation =
@@ -842,6 +842,7 @@ public class GoGuiActions
         m_actionNextVariation.setEnabled(hasNextVariation);
         updateActionPass(toMove);
         updateActionPlay(toMove, isProgramAttached, name);
+        m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
         updateActionSave(file, isModified);
