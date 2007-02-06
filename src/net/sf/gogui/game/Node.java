@@ -154,8 +154,13 @@ public final class Node
 
     /** Add other unspecified SGF property.
         Do not add SGF properties that can be set with other member functions.
-        This is for preserving unknown SGF properties that are not used
-        by this program.
+        This is for preserving unknown SGF properties that are unknown to
+        this program, or cannot be handled in all cases.
+        Example: the OT property is handled only if the value string, whose
+        format is not specified by the SGF standard, is in a known format used
+        by some other programs. Otherwise it is should be put to the unknown
+        SGF properties, so that the old value is preserved if no new value
+        is set in GameInformation.
         @param label The name of the property
         @param value The value of the property, including the brackets
     */
