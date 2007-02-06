@@ -1380,8 +1380,6 @@ public class GoGui
 
     public void contextMenu(GoPoint point, Component invoker, int x, int y)
     {
-        if (isCommandInProgress())
-            return;
         if (m_setupMode
             || (m_analyzeCommand != null
                 && m_analyzeCommand.needsPointListArg()))
@@ -1395,6 +1393,11 @@ public class GoGui
 
     public void fieldClicked(GoPoint p, boolean modifiedSelect)
     {
+        if (isCommandInProgress() && modifiedSelect)
+        {
+            m_guiBoard.contextMenu(p);
+            return;
+        }
         if (! checkCommandInProgress())
             return;
         if (m_setupMode)
@@ -2271,7 +2274,7 @@ public class GoGui
             {
                 public void clearAnalyze()
                 {
-                    GoGui.this.clearAnalyzeCommand();
+                    GoGui.this.actionClearAnalyzeCommand();
                 }
 
                 public void editLabel(GoPoint point)
