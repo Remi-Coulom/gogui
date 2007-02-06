@@ -801,13 +801,17 @@ Save the sent GTP commands to a file.
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="sendfile">
 <term><guimenuitem>Send File</guimenuitem></term>
 <listitem>
 <para>
 Send GTP commands from a file to the engine.
+This can be used to send a file containing GTp commands that configure
+parameters of the engine.
 The file is not allowed to contain any GTP command that change the
 board state.
+All commands are expected to succeed, sending will be aborted with an
+error message if a command fails.
 </para>
 </listitem>
 </varlistentry>
@@ -817,8 +821,7 @@ board state.
 <listitem>
 <para>
 Send GTP commands from a recently opened file to the engine.
-The file is not allowed to contain any GTP command that change the
-board state.
+See <xref linkend="sendfile"/>.
 </para>
 </listitem>
 </varlistentry>

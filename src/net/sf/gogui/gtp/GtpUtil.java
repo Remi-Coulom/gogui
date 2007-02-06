@@ -35,6 +35,16 @@ public final class GtpUtil
             + byoyomiMoves;
     }
 
+    /** Check if command line contains a command.
+        @return false if command line contains only whitespaces or only a
+        comment
+    */
+    public static boolean isCommand(String line)
+    {
+        line = line.trim();
+        return (! line.equals("") && ! line.startsWith("#"));
+    }
+
     /** Check if command changes the board state.
         Compares command to known GTP commands that change the board state,
         such that a controller that keeps track of the board state cannot
@@ -47,9 +57,9 @@ public final class GtpUtil
         @param cmd The command or complete command line
         @return <code>true</code> if command is a state-changing command
     */
-    public static boolean isStateChangingCommand(String command)
+    public static boolean isStateChangingCommand(String line)
     {
-        GtpCommand cmd = new GtpCommand(command);
+        GtpCommand cmd = new GtpCommand(line);
         String c = cmd.getCommand();
         return (c.equals("boardsize")
                 || c.equals("black")

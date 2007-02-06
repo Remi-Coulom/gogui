@@ -22,6 +22,18 @@ public final class GtpUtilTest
         return new junit.framework.TestSuite(GtpUtilTest.class);
     }
 
+    public void testIsCommand()
+    {
+        assertFalse(GtpUtil.isCommand(""));
+        assertFalse(GtpUtil.isCommand("\n"));
+        assertFalse(GtpUtil.isCommand("   "));
+        assertFalse(GtpUtil.isCommand("# comment"));
+        assertFalse(GtpUtil.isCommand(" # comment"));
+        assertTrue(GtpUtil.isCommand("name"));
+        assertTrue(GtpUtil.isCommand("  command arg"));
+        assertTrue(GtpUtil.isCommand("  command arg # comment"));
+    }
+
     public void testParsePointString() throws GtpError
     {
         String s = " A1 b2\n textC3 C3 PASS text\tpass";

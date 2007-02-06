@@ -3135,6 +3135,8 @@ public class GoGui
                     String line = in.readLine();
                     if (line == null)
                         break;
+                    if (! GtpUtil.isCommand(line))
+                        continue;
                     if (GtpUtil.isStateChangingCommand(line))
                     {
                         showError("Board changing commands not allowed");
