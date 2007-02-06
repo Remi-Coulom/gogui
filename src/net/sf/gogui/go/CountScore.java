@@ -94,7 +94,7 @@ public class CountScore
 
     /** Get the score.
         @param komi The komi.
-        @param rules The rules (Board.RULES_CHINESE or Board.RULES_JAPANESE)
+        @param rules The rules (Score.AREA or Score.TERRITORY)
     */
     public Score getScore(Komi komi, int rules)
     {
@@ -146,18 +146,18 @@ public class CountScore
                 ++territoryDiff;
             }
         }        
-        s.m_resultChinese = areaDiff;
-        s.m_resultJapanese =
+        s.m_resultArea = areaDiff;
+        s.m_resultTerritory =
             s.m_capturedWhite - s.m_capturedBlack + territoryDiff;
         if (komi != null)
         {
-            s.m_resultChinese -= komi.toDouble();
-            s.m_resultJapanese -= komi.toDouble();
+            s.m_resultArea -= komi.toDouble();
+            s.m_resultTerritory -= komi.toDouble();
         }
-        if (rules == Board.RULES_JAPANESE)
-            s.m_result = s.m_resultJapanese;
+        if (rules == Score.TERRITORY)
+            s.m_result = s.m_resultTerritory;
         else
-            s.m_result = s.m_resultChinese;
+            s.m_result = s.m_resultArea;
         return s;
     }
 

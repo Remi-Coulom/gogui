@@ -8,6 +8,7 @@ import java.util.Locale;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
+import net.sf.gogui.go.Score;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
@@ -118,21 +119,18 @@ public class GameInformation
     }
 
     /** Try to parse rules.
-        @return Board.RULES_JAPANESE if rules string (to lowercase) is
-        "japanese", Board.RULES_CHINESE if "chinese", Board.RULES_UNKNOWN
-        otherwise.
+        @return Score.TERRITORY if rules string (to lowercase) is
+        "japanese", Score.AREA otherwise.
     */
     public int parseRules()
     {
-        int result = Board.RULES_UNKNOWN;
+        int result = Score.AREA;
         String rules = m_rules;
         if (rules != null)
         {
             rules = rules.trim().toLowerCase(Locale.ENGLISH);
             if (rules.equals("japanese"))
-                result = Board.RULES_JAPANESE;
-            else if (rules.equals("chinese"))
-                result = Board.RULES_CHINESE;
+                result = Score.TERRITORY;
         }
         return result;
     }

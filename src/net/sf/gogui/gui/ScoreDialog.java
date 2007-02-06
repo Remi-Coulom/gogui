@@ -72,10 +72,10 @@ public class ScoreDialog
             "Points owned by %c (surrounded points and border stones)";
         m_area = createColorEntry("Area", 3, toolTipArea, labels, values);
         m_komi = createKomiEntry(3, labels, values);
-        m_resultChinese = createEntry("Result Area", 8,
+        m_resultArea = createEntry("Result Area", 8,
                                       "Area score (area and komi)",
                                       labels, values);
-        m_resultJapanese = createEntry("Result Territory", 8,
+        m_resultTerritory = createEntry("Result Territory", 8,
                                        "Territory score " +
                                        "(territory, prisoners, and komi)",
                                        labels, values);
@@ -135,9 +135,9 @@ public class ScoreDialog
 
     private final JTextField m_komi;
 
-    private final JTextField m_resultChinese;
+    private final JTextField m_resultArea;
 
-    private final JTextField m_resultJapanese;
+    private final JTextField m_resultTerritory;
 
     private JComboBox m_rules;
 
@@ -241,9 +241,9 @@ public class ScoreDialog
                     if (m_score != null)
                     {
                         if (m_rules.getSelectedItem().equals("Territory"))
-                            m_score.updateRules(Board.RULES_JAPANESE);
+                            m_score.updateRules(Score.TERRITORY);
                         else
-                            m_score.updateRules(Board.RULES_CHINESE);
+                            m_score.updateRules(Score.AREA);
                         showScore();
                     }
                 }
@@ -270,9 +270,9 @@ public class ScoreDialog
         setTextInteger(m_prisoners.m_white, m_score.m_capturedBlack);
         if (m_score.m_komi != null)
             m_komi.setText(m_score.m_komi.toString());
-        m_resultChinese.setText(Score.formatResult(m_score.m_resultChinese));
-        m_resultJapanese.setText(Score.formatResult(m_score.m_resultJapanese));
-        m_rules.setSelectedItem(m_score.m_rules == Board.RULES_JAPANESE ?
+        m_resultArea.setText(Score.formatResult(m_score.m_resultArea));
+        m_resultTerritory.setText(Score.formatResult(m_score.m_resultTerritory));
+        m_rules.setSelectedItem(m_score.m_rules == Score.TERRITORY ?
                                 "Territory" : "Area");
         m_result.setText(m_score.formatResult());
     }

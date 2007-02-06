@@ -90,11 +90,6 @@ The following other commands are used by GoGui:
 </listitem>
 <listitem>
 <simpara>
-<command>scoring_system</command>
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 <command>set_free_handicap</command>
 </simpara>
 </listitem>
@@ -131,19 +126,6 @@ will transmit handicap stones with <command>play</command> commands.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
     
-<para>
-The command <command>scoring_system area/territory</command>
-(from an early draft of GTP version 2) is used for setting Chinese/Japanese
-rules, if the command is supported by the program.
-Otherwise the rule settings are quietly ignored.
-<note>
-<para>
-<command>scoring_system</command> is deprecated and may not be supported
-in the future.
-</para>
-</note>
-</para>
-
 <para>
 The command <command>gg-undo</command> is en extension command used by GNU Go,
 which differs from undo in an optional integer argument to undo multiple

@@ -11,6 +11,12 @@ package net.sf.gogui.go;
 */
 public class Score
 {
+    /** Constant for area scoring method (CHINESE). */
+    public static final int AREA = 0;
+
+    /** Constant for territory scoring method (Japanese). */
+    public static final int TERRITORY = 1;
+
     public int m_areaBlack;
 
     public int m_areaWhite;
@@ -23,9 +29,9 @@ public class Score
 
     public double m_result;
 
-    public double m_resultChinese;
+    public double m_resultArea;
 
-    public double m_resultJapanese;
+    public double m_resultTerritory;
 
     public int m_rules;
 
@@ -57,10 +63,10 @@ public class Score
     public void updateRules(int rules)
     {
         m_rules = rules;
-        if (rules == Board.RULES_JAPANESE)
-            m_result = m_resultJapanese;
+        if (rules == Score.TERRITORY)
+            m_result = m_resultTerritory;
         else
-            m_result = m_resultChinese;
+            m_result = m_resultArea;
     }
 }
 

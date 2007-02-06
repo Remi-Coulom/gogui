@@ -300,21 +300,6 @@ public final class Board
         }
     }
 
-    /** Constant for unknown rules. */
-    public static final int RULES_UNKNOWN = 0;
-
-    /** Constant for Chinese rules.
-        Indicates that area counting (stones and territory) is used for the
-        score.
-    */
-    public static final int RULES_CHINESE = 1;
-
-    /** Constant for Japanese rules.
-        Indicates that territory counting (territory and prisoners) is used
-        for the score.
-    */
-    public static final int RULES_JAPANESE = 2;
-
     /** Constructor.
         @param boardSize The board size (number of points per row / column)
         in the range from one to GoPoint.MAXSIZE

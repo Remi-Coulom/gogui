@@ -611,12 +611,6 @@ public class GoGui
             m_prefs.put("komi", komi.toString());
             setKomi(komi);
         }
-        if (info.getRules() != null
-            && ! info.getRules().equals(m_prefs.get("rules", "")))
-        {
-            m_prefs.put("rules", info.getRules());
-            setRules();
-        }
         if (info.getTimeSettings() != null
             && ! info.getTimeSettings().equals(m_timeSettings))
         {
@@ -2547,11 +2541,6 @@ public class GoGui
         }
     }
 
-    private int getRules()
-    {
-        return getGameInformation().parseRules();
-    }
-
     private GoColor getToMove()
     {
         return m_game.getToMove();
@@ -2686,7 +2675,6 @@ public class GoGui
             }
         }
         setKomi(getGameInformation().getKomi());
-        setRules();
         setTimeSettings();
         currentNodeChanged();
         return ! isOutOfSync();
@@ -2762,7 +2750,10 @@ public class GoGui
                                 deadStones);
         m_scoreMode = true;
         if (m_scoreDialog == null)
-            m_scoreDialog = new ScoreDialog(this, this, getRules());
+        {
+            int scoringMethod = getGameInformation().parseRules();
+            m_scoreDialog = new ScoreDialog(this, this, scoringMethod);
+        }
         restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInformation().getKomi();
         m_scoreDialog.showScore(m_countScore, komi);
@@ -3254,11 +3245,6 @@ public class GoGui
                               "with " + result + "?"))
             return;
         m_game.setResult(result);
-    }
-
-    private void setRules()
-    {
-        GuiGtpUtil.sendRules(getRules(), m_gtp);
     }
 
     private void setTimeSettings()
