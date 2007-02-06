@@ -3456,6 +3456,7 @@ public class GoGui
         ConstGame game = getGame();
         m_actions.update();
         m_toolBar.update();
+        m_menuBar.update(isProgramAttached());
         m_gameInfo.update(game);
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();

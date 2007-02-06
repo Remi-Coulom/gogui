@@ -136,6 +136,11 @@ public class GoGuiMenuBar
                                        isSingle ? "Single" : "Both");
     }
 
+    public void update(boolean isProgramAttached)
+    {
+        m_recentGtp.getMenu().setEnabled(isProgramAttached);
+    }
+
     private final BookmarkListener m_bookmarkListener;
 
     private final JMenuChecked m_menuBookmarks;
