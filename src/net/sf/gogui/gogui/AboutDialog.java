@@ -71,6 +71,7 @@ public final class AboutDialog
                             "<p align=\"center\"><b>" + name + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +
+                            "Program command:<br>" +
                             command + "</p>");
         }
         else
