@@ -1013,7 +1013,11 @@ public class GoGui
             {
                 String message = "Create new setup node in game tree?";
                 if (! showOptionalQuestion("create-setup-node", message))
+                {
+                    // see GoGuiToolBar.setToggleButtonsSelectedFalse()
+                    m_toolBar.setToggleButtonsSelectedFalse();
                     return;
+                }
             }
             resetBoard();
             m_setupMode = true;

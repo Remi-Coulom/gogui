@@ -32,8 +32,8 @@ public class GoGuiToolBar
         addButton(actions.m_actionPlay);
         addButton(actions.m_actionInterrupt);
         addSeparator();
-        addToggleButton(actions.m_actionSetupBlack);
-        addToggleButton(actions.m_actionSetupWhite);
+        m_setupBlack = addToggleButton(actions.m_actionSetupBlack);
+        m_setupWhite = addToggleButton(actions.m_actionSetupWhite);
         addSeparator();
         addButton(actions.m_actionBeginning);
         addButton(actions.m_actionBackwardTen);
@@ -48,6 +48,17 @@ public class GoGuiToolBar
         setFloatable(false);
         // For com.jgoodies.looks
         putClientProperty("jgoodies.headerStyle", "Both");
+    }
+
+    /** Workaround for bug in Java 1.6.
+        Toggle buttons are not reset to unselected state correctly if the
+        button lost its focus in the action handler (modal dialog in
+        GoGui.actionSetup())
+    */
+    public void setToggleButtonsSelectedFalse()
+    {
+        m_setupBlack.setSelected(false);
+        m_setupWhite.setSelected(false);
     }
 
     public void update()
@@ -67,6 +78,10 @@ public class GoGuiToolBar
     GoGui m_goGui;
 
     JButton m_buttonSave;
+
+    private GoGuiToggleButton m_setupBlack;
+
+    private GoGuiToggleButton m_setupWhite;
 
     private AbstractButton addButton(AbstractButton button)
     {
