@@ -114,7 +114,8 @@ public class GoGui
     extends JFrame
     implements AnalyzeDialog.Listener, GuiBoard.Listener,
                GameTreeViewer.Listener, GtpShell.Listener,
-               ScoreDialog.Listener, GoGuiMenuBar.BookmarkListener
+               ScoreDialog.Listener, GoGuiMenuBar.BookmarkListener,
+               ContextMenu.Listener
 {
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean computerBlack,
@@ -458,6 +459,17 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
     }
 
+    public void actionEditLabel(GoPoint point)
+    {
+        String value = getCurrentNode().getLabel(point);
+        value = JOptionPane.showInputDialog(this, "Label " + point, value);
+        if (value == null)
+            return;
+        m_game.setLabel(point, value);
+        m_guiBoard.setLabel(point, value);
+        updateGuiBoard();
+    }
+
     public void actionEnd()
     {
         if (! checkStateChangePossible())
@@ -775,6 +787,23 @@ public class GoGui
         boardChangedBegin(false, true);
     }
 
+    public void actionMark(GoPoint point, MarkType type, boolean mark)
+    {
+        if (mark)
+            m_game.addMarked(point, type);
+        else
+            m_game.removeMarked(point, type);
+        if (type == MarkType.MARK)
+            m_guiBoard.setMark(point, mark);
+        else if (type == MarkType.CIRCLE)
+            m_guiBoard.setMarkCircle(point, mark);
+        else if (type == MarkType.SQUARE)
+            m_guiBoard.setMarkSquare(point, mark);
+        else if (type == MarkType.TRIANGLE)
+            m_guiBoard.setMarkTriangle(point, mark);        
+        updateGuiBoard();
+    }
+
     public void actionNewGame()
     {
         if (! checkStateChangePossible())
@@ -960,6 +989,11 @@ public class GoGui
             };
         m_gtp.send(command, callback);
         beginLengthyCommand();
+    }
+
+    public void actionSetAnalyzeCommand(AnalyzeCommand command)
+    {
+        actionSetAnalyzeCommand(command, false, true, true);
     }
 
     public void actionSetAnalyzeCommand(AnalyzeCommand command,
@@ -2270,30 +2304,6 @@ public class GoGui
 
     private ContextMenu createContextMenu(GoPoint point)
     {
-        ContextMenu.Listener listener = new ContextMenu.Listener()
-            {
-                public void clearAnalyze()
-                {
-                    GoGui.this.actionClearAnalyzeCommand();
-                }
-
-                public void editLabel(GoPoint point)
-                {
-                    GoGui.this.editLabel(point);
-                }
-
-                public void mark(GoPoint point, MarkType type,
-                                 boolean mark)
-                {
-                    GoGui.this.mark(point, type, mark);
-                }
-
-                public void setAnalyzeCommand(AnalyzeCommand command)
-                {
-                    GoGui.this.actionSetAnalyzeCommand(command, false, true,
-                                                       true);
-                }
-            };
         ArrayList supportedCommands = null;
         boolean noProgram = (m_gtp == null);
         if (! noProgram)
@@ -2304,7 +2314,7 @@ public class GoGui
                                m_guiBoard.getMarkCircle(point),
                                m_guiBoard.getMarkSquare(point),
                                m_guiBoard.getMarkTriangle(point),
-                               listener);
+                               this);
     }
 
     private void createTree()
@@ -2405,17 +2415,6 @@ public class GoGui
         clearStatus();
         m_statusBar.clearProgress();
         setTitle();
-    }
-
-    private void editLabel(GoPoint point)
-    {
-        String value = getCurrentNode().getLabel(point);
-        value = JOptionPane.showInputDialog(this, "Label " + point, value);
-        if (value == null)
-            return;
-        m_game.setLabel(point, value);
-        m_guiBoard.setLabel(point, value);
-        updateGuiBoard();
     }
 
     private boolean endLengthyCommand()
@@ -2837,23 +2836,6 @@ public class GoGui
             return false;
         }
         return true;
-    }
-
-    public void mark(GoPoint point, MarkType type, boolean mark)
-    {
-        if (mark)
-            m_game.addMarked(point, type);
-        else
-            m_game.removeMarked(point, type);
-        if (type == MarkType.MARK)
-            m_guiBoard.setMark(point, mark);
-        else if (type == MarkType.CIRCLE)
-            m_guiBoard.setMarkCircle(point, mark);
-        else if (type == MarkType.SQUARE)
-            m_guiBoard.setMarkSquare(point, mark);
-        else if (type == MarkType.TRIANGLE)
-            m_guiBoard.setMarkTriangle(point, mark);        
-        updateGuiBoard();
     }
 
     private void newGame(int size)
