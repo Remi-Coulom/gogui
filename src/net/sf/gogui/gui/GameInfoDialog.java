@@ -108,17 +108,18 @@ public final class GameInfoDialog
         JPanel values =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-        m_result = createEntry("Result", 5, info.getResult(),
+        m_result = createEntry("Result", 12, info.getResult(),
                                "Result of the game", labels, values);
-        m_date = createEntry("Date", 10, info.getDate(),
+        m_date = createEntry("Date", 12, info.getDate(),
                              "Date when the game was played", labels, values);
-        m_rules = createEntry("Rules", 10, info.getRules(),
+        m_rules = createEntry("Rules", 12, info.getRules(),
                               "Used rules for the game", labels, values);
         String komi = "";
         if (info.getKomi() != null)
             komi = info.getKomi().toString();
-        m_komi = createEntry("Komi", 5, komi,
-                             "Komi value (compensation for first move)",
+        m_komi = createEntry("Komi", 12, komi,
+                             "Komi value (compensation for Black's first " +
+                             "move advantage)",
                              labels, values);
         createTime(info.getTimeSettings(), labels, values);
 
@@ -138,6 +139,7 @@ public final class GameInfoDialog
         labels.add(boxLabel);
         JPanel fieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JTextField field = new JTextField(cols);
+        field.setHorizontalAlignment(JTextField.CENTER);
         field.setToolTipText(toolTipText);
         field.setText(text);
         fieldPanel.add(field);
