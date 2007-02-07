@@ -945,7 +945,7 @@ public class GoGui
         {
             m_optionalMessages.showMessage("score-no-program",
                                            "Please mark dead groups "
-                                           + "manually.\n"
+                                           + "manually\n"
                                            + "(no program is attached)");
             initScore(null);
             updateViews(false);
@@ -965,7 +965,7 @@ public class GoGui
         {
             m_optionalMessages.showMessage("score-not-supported",
                                            "Please mark dead groups "
-                                           + "manually.\n(" + getProgramName()
+                                           + "manually\n(" + getProgramName()
                                            + " does not support scoring)");
             initScore(null);
             updateViews(false);
