@@ -1121,6 +1121,7 @@ public class GoGui
             return;
         sendGtpFile(file);
         m_menuBar.addRecentGtp(file);
+        updateViews(false);
     }
 
     public void actionToggleBeepAfterMove()
@@ -3009,6 +3010,7 @@ public class GoGui
         createThumbnail(file);
         setFile(file);
         m_game.clearModified();
+        updateViews(false);
         return true;
     }
 
@@ -3025,6 +3027,7 @@ public class GoGui
         OutputStream out = new FileOutputStream(file);
         new SgfWriter(out, getBoard(), "GoGui", Version.get());
         m_menuBar.addRecent(file);
+        updateViews(false);
     }
 
     private void saveSession()

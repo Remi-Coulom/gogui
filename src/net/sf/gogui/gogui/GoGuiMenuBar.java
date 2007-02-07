@@ -63,7 +63,6 @@ public class GoGuiMenuBar
         {
         }
         m_recent.add(file);
-        m_recent.updateEnabled();
     }
 
     public void addRecentGtp(File file)
@@ -78,7 +77,6 @@ public class GoGuiMenuBar
         {
         }
         m_recentGtp.add(file);
-        m_recentGtp.updateEnabled();
     }
 
     public JMenuBar getMenuBar()
@@ -139,7 +137,11 @@ public class GoGuiMenuBar
 
     public void update(boolean isProgramAttached)
     {
-        m_recentGtp.getMenu().setEnabled(isProgramAttached);
+        if (! isProgramAttached)
+            m_recentGtp.getMenu().setEnabled(false);
+        else
+            m_recentGtp.updateEnabled();
+        m_recent.updateEnabled();
         m_computerColor.setEnabled(isProgramAttached);
     }
 
