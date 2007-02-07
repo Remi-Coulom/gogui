@@ -99,7 +99,9 @@ PSGO</ulink> style.
 <term><guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position</guimenuitem></term>
 <listitem>
 <para>
-Import a text position from a file. Can handle a variety of formats.
+Import a text position from a file.
+Can handle a variety of formats.
+However, only full board positions are supported.
 Black stones can be represented by 'X', 'x', '@' or '#'; white stones by
 'O' or 'o' (however one representation must be used consistently); '.' and
 '+' are interpreted as empty points.
@@ -213,6 +215,37 @@ Start a new game.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Game Info</guimenuitem></term>
+<listitem>
+<para>
+Edit the game information.
+Changes to the komi and rules are transmitted to the Go program.
+The only supported rules are "Chinese" and "Japanese".
+The program is informed about the komi and the rules
+with GTP commands, if supported (see <xref linkend="compatibility"/>).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Board Size</guisubmenu></term>
+<listitem>
+<para>
+Change the board size and start a new game.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Handicap</guisubmenu></term>
+<listitem>
+<para>
+Set the number of handicap stones.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Clock</guimenuitem></term>
 <listitem>
 <para>
@@ -253,6 +286,222 @@ You leave score mode by closing the score window.
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
+
+<section>
+<title>Program Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Attach</guimenuitem></term>
+<listitem>
+<para>
+Attach a program from the list of Go programs to the current game at the
+current position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Detach</guimenuitem></term>
+<listitem>
+<para>
+Detach current Go program from game and terminate the Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>New Program</guimenuitem></term>
+<listitem>
+<para>
+Add a new Go program to the list of available Go programs.
+The name field should contain a label for the
+<guimenuitem>Attach</guimenuitem> menu.
+The command file should contain the command to run the Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Edit Programs</guimenuitem></term>
+<listitem>
+<para>
+Edit the list of available Go programs.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Computer Color</guisubmenu></term>
+<listitem>
+<para>
+Choose what side the Go program plays.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play</guimenuitem></term>
+<listitem>
+<para>
+Change the computer color to the color to move and make the computer
+start playing.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play Single Move</guimenuitem></term>
+<listitem>
+<para>
+Make the computer play a move, but do not change the computer color.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Interrupt</guimenuitem></term>
+<listitem>
+<para>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and if the Go program supports interrupting
+(see <xref linkend="interrupt"/>).
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+
+<section>
+<title>Go Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Beginning</guimenuitem></term>
+<listitem>
+<para>
+Go to beginning of game.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward 10</guimenuitem></term>
+<listitem>
+<para>
+Go backward 10 moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward</guimenuitem></term>
+<listitem>
+<para>
+Go backward one move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward</guimenuitem></term>
+<listitem>
+<para>
+Go forward one move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward 10</guimenuitem></term>
+<listitem>
+<para>
+Go forward 10 moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>End</guimenuitem></term>
+<listitem>
+<para>
+Go to end of the current variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Go to Move</guimenuitem></term>
+<listitem>
+<para>
+Go to a certain move number in the current variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Next Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Back to Main Variation</guimenuitem></term>
+<listitem>
+<para>
+Go back to the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Go to Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the start node of a certain variation.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+
 <section>
 <title>Edit Menu</title>
 <variablelist>
@@ -275,37 +524,6 @@ class, similar to Perl syntax.
 <listitem>
 <para>
 Find next game node containing the last entered search pattern.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Game Info</guimenuitem></term>
-<listitem>
-<para>
-Edit the game information.
-Changes to the komi and rules are transmitted to the Go program.
-The only supported rules are "Chinese" and "Japanese".
-The program is informed about the komi and the rules
-with GTP commands, if supported (see <xref linkend="compatibility"/>).
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Size</guisubmenu></term>
-<listitem>
-<para>
-Change the board size and start a new game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Handicap</guisubmenu></term>
-<listitem>
-<para>
-Set the number of handicap stones.
 </para>
 </listitem>
 </varlistentry>
@@ -527,221 +745,6 @@ the ID as a command.
 <listitem>
 <para>
 Prepend each sent or received line with a time stamp.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-
-<section>
-<title>Go Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Beginning</guimenuitem></term>
-<listitem>
-<para>
-Go to beginning of game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Backward 10</guimenuitem></term>
-<listitem>
-<para>
-Go backward 10 moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Backward</guimenuitem></term>
-<listitem>
-<para>
-Go backward one move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Forward</guimenuitem></term>
-<listitem>
-<para>
-Go forward one move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Forward 10</guimenuitem></term>
-<listitem>
-<para>
-Go forward 10 moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>End</guimenuitem></term>
-<listitem>
-<para>
-Go to end of the current variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Go to Move</guimenuitem></term>
-<listitem>
-<para>
-Go to a certain move number in the current variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Next Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the next variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Previous Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the previous variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the next variation earlier in the game tree.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the previous variation earlier in the game tree.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Back to Main Variation</guimenuitem></term>
-<listitem>
-<para>
-Go back to the main variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Go to Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the start node of a certain variation.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-
-<section>
-<title>Program Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Attach</guimenuitem></term>
-<listitem>
-<para>
-Attach a program from the list of Go programs to the current game at the
-current position.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Detach</guimenuitem></term>
-<listitem>
-<para>
-Detach current Go program from game and terminate the Go program.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>New Program</guimenuitem></term>
-<listitem>
-<para>
-Add a new Go program to the list of available Go programs.
-The name field should contain a label for the
-<guimenuitem>Attach</guimenuitem> menu.
-The command file should contain the command to run the Go program.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Edit Programs</guimenuitem></term>
-<listitem>
-<para>
-Edit the list of available Go programs.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Computer Color</guisubmenu></term>
-<listitem>
-<para>
-Choose what side the Go program plays.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Play</guimenuitem></term>
-<listitem>
-<para>
-Change the computer color to the color to move and make the computer
-start playing.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Play Single Move</guimenuitem></term>
-<listitem>
-<para>
-Make the computer play a move, but do not change the computer color.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Interrupt</guimenuitem></term>
-<listitem>
-<para>
-Interrupt the command that is currently running.
-This menu item is only active if a lengthy command (like move
-generation) is running and if the Go program supports interrupting
-(see <xref linkend="interrupt"/>).
 </para>
 </listitem>
 </varlistentry>

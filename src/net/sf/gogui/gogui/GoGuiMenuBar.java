@@ -43,10 +43,10 @@ public class GoGuiMenuBar
         m_menuBar = new JMenuBar();
         m_menuBar.add(createMenuFile(actions, recentListener));
         m_menuBar.add(createMenuGame(actions));
+        m_menuBar.add(createMenuProgram(actions));
+        m_menuBar.add(createMenuGo(actions));
         m_menuBar.add(createMenuEdit(actions));
         m_menuBar.add(createMenuView(actions));
-        m_menuBar.add(createMenuGo(actions));
-        m_menuBar.add(createMenuProgram(actions));
         m_menuBookmarks = createMenuBookMarks(actions);
         m_menuBar.add(m_menuBookmarks);
         m_menuBar.add(createMenuTools(actions, recentGtpListener));
@@ -306,10 +306,6 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionFind, KeyEvent.VK_F);
         menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
         menu.addSeparator();
-        menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
-        menu.add(createBoardSizeMenu(actions));
-        menu.add(createHandicapMenu(actions));
-        menu.addSeparator();
         menu.addItem(actions.m_actionMakeMainVariation, KeyEvent.VK_M);
         menu.addItem(actions.m_actionDeleteSideVariations, KeyEvent.VK_D);
         menu.addItem(actions.m_actionKeepOnlyPosition, KeyEvent.VK_K);
@@ -360,6 +356,10 @@ public class GoGuiMenuBar
     {
         JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
         menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
+        menu.addSeparator();
+        menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
+        menu.add(createBoardSizeMenu(actions));
+        menu.add(createHandicapMenu(actions));
         menu.addSeparator();
         menu.addItem(actions.m_actionPass, KeyEvent.VK_P);
         menu.add(createClockMenu(actions));
