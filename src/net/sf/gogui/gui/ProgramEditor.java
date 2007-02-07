@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Locale;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -40,7 +41,7 @@ public class ProgramEditor
         m_panelRight =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("Name", 25, program.m_name);
+        m_name = createEntry("Name", 20, program.m_name);
         createCommandEntry(program.m_command);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
@@ -95,37 +96,35 @@ public class ProgramEditor
 
     private JTextField createEntry(String labelText, int cols, String text)
     {
-        Box boxLabel = Box.createHorizontalBox();
-        boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(labelText + ":");
-        label.setAlignmentY(Component.CENTER_ALIGNMENT);
-        boxLabel.add(label);
-        m_panelLeft.add(boxLabel);
-        JPanel fieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        m_panelLeft.add(createEntryLabel(labelText));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JTextField field = new JTextField(cols);
-        field.setText(text);
-        fieldPanel.add(field);
-        m_panelRight.add(fieldPanel);
+        panel.add(field);
+        m_panelRight.add(panel);
         return field;
     }
 
+    private JComponent createEntryLabel(String text)
+    {
+        Box box = Box.createHorizontalBox();
+        box.add(Box.createHorizontalGlue());
+        JLabel label = new JLabel(text + ":");
+        label.setAlignmentY(Component.CENTER_ALIGNMENT);
+        box.add(label);
+        return box;
+    }
     private void createCommandEntry(String text)
     {
-        Box boxLabel = Box.createHorizontalBox();
-        boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel("Command:");
-        label.setAlignmentY(Component.CENTER_ALIGNMENT);
-        boxLabel.add(label);
-        m_panelLeft.add(boxLabel);
-        Box box = Box.createHorizontalBox();
-        m_command = new JTextField();
+        m_panelLeft.add(createEntryLabel("Command"));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        m_command = new JTextField(20);
         m_command.setText(text);
-        box.add(m_command);
-        box.add(GuiUtil.createSmallFiller());
+        panel.add(m_command);
+        panel.add(GuiUtil.createSmallFiller());
         JButton button = new JButton();
-        box.add(button);
+        panel.add(button);
         button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
-        box.setToolTipText("Browse for Go program");
+        button.setToolTipText("Browse for Go program");
         button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     File file =
@@ -149,7 +148,7 @@ public class ProgramEditor
                     m_command.requestFocusInWindow();
                 }
             });
-        m_panelRight.add(box);
+        m_panelRight.add(panel);
     }
 
     private boolean validate(Component parent)
