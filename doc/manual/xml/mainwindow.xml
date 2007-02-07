@@ -670,7 +670,8 @@ Go to the start node of a certain variation.
 <term><guimenuitem>Attach</guimenuitem></term>
 <listitem>
 <para>
-Attach a Go program to the current game at the current position.
+Attach a program from the list of Go programs to the current game at the
+current position.
 </para>
 </listitem>
 </varlistentry>
@@ -679,8 +680,28 @@ Attach a Go program to the current game at the current position.
 <term><guimenuitem>Detach</guimenuitem></term>
 <listitem>
 <para>
-Detach currently attached Go program from game and terminate
-the Go program.
+Detach current Go program from game and terminate the Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>New Program</guimenuitem></term>
+<listitem>
+<para>
+Add a new Go program to the list of available Go programs.
+The name field should contain a label for the
+<guimenuitem>Attach</guimenuitem> menu.
+The command file should contain the command to run the Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Edit Programs</guimenuitem></term>
+<listitem>
+<para>
+Edit the list of available Go programs.
 </para>
 </listitem>
 </varlistentry>

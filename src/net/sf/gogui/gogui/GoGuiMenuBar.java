@@ -21,22 +21,25 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import net.sf.gogui.gui.Bookmark;
+import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.RecentFileMenu;
 
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
 {
-    public interface BookmarkListener
+    public interface Listener
     {
         void actionGotoBookmark(int i);
+
+        void actionAttachProgram(int i);
     }
 
     public GoGuiMenuBar(GoGuiActions actions,
                         RecentFileMenu.Listener recentListener,
                         RecentFileMenu.Listener recentGtpListener,
-                        GoGuiMenuBar.BookmarkListener bookmarkListener)
+                        GoGuiMenuBar.Listener bookmarkListener)
     {
-        m_bookmarkListener = bookmarkListener;
+        m_listener = bookmarkListener;
         m_menuBar = new JMenuBar();
         m_menuBar.add(createMenuFile(actions, recentListener));
         m_menuBar.add(createMenuGame(actions));
@@ -104,7 +107,7 @@ public class GoGuiMenuBar
             final int bookmarkIndex = i;
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        m_bookmarkListener.actionGotoBookmark(bookmarkIndex);
+                        m_listener.actionGotoBookmark(bookmarkIndex);
                     } } );
             if (bookmark.m_file != null)
             {
@@ -127,6 +130,27 @@ public class GoGuiMenuBar
         }
     }
 
+    public void setPrograms(ArrayList programs)
+    {
+        m_menuAttach.setEnabled(programs.size() > 0);
+        for (int i = 0; i < m_programItems.size(); ++i)
+            m_menuAttach.remove((JMenuItem)m_programItems.get(i));
+        if (programs.size() == 0)
+            return;
+        for (int i = 0; i < programs.size(); ++i)
+        {
+            Program program = (Program)programs.get(i);
+            JMenuItem item = new JMenuItem(program.m_name);
+            final int index = i;
+            item.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        m_listener.actionAttachProgram(index);
+                    } } );
+            m_menuAttach.add(item);
+            m_programItems.add(item);
+        }
+    }
+
     /** Is it a single menu bar or does a tool bar exist? */
     public void setHeaderStyleSingle(boolean isSingle)
     {
@@ -145,9 +169,11 @@ public class GoGuiMenuBar
         m_computerColor.setEnabled(isProgramAttached);
     }
 
-    private final BookmarkListener m_bookmarkListener;
+    private final Listener m_listener;
 
     private final JMenuChecked m_menuBookmarks;
+
+    private JMenuChecked m_menuAttach;
 
     private final JMenuBar m_menuBar;
 
@@ -158,6 +184,8 @@ public class GoGuiMenuBar
     private RecentFileMenu m_recentGtp;
 
     private final ArrayList m_bookmarkItems = new ArrayList();
+
+    private final ArrayList m_programItems = new ArrayList();
 
     private JMenu m_computerColor;
 
@@ -381,8 +409,12 @@ public class GoGuiMenuBar
                                            RecentFileMenu.Listener listener)
     {
         JMenuChecked menu = createMenu("Program", KeyEvent.VK_P);
-        menu.addItem(actions.m_actionAttachProgram, KeyEvent.VK_A);
+        m_menuAttach = createMenu("Attach", KeyEvent.VK_A);
+        m_menuAttach.setEnabled(false);
+        menu.add(m_menuAttach);
         menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
+        menu.addItem(actions.m_actionNewProgram, KeyEvent.VK_N);
+        menu.addItem(actions.m_actionEditPrograms, KeyEvent.VK_E);
         menu.addSeparator();
         m_computerColor = createComputerColorMenu(actions);
         menu.add(m_computerColor);

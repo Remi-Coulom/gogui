@@ -89,8 +89,9 @@ import net.sf.gogui.gui.LiveGfx;
 import net.sf.gogui.gui.ObjectListEditor;
 import net.sf.gogui.gui.OptionalMessageSession;
 import net.sf.gogui.gui.ParameterDialog;
+import net.sf.gogui.gui.Program;
+import net.sf.gogui.gui.ProgramEditor;
 import net.sf.gogui.gui.RecentFileMenu;
-import net.sf.gogui.gui.SelectProgram;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.SimpleDialogs;
@@ -114,7 +115,7 @@ public class GoGui
     extends JFrame
     implements AnalyzeDialog.Listener, GuiBoard.Listener,
                GameTreeViewer.Listener, GtpShell.Listener,
-               ScoreDialog.Listener, GoGuiMenuBar.BookmarkListener,
+               ScoreDialog.Listener, GoGuiMenuBar.Listener,
                ContextMenu.Listener
 {
     public GoGui(String program, File file, int move, String time,
@@ -227,10 +228,7 @@ public class GoGui
         m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar.getMenuBar());
         setMinimumSize();
-        if (program == null)
-            m_program = m_prefs.get("program", null);
-        else
-            m_program = program;
+        m_program = program;
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
         if (time != null)
@@ -278,23 +276,25 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
     }
 
-    public void actionAttachProgram()
-    {        
+    public void actionAttachProgram(int index)
+    {
+        actionAttachProgram(((Program)m_programs.get(index)).m_command);
+        m_prefs.putInt("program", index);
+    }
+
+    public void actionAttachProgram(String command)
+    {
         if (! checkCommandInProgress())
-            return;
-        String program = SelectProgram.select(this);
-        if (program == null)
             return;
         if (m_gtp != null)
             if (! actionDetachProgram())
                 return;
-        if (! attachProgram(program))
+        if (! attachProgram(command))
         {
-            m_prefs.put("program", "");
+            m_prefs.putInt("program", -1);
             updateViews(false);
             return;
         }
-        m_prefs.put("program", m_program);
         if (m_shell != null && m_session.isVisible("shell"))
             m_shell.setVisible(true);
         if (m_session.isVisible("analyze"))
@@ -409,7 +409,7 @@ public class GoGui
         if (isCommandInProgress() && ! showQuestion("Kill program?"))
             return false;
         detachProgram();
-        m_prefs.put("program", "");
+        m_prefs.putInt("program", -1);
         updateViews(false);
         return true;
     }
@@ -472,6 +472,16 @@ public class GoGui
         m_game.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
         updateGuiBoard();
+    }
+
+    public void actionEditPrograms()
+    {
+        ProgramEditor editor = new ProgramEditor();
+        ObjectListEditor listEditor = new ObjectListEditor();
+        if (! listEditor.edit(this, "Edit Programs", m_programs, editor))
+            return;
+        m_menuBar.setPrograms(m_programs);
+        m_prefs.putInt("program", -1);
     }
 
     public void actionEnd()
@@ -813,6 +823,18 @@ public class GoGui
         if (! checkStateChangePossible())
             return;
         newGame(getBoardSize(), true);
+    }
+
+    public void actionNewProgram()
+    {
+        Program program = new Program("", "");
+        ProgramEditor editor = new ProgramEditor();
+        program = editor.editItem(this, "New Program", program);
+        if (program == null)
+            return;
+        m_programs.add(program);
+        m_menuBar.setPrograms(m_programs);
+        updateViews(false);
     }
 
     public void actionNextEarlierVariation()
@@ -1336,6 +1358,11 @@ public class GoGui
         return m_commandCompletion;
     }
 
+    public int getNumberPrograms()
+    {
+        return m_programs.size();
+    }
+
     /** Get name of currently attached program.
         @return Name or null, if no program is attached
     */
@@ -1808,6 +1835,8 @@ public class GoGui
     private final GoGuiToolBar m_toolBar;
 
     private ArrayList m_bookmarks;
+
+    private ArrayList m_programs;
 
     private void analyzeBegin(boolean checkComputerMove)
     {
@@ -2695,6 +2724,14 @@ public class GoGui
     {
         m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);
+        m_programs = Program.load();
+        m_menuBar.setPrograms(m_programs);
+        if (m_program == null)
+        {
+            int index = m_prefs.getInt("program", -1);
+            if (index >= 0 && index < m_programs.size())
+                m_program = ((Program)m_programs.get(index)).m_command;
+        }
         if (m_file == null)
             newGame(getBoardSize());
         else
@@ -3033,6 +3070,7 @@ public class GoGui
     private void saveSession()
     {
         Bookmark.save(m_bookmarks);
+        Program.save(m_programs);
         if (m_shell != null)
             m_shell.saveHistory();
         if (m_analyzeDialog != null)

@@ -132,13 +132,6 @@ public class GoGuiActions
              "Add bookmark at current position in current file",
              KeyEvent.VK_B);
 
-    public final GoGuiAction m_actionAttachProgram =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionAttachProgram(); } },
-             "Attach...", "Attach Go program to current game",
-             KeyEvent.VK_A, null);
-
     public final GoGuiAction m_actionBackToMainVariation =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -257,6 +250,12 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionEditBookmarks(); } },
              "Edit Bookmarks...", "Edit list of bookmarks");
+
+    public final GoGuiAction m_actionEditPrograms =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionEditPrograms(); } },
+             "Edit Programs...", "Edit list of programs");
 
     public final GoGuiAction m_actionGoto =
         new GoGuiAction(new ActionListener() {
@@ -497,6 +496,13 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionNewGame(); } },
              "New Game", "Clear board and begin new game", "gogui-newgame");
+
+    public final GoGuiAction m_actionNewProgram =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionNewProgram(); } },
+             "New Program...",
+             "Add new Go program");
 
     public final GoGuiAction m_actionOpen =
         new GoGuiAction(new ActionListener() {
@@ -791,6 +797,7 @@ public class GoGuiActions
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
         boolean hasPattern = (m_goGui.getPattern() != null);
+        int numberPrograms = m_goGui.getNumberPrograms();
         ConstClock clock = game.getClock();
         int boardSize = game.getSize();
         GoColor toMove = game.getToMove();
@@ -819,6 +826,7 @@ public class GoGuiActions
         m_actionComputerWhite.setSelected(! computerBlack && computerWhite);
         m_actionDeleteSideVariations.setEnabled(isInMain && treeHasVariations);
         m_actionDetachProgram.setEnabled(isProgramAttached);
+        m_actionEditPrograms.setEnabled(numberPrograms > 0);
         m_actionEnd.setEnabled(hasChildren);
         m_actionFindNext.setEnabled(hasPattern);
         m_actionForward.setEnabled(hasChildren);
