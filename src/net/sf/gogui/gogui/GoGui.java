@@ -835,6 +835,8 @@ public class GoGui
         m_programs.add(program);
         m_menuBar.setPrograms(m_programs);
         updateViews(false);
+        if (! isProgramAttached())
+            actionAttachProgram(m_programs.size() - 1);
     }
 
     public void actionNextEarlierVariation()
