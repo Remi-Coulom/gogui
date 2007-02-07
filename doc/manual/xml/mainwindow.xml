@@ -869,7 +869,7 @@ See <xref linkend="sendfile"/>.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>GoGui Documentation</guimenuitem></term>
+<term><guimenuitem>GoGui Help</guimenuitem></term>
 <listitem>
 <para>
 Open a window for browsing the GoGui documentation.

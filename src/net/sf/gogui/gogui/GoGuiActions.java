@@ -293,7 +293,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionDocumentation(); } },
-             "GoGui Documentation", "Open GoGui manual", KeyEvent.VK_F1,
+             "GoGui Help", "Open GoGui manual", KeyEvent.VK_F1,
              getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionEnd =
