@@ -159,7 +159,8 @@ public class GoGuiMenuBar
                                        isSingle ? "Single" : "Both");
     }
 
-    public void update(boolean isProgramAttached)
+    public void update(boolean isProgramAttached, boolean isTreeShown,
+                       boolean isShellShown)
     {
         if (! isProgramAttached)
             m_recentGtp.getMenu().setEnabled(false);
@@ -167,6 +168,8 @@ public class GoGuiMenuBar
             m_recentGtp.updateEnabled();
         m_recent.updateEnabled();
         m_computerColor.setEnabled(isProgramAttached);
+        m_menuViewTree.setEnabled(isTreeShown);
+        m_menuViewShell.setEnabled(isShellShown);
     }
 
     private final Listener m_listener;
@@ -174,6 +177,10 @@ public class GoGuiMenuBar
     private final JMenuChecked m_menuBookmarks;
 
     private JMenuChecked m_menuAttach;
+
+    private JMenuChecked m_menuViewTree;
+
+    private JMenuChecked m_menuViewShell;
 
     private final JMenuBar m_menuBar;
 
@@ -256,24 +263,24 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuConfigureShell(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Shell Window");
-        menu.setMnemonic(KeyEvent.VK_H);
+        m_menuViewShell = new JMenuChecked("Shell");
+        m_menuViewShell.setMnemonic(KeyEvent.VK_H);
         GoGuiCheckBoxMenuItem itemCompletion =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleCompletion);
-        menu.addItem(itemCompletion, KeyEvent.VK_P);
+        m_menuViewShell.addItem(itemCompletion, KeyEvent.VK_P);
         GoGuiCheckBoxMenuItem itemAutonumber =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleAutoNumber);
-        menu.addItem(itemAutonumber, KeyEvent.VK_A);
+        m_menuViewShell.addItem(itemAutonumber, KeyEvent.VK_A);
         GoGuiCheckBoxMenuItem itemTimestamp =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleTimeStamp);
-        menu.addItem(itemTimestamp, KeyEvent.VK_T);
-        return menu;
+        m_menuViewShell.addItem(itemTimestamp, KeyEvent.VK_T);
+        return m_menuViewShell;
     }
 
     private JMenuChecked createMenuConfigureTree(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Tree Window");
-        menu.setMnemonic(KeyEvent.VK_E);
+        m_menuViewTree = new JMenuChecked("Tree");
+        m_menuViewTree.setMnemonic(KeyEvent.VK_E);
         JMenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
         menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNumber,
@@ -282,7 +289,7 @@ public class GoGuiMenuBar
                                KeyEvent.VK_M);
         menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNone,
                                KeyEvent.VK_O);
-        menu.add(menuLabel);
+        m_menuViewTree.add(menuLabel);
         JMenuChecked menuSize = createMenu("Size", KeyEvent.VK_S);
         group = new ButtonGroup();
         menuSize.addRadioItem(group, actions.m_actionTreeSizeLarge,
@@ -293,11 +300,11 @@ public class GoGuiMenuBar
                               KeyEvent.VK_S);
         menuSize.addRadioItem(group, actions.m_actionTreeSizeTiny,
                               KeyEvent.VK_T);
-        menu.add(menuSize);
+        m_menuViewTree.add(menuSize);
         GoGuiCheckBoxMenuItem itemShowSubtreeSizes =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowSubtreeSizes);
-        menu.addItem(itemShowSubtreeSizes, KeyEvent.VK_S);
-        return menu;
+        m_menuViewTree.addItem(itemShowSubtreeSizes, KeyEvent.VK_S);
+        return m_menuViewTree;
     }
 
     private JMenuChecked createMenuEdit(GoGuiActions actions)

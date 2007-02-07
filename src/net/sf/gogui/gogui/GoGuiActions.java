@@ -647,21 +647,21 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowAnalyzeDialog(); } },
-             "Analyze", "Show window with analyze commands",
+             "Analyze Dialog", "Show window with analyze commands",
              KeyEvent.VK_F9, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowShell =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowShell(); } },
-             "Shell", "Show GTP shell window",
+             "GTP Shell", "Show GTP shell window",
              KeyEvent.VK_F8, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowTree =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowTree(); } },
-             "Tree", "Show game tree window",
+             "Tree Viewer", "Show game tree window",
              KeyEvent.VK_F7, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowToolbar =

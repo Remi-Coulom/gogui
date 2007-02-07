@@ -686,7 +686,7 @@ Use fixed-width font for comment.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Tree Window</guisubmenu> / <guimenuitem>Labels</guimenuitem></term>
+<term><guisubmenu>Tree</guisubmenu> / <guimenuitem>Labels</guimenuitem></term>
 <listitem>
 <para>
 Configure the labels on the tree nodes.
@@ -695,7 +695,7 @@ Configure the labels on the tree nodes.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Tree Window</guisubmenu> / <guimenuitem>Size</guimenuitem></term>
+<term><guisubmenu>Tree</guisubmenu> / <guimenuitem>Size</guimenuitem></term>
 <listitem>
 <para>
 Configure the size of the tree nodes.
@@ -704,7 +704,7 @@ Configure the size of the tree nodes.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Tree Window</guisubmenu> / <guimenuitem>Subtree Sizes</guimenuitem></term>
+<term><guisubmenu>Tree</guisubmenu> / <guimenuitem>Subtree Sizes</guimenuitem></term>
 <listitem>
 <para>
 Show the number of nodes in the subtree for nodes that are not expanded.
@@ -713,7 +713,7 @@ Show the number of nodes in the subtree for nodes that are not expanded.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Shell Window</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
+<term><guisubmenu>Shell</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
 <listitem>
 <para>
 Popup a window with command completions while entering a command.
@@ -722,7 +722,7 @@ Popup a window with command completions while entering a command.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Shell Window</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
+<term><guisubmenu>Shell</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
 <listitem>
 <para>
 <indexterm>
@@ -741,7 +741,7 @@ the ID as a command.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Shell Window</guisubmenu> / <guimenuitem>Timestamp</guimenuitem></term>
+<term><guisubmenu>Shell</guisubmenu> / <guimenuitem>Timestamp</guimenuitem></term>
 <listitem>
 <para>
 Prepend each sent or received line with a time stamp.
@@ -785,7 +785,7 @@ Edit bookmarks.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Tree</guimenuitem></term>
+<term><guimenuitem>Tree Viewer</guimenuitem></term>
 <listitem>
 <para>
 Show or hide the game tree window.
@@ -796,7 +796,7 @@ the main window.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Analyze</guimenuitem></term>
+<term><guimenuitem>Analyze Dialog</guimenuitem></term>
 <listitem>
 <para>
 Show or hide the Analyze window.
@@ -807,7 +807,7 @@ the main window.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Shell</guimenuitem></term>
+<term><guimenuitem>GTP Shell</guimenuitem></term>
 <listitem>
 <para>
 Show or hide the GTP shell window.
