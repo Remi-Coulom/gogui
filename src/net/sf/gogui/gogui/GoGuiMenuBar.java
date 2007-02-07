@@ -46,10 +46,10 @@ public class GoGuiMenuBar
         m_menuBar.add(createMenuEdit(actions));
         m_menuBar.add(createMenuView(actions));
         m_menuBar.add(createMenuGo(actions));
-        m_menuBar.add(createMenuProgram(actions, recentGtpListener));
+        m_menuBar.add(createMenuProgram(actions));
         m_menuBookmarks = createMenuBookMarks(actions);
         m_menuBar.add(m_menuBookmarks);
-        m_menuBar.add(createMenuTools(actions));
+        m_menuBar.add(createMenuTools(actions, recentGtpListener));
         m_menuBar.add(createMenuHelp(actions));
         setHeaderStyleSingle(true);
     }
@@ -405,8 +405,7 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuProgram(GoGuiActions actions,
-                                           RecentFileMenu.Listener listener)
+    private JMenuChecked createMenuProgram(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Program", KeyEvent.VK_P);
         m_menuAttach = createMenu("Attach", KeyEvent.VK_A);
@@ -421,19 +420,11 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionPlay, KeyEvent.VK_P);
         menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_I);
-        menu.addSeparator();
-        menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
-        menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);
-        menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
-        m_recentGtp = new RecentFileMenu("Send Recent",
-                                         "net/sf/gogui/recentgtpfiles",
-                                         listener);
-        m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
-        menu.add(m_recentGtp.getMenu());
         return menu;
     }
 
-    private JMenuChecked createMenuTools(GoGuiActions actions)
+    private JMenuChecked createMenuTools(GoGuiActions actions,
+                                         RecentFileMenu.Listener listener)
     {
         JMenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
         GoGuiCheckBoxMenuItem itemTree =
@@ -445,6 +436,15 @@ public class GoGuiMenuBar
         GoGuiCheckBoxMenuItem itemShell =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowShell);
         menu.addItem(itemShell, KeyEvent.VK_S);
+        menu.addSeparator();
+        menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
+        menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);
+        menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
+        m_recentGtp = new RecentFileMenu("Send Recent",
+                                         "net/sf/gogui/recentgtpfiles",
+                                         listener);
+        m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
+        menu.add(m_recentGtp.getMenu());
         return menu;
     }
 

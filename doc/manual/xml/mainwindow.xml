@@ -746,49 +746,6 @@ generation) is running and if the Go program supports interrupting
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guimenuitem>Save Log</guimenuitem></term>
-<listitem>
-<para>
-Save the GTP streams to a log file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Save Commands</guimenuitem></term>
-<listitem>
-<para>
-Save the sent GTP commands to a file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="sendfile">
-<term><guimenuitem>Send File</guimenuitem></term>
-<listitem>
-<para>
-Send GTP commands from a file to the engine.
-This can be used to send a file containing GTp commands that configure
-parameters of the engine.
-The file is not allowed to contain any GTP command that change the
-board state.
-All commands are expected to succeed, sending will be aborted with an
-error message if a command fails.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Send Recent</guimenuitem></term>
-<listitem>
-<para>
-Send GTP commands from a recently opened file to the engine.
-See <xref linkend="sendfile"/>.
-</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -853,6 +810,49 @@ the main window.
 Show or hide the GTP shell window.
 The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
 the main window.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save Log</guimenuitem></term>
+<listitem>
+<para>
+Save the GTP streams to a log file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save Commands</guimenuitem></term>
+<listitem>
+<para>
+Save the sent GTP commands to a file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="sendfile">
+<term><guimenuitem>Send File</guimenuitem></term>
+<listitem>
+<para>
+Send GTP commands from a file to the engine.
+This can be used to send a file containing GTp commands that configure
+parameters of the engine.
+The file is not allowed to contain any GTP command that change the
+board state.
+All commands are expected to succeed, sending will be aborted with an
+error message if a command fails.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Send Recent</guimenuitem></term>
+<listitem>
+<para>
+Send GTP commands from a recently opened file to the engine.
+See <xref linkend="sendfile"/>.
 </para>
 </listitem>
 </varlistentry>
