@@ -103,6 +103,11 @@ public class GoGuiActions
             putValue(AbstractAction.SHORT_DESCRIPTION, desc);
         }
 
+        public void setName(String name)
+        {
+            putValue(AbstractAction.NAME, name);
+        }
+
         public void setSelected(boolean selected)
         {
             putValue("selected", Boolean.valueOf(selected));
@@ -825,7 +830,7 @@ public class GoGuiActions
         m_actionComputerWhite.setEnabled(isProgramAttached);
         m_actionComputerWhite.setSelected(! computerBlack && computerWhite);
         m_actionDeleteSideVariations.setEnabled(isInMain && treeHasVariations);
-        m_actionDetachProgram.setEnabled(isProgramAttached);
+        updateActionDetachProgram(isProgramAttached, name);
         m_actionEditPrograms.setEnabled(numberPrograms > 0);
         m_actionEnd.setEnabled(hasChildren);
         m_actionFindNext.setEnabled(hasPattern);
@@ -921,6 +926,15 @@ public class GoGuiActions
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     }
 
+    private void updateActionDetachProgram(boolean isProgramAttached,
+                                           String name)
+    {
+        m_actionDetachProgram.setEnabled(isProgramAttached);
+        if (! isProgramAttached)
+            m_actionDetachProgram.setName("Detach");
+        else
+            m_actionDetachProgram.setName("Detach " + name);
+    }
 
     private void updateActionInterrupt(boolean isProgramAttached,
                                        boolean isInterruptSupported,
