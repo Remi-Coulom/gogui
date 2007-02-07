@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.Box;
 import javax.swing.JDialog;
@@ -18,39 +20,16 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 /** Dialog for displaying and editing a bookmark. */
-public class BookmarkDialog
-    extends JOptionPane
+public class BookmarkEditor
+    implements ObjectListEditor.ItemEditor
 {
-    public static boolean show(Component parent, String title,
-                               Bookmark bookmark, boolean selectName)
+    public Object editItem(Component parent, Object object)
     {
-        BookmarkDialog bookmarkDialog = new BookmarkDialog(bookmark);
-        JDialog dialog = bookmarkDialog.createDialog(parent, title);
-        boolean done = false;
-        while (! done)
-        {
-            if (selectName)
-            {
-                bookmarkDialog.m_name.selectAll();
-                // Doesn't work on Sun's Linux Java 1.5
-                bookmarkDialog.m_name.requestFocusInWindow();
-            }
-            dialog.setVisible(true);
-            Object value = bookmarkDialog.getValue();
-            if (! (value instanceof Integer)
-                || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
-                return false;
-            done = bookmarkDialog.validate(parent);
-        }
-        bookmark.m_name = bookmarkDialog.m_name.getText().trim();
-        bookmark.m_file = new File(bookmarkDialog.m_file.getText());
-        bookmark.m_move = bookmarkDialog.getMove();
-        bookmark.m_variation = bookmarkDialog.m_variation.getText().trim();
-        dialog.dispose();
-        return true;
+        return editItem(parent, "Edit Bookmark", (Bookmark)object, false);
     }
 
-    public BookmarkDialog(Bookmark bookmark)
+    public Bookmark editItem(Component parent, String title, Bookmark bookmark,
+                             boolean selectName)
     {
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
         m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
@@ -66,10 +45,47 @@ public class BookmarkDialog
         String move = "";
         if (bookmark.m_move > 0)
             move = Integer.toString(bookmark.m_move);
-        m_move = createEntry("Move", 3, move);
+        m_move = createEntry("Move", 10, move);
         m_variation = createEntry("Variation", 10, bookmark.m_variation);
-        setMessage(panel);
-        setOptionType(OK_CANCEL_OPTION);
+        JOptionPane optionPane = new JOptionPane(panel,
+                                                 JOptionPane.PLAIN_MESSAGE,
+                                                 JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog(parent, title);
+        boolean done = false;
+        while (! done)
+        {
+            if (selectName)
+                m_name.selectAll();
+            dialog.addWindowListener(new WindowAdapter() {
+                    public void windowActivated(WindowEvent e) {
+                        m_name.requestFocusInWindow();
+                    }
+                });
+            dialog.setVisible(true);
+            Object value = optionPane.getValue();
+            if (! (value instanceof Integer)
+                || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
+                return null;
+            done = validate(parent);
+        }
+        String newName = m_name.getText().trim();
+        File newFile = new File(m_file.getText());
+        int newMove = getMove();
+        String newVariation = m_variation.getText().trim();
+        Bookmark newBookmark =
+            new Bookmark(newName, newFile, newMove, newVariation);
+        dialog.dispose();
+        return newBookmark;
+    }
+
+    public String getItemLabel(Object object)
+    {
+        return ((Bookmark)object).m_name;
+    }
+
+    public Object cloneItem(Object object)
+    {
+        return new Bookmark((Bookmark)object);
     }
 
     /** Serial version to suppress compiler warning.
@@ -77,9 +93,9 @@ public class BookmarkDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final JPanel m_panelLeft;
+    private JPanel m_panelLeft;
 
-    private final JPanel m_panelRight;
+    private JPanel m_panelRight;
 
     private JTextField m_name;
 

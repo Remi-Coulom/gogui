@@ -20,36 +20,24 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/** Dialog for displaying and editing a list of bookmarks. */
-public class EditBookmarksDialog
-    extends JOptionPane
+/** Dialog for displaying and editing a list of objects. */
+public class ObjectListEditor
 {
-    public static boolean show(Component parent, ArrayList bookmarks)
+    interface ItemEditor
     {
-        ArrayList tempBookmarks = new ArrayList();
-        copyBookmarks(bookmarks, tempBookmarks);
-        EditBookmarksDialog editDialog
-            = new EditBookmarksDialog(tempBookmarks);
-        JDialog dialog = editDialog.createDialog(parent, "Edit Bookmarks");
-        dialog.setVisible(true);
-        Object value = editDialog.getValue();
-        boolean result = true;
-        if (! (value instanceof Integer)
-            || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
-            result = false;
-        dialog.dispose();
-        if (result)
-            copyBookmarks(tempBookmarks, bookmarks);
-        return result;
+        Object editItem(Component parent, Object object);
+
+        String getItemLabel(Object object);
+
+        Object cloneItem(Object object);
     }
 
-    public EditBookmarksDialog(ArrayList bookmarks)
+    public boolean edit(Component parent, String title, ArrayList objects,
+                        ItemEditor editor)
     {
-        m_bookmarks = bookmarks;
-        m_actionListener = new ActionListener()
-            {
-                public void actionPerformed(ActionEvent event)
-                {
+        m_editor = editor;
+        m_actionListener = new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
                     String command = event.getActionCommand();
                     if (command.equals("edit"))
                         cbEdit();
@@ -65,10 +53,8 @@ public class EditBookmarksDialog
             };
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.PAD, 0));
         m_list = new JList();
-        m_list.addListSelectionListener(new ListSelectionListener()
-            {
-                public void valueChanged(ListSelectionEvent e)
-                {
+        m_list.addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
                     selectionChanged();
                 }
             });
@@ -76,9 +62,23 @@ public class EditBookmarksDialog
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.EAST);
-        setMessage(panel);
-        setOptionType(OK_CANCEL_OPTION);
-        updateList(m_bookmarks.size() == 0 ? -1 : 0);
+        JOptionPane optionPane = new JOptionPane(panel,
+                                                 JOptionPane.PLAIN_MESSAGE,
+                                                 JOptionPane.OK_CANCEL_OPTION);
+        m_objects = new ArrayList();
+        copyObjects(objects, m_objects);
+        updateList(m_objects.size() == 0 ? -1 : 0);
+        m_dialog = optionPane.createDialog(parent, title);
+        m_dialog.setVisible(true);
+        Object value = optionPane.getValue();
+        boolean result = true;
+        if (! (value instanceof Integer)
+            || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
+            result = false;
+        m_dialog.dispose();
+        if (result)
+            copyObjects(m_objects, objects);
+        return result;
     }
 
     /** Serial version to suppress compiler warning.
@@ -86,7 +86,7 @@ public class EditBookmarksDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final ActionListener m_actionListener;
+    private ActionListener m_actionListener;
 
     private JButton m_edit;
 
@@ -96,34 +96,37 @@ public class EditBookmarksDialog
 
     private JButton m_remove;
 
-    private final JList m_list;
+    private JList m_list;
 
     private OptionalMessage m_removeWarning;
 
-    private final ArrayList m_bookmarks;
+    private JDialog m_dialog;
+
+    private ArrayList m_objects;
+
+    private ItemEditor m_editor;
 
     private void cbMoveDown()
     {
         int index = m_list.getSelectedIndex();
-        if (index < 0 || index >= m_bookmarks.size() - 1)
+        if (index < 0 || index >= m_objects.size() - 1)
             return;
-        Object temp = m_bookmarks.get(index);
-        m_bookmarks.set(index, m_bookmarks.get(index + 1));
-        m_bookmarks.set(index + 1, temp);
+        Object temp = m_objects.get(index);
+        m_objects.set(index, m_objects.get(index + 1));
+        m_objects.set(index + 1, temp);
         updateList(index + 1);
     }
 
     private void cbEdit()
     {
-        Bookmark bookmark = getSelected();
-        if (bookmark == null)
+        int index = m_list.getSelectedIndex();
+        if (index == -1)
             return;
-        int selectedIndex = m_list.getSelectedIndex();
-        Bookmark tempBookmark = new Bookmark(bookmark);
-        if (! BookmarkDialog.show(this, "Edit Bookmark", tempBookmark, false))
+        Object object = m_editor.editItem(m_dialog, getObject(index));
+        if (object == null)
             return;
-        bookmark.copyFrom(tempBookmark);
-        updateList(selectedIndex);
+        m_objects.set(index, object);
+        updateList(index);
     }
 
     private void cbMoveUp()
@@ -131,35 +134,35 @@ public class EditBookmarksDialog
         int index = m_list.getSelectedIndex();
         if (index < 0 || index == 0)
             return;
-        Object temp = m_bookmarks.get(index);
-        m_bookmarks.set(index, m_bookmarks.get(index - 1));
-        m_bookmarks.set(index - 1, temp);
+        Object temp = m_objects.get(index);
+        m_objects.set(index, m_objects.get(index - 1));
+        m_objects.set(index - 1, temp);
         updateList(index - 1);
     }
 
     private void cbRemove()
     {
-        Bookmark bookmark = getSelected();
-        if (bookmark == null)
+        int index = m_list.getSelectedIndex();
+        if (index == -1)
             return;
-        int selectedIndex = m_list.getSelectedIndex();
-        String name = bookmark.m_name;
+        Object object = getObject(index);
+        String name = m_editor.getItemLabel(object);
         if (m_removeWarning == null)
-            m_removeWarning = new OptionalMessage(this);
-        if (! m_removeWarning.showWarningQuestion("Really remove '" + name
-                                                  + "'?"))
+            m_removeWarning = new OptionalMessage(m_dialog);
+        if (! m_removeWarning.showWarningQuestion("Really remove " + name
+                                                  + "?"))
             return;
-        m_bookmarks.remove(bookmark);
-        if (selectedIndex >= m_bookmarks.size())
-            selectedIndex = -1;
-        updateList(selectedIndex);
+        m_objects.remove(object);
+        if (index >= m_objects.size())
+            index = -1;
+        updateList(index);
     }
 
-    private static void copyBookmarks(ArrayList from, ArrayList to)
+    private void copyObjects(ArrayList from, ArrayList to)
     {
         to.clear();
         for (int i = 0; i < from.size(); ++i)
-            to.add(new Bookmark((Bookmark)from.get(i)));
+            to.add(m_editor.cloneItem(from.get(i)));
     }
 
     private JButton createButton(String label, String command)
@@ -188,17 +191,9 @@ public class EditBookmarksDialog
         return panel;
     }
 
-    private Bookmark getBookmark(int i)
+    private Object getObject(int i)
     {
-        return (Bookmark)m_bookmarks.get(i);
-    }
-
-    private Bookmark getSelected()
-    {
-        int i = m_list.getSelectedIndex();
-        if (i == -1)
-            return null;
-        return getBookmark(i);
+        return (Object)m_objects.get(i);
     }
 
     private void selectionChanged()
@@ -207,15 +202,15 @@ public class EditBookmarksDialog
         m_edit.setEnabled(index >= 0);
         m_remove.setEnabled(index >= 0);
         m_moveUp.setEnabled(index >= 1);
-        m_moveDown.setEnabled(index < m_bookmarks.size() - 1);
+        m_moveDown.setEnabled(index < m_objects.size() - 1);
     }
 
     private void updateList(int selectedIndex)
     {
         ArrayList data = new ArrayList();
-        for (int i = 0; i < m_bookmarks.size(); ++i)
+        for (int i = 0; i < m_objects.size(); ++i)
         {
-            String name = getBookmark(i).m_name;
+            String name = m_editor.getItemLabel(getObject(i));
             data.add(name);
         }
         m_list.setListData(data.toArray());

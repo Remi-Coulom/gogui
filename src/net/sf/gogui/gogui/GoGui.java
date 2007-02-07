@@ -69,11 +69,10 @@ import net.sf.gogui.gui.AnalyzeDialog;
 import net.sf.gogui.gui.AnalyzeShow;
 import net.sf.gogui.gui.BoardSizeDialog;
 import net.sf.gogui.gui.Bookmark;
-import net.sf.gogui.gui.BookmarkDialog;
+import net.sf.gogui.gui.BookmarkEditor;
 import net.sf.gogui.gui.Comment;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.ContextMenu;
-import net.sf.gogui.gui.EditBookmarksDialog;
 import net.sf.gogui.gui.FindDialog;
 import net.sf.gogui.gui.GameInfo;
 import net.sf.gogui.gui.GameInfoDialog;
@@ -87,6 +86,7 @@ import net.sf.gogui.gui.GuiGtpUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
+import net.sf.gogui.gui.ObjectListEditor;
 import net.sf.gogui.gui.OptionalMessageSession;
 import net.sf.gogui.gui.ParameterDialog;
 import net.sf.gogui.gui.RecentFileMenu;
@@ -270,7 +270,9 @@ public class GoGui
         String variation = NodeUtil.getVariationString(getCurrentNode());
         int move = NodeUtil.getMoveNumber(getCurrentNode());
         Bookmark bookmark = new Bookmark(m_file, move, variation);
-        if (! BookmarkDialog.show(this, "Add Bookmark", bookmark, true))
+        BookmarkEditor editor = new BookmarkEditor();
+        bookmark = editor.editItem(this, "Add Bookmark", bookmark, true);
+        if (bookmark == null)
             return;
         m_bookmarks.add(bookmark);
         m_menuBar.setBookmarks(m_bookmarks);
@@ -454,7 +456,9 @@ public class GoGui
 
     public void actionEditBookmarks()
     {
-        if (! EditBookmarksDialog.show(this, m_bookmarks))
+        BookmarkEditor editor = new BookmarkEditor();
+        ObjectListEditor listEditor = new ObjectListEditor();
+        if (! listEditor.edit(this, "Edit Bookmarks", m_bookmarks, editor))
             return;
         m_menuBar.setBookmarks(m_bookmarks);
     }
