@@ -111,8 +111,12 @@ public final class GtpClient
         }
         catch (IOException e)
         {
-            throw new GtpError("Could not execute " + program + ":\n" +
-                                e.getMessage());
+            String message;
+            if (e.getMessage().trim().equals(""))
+                message = "Could not run program \"" + program + "\"";
+            else
+                message = e.getMessage();
+            throw new GtpError(message);
         }
         init(m_process.getInputStream(), m_process.getOutputStream(),
              m_process.getErrorStream());
