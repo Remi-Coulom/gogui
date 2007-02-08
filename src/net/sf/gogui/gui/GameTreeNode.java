@@ -7,9 +7,11 @@ package net.sf.gogui.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseListener;
+import java.awt.font.LineMetrics;
 import javax.swing.JComponent;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
@@ -198,10 +200,12 @@ class GameTreeNode
         }
         else
             text = Integer.toString(m_moveNumber);
-        int textWidth = graphics.getFontMetrics().stringWidth(text);
-        int textHeight = graphics.getFont().getSize();
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+        LineMetrics lineMetrics = fontMetrics.getLineMetrics(text, graphics);
+        int textWidth = fontMetrics.stringWidth(text);
+        int ascent = (int)lineMetrics.getAscent();
         int xText = (size - textWidth) / 2;
-        int yText = textHeight + (size - textHeight) / 2;
+        int yText = (ascent + size) / 2;
         if (move.getColor() == GoColor.BLACK)
             graphics.setColor(Color.white);
         else
