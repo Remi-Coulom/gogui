@@ -278,8 +278,13 @@ public class GoGui
 
     public void actionAttachProgram(int index)
     {
-        actionAttachProgram(((Program)m_programs.get(index)).m_command);
+        actionAttachProgram((Program)m_programs.get(index));
         m_prefs.putInt("program", index);
+    }
+
+    public void actionAttachProgram(Program program)
+    {
+        actionAttachProgram(program.m_command);
     }
 
     public void actionAttachProgram(String command)
@@ -829,14 +834,17 @@ public class GoGui
     {
         Program program = new Program("", "");
         ProgramEditor editor = new ProgramEditor();
-        program = editor.editItem(this, "New Program", program);
-        if (program == null)
-            return;
+        do
+        {
+            program = editor.editItem(this, "New Program", program);
+            if (program == null)
+                return;
+            actionAttachProgram(program);
+        }
+        while (m_gtp == null || m_gtp.isProgramDead());
         m_programs.add(program);
         m_menuBar.setPrograms(m_programs);
         updateViews(false);
-        if (! isProgramAttached())
-            actionAttachProgram(m_programs.size() - 1);
     }
 
     public void actionNextEarlierVariation()
