@@ -165,22 +165,10 @@ command:
 http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
 </para>
 <para>
-Operating systems: GNU/Linux, Windows
+Operating systems: GNU/Linux
 </para>
 <para>
-Command: <userinput>IdgConsole2004.exe -gtp</userinput>
-</para>
-<para>
-<note>
-<para>
-INDIGO also works on Unix in the
-<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
-command:
-</para>
-<para>
-<userinput>wine IdgConsole2004.exe -gtp</userinput>
-</para>
-</note>
+Command: <userinput>Indigo2006.19x19 -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
