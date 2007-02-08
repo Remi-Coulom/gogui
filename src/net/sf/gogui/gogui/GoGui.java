@@ -2157,20 +2157,20 @@ public class GoGui
     {
         if (m_gtp == null)
         {
-            showError("No Go program is attached", false);
+            showError("No Go program is attached.", false);
             return false;
         }
         if (! checkCommandInProgress())
             return false;
         if (m_gtp.isProgramDead())
         {
-            showError(getProgramName() + " has terminated", false);
+            showError(getProgramName() + " has terminated.", false);
             return false;
         }
         if (isOutOfSync())
         {
             showError(getProgramName()
-                      + " is not in sync with current position",
+                      + " is not in sync with current position.",
                       false);
             return false;
         }

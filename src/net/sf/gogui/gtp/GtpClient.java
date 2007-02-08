@@ -89,6 +89,7 @@ public final class GtpClient
     {
         m_log = log;
         m_callback = callback;
+        m_wasKilled = false;
         if (program.indexOf("%SRAND") >= 0)
         {
             // RAND_MAX in stdlib.h ist at least 32767
@@ -144,7 +145,10 @@ public final class GtpClient
     public void destroyProcess()
     {
         if (m_process != null)
+        {
+            m_wasKilled = true;
             m_process.destroy();
+        }
     }
 
     /** Get response to last command sent. */
@@ -581,6 +585,8 @@ public final class GtpClient
 
     private boolean m_isProgramDead;
 
+    private boolean m_wasKilled;
+
     private final boolean m_log;
 
     private int m_commandNumber;
@@ -741,7 +747,10 @@ public final class GtpClient
     private void throwProgramDied() throws GtpError
     {
         m_isProgramDead = true;
-        throw new GtpError(getName() + " terminated unexpectedly.");
+        if (m_wasKilled)
+            throw new GtpError(getName() + " terminated.");
+        else
+            throw new GtpError(getName() + " terminated unexpectedly.");
     }
 
     private Message waitForMessage(long timeout) throws GtpError
