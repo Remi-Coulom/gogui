@@ -59,7 +59,6 @@ $URL$
 <not>
 <and>
 <istrue value="${optimize}"/>
-<isfalse value="${debug}"/>
 </and>
 </not>
 </condition>
@@ -128,8 +127,7 @@ $URL$
 <target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}"
- debug="${debug}" listfiles="yes"
+ deprecation="true" optimize="${optimize}" debug="true" listfiles="yes"
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
 <fileset dir="src" includes="net/sf/gogui/images/*.png"/>
@@ -642,7 +640,7 @@ ${looks.zipfile}
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
 <javac srcdir="test/junit/src" destdir="build/test" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
+ deprecation="true" optimize="${optimize}" debug="true" listfiles="yes"
  classpath="build"/>
 <copy todir="build/test">
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>

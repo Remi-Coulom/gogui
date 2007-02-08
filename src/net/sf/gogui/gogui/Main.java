@@ -4,11 +4,26 @@
 
 package net.sf.gogui.gogui;
 
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URL;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.EditorKit;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
+import net.sf.gogui.version.Version;
 
 /** GoGui main function. */
 public final class Main
@@ -25,6 +40,11 @@ public final class Main
             if (settings.m_noStartup)
                 return;
             startGoGui(settings);
+        }
+        catch (RuntimeException e)
+        {
+            showCrashDialog(e);
+            System.exit(-1);
         }
         catch (ErrorMessage e)
         {
@@ -43,6 +63,16 @@ public final class Main
         try
         {
             startGoGui(settings);
+        }
+        catch (RuntimeException e)
+        {
+            showCrashDialog(e);
+            System.exit(-1);
+        }
+        catch (ErrorMessage e)
+        {
+            System.err.println(e.getMessage());
+            return;
         }
         catch (Throwable t)
         {
@@ -66,6 +96,57 @@ public final class Main
                   settings.m_computerBlack, settings.m_computerWhite,
                   settings.m_auto, settings.m_gtpFile, settings.m_gtpCommand,
                   settings.m_initAnalyze);
+    }
+
+    private static void showCrashDialog(RuntimeException e)
+    {
+        JPanel panel = new JPanel(new GridLayout(1, 1));
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setBorder(GuiUtil.createEmptyBorder());        
+        editorPane.setEditable(false);
+        if (Platform.isMac())
+        {
+            Color color = UIManager.getColor("Label.background");
+            if (color != null)
+                editorPane.setBackground(color);
+        }
+        panel.add(editorPane);
+        EditorKit editorKit =
+            JEditorPane.createEditorKitForContentType("text/html");
+        editorPane.setEditorKit(editorKit);
+        StringWriter stackTrace = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stackTrace);
+        e.printStackTrace(printWriter);
+        String text =
+            "<p><b>The application GoGui has quit unexpectedly</b></p>" +
+            "<p>Please take a moment to submit a bug report at the " +
+            "<a href=\"http://sf.net/tracker/?group_id=59117&atid=489964\">" +
+            "GoGui bug tracker</a> and include the following " +
+            "information:</p>" +
+            "<p>GoGui version: " + Version.get() + "</p>" +
+            "<pre>" + stackTrace + "</pre>";
+        editorPane.setText(text);
+        editorPane.addHyperlinkListener(new HyperlinkListener() {
+                public void hyperlinkUpdate(HyperlinkEvent event) {
+                    HyperlinkEvent.EventType type = event.getEventType();
+                    if (type == HyperlinkEvent.EventType.ACTIVATED)
+                    {
+                        URL url = event.getURL();
+                        if (! Platform.openInExternalBrowser(url))
+                            SimpleDialogs.showError(null,
+                                                    "Could not open URL"
+                                                    + " in external browser");
+                    }
+                }
+            });
+        JOptionPane optionPane =
+            new JOptionPane(panel, JOptionPane.ERROR_MESSAGE);
+        JDialog dialog = optionPane.createDialog(null, "Error");
+        // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
+        panel.invalidate();
+        dialog.pack();
+        dialog.setVisible(true);
+        dialog.dispose();
     }
 }
 
