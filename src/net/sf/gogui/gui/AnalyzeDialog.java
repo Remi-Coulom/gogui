@@ -229,7 +229,13 @@ public final class AnalyzeDialog
 
     private void comboBoxChanged()
     {
-        String label = m_comboBoxHistory.getSelectedItem().toString();
+        Object item = m_comboBoxHistory.getSelectedItem();
+        if (item == null)
+        {
+            m_list.clearSelection();
+            return;
+        }
+        String label = item.toString();
         String selectedValue = (String)m_list.getSelectedValue();
         if (selectedValue != null && ! selectedValue.equals(label))
             m_list.clearSelection();
