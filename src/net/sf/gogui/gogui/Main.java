@@ -5,6 +5,7 @@
 package net.sf.gogui.gogui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,6 +14,7 @@ import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -86,16 +88,39 @@ public final class Main
     {
     }
 
-    private static void startGoGui(GoGuiSettings settings)
+    private static void startGoGui(final GoGuiSettings settings)
         throws GtpError, ErrorMessage
     {
         assert(! settings.m_noStartup);
-        GuiUtil.initLookAndFeel(settings.m_lookAndFeel);
-        new GoGui(settings.m_program, settings.m_file, settings.m_move,
-                  settings.m_time, settings.m_verbose,
-                  settings.m_computerBlack, settings.m_computerWhite,
-                  settings.m_auto, settings.m_gtpFile, settings.m_gtpCommand,
-                  settings.m_initAnalyze);
+        // Create thread group to catch errors from Swing event thread
+        ThreadGroup group = new ThreadGroup("catch-runtime-exceptions") {
+                public void uncaughtException(Thread t, Throwable e) {
+                    if (e instanceof RuntimeException)
+                        showCrashDialog((RuntimeException)e);
+                    System.exit(-1);
+                }
+            };
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    GuiUtil.initLookAndFeel(settings.m_lookAndFeel);
+                    try
+                    {
+                        new GoGui(settings.m_program, settings.m_file,
+                                  settings.m_move, settings.m_time,
+                                  settings.m_verbose, settings.m_computerBlack,
+                                  settings.m_computerWhite, settings.m_auto,
+                                  settings.m_gtpFile, settings.m_gtpCommand,
+                                  settings.m_initAnalyze);
+                    }
+                    catch (ErrorMessage e)
+                    {
+                        System.err.println(e.getMessage());
+                        return;
+                    }
+                }
+            };
+        Thread thread = new Thread(group, runnable);
+        thread.start();
     }
 
     private static void showCrashDialog(RuntimeException e)
@@ -110,7 +135,9 @@ public final class Main
             if (color != null)
                 editorPane.setBackground(color);
         }
-        panel.add(editorPane);
+        JScrollPane scrollPane = new JScrollPane(editorPane);
+        panel.add(scrollPane);
+        scrollPane.setPreferredSize(new Dimension(600, 400));
         EditorKit editorKit =
             JEditorPane.createEditorKitForContentType("text/html");
         editorPane.setEditorKit(editorKit);
