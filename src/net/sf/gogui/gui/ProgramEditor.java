@@ -41,7 +41,7 @@ public class ProgramEditor
         m_panelRight =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("Name", 20, program.m_name);
+        m_name = createEntry("Name", 18, program.m_name);
         createCommandEntry(program.m_command);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
@@ -118,7 +118,7 @@ public class ProgramEditor
     {
         m_panelLeft.add(createEntryLabel("Command"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        m_command = new JTextField(20);
+        m_command = new JTextField(30);
         m_command.setText(text);
         panel.add(m_command);
         panel.add(GuiUtil.createSmallFiller());

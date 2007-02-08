@@ -157,12 +157,12 @@ public final class GameInfoDialog
         boxLabel.add(label);
         labels.add(boxLabel);
         Box boxValue = Box.createHorizontalBox();
-        m_preByoyomi = new TimeField("Main time");
+        m_preByoyomi = new TimeField(3, "Main time");
         if (timeSettings != null)
             m_preByoyomi.setTime(timeSettings.getPreByoyomi());
         boxValue.add(m_preByoyomi);
         boxValue.add(new JLabel(" + "));
-        m_byoyomi = new TimeField("Byoyomi (overtime) period");
+        m_byoyomi = new TimeField(2, "Byoyomi (overtime) period");
         if (timeSettings != null && timeSettings.getUseByoyomi())
             m_byoyomi.setTime(timeSettings.getByoyomi());
         boxValue.add(m_byoyomi);
@@ -190,13 +190,13 @@ public final class GameInfoDialog
         box.add(label);
         box.add(GuiUtil.createFiller());
         playerInfo.m_box = box;
-        playerInfo.m_name = new JTextField(15);
+        playerInfo.m_name = new JTextField(18);
         playerInfo.m_name.setText(info.getPlayer(c));
         box.add(playerInfo.m_name);
         playerInfo.m_name.setHorizontalAlignment(JTextField.CENTER);
         playerInfo.m_name.setToolTipText(name + " player name");
         box.add(GuiUtil.createFiller());
-        playerInfo.m_rank = new JTextField(4);
+        playerInfo.m_rank = new JTextField(5);
         playerInfo.m_rank.setHorizontalAlignment(JTextField.CENTER);
         playerInfo.m_rank.setToolTipText(name + " player rank");
         box.add(playerInfo.m_rank);
@@ -327,10 +327,10 @@ public final class GameInfoDialog
 class TimeField
     extends Box
 {
-    public TimeField(String toolTipText)
+    public TimeField(int cols, String toolTipText)
     {        
         super(BoxLayout.X_AXIS);
-        m_textField = new JTextField(2);
+        m_textField = new JTextField(cols);
         m_textField.setHorizontalAlignment(JTextField.RIGHT);
         m_textField.setToolTipText(toolTipText);
         add(m_textField);

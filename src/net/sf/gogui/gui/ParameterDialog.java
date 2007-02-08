@@ -157,7 +157,7 @@ public class ParameterDialog
             m_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,
                                                 GuiUtil.SMALL_PAD, 0));
             m_panel.add(new JLabel(getLabel() + ":"));
-            m_textField = new JTextField(12);
+            m_textField = new JTextField(13);
             m_textField.setText(value);
             m_panel.add(m_textField);
         }
