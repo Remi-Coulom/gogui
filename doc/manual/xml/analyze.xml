@@ -32,7 +32,8 @@ in the user's home directory.
 
 <para>
 An example configuration is the default configuration file
-<filename>config/analyze-commands</filename> in the GoGui package.
+<filename>src/net/sf/gogui/gui/analyze-commands</filename> in the GoGui
+package.
 The format consists of one line per command:
 </para>
   

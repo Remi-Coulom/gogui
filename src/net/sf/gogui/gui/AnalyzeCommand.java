@@ -321,7 +321,7 @@ public class AnalyzeCommand
                        commands, labels, supportedCommands);
             return;
         }
-        String resource = "net/sf/gogui/config/analyze-commands";
+        String resource = "net/sf/gogui/gui/analyze-commands";
         URL url = ClassLoader.getSystemClassLoader().getResource(resource);
         if (url == null)
             return;

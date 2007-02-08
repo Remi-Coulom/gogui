@@ -130,13 +130,11 @@ $URL$
  deprecation="true" optimize="${optimize}" debug="true" listfiles="yes"
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
-<fileset dir="src" includes="net/sf/gogui/images/*.png"/>
+<fileset dir="src"
+ includes="net/sf/gogui/images/*.png net/sf/gogui/gui/analyze-commands"/>
 </copy>
 <copy todir="build/net/sf/gogui/doc">
 <fileset dir="doc/manual/html" includes="*.html *.png"/>
-</copy>
-<copy todir="build/net/sf/gogui/config">
-<fileset dir="config" includes="analyze-commands"/>
 </copy>
 </target>
 
@@ -153,7 +151,6 @@ $URL$
  INSTALL
  build.properties
  build.xml
- config/analyze-commands*
  config/gogui*.desktop
  config/gogui-application-x-go-sgf.png
  config/gogui-application-x-go-sgf.svg
@@ -193,6 +190,7 @@ $URL$
  src/net/sf/gogui/*/package.html
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
+ src/net/sf/gogui/gui/analyze-commands
  test/findbugs/gogui.fb
  test/checkstyle/checkstyle_checks.xml
  test/junit/src/net/sf/gogui/*/*.java
@@ -398,7 +396,6 @@ ${looks.zipfile}
 <attribute name="Class-Path" value="${looks.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/config/analyze-commands
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
  net/sf/gogui/drawboard/*.class
@@ -407,6 +404,7 @@ ${looks.zipfile}
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gogui/*.class
  net/sf/gogui/gui/*.class
+ net/sf/gogui/gui/analyze-commands
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class
  net/sf/gogui/tex/*.class
