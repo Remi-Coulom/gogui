@@ -119,15 +119,21 @@ public final class AnalyzeDialog
 
     public void saveRecent()
     {
-        if (! m_recentModified)
-            return;
+        final int maxRecent = 100;
+        ArrayList recent = new ArrayList(maxRecent);
         int start = (m_firstIsTemp ? 1 : 0);
-        int max = Math.min(getComboBoxItemCount(), 20);
-        ArrayList list = new ArrayList(max);
-        for (int i = start; i < max; ++i)
-            list.add(getComboBoxItem(i));
+        for (int i = start; i < start + m_numberNewRecent; ++i)
+            recent.add(getComboBoxItem(i));
+        for (int i = 0; i < m_fullRecentList.size(); ++i)
+        {
+            if (recent.size() == maxRecent)
+                break;
+            String name = (String)m_fullRecentList.get(i);
+            if (recent.indexOf(name) < 0)
+                recent.add(name);
+        }
         PrefUtil.putList("net/sf/gogui/gui/analyzedialog/recentcommands",
-                         list);
+                         recent);
     }
 
     /** Set board size.
@@ -172,8 +178,6 @@ public final class AnalyzeDialog
         private final String m_item;
     }
 
-    private boolean m_recentModified;
-
     /** Is the first item in the history combo box a temporary item?
         Avoids that the first item in the history combo box is treated
         as a real history command, if it was not run.
@@ -186,6 +190,10 @@ public final class AnalyzeDialog
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+
+    private int m_numberNewRecent;
+
+    private ArrayList m_fullRecentList;
 
     private GoColor m_selectedColor = GoColor.EMPTY;
 
@@ -308,6 +316,7 @@ public final class AnalyzeDialog
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
         reload();
+        loadRecent();
         return panel;
     }
 
@@ -347,7 +356,6 @@ public final class AnalyzeDialog
         optionsPanel.add(rightPanel);
         lowerPanel.add(createButtons());
         m_comboBoxHistory.addActionListener(this);
-        loadRecent();
         return panel;
     }
 
@@ -377,10 +385,17 @@ public final class AnalyzeDialog
     private void loadRecent()
     {
         m_comboBoxHistory.removeAllItems();
-        ArrayList list =
+        m_fullRecentList =
             PrefUtil.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
-        for (int i = 0; i < list.size(); ++i)
-            m_comboBoxHistory.addItem(new WrapperObject((String)list.get(i)));
+        m_numberNewRecent = 0;
+        for (int i = 0; i < m_fullRecentList.size(); ++i)
+        {
+            String name = (String)m_fullRecentList.get(i);
+            if (m_labels.indexOf(name) >= 0)
+                m_comboBoxHistory.addItem(new WrapperObject(name));
+            if (m_comboBoxHistory.getItemCount() > 20)
+                break;
+        }
         m_firstIsTemp = false;
     }
 
@@ -415,6 +430,7 @@ public final class AnalyzeDialog
             return;
         }
         updateRecent(index);
+        ++m_numberNewRecent;
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         if (command.needsColorArg())
@@ -546,6 +562,5 @@ public final class AnalyzeDialog
                 m_comboBoxHistory.removeItemAt(i);
         m_comboBoxHistory.setSelectedIndex(0);
         m_firstIsTemp = false;        
-        m_recentModified = true;
     }
 }
