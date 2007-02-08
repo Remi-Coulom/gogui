@@ -93,6 +93,8 @@ public class BoardDrawer
 
     public GoPoint getPoint(Point point)
     {
+        if (m_fieldSize == 0)
+            return null;
         int x = ((int)point.getX() - m_fieldOffset) / m_fieldSize;
         int y = ((int)point.getY() - m_fieldOffset) / m_fieldSize;
         y = m_size - y - 1;
