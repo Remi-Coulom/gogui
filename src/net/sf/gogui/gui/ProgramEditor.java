@@ -99,6 +99,7 @@ public class ProgramEditor
         m_panelLeft.add(createEntryLabel(labelText));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JTextField field = new JTextField(cols);
+        field.setText(text);
         panel.add(field);
         m_panelRight.add(panel);
         return field;
