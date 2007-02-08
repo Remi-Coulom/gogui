@@ -100,9 +100,13 @@ Analyze command wildcard %f is deprecated; use new wildcards %r and %w instead
 <listitem>
 <simpara>
 The preferred way to configure analyze commands is now that the program
-implements the command gogui_analyze_commands, otherwise an internal list with
-default commands is used; analyze command configuration files in the .gogui
-directory are still supported, but deprecated
+implements the command gogui-analyze_commands, otherwise an internal list with
+default commands is used.
+If gogui-analyze_commands is supported, only the response will be used to
+configure analyze commands, so that the Go engine has full control over what
+is shown in what order in the analyze dialog.
+Analyze command configuration files in the .gogui directory are still
+supported, but deprecated.
 </simpara>
 </listitem>
 <listitem>
