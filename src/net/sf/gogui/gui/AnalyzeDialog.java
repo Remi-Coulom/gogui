@@ -257,6 +257,7 @@ public final class AnalyzeDialog
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
+        m_runButton.setEnabled(false);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
         m_clearButton = new JButton("Clear");
@@ -276,10 +277,12 @@ public final class AnalyzeDialog
         ButtonGroup group = new ButtonGroup();
         m_black = new JRadioButton("Black");
         m_black.setToolTipText("Run selected command for color Black");
+        m_black.setEnabled(false);
         group.add(m_black);
         m_colorBox.add(m_black);
         m_white = new JRadioButton("White");
         m_white.setToolTipText("Run selected command for color White");
+        m_white.setEnabled(false);
         group.add(m_white);
         m_colorBox.add(m_white);
         return m_colorBox;
@@ -346,9 +349,11 @@ public final class AnalyzeDialog
                 }
             });
         m_autoRun.setToolTipText("Automatically run after changes on board");
+        m_autoRun.setEnabled(false);
         leftBox.add(m_autoRun);
         m_clearBoard = new JCheckBox("Clear board");
         m_clearBoard.setToolTipText("Clear board before displaying result");
+        m_clearBoard.setEnabled(false);
         leftBox.add(m_clearBoard);
         m_clearBoard.setSelected(true);
         JPanel rightPanel = new JPanel();
@@ -396,6 +401,9 @@ public final class AnalyzeDialog
             if (m_comboBoxHistory.getItemCount() > 20)
                 break;
         }
+        int index = getSelectedCommand();
+        if (index >= 0)
+            selectCommand(index);
         m_firstIsTemp = false;
     }
 
