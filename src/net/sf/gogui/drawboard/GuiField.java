@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.awt.font.LineMetrics;
 import java.awt.geom.Point2D;
 import net.sf.gogui.go.GoColor;
 
@@ -379,11 +380,13 @@ public class GuiField
     {
         setComposite(COMPOSITE_97);
         setFont(m_graphics, m_size);
-        FontMetrics metrics = m_graphics.getFontMetrics();
-        int stringWidth = metrics.stringWidth(m_label);
-        int stringHeight = metrics.getAscent();
-        int x = Math.max((m_size - stringWidth) / 2, 0);
-        int y = stringHeight + (m_size - stringHeight) / 2;
+        FontMetrics fontMetrics = m_graphics.getFontMetrics();
+        LineMetrics lineMetrics =
+            fontMetrics.getLineMetrics(m_label, m_graphics);
+        int width = fontMetrics.stringWidth(m_label);
+        int ascent = (int)lineMetrics.getAscent();
+        int x = Math.max((m_size - width) / 2, 0);
+        int y = (ascent + m_size) / 2;
         if (m_shadowStoneColor != null)
         {
             if (m_shadowStoneColor == GoColor.WHITE)
@@ -399,7 +402,7 @@ public class GuiField
                 m_graphics.setColor(Color.white);
         }
         Rectangle clip = null;
-        if (stringWidth > 0.95 * m_size)
+        if (width > 0.95 * m_size)
         {
             clip = m_graphics.getClipBounds();
             m_graphics.setClip(clip.x, clip.y,
