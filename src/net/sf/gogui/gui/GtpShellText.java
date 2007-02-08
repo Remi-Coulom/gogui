@@ -26,7 +26,7 @@ class GtpShellText
         addStyle("output", null, null, true);
         addStyle("log", new Color(0.5f, 0.5f, 0.5f));
         addStyle("time", new Color(0, 0, 0.5f));
-        addStyle("invalid", Color.white, Color.red, false);
+        addStyle("invalid", new Color(1.0f, 0.58f, 0.25f));
         get().setEditable(false);
     }
 

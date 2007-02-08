@@ -843,6 +843,7 @@ public class GoGui
         }
         while (m_gtp == null || m_gtp.isProgramDead());
         m_programs.add(program);
+        m_prefs.putInt("program", m_programs.size() - 1);
         m_menuBar.setPrograms(m_programs);
         updateViews(false);
     }
