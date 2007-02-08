@@ -279,6 +279,8 @@ public class GuiField
 
     private static final Color COLOR_INFLUENCE_WHITE = Color.white;
 
+    private static final Color COLOR_LABEL_EMPTY = Color.decode("#E0FFFF");
+
     private static final Color COLOR_LAST_MOVE
         = Color.decode("#888888");
 
@@ -398,8 +400,10 @@ public class GuiField
         {
             if (m_color == GoColor.WHITE)
                 m_graphics.setColor(Color.black);
-            else
+            else if (m_color == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
+            else
+                m_graphics.setColor(COLOR_LABEL_EMPTY);
         }
         Rectangle clip = null;
         if (width > 0.95 * m_size)
