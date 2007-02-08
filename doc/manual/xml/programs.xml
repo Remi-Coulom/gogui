@@ -41,10 +41,6 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
 <para>
 <note>
 <para>
-Aya (version 5.53) opens its own window which does not repaint correctly in
-GTP mode, however, this window can simply be ignored and minimized.
-</para>
-<para>
 Aya also works on Unix in the <ulink url="http://www.winehq.com">Wine</ulink>
 Windows emulator using the command:
 </para>
