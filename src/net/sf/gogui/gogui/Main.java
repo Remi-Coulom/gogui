@@ -125,6 +125,14 @@ public final class Main
 
     private static void showCrashDialog(RuntimeException e)
     {
+        if ("GNU libgcj".equals(System.getProperty("java.vm.name")))
+        {
+            System.err.print("--------------------------------------------\n" +
+                             "GNU libgcj is not supported !\n" +
+                             "--------------------------------------------\n");
+            SimpleDialogs.showError(null, "GNU libgcj is not supported");
+            return;
+        }
         JPanel panel = new JPanel(new GridLayout(1, 1));
         JEditorPane editorPane = new JEditorPane();
         editorPane.setBorder(GuiUtil.createEmptyBorder());        
