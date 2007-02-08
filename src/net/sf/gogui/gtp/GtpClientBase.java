@@ -300,11 +300,11 @@ public abstract class GtpClientBase
     */
     public abstract void waitForExit();
 
+    protected String m_name = "Unknown Program";
+
     private boolean m_lowerCase;
 
     private int m_protocolVersion = 2;
-
-    private String m_name = "Unknown Program";
 
     private String[] m_supportedCommands;
 }

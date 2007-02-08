@@ -221,6 +221,12 @@ public final class GtpClient
         return send(command, -1, null);
     }
 
+    public void queryName(long timeout, TimeoutCallback timeoutCallback)
+        throws GtpError
+    {
+        m_name = send("name", timeout, timeoutCallback);
+    }
+
     /** Send a command with timeout.
         @param command The command to send
         @param timeout Timeout in milliseconds or -1, if no timeout

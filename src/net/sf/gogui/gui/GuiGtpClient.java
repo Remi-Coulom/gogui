@@ -209,11 +209,12 @@ public class GuiGtpClient
         m_gtp.queryInterruptSupport();
     }
 
-    public void queryName()
+    public void queryName() throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        m_gtp.queryName();
+        TimeoutCallback timeoutCallback = new TimeoutCallback("name");
+        m_gtp.queryName(TIMEOUT, timeoutCallback);
     }
 
     public void queryProtocolVersion()
