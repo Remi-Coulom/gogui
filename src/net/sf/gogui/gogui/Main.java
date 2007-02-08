@@ -159,7 +159,10 @@ public final class Main
             "GoGui bug tracker</a> and include the following " +
             "information:</p>" +
             "<p>GoGui version: " + Version.get() + "</p>" +
-            "<pre>" + stackTrace + "</pre>";
+            "<p>Java version: " + 
+            System.getProperty("java.vm.name") + " " +
+            System.getProperty("java.vm.version") + "</p>" +
+            "<p><pre>" + stackTrace + "</pre></p>";
         editorPane.setText(text);
         editorPane.addHyperlinkListener(new HyperlinkListener() {
                 public void hyperlinkUpdate(HyperlinkEvent event) {
