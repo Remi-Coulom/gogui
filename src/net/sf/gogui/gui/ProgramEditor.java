@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -30,31 +31,36 @@ public class ProgramEditor
 {
     public Object editItem(Component parent, Object object)
     {
-        return editItem(parent, "Edit Program", (Program)object);
+        return editItem(parent, "Edit Program", (Program)object, false);
     }
 
-    public Program editItem(Component parent, String title, Program program)
+    public Program editItem(Component parent, String title, Program program,
+                            boolean disableName)
     {
+        m_disableName = disableName;
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
         m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelLeft, BorderLayout.WEST);
-        m_panelRight =
-            new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
+        m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("Name", 18, program.m_name);
+        if (! disableName)
+            m_name = createEntry("Name", 18, program.m_name);
         createCommandEntry(program.m_command);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
                                                  JOptionPane.OK_CANCEL_OPTION);
         m_dialog = optionPane.createDialog(parent, title);
+        m_dialog.addWindowListener(new WindowAdapter() {
+                public void windowActivated(WindowEvent e) {
+                    if (m_name != null)
+                        m_name.requestFocusInWindow();
+                    else
+                        m_command.requestFocusInWindow();
+                }
+            });
         boolean done = false;
         while (! done)
         {
-            m_dialog.addWindowListener(new WindowAdapter() {
-                    public void windowActivated(WindowEvent e) {
-                        m_name.requestFocusInWindow();
-                    }
-                });
             m_dialog.setVisible(true);
             Object value = optionPane.getValue();
             if (! (value instanceof Integer)
@@ -62,7 +68,9 @@ public class ProgramEditor
                 return null;
             done = validate(parent);
         }
-        String newName = m_name.getText().trim();
+        String newName = "";
+        if (! disableName)
+            newName = m_name.getText().trim();
         String newCommand = m_command.getText().trim();
         Program newProgram = new Program(newName, newCommand);
         m_dialog.dispose();
@@ -94,30 +102,41 @@ public class ProgramEditor
 
     private JDialog m_dialog;
 
+    private boolean m_disableName;
+
     private JTextField createEntry(String labelText, int cols, String text)
     {
-        m_panelLeft.add(createEntryLabel(labelText));
+        JComponent label = createEntryLabel(labelText);
+        m_panelLeft.add(label);        
+        Box box = Box.createVerticalBox();
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        box.add(Box.createVerticalGlue());
+        box.add(panel);
+        box.add(Box.createVerticalGlue());
         JTextField field = new JTextField(cols);
         field.setText(text);
         panel.add(field);
-        m_panelRight.add(panel);
+        m_panelRight.add(box);
         return field;
     }
 
     private JComponent createEntryLabel(String text)
     {
         Box box = Box.createHorizontalBox();
-        box.add(Box.createHorizontalGlue());
         JLabel label = new JLabel(text + ":");
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
+        setUnlimitedSize(label);
         box.add(label);
         return box;
     }
     private void createCommandEntry(String text)
     {
         m_panelLeft.add(createEntryLabel("Command"));
+        Box box = Box.createVerticalBox();
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        box.add(Box.createVerticalGlue());
+        box.add(panel);
+        box.add(Box.createVerticalGlue());
         m_command = new JTextField(30);
         m_command.setText(text);
         panel.add(m_command);
@@ -149,12 +168,18 @@ public class ProgramEditor
                     m_command.requestFocusInWindow();
                 }
             });
-        m_panelRight.add(panel);
+        m_panelRight.add(box);
+    }
+
+    private void setUnlimitedSize(JComponent component)
+    {
+        Dimension size = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
+        component.setMaximumSize(size);
     }
 
     private boolean validate(Component parent)
     {
-        if (m_name.getText().trim().equals(""))
+        if (! m_disableName && m_name.getText().trim().equals(""))
         {
             SimpleDialogs.showError(parent, "Name cannot be empty");
             return false;

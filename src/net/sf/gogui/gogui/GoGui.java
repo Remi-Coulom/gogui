@@ -836,12 +836,20 @@ public class GoGui
         ProgramEditor editor = new ProgramEditor();
         do
         {
-            program = editor.editItem(this, "New Program", program);
+            program = editor.editItem(this, "New Program", program, true);
             if (program == null)
                 return;
             actionAttachProgram(program);
         }
         while (m_gtp == null || m_gtp.isProgramDead());
+        program.m_name =
+            GoGuiUtil.makeProgramLabelUnique(getProgramName(), m_programs);
+        program = editor.editItem(this, "New Program", program, false);
+        if (program == null)
+        {
+            actionDetachProgram();
+            return;
+        }
         m_programs.add(program);
         m_prefs.putInt("program", m_programs.size() - 1);
         m_menuBar.setPrograms(m_programs);

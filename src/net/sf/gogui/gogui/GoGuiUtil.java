@@ -6,6 +6,7 @@ package net.sf.gogui.gogui;
 
 import java.awt.Frame;
 import java.awt.Point;
+import java.util.ArrayList;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
@@ -17,12 +18,35 @@ import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
+import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.gui.TextViewer;
 
 /** Utility functions for class GoGui. */
 public final class GoGuiUtil
 {
+    public static String makeProgramLabelUnique(String name,
+                                                ArrayList programs)
+    {
+        if (name == null || name.trim().equals(""))
+            name = "Unknown Program";
+        for (int i = 1; ; ++i)
+        {
+            String tryName = name;
+            if (i > 1)
+                tryName = tryName + " (" + i + ")";
+            boolean found = false;
+            for (int j = 0; j < programs.size(); ++j)
+                if (tryName.equals(((Program)programs.get(j)).m_name))
+                {
+                    found = true;
+                    break;
+                }
+            if (! found)
+                return tryName;
+        }
+    }
+
     public static void showAnalyzeTextOutput(Frame owner, GuiBoard guiBoard,
                                              int type, GoPoint pointArg,
                                              String title, String response)
