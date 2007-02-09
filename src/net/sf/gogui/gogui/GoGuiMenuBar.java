@@ -385,6 +385,9 @@ public class GoGuiMenuBar
         menu.add(createBoardSizeMenu(actions));
         menu.add(createHandicapMenu(actions));
         menu.addSeparator();
+        m_computerColor = createComputerColorMenu(actions);
+        menu.add(m_computerColor);
+        menu.addSeparator();
         menu.addItem(actions.m_actionPass, KeyEvent.VK_P);
         menu.add(createClockMenu(actions));
         menu.addItem(actions.m_actionScore, KeyEvent.VK_O);
@@ -435,12 +438,10 @@ public class GoGuiMenuBar
         m_menuAttach = createMenu("Attach", KeyEvent.VK_A);
         m_menuAttach.setEnabled(false);
         menu.add(m_menuAttach);
+        menu.addSeparator();
         menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
         menu.addItem(actions.m_actionReattachProgram, KeyEvent.VK_R);
         menu.addSeparator();
-        m_computerColor = createComputerColorMenu(actions);
-        menu.add(m_computerColor);
-        menu.addItem(actions.m_actionPlay, KeyEvent.VK_P);
         menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_I);
         menu.addSeparator();

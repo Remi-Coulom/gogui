@@ -526,7 +526,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionPlay(false); } },
-             "Play", "Make computer play", KeyEvent.VK_F5,
+             "Computer Play", "Make computer play", KeyEvent.VK_F5,
              getFunctionKeyShortcut(), "gogui-play");
 
     public final GoGuiAction m_actionPlaySingleMove =

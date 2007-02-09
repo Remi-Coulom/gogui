@@ -246,6 +246,15 @@ Set the number of handicap stones.
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Computer Color</guisubmenu></term>
+<listitem>
+<para>
+Choose what side the Go program plays.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Clock</guimenuitem></term>
 <listitem>
 <para>
@@ -336,25 +345,6 @@ The command file should contain the command to run the Go program.
 <listitem>
 <para>
 Edit the list of available Go programs.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Computer Color</guisubmenu></term>
-<listitem>
-<para>
-Choose what side the Go program plays.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Play</guimenuitem></term>
-<listitem>
-<para>
-Change the computer color to the color to move and make the computer
-start playing.
 </para>
 </listitem>
 </varlistentry>
