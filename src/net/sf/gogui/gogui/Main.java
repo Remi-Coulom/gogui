@@ -158,11 +158,13 @@ public final class Main
             "<a href=\"http://sf.net/tracker/?group_id=59117&atid=489964\">" +
             "GoGui bug tracker</a> and include the following " +
             "information:</p>" +
-            "<p>GoGui version: " + Version.get() + "</p>" +
-            "<p>Java version: " + 
+            "<p>GoGui version: " + Version.get() + "<br>" +
+            "Java version: " + 
             System.getProperty("java.vm.name") + " " +
-            System.getProperty("java.vm.version") + "</p>" +
-            "<p><pre>" + stackTrace + "</pre></p>";
+            System.getProperty("java.vm.version")+ "<br>" +
+            "Operating system: " + System.getProperty("os.name")
+            + "</p>" +
+            "<pre>" + stackTrace + "</pre>";
         editorPane.setText(text);
         editorPane.addHyperlinkListener(new HyperlinkListener() {
                 public void hyperlinkUpdate(HyperlinkEvent event) {
