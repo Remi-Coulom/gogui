@@ -47,14 +47,6 @@ public class Game
         m_modified = true;
     }
 
-    public void backward(int n)
-    {
-        assert(n >=0);
-        for (int i = 0; i < n && m_current != getRoot(); ++i)
-            m_current = m_current.getFather();
-        updateBoard();
-    }
-
     /** Clear modified flag.
         Can be used for instance after game was saved.
         @see #isModified()
@@ -74,20 +66,6 @@ public class Game
         m_current.append(node);
         m_current = node;
         m_modified = true;
-    }
-
-    public void forward(int n)
-    {
-        assert(n >= 0);
-        ConstNode node = m_current;
-        for (int i = 0; i < n; ++i)
-        {
-            ConstNode child = node.getChildConst();
-            if (child == null)
-                break;
-            node = child;
-        }
-        gotoNode(node);
     }
 
     public ConstBoard getBoard()
@@ -373,9 +351,10 @@ public class Game
     */
     public void truncate()
     {
-        assert(m_current.getFather() != null);
+        Node father = m_current.getFather();
+        assert(father != null);
         Node oldCurrentNode = m_current;
-        backward(1);
+        m_current = father;
         m_current.removeChild(oldCurrentNode);
         m_modified = true;
     }

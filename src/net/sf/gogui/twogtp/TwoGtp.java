@@ -457,7 +457,7 @@ public class TwoGtp
         int moveNumber = m_game.getMoveNumber();
         if (moveNumber == 0)
             throw new GtpError("cannot undo");
-        m_game.backward(1);
+        m_game.gotoNode(getCurrentNode().getFatherConst());
         assert(m_game.getMoveNumber() == moveNumber - 1);
         synchronize();
     }

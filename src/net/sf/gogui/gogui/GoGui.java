@@ -319,18 +319,12 @@ public class GoGui
 
     public void actionBackward(int n)
     {
-        if (! checkStateChangePossible())
-            return;
-        backward(n);
-        boardChangedBegin(false, false);
+        actionGotoNode(NodeUtil.backward(getCurrentNode(), n));
     }
 
     public void actionBeginning()
     {
-        if (! checkStateChangePossible())
-            return;
-        backward(NodeUtil.getDepth(getCurrentNode()));
-        boardChangedBegin(false, false);
+        actionBackward(NodeUtil.getDepth(getCurrentNode()));
     }
 
     public void actionBoardSize(int boardSize)
@@ -506,10 +500,7 @@ public class GoGui
 
     public void actionEnd()
     {
-        if (! checkStateChangePossible())
-            return;
-        forward(NodeUtil.getNodesLeft(getCurrentNode()));
-        boardChangedBegin(false, false);
+        actionForward(NodeUtil.getNodesLeft(getCurrentNode()));
     }
 
     public void actionExportLatexMainVariation()
@@ -627,17 +618,15 @@ public class GoGui
         }
         else
         {
-            actionGotoNode(node);
+            gotoNode(node);
             m_comment.markAll(m_pattern);
+            boardChangedBegin(false, false);
         }
     }
 
     public void actionForward(int n)
     {
-        if (! checkStateChangePossible())
-            return;
-        forward(n);
-        boardChangedBegin(false, false);
+        actionGotoNode(NodeUtil.forward(getCurrentNode(), n));
     }
 
     public void actionGameInfo()
@@ -707,16 +696,21 @@ public class GoGui
             showError("Bookmark has invalid move number");
             return;
         }
-        gotoNode(node);
-        boardChangedBegin(false, true);
+        actionGotoNode(node);
     }
 
-    public void actionGotoNode(ConstNode node)
+    public void actionGotoNode(final ConstNode node)
     {
         if (! checkStateChangePossible())
             return;
-        gotoNode(node);
-        boardChangedBegin(false, false);
+        protectGui();
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run() {        
+                    gotoNode(node);
+                    boardChangedBegin(false, false);
+                    unprotectGui();
+                }
+            });
     }
 
     public void actionGotoVariation()
@@ -2101,13 +2095,6 @@ public class GoGui
         return true;
     }    
 
-    /** Go backward a number of nodes in the tree. */
-    private void backward(int n)
-    {
-        m_game.backward(n);
-        currentNodeChanged();
-    }
-
     private void beginLengthyCommand()
     {
         m_progressBarTimer.restart();
@@ -2558,20 +2545,6 @@ public class GoGui
         return true;
     }
 
-    private void forward(int n)
-    {
-        assert(n >= 0);
-        ConstNode node = getCurrentNode();
-        for (int i = 0; i < n; ++i)
-        {
-            ConstNode child = node.getChildConst();
-            if (child == null)
-                break;
-            node = child;
-        }
-        gotoNode(node);
-    }
-
     private void generateMove(boolean isSingleMove)
     {
         GoColor toMove = getToMove();
@@ -2929,7 +2902,12 @@ public class GoGui
             m_game.init(tree);
             initGtp();
             if (move > 0)
-                forward(move);            
+            {
+                ConstNode node =
+                    NodeUtil.findByMoveNumber(getCurrentNode(), move); 
+                if (node != null)
+                    m_game.gotoNode(node);
+            }
             setFile(file);
             String warnings = reader.getWarnings();
             if (warnings != null)

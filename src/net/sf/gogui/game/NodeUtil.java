@@ -20,6 +20,14 @@ import net.sf.gogui.util.StringUtil;
 /** Utility functions operating on a tree of nodes. */
 public final class NodeUtil
 {
+    public static ConstNode backward(ConstNode node, int n)
+    {
+        assert(n >= 0);
+        for (int i = 0; i < n && node.getFatherConst() != null; ++i)
+            node = node.getFatherConst();
+        return node;
+    }
+
     public static boolean canRestoreTime(ConstNode node, ConstClock clock)
     {
         if (! clock.isInitialized())
@@ -37,6 +45,12 @@ public final class NodeUtil
             || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
             return true;
         return false;
+    }
+
+    public static boolean commentContains(ConstNode node, Pattern pattern)
+    {
+        String comment = node.getComment();
+        return (comment != null && pattern.matcher(comment).find());
     }
 
     /** Find first node with a certain move number in main variation
@@ -107,12 +121,6 @@ public final class NodeUtil
         return node;
     }
 
-    public static boolean commentContains(ConstNode node, Pattern pattern)
-    {
-        String comment = node.getComment();
-        return (comment != null && pattern.matcher(comment).find());
-    }
-
     public static ConstNode findInComments(ConstNode node, Pattern pattern)
     {
         node = nextNode(node);
@@ -123,6 +131,19 @@ public final class NodeUtil
             node = nextNode(node);
         }
         return null;
+    }
+
+    public static ConstNode forward(ConstNode node, int n)
+    {
+        assert(n >= 0);
+        for (int i = 0; i < n; ++i)
+        {
+            ConstNode child = node.getChildConst();
+            if (child == null)
+                break;
+            node = child;
+        }
+        return node;
     }
 
     /** Get stones added and moves all as moves for a list of nodes.
