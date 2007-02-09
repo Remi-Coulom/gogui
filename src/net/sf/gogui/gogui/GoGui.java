@@ -233,6 +233,7 @@ public class GoGui
             m_program = null;
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
+        protectGui(); // Show wait cursor
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     initialize();
@@ -279,8 +280,8 @@ public class GoGui
 
     public void actionAttachProgram(int index)
     {
-        actionAttachProgram((Program)m_programs.get(index));
         m_prefs.putInt("program", index);
+        actionAttachProgram((Program)m_programs.get(index));
     }
 
     public void actionAttachProgram(Program program)
@@ -288,25 +289,24 @@ public class GoGui
         actionAttachProgram(program.m_command);
     }
 
-    public void actionAttachProgram(String command)
+    public void actionAttachProgram(final String command)
     {
         if (! checkCommandInProgress())
             return;
-        if (m_gtp != null)
-            if (! actionDetachProgram())
-                return;
-        if (! attachProgram(command))
-        {
-            m_prefs.putInt("program", -1);
-            updateViews(false);
-            return;
-        }
-        if (m_shell != null && m_session.isVisible("shell"))
-            m_shell.setVisible(true);
-        if (m_session.isVisible("analyze"))
-            createAnalyzeDialog();
-        toFrontLater();
-        updateViews(false);
+        protectGui();
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    try
+                    {
+                        attachNewProgram(command);
+                    }
+                    finally
+                    {
+                        unprotectGui();
+                    }
+                }
+            };
+        SwingUtilities.invokeLater(runnable);
     }
 
     public void actionBackToMainVariation()
@@ -408,16 +408,28 @@ public class GoGui
         boardChangedBegin(false, true);
     }
 
-    public boolean actionDetachProgram()
+    public void actionDetachProgram()
     {        
         if (m_gtp == null)
-            return false;
-        if (isCommandInProgress() && ! showQuestion("Kill program?"))
-            return false;
-        detachProgram();
+            return;
+        if (isCommandInProgress())
+            return;
         m_prefs.putInt("program", -1);
-        updateViews(false);
-        return true;
+        protectGui();
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    try
+                    {
+                        detachProgram();
+                        updateViews(false);
+                    }
+                    finally
+                    {
+                        unprotectGui();
+                    }
+                }
+            };
+        SwingUtilities.invokeLater(runnable);
     }
 
     public void actionDisposeAnalyzeDialog()
@@ -842,7 +854,7 @@ public class GoGui
             program = editor.editItem(this, "New Program", program, true);
             if (program == null)
                 return;
-            actionAttachProgram(program);
+            attachNewProgram(program.m_command);
         }
         while (m_gtp == null || m_gtp.isProgramDead());
         program.m_name =
@@ -1936,6 +1948,24 @@ public class GoGui
         }
     }
 
+    private void attachNewProgram(String command)
+    {
+        if (m_gtp != null)
+            detachProgram();
+        if (! attachProgram(command))
+        {
+            m_prefs.putInt("program", -1);
+            updateViews(false);
+            return;
+        }
+        if (m_shell != null && m_session.isVisible("shell"))
+            m_shell.setVisible(true);
+        if (m_session.isVisible("analyze"))
+            createAnalyzeDialog();
+        toFrontLater();
+        updateViews(false);
+    }
+
     /** Attach program.
         @return true if program was successfully attached.
     */
@@ -2257,19 +2287,22 @@ public class GoGui
 
     private void close()
     {
-        if (isCommandInProgress() && ! showQuestion("Kill program?"))
-                return;
         if (! checkSaveGame(true))
             return;
-        if (m_gtp != null)
-        {
-            m_analyzeCommand = null;
-            detachProgram();
-        }
-        else
-            saveSession();
-        dispose();
-        System.exit(0);
+        protectGui();
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    if (m_gtp != null)
+                    {
+                        m_analyzeCommand = null;
+                        detachProgram();
+                    }
+                    else
+                        saveSession();
+                    dispose();
+                    System.exit(0);
+                }
+            });
     }
 
     private void computerMoved()
@@ -2794,6 +2827,7 @@ public class GoGui
         setTitleFromProgram();
         updateViews(true);
         getLayeredPane().setVisible(true);
+        unprotectGui();
         toFrontLater();
         checkComputerMove();
     }
@@ -2954,6 +2988,12 @@ public class GoGui
         if (isMove && m_showLastMove)
             m_guiBoard.markLastMove(point);
         m_guiBoard.paintImmediately(point);
+    }
+
+    private void protectGui()
+    {
+        getGlassPane().setVisible(true);
+        setCursor(getGlassPane(), Cursor.WAIT_CURSOR);
     }
 
     private void registerSpecialMacHandler()
@@ -3508,6 +3548,12 @@ public class GoGui
                     toFront();
                 }
             });
+    }
+
+    private void unprotectGui()
+    {
+        getGlassPane().setVisible(false);
+        setCursor(getGlassPane(), Cursor.DEFAULT_CURSOR);
     }
 
     /** Update all views.
