@@ -921,7 +921,7 @@ public class GoGui
         actionOpenFile(file);
     }
 
-    public void actionOpenFile(File file)
+    public void actionOpenFile(final File file)
     {
         if (file == null)
             return;
@@ -929,8 +929,17 @@ public class GoGui
             return;
         if (! checkSaveGame())
             return;
-        loadFile(file, -1);
-        boardChangedBegin(false, true);
+        final boolean protectGui = (m_gtp != null);
+        if (protectGui)
+            protectGui();
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run() {        
+                    loadFile(file, -1);
+                    boardChangedBegin(false, true);
+                    if (protectGui)
+                        unprotectGui();
+                }
+            });
     }
 
     public void actionPass()
