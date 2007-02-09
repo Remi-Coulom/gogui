@@ -2306,7 +2306,7 @@ public class GoGui
     {
         if (! checkSaveGame(true))
             return;
-        protectGui();
+        setVisible(false);
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     if (m_gtp != null)
