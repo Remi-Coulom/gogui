@@ -157,7 +157,7 @@ public final class GoGuiUtil
             toolTip.append(variation);
         }
         else
-            toolTip.append("in main variation ");
+            toolTip.append("in main variation");
         statusBar.setMoveText(moveText.toString(), toolTip.toString());
     }
 

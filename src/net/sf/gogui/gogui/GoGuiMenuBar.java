@@ -115,13 +115,15 @@ public class GoGuiMenuBar
                 toolTip.append(bookmark.m_file.toString());
                 if (bookmark.m_move > 0)
                 {
-                    toolTip.append(" move ");
+                    toolTip.append(" (move ");
                     toolTip.append(bookmark.m_move);
+                    toolTip.append(")");
                 }
                 if (! bookmark.m_variation.trim().equals(""))
                 {
-                    toolTip.append(" in variation ");
+                    toolTip.append(" (variation ");
                     toolTip.append(bookmark.m_variation);
+                    toolTip.append(")");
                 }
                 item.setToolTipText(toolTip.toString());
             }
