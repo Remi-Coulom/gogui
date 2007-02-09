@@ -33,6 +33,7 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -2739,6 +2740,9 @@ public class GoGui
             saveSession();
             m_guiBoard.initSize(size);
             restoreMainWindow(size);
+            JLayeredPane layeredPane = getLayeredPane();
+            // Loading a file with program attached can take long
+            layeredPane.paintImmediately(layeredPane.getVisibleRect());
         }
         ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
         if (handicap == null)
