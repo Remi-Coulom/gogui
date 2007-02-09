@@ -853,7 +853,7 @@ public class GoGui
 
     public void actionNewProgram()
     {
-        m_newProgram = new Program("", "");
+        m_newProgram = new Program("", "", "", "");
         final ProgramEditor editor = new ProgramEditor();
         m_newProgram =
             editor.editItem(this, "New Program", m_newProgram, true);
@@ -873,9 +873,10 @@ public class GoGui
                             return;
                         SwingUtilities.invokeLater(this);
                     }
-                    m_newProgram.m_name =
-                        GoGuiUtil.makeProgramLabelUnique(getProgramName(),
-                                                         m_programs);
+                    m_newProgram.m_name = getProgramName();
+                    m_newProgram.m_version = m_version;
+                    m_newProgram.m_label =
+                        GoGuiUtil.suggestLabel(m_newProgram, m_programs);
                     m_newProgram = editor.editItem(GoGui.this, "New Program",
                                                    m_newProgram, false);
                     if (m_newProgram == null)

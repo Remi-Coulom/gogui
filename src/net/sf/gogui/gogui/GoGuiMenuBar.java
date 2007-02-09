@@ -140,12 +140,27 @@ public class GoGuiMenuBar
         for (int i = 0; i < programs.size(); ++i)
         {
             Program program = (Program)programs.get(i);
-            JMenuItem item = new JMenuItem(program.m_name);
+            JMenuItem item = new JMenuItem(program.m_label);
             final int index = i;
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         m_listener.actionAttachProgram(index);
                     } } );
+            StringBuffer toolTip = new StringBuffer(128);
+            if (program.m_name != null)
+                toolTip.append(program.m_name);
+            if (program.m_version != null && ! program.m_version.equals(""))
+            {
+                toolTip.append(" ");
+                toolTip.append(program.m_version);
+            }
+            if (program.m_command != null)
+            {
+                toolTip.append(" (");
+                toolTip.append(program.m_command);
+                toolTip.append(")");
+            }
+            item.setToolTipText(toolTip.toString());
             m_menuAttach.add(item);
             m_programItems.add(item);
         }

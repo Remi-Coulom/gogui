@@ -43,7 +43,11 @@ public class ProgramEditor
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         if (! disableName)
+        {
+            m_label = createEntry("Label", 18, program.m_label);
             m_name = createEntry("Name", 18, program.m_name);
+            m_version = createEntry("Version", 18, program.m_version);
+        }
         createCommandEntry(program.m_command);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
@@ -51,8 +55,8 @@ public class ProgramEditor
         m_dialog = optionPane.createDialog(parent, title);
         m_dialog.addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent e) {
-                    if (m_name != null)
-                        m_name.requestFocusInWindow();
+                    if (m_label != null)
+                        m_label.requestFocusInWindow();
                     else
                         m_command.requestFocusInWindow();
                 }
@@ -67,18 +71,25 @@ public class ProgramEditor
                 return null;
             done = validate(parent);
         }
+        String newLabel = "";
         String newName = "";
+        String newVersion = "";
         if (! disableName)
+        {
+            newLabel = m_label.getText().trim();
             newName = m_name.getText().trim();
+            newVersion = m_version.getText().trim();
+        }
         String newCommand = m_command.getText().trim();
-        Program newProgram = new Program(newName, newCommand);
+        Program newProgram = new Program(newLabel, newName, newVersion,
+                                         newCommand);
         m_dialog.dispose();
         return newProgram;
     }
 
     public String getItemLabel(Object object)
     {
-        return ((Program)object).m_name;
+        return ((Program)object).m_label;
     }
 
     public Object cloneItem(Object object)
@@ -95,7 +106,11 @@ public class ProgramEditor
 
     private JPanel m_panelRight;
 
+    private JTextField m_label;
+
     private JTextField m_name;
+
+    private JTextField m_version;
 
     private JTextField m_command;
 
@@ -178,10 +193,13 @@ public class ProgramEditor
 
     private boolean validate(Component parent)
     {
-        if (! m_disableName && m_name.getText().trim().equals(""))
+        if (! m_disableName)
         {
-            SimpleDialogs.showError(parent, "Name cannot be empty");
-            return false;
+            if (m_label.getText().trim().equals(""))
+            {
+                SimpleDialogs.showError(parent, "Label cannot be empty");
+                return false;
+            }
         }
         if (m_command.getText().trim().equals(""))
         {

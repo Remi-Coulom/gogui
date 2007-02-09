@@ -25,25 +25,45 @@ import net.sf.gogui.gui.TextViewer;
 /** Utility functions for class GoGui. */
 public final class GoGuiUtil
 {
-    public static String makeProgramLabelUnique(String name,
-                                                ArrayList programs)
+    public static String suggestLabel(Program p, ArrayList programs)
     {
-        if (name == null || name.trim().equals(""))
-            name = "Unknown Program";
+        String label = p.m_name;
+        if (label == null || label.trim().equals(""))
+            label = "Unknown Program";
+        boolean alreadyExists = false;
+        for (int i = 0; i < programs.size(); ++i)
+            if (label.equals(((Program)programs.get(i)).m_label))
+            {
+                alreadyExists = true;
+                break;
+            }
+        if (! alreadyExists)
+            return label;
+        if (p.m_version != null && ! p.m_version.trim().equals(""))
+            label = label + " " + p.m_version.trim();
+        alreadyExists = false;
+        for (int i = 0; i < programs.size(); ++i)
+            if (label.equals(((Program)programs.get(i)).m_label))
+            {
+                alreadyExists = true;
+                break;
+            }
+        if (! alreadyExists)
+            return label;
         for (int i = 1; ; ++i)
         {
-            String tryName = name;
+            String tryLabel = label;
             if (i > 1)
-                tryName = tryName + " (" + i + ")";
-            boolean found = false;
+                tryLabel = tryLabel + " (" + i + ")";
+            alreadyExists = false;
             for (int j = 0; j < programs.size(); ++j)
-                if (tryName.equals(((Program)programs.get(j)).m_name))
+                if (tryLabel.equals(((Program)programs.get(j)).m_label))
                 {
-                    found = true;
+                    alreadyExists = true;
                     break;
                 }
-            if (! found)
-                return tryName;
+            if (! alreadyExists)
+                return tryLabel;
         }
     }
 
