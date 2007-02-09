@@ -319,7 +319,9 @@ public class GoGui
 
     public void actionBackward(int n)
     {
-        actionGotoNode(NodeUtil.backward(getCurrentNode(), n));
+        boolean protectGui = (m_gtp != null
+                              && (n > 1 || ! m_gtp.isSupported("undo")));
+        actionGotoNode(NodeUtil.backward(getCurrentNode(), n), protectGui);
     }
 
     public void actionBeginning()
@@ -626,7 +628,8 @@ public class GoGui
 
     public void actionForward(int n)
     {
-        actionGotoNode(NodeUtil.forward(getCurrentNode(), n));
+        boolean protectGui = (m_gtp != null && n > 1);
+        actionGotoNode(NodeUtil.forward(getCurrentNode(), n), protectGui);
     }
 
     public void actionGameInfo()
@@ -699,16 +702,24 @@ public class GoGui
         actionGotoNode(node);
     }
 
-    public void actionGotoNode(final ConstNode node)
+    public void actionGotoNode(ConstNode node)
+    {
+        boolean protectGui = (m_gtp != null);
+        actionGotoNode(node, protectGui);
+    }
+
+    public void actionGotoNode(final ConstNode node, final boolean protectGui)
     {
         if (! checkStateChangePossible())
             return;
-        protectGui();
+        if (protectGui)
+            protectGui();
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {        
                     gotoNode(node);
                     boardChangedBegin(false, false);
-                    unprotectGui();
+                    if (protectGui)
+                        unprotectGui();
                 }
             });
     }
