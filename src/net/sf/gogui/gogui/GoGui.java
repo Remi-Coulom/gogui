@@ -847,29 +847,43 @@ public class GoGui
 
     public void actionNewProgram()
     {
-        Program program = new Program("", "");
-        ProgramEditor editor = new ProgramEditor();
-        do
-        {
-            program = editor.editItem(this, "New Program", program, true);
-            if (program == null)
-                return;
-            attachNewProgram(program.m_command);
-        }
-        while (m_gtp == null || m_gtp.isProgramDead());
-        program.m_name =
-            GoGuiUtil.makeProgramLabelUnique(getProgramName(), m_programs);
-        program = editor.editItem(this, "New Program", program, false);
-        if (program == null)
-        {
-            actionDetachProgram();
+        m_newProgram = new Program("", "");
+        final ProgramEditor editor = new ProgramEditor();
+        m_newProgram =
+            editor.editItem(this, "New Program", m_newProgram, true);
+        if (m_newProgram == null)
             return;
-        }
-        m_programs.add(program);
-        m_prefs.putInt("program", m_programs.size() - 1);
-        m_menuBar.setPrograms(m_programs);
-        Program.save(m_programs);
-        updateViews(false);
+        protectGui();
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    attachNewProgram(m_newProgram.m_command);
+                    unprotectGui();
+                    if (m_gtp.isProgramDead())
+                    {
+                        m_newProgram = editor.editItem(GoGui.this,
+                                                       "New Program",
+                                                       m_newProgram, true);
+                        if (m_newProgram == null)
+                            return;
+                        SwingUtilities.invokeLater(this);
+                    }
+                    m_newProgram.m_name =
+                        GoGuiUtil.makeProgramLabelUnique(getProgramName(),
+                                                         m_programs);
+                    m_newProgram = editor.editItem(GoGui.this, "New Program",
+                                                   m_newProgram, false);
+                    if (m_newProgram == null)
+                    {
+                        actionDetachProgram();
+                        return;
+                    }
+                    m_programs.add(m_newProgram);
+                    m_prefs.putInt("program", m_programs.size() - 1);
+                    m_menuBar.setPrograms(m_programs);
+                    Program.save(m_programs);
+                    updateViews(false);
+                }
+            });
     }
 
     public void actionNextEarlierVariation()
@@ -1854,6 +1868,9 @@ public class GoGui
     private ScoreDialog m_scoreDialog;
 
     private String m_programAnalyzeCommands;
+
+    /** Program currently being edited in actionNewProgram() */
+    private Program m_newProgram;
 
     private final ThumbnailCreator m_thumbnailCreator =
         new ThumbnailCreator(false);
