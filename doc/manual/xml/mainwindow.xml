@@ -311,6 +311,15 @@ Detach current Go program from game and terminate the Go program.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Reattach</guimenuitem></term>
+<listitem>
+<para>
+Restart Go program and attach it to the currrent game and current position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>New Program</guimenuitem></term>
 <listitem>
 <para>

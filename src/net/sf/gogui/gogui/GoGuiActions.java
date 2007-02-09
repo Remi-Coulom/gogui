@@ -558,6 +558,13 @@ public class GoGuiActions
                     m_goGui.actionPrint(); } },
              "Print...", "Print current position", KeyEvent.VK_P, null);
 
+    public final GoGuiAction m_actionReattachProgram =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionReattachProgram(); } },
+             "Reattach",
+             "Restart Go program and attach it to the currrent position");
+
     public final GoGuiAction m_actionSave =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -858,6 +865,7 @@ public class GoGuiActions
         m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
+        updateActionReattachProgram(isProgramAttached, name);
         updateActionSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == GoColor.BLACK);
@@ -979,6 +987,16 @@ public class GoGuiActions
         if (! isProgramAttached)
             desc = desc + " (no program attached)";
         m_actionPlay.setDescription(desc);
+    }
+
+    private void updateActionReattachProgram(boolean isProgramAttached,
+                                             String name)
+    {
+        m_actionReattachProgram.setEnabled(isProgramAttached);
+        if (! isProgramAttached)
+            m_actionReattachProgram.setName("Reattach");
+        else
+            m_actionReattachProgram.setName("Reattach " + name);
     }
 
     private void updateActionSave(File file, boolean isModified)

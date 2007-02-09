@@ -1001,6 +1001,13 @@ public class GoGui
         Print.run(this, m_guiBoard);
     }
 
+    public void actionReattachProgram()
+    {
+        if (m_gtp == null)
+            return;
+        actionAttachProgram(m_program);
+    }
+
     public void actionSave()
     {
         if (m_file == null)

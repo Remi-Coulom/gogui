@@ -436,14 +436,16 @@ public class GoGuiMenuBar
         m_menuAttach.setEnabled(false);
         menu.add(m_menuAttach);
         menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
-        menu.addItem(actions.m_actionNewProgram, KeyEvent.VK_N);
-        menu.addItem(actions.m_actionEditPrograms, KeyEvent.VK_E);
+        menu.addItem(actions.m_actionReattachProgram, KeyEvent.VK_R);
         menu.addSeparator();
         m_computerColor = createComputerColorMenu(actions);
         menu.add(m_computerColor);
         menu.addItem(actions.m_actionPlay, KeyEvent.VK_P);
         menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_I);
+        menu.addSeparator();
+        menu.addItem(actions.m_actionNewProgram, KeyEvent.VK_N);
+        menu.addItem(actions.m_actionEditPrograms, KeyEvent.VK_E);
         return menu;
     }
 
