@@ -274,6 +274,7 @@ public class GoGui
             return;
         m_bookmarks.add(bookmark);
         m_menuBar.setBookmarks(m_bookmarks);
+        Bookmark.save(m_bookmarks);
     }
 
     public void actionAttachProgram(int index)
@@ -466,6 +467,7 @@ public class GoGui
         if (! listEditor.edit(this, "Edit Bookmarks", m_bookmarks, editor))
             return;
         m_menuBar.setBookmarks(m_bookmarks);
+        Bookmark.save(m_bookmarks);
     }
 
     public void actionEditLabel(GoPoint point)
@@ -487,6 +489,7 @@ public class GoGui
             return;
         m_menuBar.setPrograms(m_programs);
         m_prefs.putInt("program", -1);
+        Program.save(m_programs);
     }
 
     public void actionEnd()
@@ -853,6 +856,7 @@ public class GoGui
         m_programs.add(program);
         m_prefs.putInt("program", m_programs.size() - 1);
         m_menuBar.setPrograms(m_programs);
+        Program.save(m_programs);
         updateViews(false);
     }
 
@@ -3088,8 +3092,6 @@ public class GoGui
 
     private void saveSession()
     {
-        Bookmark.save(m_bookmarks);
-        Program.save(m_programs);
         if (m_shell != null)
             m_shell.saveHistory();
         if (m_analyzeDialog != null)
