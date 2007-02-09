@@ -120,7 +120,11 @@ public final class AnalyzeDialog
         ArrayList recent = new ArrayList(maxRecent);
         int start = (m_firstIsTemp ? 1 : 0);
         for (int i = start; i < start + m_numberNewRecent; ++i)
+        {
+            if (i >= getComboBoxItemCount()) // Should not happen ?
+                break;
             recent.add(getComboBoxItem(i));
+        }
         for (int i = 0; i < m_fullRecentList.size(); ++i)
         {
             if (recent.size() == maxRecent)
@@ -432,8 +436,10 @@ public final class AnalyzeDialog
                       false);
             return;
         }
+        int oldItemCount = m_comboBoxHistory.getItemCount();
         updateRecent(index);
-        ++m_numberNewRecent;
+        if (m_comboBoxHistory.getItemCount() > oldItemCount)
+            ++m_numberNewRecent;
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         if (command.needsColorArg())
@@ -558,8 +564,7 @@ public final class AnalyzeDialog
     private void updateRecent(int index)
     {
         String label = (String)m_labels.get(index);
-        if (getComboBoxItemCount() == 0 || ! getComboBoxItem(0).equals(label))
-            insertComboBoxItem(label, 0);
+        insertComboBoxItem(label, 0);
         for (int i = 1; i < getComboBoxItemCount(); ++i)
             if (getComboBoxItem(i).equals(label))
                 m_comboBoxHistory.removeItemAt(i);
