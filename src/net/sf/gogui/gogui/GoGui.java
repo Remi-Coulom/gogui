@@ -2741,8 +2741,11 @@ public class GoGui
             m_guiBoard.initSize(size);
             restoreMainWindow(size);
             JLayeredPane layeredPane = getLayeredPane();
-            // Loading a file with program attached can take long
-            layeredPane.paintImmediately(layeredPane.getVisibleRect());
+            if (layeredPane.isVisible())
+            {
+                // Loading a file with program attached can take long
+                layeredPane.paintImmediately(layeredPane.getVisibleRect());
+            }
         }
         ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
         if (handicap == null)
