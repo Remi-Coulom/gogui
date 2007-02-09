@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -31,14 +30,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.sf.gogui.go.ConstPointList;
@@ -77,7 +74,7 @@ public final class AnalyzeDialog
         JPanel commandPanel = createCommandPanel();
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
-        int minWidth = commandPanel.getPreferredSize().width;
+        //int minWidth = commandPanel.getPreferredSize().width;
         // not supported in Java 1.4
         //setMinimumSize(new Dimension(minWidth, 192));
         pack();
@@ -208,8 +205,6 @@ public final class AnalyzeDialog
     private JCheckBox m_clearBoard;
 
     private JComboBox m_comboBoxHistory;
-
-    private JLabel m_labelColor;
 
     private JList m_list;
 

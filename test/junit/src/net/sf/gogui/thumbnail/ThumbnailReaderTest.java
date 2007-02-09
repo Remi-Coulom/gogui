@@ -6,7 +6,6 @@ package net.sf.gogui.thumbnail;
 
 import java.io.File;
 import java.io.IOException;
-import net.sf.gogui.util.ErrorMessage;
 
 public final class ThumbnailReaderTest
     extends junit.framework.TestCase

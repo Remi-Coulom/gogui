@@ -5,7 +5,6 @@
 package net.sf.gogui.game;
 
 import java.util.Locale;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Score;

@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.StringUtil;

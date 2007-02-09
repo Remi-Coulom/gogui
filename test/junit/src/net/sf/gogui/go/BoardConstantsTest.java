@@ -4,7 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
 
 public final class BoardConstantsTest

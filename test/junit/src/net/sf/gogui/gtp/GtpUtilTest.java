@@ -4,7 +4,6 @@
 
 package net.sf.gogui.gtp;
 
-import java.util.ArrayList;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;

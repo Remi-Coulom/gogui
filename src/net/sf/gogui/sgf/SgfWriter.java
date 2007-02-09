@@ -21,7 +21,6 @@ import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
-import net.sf.gogui.util.StringUtil;
 
 /** Write in SGF format. */
 public class SgfWriter

@@ -205,8 +205,6 @@ public final class SgfReader
 
     private java.io.Reader m_reader;
 
-    private GameInformation m_gameInformationRoot;
-
     private GameTree m_tree;
 
     private final ProgressShow m_progressShow;

@@ -31,8 +31,8 @@ public class GoGuiToolBar
         addSeparator();
         addButton(actions.m_actionPlay);
         addSeparator();
-        m_setupBlack = addToggleButton(actions.m_actionSetupBlack);
-        m_setupWhite = addToggleButton(actions.m_actionSetupWhite);
+        addToggleButton(actions.m_actionSetupBlack);
+        addToggleButton(actions.m_actionSetupWhite);
         addSeparator();
         addButton(actions.m_actionBeginning);
         addButton(actions.m_actionBackwardTen);
@@ -66,10 +66,6 @@ public class GoGuiToolBar
     GoGui m_goGui;
 
     JButton m_buttonSave;
-
-    private GoGuiToggleButton m_setupBlack;
-
-    private GoGuiToggleButton m_setupWhite;
 
     private AbstractButton addButton(AbstractButton button)
     {

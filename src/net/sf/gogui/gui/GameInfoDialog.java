@@ -4,12 +4,9 @@
 
 package net.sf.gogui.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -19,12 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.util.ObjectUtil;
 
 /** Dialog for editing game settings and other information. */
 public final class GameInfoDialog
@@ -75,10 +70,6 @@ public final class GameInfoDialog
     private PlayerInfo m_white;
 
     private TimeField m_preByoyomi;
-
-    private JTextField m_rankBlack;
-
-    private JTextField m_rankWhite;
 
     private JTextField m_result;
 
@@ -213,12 +204,6 @@ public final class GameInfoDialog
     private boolean isEmpty(JTextField textField)
     {
         return getTextFieldContent(textField).equals("");
-    }
-
-    private void setUnlimitedSize(JComponent component)
-    {
-        Dimension size = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
-        component.setMaximumSize(size);
     }
 
     private void updateGameInfo(GameInformation info)

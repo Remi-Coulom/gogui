@@ -9,7 +9,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;

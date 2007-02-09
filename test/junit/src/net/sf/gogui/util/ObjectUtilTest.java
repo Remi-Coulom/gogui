@@ -4,9 +4,6 @@
 
 package net.sf.gogui.util;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public final class ObjectUtilTest
     extends junit.framework.TestCase
 {

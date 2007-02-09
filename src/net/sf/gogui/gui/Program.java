@@ -4,10 +4,8 @@
 
 package net.sf.gogui.gui;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
-import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.PrefUtil;
 
 /** Command line and other information to run a GTP engine. */

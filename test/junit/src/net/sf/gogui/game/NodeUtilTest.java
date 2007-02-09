@@ -9,7 +9,6 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
 
 public final class NodeUtilTest
     extends junit.framework.TestCase

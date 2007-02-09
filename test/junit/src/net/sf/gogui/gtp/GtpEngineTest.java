@@ -4,9 +4,6 @@
 
 package net.sf.gogui.gtp;
 
-import net.sf.gogui.go.GoColor;
-import net.sf.gogui.go.GoPoint;
-
 public final class GtpEngineTest
     extends junit.framework.TestCase
 {

@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,8 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Score;
@@ -147,8 +144,6 @@ public class ScoreDialog
     private final JTextField m_result;
 
     private Score m_score;
-
-    private int m_boardRules;
 
     private static final ImageIcon m_iconBlack =
         GuiUtil.getIcon("gogui-black-16x16", "Black");

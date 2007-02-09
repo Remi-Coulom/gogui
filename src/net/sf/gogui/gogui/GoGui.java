@@ -3158,10 +3158,7 @@ public class GoGui
         clearStatus();
         m_guiBoard.clearAll();
         if (score != null)
-        {
-            Komi komi = getGameInformation().getKomi();
             setResult(score.formatResult());
-        }
     }
 
     private void sendGtp(Reader reader)
