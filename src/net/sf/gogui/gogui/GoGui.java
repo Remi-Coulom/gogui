@@ -864,7 +864,7 @@ public class GoGui
                 public void run() {
                     attachNewProgram(m_newProgram.m_command);
                     unprotectGui();
-                    if (m_gtp.isProgramDead())
+                    if (m_gtp == null || m_gtp.isProgramDead())
                     {
                         m_newProgram = editor.editItem(GoGui.this,
                                                        "New Program",
@@ -872,6 +872,7 @@ public class GoGui
                         if (m_newProgram == null)
                             return;
                         SwingUtilities.invokeLater(this);
+                        return;
                     }
                     m_newProgram.m_name = getProgramName();
                     m_newProgram.m_version = m_version;
