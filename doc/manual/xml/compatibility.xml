@@ -46,6 +46,13 @@ The commands in parentheses are used if the program supports
 the <command>protocol_version</command> command and responds with 1.
 </para>
     
+<para>
+Go engines that can be synchronized to board positions with play commands,
+but are not able to generate moves (because they provide only other
+functionality) should still implement the <command>genmove</command> command
+and return a failure with an error message.
+</para>
+    
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
