@@ -364,7 +364,7 @@ public class GuiGtpClient
         private final String m_command;
     };
 
-    private static final int TIMEOUT = 8000;
+    private static final int TIMEOUT = 12000;
 
     private boolean m_commandInProgress;
 
