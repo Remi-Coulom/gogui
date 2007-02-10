@@ -237,6 +237,11 @@ public class GuiUtil
         return ((state & mask) == 0);
     }
 
+    public static void paintImmediately(JComponent component)
+    {
+        component.paintImmediately(component.getVisibleRect());
+    }
+
     public static void removeKeyBinding(JComponent component, String key)
     {
         int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;

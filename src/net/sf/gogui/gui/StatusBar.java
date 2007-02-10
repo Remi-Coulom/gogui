@@ -113,8 +113,9 @@ public class StatusBar
     public void immediatelyPaintMoveText(String text)
     {
         assert(SwingUtilities.isEventDispatchThread());
-        m_moveText.setText(text);
-        m_moveText.paintImmediately(m_moveText.getVisibleRect());
+        setMoveText(text, null);
+        GuiUtil.paintImmediately(m_moveText);
+        GuiUtil.paintImmediately(m_moveTextSeparator);
     }
 
     public boolean isProgressShown()
