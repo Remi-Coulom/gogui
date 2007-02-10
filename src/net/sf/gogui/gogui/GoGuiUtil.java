@@ -25,48 +25,6 @@ import net.sf.gogui.gui.TextViewer;
 /** Utility functions for class GoGui. */
 public final class GoGuiUtil
 {
-    public static String suggestLabel(Program p, ArrayList programs)
-    {
-        String label = p.m_name;
-        if (label == null || label.trim().equals(""))
-            label = "Unknown Program";
-        boolean alreadyExists = false;
-        for (int i = 0; i < programs.size(); ++i)
-            if (label.equals(((Program)programs.get(i)).m_label))
-            {
-                alreadyExists = true;
-                break;
-            }
-        if (! alreadyExists)
-            return label;
-        if (p.m_version != null && ! p.m_version.trim().equals(""))
-            label = label + " " + p.m_version.trim();
-        alreadyExists = false;
-        for (int i = 0; i < programs.size(); ++i)
-            if (label.equals(((Program)programs.get(i)).m_label))
-            {
-                alreadyExists = true;
-                break;
-            }
-        if (! alreadyExists)
-            return label;
-        for (int i = 1; ; ++i)
-        {
-            String tryLabel = label;
-            if (i > 1)
-                tryLabel = tryLabel + " (" + i + ")";
-            alreadyExists = false;
-            for (int j = 0; j < programs.size(); ++j)
-                if (tryLabel.equals(((Program)programs.get(j)).m_label))
-                {
-                    alreadyExists = true;
-                    break;
-                }
-            if (! alreadyExists)
-                return tryLabel;
-        }
-    }
-
     public static void showAnalyzeTextOutput(Frame owner, GuiBoard guiBoard,
                                              int type, GoPoint pointArg,
                                              String title, String response)

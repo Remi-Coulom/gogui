@@ -872,8 +872,7 @@ public class GoGui
                     }
                     m_newProgram.m_name = getProgramName();
                     m_newProgram.m_version = m_version;
-                    m_newProgram.m_label =
-                        GoGuiUtil.suggestLabel(m_newProgram, m_programs);
+                    m_newProgram.setUniqueLabel(m_programs);
                     m_newProgram = editor.editItem(GoGui.this, "New Program",
                                                    m_newProgram, false);
                     if (m_newProgram == null)
@@ -2129,21 +2128,9 @@ public class GoGui
         catch (GtpError e)
         {
         }        
-        // Update program information if name has changed since last
-        // invocation
         if (m_program != null
-            && ! ObjectUtil.equals(m_program.m_name, getProgramName()))
+            && m_program.updateInfo(getProgramName(), m_version))
         {
-            m_program.m_name = getProgramName();
-            Program.save(m_programs);
-            m_menuBar.setPrograms(m_programs);
-        }
-        // Update program information if version has changed since last
-        // invocation
-        if (m_program != null
-            && ! ObjectUtil.equals(m_program.m_version, m_version))
-        {
-            m_program.m_version = m_version;
             Program.save(m_programs);
             m_menuBar.setPrograms(m_programs);
         }
