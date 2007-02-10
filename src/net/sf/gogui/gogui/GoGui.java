@@ -995,6 +995,8 @@ public class GoGui
     {
         if (m_gtp == null)
             return;
+        if (! checkCommandInProgress())
+            return;
         protectGui();
         Runnable runnable = new Runnable() {
                 public void run() {
