@@ -5,12 +5,15 @@
 package net.sf.gogui.gtp;
 
 import java.util.ArrayList;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.util.ObjectUtil;
 
 /** Synchronizes a GTP engine with a Go board.
     Handles different capabilities of different engines.
@@ -50,7 +53,8 @@ public class GtpSynchronizer
         return m_isOutOfSync;
     }
 
-    public void init(ConstBoard board) throws GtpError
+    public void init(ConstBoard board, Komi komi, TimeSettings timeSettings)
+        throws GtpError
     {
         initSupportedCommands();
         m_isOutOfSync = true;
@@ -63,16 +67,20 @@ public class GtpSynchronizer
         m_gtp.sendClearBoard(size);
         ArrayList toExecuteAll = computeToExecuteAll(board);
         doPlacements(toExecuteAll);
+        m_komi = null;
+        m_timeSettings = null;
+        sendGameInfo(komi, timeSettings);
         m_isOutOfSync = false;
     }
 
-    public void synchronize(ConstBoard board) throws GtpError
+    public void synchronize(ConstBoard board, Komi komi,
+                            TimeSettings timeSettings) throws GtpError
     {
         int size = board.getSize();
         if (m_board == null || size != m_board.getSize()
             || getHandicap(board) != getHandicap(m_board))
         {
-            init(board);
+            init(board, komi, timeSettings);
             return;
         }
         m_isOutOfSync = true;
@@ -82,10 +90,11 @@ public class GtpSynchronizer
         {
             undoPlacements(numberUndo);
             doPlacements(toExecuteMissing);
+            sendGameInfo(komi, timeSettings);
             m_isOutOfSync = false;
         }
         else
-            init(board);
+            init(board, komi, timeSettings);
     }
 
     /** Send human move to engine.
@@ -148,6 +157,10 @@ public class GtpSynchronizer
 
     /** Board representing the engine state. */
     private Board m_board;
+
+    private Komi m_komi;
+
+    private TimeSettings m_timeSettings;
 
     private final Listener m_listener;
 
@@ -394,6 +407,46 @@ public class GtpSynchronizer
             {
                 play((Move)moves.get(i));
                 updateListener();
+            }
+        }
+    }
+
+    private void sendGameInfo(Komi komi, TimeSettings timeSettings)
+    {
+        if (! ObjectUtil.equals(komi, m_komi))
+        {
+            m_komi = komi;
+            if (m_gtp.isSupported("komi") && komi != null)
+            {
+                try
+                {
+                    m_gtp.send("komi " + komi);
+                }
+                catch (GtpError e)
+                {
+                }
+            }
+        }
+        if (! ObjectUtil.equals(timeSettings, m_timeSettings))
+        {
+            if (timeSettings == null && m_timeSettings == null)
+            {
+                // Avoid sending "no time limit" settings, if not necessary
+                // because it could confuse some programs
+                // (see GtpUtil.getTimeSettingsCommand())
+                m_timeSettings = timeSettings;
+                return;
+            }
+            m_timeSettings = timeSettings;
+            if (m_gtp.isSupported("time_settings"))
+            {
+                try
+                {
+                    m_gtp.send(GtpUtil.getTimeSettingsCommand(timeSettings));
+                }
+                catch (GtpError e)
+                {
+                }
             }
         }
     }

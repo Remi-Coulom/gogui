@@ -638,19 +638,14 @@ public class GoGui
             new GameInformation(node.getGameInformationConst());
         GameInfoDialog.show(this, info);
         m_game.setGameInformation(info, node);
+        currentNodeChanged(); // updates komi, time settings
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))
-        {
             m_prefs.put("komi", komi.toString());
-            setKomi(komi);
-        }
         if (info.getTimeSettings() != null
             && ! info.getTimeSettings().equals(m_timeSettings))
-        {
             m_timeSettings = info.getTimeSettings();
-            setTimeSettings();
-        }
         setTitle();
         updateViews(false);
     }
@@ -2515,7 +2510,9 @@ public class GoGui
         boolean wasOutOfSync = isOutOfSync();
         try
         {
-            m_gtp.synchronize(getBoard());
+            ConstGameInformation info = getGameInformation();
+            m_gtp.synchronize(getBoard(), info.getKomi(),
+                              info.getTimeSettings());
         }
         catch (GtpError e)
         {
@@ -2813,7 +2810,9 @@ public class GoGui
         {
             try
             {
-                m_gtp.initSynchronize(getBoard());
+                ConstGameInformation info = getGameInformation();
+                m_gtp.synchronize(getBoard(), info.getKomi(),
+                                  info.getTimeSettings());
             }
             catch (GtpError error)
             {
@@ -2821,8 +2820,6 @@ public class GoGui
                 return false;
             }
         }
-        setKomi(getGameInformation().getKomi());
-        setTimeSettings();
         currentNodeChanged();
         return ! isOutOfSync();
     }
@@ -3358,11 +3355,6 @@ public class GoGui
         setTitle();
     }
 
-    private void setKomi(Komi komi)
-    {
-        GuiGtpUtil.sendKomi(this, komi, getProgramName(), m_gtp);
-    }
-
     private void setMinimumSize()
     {
         // setMinimumSize not available in Java 1.4
@@ -3398,27 +3390,6 @@ public class GoGui
                               "with " + result + "?"))
             return;
         m_game.setResult(result);
-    }
-
-    private void setTimeSettings()
-    {
-        if (m_gtp == null)
-            return;
-        TimeSettings timeSettings = getGameInformation().getTimeSettings();
-        if (timeSettings == null)
-            return;
-        if (! m_gtp.isSupported("time_settings"))
-            return;
-        m_game.setTimeSettings(timeSettings);
-        String command = GtpUtil.getTimeSettingsCommand(timeSettings);
-        try
-        {
-            m_gtp.send(command);
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-        }
     }
 
     private void setTitle()

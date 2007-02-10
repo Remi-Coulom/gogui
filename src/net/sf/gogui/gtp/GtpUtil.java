@@ -21,8 +21,17 @@ import net.sf.gogui.util.StringUtil;
 /** Utility functions used in package gtp. */
 public final class GtpUtil
 {
+    /** Get GTP time settings command .
+        @param settings The time settings. If null, this function will return
+        the GTP command for "no time limit" (zero byoyomi stones), which could
+        confuse some programs. On the other hand there is no other command
+        for changing from a state with time settings to a state with no time
+        settings.
+    */
     public static String getTimeSettingsCommand(TimeSettings settings)
     {
+        if (settings == null)
+            return "time_settings 0 1 0";
         long preByoyomi = settings.getPreByoyomi() / 1000;
         long byoyomi = 0;
         long byoyomiMoves = 0;

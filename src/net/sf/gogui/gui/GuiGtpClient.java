@@ -8,8 +8,10 @@ import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
@@ -169,11 +171,12 @@ public class GuiGtpClient
         m_gtp.sendInterrupt();
     }
 
-    public void initSynchronize(ConstBoard board) throws GtpError
+    public void initSynchronize(ConstBoard board, Komi komi,
+                                TimeSettings timeSettings) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        m_gtpSynchronizer.init(board);
+        m_gtpSynchronizer.init(board, komi, timeSettings);
     }
 
     public boolean isCommandInProgress()
@@ -311,11 +314,12 @@ public class GuiGtpClient
         m_gtp.sendPlay(move, TIMEOUT, timeoutCallback);
     }
 
-    public void synchronize(ConstBoard board) throws GtpError
+    public void synchronize(ConstBoard board, Komi komi,
+                            TimeSettings timeSettings) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        m_gtpSynchronizer.synchronize(board);
+        m_gtpSynchronizer.synchronize(board, komi, timeSettings);
     }
 
     public void updateAfterGenmove(ConstBoard board)

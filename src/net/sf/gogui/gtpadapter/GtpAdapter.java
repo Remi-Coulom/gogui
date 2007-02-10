@@ -12,11 +12,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpCallback;
@@ -161,6 +163,18 @@ public class GtpAdapter
         cmd.getResponse().append(BoardUtil.toString(m_board, true));
     }
 
+    public void cmdKomi(GtpCommand cmd) throws GtpError
+    {
+        try
+        {
+            m_komi = Komi.parseKomi(cmd.getArg());
+        }
+        catch (Komi.InvalidKomi e)
+        {
+            throw new GtpError("invalid komi");
+        }
+    }
+
     public void cmdLoadsgf(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArgLessEqual(2);
@@ -238,6 +252,21 @@ public class GtpAdapter
             points.add(getPointArg(cmd, i));
         m_board.setup(points, null, null);
         synchronize();
+    }
+
+    public void cmdTimeSettings(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArg(3);
+        long mainTime = cmd.getIntArg(0, 0, Integer.MAX_VALUE) * 1000L;
+        long byoyomiTime = cmd.getIntArg(0, 0, Integer.MAX_VALUE) * 1000L;
+        int byoyomiStones = cmd.getIntArg(0, 0, Integer.MAX_VALUE);
+        if (byoyomiTime == 0)
+            m_timeSettings = new TimeSettings(mainTime);
+        else if (byoyomiStones == 0)
+            m_timeSettings = null;
+        else
+            m_timeSettings =
+                new TimeSettings(mainTime, byoyomiTime, byoyomiStones);
     }
 
     public void cmdUndo(GtpCommand cmd) throws GtpError
@@ -318,6 +347,10 @@ public class GtpAdapter
     private final GtpClientBase m_gtp;
 
     private final GtpSynchronizer m_synchronizer;
+
+    private Komi m_komi;
+
+    private TimeSettings m_timeSettings;
 
     private boolean checkResign(GoColor color, StringBuffer response)
     {
@@ -408,10 +441,9 @@ public class GtpAdapter
         register("gtpadapter-showboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGtpAdapterShowBoard(cmd); } });
-        if (version1)
-            register("protocol_version", new GtpCallback() {
-                    public void run(GtpCommand cmd) throws GtpError {
-                        cmdProtocolVersion1(cmd); } });
+        register("komi", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdKomi(cmd); } });
         register("loadsgf", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLoadsgf(cmd); } });
@@ -419,9 +451,16 @@ public class GtpAdapter
         register("place_free_handicap", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdPlaceFreeHandicap(cmd); } });
+        if (version1)
+            register("protocol_version", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdProtocolVersion1(cmd); } });
         register("set_free_handicap", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdSetFreeHandicap(cmd); } });
+        register("time_settings", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdTimeSettings(cmd); } });
         if (noScore)
         {
             unregister("final_score");
@@ -552,6 +591,6 @@ public class GtpAdapter
 
     private void synchronize() throws GtpError
     {
-        m_synchronizer.synchronize(m_board);
+        m_synchronizer.synchronize(m_board, m_komi, m_timeSettings);
     }
 }
