@@ -6,7 +6,6 @@ package net.sf.gogui.gogui;
 
 import java.awt.Frame;
 import java.awt.Point;
-import java.util.ArrayList;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
@@ -18,7 +17,6 @@ import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
-import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.gui.TextViewer;
 
