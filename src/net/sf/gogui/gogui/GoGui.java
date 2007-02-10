@@ -2791,7 +2791,7 @@ public class GoGui
             if (layeredPane.isVisible())
             {
                 // Loading a file with program attached can take long
-                layeredPane.paintImmediately(layeredPane.getVisibleRect());
+                GuiUtil.paintImmediately(layeredPane);
             }
         }
         ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
