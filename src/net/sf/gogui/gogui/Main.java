@@ -96,7 +96,8 @@ public final class Main
         ThreadGroup group = new ThreadGroup("catch-runtime-exceptions") {
                 public void uncaughtException(Thread t, Throwable e) {
                     StringUtil.printException(e);
-                    if (e instanceof RuntimeException)
+                    if (e instanceof RuntimeException
+                        || e instanceof AssertionError)
                         showCrashDialog((RuntimeException)e);
                     System.exit(-1);
                 }
