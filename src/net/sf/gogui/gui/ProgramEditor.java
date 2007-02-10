@@ -43,12 +43,13 @@ public class ProgramEditor
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         if (! disableName)
-        {
             m_label = createEntry("Label", 18, program.m_label);
-            m_name = createEntry("Name", 18, program.m_name);
-            m_version = createEntry("Version", 18, program.m_version);
-        }
         createCommandEntry(program.m_command);
+        if (! disableName)
+        {
+            m_name = createEntry("Name", 18, program.m_name, false);
+            m_version = createEntry("Version", 18, program.m_version, false);
+        }
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
                                                  JOptionPane.OK_CANCEL_OPTION);
@@ -120,6 +121,12 @@ public class ProgramEditor
 
     private JTextField createEntry(String labelText, int cols, String text)
     {
+        return createEntry(labelText, cols, text, true);
+    }
+
+    private JTextField createEntry(String labelText, int cols, String text,
+                                   boolean editable)
+    {
         JComponent label = createEntryLabel(labelText);
         m_panelLeft.add(label);        
         Box box = Box.createVerticalBox();
@@ -129,6 +136,7 @@ public class ProgramEditor
         box.add(Box.createVerticalGlue());
         JTextField field = new JTextField(cols);
         field.setText(text);
+        field.setEditable(editable);
         panel.add(field);
         m_panelRight.add(box);
         return field;

@@ -229,9 +229,9 @@ public class GoGui
         m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar.getMenuBar());
         setMinimumSize();
-        m_program = program;
-        if (m_program != null && m_program.trim().equals(""))
-            m_program = null;
+        m_programCommand = program;
+        if (m_programCommand != null && m_programCommand.trim().equals(""))
+            m_programCommand = null;
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
         protectGui(); // Show wait cursor
@@ -285,12 +285,7 @@ public class GoGui
         actionAttachProgram((Program)m_programs.get(index));
     }
 
-    public void actionAttachProgram(Program program)
-    {
-        actionAttachProgram(program.m_command);
-    }
-
-    public void actionAttachProgram(final String command)
+    public void actionAttachProgram(final Program program)
     {
         if (! checkCommandInProgress())
             return;
@@ -299,7 +294,7 @@ public class GoGui
                 public void run() {
                     try
                     {
-                        attachNewProgram(command);
+                        attachNewProgram(program.m_command, program);
                     }
                     finally
                     {
@@ -862,7 +857,7 @@ public class GoGui
         protectGui();
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    attachNewProgram(m_newProgram.m_command);
+                    attachNewProgram(m_newProgram.m_command, m_newProgram);
                     unprotectGui();
                     if (m_gtp == null || m_gtp.isProgramDead())
                     {
@@ -1005,7 +1000,20 @@ public class GoGui
     {
         if (m_gtp == null)
             return;
-        actionAttachProgram(m_program);
+        protectGui();
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    try
+                    {
+                        attachNewProgram(m_programCommand, null);
+                    }
+                    finally
+                    {
+                        unprotectGui();
+                    }
+                }
+            };
+        SwingUtilities.invokeLater(runnable);
     }
 
     public void actionSave()
@@ -1878,7 +1886,7 @@ public class GoGui
 
     private String m_lastAnalyzeCommand;
 
-    private String m_program;
+    private String m_programCommand;
 
     private String m_titleFromProgram;
 
@@ -1891,9 +1899,16 @@ public class GoGui
 
     private ScoreDialog m_scoreDialog;
 
-    private String m_programAnalyzeCommands;
+    private String m_programCommandAnalyzeCommands;
 
-    /** Program currently being edited in actionNewProgram() */
+    /** Program information.
+        Can be null even if a program is attached, if only m_programName
+        is known.
+    */
+    private Program m_program;
+
+    /** Program currently being edited in actionNewProgram()
+     */
     private Program m_newProgram;
 
     private final ThumbnailCreator m_thumbnailCreator =
@@ -1989,11 +2004,11 @@ public class GoGui
         }
     }
 
-    private void attachNewProgram(String command)
+    private void attachNewProgram(String command, Program program)
     {
         if (m_gtp != null)
             detachProgram();
-        if (! attachProgram(command))
+        if (! attachProgram(command, program))
         {
             m_prefs.putInt("program", -1);
             updateViews(false);
@@ -2008,14 +2023,17 @@ public class GoGui
     }
 
     /** Attach program.
+        @param programCommand Command line for running program.
+        @param program Program information (may be null)
         @return true if program was successfully attached.
     */
-    private boolean attachProgram(String program)
+    private boolean attachProgram(String programCommand, Program program)
     {
-        program = program.trim();
-        if (program.equals(""))
+        programCommand = programCommand.trim();
+        if (programCommand.equals(""))
             return false;
         m_program = program;
+        m_programCommand = programCommand;
         if (m_shell != null)
         {
             m_shell.dispose();
@@ -2030,7 +2048,7 @@ public class GoGui
             });
         // Don't restore size yet, see workaround GtpShell.setFinalSize()
         m_session.restoreLocation(m_shell, "shell");
-        m_shell.setProgramCommand(program);
+        m_shell.setProgramCommand(programCommand);
         m_shell.setTimeStamp(m_timeStamp);
         m_shell.setCommandCompletion(m_commandCompletion);
         GtpClient.InvalidResponseCallback invalidResponseCallback =
@@ -2086,7 +2104,8 @@ public class GoGui
             };
         try
         {
-            GtpClient gtp = new GtpClient(m_program, m_verbose, ioCallback);
+            GtpClient gtp =
+                new GtpClient(m_programCommand, m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_autoNumber);
             m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback);
@@ -2109,7 +2128,25 @@ public class GoGui
         catch (GtpError e)
         {
         }        
-        m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
+        // Update program information if name has changed since last
+        // invocation
+        if (m_program != null
+            && ! ObjectUtil.equals(m_program.m_name, getProgramName()))
+        {
+            m_program.m_name = getProgramName();
+            Program.save(m_programs);
+            m_menuBar.setPrograms(m_programs);
+        }
+        // Update program information if version has changed since last
+        // invocation
+        if (m_program != null
+            && ! ObjectUtil.equals(m_program.m_version, m_version))
+        {
+            m_program.m_version = m_version;
+            Program.save(m_programs);
+            m_menuBar.setPrograms(m_programs);
+        }
+        m_programCommandAnalyzeCommands = m_gtp.getAnalyzeCommands();
         restoreSize(m_shell, "shell");
         m_shell.setProgramName(getProgramName());
         ArrayList supportedCommands =
@@ -2418,7 +2455,7 @@ public class GoGui
     {
         m_analyzeDialog =
             new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
-                              m_programAnalyzeCommands, m_gtp);
+                              m_programCommandAnalyzeCommands, m_gtp);
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -2437,7 +2474,7 @@ public class GoGui
         if (! noProgram)
             supportedCommands = m_gtp.getSupportedCommands();
         return new ContextMenu(point, noProgram, supportedCommands,
-                               m_programAnalyzeCommands,
+                               m_programCommandAnalyzeCommands,
                                m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),
                                m_guiBoard.getMarkSquare(point),
@@ -2808,11 +2845,14 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
         m_programs = Program.load();
         m_menuBar.setPrograms(m_programs);
-        if (m_program == null)
+        if (m_programCommand == null)
         {
             int index = m_prefs.getInt("program", -1);
             if (index >= 0 && index < m_programs.size())
-                m_program = ((Program)m_programs.get(index)).m_command;
+            {
+                m_program = (Program)m_programs.get(index);
+                m_programCommand = m_program.m_command;
+            }
         }
         if (m_file == null)
             newGame(getBoardSize());
@@ -2827,8 +2867,8 @@ public class GoGui
         // the window visible, but not draw the window content yet
         getLayeredPane().setVisible(false);
         setVisible(true);
-        if (m_program != null)
-            attachProgram(m_program);
+        if (m_programCommand != null)
+            attachProgram(m_programCommand, m_program);
         setTitle();
         registerSpecialMacHandler();
         initProgressBarTimer();
