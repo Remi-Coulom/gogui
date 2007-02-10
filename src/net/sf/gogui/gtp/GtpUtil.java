@@ -23,10 +23,10 @@ public final class GtpUtil
 {
     /** Get GTP time settings command .
         @param settings The time settings. If null, this function will return
-        the GTP command for "no time limit" (zero byoyomi stones), which could
-        confuse some programs. On the other hand there is no other command
-        for changing from a state with time settings to a state with no time
-        settings.
+        a GTP command for "no time limit" ("time_settings 0 1 0" with zero
+        byoyomi stones), which could confuse some programs, so it should be
+        only sent if necessary (when changing from a state with time settings
+        to a state with no time settings).
     */
     public static String getTimeSettingsCommand(TimeSettings settings)
     {

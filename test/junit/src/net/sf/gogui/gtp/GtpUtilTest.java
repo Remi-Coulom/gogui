@@ -56,6 +56,8 @@ public final class GtpUtilTest
         settings = new TimeSettings(30000, 60000, 10);
         assertEquals(GtpUtil.getTimeSettingsCommand(settings),
                      "time_settings 30 60 10");
+        assertEquals(GtpUtil.getTimeSettingsCommand(null),
+                     "time_settings 0 1 0");
     }
 }
 
