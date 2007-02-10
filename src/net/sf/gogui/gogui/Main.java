@@ -98,7 +98,7 @@ public final class Main
                     StringUtil.printException(e);
                     if (e instanceof RuntimeException
                         || e instanceof AssertionError)
-                        showCrashDialog((RuntimeException)e);
+                        showCrashDialog(e);
                     System.exit(-1);
                 }
             };
@@ -125,7 +125,7 @@ public final class Main
         thread.start();
     }
 
-    private static void showCrashDialog(RuntimeException e)
+    private static void showCrashDialog(Throwable e)
     {
         if ("GNU libgcj".equals(System.getProperty("java.vm.name")))
         {
