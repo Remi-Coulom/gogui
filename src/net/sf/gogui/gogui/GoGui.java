@@ -2811,8 +2811,8 @@ public class GoGui
             try
             {
                 ConstGameInformation info = getGameInformation();
-                m_gtp.synchronize(getBoard(), info.getKomi(),
-                                  info.getTimeSettings());
+                m_gtp.initSynchronize(getBoard(), info.getKomi(),
+                                      info.getTimeSettings());
             }
             catch (GtpError error)
             {
