@@ -404,7 +404,9 @@ public class GoGui
     {        
         if (m_gtp == null)
             return;
-        if (isCommandInProgress())
+        if (isCommandInProgress()
+            && ! showQuestion("Command in progress. Terminate "
+                              + getProgramName() + "?"))
             return;
         m_prefs.putInt("program", -1);
         protectGui();
@@ -1942,7 +1944,7 @@ public class GoGui
     {
         if (m_analyzeClearBoard)
             resetBoard();
-        boolean isSignificant = m_gtp.isProgramDead();
+        boolean isSignificant = (m_gtp != null && m_gtp.isProgramDead());
         if (! endLengthyCommand(isSignificant))
             return;
         clearStatus();
@@ -2586,7 +2588,7 @@ public class GoGui
         clearStatus();
         if (m_shell != null)
             m_shell.setCommandInProgess(false);
-        // Program could have been killed in cbInterrupt
+        // Program could have been killed in actionDetachProgram()
         if (m_gtp == null)
             return false;
         GtpError error = m_gtp.getException();
