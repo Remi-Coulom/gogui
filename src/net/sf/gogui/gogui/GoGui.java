@@ -3365,6 +3365,8 @@ public class GoGui
 
     private void setMinimumSize()
     {
+        // setMinimumSize not available in Java 1.4
+        /*
         int width = 128;
         int height = 32;
         Insets rootInsets = getRootPane().getInsets();
@@ -3383,8 +3385,8 @@ public class GoGui
             height += (int)toolBarSize.getHeight();
         }
         height += 224;
-        // not available in Java 1.4
-        //setMinimumSize(new Dimension(width, height));
+        setMinimumSize(new Dimension(width, height));
+        */
     }
 
     private void setResult(String result)
