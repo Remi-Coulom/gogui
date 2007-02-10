@@ -245,7 +245,7 @@ public final class GtpSynchronizerTest
 
     private void synchronize() throws GtpError
     {
-        m_synchronizer.synchronize(m_board);
+        m_synchronizer.synchronize(m_board, null, null);
     }
 
     private void undo()
