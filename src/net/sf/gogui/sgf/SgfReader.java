@@ -762,7 +762,7 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setTimeLeftBlack(Double.parseDouble(v));
+                    node.setTimeLeft(GoColor.BLACK, Double.parseDouble(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -858,7 +858,7 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setMovesLeftBlack(Integer.parseInt(v));
+                    node.setMovesLeft(GoColor.BLACK, Integer.parseInt(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -874,7 +874,7 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setMovesLeftWhite(Integer.parseInt(v));
+                    node.setMovesLeft(GoColor.WHITE, Integer.parseInt(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -938,7 +938,7 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setTimeLeftWhite(Double.parseDouble(v));
+                    node.setTimeLeft(GoColor.WHITE, Double.parseDouble(v));
                 }
                 catch (NumberFormatException e)
                 {

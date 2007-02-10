@@ -675,36 +675,28 @@ public final class Node
         m_move = move;
     }
 
-    /** Set byoyomi moves left for black.
+    /** Set byoyomi moves left.
         @param moves Number of moves left.
     */
-    public void setMovesLeftBlack(int moves)
+    public void setMovesLeft(GoColor color, int moves)
     {
-        createTimeInfo().m_movesLeftBlack = moves;
+        assert(color.isBlackWhite());
+        if (color == GoColor.BLACK)
+            createTimeInfo().m_movesLeftBlack = moves;
+        else
+            createTimeInfo().m_movesLeftWhite = moves;
     }
 
-    /** Set byoyomi moves left for white.
-        @param moves Number of moves left.
-    */
-    public void setMovesLeftWhite(int moves)
-    {
-        createTimeInfo().m_movesLeftWhite = moves;
-    }
-
-    /** Set byoyomi time left for black.
+    /** Set byoyomi time left.
         @param timeLeft Time left in seconds.
     */
-    public void setTimeLeftBlack(double timeLeft)
+    public void setTimeLeft(GoColor color, double timeLeft)
     {
-        createTimeInfo().m_timeLeftBlack = timeLeft;
-    }
-
-    /** Set byoyomi time left for white.
-        @param timeLeft Time left in seconds.
-    */
-    public void setTimeLeftWhite(double timeLeft)
-    {
-        createTimeInfo().m_timeLeftWhite = timeLeft;
+        assert(color.isBlackWhite());
+        if (color == GoColor.BLACK)
+            createTimeInfo().m_timeLeftBlack = timeLeft;
+        else
+            createTimeInfo().m_timeLeftWhite = timeLeft;
     }
 
     /** Explicitely set color to play.

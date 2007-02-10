@@ -189,19 +189,9 @@ public class Game
             GoColor color = move.getColor();
             // Round time to seconds
             long timeLeft = m_clock.getTimeLeft(color) / 1000L;
-            if (color == GoColor.BLACK)
-            {
-                node.setTimeLeftBlack((double)timeLeft);
-                if (m_clock.isInByoyomi(color))
-                    node.setMovesLeftBlack(m_clock.getMovesLeft(color));
-            }
-            else
-            {
-                assert(color == GoColor.WHITE);
-                node.setTimeLeftWhite((double)timeLeft);
-                if (m_clock.isInByoyomi(color))
-                    node.setMovesLeftWhite(m_clock.getMovesLeft(color));
-            }
+            node.setTimeLeft(color, (double)timeLeft);
+            if (m_clock.isInByoyomi(color))
+                node.setMovesLeft(color, m_clock.getMovesLeft(color));
         }
         m_current.append(node);
         m_current = node;
