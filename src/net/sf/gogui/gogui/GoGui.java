@@ -372,7 +372,7 @@ public class GoGui
 
     public void actionClockRestore()
     {        
-        if (! NodeUtil.canRestoreTime(getCurrentNode(), getClock()))
+        if (! getClock().isInitialized())
             return;
         m_game.restoreClock();
         m_gameInfo.updateTimeFromClock(getClock());

@@ -76,6 +76,11 @@ public final class Clock
             return (getPreByoyomi() - time);
     }
 
+    public TimeSettings getTimeSettings()
+    {
+        return m_timeSettings;
+    }
+
     public String getTimeString(GoColor color)
     {
         assert(color == GoColor.BLACK || color == GoColor.WHITE);

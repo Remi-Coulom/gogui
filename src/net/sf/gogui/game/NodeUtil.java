@@ -28,25 +28,6 @@ public final class NodeUtil
         return node;
     }
 
-    public static boolean canRestoreTime(ConstNode node, ConstClock clock)
-    {
-        if (! clock.isInitialized())
-            return false;
-        ConstNode father = node.getFatherConst();
-        if (father == null)
-            return true;
-        if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
-            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
-            return true;
-        node = father;
-        if (father == null)
-            return true;
-        if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
-            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
-            return true;
-        return false;
-    }
-
     public static boolean commentContains(ConstNode node, Pattern pattern)
     {
         String comment = node.getComment();
@@ -371,7 +352,7 @@ public final class NodeUtil
         return nodesLeft;
     }
 
-    /** Get nodes in path a given node to the root node. */
+    /** Get nodes in path from a given node to the root node. */
     public static void getPathToRoot(ConstNode node, ArrayList result)
     {
         result.clear();
@@ -658,7 +639,20 @@ public final class NodeUtil
         }
         return buffer.toString();
     }
-        
+
+    public static void restoreClock(ConstNode node, Clock clock)
+    {
+        clock.reset();
+        ArrayList path = new ArrayList();
+        getPathToRoot(node, path);
+        for (int i = path.size() - 1; i >= 0; --i)
+        {
+            ConstNode pathNode = (ConstNode)path.get(i);
+            restoreTimeLeft(pathNode, clock, GoColor.BLACK);
+            restoreTimeLeft(pathNode, clock, GoColor.WHITE);
+        }
+    }
+
     public static boolean subtreeGreaterThan(ConstNode node, int size)
     {
         int n = 0;
@@ -751,6 +745,11 @@ public final class NodeUtil
         }
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private NodeUtil()
+    {
+    }
+
     private static void appendInfo(StringBuffer buffer, String label,
                                    int value)
     {
@@ -804,9 +803,14 @@ public final class NodeUtil
         buffer.append(' ');
     }
 
-    /** Make constructor unavailable; class is for namespace only. */
-    private NodeUtil()
+    private static void restoreTimeLeft(ConstNode node, Clock clock,
+                                        GoColor color)
     {
-    }
+        double timeLeft = node.getTimeLeft(color);
+        int movesLeft = node.getMovesLeft(color);
+        if (! Double.isNaN(timeLeft))
+            clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
+    }    
+
 }
 

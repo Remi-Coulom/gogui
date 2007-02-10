@@ -226,12 +226,7 @@ public class Game
     {        
         if (! getClock().isInitialized())
             return;
-        GoColor color = getToMove();
-        ConstNode node = getCurrentNode();
-        restoreClock(node, color.otherColor());
-        ConstNode father = node.getFatherConst();
-        if (father != null)
-            restoreClock(father, color);
+        NodeUtil.restoreClock(getCurrentNode(), m_clock);
     }
 
     /** Set clock listener.
@@ -382,23 +377,6 @@ public class Game
     private ConstNode getRoot()
     {
         return m_tree.getRoot();
-    }
-
-    private void restoreClock(ConstNode node, GoColor color)
-    {
-        Move move = node.getMove();
-        if (move == null)
-        {
-            if (node == getTree().getRootConst())
-                resetClock();
-            return;
-        }
-        if (move.getColor() != color)
-            return;
-        double timeLeft = node.getTimeLeft(color);
-        int movesLeft = node.getMovesLeft(color);
-        if (! Double.isNaN(timeLeft))
-            m_clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
     }
 
     private void updateBoard()

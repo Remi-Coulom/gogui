@@ -15,6 +15,8 @@ public interface ConstClock
 
     long getTimeLeft(GoColor color);
 
+    TimeSettings getTimeSettings();
+
     String getTimeString(GoColor color);
 
     boolean isInitialized();

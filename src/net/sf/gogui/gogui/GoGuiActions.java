@@ -15,6 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
@@ -827,7 +828,7 @@ public class GoGuiActions
                                            || boardSize % 2 == 0);
         m_actionClockHalt.setEnabled(clock.isRunning());
         m_actionClockResume.setEnabled(! clock.isRunning());
-        m_actionClockRestore.setEnabled(NodeUtil.canRestoreTime(node, clock));
+        updateActionClockRestore(node, clock);
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
         m_actionComputerBoth.setEnabled(isProgramAttached);
@@ -932,6 +933,29 @@ public class GoGuiActions
     private static int getShortcut()
     {
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    }
+
+    private void updateActionClockRestore(ConstNode node, ConstClock clock)
+    {
+        boolean enabled = false;
+        String desc = null;
+        if (clock.isInitialized())
+        {
+            enabled = true;
+            Clock tempClock = new Clock();
+            tempClock.setTimeSettings(clock.getTimeSettings());
+            NodeUtil.restoreClock(node, tempClock);
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Restore clock");
+            buffer.append(" (B ");
+            buffer.append(tempClock.getTimeString(GoColor.BLACK));
+            buffer.append(", W ");
+            buffer.append(tempClock.getTimeString(GoColor.WHITE));
+            buffer.append(")");
+            desc = buffer.toString();
+        }
+        m_actionClockRestore.setEnabled(enabled);
+        m_actionClockRestore.setDescription(desc);
     }
 
     private void updateActionDetachProgram(boolean isProgramAttached,
