@@ -95,6 +95,7 @@ public final class Main
         // Create thread group to catch errors from Swing event thread
         ThreadGroup group = new ThreadGroup("catch-runtime-exceptions") {
                 public void uncaughtException(Thread t, Throwable e) {
+                    StringUtil.printException(e);
                     if (e instanceof RuntimeException)
                         showCrashDialog((RuntimeException)e);
                     System.exit(-1);
