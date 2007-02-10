@@ -678,6 +678,7 @@ public class GoGui
         if (m_file == null || ! file.equals(m_file))
             if (! loadFile(file, -1))
                 return;
+        updateViews(true);
         String variation = bookmark.m_variation;
         ConstNode node = getTree().getRootConst();
         if (! variation.equals(""))
