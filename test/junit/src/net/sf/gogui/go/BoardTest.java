@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.util.ArrayList;
-
 public final class BoardTest
     extends junit.framework.TestCase
 {
