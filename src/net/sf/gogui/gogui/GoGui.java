@@ -414,6 +414,7 @@ public class GoGui
                 public void run() {
                     try
                     {
+                        saveSession();
                         detachProgram();
                         updateViews(false);
                     }
@@ -2006,7 +2007,10 @@ public class GoGui
     private void attachNewProgram(String command, Program program)
     {
         if (m_gtp != null)
+        {
+            saveSession();
             detachProgram();
+        }
         if (! attachProgram(command, program))
         {
             m_prefs.putInt("program", -1);
@@ -2347,6 +2351,7 @@ public class GoGui
     {
         if (! checkSaveGame(true))
             return;
+        saveSession();
         setVisible(false);
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
@@ -2355,8 +2360,6 @@ public class GoGui
                         m_analyzeCommand = null;
                         detachProgram();
                     }
-                    else
-                        saveSession();
                     dispose();
                     System.exit(0);
                 }
@@ -2552,7 +2555,6 @@ public class GoGui
                 m_gtp.close();
             }
         }
-        saveSession();
         m_gtp = null;
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
