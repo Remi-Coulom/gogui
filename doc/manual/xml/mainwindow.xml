@@ -788,8 +788,6 @@ Edit bookmarks.
 <listitem>
 <para>
 Show or hide the game tree window.
-The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
-the main window.
 </para>
 </listitem>
 </varlistentry>
@@ -799,8 +797,6 @@ the main window.
 <listitem>
 <para>
 Show or hide the Analyze window.
-The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
-the main window.
 </para>
 </listitem>
 </varlistentry>
@@ -898,6 +894,36 @@ The tool bar contains buttons for frequently used commands from the main menu.
 The forward and backward buttons correspond to the Forward and Backward menu
 item if clicked once, but send repeatedly Forward 10 and Backward 10 commands
 if they are pressed and held down for a longer time.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Accelerator Keys</title>
+<indexterm>
+<primary>accelerator keys</primary>
+</indexterm>
+<para>
+In addition to the accelerator keys shown in the menu, the following
+accelerator keys are defined:
+<variablelist>
+<varlistentry>
+<term><keycap>F5</keycap></term>
+<listitem>
+<simpara>
+Make the computer play for the color currently to move.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><keycap>F6</keycap></term>
+<listitem>
+<simpara>
+Focus the main window (if one of the utility windows currently has the focus).
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
