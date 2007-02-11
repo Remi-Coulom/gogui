@@ -3429,8 +3429,9 @@ public class GoGui
         else
         {
             String name = getProgramName();
-            if (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), name)
-                || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), name))
+            if (! appName.equals("GoGui")
+                && (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), name)
+                    || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), name)))
                 setTitle(gameName);
             else
                 setTitle(gameName + " - " + appName);
