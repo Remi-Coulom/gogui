@@ -514,7 +514,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionOpen(); } },
-             "Open...", "Open game", KeyEvent.VK_O, "document-open");
+             "Open...", "Open", KeyEvent.VK_O, "document-open");
 
     public final GoGuiAction m_actionPass =
         new GoGuiAction(new ActionListener() {
@@ -570,13 +570,13 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSave(); } },
-             "Save", "Save game", KeyEvent.VK_S, "document-save");
+             "Save", "Save", KeyEvent.VK_S, "document-save");
 
     public final GoGuiAction m_actionSaveAs =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSaveAs(); } },
-             "Save As...", "Save game", "document-save-as");
+             "Save As...", "Save As", "document-save-as");
 
     public final GoGuiAction m_actionScore =
         new GoGuiAction(new ActionListener() {
@@ -1025,7 +1025,7 @@ public class GoGuiActions
 
     private void updateActionSave(File file, boolean isModified)
     {
-        String desc = "Save game";
+        String desc = "Save";
         if (file != null)
         {
             desc = desc + " (" + file + ")";
