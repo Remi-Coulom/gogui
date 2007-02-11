@@ -593,7 +593,6 @@ public class GoGui
             m_comment.markAll(m_pattern);
         else
             actionFindNext();
-        updateViews(false);
     }
 
     public void actionFindNext()
@@ -620,8 +619,8 @@ public class GoGui
         else
         {
             gotoNode(node);
-            m_comment.markAll(m_pattern);
             boardChangedBegin(false, false);
+            m_comment.markAll(m_pattern);
         }
     }
 
