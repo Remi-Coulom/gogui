@@ -264,11 +264,6 @@ public final class SimpleDialogs
         chooser.setMultiSelectionEnabled(false);
         javax.swing.filechooser.FileFilter sgfFilter = new SgfFilter();
         chooser.addChoosableFileFilter(sgfFilter);
-        if (type == FILE_SAVE)
-        {
-            if (lastFile != null && lastFile.isFile() && lastFile.exists())
-                chooser.setSelectedFile(lastFile);
-        }
         if (setSgfFilter)
         {
             chooser.setFileFilter(sgfFilter);
@@ -281,6 +276,11 @@ public final class SimpleDialogs
         }
         else
             chooser.setFileFilter(chooser.getAcceptAllFileFilter());
+        if (type == FILE_SAVE)
+        {
+            if (lastFile != null && lastFile.isFile() && lastFile.exists())
+                chooser.setSelectedFile(lastFile);
+        }
         int ret;
         switch (type)
         {
