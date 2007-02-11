@@ -150,15 +150,25 @@ class GameTreeNode
             }
             toolTip.append(")");
         }
-        String comment = NodeUtil.getCommentStart(m_node, 50);
+        String comment = NodeUtil.getCommentStart(m_node, false, 80);
         if (comment != null)
         {
-            if (toolTip.length() > 0)
-                toolTip.append("  ");
-            toolTip.append(comment);
+            comment = comment.replaceAll("\n", "<br>");
+            if (comment.length() > 50)
+            {
+                toolTip.append("<p width=\"250\">");
+                toolTip.append(comment);
+                toolTip.append("</p>");
+            }
+            else
+            {
+                toolTip.append("<p>");
+                toolTip.append(comment);
+                toolTip.append("</p>");
+            }
         }
         if (toolTip.length() > 0)
-            setToolTipText(toolTip.toString());
+            setToolTipText("<html>" + toolTip.toString() + "</html>");
     }
 
     private final int m_moveNumber;

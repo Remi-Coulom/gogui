@@ -244,22 +244,25 @@ public final class NodeUtil
         return null;
     }
 
-    /** Get first line of comment, but no more than a maximum number of
-        characters.
-        @return First line of comment, with ellipses appended if trunceted;
+    /** Get comment, but no more than a maximum number of characters.
+        @return Start of comment, with ellipses appended if trunceted;
         null, if node has no comment.
     */
-    public static String getCommentStart(ConstNode node, int maxChar)
+    public static String getCommentStart(ConstNode node, boolean firstLineOnly,
+                                         int maxChar)
     {
         String comment = node.getComment();
         if (comment == null)
             return null;
         boolean trimmed = false;
-        int pos = comment.indexOf("\n");
-        if (pos >= 0)
+        if (firstLineOnly)
         {
-            comment = comment.substring(0, pos);
-            trimmed = true;
+            int pos = comment.indexOf("\n");
+            if (pos >= 0)
+            {
+                comment = comment.substring(0, pos);
+                trimmed = true;
+            }
         }
         if (comment.length() > maxChar)
         {
@@ -267,7 +270,20 @@ public final class NodeUtil
             trimmed = true;
         }
         if (trimmed)
-            comment = comment + " ...";
+        {
+            if (maxChar > 30)
+            {
+                // Try to find a cut-off at a space
+                int pos = comment.lastIndexOf(" ");
+                if (pos > 20)
+                {
+                    if (comment.charAt(pos) == '.')
+                        --pos;
+                    comment = comment.substring(0, pos);
+                }
+            }
+            comment = comment + "...";
+        }
         return comment;
     }
 
@@ -789,7 +805,7 @@ public final class NodeUtil
 
     private static void appendInfoComment(StringBuffer buffer, ConstNode node)
     {
-        String comment = getCommentStart(node, 30);
+        String comment = getCommentStart(node, true, 30);
         if (comment != null)
             appendInfo(buffer, "Comment", comment);
     }
