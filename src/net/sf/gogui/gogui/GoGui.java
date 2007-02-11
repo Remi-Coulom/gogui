@@ -1159,7 +1159,9 @@ public class GoGui
             // otherwise toggle buttons and menus will stay selected, if
             // entering setup mode was cancelled
             updateViews(false);
-            if (node.getMove() != null)
+            boolean needsNewNode =
+                (node.getMove() != null || node.getNumberChildren() > 0);
+            if (needsNewNode)
             {
                 String message = "Create new setup node in game tree?";
                 if (! showOptionalQuestion("create-setup-node", message))
@@ -1169,7 +1171,7 @@ public class GoGui
                     return;
                 }
             }
-            if (node.getMove() != null)
+            if (needsNewNode)
             {
                 m_game.createNewChild();
                 currentNodeChanged();
