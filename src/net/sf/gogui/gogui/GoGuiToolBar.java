@@ -52,10 +52,6 @@ public class GoGuiToolBar
     public void update()
     {
         GoGuiActions actions = m_goGui.getActions();
-        if (m_goGui.getFile() == null)
-            setAction(m_buttonSave, actions.m_actionSaveAs);
-        else
-            setAction(m_buttonSave, actions.m_actionSave);
     }
 
     /** Serial version to suppress compiler warning.

@@ -1033,6 +1033,5 @@ public class GoGuiActions
                 desc = desc + " (not modified)";
         }
         m_actionSave.setDescription(desc);
-        m_actionSave.setEnabled(file != null && isModified);
     }
 }

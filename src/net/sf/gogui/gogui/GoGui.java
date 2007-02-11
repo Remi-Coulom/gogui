@@ -1018,7 +1018,7 @@ public class GoGui
 
     public void actionSave()
     {
-        if (m_file == null)
+        if (m_file == null || ! isModified())
             saveDialog();
         else
         {
