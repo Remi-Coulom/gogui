@@ -1008,7 +1008,13 @@ public class GoGuiActions
             desc = "Make " + name + " play Black";
         else
             desc = "Make " + name + " play White";
-        if (! isProgramAttached)
+        if (isProgramAttached)
+        {
+            String key = AbstractAction.ACCELERATOR_KEY;
+            String value = m_actionPlay.getValue(key).toString();
+            desc = desc + " (" + value.replaceAll("pressed", "").trim() + ")";
+        }
+        else
             desc = desc + " (no program attached)";
         m_actionPlay.setDescription(desc);
     }
