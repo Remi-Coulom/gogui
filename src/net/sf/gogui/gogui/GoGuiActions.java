@@ -501,7 +501,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionNewGame(); } },
-             "New Game", "Clear board and begin new game", "gogui-newgame");
+             "New Game", "Clear board and start new game", "gogui-newgame");
 
     public final GoGuiAction m_actionNewProgram =
         new GoGuiAction(new ActionListener() {
@@ -588,13 +588,17 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSetup(GoColor.BLACK); } },
-             "Setup Black", "Setup black stones", "gogui-setup-black");
+             "Setup Black",
+             "Add black stones (and set Black to play)",
+             "gogui-setup-black");
 
     public final GoGuiAction m_actionSetupWhite =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSetup(GoColor.WHITE); } },
-             "Setup White", "Setup white stones", "gogui-setup-white");
+             "Setup White",
+             "Add white stones (and set White to play)",
+             "gogui-setup-white");
 
     public final GoGuiAction m_actionToggleAutoNumber =
         new GoGuiAction(new ActionListener() {
