@@ -6,21 +6,25 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -447,8 +451,7 @@ class SgfPreview
             {
                 m_thumbnailCreator.create(m_file);
                 File thumbnail = m_thumbnailCreator.getLastThumbnail();
-                ImageIcon icon = new ImageIcon(thumbnail.toString());
-                m_image = icon.getImage();
+                m_image = loadImage(thumbnail);
                 String description = m_thumbnailCreator.getLastDescription();
                 if (description != null && ! description.trim().equals(""))
                     m_imagePanel.setToolTipText(description);
@@ -467,6 +470,33 @@ class SgfPreview
         }
         m_imagePanel.repaint();
         m_preview.setEnabled(false);
+    }
+
+    private static Image loadImage(File file)
+    {
+        URL url;
+        try
+        {
+            // File.toURL() is deprecated in Java 1.6
+            url = file.toURI().toURL();
+        }
+        catch (MalformedURLException e)
+        {
+            assert(false); // Cannot happen
+            return null;
+        }
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        MediaTracker mediaTracker = new MediaTracker(new Container());
+        mediaTracker.addImage(image, 0);
+        try
+        {
+            mediaTracker.waitForID(0);
+        }
+        catch (InterruptedException e)
+        {
+            return null;
+        }
+        return image;
     }
 }
 
