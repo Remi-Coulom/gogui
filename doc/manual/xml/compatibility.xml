@@ -46,6 +46,18 @@ The commands in parentheses are used if the program supports
 the <command>protocol_version</command> command and responds with 1.
 </para>
     
+<para>
+If the Go engine does not support generating moves, because it provides
+only other functionality, it is recommended that it implements
+<command>list_commands</command>, so that GoGui can detect that
+<command>genmove</command> is not supported.
+In this case, GoGui will always set the computer color by default to None, so
+that the engine should not be made playing moves automatically.
+Since the user can still issue play commands, it is recommended that the
+engine responds to a <command>genmove</command> command with a meaningful
+failure response.
+</para>
+    
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
