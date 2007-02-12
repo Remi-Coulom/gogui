@@ -130,14 +130,23 @@ public class StatusBar
         m_progressBar.setVisible(true);
         m_progressBarDistance.setVisible(true);
         // Don't use text on progress bar, because otherwise it will
-        // be green in indetemrminate and blue in dterminate mode on
+        // be green in indeterminate and blue in dterminate mode on
         // Windows XP JDK 1.6
         if (percent < 0)
         {
-            // First set to minimum to reset indeterminate animation
-            m_progressBar.setIndeterminate(false);
-            m_progressBar.setValue(m_progressBar.getMinimum());
-            m_progressBar.setIndeterminate(true);
+            if (Platform.isMac())
+            {
+                // Don't use indeterminate progress bar on Mac Java 1.4
+                // looks totally ugly (a blue white candy bar)
+                clearProgress();
+            }
+            else
+            {
+                // First set to minimum to reset indeterminate animation
+                m_progressBar.setIndeterminate(false);
+                m_progressBar.setValue(m_progressBar.getMinimum());
+                m_progressBar.setIndeterminate(true);
+            }
         }
         else
         {
