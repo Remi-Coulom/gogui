@@ -6,7 +6,9 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,7 @@ import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -450,11 +453,15 @@ public class GtpShell
         m_editor.setItem(null);
     }
 
-    private JPanel createCommandInput()
+    private JComponent createCommandInput()
     {
+        Box box = Box.createVerticalBox();
+        //JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        panel.add(buttonPanel, BorderLayout.EAST);
+        box.add(GuiUtil.createSmallFiller());
+        box.add(Box.createVerticalGlue());
+        box.add(panel);
+        box.add(Box.createVerticalGlue());
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
@@ -495,15 +502,18 @@ public class GtpShell
                     m_textField.requestFocusInWindow();
                 }
             });
-        panel.add(m_comboBox);
+        panel.add(m_comboBox, BorderLayout.CENTER);
         m_runButton = new JButton();
         m_runButton.setIcon(GuiUtil.getIcon("gogui-key_enter", "Run"));
         m_runButton.setActionCommand("run");
         m_runButton.setFocusable(false);
         m_runButton.setToolTipText("Send command line");
         m_runButton.addActionListener(this);
-        buttonPanel.add(GuiUtil.createSmallFiller(), BorderLayout.WEST);
-        buttonPanel.add(m_runButton, BorderLayout.CENTER);
+        JPanel buttonPanel =
+            new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panel.add(buttonPanel, BorderLayout.EAST);
+        buttonPanel.add(GuiUtil.createSmallFiller());
+        buttonPanel.add(m_runButton);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
         if (Platform.isMac())
@@ -511,9 +521,9 @@ public class GtpShell
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
                 new Box.Filler(dimension, dimension, dimension);
-            buttonPanel.add(filler, BorderLayout.EAST);
+            buttonPanel.add(filler);
         }
-        return panel;
+        return box;
     }
 
     private void findBestCompletion()
