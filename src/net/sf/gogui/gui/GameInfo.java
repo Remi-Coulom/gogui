@@ -5,8 +5,10 @@
 package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -182,6 +184,10 @@ class GuiClock
         super(11);
         GuiUtil.setEditableFalse(this);
         setFocusable(false);
+        // Explicitely set line border to avoid strange look on Mac
+        // with TextField border and label foreground/background from
+        // GuiUtil.setEditableFalse
+        setBorder(BorderFactory.createLineBorder(Color.gray));
         setHorizontalAlignment(SwingConstants.CENTER);
         GuiUtil.setMonospacedFont(this);
         setMinimumSize(getPreferredSize());
