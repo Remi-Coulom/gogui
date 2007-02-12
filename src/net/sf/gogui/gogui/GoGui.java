@@ -2154,6 +2154,11 @@ public class GoGui
             sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
+        if (! m_gtp.isGenmoveSupported())
+        {
+            m_computerBlack = false;
+            m_computerWhite = false;
+        }
         initGtp();
         setTitle();
         currentNodeChanged();

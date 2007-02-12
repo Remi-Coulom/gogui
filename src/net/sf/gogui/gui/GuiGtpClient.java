@@ -184,6 +184,11 @@ public class GuiGtpClient
         return m_commandInProgress;
     }
 
+    public boolean isGenmoveSupported()
+    {
+        return m_gtp.isGenmoveSupported();
+    }
+
     public boolean isSupported(String command)
     {
         assert(SwingUtilities.isEventDispatchThread());

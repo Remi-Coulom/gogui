@@ -176,6 +176,13 @@ public abstract class GtpClientBase
         return isSupported("cputime");
     }
 
+    public boolean isGenmoveSupported()
+    {
+        return (isSupported("genmove")
+                || (isSupported("genmove_black")
+                    && isSupported("genmove_white")));
+    }
+
     /** Check if interrupting a command is supported. */
     public abstract boolean isInterruptSupported();
 
