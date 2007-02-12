@@ -184,6 +184,8 @@ public class GuiUtil
             showError = false;
             if (Platform.isWindows())
                 lookAndFeel = "system";
+            else if (Platform.isMac())
+                lookAndFeel = "quaqua";
             else if (Platform.isUnix())
                 lookAndFeel = "plasticxp";
             else
@@ -201,6 +203,8 @@ public class GuiUtil
             lookAndFeel = "com.jgoodies.looks.windows.WindowsLookAndFeel";
         else if ("plasticxp".equals(lookAndFeel))
             lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+        else if ("quaqua".equals(lookAndFeel))
+            lookAndFeel = "ch.randelshofer.quaqua.QuaquaLookAndFeel";
         else if ("system".equals(lookAndFeel))
             lookAndFeel = UIManager.getSystemLookAndFeelClassName();
         else if ("windows".equals(lookAndFeel))

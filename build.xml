@@ -21,10 +21,14 @@ $URL$
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
 
 <property name="looks.zipfile" value="external/jgoodies/looks-2_1_2.zip"/>
-
 <property name="looks.dir" value="looks-2.1.2"/>
-
 <property name="looks.jarfile" value="looks-2.1.2.jar"/>
+
+<property name="quaqua.nestedzipfile"
+ value="external/quaqua/quaqua-3.6.11_2.nested.zip"/>
+<property name="quaqua.zipfile" value="Quaqua 3.6.11_2.zip"/>
+<property name="quaqua.dir" value="Quaqua 3.6.11_2/lib"/>
+<property name="quaqua.jarfile" value="quaqua.jar"/>
 
 <property name="docbook.path" value="external/docbook/${docbook.name}"/>
 
@@ -54,6 +58,11 @@ $URL$
  file="external/jgoodies/${looks.dir}/${looks.jarfile}"/>
 
 <available property="looks.zip-available" file="${looks.zipfile}"/>
+
+<available property="quaqua.available"
+ file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
+
+<available property="quaqua.zip-available" file="${quaqua.nestedzipfile}"/>
 
 <condition property="build.notdist">
 <not>
@@ -101,6 +110,7 @@ $URL$
    gtpstatistics.jar,
    gtpterminal.jar,
    ${looks.jarfile},
+   ${quaqua.jarfile},
    netgtp.jar,
    sgftotex.jar,
    sgfthumbnail.jar,
@@ -172,6 +182,7 @@ $URL$
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
  external/jgoodies/${looks.zipfile}
+ external/quaqua/${quaqua.zipfile}
  lib/*.jar
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
@@ -304,6 +315,24 @@ ${looks.zipfile}
 </unzip>
 </target>
 
+<target name="extract-quaqua" unless="quaqua.available">
+<fail unless="quaqua.zip-available">
+Please download the Quaqua Look and Feel from
+http://http://www.randelshofer.ch/quaqua/download.html and copy it to
+${quaqua.zipfile}
+</fail>
+<unzip src="${quaqua.nestedzipfile}" dest="external/quaqua">
+<patternset>
+<include name="${quaqua.zipfile}"/>
+</patternset>
+</unzip>
+<unzip src="external/quaqua/${quaqua.zipfile}" dest="external/quaqua">
+<patternset>
+<include name="${quaqua.dir}/${quaqua.jarfile}"/>
+</patternset>
+</unzip>
+</target>
+
 <target name="findbugs" depends="compile"
  description="Invoke FindBugs (with exec)">
 <mkdir dir="test/findbugs"/>
@@ -386,14 +415,14 @@ ${looks.zipfile}
 </exec>
 </target>
 
-<target name="gogui.jar" depends="compile,extract-looks">
+<target name="gogui.jar" depends="compile,extract-looks,extract-quaqua">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${looks.jarfile}"/>
+<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/doc/*.html
@@ -418,6 +447,7 @@ ${looks.zipfile}
 "/>
 </jar>
 <copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
+<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
 <target name="gtpadapter.jar" depends="compile">
@@ -440,14 +470,14 @@ ${looks.zipfile}
 </jar>
 </target>
 
-<target name="gtpdisplay.jar" depends="compile,extract-looks">
+<target name="gtpdisplay.jar" depends="compile,extract-looks,extract-quaqua">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdisplay.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${looks.jarfile}"/>
+<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/drawboard/*.class
@@ -472,6 +502,7 @@ ${looks.zipfile}
 "/>
 </jar>
 <copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
+<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
 <target name="gtpdummy.jar" depends="compile">

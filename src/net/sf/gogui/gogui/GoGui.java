@@ -214,11 +214,8 @@ public class GoGui
         m_showSubtreeSizes =
             m_prefs.getBoolean("gametree-show-subtree-sizes", false);
         m_autoNumber = m_prefs.getBoolean("gtpshell-autonumber", false);
-        // JComboBox has problems on the Mac, see section Bugs in
-        // documentation
         m_commandCompletion =
-            ! m_prefs.getBoolean("gtpshell-disable-completions",
-                                 Platform.isMac());
+            ! m_prefs.getBoolean("gtpshell-disable-completions", false);
         m_timeStamp = m_prefs.getBoolean("gtpshell-timestamp", false);
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);        
         m_showVariations = m_prefs.getBoolean("show-variations", false);

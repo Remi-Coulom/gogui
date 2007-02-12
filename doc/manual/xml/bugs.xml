@@ -33,20 +33,6 @@ With other Java versions, or on other systems, the problem can still exist.
 </section>
 
 <section>
-<title>
-Problems with command completion in GTP shell on Mac&nbsp;OS&nbsp;X
-</title>
-<para>
-There are two known problems with Java 1.4.2 on Mac&nbsp;OS&nbsp;X:
-the popup menu sometimes overlaps the command field and selection from
-the popup menu using the Enter key does not work.
-It is recommended to disable command line completion on the Mac and to
-select from the popup menu only using the mouse.
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
 <title>Out of memory error when loading large SGF trees</title>
 <para>
 Java uses a low maximum memory heap size by default.

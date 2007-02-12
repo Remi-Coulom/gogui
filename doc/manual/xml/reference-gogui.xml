@@ -183,8 +183,9 @@ Set the komi value.
 <listitem>
 <para>
 Set Swing look and feel.
-If this option is not used, GoGui tries to use "plasticxp" on Linux, and
-"system" on Windows, but shows no error if the look and feel is not found.
+If this option is not used, GoGui tries to use "plasticxp" on Linux, "system"
+on Windows and "quaqua" on Mac OS/X, but shows no error if the look and feel
+is not found.
 If the option is used, the name can be an empty string for the default look
 and feel of the Java implementation, a full class name, or one of the
 following shortcuts:
@@ -226,6 +227,14 @@ com.jgoodies.looks.windows.WindowsLookAndFeel
 <listitem>
 <simpara>
 com.jgoodies.looks.plastic.PlasticXPLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>quaqua</term>
+<listitem>
+<simpara>
+ch.randelshofer.quaqua.QuaquaLookAndFeel
 </simpara>
 </listitem>
 </varlistentry>
