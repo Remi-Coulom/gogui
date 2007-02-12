@@ -964,7 +964,7 @@ public class GoGui
         m_interruptComputerBoth = false;
         generateMove(isSingleMove);
         if (getCurrentNode() == getTree().getRootConst()
-            && getCurrentNode().getNumberChildren() == 0)
+            && ! getCurrentNode().hasChildren())
             m_game.resetClock();
         m_game.startClock();
     }
@@ -1160,7 +1160,7 @@ public class GoGui
             // entering setup mode was cancelled
             updateViews(false);
             boolean needsNewNode =
-                (node.getMove() != null || node.getNumberChildren() > 0);
+                (node.getMove() != null || node.hasChildren());
             if (needsNewNode)
             {
                 String message = "Create new setup node in game tree?";
@@ -1394,7 +1394,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (getCurrentNode().getFatherConst() == null)
+        if (! getCurrentNode().hasFather())
             return;
         if (! showQuestion("Truncate current?"))
             return;
@@ -2615,7 +2615,7 @@ public class GoGui
         String name = getProgramName();
         if (! isSingleMove && m_file == null && playerToMove == null
             && (father == null
-                || (father.getFatherConst() == null
+                || (! father.hasFather()
                     && (playerOther == null || playerOther.equals(name)))))
         {
             m_game.setPlayer(toMove, name);

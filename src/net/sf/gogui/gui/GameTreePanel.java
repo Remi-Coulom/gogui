@@ -269,7 +269,7 @@ public class GameTreePanel
     /** Faster than update if a new node was added as the first child. */
     public void addNewSingleChild(ConstNode node)
     {
-        assert(node.getNumberChildren() == 0);
+        assert(! node.hasChildren());
         ConstNode father = node.getFatherConst();
         assert(father != null);
         assert(father.getNumberChildren() == 1);
@@ -704,7 +704,7 @@ public class GameTreePanel
             popup.addSeparator();
         }
         item = new JMenuItem("Hide Variations");
-        if (node.getNumberChildren() == 0)
+        if (! node.hasChildren())
             item.setEnabled(false);
         item.setActionCommand("hide-subtree");
         item.addActionListener(listener);
@@ -720,7 +720,7 @@ public class GameTreePanel
         item.addActionListener(listener);
         popup.add(item);
         item = new JMenuItem("Show Subtree");
-        if (node.getNumberChildren() == 0)
+        if (! node.hasChildren())
             item.setEnabled(false);
         item.setActionCommand("show-subtree");
         item.addActionListener(listener);

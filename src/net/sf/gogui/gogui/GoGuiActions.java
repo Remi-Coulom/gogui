@@ -795,7 +795,7 @@ public class GoGuiActions
             name = "computer";
         ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
-        boolean hasChildren = (node.getNumberChildren() > 0);
+        boolean hasChildren = node.hasChildren();
         boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
         boolean hasPreviousVariation =
             (NodeUtil.getPreviousVariation(node) != null);

@@ -61,7 +61,11 @@ public interface ConstNode
 
     float getValue();
 
+    boolean hasChildren();
+
     boolean hasComment();
+
+    boolean hasFather();
 
     boolean hasSetup();
 

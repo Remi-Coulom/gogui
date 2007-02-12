@@ -222,7 +222,7 @@ public final class Node
     */
     public Node getChild()
     {
-        if (getNumberChildren() == 0)
+        if (! hasChildren())
             return null;
         return getChild(0);
     }
@@ -514,6 +514,11 @@ public final class Node
         return m_extraInfo.m_value;
     }
 
+    public boolean hasChildren()
+    {
+        return (getNumberChildren() > 0);
+    }
+
     /** Check if node contains a comment.
         More efficient than #getComment(), because getComment decodes the
         comment into a String, if it exists.
@@ -522,6 +527,11 @@ public final class Node
     public boolean hasComment()
     {
         return (m_comment != null);
+    }
+
+    public boolean hasFather()
+    {
+        return (getFatherConst() != null);
     }
 
     /** Check if node has setup or delete stones.

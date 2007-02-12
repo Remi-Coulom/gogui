@@ -301,7 +301,7 @@ public final class NodeUtil
     /** Get last node in main variation. */
     public static ConstNode getLast(ConstNode node)
     {
-        while (node.getNumberChildren() > 0)
+        while (node.hasChildren())
             node = node.getChildConst();
         return node;
     }
@@ -490,7 +490,7 @@ public final class NodeUtil
 
     public static boolean isRootWithoutChildren(ConstNode node)
     {
-        return (node.getFatherConst() == null && node.getChildConst() == null);
+        return (! node.hasFather() && ! node.hasChildren());
     }
 
     public static void makeMainVariation(Node node)
