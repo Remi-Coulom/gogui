@@ -147,17 +147,21 @@ public final class GameInfoDialog
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         boxLabel.add(label);
         labels.add(boxLabel);
-        Box boxValue = Box.createHorizontalBox();
+        Box boxValue = Box.createVerticalBox();
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        boxValue.add(Box.createVerticalGlue());
+        boxValue.add(panel);
+        boxValue.add(Box.createVerticalGlue());
         m_preByoyomi = new TimeField(3, "Main time");
         if (timeSettings != null)
             m_preByoyomi.setTime(timeSettings.getPreByoyomi());
-        boxValue.add(m_preByoyomi);
-        boxValue.add(new JLabel(" + "));
+        panel.add(m_preByoyomi);
+        panel.add(new JLabel(" + "));
         m_byoyomi = new TimeField(2, "Byoyomi (overtime) period");
         if (timeSettings != null && timeSettings.getUseByoyomi())
             m_byoyomi.setTime(timeSettings.getByoyomi());
-        boxValue.add(m_byoyomi);
-        boxValue.add(new JLabel(" / "));
+        panel.add(m_byoyomi);
+        panel.add(new JLabel(" / "));
         m_byoyomiMoves = new JTextField(2);
         m_byoyomiMoves.setToolTipText("Moves per byoyomi (overtime) period");
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
@@ -166,8 +170,8 @@ public final class GameInfoDialog
             int byoyomiMoves = timeSettings.getByoyomiMoves();
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
-        boxValue.add(m_byoyomiMoves);
-        boxValue.add(new JLabel(" moves"));
+        panel.add(m_byoyomiMoves);
+        panel.add(new JLabel(" moves"));
         values.add(boxValue);
     }
 
@@ -314,15 +318,19 @@ class TimeField
 {
     public TimeField(int cols, String toolTipText)
     {        
-        super(BoxLayout.X_AXIS);
+        super(BoxLayout.Y_AXIS);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        add(Box.createVerticalGlue());
+        add(panel);
+        add(Box.createVerticalGlue());
         m_textField = new JTextField(cols);
         m_textField.setHorizontalAlignment(JTextField.RIGHT);
         m_textField.setToolTipText(toolTipText);
-        add(m_textField);
-        add(GuiUtil.createSmallFiller());
+        panel.add(m_textField);
+        panel.add(GuiUtil.createSmallFiller());
         String[] units = { "min", "sec" };
         m_comboBox = new JComboBox(units);
-        add(m_comboBox);
+        panel.add(m_comboBox);
     }
 
     public boolean isEmpty()
