@@ -14,6 +14,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -169,9 +170,13 @@ public final class AboutDialog
             buffer.append("<p align=\"center\">");
             String vendor = System.getProperty("java.vm.vendor");
             if (vendor != null)
-            {
                 buffer.append(vendor);
-            }
+            String lafName = "unknown";
+            LookAndFeel laf = UIManager.getLookAndFeel();
+            if (laf != null)
+                lafName = laf.getName();
+            buffer.append("<br>Look and Feel: ");
+            buffer.append(lafName);
             buffer.append("<br>");
         }
         Runtime runtime = Runtime.getRuntime();
