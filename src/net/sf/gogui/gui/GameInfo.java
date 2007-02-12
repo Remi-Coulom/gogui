@@ -177,30 +177,39 @@ public class GameInfo
 }
 
 class GuiClock
-    extends JTextField
+    extends JPanel
 {
     public GuiClock(GoColor color)
     {
-        super(11);
-        GuiUtil.setEditableFalse(this);
-        setFocusable(false);
+        super(new BorderLayout());
         // Explicitely set line border to avoid strange look on Mac
         // with TextField border and label foreground/background from
         // GuiUtil.setEditableFalse
         setBorder(BorderFactory.createLineBorder(Color.gray));
-        setHorizontalAlignment(SwingConstants.CENTER);
-        GuiUtil.setMonospacedFont(this);
-        setMinimumSize(getPreferredSize());
+        m_textField = new JTextField(10);
+        m_textField.setBorder(null);
+        add(m_textField, BorderLayout.WEST);
+        GuiUtil.setEditableFalse(m_textField);
+        m_textField.setHorizontalAlignment(SwingConstants.CENTER);
+        //GuiUtil.setMonospacedFont(m_textField);
+        m_textField.setMinimumSize(getPreferredSize());
         if (color == GoColor.BLACK)
-            setToolTipText("Time for Black");
+            m_textField.setToolTipText("Time for Black");
         else
-            setToolTipText("Time for White");
+            m_textField.setToolTipText("Time for White");
+    }
+
+    public void setText(String text)
+    {
+        m_textField.setText(text);
     }
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+
+    private JTextField m_textField;
 }
 
 class Prisoners
