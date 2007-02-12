@@ -3031,17 +3031,25 @@ public class GoGui
             return;
         setFile(null);
         newGame(size);
-        // Set computer color to the color not to move to avoid automatic
-        // move generation after starting a new game
-        if ((m_computerBlack || m_computerWhite)
-            && m_gtp.isGenmoveSupported())
+        if (! m_gtp.isGenmoveSupported())
         {
             m_computerBlack = false;
             m_computerWhite = false;
+        }
+        else if (m_computerBlack || m_computerWhite)
+        {
+            // Set computer color to the color not to move to avoid automatic
+            // move generation after starting a new game
             if (m_handicap == 0)
+            {
+                m_computerBlack = false;
                 m_computerWhite = true;
+            }
             else
+            {
                 m_computerBlack = true;
+                m_computerWhite = false;
+            }
         }
         if (startClock)
             m_game.startClock();
