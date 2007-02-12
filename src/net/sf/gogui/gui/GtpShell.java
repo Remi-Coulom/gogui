@@ -463,6 +463,9 @@ public class GtpShell
         box.add(panel);
         box.add(Box.createVerticalGlue());
         m_comboBox = new JComboBox();
+        if (Platform.isMac())
+            // Workaround for bug in Quaqua Look and Feel 3.6.11
+            m_comboBox.setMaximumRowCount(7);
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
         m_textField.setFocusTraversalKeysEnabled(false);
