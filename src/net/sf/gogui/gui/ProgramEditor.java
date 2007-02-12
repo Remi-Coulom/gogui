@@ -136,7 +136,8 @@ public class ProgramEditor
         box.add(Box.createVerticalGlue());
         JTextField field = new JTextField(cols);
         field.setText(text);
-        field.setEditable(editable);
+        if (! editable)
+            GuiUtil.setEditableFalse(field);
         panel.add(field);
         m_panelRight.add(box);
         return field;

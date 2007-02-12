@@ -180,7 +180,7 @@ class GuiClock
     public GuiClock(GoColor color)
     {
         super(11);
-        setEditable(false);
+        GuiUtil.setEditableFalse(this);
         setFocusable(false);
         setHorizontalAlignment(SwingConstants.CENTER);
         GuiUtil.setMonospacedFont(this);

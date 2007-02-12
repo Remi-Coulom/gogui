@@ -173,7 +173,7 @@ public class ScoreDialog
         labels.add(createEntryLabel(labelText));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         JTextField field = new JTextField(cols);
-        field.setEditable(false);
+        GuiUtil.setEditableFalse(field);
         field.setHorizontalAlignment(JTextField.CENTER);
         field.setToolTipText(toolTip);
         panel.add(field);
@@ -194,7 +194,7 @@ public class ScoreDialog
         JTextField black = new JTextField(cols);
         black.setHorizontalAlignment(JTextField.CENTER);
         colorFields.m_black = black;
-        black.setEditable(false);
+        GuiUtil.setEditableFalse(black);
         if (toolTip != null)
             black.setToolTipText(toolTip.replaceAll("%c", "Black"));
         panel.add(black);
@@ -204,7 +204,7 @@ public class ScoreDialog
         JTextField white = new JTextField(cols);
         white.setHorizontalAlignment(JTextField.CENTER);
         colorFields.m_white = white;
-        white.setEditable(false);
+        GuiUtil.setEditableFalse(white);
         if (toolTip != null)
             white.setToolTipText(toolTip.replaceAll("%c", "White"));
         panel.add(white);
@@ -221,7 +221,7 @@ public class ScoreDialog
         panel.add(GuiUtil.createSmallFiller());
         JTextField field = new JTextField(cols);
         field.setHorizontalAlignment(JTextField.CENTER);
-        field.setEditable(false);
+        GuiUtil.setEditableFalse(field);
         field.setToolTipText("Komi value (compensation for Black's first " +
                              "move advantage)");
         panel.add(field);

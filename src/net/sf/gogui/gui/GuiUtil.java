@@ -32,6 +32,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -297,6 +298,23 @@ public class GuiUtil
             Graphics2D graphics2D = (Graphics2D)graphics;
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+    }
+
+    /** Set text field non-editable.
+        Also sets it non-focusable.
+        Java 1.4 on Mac does not render non-editable text fields
+        differently as editable ones, so we use a label background and
+        forground there.
+    */
+    public static void setEditableFalse(JTextField field)
+    {
+        field.setEditable(false);
+        field.setFocusable(false);
+        if (Platform.isMac())
+        {
+            field.setForeground(UIManager.getColor("Label.foreground"));
+            field.setBackground(UIManager.getColor("Label.background"));
         }
     }
 

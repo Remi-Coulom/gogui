@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import javax.swing.Box;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.BorderFactory;
+import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.Platform;
 
@@ -75,14 +76,12 @@ public class StatusBar
         m_iconBox.add(GuiUtil.createSmallFiller());
 
         m_text = new TextFieldWithToolTip();
-        m_text.setEditable(false);
         m_text.setFocusable(false);
         m_text.setBorder(null);
         panel.add(m_text, BorderLayout.CENTER);
         Box moveTextBox = Box.createHorizontalBox();
         panel.add(moveTextBox, BorderLayout.EAST);
-        m_moveText = new JTextField(12);
-        m_moveText.setEditable(false);
+        m_moveText = new TextFieldWithToolTip(12);
         m_moveText.setFocusable(false);
         m_moveText.setBorder(null);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
@@ -231,10 +230,21 @@ public class StatusBar
     Box.Filler m_distanceSetup;
 }
 
-/** Text fiel with tool tip if text is truncated. */
+/** Non-ediatable text field with tool tip if text is truncated. */
 class TextFieldWithToolTip
     extends JTextField
 {
+    public TextFieldWithToolTip(int cols)
+    {
+        super(cols);
+        GuiUtil.setEditableFalse(this);
+    }
+
+    public TextFieldWithToolTip()
+    {
+        GuiUtil.setEditableFalse(this);
+    }
+
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
