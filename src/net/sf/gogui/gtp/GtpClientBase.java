@@ -176,11 +176,18 @@ public abstract class GtpClientBase
         return isSupported("cputime");
     }
 
+    /** Check if a genmove command is supported.
+        If list_commands is not supported, it is assumed that genmove is
+        supported.
+        Note: call querySupportedCommands() first.
+    */
     public boolean isGenmoveSupported()
     {
-        return (isSupported("genmove")
-                || (isSupported("genmove_black")
-                    && isSupported("genmove_white")));
+        if (m_protocolVersion == 1)
+            return (! isSupported("help") ||
+                    (isSupported("genmove_black")
+                     && isSupported("genmove_white")));
+        return (! isSupported("list_commands") || isSupported("genmove"));
     }
 
     /** Check if interrupting a command is supported. */
