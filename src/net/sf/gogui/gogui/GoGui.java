@@ -1317,6 +1317,7 @@ public class GoGui
         }
         else
             m_shell.setVisible(false);
+        updateViews(false);
     }
 
     public void actionToggleShowSubtreeSizes()
@@ -1350,6 +1351,7 @@ public class GoGui
             createTree();
         else
             actionDisposeTree();
+        updateViews(false);
     }
 
     public void actionToggleShowVariations()
