@@ -191,7 +191,6 @@ class GuiClock
         add(m_textField, BorderLayout.WEST);
         GuiUtil.setEditableFalse(m_textField);
         m_textField.setHorizontalAlignment(SwingConstants.CENTER);
-        //GuiUtil.setMonospacedFont(m_textField);
         m_textField.setMinimumSize(getPreferredSize());
         if (color == GoColor.BLACK)
             m_textField.setToolTipText("Time for Black");
