@@ -422,7 +422,7 @@ ${quaqua.zipfile}
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile} /System/Library/Java"/>
+<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/doc/*.html
@@ -477,7 +477,7 @@ ${quaqua.zipfile}
 <attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile} /System/Library/Java"/>
+<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/drawboard/*.class
