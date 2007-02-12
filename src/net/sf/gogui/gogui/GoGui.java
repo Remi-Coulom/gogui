@@ -315,6 +315,8 @@ public class GoGui
 
     public void actionBackward(int n)
     {
+        if (! checkStateChangePossible())
+            return;
         boolean protectGui = (m_gtp != null
                               && (n > 1 || ! m_gtp.isSupported("undo")));
         actionGotoNode(NodeUtil.backward(getCurrentNode(), n), protectGui);
@@ -322,6 +324,8 @@ public class GoGui
 
     public void actionBeginning()
     {
+        if (! checkStateChangePossible())
+            return;
         actionBackward(NodeUtil.getDepth(getCurrentNode()));
     }
 
@@ -626,6 +630,8 @@ public class GoGui
 
     public void actionForward(int n)
     {
+        if (! checkStateChangePossible())
+            return;
         boolean protectGui = (m_gtp != null && n > 1);
         actionGotoNode(NodeUtil.forward(getCurrentNode(), n), protectGui);
     }
@@ -1136,7 +1142,7 @@ public class GoGui
     public void actionSetup(GoColor color)
     {
         assert(color.isBlackWhite());
-        if (! checkCommandInProgress())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = getCurrentNode();
         if (m_setupMode)
