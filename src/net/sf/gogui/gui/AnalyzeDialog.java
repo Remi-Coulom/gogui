@@ -119,11 +119,11 @@ public final class AnalyzeDialog
         final int maxRecent = 100;
         ArrayList recent = new ArrayList(maxRecent);
         int start = (m_firstIsTemp ? 1 : 0);
-        for (int i = start; i < start + m_numberNewRecent; ++i)
+        for (int i = start; i < getComboBoxItemCount(); ++i)
         {
-            if (i >= getComboBoxItemCount()) // Should not happen ?
-                break;
-            recent.add(getComboBoxItem(i));
+            String name = getComboBoxItem(i);
+            if (recent.indexOf(name) < 0)
+                recent.add(name);
         }
         for (int i = 0; i < m_fullRecentList.size(); ++i)
         {
@@ -191,8 +191,6 @@ public final class AnalyzeDialog
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private int m_numberNewRecent;
 
     private ArrayList m_fullRecentList;
 
@@ -391,7 +389,6 @@ public final class AnalyzeDialog
         m_comboBoxHistory.removeAllItems();
         m_fullRecentList =
             PrefUtil.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
-        m_numberNewRecent = 0;
         for (int i = 0; i < m_fullRecentList.size(); ++i)
         {
             String name = (String)m_fullRecentList.get(i);
@@ -436,10 +433,7 @@ public final class AnalyzeDialog
                       false);
             return;
         }
-        int oldItemCount = m_comboBoxHistory.getItemCount();
         updateRecent(index);
-        if (m_comboBoxHistory.getItemCount() > oldItemCount)
-            ++m_numberNewRecent;
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         if (command.needsColorArg())
