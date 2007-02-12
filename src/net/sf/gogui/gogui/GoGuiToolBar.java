@@ -51,7 +51,8 @@ public class GoGuiToolBar
 
     public void update()
     {
-        GoGuiActions actions = m_goGui.getActions();
+        //GoGuiActions actions = m_goGui.getActions();
+        // At the moment the toolbar does not have any changing elements
     }
 
     /** Serial version to suppress compiler warning.
