@@ -42,24 +42,24 @@ public final class Session
         Preferences prefs = getNode(name);
         if (prefs == null)
             return;
-        int x = prefs.getInt("x", -1);
-        int y = prefs.getInt("y", -1);
-        if (x == -1 || y == -1)
+        int x = prefs.getInt("x", Integer.MIN_VALUE);
+        int y = prefs.getInt("y", Integer.MIN_VALUE);
+        if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE)
             return;
         setLocationChecked(window, x, y);
     }
 
     public void restoreLocation(Window window, Window owner, String name)
     {
-        int x = -1;
-        int y = -1;
+        int x = Integer.MIN_VALUE;
+        int y = Integer.MIN_VALUE;
         Preferences prefs = getNode(name);
         if (prefs != null)
         {
-            x = prefs.getInt("x", -1);
-            y = prefs.getInt("y", -1);
+            x = prefs.getInt("x", Integer.MIN_VALUE);
+            y = prefs.getInt("y", Integer.MIN_VALUE);
         }
-        if (x == -1 || y == -1)
+        if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE)
         {
             window.setLocationRelativeTo(owner);
             return;
@@ -73,11 +73,12 @@ public final class Session
         Preferences prefs = getNode(name);
         if (prefs == null)
             return;
-        int x = prefs.getInt("x", -1);
-        int y = prefs.getInt("y", -1);
-        int width = prefs.getInt("width", -1);
-        int height = prefs.getInt("height", -1);
-        if (x == -1 || y == -1 || width == -1 || height == -1)
+        int x = prefs.getInt("x", Integer.MIN_VALUE);
+        int y = prefs.getInt("y", Integer.MIN_VALUE);
+        int width = prefs.getInt("width", Integer.MIN_VALUE);
+        int height = prefs.getInt("height", Integer.MIN_VALUE);
+        if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE
+            || width == Integer.MIN_VALUE || height == Integer.MIN_VALUE)
             return;
         setLocationChecked(window, x, y);
         setSizeChecked(window, width, height);
@@ -86,15 +87,15 @@ public final class Session
     public void restoreSize(Window window, Window owner, String name)
     {
         restoreLocation(window, owner, name);
-        int width = -1;
-        int height = -1;
+        int width = Integer.MIN_VALUE;
+        int height = Integer.MIN_VALUE;
         Preferences prefs = getNode(name);
         if (prefs != null)
         {
-            width = prefs.getInt("width", -1);
-            height = prefs.getInt("height", -1);
+            width = prefs.getInt("width", Integer.MIN_VALUE);
+            height = prefs.getInt("height", Integer.MIN_VALUE);
         }
-        if (width == -1 || height == -1)
+        if (width == Integer.MIN_VALUE || height == Integer.MIN_VALUE)
             return;
         setSizeChecked(window, width, height);
     }
