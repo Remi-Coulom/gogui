@@ -258,7 +258,7 @@ public final class GameInfoDialog
 
     private boolean validate(Component parent)
     {
-        if (! validateKomi(parent, m_komi, "Invalid komi"))
+        if (! validateKomi(parent, m_komi))
             return false;
         if (! m_preByoyomi.validateTime(parent))
             return false;
@@ -269,14 +269,13 @@ public final class GameInfoDialog
             return false;
         if (m_byoyomi.isEmpty() != isEmpty(m_byoyomiMoves))
         {
-            SimpleDialogs.showError(parent, "Invalid byoyomi settings");
+            SimpleDialogs.showError(parent, "Invalid byoyomi settings", "");
             return false;
         }
         return true;
     }
 
-    private boolean validateKomi(Component parent, JTextField textField,
-                                 String errorMessage)
+    private boolean validateKomi(Component parent, JTextField textField)
     {
         String text = getTextFieldContent(textField);
         try
@@ -285,7 +284,8 @@ public final class GameInfoDialog
         }
         catch (Komi.InvalidKomi e)
         {
-            SimpleDialogs.showError(parent, errorMessage);
+            SimpleDialogs.showError(parent, "Invalid komi",
+                                    "The komi must be a number");
             return false;
         }
         return true;
@@ -306,7 +306,7 @@ public final class GameInfoDialog
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, errorMessage);
+            SimpleDialogs.showError(parent, errorMessage, "");
             return false;
         }
         return true;
@@ -382,7 +382,7 @@ class TimeField
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Invalid time");
+            SimpleDialogs.showError(parent, "Invalid time", "");
             return false;
         }
         return true;

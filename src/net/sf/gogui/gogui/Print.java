@@ -24,9 +24,9 @@ public final class Print
         }
         catch (Exception e)
         {
-            SimpleDialogs.showError(parent, "Printing failed");
+            SimpleDialogs.showError(parent, "Printing failed", "");
         }
-        SimpleDialogs.showInfo(parent, "Printing done");
+        SimpleDialogs.showInfo(parent, "Printing done", "");
     }
 
     /** Make constructor unavailable; class is for namespace only. */

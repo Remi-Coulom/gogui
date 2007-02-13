@@ -338,7 +338,7 @@ public class GameTreePanel
             m_expanded.clear();
             removeAll();
             SimpleDialogs.showError(m_owner,
-                                    "Could not show game tree\n" + 
+                                    "Could not show game tree", 
                                     "Out of memory");
             update(tree, currentNode, minWidth, minHeight);
         }
@@ -744,7 +744,9 @@ public class GameTreePanel
     {
         if (NodeUtil.subtreeGreaterThan(root, 10000)
             && ! SimpleDialogs.showQuestion(m_owner,
-                                            "Really expand large subtree?"))
+                                            "Really expand large subtree?",
+                                            "This action might fail if not "
+                                            + "enough memory is available"))
             return;
         boolean changed = false;
         ConstNode node = root;

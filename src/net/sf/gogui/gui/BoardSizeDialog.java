@@ -32,7 +32,7 @@ public final class BoardSizeDialog
         {
         }
         if (size == -1)
-            SimpleDialogs.showError(parent, "Invalid size");
+            SimpleDialogs.showError(parent, "Invalid size", "");
         return size;
     }
 

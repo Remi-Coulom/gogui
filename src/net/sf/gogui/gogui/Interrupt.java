@@ -36,7 +36,7 @@ public final class Interrupt
         if (m_question == null)
             m_question = new OptionalMessage(parent);
         if (! m_question.showQuestion("Interrupt " + gtp.getProgramName()
-                                      + "?"))
+                                      + "?", null))
             return false;
         try
         {
@@ -44,7 +44,7 @@ public final class Interrupt
         }
         catch (GtpError e)
         {
-            SimpleDialogs.showError(parent, e.getMessage());
+            SimpleDialogs.showError(parent, "Interrupting failed", e);
             return false;
         }
         return true;

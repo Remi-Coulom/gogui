@@ -139,18 +139,18 @@ public class BookmarkEditor
     {
         if (m_name.getText().trim().equals(""))
         {
-            SimpleDialogs.showError(parent, "Name cannot be empty");
+            SimpleDialogs.showError(parent, "Name cannot be empty", "");
             return false;
         }
         if (getMove() < 0)
         {
-            SimpleDialogs.showError(parent, "Invalid move number");
+            SimpleDialogs.showError(parent, "Invalid move number", "");
             return false;
         }
         File file = new File(m_file.getText().trim());
         if (! file.exists())
         {
-            SimpleDialogs.showError(parent, "File does not exist");
+            SimpleDialogs.showError(parent, "File does not exist", "");
             return false;
         }
         return true;

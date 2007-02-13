@@ -415,7 +415,8 @@ public final class AnalyzeDialog
         }
         catch (Exception e)
         {            
-            showError(e.getMessage());
+            showError("Loading analyze configuration file failed",
+                      e.getMessage());
         }
     }
 
@@ -423,14 +424,14 @@ public final class AnalyzeDialog
     {
         if (m_gtp.isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking", false);
+            showError("Cannot execute while computer is thinking", "", false);
             return;
         }
         int index = getSelectedCommand();
         if (index < 0)
         {
             showError("Command not supported by " + m_gtp.getProgramName(),
-                      false);
+                      "", false);
             return;
         }
         updateRecent(index);
@@ -450,11 +451,11 @@ public final class AnalyzeDialog
         }
         if (command.needsOptStringArg())
         {
+            command.setOptStringArg("");
+            String commandWithoutArg =
+                command.replaceWildCards(m_selectedColor);
             try
             {
-                command.setOptStringArg("");
-                String commandWithoutArg =
-                    command.replaceWildCards(m_selectedColor);
                 String value = m_gtp.send(commandWithoutArg);
                 Object[] values = null;
                 Object optStringArg =
@@ -467,17 +468,18 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError(e.getMessage());
+                showError("Command '" + commandWithoutArg + "' failed",
+                          e.getMessage());
                 return;
             }
         }
         if (command.getType() == AnalyzeCommand.EPLIST)
         {
+            command.setPointListArg(new PointList());
+            String commandWithoutArg =
+                command.replaceWildCards(m_selectedColor) + " show";
             try
             {
-                command.setPointListArg(new PointList());
-                String commandWithoutArg =
-                    command.replaceWildCards(m_selectedColor) + " show";
                 String response = m_gtp.send(commandWithoutArg);
                 ConstPointList pointList =
                     GtpUtil.parsePointList(response, m_boardSize);
@@ -485,7 +487,8 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError(e.getMessage());
+                showError("Command '" + commandWithoutArg + "' failed",
+                          e.getMessage());
                 return;
             }
         }
@@ -550,14 +553,16 @@ public final class AnalyzeDialog
             m_white.setSelected(true);
     }
 
-    private void showError(String message)
+    private void showError(String mainMessage, String optionalMessage)
     {
-        showError(message, true);
+        showError(mainMessage, optionalMessage, true);
     }
 
-    private void showError(String message, boolean isSignificant)
+    private void showError(String mainMessage, String optionalMessage,
+                           boolean isSignificant)
     {
-        SimpleDialogs.showError(this, message, isSignificant);
+        SimpleDialogs.showError(this, mainMessage, optionalMessage,
+                                isSignificant);
     }
 
     private void updateRecent(int index)

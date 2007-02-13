@@ -148,7 +148,9 @@ public class AnalyzeCommand
         }
         catch (Exception e)
         {            
-            SimpleDialogs.showError(owner, e.getMessage());
+            SimpleDialogs.showError(owner,
+                                    "Reading analyze configuration failed",
+                                    e);
         }
         int index = labels.indexOf(label);
         if (index < 0)

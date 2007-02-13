@@ -55,7 +55,8 @@ public final class Main
         }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, StringUtil.printException(t));
+            SimpleDialogs.showError(null, "Unexpected failure",
+                                    StringUtil.printException(t));
             System.exit(-1);
         }
     }
@@ -78,7 +79,8 @@ public final class Main
         }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, StringUtil.printException(t));
+            SimpleDialogs.showError(null, "Unexpected failure",
+                                    StringUtil.printException(t));
             System.exit(-1);
         }
     }
@@ -132,7 +134,7 @@ public final class Main
             System.err.print("--------------------------------------------\n" +
                              "GNU libgcj is not supported !\n" +
                              "--------------------------------------------\n");
-            SimpleDialogs.showError(null, "GNU libgcj is not supported");
+            SimpleDialogs.showError(null, "GNU libgcj is not supported", "");
             return;
         }
         JPanel panel = new JPanel(new GridLayout(1, 1));
@@ -177,7 +179,8 @@ public final class Main
                         if (! Platform.openInExternalBrowser(url))
                             SimpleDialogs.showError(null,
                                                     "Could not open URL"
-                                                    + " in external browser");
+                                                    + " in external browser",
+                                                    "");
                     }
                 }
             });

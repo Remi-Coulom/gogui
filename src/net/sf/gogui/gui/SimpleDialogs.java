@@ -53,12 +53,14 @@ public final class SimpleDialogs
     */
     public static final int FILE_SELECT = 2;
     
-    public static void showError(Component frame, String message)
+    public static void showError(Component frame, String mainMessage,
+                                 String optionalMessage)
     {
-        showError(frame, message, true);
+        showError(frame, mainMessage, optionalMessage, true);
     }
 
-    public static void showError(Component frame, String message,
+    public static void showError(Component frame, String mainMessage,
+                                 String optionalMessage,
                                  boolean isSignificant)
     {
         String title = "Error";
@@ -69,19 +71,22 @@ public final class SimpleDialogs
             type = JOptionPane.ERROR_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
+        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
         JOptionPane.showMessageDialog(frame, message, title, type);
     }
 
     public static void showError(Component frame, String message, Exception e)
     {
-        showError(frame, message + "\n\n" + StringUtil.getErrorMessage(e));
+        showError(frame, message, StringUtil.getErrorMessage(e));
     }
 
-    public static void showInfo(Component frame, String message)
+    public static void showInfo(Component frame, String mainMessage,
+                                String optionalMessage)
     {
         String title = "Info";
         if (frame == null)
             title = title + " - " + APP_NAME;
+        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
         JOptionPane.showMessageDialog(frame, message, title,
                                       JOptionPane.INFORMATION_MESSAGE);
     }
@@ -96,8 +101,10 @@ public final class SimpleDialogs
         return showFileChooser(parent, FILE_OPEN, null, true, null);
     }
 
-    public static boolean showQuestion(Component frame, String message)
+    public static boolean showQuestion(Component frame, String mainMessage,
+                                       String optionalMessage)
     {
+        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
         String title = "Question";
         if (frame == null)
             title = title + " - " + APP_NAME;
@@ -106,9 +113,11 @@ public final class SimpleDialogs
         return (r == 0);
     }
 
-    public static int showYesNoCancelQuestion(Component parent, String message)
+    public static int showYesNoCancelQuestion(Component parent,
+                                              String mainMessage,
+                                              String optionalMessage)
     {
-        
+        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
         int result =
             JOptionPane.showConfirmDialog(parent, message, "Question",
                                           JOptionPane.YES_NO_CANCEL_OPTION,
@@ -134,11 +143,13 @@ public final class SimpleDialogs
         return showFileChooser(parent, FILE_SELECT, s_lastFile, false, title);
     }
 
-    public static void showWarning(Component parent, String message)
+    public static void showWarning(Component parent, String mainMessage,
+                                   String optionalMessage)
     {
         String title = "Warning";
         if (parent == null)
             title = title + " - " + APP_NAME;
+        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
         JOptionPane.showMessageDialog(parent, message, title,
                                       JOptionPane.WARNING_MESSAGE);
     }
@@ -196,7 +207,7 @@ public final class SimpleDialogs
         while (file != null)
         {
             if (file.exists()
-                && ! showQuestion(parent, "Overwrite " + file + "?"))
+                && ! showQuestion(parent, "Overwrite " + file + "?", null))
             {
                 file = showFileChooser(parent, FILE_SAVE, lastFile,
                                        setSgfFilter, title);

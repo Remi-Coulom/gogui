@@ -250,18 +250,23 @@ public class GoGui
     {
         if (m_file == null)
         {
-            showError("Cannot set bookmark if no file loaded");
+            showError("Cannot set bookmark if no file is loaded",
+                      "Bookmarks can only be set in loaded files");
             return;
         }
         if (isModified())
         {
-            showError("Cannot set bookmark if file modified");
+            showError("Cannot set bookmark in modified file",
+                      "Bookmarks cannot be set in modified files.\n" +
+                      "Save the file before setting a bookmark.");
             return;
         }
         if (getCurrentNode().getFatherConst() != null
             && getCurrentNode().getMove() == null)
         {
-            showError("Cannot set bookmark at non-root node without move");
+            showError("Cannot set bookmark at this node.",
+                      "Bookmarks can only be set at non-root nodes without "
+                      + "moves");
             return;
         }
         String variation = NodeUtil.getVariationString(getCurrentNode());
@@ -395,7 +400,7 @@ public class GoGui
             return;
         if (! NodeUtil.isInMainVariation(getCurrentNode()))
             return;
-        if (! showQuestion("Delete all variations but main?"))
+        if (! showQuestion("Delete all variations but main?", null))
             return;
         m_game.keepOnlyMainVariation();
         boardChangedBegin(false, true);
@@ -406,8 +411,8 @@ public class GoGui
         if (m_gtp == null)
             return;
         if (isCommandInProgress()
-            && ! showQuestion("Command in progress. Terminate "
-                              + getProgramName() + "?"))
+            && ! showQuestion("Terminate " + getProgramName() + "?",
+                              "A command is in progress."))
             return;
         m_prefs.putInt("program", -1);
         protectGui();
@@ -456,7 +461,7 @@ public class GoGui
         URL url = classLoader.getResource("net/sf/gogui/doc/index.html");
         if (url == null)
         {
-            showError("Help not found");
+            showError("Help not found", "");
             return;
         }
         if (m_help == null)
@@ -606,7 +611,8 @@ public class GoGui
         ConstNode node = NodeUtil.findInComments(getCurrentNode(), m_pattern);
         if (node == null)
             if (getCurrentNode() != root)
-                if (showQuestion("End of tree reached. Continue from start?"))
+                if (showQuestion("Continue from start?",
+                                 "The end of the tree was reached."))
                 {
                     node = root;
                     if (! NodeUtil.commentContains(node, m_pattern))
@@ -614,7 +620,7 @@ public class GoGui
                 }
         if (node == null)
         {
-            showInfo("Not found");
+            showInfo("Not found", null);
             m_pattern = null;
         }
         else
@@ -686,14 +692,14 @@ public class GoGui
             node = NodeUtil.findByVariation(node, variation);
             if (node == null)
             {
-                showError("Bookmark has invalid variation");
+                showError("Bookmark has invalid variation", "");
                 return;
             }
         }
         node = NodeUtil.findByMoveNumber(node, bookmark.m_move);
         if (node == null)
         {
-            showError("Bookmark has invalid move number");
+            showError("Bookmark has invalid move number", "");
             return;
         }
         actionGotoNode(node);
@@ -738,7 +744,7 @@ public class GoGui
             return;
         m_handicap = handicap;
         if (isModified())
-            showInfo("Handicap will take effect on next game.");
+            showInfo("Handicap will take effect on next game.", null);
         else
         {
             m_computerBlack = false;
@@ -769,7 +775,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found");
+            showError("File not found", "");
         }
     }
 
@@ -779,7 +785,7 @@ public class GoGui
             return;
         String text = GuiUtil.getClipboardText();
         if (text == null)
-            showError("No text selection in clipboard");
+            showError("No text selection in clipboard", "");
         else
             importTextPosition(new StringReader(text));
     }
@@ -788,7 +794,7 @@ public class GoGui
     {
         if (! isCommandInProgress())
         {
-            showError("Computer is not thinking");
+            showError("Computer is not thinking", "");
             return;
         }
         if (m_gtp == null || m_gtp.isProgramDead())
@@ -801,7 +807,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showQuestion("Delete all moves?"))
+        if (! showQuestion("Delete all moves?", null))
             return;
         m_game.keepOnlyPosition();
         initGtp();
@@ -817,7 +823,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showQuestion("Make current to main variation?"))
+        if (! showQuestion("Make current to main variation?", null))
             return;
         m_game.makeMainVariation();
         boardChangedBegin(false, true);
@@ -944,7 +950,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showOptionalQuestion("pass", "Really pass?"))
+        if (! showOptionalQuestion("pass", "Really pass?", null))
             return;
         humanMoved(Move.getPass(getToMove()));
     }
@@ -1028,7 +1034,7 @@ public class GoGui
             {
                 String message = "Overwrite " + m_file + "?";
                 if (! m_optionalMessages.showWarningQuestion("overwrite",
-                                                             message))
+                                                             message, null))
                     return;
             }
             save(m_file);
@@ -1050,8 +1056,8 @@ public class GoGui
         {
             m_optionalMessages.showMessage("score-no-program",
                                            "Please mark dead groups "
-                                           + "manually\n"
-                                           + "(no program is attached)");
+                                           + "manually",
+                                           "No program is attached.");
             initScore(null);
             updateViews(false);
             return;
@@ -1070,8 +1076,9 @@ public class GoGui
         {
             m_optionalMessages.showMessage("score-not-supported",
                                            "Please mark dead groups "
-                                           + "manually\n(" + getProgramName()
-                                           + " does not support scoring)");
+                                           + "manually",
+                                           getProgramName()
+                                           + " does not support scoring.");
             initScore(null);
             updateViews(false);
         }
@@ -1090,7 +1097,7 @@ public class GoGui
     {
         if (GtpUtil.isStateChangingCommand(command))
         {
-            showError("Cannot send board changing command", false);
+            showError("Cannot send board changing command", null, false);
             return;
         }
         if (! checkProgramReady())
@@ -1167,7 +1174,8 @@ public class GoGui
             if (needsNewNode)
             {
                 String message = "Create new setup node in game tree?";
-                if (! showOptionalQuestion("create-setup-node", message))
+                if (! showOptionalQuestion("create-setup-node", message,
+                                           null))
                 {
                     m_setupMode = false;
                     updateViews(false);
@@ -1401,7 +1409,7 @@ public class GoGui
             return;
         if (! getCurrentNode().hasFather())
             return;
-        if (! showQuestion("Truncate current?"))
+        if (! showQuestion("Truncate current?", null))
             return;
         m_game.truncate();
         boardChangedBegin(false, true);
@@ -1414,7 +1422,7 @@ public class GoGui
         int numberChildren = getCurrentNode().getNumberChildren();
         if (numberChildren == 0)
             return;
-        if (! showQuestion("Truncate children?"))
+        if (! showQuestion("Truncate children?", null))
             return;
         m_game.truncateChildren();
         boardChangedBegin(false, true);
@@ -1608,10 +1616,10 @@ public class GoGui
         else
         {
             if (getBoard().isSuicide(p, getToMove())
-                && ! showQuestion("Play suicide?"))
+                && ! showQuestion("Play suicide?", null))
                 return;
             else if (getBoard().isKo(p)
-                && ! showQuestion("Play illegal Ko move?"))
+                && ! showQuestion("Play illegal Ko move?", null))
                 return;
             Move move = Move.get(p, getToMove());
             humanMoved(move);
@@ -1738,16 +1746,17 @@ public class GoGui
                 m_optionalMessages.showWarning("invalid-empty-response",
                                                getProgramName() +
                                                " sent a malformed GTP " +
-                                               "response\n" +
-                                               "(empty line before " +
-                                               "response start)");
+                                               "response",
+                                               "Empty line before " +
+                                               "response start");
             else
                 m_optionalMessages.showWarning("invalid-response",
                                                getProgramName() +
                                                " sent a malformed GTP " +
-                                               "response\n(first line not " +
+                                               "response",
+                                               "First line not " +
                                                "starting with status " +
-                                               "character)");
+                                               "character");
         }
         
         private final String m_line;
@@ -2196,7 +2205,8 @@ public class GoGui
     {
         if (isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking", false);
+            showError("Cannot execute while computer is thinking", null,
+                      false);
             return false;
         }
         return true;
@@ -2246,13 +2256,13 @@ public class GoGui
         {
             if (color == GoColor.BLACK)
             {
-                showInfo("Black lost on time.");
+                showInfo("Black lost on time.", null);
                 setResult("W+Time");
             }
             else
             {
                 assert(color == GoColor.WHITE);
-                showInfo("White lost on time.");
+                showInfo("White lost on time.", null);
                 setResult("B+Time");
             }
             m_lostOnTimeShown = true;
@@ -2264,20 +2274,20 @@ public class GoGui
     {
         if (m_gtp == null)
         {
-            showError("No Go program is attached.", false);
+            showError("No Go program is attached.", null, false);
             return false;
         }
         if (! checkCommandInProgress())
             return false;
         if (m_gtp.isProgramDead())
         {
-            showError(getProgramName() + " has terminated.", false);
+            showError(getProgramName() + " has terminated.", null, false);
             return false;
         }
         if (isOutOfSync())
         {
             showError(getProgramName()
-                      + " is not in sync with current position.",
+                      + " is not in sync with current position.", null,
                       false);
             return false;
         }
@@ -2301,9 +2311,11 @@ public class GoGui
         int result;
         if (! isProgramTerminating)
             result =
-                m_optionalMessages.showYesNoCancelQuestion("save", message);
+                m_optionalMessages.showYesNoCancelQuestion("save", message,
+                                                           null);
         else
-            result = SimpleDialogs.showYesNoCancelQuestion(this, message);
+            result = SimpleDialogs.showYesNoCancelQuestion(this, message,
+                                                           null);
         switch (result)
         {
         case 0:
@@ -2392,7 +2404,7 @@ public class GoGui
             if (response.equalsIgnoreCase("resign"))
             {
                 if (! isComputerBoth())
-                    showInfo(getProgramName() + " resigns");
+                    showInfo(getProgramName() + " resigns", null);
                 m_resigned = true;
                 setResult((toMove == GoColor.BLACK ? "W" : "B") + "+Resign");
             }
@@ -2404,13 +2416,14 @@ public class GoGui
                 {
                     if (board.getColor(point) != GoColor.EMPTY)
                     {
-                        showWarning("Program played move on non-empty point");
+                        showWarning("Program played move on non-empty point",
+                                    "");
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
                     else if (board.isKo(point))
                     {
-                        showWarning("Program violated Ko rule");
+                        showWarning("Program violated Ko rule", "");
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
@@ -2421,7 +2434,7 @@ public class GoGui
                 if (point == null && ! isComputerBoth())
                     m_optionalMessages.showMessage("computer-passed",
                                                    getProgramName() +
-                                                   " passes");
+                                                   " passes", null);
                 m_resigned = false;
                 gameTreeChanged = true;
                 ConstNode currentNode = getCurrentNode();
@@ -2793,13 +2806,12 @@ public class GoGui
             {
                 // Loading a file with program attached can take long
                 GuiUtil.paintImmediately(layeredPane);
-            }
-            m_handicap = 0;
+            }            
         }
         ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
-                        "defined for this board size");
+                        "defined for this board size", "");
         m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
                     m_timeSettings);
         if (size != oldSize)
@@ -2889,7 +2901,7 @@ public class GoGui
                 AnalyzeCommand.get(this, m_initAnalyze);
             if (analyzeCommand == null)
                 showError("Unknown analyze command \"" + m_initAnalyze
-                          + "\"");
+                          + "\"", "");
             else
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
@@ -2990,7 +3002,7 @@ public class GoGui
             setFile(file);
             String warnings = reader.getWarnings();
             if (warnings != null)
-                showWarning(warnings);
+                showWarning("File does not follow SGF standard", warnings);
             SimpleDialogs.setLastFile(file);
             m_computerBlack = false;
             m_computerWhite = false;
@@ -2998,7 +3010,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found");
+            showError("File not found", e);
             return false;
         }
         catch (SgfReader.SgfError e)
@@ -3307,7 +3319,8 @@ public class GoGui
                         continue;
                     if (GtpUtil.isStateChangingCommand(line))
                     {
-                        showError("Board changing commands not allowed");
+                        showError("Board changing commands not allowed",
+                                  "");
                         break;
                     }
                     if (! sendGtpCommandSync(line))
@@ -3315,7 +3328,7 @@ public class GoGui
                 }
                 catch (IOException e)
                 {
-                    showError("Error reading file");
+                    showError("Error reading file", e);
                     break;
                 }
                 catch (GtpError e)
@@ -3345,7 +3358,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found: " + e.getMessage());
+            showError("File not found", e);
         }
     }
 
@@ -3416,7 +3429,7 @@ public class GoGui
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
             && ! showQuestion("Overwrite old result " + oldResult + "\n" +
-                              "with " + result + "?"))
+                              "with " + result + "?", null))
             return;
         m_game.setResult(result);
     }
@@ -3504,24 +3517,27 @@ public class GoGui
         GuiGtpUtil.showError(this, getProgramName(), error, isSignificant);
     }
 
-    private void showError(String message)
+    private void showError(String mainMessage, String optionalMessage)
     {
-        showError(message, true);
+        showError(mainMessage, optionalMessage, true);
     }
 
-    private void showError(String message, boolean isSignificant)
+    private void showError(String mainMessage, String optionalMessage,
+                           boolean isSignificant)
     {
-        SimpleDialogs.showError(this, message, isSignificant);
+        SimpleDialogs.showError(this, mainMessage, optionalMessage,
+                                isSignificant);
     }
 
     private void showGameFinished()
     {
-        m_optionalMessages.showMessage("game-finished", "Game finished");
+        m_optionalMessages.showMessage("game-finished", "Game finished",
+                                       null);
     }
 
-    private void showInfo(String message)
+    private void showInfo(String mainMessage, String optionalMessage)
     {
-        SimpleDialogs.showInfo(this, message);
+        SimpleDialogs.showInfo(this, mainMessage, optionalMessage);
     }
 
     private void showInfoPanel(boolean enable)
@@ -3546,14 +3562,16 @@ public class GoGui
         pack();
     }
 
-    private boolean showOptionalQuestion(String id, String message)
+    private boolean showOptionalQuestion(String id, String mainMessage,
+                                         String optionalMessage)
     {
-        return m_optionalMessages.showQuestion(id, message);
+        return m_optionalMessages.showQuestion(id, mainMessage,
+                                               optionalMessage);
     }
 
-    private boolean showQuestion(String message)
+    private boolean showQuestion(String mainMessage, String optionalMessage)
     {
-        return SimpleDialogs.showQuestion(this, message);
+        return SimpleDialogs.showQuestion(this, mainMessage, optionalMessage);
     }
 
     private void showStatus(String text)
@@ -3594,9 +3612,9 @@ public class GoGui
         pack();
     }
 
-    private void showWarning(String message)
+    private void showWarning(String mainMessage, String optionalMessage)
     {
-        SimpleDialogs.showWarning(this, message);
+        SimpleDialogs.showWarning(this, mainMessage, optionalMessage);
     }
 
     private void toFrontLater()

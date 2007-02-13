@@ -436,12 +436,13 @@ public class GtpShell
             if (GtpUtil.isStateChangingCommand(command))
             {
                 showError("Cannot send board changing command from GTP shell",
-                          false);
+                          "", false);
                 return;
             }
             if (m_commandInProgress)
             {
-                showError("Cannot execute while computer is thinking", false);
+                showError("Cannot execute while computer is thinking", "",
+                          false);
                 return;
             }
             m_listener.actionSendCommand(command, false, false);
@@ -626,9 +627,11 @@ public class GtpShell
         }
     }
 
-    private void showError(String message, boolean isSignificant)
+    private void showError(String mainMessage, String optionalMessage,
+                           boolean isSignificant)
     {
-        SimpleDialogs.showError(this, message, isSignificant);
+        SimpleDialogs.showError(this, mainMessage, optionalMessage,
+                                isSignificant);
     }
 
     private void scrollPage(boolean up)

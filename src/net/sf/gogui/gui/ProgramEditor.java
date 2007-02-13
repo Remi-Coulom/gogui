@@ -148,7 +148,7 @@ public class ProgramEditor
         Box box = Box.createHorizontalBox();
         JLabel label = new JLabel(text + ":");
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
-        setUnlimitedSize(label);
+        GuiUtil.setUnlimitedSize(label);
         box.add(label);
         return box;
     }
@@ -183,7 +183,8 @@ public class ProgramEditor
                     {
                         String message =
                             "Append option '--mode gtp' for GNU Go?";
-                        if (SimpleDialogs.showQuestion(m_dialog, message))
+                        if (SimpleDialogs.showQuestion(m_dialog, message,
+                                                       null))
                             text = text + " --mode gtp";
                     }
                     m_command.setText(text);
@@ -194,25 +195,19 @@ public class ProgramEditor
         m_panelRight.add(box);
     }
 
-    private void setUnlimitedSize(JComponent component)
-    {
-        Dimension size = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
-        component.setMaximumSize(size);
-    }
-
     private boolean validate(Component parent)
     {
         if (! m_disableName)
         {
             if (m_label.getText().trim().equals(""))
             {
-                SimpleDialogs.showError(parent, "Label cannot be empty");
+                SimpleDialogs.showError(parent, "Label cannot be empty", "");
                 return false;
             }
         }
         if (m_command.getText().trim().equals(""))
         {
-            SimpleDialogs.showError(parent, "Command cannot be empty");
+            SimpleDialogs.showError(parent, "Command cannot be empty", "");
             return false;
         }
         return true;

@@ -110,7 +110,8 @@ public class GtpDisplay
                     if (m_frame != null)
                     {
                         SimpleDialogs.showInfo(m_frame,
-                                               "GTP stream was closed");
+                                               "GTP stream was closed",
+                                               "");
                         showStatus("GTP stream was closed");
                     }
                     else if (m_gtp == null)
@@ -211,7 +212,7 @@ public class GtpDisplay
         if (m_gtp == null)
         {
             if (! SimpleDialogs.showQuestion(m_frame,
-                                             "Terminate GtpDisplay?"))
+                                             "Terminate GtpDisplay?", null))
                 return;
             System.exit(0);
         }

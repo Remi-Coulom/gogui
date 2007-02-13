@@ -28,14 +28,15 @@ public final class MoveNumberDialog
             node = NodeUtil.findByMoveNumber(node, number);
             if (node == null)
             {
-                SimpleDialogs.showError(parent, "No move with this number");
+                SimpleDialogs.showError(parent, "No move with this number",
+                                        "");
                 return null;
             }
             return node;
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Not a number");
+            SimpleDialogs.showError(parent, "Not a number", "");
             return null;
         }
     }

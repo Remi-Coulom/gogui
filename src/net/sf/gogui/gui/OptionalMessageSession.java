@@ -15,29 +15,34 @@ public class OptionalMessageSession
         m_parent = parent;
     }
 
-    public void showMessage(String id, String message)
+    public void showMessage(String id, String mainMessage,
+                            String optionalMessage)
     {
-        get(id).showMessage(message);
+        get(id).showMessage(mainMessage, optionalMessage);
     }
 
-    public boolean showQuestion(String id, String message)
+    public boolean showQuestion(String id, String mainMessage,
+                                String optionalMessage)
     {
-        return get(id).showQuestion(message);
+        return get(id).showQuestion(mainMessage, optionalMessage);
     }
 
-    public void showWarning(String id, String message)
+    public void showWarning(String id, String mainMessage,
+                            String optionalMessage)
     {
-        get(id).showWarning(message);
+        get(id).showWarning(mainMessage, optionalMessage);
     }
 
-    public boolean showWarningQuestion(String id, String message)
+    public boolean showWarningQuestion(String id, String mainMessage,
+                                       String optionalMessage)
     {
-        return get(id).showWarningQuestion(message);
+        return get(id).showWarningQuestion(mainMessage, optionalMessage);
     }
 
-    public int showYesNoCancelQuestion(String id, String message)
+    public int showYesNoCancelQuestion(String id, String mainMessage,
+                                       String optionalMessage)
     {
-        return get(id).showYesNoCancelQuestion(message);
+        return get(id).showYesNoCancelQuestion(mainMessage, optionalMessage);
     }
 
     private TreeMap m_messages = new TreeMap();

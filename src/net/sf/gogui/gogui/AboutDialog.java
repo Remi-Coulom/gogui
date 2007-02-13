@@ -116,7 +116,8 @@ public final class AboutDialog
                         if (! Platform.openInExternalBrowser(url))
                             SimpleDialogs.showError(null,
                                                     "Could not open URL"
-                                                    + " in external browser");
+                                                    + " in external browser",
+                                                    (String)null);
                     }
                 }
             });

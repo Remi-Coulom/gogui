@@ -58,10 +58,11 @@ public class ParameterDialog
             }
             catch (GtpError e)
             {
-                String message =
-                    "Could not change parameter " + parameter.getKey()
-                    + ":\n" + StringUtil.capitalize(e.getMessage());
-                SimpleDialogs.showError(owner, message);
+                SimpleDialogs.showError(owner,
+                                        "Could not change parameter "
+                                        + parameter.getKey(),
+                                        StringUtil.capitalize(e.getMessage())
+                                        );
             }
         }
     }

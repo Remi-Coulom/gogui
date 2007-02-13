@@ -150,7 +150,7 @@ public class ObjectListEditor
         if (m_removeWarning == null)
             m_removeWarning = new OptionalMessage(m_dialog);
         if (! m_removeWarning.showWarningQuestion("Really remove " + name
-                                                  + "?"))
+                                                  + "?", null))
             return;
         m_objects.remove(object);
         if (index >= m_objects.size())

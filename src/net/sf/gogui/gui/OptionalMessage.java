@@ -6,13 +6,16 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.SwingConstants;
 
 /** Message which can be disabled.
     Also provides multi-line word-wrapped text.
@@ -24,19 +27,20 @@ public class OptionalMessage
         m_parent = parent;
     }
     
-    public void showMessage(String message)
+    public void showMessage(String mainMessage, String optionalMessage)
     {
         if (m_disabled)
             return;
-        show(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_OPTION);
+        show(mainMessage, optionalMessage, JOptionPane.INFORMATION_MESSAGE,
+             JOptionPane.OK_OPTION);
         m_disabled = m_disabledCheckBox.isSelected();
     }
 
-    public boolean showQuestion(String message)
+    public boolean showQuestion(String mainMessage, String optionalMessage)
     {
         if (m_disabled)
             return true;
-        show(message, JOptionPane.QUESTION_MESSAGE,
+        show(mainMessage, optionalMessage, JOptionPane.QUESTION_MESSAGE,
              JOptionPane.OK_CANCEL_OPTION);
         boolean result = (m_optionPane.getValue() == m_options[0]);
         if (result)
@@ -44,19 +48,21 @@ public class OptionalMessage
         return result;
     }
 
-    public void showWarning(String message)
+    public void showWarning(String mainMessage, String optionalMessage)
     {
         if (m_disabled)
             return;
-        show(message, JOptionPane.WARNING_MESSAGE, JOptionPane.OK_OPTION);
+        show(mainMessage, optionalMessage, JOptionPane.WARNING_MESSAGE,
+             JOptionPane.OK_OPTION);
         m_disabled = m_disabledCheckBox.isSelected();
     }
 
-    public boolean showWarningQuestion(String message)
+    public boolean showWarningQuestion(String mainMessage,
+                                       String optionalMessage)
     {
         if (m_disabled)
             return true;
-        show(message, JOptionPane.WARNING_MESSAGE,
+        show(mainMessage, optionalMessage, JOptionPane.WARNING_MESSAGE,
              JOptionPane.OK_CANCEL_OPTION);
         boolean result = (m_optionPane.getValue() == m_options[0]);
         if (result)
@@ -64,11 +70,12 @@ public class OptionalMessage
         return result;
     }
 
-    public int showYesNoCancelQuestion(String message)
+    public int showYesNoCancelQuestion(String mainMessage,
+                                       String optionalMessage)
     {
         if (m_disabled)
             return 1;
-        show(message, JOptionPane.QUESTION_MESSAGE,
+        show(mainMessage, optionalMessage, JOptionPane.QUESTION_MESSAGE,
              JOptionPane.YES_NO_CANCEL_OPTION);
         Object value = m_optionPane.getValue();
         int result;
@@ -98,32 +105,27 @@ public class OptionalMessage
     private JCheckBox m_disabledCheckBox;
 
     /** Show message dialog if it was not disabled.
-        @param message The message text
         @param type The message type (JOptionPane.QUESTION_MESSAGE,
         JOptionPane.WARNING_MESSAGE or JOptionPane.INFORMATION_MESSAGE)
         @param isYesNoCancel true, if buttons should be "yes", "no", "cancel";
         false if buttons should be "ok", "cancel"
         @return true, if message was not shown or confirmed
     */
-    private void show(String message, int messageType, int optionType)
+    private void show(String mainMessage, String optionalMessage,
+                      int messageType, int optionType)
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        int columns = Math.min(30, message.length());
-        JTextArea textArea = new JTextArea(message, 0, columns);
-        textArea.setEditable(false);
-        textArea.setFocusable(false);
-        textArea.setForeground(UIManager.getColor("Label.foreground"));
-        textArea.setBackground(UIManager.getColor("Label.background"));
-        textArea.setFont(UIManager.getFont("Label.font"));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        panel.add(GuiUtil.createFiller());
-        panel.add(GuiUtil.createFiller());
-        panel.add(textArea);
-        panel.add(GuiUtil.createFiller());
-        panel.add(GuiUtil.createFiller());
+        Box box = Box.createVerticalBox();
+        JLabel label =
+            new JLabel(GuiUtil.formatMessage(mainMessage, optionalMessage));
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        GuiUtil.setUnlimitedSize(label);
+        box.add(GuiUtil.createFiller());
+        box.add(label);
+        box.add(GuiUtil.createFiller());
+        box.add(GuiUtil.createFiller());
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
+        checkBoxPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         String title;
         Object defaultOption;
         if (messageType == JOptionPane.QUESTION_MESSAGE)
@@ -179,12 +181,12 @@ public class OptionalMessage
             "Disable this kind of messages for the current session";
         m_disabledCheckBox.setToolTipText(toolTipText);
         checkBoxPanel.add(m_disabledCheckBox, BorderLayout.WEST);
-        panel.add(checkBoxPanel);
-        m_optionPane = new JOptionPane(panel, messageType, optionType, null,
+        box.add(checkBoxPanel);
+        m_optionPane = new JOptionPane(box, messageType, optionType, null,
                                        m_options, defaultOption);
         JDialog dialog = m_optionPane.createDialog(m_parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
-        panel.invalidate();
+        box.invalidate();
         dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();

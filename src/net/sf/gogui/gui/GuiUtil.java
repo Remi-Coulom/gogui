@@ -126,6 +126,37 @@ public class GuiUtil
                               SMALL_FILLER_DIMENSION);
     }
 
+    public static String formatMessage(String mainMessage,
+                                       String optionalMessage)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<html>");
+        if (Platform.isMac())
+            buffer.append("<head>"+
+                          "<style type=\"text/css\">"+
+                          "b {font: 13pt \"Lucida Grande\"}"+
+                          "p {font: 11pt \"Lucida Grande\"; margin-top: 8px}"+
+                          "</style>"+
+                          "</head>");
+        else
+            buffer.append("<head>"+
+                          "<style type=\"text/css\">"+
+                          "p {margin-top: 8px}"+
+                          "</style>"+
+                          "</head>");
+        buffer.append("<b>");
+        buffer.append(mainMessage.replaceAll("\n", "<br>"));
+        buffer.append("</b>");
+        if (optionalMessage != null && ! optionalMessage.trim().equals(""))
+        {
+            buffer.append("<p>");
+            buffer.append(optionalMessage.replaceAll("\n", "<br>"));
+            buffer.append("</p>");
+        }
+        buffer.append("</html>");
+        return buffer.toString();
+    }
+
     public static String getClipboardText()
     {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -232,7 +263,7 @@ public class GuiUtil
         {
             if (showError)
                 SimpleDialogs.showWarning(null,
-                                          "Look and feel not found:\n" +
+                                          "Look and feel not found",
                                           lookAndFeel);
         }
     }
@@ -348,6 +379,12 @@ public class GuiUtil
     {
         if (MONOSPACED_FONT != null)
             component.setFont(MONOSPACED_FONT);
+    }
+
+    public static void setUnlimitedSize(JComponent component)
+    {
+        Dimension size = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
+        component.setMaximumSize(size);
     }
 
     static
