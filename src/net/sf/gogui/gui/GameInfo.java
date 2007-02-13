@@ -186,7 +186,7 @@ class GuiClock
         // with TextField border and label foreground/background from
         // GuiUtil.setEditableFalse
         setBorder(BorderFactory.createLineBorder(Color.gray));
-        m_textField = new JTextField(10);
+        m_textField = new JTextField(9);
         m_textField.setBorder(null);
         add(m_textField, BorderLayout.WEST);
         GuiUtil.setEditableFalse(m_textField);

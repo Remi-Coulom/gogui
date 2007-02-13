@@ -441,7 +441,9 @@ public final class AnalyzeDialog
         String label = command.getResultTitle();        
         if (command.needsStringArg())
         {
-            String stringArg = JOptionPane.showInputDialog(this, label);
+            String stringArg =
+                JOptionPane.showInputDialog(this, label, "Input",
+                                            JOptionPane.PLAIN_MESSAGE);
             if (stringArg == null)
                 return;
             command.setStringArg(stringArg);
@@ -454,11 +456,14 @@ public final class AnalyzeDialog
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor);
                 String value = m_gtp.send(commandWithoutArg);
-                String optStringArg =
-                    JOptionPane.showInputDialog(this, label, value);
+                Object[] values = null;
+                Object optStringArg =
+                    JOptionPane.showInputDialog(this, label, "Input",
+                                                JOptionPane.PLAIN_MESSAGE,
+                                                null, values, value);
                 if (optStringArg == null || optStringArg.equals(value))
                     return;
-                command.setOptStringArg(optStringArg);
+                command.setOptStringArg((String)optStringArg);
             }
             catch (GtpError e)
             {
