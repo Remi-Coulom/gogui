@@ -35,6 +35,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -213,6 +214,19 @@ public class GuiUtil
         try
         {
             UIManager.setLookAndFeel(lookAndFeel);
+            if (lookAndFeel.equals("ch.randelshofer.quaqua.QuaquaLookAndFeel"))
+            {
+                // Auto-generation of badged icons does not work in Quaqua
+                // 3.7.2 (the GoGui app icon shows filled white), and Apple
+                // style guide says that alert icons badged with app icon
+                // should be used only in rare cases anyway
+                Object icon = LookAndFeel.makeIcon(GuiUtil.class,
+                                                   "gogui-64x64.png");
+                UIManager.put("OptionPane.errorIcon", icon);
+                UIManager.put("OptionPane.informationIcon", icon);
+                UIManager.put("OptionPane.questionIcon", icon);
+                UIManager.put("OptionPane.warningIcon", icon);
+            }
         }
         catch (Exception e)
         {

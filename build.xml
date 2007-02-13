@@ -141,7 +141,11 @@ $URL$
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
 <fileset dir="src"
- includes="net/sf/gogui/images/*.png net/sf/gogui/gui/analyze-commands"/>
+ includes="
+  net/sf/gogui/images/*.png
+  net/sf/gogui/gui/analyze-commands
+  net/sf/gogui/gui/*.png
+"/>
 </copy>
 <copy todir="build/net/sf/gogui/doc">
 <fileset dir="doc/manual/html" includes="*.html *.png"/>
@@ -433,6 +437,7 @@ ${quaqua.zipfile}
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gogui/*.class
  net/sf/gogui/gui/*.class
+ net/sf/gogui/gui/*.png
  net/sf/gogui/gui/analyze-commands
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class
@@ -484,6 +489,7 @@ ${quaqua.zipfile}
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gui/*.class
+ net/sf/gogui/gui/*.png
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpdisplay/*.class
  net/sf/gogui/images/gogui*.png
