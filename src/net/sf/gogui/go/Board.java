@@ -389,17 +389,6 @@ public final class Board
         return m_color[p.getX()][p.getY()];
     }
 
-    /** Get location of handicap stones.
-        @param n The number of handicap stones.
-        @return List of points (go.Point) corresponding to the handicap
-        stone locations.
-        @see BoardConstants#getHandicapStones
-    */
-    public ConstPointList getHandicapStones(int n)
-    {
-        return m_constants.getHandicapStones(n);
-    }
-
     /** Get location of handicap stones for a given board size.
         @param n The number of handicap stones.
         @param size The board size.

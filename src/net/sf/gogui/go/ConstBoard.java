@@ -21,8 +21,6 @@ public interface ConstBoard
 
     GoColor getColor(GoPoint p);
 
-    ConstPointList getHandicapStones(int n);
-
     ConstPointList getKilled();
 
     Move getLastMove();

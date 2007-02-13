@@ -50,6 +50,7 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
@@ -2793,8 +2794,9 @@ public class GoGui
                 // Loading a file with program attached can take long
                 GuiUtil.paintImmediately(layeredPane);
             }
+            m_handicap = 0;
         }
-        ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
+        ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
