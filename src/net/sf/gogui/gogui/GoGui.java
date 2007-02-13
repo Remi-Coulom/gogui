@@ -3029,7 +3029,7 @@ public class GoGui
             return;
         setFile(null);
         newGame(size);
-        if (! m_gtp.isGenmoveSupported())
+        if (m_gtp != null && ! m_gtp.isGenmoveSupported())
         {
             m_computerBlack = false;
             m_computerWhite = false;
