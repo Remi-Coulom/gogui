@@ -137,6 +137,11 @@ Use Quaqua look and feel on Mac OS/X
 </listitem>
 <listitem>
 <simpara>
+LaTex position export now exports all markup types
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpAdapter: handle all state changing commands and automatically emulate them
 if not supported by the engine; always translate a loadsgf command into a
 sequence of play commands; don't use option -emuloadsgf and -emuhandicap

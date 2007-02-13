@@ -540,6 +540,9 @@ public class GoGui
                                                      "tex");
             new TexWriter(title, out, getBoard(), false,
                           GuiBoardUtil.getLabels(m_guiBoard),
+                          GuiBoardUtil.getMark(m_guiBoard),
+                          GuiBoardUtil.getMarkTriangle(m_guiBoard),
+                          GuiBoardUtil.getMarkCircle(m_guiBoard),
                           GuiBoardUtil.getMarkSquare(m_guiBoard),
                           GuiBoardUtil.getSelects(m_guiBoard));
         }

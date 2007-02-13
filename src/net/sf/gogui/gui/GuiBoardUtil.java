@@ -54,6 +54,32 @@ public final class GuiBoardUtil
         }
     }
 
+    public static boolean[][] getMark(GuiBoard guiBoard)
+    {
+        int size = guiBoard.getBoardSize();
+        boolean[][] result = new boolean[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+            {
+                GoPoint point = GoPoint.get(x, y);
+                result[x][y] = guiBoard.getMark(point);
+            }
+        return result;
+    }
+
+    public static boolean[][] getMarkCircle(GuiBoard guiBoard)
+    {
+        int size = guiBoard.getBoardSize();
+        boolean[][] result = new boolean[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+            {
+                GoPoint point = GoPoint.get(x, y);
+                result[x][y] = guiBoard.getMarkCircle(point);
+            }
+        return result;
+    }
+
     public static boolean[][] getMarkSquare(GuiBoard guiBoard)
     {
         int size = guiBoard.getBoardSize();
@@ -63,6 +89,19 @@ public final class GuiBoardUtil
             {
                 GoPoint point = GoPoint.get(x, y);
                 result[x][y] = guiBoard.getMarkSquare(point);
+            }
+        return result;
+    }
+
+    public static boolean[][] getMarkTriangle(GuiBoard guiBoard)
+    {
+        int size = guiBoard.getBoardSize();
+        boolean[][] result = new boolean[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+            {
+                GoPoint point = GoPoint.get(x, y);
+                result[x][y] = guiBoard.getMarkTriangle(point);
             }
         return result;
     }

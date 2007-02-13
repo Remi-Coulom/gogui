@@ -21,8 +21,9 @@ import net.sf.gogui.go.Move;
 public class TexWriter
 {
     public TexWriter(String title, OutputStream out, ConstBoard board,
-                     boolean usePass, String[][] strings,
-                     boolean[][] markups, boolean[][] selects)
+                     boolean usePass, String[][] markLabel, boolean[][] mark,
+                     boolean[][] markTriangle, boolean[][] markCircle,
+                     boolean[][] markSquare, boolean[][] markSelect)
     {        
         m_out = new PrintStream(out);
         m_usePass = usePass;
@@ -30,7 +31,8 @@ public class TexWriter
         if (title != null && ! title.trim().equals(""))
             m_out.println("\\section*{" + escape(title) + "}");
         printBeginPSGo(board.getSize());
-        printPosition(board, strings, markups, selects);
+        printPosition(board, markLabel, mark, markTriangle, markCircle,
+                      markSquare, markSelect);
         printEndPSGo();
         m_out.println("\\\\");
         String toMove =
@@ -78,20 +80,6 @@ public class TexWriter
         text = text.replaceAll("\\{", "\\\\{");
         text = text.replaceAll("\\}", "\\\\}");
         return text;
-    }
-
-    private String getMarkers(String string, boolean markup, boolean select)
-    {
-        if ((string == null || string.equals("")) && ! markup && ! select)
-            return null;
-        StringBuffer result = new StringBuffer();
-        if (string != null && ! string.equals(""))
-            result.append("\\marklb{" + string + "}");
-        if (markup)
-            result.append("\\marksq");
-        if (select)
-            result.append("\\markdd");
-        return result.toString();
     }
 
     private String getStoneInTextString(int moveNumber, GoColor color)
@@ -160,11 +148,9 @@ public class TexWriter
         while (node != null)
         {
             for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                printStone(GoColor.BLACK, node.getAddBlack(i), null, false,
-                           false);
+                printStone(GoColor.BLACK, node.getAddBlack(i), null);
             for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                printStone(GoColor.WHITE, node.getAddWhite(i), null, false,
-                           false);
+                printStone(GoColor.WHITE, node.getAddWhite(i), null);
             Move move = node.getMove();
             if (move == null)
             {
@@ -241,8 +227,10 @@ public class TexWriter
         return comment.toString();
     }
     
-    private void printPosition(ConstBoard board, String[][] strings,
-                               boolean[][] markups, boolean[][] selects)
+    private void printPosition(ConstBoard board, String[][] markLabel,
+                               boolean[][] mark, boolean[][] markTriangle,
+                               boolean[][] markCircle, boolean[][] markSquare,
+                               boolean[][] markSelect)
     {
         int numberPoints = board.getNumberPoints();
         for (int i = 0; i < numberPoints; ++i)
@@ -252,32 +240,46 @@ public class TexWriter
             int x = point.getX();
             int y = point.getY();
             String string = null;
-            if (strings != null)
-                string = strings[x][y];
-            boolean markup = (markups != null && markups[x][y]);
-            boolean select = (selects != null && selects[x][y]);
+            StringBuffer buffer = new StringBuffer();
+            if (mark != null && mark[x][y])
+                buffer.append("\\markma");
+            if (markTriangle != null && markTriangle[x][y])
+                buffer.append("\\marktr");
+            if (markCircle != null && markCircle[x][y])
+                buffer.append("\\markcr");
+            if (markSquare != null && markSquare[x][y])
+                buffer.append("\\marksq");
+            if (markLabel != null && markLabel[x][y] != null
+                     && ! markLabel[x][y].trim().equals(""))
+            {
+                buffer.append("\\marklb{");
+                buffer.append(markLabel[x][y]);
+                buffer.append("}");
+            }
+            if (markSelect != null && markSelect[x][y])
+                buffer.append("\\marksl");
+            String markup = null;
+            if (buffer.length() > 0)
+                markup = buffer.toString();
             if (color == GoColor.EMPTY)
             {
-                String markers = getMarkers(string, markup, select);
-                if (markers != null)
+                if (markup != null)
                 {
-                    m_out.print("\\markpos{" + markers + "}");
+                    m_out.print("\\markpos{" + markup + "}");
                     printCoordinates(point);
                     m_out.print("\n");
                 }
             }
             else
-                printStone(color, point, string, markup, select);
+                printStone(color, point, markup);
         }
     }
 
-    private void printStone(GoColor color, GoPoint point, String string,
-                            boolean markup, boolean select)
+    private void printStone(GoColor color, GoPoint point, String markup)
     {
         m_out.print("\\stone");
-        String markers = getMarkers(string, markup, select);
-        if (markers != null)
-            m_out.print("[" + markers + "]");
+        if (markup != null)
+            m_out.print("[" + markup + "]");
         printColor(color);
         printCoordinates(point);
         m_out.print("\n");
