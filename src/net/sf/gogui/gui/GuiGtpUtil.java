@@ -8,6 +8,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
 /** Static utility functions. */
@@ -63,10 +64,10 @@ public final class GuiGtpUtil
         if (name != null)
             title = title + " - " + name;
         int type;
-        if (isSignificant)
-            type = JOptionPane.ERROR_MESSAGE;
-        else
+        if (! isSignificant || Platform.isMac())
             type =JOptionPane.PLAIN_MESSAGE;
+        else
+            type = JOptionPane.ERROR_MESSAGE;
         JOptionPane.showMessageDialog(parent, message, title, type);
     }
 

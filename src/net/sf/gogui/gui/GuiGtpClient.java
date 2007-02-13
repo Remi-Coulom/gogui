@@ -16,6 +16,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
+import net.sf.gogui.util.Platform;
 
 /** Wrapper around gtp.GtpClient to be used in a GUI environment.
     Allows to send fast commands immediately in the event dispatch thread
@@ -360,11 +361,13 @@ public class GuiGtpClient
             message = message + "\nKill program?";
             String title = "Error";
             String options[] = { "Kill Program", "Wait" };
+            int type = JOptionPane.ERROR_MESSAGE;
+            if (Platform.isMac())
+                type = JOptionPane.PLAIN_MESSAGE;
             int result =
                 JOptionPane.showOptionDialog(m_owner, message, title,
                                              JOptionPane.YES_NO_OPTION,
-                                             JOptionPane.ERROR_MESSAGE,
-                                             null, options, options[1]);
+                                             type, null, options, options[1]);
             if (result == 0)
                 return false;
             return true;

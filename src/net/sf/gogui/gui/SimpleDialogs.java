@@ -67,10 +67,10 @@ public final class SimpleDialogs
         if (frame == null)
             title = title + " - " + APP_NAME;
         int type;
-        if (isSignificant)
-            type = JOptionPane.ERROR_MESSAGE;
-        else
+        if (! isSignificant || Platform.isMac())
             type = JOptionPane.PLAIN_MESSAGE;
+        else
+            type = JOptionPane.ERROR_MESSAGE;
         String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
         JOptionPane.showMessageDialog(frame, message, title, type);
     }
@@ -87,8 +87,10 @@ public final class SimpleDialogs
         if (frame == null)
             title = title + " - " + APP_NAME;
         String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        JOptionPane.showMessageDialog(frame, message, title,
-                                      JOptionPane.INFORMATION_MESSAGE);
+        int type = JOptionPane.INFORMATION_MESSAGE;
+        if (Platform.isMac())
+            type = JOptionPane.PLAIN_MESSAGE;
+        JOptionPane.showMessageDialog(frame, message, title, type);
     }
 
     public static File showOpen(Component parent, String title)
@@ -118,10 +120,13 @@ public final class SimpleDialogs
                                               String optionalMessage)
     {
         String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
+        int type = JOptionPane.QUESTION_MESSAGE;
+        if (Platform.isMac())
+            type = JOptionPane.PLAIN_MESSAGE;
         int result =
             JOptionPane.showConfirmDialog(parent, message, "Question",
                                           JOptionPane.YES_NO_CANCEL_OPTION,
-                                          JOptionPane.QUESTION_MESSAGE);
+                                          type);
         if (result < 0)
             return 2; // Handle dialog closing as cancel
         return result;
@@ -150,8 +155,10 @@ public final class SimpleDialogs
         if (parent == null)
             title = title + " - " + APP_NAME;
         String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        JOptionPane.showMessageDialog(parent, message, title,
-                                      JOptionPane.WARNING_MESSAGE);
+        int type = JOptionPane.WARNING_MESSAGE;
+        if (Platform.isMac())
+            type = JOptionPane.PLAIN_MESSAGE;
+        JOptionPane.showMessageDialog(parent, message, title, type);
     }
 
     public static void setLastFile(File file)

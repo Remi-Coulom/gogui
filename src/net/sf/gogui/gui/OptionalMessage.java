@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.SwingConstants;
+import net.sf.gogui.util.Platform;
 
 /** Message which can be disabled.
     Also provides multi-line word-wrapped text.
@@ -114,6 +115,8 @@ public class OptionalMessage
     private void show(String mainMessage, String optionalMessage,
                       int messageType, int optionType)
     {
+        if (Platform.isMac())
+            messageType = JOptionPane.PLAIN_MESSAGE;
         Box box = Box.createVerticalBox();
         JLabel label =
             new JLabel(GuiUtil.formatMessage(mainMessage, optionalMessage));

@@ -621,9 +621,7 @@ public class GtpShell
         }
         catch (FileNotFoundException e)
         {
-            JOptionPane.showMessageDialog(parent, "Could not save to file.",
-                                          "GoGui: Error",
-                                          JOptionPane.ERROR_MESSAGE);
+            SimpleDialogs.showError(parent, "Could not save to file.", "");
         }
     }
 

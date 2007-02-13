@@ -10,6 +10,7 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.OptionalMessage;
 import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.util.Platform;
 
 /** Interrupt command. */
 public final class Interrupt
@@ -25,10 +26,13 @@ public final class Interrupt
         {
             Object[] options = { "Kill Program", "Cancel" };
             Object message = "Program does not support interrupt";
+            int type = JOptionPane.WARNING_MESSAGE;
+            if (Platform.isMac())
+                type = JOptionPane.PLAIN_MESSAGE;
             int n = JOptionPane.showOptionDialog(parent, message, "Question",
                                                  JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.WARNING_MESSAGE,
-                                                 null, options, options[1]);
+                                                 type, null, options,
+                                                 options[1]);
             if (n == 0)
                 gtp.destroyGtp();
             return false;

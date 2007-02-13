@@ -135,13 +135,14 @@ public class GuiUtil
             buffer.append("<head>"+
                           "<style type=\"text/css\">"+
                           "b {font: 13pt \"Lucida Grande\"}"+
-                          "p {font: 11pt \"Lucida Grande\"; margin-top: 8px}"+
+                          "p {font: 11pt \"Lucida Grande\"; "
+                          + "margin-top: 8px; margin-bottom: 8px}"+
                           "</style>"+
                           "</head>");
         else
             buffer.append("<head>"+
                           "<style type=\"text/css\">"+
-                          "p {margin-top: 8px}"+
+                          "p {margin-top: 8px; margin-bottom: 8px}"+
                           "</style>"+
                           "</head>");
         buffer.append("<b>");
