@@ -18,12 +18,14 @@ public final class GotoVariationDialog
                                  ConstNode currentNode)
     {
         String variation = NodeUtil.getVariationString(currentNode);
-        variation =
-            JOptionPane.showInputDialog(parent, "Variation", variation);
-        if (variation == null || variation.equals(""))
+        Object value =
+            JOptionPane.showInputDialog(parent, "Variation", "Input",
+                                        JOptionPane.PLAIN_MESSAGE, null, null,
+                                        variation);
+        if (value == null || value.equals(""))
             return null;
         ConstNode root = tree.getRootConst();
-        ConstNode node = NodeUtil.findByVariation(root, variation);
+        ConstNode node = NodeUtil.findByVariation(root, (String)value);
         if (node == null)
             SimpleDialogs.showError(parent, "Invalid variation");
         return node;

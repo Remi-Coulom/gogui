@@ -16,13 +16,15 @@ public final class MoveNumberDialog
     public static ConstNode show(Component parent, ConstNode node)
     {
         int number = NodeUtil.getMoveNumber(node);        
-        String value = Integer.toString(number);
-        value = JOptionPane.showInputDialog(parent, "Move Number", value);
+        Object value =
+            JOptionPane.showInputDialog(parent, "Move Number", "Input",
+                                        JOptionPane.PLAIN_MESSAGE, null, null,
+                                        Integer.toString(number));
         if (value == null || value.equals(""))
             return null;
         try
         {
-            number = Integer.parseInt(value);
+            number = Integer.parseInt((String)value);
             node = NodeUtil.findByMoveNumber(node, number);
             if (node == null)
             {
