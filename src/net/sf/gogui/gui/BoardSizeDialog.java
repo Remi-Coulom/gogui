@@ -15,14 +15,16 @@ public final class BoardSizeDialog
         @return Board size or -1 if aborted. */
     public static int show(Component parent, int size)
     {
-        String value = Integer.toString(size);
-        value = JOptionPane.showInputDialog(parent, "Board size", value);
+        Object value =
+            JOptionPane.showInputDialog(parent, "Board size", "Input",
+                                        JOptionPane.PLAIN_MESSAGE, null, null,
+                                        Integer.toString(size));
         if (value == null)
             return -1;
         size = -1;
         try
         {
-            size = Integer.parseInt(value);
+            size = Integer.parseInt((String)value);
             if (size < 1 || size > GoPoint.MAXSIZE)
                 size = -1;
         }
