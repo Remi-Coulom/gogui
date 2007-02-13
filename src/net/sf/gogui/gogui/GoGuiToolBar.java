@@ -28,7 +28,6 @@ public class GoGuiToolBar
         addSeparator();
         addButton(actions.m_actionNewGame);
         addButton(actions.m_actionPass);
-        addSeparator();
         addButton(actions.m_actionPlay);
         addSeparator();
         addToggleButton(actions.m_actionSetupBlack);
