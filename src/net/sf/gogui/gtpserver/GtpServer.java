@@ -30,10 +30,12 @@ public final class GtpServer
         name.
         @param port Port number at remote host
         @param userFile file containing login information that is sent to the
+        @param timeout Timeout in seconds, zero for no timeout.
         remote host. Only used if remoteHost is set.
     */
     public GtpServer(boolean verbose, boolean loop, String program,
-                     String remoteHost, int port, String userFile)
+                     String remoteHost, int port, String userFile,
+                     int timeout)
         throws Exception
     {
         Runtime runtime = Runtime.getRuntime();
@@ -58,6 +60,8 @@ public final class GtpServer
             if (verbose)
                 System.err.println("gtpserver: Connected with "
                                    + socket.getInetAddress());
+            if (timeout >= 0)
+                socket.setSoTimeout(timeout * 1000);
             Thread fromNet =
                 new Thread(new StreamCopy(verbose, socket.getInputStream(),
                                           process.getOutputStream(), true));
@@ -88,6 +92,7 @@ public final class GtpServer
                 "loop",
                 "port:",
                 "remote:",
+                "timeout:",
                 "user:",
                 "verbose",
                 "version",
@@ -118,6 +123,7 @@ public final class GtpServer
             int port = opt.getInteger("port");
             String remoteHost = opt.get("remote", null);
             String userFile = opt.get("user", null);
+            int timeout = opt.getInteger("timeout", 0, 0);
             if (userFile != null && remoteHost == null)
             {
                 System.err.println("Option -user only valid with -remote");
@@ -130,7 +136,8 @@ public final class GtpServer
                 System.exit(-1);
             }
             String program = (String)arguments.get(0);
-            new GtpServer(verbose, loop, program, remoteHost, port, userFile);
+            new GtpServer(verbose, loop, program, remoteHost, port, userFile,
+                          timeout);
         }
         catch (Throwable t)
         {

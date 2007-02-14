@@ -22,6 +22,7 @@ Connects a Go program supporting Go Text Protocol to a socket.
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-loop</option></arg>
 <arg><option>-remote</option> <replaceable>hostname</replaceable></arg>
+<arg><option>-timeout</option> <replaceable>sec</replaceable></arg>
 <arg><option>-user</option> <replaceable>file</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg choice="plain"><replaceable>program</replaceable></arg>
@@ -105,6 +106,18 @@ Port number to user for the socket.
 <para>
 Connect to a remote host, instead of waiting for incoming connections.
 See also <option>-user</option>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-timeout</option> <replaceable>seconds</replaceable>
+</term>
+<listitem>
+<para>
+Close connections if no command has been received for a number of
+seconds. Default is zero, which means no timeout.
 </para>
 </listitem>
 </varlistentry>

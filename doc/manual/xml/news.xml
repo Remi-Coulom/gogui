@@ -177,6 +177,11 @@ slow
 </listitem>
 <listitem>
 <simpara>
+GtpServer: new option -timeout
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other changes, fixes and user interface re-organizations
 </simpara>
 </listitem>
