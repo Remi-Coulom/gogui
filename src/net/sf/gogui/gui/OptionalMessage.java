@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -191,13 +192,53 @@ public class OptionalMessage
         m_disabledCheckBox.setToolTipText(toolTipText);
         checkBoxPanel.add(m_disabledCheckBox, BorderLayout.WEST);
         box.add(checkBoxPanel);
+
+        // Workaround for bug in Java 1.6 (and earlier versions) on Linux and
+        // Windows:
+        // The label size is not computed correctly, lines are wrapped and
+        // the dialog buttons are not fully visible.
+        // Simple example to show this bug:
+        /*
+          Box box = Box.createVerticalBox();
+          JLabel label =
+              new JLabel("<html>" +
+                       "<b>Save current document?</b>" +
+                       "<p>" +
+                       "Your changes will be lost if you don't save them" +
+                       "</p>" +
+                       "</html>");
+          box.add(new Box.Filler(new Dimension(10, 10),
+                                 new Dimension(10, 10),
+                                 new Dimension(10, 10)));
+          box.add(label);
+          JOptionpane optionPane =
+              new JOptionPane(box, JOptionPane.QUESTION_MESSAGE,
+                              JOptionPane.YES_NO_CANCEL_OPTION);
+          dialog = optionPane.createDialog(null, "Warning");
+          dialog.pack();
+          dialog.setVisible(true);
+        */
+        // Second line of text gets wrapped between "save" and "then"
+        // and buttons are shifted by one text line height to the bottom
+        // out of the window.
+        // Since everything works if the label is directly the option pane
+        // message component, we first render such an option pane, get
+        // the label size and use it at the minimum size for the
+        // real option pane
+
+        JLabel tempLabel = new JLabel(label.getText());
+        JOptionPane tempOptionPane =
+            new JOptionPane(tempLabel, messageType, optionType, null,
+                            m_options, defaultOption);
+        JDialog tempDialog = tempOptionPane.createDialog(null, title);
+        tempDialog.pack();
+        Dimension labelSize = tempLabel.getSize();
+        tempDialog.dispose();
+        label.setMinimumSize(labelSize);
+
         m_optionPane = new JOptionPane(box, messageType, optionType, null,
                                        m_options, defaultOption);
         JDialog dialog = m_optionPane.createDialog(m_parent, title);
-        // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
-        box.invalidate();
-        dialog.pack();
-        box.invalidate();
         dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();
