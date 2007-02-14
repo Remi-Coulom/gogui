@@ -251,14 +251,16 @@ public class GoGui
         if (m_file == null)
         {
             showError("Cannot set bookmark if no file is loaded",
-                      "Bookmarks can only be set in loaded files");
+                      "Bookmarks can only be set in loaded files",
+                      false);
             return;
         }
         if (isModified())
         {
             showError("Cannot set bookmark in modified file",
                       "Bookmarks cannot be set in modified files.\n" +
-                      "Save the file before setting a bookmark.");
+                      "Save the file before setting a bookmark.",
+                      false);
             return;
         }
         if (getCurrentNode().getFatherConst() != null
@@ -266,7 +268,7 @@ public class GoGui
         {
             showError("Cannot set bookmark at this node.",
                       "Bookmarks can only be set at non-root nodes without "
-                      + "moves");
+                      + "moves", false);
             return;
         }
         String variation = NodeUtil.getVariationString(getCurrentNode());
