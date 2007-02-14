@@ -131,26 +131,24 @@ public class GuiUtil
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<html>");
+        String fontMainMessage = "";
+        String fontOptionalMessage = "";
         if (Platform.isMac())
-            buffer.append("<head>"+
-                          "<style type=\"text/css\">"+
-                          "b {font: 13pt \"Lucida Grande\"}"+
-                          "p {font: 11pt \"Lucida Grande\"; "
-                          + "margin-top: 8px; margin-bottom: 8px}"+
-                          "</style>"+
-                          "</head>");
-        else
         {
-            String widthProp = "";
-            if (optionalMessage != null && optionalMessage.length() > 60)
-                widthProp = "width: 300px;";
-            buffer.append("<head>"+
-                          "<style type=\"text/css\">"+
-                          "p {margin-top: 8px; margin-bottom: 8px; "
-                          + widthProp + "}"+
-                          "</style>"+
-                          "</head>");
+            fontMainMessage = "font: 13pt \"Lucida Grande\";";
+            fontOptionalMessage = "font: 11pt \"Lucida Grande\";";
         }
+        String widthProp = "";
+        if (optionalMessage != null && optionalMessage.length() > 60)
+            widthProp = "width: 300px;";
+        buffer.append("<head>"+
+                      "<style type=\"text/css\">" +
+                      "b { " + fontMainMessage + " }" +
+                      "p { " + fontOptionalMessage +
+                      " margin-top: 8px; margin-bottom: 8px; "
+                      + widthProp + "}"+
+                      "</style>"+
+                      "</head>");
         buffer.append("<b>");
         buffer.append(mainMessage.replaceAll("\n", "<br>"));
         buffer.append("</b>");
