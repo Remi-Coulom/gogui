@@ -5,6 +5,7 @@
 package net.sf.gogui.util;
 
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 /** Thread copying the output of one stream to another stream. */
@@ -37,11 +38,7 @@ public class StreamCopy
             {
                 int n = m_src.read(buffer);
                 if (n < 0)
-                {
-                    if (m_close)
-                        m_dest.close();
                     break;
-                }
                 if (m_verbose)
                     System.err.write(buffer, 0, n);
                 m_dest.write(buffer, 0, n);
@@ -51,6 +48,20 @@ public class StreamCopy
         catch (Throwable e)
         {
             StringUtil.printException(e);
+        }
+        finally
+        {
+            if (m_close)
+            {
+                try
+                {
+                    m_dest.close();
+                }
+                catch (IOException e)
+                {
+                    StringUtil.printException(e);
+                }
+            }
         }
     }
 
