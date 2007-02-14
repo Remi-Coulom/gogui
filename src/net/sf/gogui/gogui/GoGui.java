@@ -2576,19 +2576,29 @@ public class GoGui
                 String name = getProgramName();
                 String mainMessage =
                     "Could not synchronize position with " + name;
-                String optionalMessage = formatCommand(e.getCommand());
-                optionalMessage = optionalMessage + " sent to " + name
-                    + " failed.\n";
-                if (! e.getMessage().trim().equals(""))
+                String optionalMessage;
+                if (e.getCommand() == null)
                 {
-                    optionalMessage = optionalMessage +
-                        "The response was \"" + e.getMessage() + "\"";
-                    if (! e.getMessage().endsWith("."))
-                        optionalMessage = optionalMessage + ".";
-                    optionalMessage = optionalMessage + "\n";
+                    optionalMessage =
+                        "The current position could not be synchronized" +
+                        " with " + name + " (" + e.getMessage() + ").\n";
+                }
+                else
+                {
+                    optionalMessage = formatCommand(e.getCommand());
+                    optionalMessage = optionalMessage + " sent to " + name
+                        + " failed.\n";
+                    if (! e.getMessage().trim().equals(""))
+                    {
+                        optionalMessage = optionalMessage +
+                            "The response was \"" + e.getMessage() + "\"";
+                        if (! e.getMessage().endsWith("."))
+                            optionalMessage = optionalMessage + ".";
+                        optionalMessage = optionalMessage + "\n";
+                    }
                 }
                 optionalMessage = optionalMessage
-                    + "You will not be able to use any functionality of "
+                    + "You will not be able to use functionality of "
                     + name + " in the current position.";
                 showWarning(mainMessage, optionalMessage, true);
             }
