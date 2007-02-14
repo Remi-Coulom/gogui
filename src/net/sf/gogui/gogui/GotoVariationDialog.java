@@ -27,7 +27,9 @@ public final class GotoVariationDialog
         ConstNode root = tree.getRootConst();
         ConstNode node = NodeUtil.findByVariation(root, (String)value);
         if (node == null)
-            SimpleDialogs.showError(parent, "Invalid variation", "");
+            SimpleDialogs.showError(parent, "Invalid variation",
+                                    "You need to specify a valid variation.",
+                                    false);
         return node;
     }
 

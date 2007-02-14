@@ -117,7 +117,7 @@ public final class AboutDialog
                             SimpleDialogs.showError(null,
                                                     "Could not open URL"
                                                     + " in external browser",
-                                                    (String)null);
+                                                    "", false);
                     }
                 }
             });

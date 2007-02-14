@@ -211,7 +211,7 @@ public class Help
         {
             SimpleDialogs.showError(this,
                                     "Could not load page\n" +
-                                    url.toString(), e.getMessage());
+                                    url.toString(), e.getMessage(), false);
         }
     }
 

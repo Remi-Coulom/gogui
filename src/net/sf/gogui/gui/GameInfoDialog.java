@@ -269,7 +269,12 @@ public final class GameInfoDialog
             return false;
         if (m_byoyomi.isEmpty() != isEmpty(m_byoyomiMoves))
         {
-            SimpleDialogs.showError(parent, "Invalid byoyomi settings", "");
+            SimpleDialogs.showError(parent,
+                                    "Invalid byoyomi settings",
+                                    "You need to specify both the byoyomi "
+                                    + "time period and the number of byoyomi "
+                                    + "moves.",
+                                    false);
             return false;
         }
         return true;
@@ -285,7 +290,7 @@ public final class GameInfoDialog
         catch (Komi.InvalidKomi e)
         {
             SimpleDialogs.showError(parent, "Invalid komi",
-                                    "The komi must be a number");
+                                    "The komi has to be a number.", false);
             return false;
         }
         return true;
@@ -302,11 +307,18 @@ public final class GameInfoDialog
                 return true;
             int value = Integer.parseInt(content);
             if (value <= 0)
+            {
+                SimpleDialogs.showError(parent, errorMessage,
+                                        "The entered value needs to be a " +
+                                        "positive number.", false);
                 return false;
+            }
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, errorMessage, "");
+            SimpleDialogs.showError(parent, errorMessage,
+                                    "The entered value needs to be a " +
+                                    "number.", false);
             return false;
         }
         return true;
@@ -378,11 +390,18 @@ class TimeField
                 return true;
             int value = Integer.parseInt(m_textField.getText());
             if (value <= 0)
+            {
+                SimpleDialogs.showError(parent, "Invalid time",
+                                        "The entered value needs to be a " +
+                                        "positive number.", false);
                 return false;
+            }
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Invalid time", "");
+            SimpleDialogs.showError(parent, "Invalid time",
+                                    "The entered value needs to be a " +
+                                    "number.", false);
             return false;
         }
         return true;

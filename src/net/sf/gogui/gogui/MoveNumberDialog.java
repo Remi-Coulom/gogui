@@ -29,14 +29,17 @@ public final class MoveNumberDialog
             if (node == null)
             {
                 SimpleDialogs.showError(parent, "No move with this number",
-                                        "");
+                                        "You need to enter a valid move "
+                                        +"number", false);
                 return null;
             }
             return node;
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Not a number", "");
+            SimpleDialogs.showError(parent, "Not a number",
+                                    "You need to enter a valid move number.",
+                                    false);
             return null;
         }
     }

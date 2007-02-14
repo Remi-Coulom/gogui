@@ -252,7 +252,7 @@ public class GoGui
         if (m_file == null)
         {
             showError("Cannot set bookmark if no file is loaded",
-                      "Bookmarks can only be set in loaded files",
+                      "Bookmarks can only be set in loaded files.",
                       false);
             return;
         }
@@ -527,7 +527,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e);
+            showError("Export failed", e, false);
         }
     }
 
@@ -551,7 +551,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e);
+            showError("Export failed", e, false);
         }
     }
 
@@ -566,7 +566,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Could not save position", e);
+            showError("Could not save position", e, false);
         }
     }
 
@@ -584,7 +584,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e);
+            showError("Export failed", e, false);
         }
     }
 
@@ -781,7 +781,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found", "");
+            showError("File not found", "", false);
         }
     }
 
@@ -791,7 +791,7 @@ public class GoGui
             return;
         String text = GuiUtil.getClipboardText();
         if (text == null)
-            showError("No text selection in clipboard", "");
+            showError("No text selection in clipboard", "", false);
         else
             importTextPosition(new StringReader(text));
     }
@@ -800,7 +800,7 @@ public class GoGui
     {
         if (! isCommandInProgress())
         {
-            showError("Computer is not thinking", "");
+            showError("Computer is not thinking", "", false);
             return;
         }
         if (m_gtp == null || m_gtp.isProgramDead())
@@ -1113,7 +1113,7 @@ public class GoGui
     {
         if (GtpUtil.isStateChangingCommand(command))
         {
-            showError("Cannot send board changing command", null, false);
+            showError("Cannot send board changing command", "", false);
             return;
         }
         if (! checkProgramReady())
@@ -2026,7 +2026,7 @@ public class GoGui
         catch (GtpError e)
         {                
             showStatus(title);
-            showError(e);
+            showError(e, false);
         }
         finally
         {
@@ -2221,7 +2221,9 @@ public class GoGui
     {
         if (isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking", null,
+            showError("Cannot execute while computer is thinking",
+                      "You need to wait until the command in "
+                      + " progress is finished.",
                       false);
             return false;
         }
@@ -2290,7 +2292,7 @@ public class GoGui
     {
         if (m_gtp == null)
         {
-            showError("No Go program is attached.", null, false);
+            showError("No Go program is attached.", "", false);
             return false;
         }
         if (! checkCommandInProgress())
@@ -3579,7 +3581,12 @@ public class GoGui
 
     private void showError(String message, Exception e)
     {
-        SimpleDialogs.showError(this, message, e);
+        showError(message, e, true);
+    }
+    
+    private void showError(String message, Exception e, boolean isCritical)
+    {
+        SimpleDialogs.showError(this, message, e, isCritical);
     }
 
     private void showError(GtpError error)

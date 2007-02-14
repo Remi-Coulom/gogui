@@ -77,7 +77,13 @@ public final class SimpleDialogs
 
     public static void showError(Component frame, String message, Exception e)
     {
-        showError(frame, message, StringUtil.getErrorMessage(e));
+        showError(frame, message, e, true);
+    }
+
+    public static void showError(Component frame, String message, Exception e,
+                                 boolean isCritical)
+    {
+        showError(frame, message, StringUtil.getErrorMessage(e), isCritical);
     }
 
     public static void showInfo(Component frame, String mainMessage,

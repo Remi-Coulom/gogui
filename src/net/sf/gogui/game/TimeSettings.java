@@ -34,7 +34,7 @@ public final class TimeSettings
     */
     public TimeSettings(long preByoyomi, long byoyomi, int byoyomiMoves)
     {
-        assert(preByoyomi > 0);
+        assert(preByoyomi >= 0);
         assert(byoyomi > 0);
         assert(byoyomiMoves > 0);
         m_preByoyomi = preByoyomi;

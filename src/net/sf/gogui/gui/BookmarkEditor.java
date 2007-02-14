@@ -148,7 +148,7 @@ public class BookmarkEditor
         if (getMove() < 0)
         {
             SimpleDialogs.showError(parent, "Invalid move number",
-                                    "Only positive move numbers are valid",
+                                    "Only positive move numbers are valid.",
                                     false);
             return false;
         }

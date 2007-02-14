@@ -424,14 +424,18 @@ public final class AnalyzeDialog
     {
         if (m_gtp.isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking", "", false);
+            showError("Cannot execute while computer is thinking",
+                      "You need to wait until the command in "
+                      + " progress is finished.",
+                      false);
             return;
         }
         int index = getSelectedCommand();
         if (index < 0)
         {
-            showError("Command not supported by " + m_gtp.getProgramName(),
-                      "", false);
+            showError("Command not supported",
+                      m_gtp.getProgramName()
+                      + " does not support this command.", false);
             return;
         }
         updateRecent(index);
@@ -469,7 +473,7 @@ public final class AnalyzeDialog
             catch (GtpError e)
             {
                 showError("Command '" + commandWithoutArg + "' failed",
-                          e.getMessage());
+                          e.getMessage(), false);
                 return;
             }
         }
@@ -488,7 +492,7 @@ public final class AnalyzeDialog
             catch (GtpError e)
             {
                 showError("Command '" + commandWithoutArg + "' failed",
-                          e.getMessage());
+                          e.getMessage(), false);
                 return;
             }
         }

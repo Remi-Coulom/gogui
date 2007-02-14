@@ -436,12 +436,16 @@ public class GtpShell
             if (GtpUtil.isStateChangingCommand(command))
             {
                 showError("Cannot send board changing command from GTP shell",
-                          "", false);
+                          "Use the graphical board to start new games, "
+                          + "play moves, and for all other actions that "
+                          + " change the state of the board.", false);
                 return;
             }
             if (m_commandInProgress)
             {
-                showError("Cannot execute while computer is thinking", "",
+                showError("Cannot execute while computer is thinking",
+                          "You need to wait until the command in "
+                          + " progress is finished.",
                           false);
                 return;
             }

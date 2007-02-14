@@ -180,7 +180,7 @@ public final class Main
                             SimpleDialogs.showError(null,
                                                     "Could not open URL"
                                                     + " in external browser",
-                                                    "");
+                                                    "", false);
                     }
                 }
             });
