@@ -254,15 +254,23 @@ public final class GtpClient
         log(">> " + command);
         m_out.println(command);
         m_out.flush();
-        if (m_out.checkError())
+        try
         {
-            readRemainingErrorMessages();
-            throwProgramDied();
+            if (m_out.checkError())
+            {
+                readRemainingErrorMessages();
+                throwProgramDied();
+            }
+            if (m_callback != null)
+                m_callback.sentCommand(command);
+            readResponse(timeout);
+            return m_response;
         }
-        if (m_callback != null)
-            m_callback.sentCommand(command);
-        readResponse(timeout);
-        return m_response;
+        catch (GtpError e)
+        {
+            e.setCommand(command);
+            throw e;
+        }
     }
 
     public void sendPlay(Move move, long timeout,
@@ -728,12 +736,7 @@ public final class GtpClient
                 else
                     m_response = response.substring(index + 1, length - 2);
                 if (error)
-                {
-                    if (m_response.trim().equals(""))
-                        throw new GtpError("GTP command failed.");
-                    else
-                        throw new GtpError(m_response);
-                }
+                    throw new GtpError(m_response);
                 return m_response;
             }
         }

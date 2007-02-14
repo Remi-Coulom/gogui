@@ -28,15 +28,17 @@ public class OptionalMessageSession
     }
 
     public void showWarning(String id, String mainMessage,
-                            String optionalMessage)
+                            String optionalMessage, boolean isCritical)
     {
-        get(id).showWarning(mainMessage, optionalMessage);
+        get(id).showWarning(mainMessage, optionalMessage, isCritical);
     }
 
     public boolean showWarningQuestion(String id, String mainMessage,
-                                       String optionalMessage)
+                                       String optionalMessage,
+                                       boolean isCritical)
     {
-        return get(id).showWarningQuestion(mainMessage, optionalMessage);
+        return get(id).showWarningQuestion(mainMessage, optionalMessage,
+                                           isCritical);
     }
 
     public int showYesNoCancelQuestion(String id, String mainMessage,

@@ -61,13 +61,13 @@ public final class SimpleDialogs
 
     public static void showError(Component frame, String mainMessage,
                                  String optionalMessage,
-                                 boolean isSignificant)
+                                 boolean isCritical)
     {
         String title = "Error";
         if (frame == null)
             title = title + " - " + APP_NAME;
         int type;
-        if (! isSignificant || Platform.isMac())
+        if (! isCritical || Platform.isMac())
             type = JOptionPane.PLAIN_MESSAGE;
         else
             type = JOptionPane.ERROR_MESSAGE;
@@ -149,7 +149,21 @@ public final class SimpleDialogs
     }
 
     public static void showWarning(Component parent, String mainMessage,
-                                   String optionalMessage)
+                                   String optionalMessage, boolean isCritical)
+    {
+        String title = "Warning";
+        if (parent == null)
+            title = title + " - " + APP_NAME;
+        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
+        int type = JOptionPane.WARNING_MESSAGE;
+        if (! isCritical || Platform.isMac())
+            type = JOptionPane.PLAIN_MESSAGE;
+        JOptionPane.showMessageDialog(parent, message, title, type);
+    }
+
+    public static boolean showWarningQuestion(Component parent,
+                                           String mainMessage,
+                                           String optionalMessage)
     {
         String title = "Warning";
         if (parent == null)
@@ -158,7 +172,9 @@ public final class SimpleDialogs
         int type = JOptionPane.WARNING_MESSAGE;
         if (Platform.isMac())
             type = JOptionPane.PLAIN_MESSAGE;
-        JOptionPane.showMessageDialog(parent, message, title, type);
+        int r = JOptionPane.showConfirmDialog(parent, message, title,
+                                              JOptionPane.YES_NO_OPTION, type);
+        return (r == 0);
     }
 
     public static void setLastFile(File file)
@@ -213,12 +229,20 @@ public final class SimpleDialogs
             return file;
         while (file != null)
         {
-            if (file.exists()
-                && ! showQuestion(parent, "Overwrite " + file + "?", null))
+            if (file.exists())
             {
-                file = showFileChooser(parent, FILE_SAVE, lastFile,
-                                       setSgfFilter, title);
-                continue;
+                String mainMessage =
+                    "Replace file \"" + file.getName() + "\"?";
+                String optionalMessage =
+                    "If you overwrite the file, the previous " +
+                    "version will be lost.";
+                if (! showWarningQuestion(parent, mainMessage,
+                                          optionalMessage))
+                {
+                    file = showFileChooser(parent, FILE_SAVE, lastFile,
+                                           setSgfFilter, title);
+                    continue;
+                }
             }
             break;
         }

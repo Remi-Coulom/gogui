@@ -6,6 +6,7 @@ package net.sf.gogui.gogui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import javax.swing.Action;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -23,6 +24,7 @@ public class GoGuiToolBar
     {
         m_goGui = goGui;
         GoGuiActions actions = m_goGui.getActions();
+        m_actions = actions;
         addButton(actions.m_actionOpen);
         m_buttonSave = addButton(actions.m_actionSave);
         addSeparator();
@@ -50,8 +52,12 @@ public class GoGuiToolBar
 
     public void update()
     {
-        //GoGuiActions actions = m_goGui.getActions();
-        // At the moment the toolbar does not have any changing elements
+        File file = m_goGui.getFile();
+        if (file == null)
+            m_buttonSave.setAction(m_actions.m_actionSaveAs);
+        else
+            m_buttonSave.setAction(m_actions.m_actionSave);
+        m_buttonSave.setText(null);
     }
 
     /** Serial version to suppress compiler warning.
@@ -62,6 +68,8 @@ public class GoGuiToolBar
     GoGui m_goGui;
 
     JButton m_buttonSave;
+
+    GoGuiActions m_actions;
 
     private AbstractButton addButton(AbstractButton button)
     {
@@ -89,9 +97,7 @@ public class GoGuiToolBar
     private void setAction(AbstractButton button, Action action)
     {
         button.setAction(action);
-        // Don't use text unless there is no icon
-        if (button.getIcon() != null)
-            button.setText(null);
+        button.setText(null);
     }
 }
 

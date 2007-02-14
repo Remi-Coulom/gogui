@@ -62,6 +62,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.Score;
 import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
@@ -1031,24 +1032,34 @@ public class GoGui
 
     public void actionSave()
     {
-        if (m_file == null || ! isModified())
-            saveDialog();
+        if (! isModified())
+            return;
+        if (m_file == null)
+            actionSaveAs();
         else
         {
             if (m_file.exists())
             {
-                String message = "Overwrite " + m_file + "?";
+                String mainMessage = "Replace file \"" + m_file.getName()
+                    + "\"?";
+                String optionalMessage =
+                    "If you overwrite the file with your changed version,\n" +
+                    "the previous version will be lost.";
                 if (! m_optionalMessages.showWarningQuestion("overwrite",
-                                                             message, null))
+                                                             mainMessage,
+                                                             optionalMessage,
+                                                             true))
                     return;
             }
             save(m_file);
         }
+        updateViews(false);
     }
 
     public void actionSaveAs()
     {
         saveDialog();
+        updateViews(false);
     }
 
     public void actionScore()
@@ -1097,7 +1108,7 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionSendCommand(String command, final boolean isSignificant,
+    public void actionSendCommand(String command, final boolean isCritical,
                                   final boolean showError)
     {
         if (GtpUtil.isStateChangingCommand(command))
@@ -1109,7 +1120,7 @@ public class GoGui
             return;
         Runnable callback = new Runnable() {
                 public void run() {
-                    sendGtpCommandContinue(isSignificant, showError);
+                    sendGtpCommandContinue(isCritical, showError);
                 }
             };
         m_gtp.send(command, callback);
@@ -1680,10 +1691,10 @@ public class GoGui
         return true;
     }
 
-    public void sendGtpCommandContinue(boolean isSignificant,
+    public void sendGtpCommandContinue(boolean isCritical,
                                        boolean showError)
     {
-        endLengthyCommand(isSignificant, showError);
+        endLengthyCommand(isCritical, showError);
     }
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
@@ -1753,7 +1764,7 @@ public class GoGui
                                                " sent a malformed GTP " +
                                                "response",
                                                "Empty line before " +
-                                               "response start");
+                                               "response start", false);
             else
                 m_optionalMessages.showWarning("invalid-response",
                                                getProgramName() +
@@ -1761,7 +1772,7 @@ public class GoGui
                                                "response",
                                                "First line not " +
                                                "starting with status " +
-                                               "character");
+                                               "character", false);
         }
         
         private final String m_line;
@@ -1965,8 +1976,8 @@ public class GoGui
     {
         if (m_analyzeClearBoard)
             resetBoard();
-        boolean isSignificant = (m_gtp != null && m_gtp.isProgramDead());
-        if (! endLengthyCommand(isSignificant))
+        boolean isCritical = (m_gtp != null && m_gtp.isProgramDead());
+        if (! endLengthyCommand(isCritical))
             return;
         clearStatus();
         if (m_analyzeCommand == null)
@@ -2284,15 +2295,20 @@ public class GoGui
         }
         if (! checkCommandInProgress())
             return false;
+        String name = getProgramName();
         if (m_gtp.isProgramDead())
         {
-            showError(getProgramName() + " has terminated.", null, false);
+            showError(name + " has terminated.", null, false);
             return false;
         }
         if (isOutOfSync())
         {
-            showError(getProgramName()
-                      + " is not in sync with current position.", null,
+            showError(name + " is not in sync with current position",
+                      "A previous command to synchronize " + name
+                      + " with the current position failed.\n" +
+                      "You won't be able to use any functionality of " + name +
+                      " until you go to a position\n" +
+                      "that can be synchronized again.",
                       false);
             return false;
         }
@@ -2312,15 +2328,17 @@ public class GoGui
     {
         if (! isModified())
             return true;
-        String message = "Save current game?";
+        String mainMessage = "Save current game?";
+        String optionalMessage =
+            "Your changes will be lost if you don't save them.";
         int result;
         if (! isProgramTerminating)
             result =
-                m_optionalMessages.showYesNoCancelQuestion("save", message,
-                                                           null);
+                m_optionalMessages.showYesNoCancelQuestion("save", mainMessage,
+                                                           optionalMessage);
         else
-            result = SimpleDialogs.showYesNoCancelQuestion(this, message,
-                                                           null);
+            result = SimpleDialogs.showYesNoCancelQuestion(this, mainMessage,
+                                                           optionalMessage);
         switch (result)
         {
         case 0:
@@ -2422,13 +2440,13 @@ public class GoGui
                     if (board.getColor(point) != GoColor.EMPTY)
                     {
                         showWarning("Program played move on non-empty point",
-                                    "");
+                                    "", true);
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
                     else if (board.isKo(point))
                     {
-                        showWarning("Program violated Ko rule", "");
+                        showWarning("Program violated Ko rule", "", true);
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
@@ -2553,10 +2571,26 @@ public class GoGui
         catch (GtpError e)
         {
             if (! wasOutOfSync)
-                GuiGtpUtil.showError(this,
-                                     "Could not synchronize current\n" +
-                                     "position with " + getProgramName() + ":",
-                                     getProgramName(), e, true);
+            {
+                String name = getProgramName();
+                String mainMessage =
+                    "Could not synchronize position with " + name;
+                String optionalMessage = formatCommand(e.getCommand());
+                optionalMessage = optionalMessage + " sent to " + name
+                    + " failed.\n";
+                if (! e.getMessage().trim().equals(""))
+                {
+                    optionalMessage = optionalMessage +
+                        "The response was \"" + e.getMessage() + "\"";
+                    if (! e.getMessage().endsWith("."))
+                        optionalMessage = optionalMessage + ".";
+                    optionalMessage = optionalMessage + "\n";
+                }
+                optionalMessage = optionalMessage
+                    + "You will not be able to use any functionality of "
+                    + name + " in the current position.";
+                showWarning(mainMessage, optionalMessage, true);
+            }
         }
     }
 
@@ -2607,12 +2641,12 @@ public class GoGui
         return endLengthyCommand(true, true);
     }
 
-    private boolean endLengthyCommand(boolean isSignificant)
+    private boolean endLengthyCommand(boolean isCritical)
     {
-        return endLengthyCommand(isSignificant, true);
+        return endLengthyCommand(isCritical, true);
     }
 
-    private boolean endLengthyCommand(boolean isSignificant,
+    private boolean endLengthyCommand(boolean isCritical,
                                       boolean showError)
     {
         m_statusBar.clearProgress();     
@@ -2626,10 +2660,20 @@ public class GoGui
         updateViews(false);
         if (error != null && showError)
         {
-            showError(error, isSignificant);
+            showError(error, isCritical);
             return false;
         }
         return true;
+    }
+
+    private String formatCommand(String command)
+    {
+        if (command == null)
+            return "A command";
+        if (command.length() < 20)
+            return "The command \"" + command + "\"";
+        GtpCommand cmd = new GtpCommand(command);
+        return "The command \"" + cmd.getCommand() + " [...]\"";
     }
 
     private void generateMove(boolean isSingleMove)
@@ -2815,8 +2859,16 @@ public class GoGui
         }
         ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
         if (handicap == null)
-            showWarning("Handicap stone locations not\n" +
-                        "defined for this board size", "");
+        {
+            String optionalMessage =
+                "There is no standard definition for the location\n" +
+                "of " + m_handicap + " handicap stones on boards of size "
+                + size + ".\n" +
+                "You need to do a manual setup or make White\n" +
+                "play " + m_handicap + " passes instead.";
+            showWarning("Handicap stone locations not defined",
+                        optionalMessage, false);
+        }
         m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
                     m_timeSettings);
         if (size != oldSize)
@@ -3007,7 +3059,8 @@ public class GoGui
             setFile(file);
             String warnings = reader.getWarnings();
             if (warnings != null)
-                showWarning("File does not follow SGF standard", warnings);
+                showWarning("File does not follow SGF standard",
+                            warnings, false);
             SimpleDialogs.setLastFile(file);
             m_computerBlack = false;
             m_computerWhite = false;
@@ -3517,9 +3570,20 @@ public class GoGui
         showError(error, true);
     }
 
-    private void showError(GtpError error, boolean isSignificant)
+    private void showError(GtpError e, boolean isCritical)
     {        
-        GuiGtpUtil.showError(this, getProgramName(), error, isSignificant);
+        String name = getProgramName();
+        String mainMessage = "Command failed";
+        String optionalMessage = formatCommand(e.getCommand());
+        optionalMessage = optionalMessage + " sent to " + name + " failed.";
+        if (! e.getMessage().trim().equals(""))
+        {
+            optionalMessage = optionalMessage + "\nThe response was \""
+                + e.getMessage() + "\"";
+            if (! e.getMessage().endsWith("."))
+                optionalMessage = optionalMessage + ".";
+        }
+        showError(mainMessage, optionalMessage, isCritical);
     }
 
     private void showError(String mainMessage, String optionalMessage)
@@ -3528,10 +3592,10 @@ public class GoGui
     }
 
     private void showError(String mainMessage, String optionalMessage,
-                           boolean isSignificant)
+                           boolean isCritical)
     {
         SimpleDialogs.showError(this, mainMessage, optionalMessage,
-                                isSignificant);
+                                isCritical);
     }
 
     private void showGameFinished()
@@ -3617,9 +3681,11 @@ public class GoGui
         pack();
     }
 
-    private void showWarning(String mainMessage, String optionalMessage)
+    private void showWarning(String mainMessage, String optionalMessage,
+                             boolean isCritical)
     {
-        SimpleDialogs.showWarning(this, mainMessage, optionalMessage);
+        SimpleDialogs.showWarning(this, mainMessage, optionalMessage,
+                                  isCritical);
     }
 
     private void toFrontLater()

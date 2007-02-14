@@ -49,22 +49,28 @@ public class OptionalMessage
         return result;
     }
 
-    public void showWarning(String mainMessage, String optionalMessage)
+    public void showWarning(String mainMessage, String optionalMessage,
+                            boolean isCritical)
     {
         if (m_disabled)
             return;
-        show(mainMessage, optionalMessage, JOptionPane.WARNING_MESSAGE,
-             JOptionPane.OK_OPTION);
+        int type = JOptionPane.WARNING_MESSAGE;
+        if (! isCritical)
+            type = JOptionPane.PLAIN_MESSAGE;
+        show(mainMessage, optionalMessage, type, JOptionPane.OK_OPTION);
         m_disabled = m_disabledCheckBox.isSelected();
     }
 
     public boolean showWarningQuestion(String mainMessage,
-                                       String optionalMessage)
+                                       String optionalMessage,
+                                       boolean isCritical)
     {
         if (m_disabled)
             return true;
-        show(mainMessage, optionalMessage, JOptionPane.WARNING_MESSAGE,
-             JOptionPane.OK_CANCEL_OPTION);
+        int type = JOptionPane.WARNING_MESSAGE;
+        if (! isCritical)
+            type = JOptionPane.PLAIN_MESSAGE;
+        show(mainMessage, optionalMessage, type, JOptionPane.OK_CANCEL_OPTION);
         boolean result = (m_optionPane.getValue() == m_options[0]);
         if (result)
             m_disabled = m_disabledCheckBox.isSelected();
@@ -189,6 +195,8 @@ public class OptionalMessage
                                        m_options, defaultOption);
         JDialog dialog = m_optionPane.createDialog(m_parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
+        box.invalidate();
+        dialog.pack();
         box.invalidate();
         dialog.pack();
         dialog.setVisible(true);

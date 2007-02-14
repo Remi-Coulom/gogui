@@ -559,10 +559,10 @@ public final class AnalyzeDialog
     }
 
     private void showError(String mainMessage, String optionalMessage,
-                           boolean isSignificant)
+                           boolean isCritical)
     {
         SimpleDialogs.showError(this, mainMessage, optionalMessage,
-                                isSignificant);
+                                isCritical);
     }
 
     private void updateRecent(int index)

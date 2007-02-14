@@ -264,8 +264,13 @@ public class GuiUtil
         {
             if (showError)
                 SimpleDialogs.showWarning(null,
-                                          "Look and feel not found",
-                                          lookAndFeel);
+                                          "Look and Feel not found",
+                                          "The look and feel\n\""
+                                          + lookAndFeel + "\"\n"
+                                          + "was not found.\n" +
+                                          "Using default Look and Feel "
+                                          + "instead\n",
+                                          false);
         }
     }
 

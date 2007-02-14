@@ -32,7 +32,14 @@ public final class BoardSizeDialog
         {
         }
         if (size == -1)
-            SimpleDialogs.showError(parent, "Invalid size", "");
+        {
+            String mainMessage = "Invalid size";
+            String optionalMessage =
+                "Valid board sizes are numbers between 1 and "
+                + GoPoint.MAXSIZE + ".";
+            SimpleDialogs.showError(parent, mainMessage, optionalMessage,
+                                    false);
+        }
         return size;
     }
 
