@@ -185,6 +185,8 @@ public class OptionalMessage
             m_options[0] = "Ok";
             defaultOption = m_options[0];
         }
+        if (Platform.isMac())
+            m_disabledCheckBox.setFont(m_disabledCheckBox.getFont().deriveFont(11f));
         m_disabledCheckBox.setSelected(m_disabled);
         String toolTipText =
             "Disable this kind of messages for the current session";
