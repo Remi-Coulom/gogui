@@ -71,7 +71,8 @@ public class OptionalMessage
         int type = JOptionPane.WARNING_MESSAGE;
         if (! isCritical)
             type = JOptionPane.PLAIN_MESSAGE;
-        show(mainMessage, optionalMessage, type, JOptionPane.OK_CANCEL_OPTION);
+        show(mainMessage, optionalMessage, type,
+             JOptionPane.OK_CANCEL_OPTION);
         boolean result = (m_optionPane.getValue() == m_options[0]);
         if (result)
             m_disabled = m_disabledCheckBox.isSelected();
@@ -122,8 +123,6 @@ public class OptionalMessage
     private void show(String mainMessage, String optionalMessage,
                       int messageType, int optionType)
     {
-        if (Platform.isMac())
-            messageType = JOptionPane.PLAIN_MESSAGE;
         Box box = Box.createVerticalBox();
         JLabel label =
             new JLabel(GuiUtil.formatMessage(mainMessage, optionalMessage));
@@ -192,6 +191,10 @@ public class OptionalMessage
         m_disabledCheckBox.setToolTipText(toolTipText);
         checkBoxPanel.add(m_disabledCheckBox, BorderLayout.WEST);
         box.add(checkBoxPanel);
+        if (Platform.isMac())
+            // Don't show icons on Mac, proplem with icon generation in
+            // Quaqua 3.7.2
+            messageType = JOptionPane.PLAIN_MESSAGE;
 
         // Workaround for bug in Java 1.6 (and earlier versions) on Linux and
         // Windows:

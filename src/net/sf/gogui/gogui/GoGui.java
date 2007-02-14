@@ -2334,7 +2334,8 @@ public class GoGui
         int result;
         if (! isProgramTerminating)
             result =
-                m_optionalMessages.showYesNoCancelQuestion("save", mainMessage,
+                m_optionalMessages.showYesNoCancelQuestion("save",
+                                                           mainMessage,
                                                            optionalMessage);
         else
             result = SimpleDialogs.showYesNoCancelQuestion(this, mainMessage,
