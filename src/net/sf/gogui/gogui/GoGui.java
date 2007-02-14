@@ -3592,7 +3592,7 @@ public class GoGui
         String name = getProgramName();
         String mainMessage;
         String optionalMessage;
-        if (m_gtp.isProgramDead())
+        if (m_gtp != null && m_gtp.isProgramDead())
         {
             mainMessage = name + " terminated unexpectedly";
             optionalMessage =
