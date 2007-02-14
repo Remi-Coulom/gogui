@@ -1043,7 +1043,7 @@ public class GoGui
                 String mainMessage = "Replace file \"" + m_file.getName()
                     + "\"?";
                 String optionalMessage =
-                    "If you overwrite the file with your changed version,\n" +
+                    "If you overwrite the file with your changed version, " +
                     "the previous version will be lost.";
                 if (! m_optionalMessages.showWarningQuestion("overwrite",
                                                              mainMessage,
@@ -2305,9 +2305,9 @@ public class GoGui
         {
             showError(name + " is not in sync with current position",
                       "A previous command to synchronize " + name
-                      + " with the current position failed.\n" +
-                      "You won't be able to use any functionality of " + name +
-                      " until you go to a position\n" +
+                      + " with the current position failed. " +
+                      "You won't be able to use " + name +
+                      " until you go to a position " +
                       "that can be synchronized again.",
                       false);
             return false;
@@ -2862,10 +2862,10 @@ public class GoGui
         if (handicap == null)
         {
             String optionalMessage =
-                "There is no standard definition for the location\n" +
+                "There is no standard definition for the location " +
                 "of " + m_handicap + " handicap stones on boards of size "
                 + size + ".\n" +
-                "You need to do a manual setup or make White\n" +
+                "You need to do a manual setup or make White " +
                 "play " + m_handicap + " passes instead.";
             showWarning("Handicap stone locations not defined",
                         optionalMessage, false);

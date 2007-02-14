@@ -140,11 +140,17 @@ public class GuiUtil
                           "</style>"+
                           "</head>");
         else
+        {
+            String widthProp = "";
+            if (optionalMessage != null && optionalMessage.length() > 60)
+                widthProp = "width: 300px;";
             buffer.append("<head>"+
                           "<style type=\"text/css\">"+
-                          "p {margin-top: 8px; margin-bottom: 8px}"+
+                          "p {margin-top: 8px; margin-bottom: 8px; "
+                          + widthProp + "}"+
                           "</style>"+
                           "</head>");
+        }
         buffer.append("<b>");
         buffer.append(mainMessage.replaceAll("\n", "<br>"));
         buffer.append("</b>");
