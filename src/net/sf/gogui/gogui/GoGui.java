@@ -2298,7 +2298,13 @@ public class GoGui
         String name = getProgramName();
         if (m_gtp.isProgramDead())
         {
-            showError(name + " has terminated.", null, false);
+            String mainMessage = name + " has terminated";
+            String optionalMessage =
+                "Check the GTP shell window for error messages of " + name +
+                " that might be helpful to find the reason for " +
+                " this unexpected failure.\n" +
+                "You can reattach " + name + " from the Program menu.";
+            showError(mainMessage, optionalMessage, false);
             return false;
         }
         if (isOutOfSync())
@@ -3584,15 +3590,30 @@ public class GoGui
     private void showError(GtpError e, boolean isCritical)
     {        
         String name = getProgramName();
-        String mainMessage = "Command failed";
-        String optionalMessage = formatCommand(e.getCommand());
-        optionalMessage = optionalMessage + " sent to " + name + " failed.";
-        if (! e.getMessage().trim().equals(""))
+        String mainMessage;
+        String optionalMessage;
+        if (m_gtp.isProgramDead())
         {
-            optionalMessage = optionalMessage + "\nThe response was \""
-                + e.getMessage() + "\"";
-            if (! e.getMessage().endsWith("."))
-                optionalMessage = optionalMessage + ".";
+            mainMessage = name + " terminated unexpectedly";
+            optionalMessage =
+                "Check the GTP shell window for error messages of " + name +
+                " that might be helpful to find the reason for " +
+                " this unexpected failure.\n" +
+                "You can reattach " + name + " from the Program menu.";
+        }
+        else
+        {
+            mainMessage = "Command failed";
+            optionalMessage = formatCommand(e.getCommand());
+            optionalMessage = optionalMessage + " sent to " + name
+                + " failed.\n";
+            if (! e.getMessage().trim().equals(""))
+            {
+                optionalMessage = optionalMessage + "\nThe response was \""
+                    + e.getMessage() + "\"";
+                if (! e.getMessage().endsWith("."))
+                    optionalMessage = optionalMessage + ".";
+            }
         }
         showError(mainMessage, optionalMessage, isCritical);
     }
