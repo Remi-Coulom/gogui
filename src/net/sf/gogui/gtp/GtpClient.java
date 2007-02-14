@@ -39,6 +39,18 @@ import net.sf.gogui.util.ProcessUtil;
 public final class GtpClient
     extends GtpClientBase
 {
+    public static class ExecFailed
+        extends GtpError
+    {
+        public String m_program;
+
+        public ExecFailed(String program, IOException e)
+        {
+            super(e.getMessage());
+            m_program = program;
+        }        
+    }
+
     /** Callback if a timeout occured. */
     public interface TimeoutCallback
     {
@@ -112,12 +124,7 @@ public final class GtpClient
         }
         catch (IOException e)
         {
-            String message;
-            if (e.getMessage().trim().equals(""))
-                message = "Could not run program \"" + program + "\"";
-            else
-                message = e.getMessage();
-            throw new GtpError(message);
+            throw new ExecFailed(program, e);
         }
         init(m_process.getInputStream(), m_process.getOutputStream(),
              m_process.getErrorStream());

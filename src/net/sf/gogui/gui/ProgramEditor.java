@@ -201,13 +201,23 @@ public class ProgramEditor
         {
             if (m_label.getText().trim().equals(""))
             {
-                SimpleDialogs.showError(parent, "Label cannot be empty", "");
+                String mainMessage = "Label cannot be empty";
+                String optionalMessage =
+                    "You need to enter a label that will be used for "
+                    + "the menu item for the Go program.";
+                SimpleDialogs.showError(parent, mainMessage, optionalMessage,
+                                        false);
                 return false;
             }
         }
         if (m_command.getText().trim().equals(""))
         {
-            SimpleDialogs.showError(parent, "Command cannot be empty", "");
+            String mainMessage = "Command cannot be empty";
+            String optionalMessage =
+                "You need to specify the command line for invoking the Go " +
+                "program.";
+            SimpleDialogs.showError(parent, mainMessage, optionalMessage,
+                                    false);
             return false;
         }
         return true;

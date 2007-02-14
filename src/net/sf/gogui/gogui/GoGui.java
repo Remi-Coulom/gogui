@@ -3601,6 +3601,19 @@ public class GoGui
                 " this unexpected failure.\n" +
                 "You can reattach " + name + " from the Program menu.";
         }
+        else if (e instanceof GtpClient.ExecFailed)
+        {
+            String program = ((GtpClient.ExecFailed)e).m_program;
+            mainMessage = "Could not execute Go program";
+            optionalMessage =
+                "The Go program could not be executed using the command" +
+                " \"" + program + "\"";
+            if (e.getMessage() != null && ! e.getMessage().trim().equals(""))
+                optionalMessage = optionalMessage +
+                    " (" + e.getMessage() + ")";
+            optionalMessage = optionalMessage
+                + ".\nPlease correct the command for executing the program.";
+        }
         else
         {
             mainMessage = "Command failed";
