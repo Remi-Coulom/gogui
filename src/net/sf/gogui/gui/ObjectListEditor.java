@@ -59,6 +59,8 @@ public class ObjectListEditor
                 }
             });
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        int rows = Math.min(Math.max(objects.size(), 8), 15);
+        m_list.setVisibleRowCount(rows);
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.EAST);
@@ -215,6 +217,7 @@ public class ObjectListEditor
         }
         m_list.setListData(data.toArray());
         m_list.setSelectedIndex(selectedIndex);
+        m_list.ensureIndexIsVisible(selectedIndex);
     }
 }
 
