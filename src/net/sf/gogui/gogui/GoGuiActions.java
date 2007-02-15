@@ -589,7 +589,7 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSetup(GoColor.BLACK); } },
              "Setup Black",
-             "Add black stones (and set Black to play)",
+             "Add black stones and set Black to play",
              "gogui-setup-black");
 
     public final GoGuiAction m_actionSetupWhite =
@@ -597,7 +597,7 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSetup(GoColor.WHITE); } },
              "Setup White",
-             "Add white stones (and set White to play)",
+             "Add white stones and set White to play",
              "gogui-setup-white");
 
     public final GoGuiAction m_actionToggleAutoNumber =
