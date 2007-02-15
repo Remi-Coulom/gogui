@@ -12,11 +12,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.StringUtil;
 
@@ -31,20 +34,49 @@ public class ParameterDialog
     {
         ArrayList parameters = parseResponse(response);
         int numberParameters = parameters.size();
-        int cols = Math.max(1, numberParameters / 25);
-        JPanel panel =
-            new JPanel(new GridLayout(0, cols, 0, GuiUtil.PAD));
-        for (int i = 0; i < numberParameters; ++i)
-            panel.add(((Parameter)parameters.get(i)).getComponent());
+        Box outerBox = Box.createHorizontalBox();
+        int i = 0;
+        int numberColumns = 0;
+        Box box = null;
+        while (i < numberParameters)
+        {
+            if (i % 30 == 0)
+            {
+                if (box != null)
+                {
+                    if (numberColumns > 0)
+                    {
+                        outerBox.add(GuiUtil.createFiller());
+                        outerBox.add(new JSeparator(SwingConstants.VERTICAL));
+                        outerBox.add(GuiUtil.createFiller());
+                    }
+                    outerBox.add(box);
+                    ++numberColumns;
+                }
+                box = Box.createVerticalBox();
+            }
+            box.add(((Parameter)parameters.get(i)).getComponent());
+            ++i;
+        }
+        if (box != null)
+        {
+            if (numberColumns > 0)
+            {
+                outerBox.add(GuiUtil.createFiller());
+                outerBox.add(new JSeparator(SwingConstants.VERTICAL));
+                outerBox.add(GuiUtil.createFiller());
+            }
+            outerBox.add(box);
+        }
         Object options[] = { "Ok", "Cancel" };
         int r =
-            JOptionPane.showOptionDialog(owner, panel, title,
+            JOptionPane.showOptionDialog(owner, outerBox, title,
                                          JOptionPane.OK_CANCEL_OPTION,
                                          JOptionPane.PLAIN_MESSAGE, null,
                                          options, options[0]);
         if (r != 0)
             return;
-        for (int i = 0; i < parameters.size(); ++i)
+        for (i = 0; i < parameters.size(); ++i)
         {
             Parameter parameter = (Parameter)parameters.get(i);
             if (! parameter.isChanged())
@@ -155,7 +187,8 @@ public class ParameterDialog
         {
             super(key, value);
             m_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,
-                                                GuiUtil.SMALL_PAD, 0));
+                                                GuiUtil.SMALL_PAD,
+                                                GuiUtil.SMALL_PAD));
             m_panel.add(new JLabel(getLabel() + ":"));
             m_textField = new JTextField(13);
             m_textField.setText(value);
