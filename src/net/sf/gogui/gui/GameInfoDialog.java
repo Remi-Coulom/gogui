@@ -25,7 +25,8 @@ import net.sf.gogui.game.TimeSettings;
 public final class GameInfoDialog
     extends JOptionPane
 {
-    public static void show(Component parent, GameInformation info)
+    public static void show(Component parent, GameInformation info,
+                            MessageDialogs messageDialogs)
     {
         GameInfoDialog gameInfo = new GameInfoDialog(info);
         JDialog dialog = gameInfo.createDialog(parent, "Game Info");
@@ -37,7 +38,7 @@ public final class GameInfoDialog
             if (! (value instanceof Integer)
                 || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
                 return;
-            done = gameInfo.validate(parent);
+            done = gameInfo.validate(parent, messageDialogs);
         }
         dialog.dispose();
         gameInfo.updateGameInfo(info);
@@ -256,31 +257,32 @@ public final class GameInfoDialog
         }
     }
 
-    private boolean validate(Component parent)
+    private boolean validate(Component parent, MessageDialogs messageDialogs)
     {
-        if (! validateKomi(parent, m_komi))
+        if (! validateKomi(parent, m_komi, messageDialogs))
             return false;
-        if (! m_preByoyomi.validateTime(parent))
+        if (! m_preByoyomi.validateTime(parent, messageDialogs))
             return false;
-        if (! m_byoyomi.validateTime(parent))
+        if (! m_byoyomi.validateTime(parent, messageDialogs))
             return false;
         if (! validatePosIntOrEmpty(parent, m_byoyomiMoves,
-                                    "Invalid time settings"))
+                                    "Invalid time settings", messageDialogs))
             return false;
         if (m_byoyomi.isEmpty() != isEmpty(m_byoyomiMoves))
         {
-            SimpleDialogs.showError(parent,
-                                    "Invalid byoyomi settings",
-                                    "You need to specify both the byoyomi "
-                                    + "time period and the number of byoyomi "
-                                    + "moves.",
-                                    false);
+            messageDialogs.showError(parent,
+                                     "Invalid byoyomi settings",
+                                     "You need to specify both the byoyomi "
+                                     + "time period and the number of byoyomi "
+                                     + "moves.",
+                                     false);
             return false;
         }
         return true;
     }
 
-    private boolean validateKomi(Component parent, JTextField textField)
+    private boolean validateKomi(Component parent, JTextField textField,
+                                 MessageDialogs messageDialogs)
     {
         String text = getTextFieldContent(textField);
         try
@@ -289,7 +291,7 @@ public final class GameInfoDialog
         }
         catch (Komi.InvalidKomi e)
         {
-            SimpleDialogs.showError(parent, "Invalid komi",
+            messageDialogs.showError(parent, "Invalid komi",
                                     "The komi has to be a number.", false);
             return false;
         }
@@ -298,7 +300,8 @@ public final class GameInfoDialog
 
     private boolean validatePosIntOrEmpty(Component parent,
                                           JTextField textField,
-                                          String errorMessage)
+                                          String errorMessage,
+                                          MessageDialogs messageDialogs)
     {
         try
         {
@@ -308,7 +311,7 @@ public final class GameInfoDialog
             int value = Integer.parseInt(content);
             if (value <= 0)
             {
-                SimpleDialogs.showError(parent, errorMessage,
+                messageDialogs.showError(parent, errorMessage,
                                         "The entered value needs to be a " +
                                         "positive number.", false);
                 return false;
@@ -316,7 +319,7 @@ public final class GameInfoDialog
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, errorMessage,
+            messageDialogs.showError(parent, errorMessage,
                                     "The entered value needs to be a " +
                                     "number.", false);
             return false;
@@ -382,7 +385,8 @@ class TimeField
         }
     }
 
-    public boolean validateTime(Component parent)
+    public boolean validateTime(Component parent,
+                                MessageDialogs messageDialogs)
     {
         try
         {
@@ -391,7 +395,7 @@ class TimeField
             int value = Integer.parseInt(m_textField.getText());
             if (value <= 0)
             {
-                SimpleDialogs.showError(parent, "Invalid time",
+                messageDialogs.showError(parent, "Invalid time",
                                         "The entered value needs to be a " +
                                         "positive number.", false);
                 return false;
@@ -399,7 +403,7 @@ class TimeField
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Invalid time",
+            messageDialogs.showError(parent, "Invalid time",
                                     "The entered value needs to be a " +
                                     "number.", false);
             return false;

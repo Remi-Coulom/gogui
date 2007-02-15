@@ -56,9 +56,11 @@ public class GameTreePanel
     public static final Color BACKGROUND = new Color(192, 192, 192);
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
-                         int labelMode, int sizeMode)
+                         int labelMode, int sizeMode,
+                         MessageDialogs messageDialogs)
     {
         super(new SpringLayout());
+        m_messageDialogs = messageDialogs;
         m_owner = owner;
         setBackground(BACKGROUND);
         m_labelMode = labelMode;
@@ -337,9 +339,9 @@ public class GameTreePanel
         {
             m_expanded.clear();
             removeAll();
-            SimpleDialogs.showError(m_owner,
-                                    "Could not show game tree", 
-                                    "Out of memory");
+            m_messageDialogs.showError(m_owner,
+                                       "Could not show game tree", 
+                                       "Out of memory");
             update(tree, currentNode, minWidth, minHeight);
         }
         setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + MARGIN,
@@ -454,6 +456,8 @@ public class GameTreePanel
     private ImageIcon m_iconWhite;
 
     private ImageIcon m_iconSetup;
+
+    private MessageDialogs m_messageDialogs;
 
     private void initSize(int sizeMode)
     {
@@ -743,10 +747,10 @@ public class GameTreePanel
     private void showSubtree(ConstNode root)
     {
         if (NodeUtil.subtreeGreaterThan(root, 10000)
-            && ! SimpleDialogs.showQuestion(m_owner,
-                                            "Really expand large subtree?",
-                                            "This action might fail if not "
-                                            + "enough memory is available"))
+            && ! m_messageDialogs.showQuestion(m_owner,
+                                               "Really expand large subtree?",
+                                               "This action might fail if not "
+                                               + "enough memory is available"))
             return;
         boolean changed = false;
         ConstNode node = root;

@@ -20,7 +20,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
 import net.sf.gogui.gui.GuiUtil;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.version.Version;
 
@@ -29,9 +29,10 @@ public final class AboutDialog
     extends JOptionPane
 {
     public static void show(Component parent, String name, String version,
-                            String command)
+                            String command, MessageDialogs messageDialogs)
     {
-        AboutDialog aboutDialog = new AboutDialog(name, version, command);
+        AboutDialog aboutDialog = new AboutDialog(name, version, command,
+                                                  messageDialogs);
         JDialog dialog = aboutDialog.createDialog(parent, "About");
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
         aboutDialog.m_tabbedPane.invalidate();
@@ -47,8 +48,12 @@ public final class AboutDialog
 
     private JTabbedPane m_tabbedPane;
 
-    private AboutDialog(String name, String version, String command)
+    private MessageDialogs m_messageDialogs;
+
+    private AboutDialog(String name, String version, String command,
+                        MessageDialogs messageDialogs)
     {
+        m_messageDialogs = messageDialogs;
         m_tabbedPane = new JTabbedPane();
         m_tabbedPane.putClientProperty("jgoodies.noContentBorder",
                                        Boolean.TRUE);
@@ -88,7 +93,7 @@ public final class AboutDialog
         setOptionType(DEFAULT_OPTION);
     }
 
-    private static JPanel createPanel(String text)
+    private JPanel createPanel(String text)
     {
         JPanel panel = new JPanel(new GridLayout(1, 1));
         JEditorPane editorPane = new JEditorPane();
@@ -114,10 +119,10 @@ public final class AboutDialog
                     {
                         URL url = event.getURL();
                         if (! Platform.openInExternalBrowser(url))
-                            SimpleDialogs.showError(null,
-                                                    "Could not open URL"
-                                                    + " in external browser",
-                                                    "", false);
+                            m_messageDialogs.showError(null,
+                                                       "Could not open URL in"
+                                                       + " external browser",
+                                                       "", false);
                     }
                 }
             });

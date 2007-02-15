@@ -22,13 +22,16 @@ import javax.swing.JTextField;
 public class BookmarkEditor
     implements ObjectListEditor.ItemEditor
 {
-    public Object editItem(Component parent, Object object)
+    public Object editItem(Component parent, Object object,
+                           MessageDialogs messageDialogs)
     {
-        return editItem(parent, "Edit Bookmark", (Bookmark)object, false);
+        return editItem(parent, "Edit Bookmark", (Bookmark)object, false,
+                        messageDialogs);
     }
 
-    public Bookmark editItem(Component parent, String title, Bookmark bookmark,
-                             boolean selectName)
+    public Bookmark editItem(Component parent, String title,
+                             Bookmark bookmark, boolean selectName,
+                             MessageDialogs messageDialogs)
     {
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
         m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
@@ -65,7 +68,7 @@ public class BookmarkEditor
             if (! (value instanceof Integer)
                 || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
                 return null;
-            done = validate(parent);
+            done = validate(parent, messageDialogs);
         }
         String newName = m_name.getText().trim();
         File newFile = new File(m_file.getText());
@@ -135,30 +138,30 @@ public class BookmarkEditor
         }
     }
 
-    private boolean validate(Component parent)
+    private boolean validate(Component parent, MessageDialogs messageDialogs)
     {
         if (m_name.getText().trim().equals(""))
         {
-            SimpleDialogs.showError(parent, "Name cannot be empty",
-                                    "You need to enter a name for the "
-                                    +" item in the Bookmarks menu. ",
-                                    false);
+            messageDialogs.showError(parent, "Name cannot be empty",
+                                     "You need to enter a name for the "
+                                     +" item in the Bookmarks menu. ",
+                                     false);
             return false;
         }
         if (getMove() < 0)
         {
-            SimpleDialogs.showError(parent, "Invalid move number",
-                                    "Only positive move numbers are valid.",
-                                    false);
+            messageDialogs.showError(parent, "Invalid move number",
+                                     "Only positive move numbers are valid.",
+                                     false);
             return false;
         }
         File file = new File(m_file.getText().trim());
         if (! file.exists())
         {
-            SimpleDialogs.showError(parent, "File does not exist",
-                                    "You need to enter the name of an "
-                                    + "existing file.",
-                                    false);
+            messageDialogs.showError(parent, "File does not exist",
+                                     "You need to enter the name of an "
+                                     + "existing file.",
+                                     false);
             return false;
         }
         return true;

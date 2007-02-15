@@ -44,9 +44,10 @@ public class Help
     extends JFrame
     implements ActionListener, HyperlinkListener
 {
-    public Help(URL contents)
+    public Help(URL contents, MessageDialogs messageDialogs)
     {
         super("Documentation - GoGui");
+        m_messageDialogs = messageDialogs;
         m_contents = contents;
         Container contentPane = getContentPane();
         JPanel panel = new JPanel(new BorderLayout());
@@ -117,6 +118,8 @@ public class Help
     private java.util.List m_history = new ArrayList();
 
     private final URL m_contents;
+
+    private MessageDialogs m_messageDialogs;
 
     private void appendHistory(URL url)
     {
@@ -209,9 +212,9 @@ public class Help
         }
         catch (IOException e)
         {
-            SimpleDialogs.showError(this,
-                                    "Could not load page\n" +
-                                    url.toString(), e.getMessage(), false);
+            m_messageDialogs.showError(this,
+                                       "Could not load page\n" +
+                                       url.toString(), e.getMessage(), false);
         }
     }
 

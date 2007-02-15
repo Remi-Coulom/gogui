@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.OptionalMessage;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.util.Platform;
 
 /** Interrupt command. */
@@ -20,7 +20,8 @@ public final class Interrupt
         supported by the program, otherwise kill the program.
         @return true if interrupt comment line was sent.
     */
-    public boolean run(Component parent, GuiGtpClient gtp)
+    public boolean run(Component parent, GuiGtpClient gtp,
+                       MessageDialogs messageDialogs)
     {
         if (! gtp.isInterruptSupported())
         {
@@ -48,7 +49,7 @@ public final class Interrupt
         }
         catch (GtpError e)
         {
-            SimpleDialogs.showError(parent, "Interrupting failed", e);
+            messageDialogs.showError(parent, "Interrupting failed", e);
             return false;
         }
         return true;

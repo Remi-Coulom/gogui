@@ -86,8 +86,10 @@ import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.GuiGtpUtil;
 import net.sf.gogui.gui.GuiUtil;
+import net.sf.gogui.gui.FileDialogs;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
+import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.gui.ObjectListEditor;
 import net.sf.gogui.gui.OptionalMessageSession;
 import net.sf.gogui.gui.ParameterDialog;
@@ -96,7 +98,6 @@ import net.sf.gogui.gui.ProgramEditor;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
-import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
@@ -244,7 +245,8 @@ public class GoGui
         String command = null;
         if (m_gtp != null)
             command = m_gtp.getProgramCommand();
-        AboutDialog.show(this, getProgramName(), m_version, command);
+        AboutDialog.show(this, getProgramName(), m_version, command,
+                         m_messageDialogs);
     }
 
     public void actionAddBookmark()
@@ -276,7 +278,8 @@ public class GoGui
         int move = NodeUtil.getMoveNumber(getCurrentNode());
         Bookmark bookmark = new Bookmark(m_file, move, variation);
         BookmarkEditor editor = new BookmarkEditor();
-        bookmark = editor.editItem(this, "Add Bookmark", bookmark, true);
+        bookmark = editor.editItem(this, "Add Bookmark", bookmark, true,
+                                   m_messageDialogs);
         if (bookmark == null)
             return;
         m_bookmarks.add(bookmark);
@@ -347,7 +350,8 @@ public class GoGui
     {
         if (! checkCommandInProgress())
             return;
-        int size = BoardSizeDialog.show(this, getBoardSize());
+        int size = BoardSizeDialog.show(this, getBoardSize(),
+                                        m_messageDialogs);
         if (size < 1 || size > GoPoint.MAXSIZE)
             return;
         saveSession();
@@ -469,7 +473,7 @@ public class GoGui
         }
         if (m_help == null)
         {
-            m_help = new Help(url);
+            m_help = new Help(url, m_messageDialogs);
             m_session.restoreSize(m_help, "help");
         }
         m_help.setVisible(true);
@@ -480,7 +484,8 @@ public class GoGui
     {
         BookmarkEditor editor = new BookmarkEditor();
         ObjectListEditor listEditor = new ObjectListEditor();
-        if (! listEditor.edit(this, "Edit Bookmarks", m_bookmarks, editor))
+        if (! listEditor.edit(this, "Edit Bookmarks", m_bookmarks, editor,
+                              m_messageDialogs))
             return;
         m_menuBar.setBookmarks(m_bookmarks);
         Bookmark.save(m_bookmarks);
@@ -501,7 +506,8 @@ public class GoGui
     {
         ProgramEditor editor = new ProgramEditor();
         ObjectListEditor listEditor = new ObjectListEditor();
-        if (! listEditor.edit(this, "Edit Programs", m_programs, editor))
+        if (! listEditor.edit(this, "Edit Programs", m_programs, editor,
+                              m_messageDialogs))
             return;
         m_menuBar.setPrograms(m_programs);
         m_prefs.putInt("program", -1);
@@ -515,7 +521,8 @@ public class GoGui
 
     public void actionExportLatexMainVariation()
     {
-        File file = SimpleDialogs.showSave(this, "Export LaTeX");
+        File file = FileDialogs.showSave(this, "Export LaTeX",
+                                         m_messageDialogs);
         if (file == null)
             return;
         try
@@ -533,7 +540,8 @@ public class GoGui
 
     public void actionExportLatexPosition()
     {
-        File file = SimpleDialogs.showSave(this, "Export LaTeX Position");
+        File file = FileDialogs.showSave(this, "Export LaTeX Position",
+                                         m_messageDialogs);
         if (file == null)
             return;
         try
@@ -557,7 +565,7 @@ public class GoGui
 
     public void actionExportSgfPosition()
     {
-        File file = SimpleDialogs.showSaveSgf(this);
+        File file = FileDialogs.showSaveSgf(this, m_messageDialogs);
         if (file == null)
             return;
         try
@@ -572,7 +580,8 @@ public class GoGui
 
     public void actionExportTextPosition()
     {
-        File file = SimpleDialogs.showSave(this, "Export Text Position");
+        File file = FileDialogs.showSave(this, "Export Text Position",
+                                         m_messageDialogs);
         if (file == null)
             return;
         try
@@ -653,7 +662,7 @@ public class GoGui
         ConstNode node = m_game.getGameInformationNode();
         GameInformation info =
             new GameInformation(node.getGameInformationConst());
-        GameInfoDialog.show(this, info);
+        GameInfoDialog.show(this, info, m_messageDialogs);
         m_game.setGameInformation(info, node);
         currentNodeChanged(); // updates komi, time settings
         Komi prefsKomi = getPrefsKomi();
@@ -671,7 +680,8 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        ConstNode node = MoveNumberDialog.show(this, getCurrentNode());
+        ConstNode node = MoveNumberDialog.show(this, getCurrentNode(),
+                                               m_messageDialogs);
         if (node == null)
             return;
         actionGotoNode(node);
@@ -738,7 +748,8 @@ public class GoGui
         if (! checkStateChangePossible())
             return;
         ConstNode node = GotoVariationDialog.show(this, getTree(),
-                                                  getCurrentNode());
+                                                  getCurrentNode(),
+                                                  m_messageDialogs);
         if (node == null)
             return;
         actionGotoNode(node);
@@ -772,7 +783,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        File file = SimpleDialogs.showOpen(this, "Import Text Position");
+        File file = FileDialogs.showOpen(this, "Import Text Position");
         if (file == null)
             return;
         try
@@ -805,7 +816,7 @@ public class GoGui
         }
         if (m_gtp == null || m_gtp.isProgramDead())
             return;
-        if (m_interrupt.run(this, m_gtp))
+        if (m_interrupt.run(this, m_gtp, m_messageDialogs))
             showStatus("Interrupting...");
     }
 
@@ -864,7 +875,8 @@ public class GoGui
         m_newProgram = new Program("", "", "", "");
         final ProgramEditor editor = new ProgramEditor();
         m_newProgram =
-            editor.editItem(this, "New Program", m_newProgram, true);
+            editor.editItem(this, "New Program", m_newProgram, true,
+                            m_messageDialogs);
         if (m_newProgram == null)
             return;
         protectGui();
@@ -876,7 +888,8 @@ public class GoGui
                     {
                         m_newProgram = editor.editItem(GoGui.this,
                                                        "New Program",
-                                                       m_newProgram, true);
+                                                       m_newProgram, true,
+                                                       m_messageDialogs);
                         if (m_newProgram == null)
                             return;
                         SwingUtilities.invokeLater(this);
@@ -886,7 +899,8 @@ public class GoGui
                     m_newProgram.m_version = m_version;
                     m_newProgram.setUniqueLabel(m_programs);
                     m_newProgram = editor.editItem(GoGui.this, "New Program",
-                                                   m_newProgram, false);
+                                                   m_newProgram, false,
+                                                   m_messageDialogs);
                     if (m_newProgram == null)
                     {
                         actionDetachProgram();
@@ -925,7 +939,7 @@ public class GoGui
             return;
         if (! checkSaveGame())
             return;
-        File file = SimpleDialogs.showOpenSgf(this);
+        File file = FileDialogs.showOpenSgf(this);
         if (file == null)
             return;
         actionOpenFile(file);
@@ -1005,7 +1019,7 @@ public class GoGui
 
     public void actionPrint()
     {
-        Print.run(this, m_guiBoard);
+        Print.run(this, m_guiBoard, m_messageDialogs);
     }
 
     public void actionReattachProgram()
@@ -1236,7 +1250,7 @@ public class GoGui
             return;
         if (m_shell == null)
             return;
-        File file = SimpleDialogs.showOpen(this, "Choose GTP file");
+        File file = FileDialogs.showOpen(this, "Choose GTP file");
         if (file == null)
             return;
         actionShellSendFile(file);
@@ -1895,6 +1909,8 @@ public class GoGui
 
     private GoColor m_setupColor;
 
+    private MessageDialogs m_messageDialogs = new MessageDialogs();
+
     private OptionalMessageSession m_optionalMessages =
         new OptionalMessageSession(this);
 
@@ -2004,7 +2020,8 @@ public class GoGui
             }
             if (type == AnalyzeCommand.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
-                                               title, response, m_gtp);
+                                               title, response, m_gtp,
+                                               m_messageDialogs);
             if (AnalyzeCommand.isTextType(type))
             {
                 if (response.indexOf("\n") < 0)
@@ -2073,7 +2090,7 @@ public class GoGui
             m_shell.dispose();
             m_shell = null;
         }
-        m_shell = new GtpShell(this, this);
+        m_shell = new GtpShell(this, this, m_messageDialogs);
         m_actions.registerAll(m_shell.getLayeredPane());
         m_shell.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -2346,8 +2363,10 @@ public class GoGui
                                                            mainMessage,
                                                            optionalMessage);
         else
-            result = SimpleDialogs.showYesNoCancelQuestion(this, mainMessage,
-                                                           optionalMessage);
+            result =
+                m_messageDialogs.showYesNoCancelQuestion(this,
+                                                         mainMessage,
+                                                         optionalMessage);
         switch (result)
         {
         case 0:
@@ -2501,7 +2520,8 @@ public class GoGui
     {
         m_analyzeDialog =
             new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
-                              m_programCommandAnalyzeCommands, m_gtp);
+                              m_programCommandAnalyzeCommands, m_gtp,
+                              m_messageDialogs);
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -2530,7 +2550,7 @@ public class GoGui
 
     private void createTree()
     {
-        m_gameTreeViewer = new GameTreeViewer(this, this);
+        m_gameTreeViewer = new GameTreeViewer(this, this, m_messageDialogs);
         m_gameTreeViewer.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     actionDisposeTree();
@@ -2974,7 +2994,7 @@ public class GoGui
         if (! m_initAnalyze.equals(""))
         {
             AnalyzeCommand analyzeCommand =
-                AnalyzeCommand.get(this, m_initAnalyze);
+                AnalyzeCommand.get(this, m_initAnalyze, m_messageDialogs);
             if (analyzeCommand == null)
                 showError("Unknown analyze command \"" + m_initAnalyze
                           + "\"", "");
@@ -3080,7 +3100,7 @@ public class GoGui
             if (warnings != null)
                 showWarning("File does not follow SGF standard",
                             warnings, false);
-            SimpleDialogs.setLastFile(file);
+            FileDialogs.setLastFile(file);
             m_computerBlack = false;
             m_computerWhite = false;
             createThumbnail(file);
@@ -3290,7 +3310,7 @@ public class GoGui
 
     private boolean saveDialog()
     {
-        File file = SimpleDialogs.showSaveSgf(this);
+        File file = FileDialogs.showSaveSgf(this, m_messageDialogs);
         if (file == null)
             return false;
         return save(file);
@@ -3586,7 +3606,7 @@ public class GoGui
     
     private void showError(String message, Exception e, boolean isCritical)
     {
-        SimpleDialogs.showError(this, message, e, isCritical);
+        m_messageDialogs.showError(this, message, e, isCritical);
     }
 
     private void showError(GtpError error)
@@ -3646,8 +3666,8 @@ public class GoGui
     private void showError(String mainMessage, String optionalMessage,
                            boolean isCritical)
     {
-        SimpleDialogs.showError(this, mainMessage, optionalMessage,
-                                isCritical);
+        m_messageDialogs.showError(this, mainMessage, optionalMessage,
+                                   isCritical);
     }
 
     private void showGameFinished()
@@ -3658,7 +3678,7 @@ public class GoGui
 
     private void showInfo(String mainMessage, String optionalMessage)
     {
-        SimpleDialogs.showInfo(this, mainMessage, optionalMessage);
+        m_messageDialogs.showInfo(this, mainMessage, optionalMessage);
     }
 
     private void showInfoPanel(boolean enable)
@@ -3692,7 +3712,8 @@ public class GoGui
 
     private boolean showQuestion(String mainMessage, String optionalMessage)
     {
-        return SimpleDialogs.showQuestion(this, mainMessage, optionalMessage);
+        return m_messageDialogs.showQuestion(this, mainMessage,
+                                             optionalMessage);
     }
 
     private void showStatus(String text)
@@ -3736,8 +3757,8 @@ public class GoGui
     private void showWarning(String mainMessage, String optionalMessage,
                              boolean isCritical)
     {
-        SimpleDialogs.showWarning(this, mainMessage, optionalMessage,
-                                  isCritical);
+        m_messageDialogs.showWarning(this, mainMessage, optionalMessage,
+                                     isCritical);
     }
 
     private void toFrontLater()

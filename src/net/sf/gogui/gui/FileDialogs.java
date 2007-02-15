@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: SimpleDialogs.java 4309 2007-02-14 22:49:26Z enz $
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -26,10 +27,15 @@ import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.sf.gogui.sgf.SgfFilter;
@@ -38,8 +44,8 @@ import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
-/** Simple message dialogs and file selectors. */
-public final class SimpleDialogs
+/** File dialogs. */
+public final class FileDialogs
 {
     /** Dialog type for opening a file. */
     public static final int FILE_OPEN = 0;
@@ -53,52 +59,6 @@ public final class SimpleDialogs
     */
     public static final int FILE_SELECT = 2;
     
-    public static void showError(Component frame, String mainMessage,
-                                 String optionalMessage)
-    {
-        showError(frame, mainMessage, optionalMessage, true);
-    }
-
-    public static void showError(Component frame, String mainMessage,
-                                 String optionalMessage,
-                                 boolean isCritical)
-    {
-        String title = "Error";
-        if (frame == null)
-            title = title + " - " + APP_NAME;
-        int type;
-        if (! isCritical || Platform.isMac())
-            type = JOptionPane.PLAIN_MESSAGE;
-        else
-            type = JOptionPane.ERROR_MESSAGE;
-        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        JOptionPane.showMessageDialog(frame, message, title, type);
-    }
-
-    public static void showError(Component frame, String message, Exception e)
-    {
-        showError(frame, message, e, true);
-    }
-
-    public static void showError(Component frame, String message, Exception e,
-                                 boolean isCritical)
-    {
-        showError(frame, message, StringUtil.getErrorMessage(e), isCritical);
-    }
-
-    public static void showInfo(Component frame, String mainMessage,
-                                String optionalMessage)
-    {
-        String title = "Info";
-        if (frame == null)
-            title = title + " - " + APP_NAME;
-        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        int type = JOptionPane.INFORMATION_MESSAGE;
-        if (Platform.isMac())
-            type = JOptionPane.PLAIN_MESSAGE;
-        JOptionPane.showMessageDialog(frame, message, title, type);
-    }
-
     public static File showOpen(Component parent, String title)
     {
         return showFileChooser(parent, FILE_OPEN, null, false, title);
@@ -109,43 +69,18 @@ public final class SimpleDialogs
         return showFileChooser(parent, FILE_OPEN, null, true, null);
     }
 
-    public static boolean showQuestion(Component frame, String mainMessage,
-                                       String optionalMessage)
+    public static File showSave(Component parent, String title,
+                                MessageDialogs messageDialogs)
     {
-        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        String title = "Question";
-        if (frame == null)
-            title = title + " - " + APP_NAME;
-        int r = JOptionPane.showConfirmDialog(frame, message, title,
-                                              JOptionPane.YES_NO_OPTION);
-        return (r == 0);
+        return showFileChooserSave(parent, null, false, title,
+                                   messageDialogs);
     }
 
-    public static int showYesNoCancelQuestion(Component parent,
-                                              String mainMessage,
-                                              String optionalMessage)
+    public static File showSaveSgf(Frame parent,
+                                   MessageDialogs messageDialogs)
     {
-        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        int type = JOptionPane.QUESTION_MESSAGE;
-        if (Platform.isMac())
-            type = JOptionPane.PLAIN_MESSAGE;
-        int result =
-            JOptionPane.showConfirmDialog(parent, message, "Question",
-                                          JOptionPane.YES_NO_CANCEL_OPTION,
-                                          type);
-        if (result < 0)
-            return 2; // Handle dialog closing as cancel
-        return result;
-    }
-
-    public static File showSave(Component parent, String title)
-    {
-        return showFileChooserSave(parent, null, false, title);
-    }
-
-    public static File showSaveSgf(Frame parent)
-    {
-        return showFileChooserSave(parent, s_lastFile, true, null);
+        return showFileChooserSave(parent, s_lastFile, true, null,
+                                   messageDialogs);
     }
 
     /** File selection, unknown whether for load or save. */
@@ -154,46 +89,15 @@ public final class SimpleDialogs
         return showFileChooser(parent, FILE_SELECT, s_lastFile, false, title);
     }
 
-    public static void showWarning(Component parent, String mainMessage,
-                                   String optionalMessage, boolean isCritical)
-    {
-        String title = "Warning";
-        if (parent == null)
-            title = title + " - " + APP_NAME;
-        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        int type = JOptionPane.WARNING_MESSAGE;
-        if (! isCritical || Platform.isMac())
-            type = JOptionPane.PLAIN_MESSAGE;
-        JOptionPane.showMessageDialog(parent, message, title, type);
-    }
-
-    public static boolean showWarningQuestion(Component parent,
-                                           String mainMessage,
-                                           String optionalMessage)
-    {
-        String title = "Warning";
-        if (parent == null)
-            title = title + " - " + APP_NAME;
-        String message = GuiUtil.formatMessage(mainMessage, optionalMessage);
-        int type = JOptionPane.WARNING_MESSAGE;
-        if (Platform.isMac())
-            type = JOptionPane.PLAIN_MESSAGE;
-        int r = JOptionPane.showConfirmDialog(parent, message, title,
-                                              JOptionPane.YES_NO_OPTION, type);
-        return (r == 0);
-    }
-
     public static void setLastFile(File file)
     {
         s_lastFile = file;
     }
 
-    private static final String APP_NAME = "GoGui";
-
     private static File s_lastFile;
 
     /** Make constructor unavailable; class is for namespace only. */
-    private SimpleDialogs()
+    private FileDialogs()
     {
     }
 
@@ -226,7 +130,8 @@ public final class SimpleDialogs
     private static File showFileChooserSave(Component parent,
                                             File lastFile,
                                             boolean setSgfFilter,
-                                            String title)
+                                            String title,
+                                            MessageDialogs messageDialogs)
     {
         File file = showFileChooser(parent, FILE_SAVE, lastFile, setSgfFilter,
                                     title);
@@ -242,8 +147,8 @@ public final class SimpleDialogs
                 String optionalMessage =
                     "If you overwrite the file, the previous " +
                     "version will be lost.";
-                if (! showWarningQuestion(parent, mainMessage,
-                                          optionalMessage))
+                if (! messageDialogs.showWarningQuestion(parent, mainMessage,
+                                                         optionalMessage))
                 {
                     file = showFileChooser(parent, FILE_SAVE, lastFile,
                                            setSgfFilter, title);

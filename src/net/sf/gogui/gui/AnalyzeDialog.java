@@ -63,9 +63,11 @@ public final class AnalyzeDialog
 
     public AnalyzeDialog(Frame owner, Listener listener,
                          ArrayList supportedCommands,
-                         String programAnalyzeCommands, GuiGtpClient gtp)
+                         String programAnalyzeCommands, GuiGtpClient gtp,
+                         MessageDialogs messageDialogs)
     {
         super(owner, "Analyze");
+        m_messageDialogs = messageDialogs;
         m_gtp = gtp;
         m_supportedCommands = supportedCommands;
         m_programAnalyzeCommands = programAnalyzeCommands;
@@ -195,6 +197,8 @@ public final class AnalyzeDialog
     private ArrayList m_fullRecentList;
 
     private GoColor m_selectedColor = GoColor.EMPTY;
+
+    private MessageDialogs m_messageDialogs;
 
     private final GuiGtpClient m_gtp;
 
@@ -498,21 +502,21 @@ public final class AnalyzeDialog
         }
         if (command.needsFileArg())
         {
-            File fileArg = SimpleDialogs.showSelectFile(this, label);
+            File fileArg = FileDialogs.showSelectFile(this, label);
             if (fileArg == null)
                 return;
             command.setFileArg(fileArg);
         }
         if (command.needsFileOpenArg())
         {
-            File fileArg = SimpleDialogs.showOpen(this, label);
+            File fileArg = FileDialogs.showOpen(this, label);
             if (fileArg == null)
                 return;
             command.setFileOpenArg(fileArg);
         }
         if (command.needsFileSaveArg())
         {
-            File fileArg = SimpleDialogs.showSave(this, label);
+            File fileArg = FileDialogs.showSave(this, label, m_messageDialogs);
             if (fileArg == null)
                 return;
             command.setFileSaveArg(fileArg);
@@ -565,8 +569,8 @@ public final class AnalyzeDialog
     private void showError(String mainMessage, String optionalMessage,
                            boolean isCritical)
     {
-        SimpleDialogs.showError(this, mainMessage, optionalMessage,
-                                isCritical);
+        m_messageDialogs.showError(this, mainMessage, optionalMessage,
+                                   isCritical);
     }
 
     private void updateRecent(int index)

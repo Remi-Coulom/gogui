@@ -138,7 +138,8 @@ public class AnalyzeCommand
         return command;
     }
 
-    public static AnalyzeCommand get(Frame owner, String label)
+    public static AnalyzeCommand get(Frame owner, String label,
+                                     MessageDialogs messageDialogs)
     {
         ArrayList commands = new ArrayList(128);
         ArrayList labels = new ArrayList(128);
@@ -148,9 +149,9 @@ public class AnalyzeCommand
         }
         catch (Exception e)
         {            
-            SimpleDialogs.showError(owner,
-                                    "Reading analyze configuration failed",
-                                    e);
+            messageDialogs.showError(owner,
+                                     "Reading analyze configuration failed",
+                                     e);
         }
         int index = labels.indexOf(label);
         if (index < 0)

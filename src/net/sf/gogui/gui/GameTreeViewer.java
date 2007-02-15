@@ -30,13 +30,15 @@ public class GameTreeViewer
         void actionGotoNode(ConstNode node);
     }
 
-    public GameTreeViewer(Frame owner, Listener listener)
+    public GameTreeViewer(Frame owner, Listener listener,
+                          MessageDialogs messageDialogs)
     {
         super(owner, "Tree");
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.LABEL_NUMBER,
-                                    GameTreePanel.SIZE_NORMAL);
+                                    GameTreePanel.SIZE_NORMAL,
+                                    messageDialogs);
         m_scrollPane =
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

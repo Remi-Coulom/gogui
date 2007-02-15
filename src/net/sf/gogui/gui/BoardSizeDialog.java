@@ -13,7 +13,8 @@ public final class BoardSizeDialog
 {
     /** Run dialog.
         @return Board size or -1 if aborted. */
-    public static int show(Component parent, int size)
+    public static int show(Component parent, int size,
+                           MessageDialogs messageDialogs)
     {
         Object value =
             JOptionPane.showInputDialog(parent, "Board size", "Input",
@@ -37,8 +38,8 @@ public final class BoardSizeDialog
             String optionalMessage =
                 "Valid board sizes are numbers between 1 and "
                 + GoPoint.MAXSIZE + ".";
-            SimpleDialogs.showError(parent, mainMessage, optionalMessage,
-                                    false);
+            messageDialogs.showError(parent, mainMessage, optionalMessage,
+                                     false);
         }
         return size;
     }

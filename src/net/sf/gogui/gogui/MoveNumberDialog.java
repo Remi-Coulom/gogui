@@ -8,12 +8,13 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 
 /** Ask for a move number in a variation given by a node. */
 public final class MoveNumberDialog
 {
-    public static ConstNode show(Component parent, ConstNode node)
+    public static ConstNode show(Component parent, ConstNode node,
+                                 MessageDialogs messageDialogs)
     {
         int number = NodeUtil.getMoveNumber(node);        
         Object value =
@@ -28,18 +29,18 @@ public final class MoveNumberDialog
             node = NodeUtil.findByMoveNumber(node, number);
             if (node == null)
             {
-                SimpleDialogs.showError(parent, "No move with this number",
-                                        "You need to enter a valid move "
-                                        +"number", false);
+                messageDialogs.showError(parent, "No move with this number",
+                                         "You need to enter a valid move "
+                                         +"number", false);
                 return null;
             }
             return node;
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Not a number",
-                                    "You need to enter a valid move number.",
-                                    false);
+            messageDialogs.showError(parent, "Not a number",
+                                     "You need to enter a valid move number.",
+                                     false);
             return null;
         }
     }

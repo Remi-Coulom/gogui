@@ -52,9 +52,11 @@ public class GtpShell
                                boolean showError);
     }
 
-    public GtpShell(Frame owner, Listener listener)
+    public GtpShell(Frame owner, Listener listener,
+                    MessageDialogs messageDialogs)
     {
         super(owner, "Shell");
+        m_messageDialogs = messageDialogs;
         m_listener = listener;
         Preferences prefs = Preferences.userNodeForPackage(getClass());
         m_historyMin = prefs.getInt("history-min", 2000);
@@ -350,6 +352,8 @@ public class GtpShell
 
     private String m_programVersion = "unknown";
 
+    private MessageDialogs m_messageDialogs;
+
     private void addAllCompletions(ArrayList completions)
     {
         // On Windows JDK 1.4 changing the popup automatically
@@ -610,7 +614,7 @@ public class GtpShell
 
     private void save(JFrame parent, String s, int linesTruncated)
     {
-        File file = SimpleDialogs.showSave(parent, null);
+        File file = FileDialogs.showSave(parent, null, m_messageDialogs);
         if (file == null)
             return;
         try
@@ -625,15 +629,15 @@ public class GtpShell
         }
         catch (FileNotFoundException e)
         {
-            SimpleDialogs.showError(parent, "Could not save to file.", "");
+            m_messageDialogs.showError(parent, "Could not save to file.", "");
         }
     }
 
     private void showError(String mainMessage, String optionalMessage,
                            boolean isCritical)
     {
-        SimpleDialogs.showError(this, mainMessage, optionalMessage,
-                                isCritical);
+        m_messageDialogs.showError(this, mainMessage, optionalMessage,
+                                   isCritical);
     }
 
     private void scrollPage(boolean up)

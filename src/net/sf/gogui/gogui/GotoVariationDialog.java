@@ -9,13 +9,14 @@ import javax.swing.JOptionPane;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 
 /** Ask for a variation. */
 public final class GotoVariationDialog
 {
     public static ConstNode show(Component parent, ConstGameTree tree,
-                                 ConstNode currentNode)
+                                 ConstNode currentNode,
+                                 MessageDialogs messageDialogs)
     {
         String variation = NodeUtil.getVariationString(currentNode);
         Object value =
@@ -27,9 +28,9 @@ public final class GotoVariationDialog
         ConstNode root = tree.getRootConst();
         ConstNode node = NodeUtil.findByVariation(root, (String)value);
         if (node == null)
-            SimpleDialogs.showError(parent, "Invalid variation",
-                                    "You need to specify a valid variation.",
-                                    false);
+            messageDialogs.showError(parent, "Invalid variation",
+                                     "You need to specify a valid variation.",
+                                     false);
         return node;
     }
 

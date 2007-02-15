@@ -28,13 +28,16 @@ import javax.swing.JTextField;
 public class ProgramEditor
     implements ObjectListEditor.ItemEditor
 {
-    public Object editItem(Component parent, Object object)
+    public Object editItem(Component parent, Object object,
+                           MessageDialogs messageDialogs)
     {
-        return editItem(parent, "Edit Program", (Program)object, false);
+        return editItem(parent, "Edit Program", (Program)object, false,
+                        messageDialogs);
     }
 
     public Program editItem(Component parent, String title, Program program,
-                            boolean disableName)
+                            boolean disableName,
+                            MessageDialogs messageDialogs)
     {
         m_disableName = disableName;
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
@@ -44,7 +47,7 @@ public class ProgramEditor
         panel.add(m_panelRight, BorderLayout.CENTER);
         if (! disableName)
             m_label = createEntry("Label", 18, program.m_label);
-        createCommandEntry(program.m_command);
+        createCommandEntry(program.m_command, messageDialogs);
         if (! disableName)
         {
             m_name = createEntry("Name", 18, program.m_name, false);
@@ -70,7 +73,7 @@ public class ProgramEditor
             if (! (value instanceof Integer)
                 || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
                 return null;
-            done = validate(parent);
+            done = validate(parent, messageDialogs);
         }
         String newLabel = "";
         String newName = "";
@@ -152,7 +155,8 @@ public class ProgramEditor
         box.add(label);
         return box;
     }
-    private void createCommandEntry(String text)
+    private void createCommandEntry(String text,
+                                    final MessageDialogs messageDialogs)
     {
         m_panelLeft.add(createEntryLabel("Command"));
         Box box = Box.createVerticalBox();
@@ -171,7 +175,7 @@ public class ProgramEditor
         button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     File file =
-                        SimpleDialogs.showOpen(m_dialog, "Select Go Program");
+                        FileDialogs.showOpen(m_dialog, "Select Go Program");
                     if (file == null)
                         return;
                     String text = file.toString();
@@ -183,8 +187,8 @@ public class ProgramEditor
                     {
                         String message =
                             "Append option '--mode gtp' for GNU Go?";
-                        if (SimpleDialogs.showQuestion(m_dialog, message,
-                                                       null))
+                        if (messageDialogs.showQuestion(m_dialog, message,
+                                                        null))
                             text = text + " --mode gtp";
                     }
                     m_command.setText(text);
@@ -195,7 +199,7 @@ public class ProgramEditor
         m_panelRight.add(box);
     }
 
-    private boolean validate(Component parent)
+    private boolean validate(Component parent, MessageDialogs messageDialogs)
     {
         if (! m_disableName)
         {
@@ -205,8 +209,8 @@ public class ProgramEditor
                 String optionalMessage =
                     "You need to enter a label that will be used for "
                     + "the menu item for the Go program.";
-                SimpleDialogs.showError(parent, mainMessage, optionalMessage,
-                                        false);
+                messageDialogs.showError(parent, mainMessage, optionalMessage,
+                                         false);
                 return false;
             }
         }
@@ -216,8 +220,8 @@ public class ProgramEditor
             String optionalMessage =
                 "You need to specify the command line for invoking the Go " +
                 "program.";
-            SimpleDialogs.showError(parent, mainMessage, optionalMessage,
-                                    false);
+            messageDialogs.showError(parent, mainMessage, optionalMessage,
+                                     false);
             return false;
         }
         return true;

@@ -7,12 +7,13 @@ package net.sf.gogui.gogui;
 import java.awt.Component;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 
 /** Print a printable. */
 public final class Print
 {
-    public static void run(Component parent, Printable printable)
+    public static void run(Component parent, Printable printable,
+                           MessageDialogs messageDialogs)
     {
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPrintable(printable);
@@ -24,9 +25,9 @@ public final class Print
         }
         catch (Exception e)
         {
-            SimpleDialogs.showError(parent, "Printing failed", "");
+            messageDialogs.showError(parent, "Printing failed", "");
         }
-        SimpleDialogs.showInfo(parent, "Printing done", "");
+        messageDialogs.showInfo(parent, "Printing done", "");
     }
 
     /** Make constructor unavailable; class is for namespace only. */

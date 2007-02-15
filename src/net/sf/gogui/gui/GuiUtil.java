@@ -126,42 +126,6 @@ public class GuiUtil
                               SMALL_FILLER_DIMENSION);
     }
 
-    public static String formatMessage(String mainMessage,
-                                       String optionalMessage)
-    {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<html>");
-        String fontMainMessage = "";
-        String fontOptionalMessage = "";
-        if (Platform.isMac())
-        {
-            fontMainMessage = "font: 13pt \"Lucida Grande\";";
-            fontOptionalMessage = "font: 11pt \"Lucida Grande\";";
-        }
-        String widthProp = "";
-        if (optionalMessage != null && optionalMessage.length() > 60)
-            widthProp = "width: 300px;";
-        buffer.append("<head>"+
-                      "<style type=\"text/css\">" +
-                      "b { " + fontMainMessage + " }" +
-                      "p { " + fontOptionalMessage +
-                      " margin-top: 8px; margin-bottom: 8px; "
-                      + widthProp + "}"+
-                      "</style>"+
-                      "</head>");
-        buffer.append("<b>");
-        buffer.append(mainMessage.replaceAll("\n", "<br>"));
-        buffer.append("</b>");
-        if (optionalMessage != null && ! optionalMessage.trim().equals(""))
-        {
-            buffer.append("<p>");
-            buffer.append(optionalMessage.replaceAll("\n", "<br>"));
-            buffer.append("</p>");
-        }
-        buffer.append("</html>");
-        return buffer.toString();
-    }
-
     public static String getClipboardText()
     {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -267,14 +231,17 @@ public class GuiUtil
         catch (Exception e)
         {
             if (showError)
-                SimpleDialogs.showWarning(null,
-                                          "Look and Feel not found",
-                                          "The look and feel\n\""
-                                          + lookAndFeel + "\"\n"
-                                          + "was not found.\n" +
-                                          "Using default Look and Feel "
-                                          + "instead\n",
-                                          false);
+            {
+                MessageDialogs messageDialogs = new MessageDialogs();
+                messageDialogs.showWarning(null,
+                                           "Look and Feel not found",
+                                           "The look and feel\n\""
+                                           + lookAndFeel + "\"\n"
+                                           + "was not found.\n" +
+                                           "Using default Look and Feel "
+                                           + "instead\n",
+                                           false);
+            }
         }
     }
 

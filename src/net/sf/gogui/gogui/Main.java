@@ -21,7 +21,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtil;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
@@ -55,8 +55,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, "Unexpected failure",
-                                    StringUtil.printException(t));
+            showError("Unexpected failure", StringUtil.printException(t));
             System.exit(-1);
         }
     }
@@ -79,8 +78,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, "Unexpected failure",
-                                    StringUtil.printException(t));
+            showError("Unexpected failure", StringUtil.printException(t));
             System.exit(-1);
         }
     }
@@ -134,7 +132,7 @@ public final class Main
             System.err.print("--------------------------------------------\n" +
                              "GNU libgcj is not supported !\n" +
                              "--------------------------------------------\n");
-            SimpleDialogs.showError(null, "GNU libgcj is not supported", "");
+            showError("GNU libgcj is not supported", "");
             return;
         }
         JPanel panel = new JPanel(new GridLayout(1, 1));
@@ -177,10 +175,8 @@ public final class Main
                     {
                         URL url = event.getURL();
                         if (! Platform.openInExternalBrowser(url))
-                            SimpleDialogs.showError(null,
-                                                    "Could not open URL"
-                                                    + " in external browser",
-                                                    "", false);
+                            showError("Could not open URL in external "
+                                      + "browser", "");
                     }
                 }
             });
@@ -192,6 +188,12 @@ public final class Main
         dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();
+    }
+
+    private static void showError(String mainMessage, String optionalMessage)
+    {
+        MessageDialogs messageDialogs = new MessageDialogs();
+        messageDialogs.showError(null, mainMessage, optionalMessage);
     }
 }
 

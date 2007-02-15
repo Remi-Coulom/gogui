@@ -7,9 +7,11 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -113,6 +115,17 @@ public class OptionalMessage
 
     private JCheckBox m_disabledCheckBox;
 
+    private Font m_labelFont;
+
+    private Font m_labelFontBold;
+
+    private void addFiller(JComponent component)
+    {
+        Box.Filler filler = GuiUtil.createFiller();
+        filler.setAlignmentX(Component.LEFT_ALIGNMENT);
+        component.add(filler);
+    }
+
     /** Show message dialog if it was not disabled.
         @param type The message type (JOptionPane.QUESTION_MESSAGE,
         JOptionPane.WARNING_MESSAGE or JOptionPane.INFORMATION_MESSAGE)
@@ -124,17 +137,30 @@ public class OptionalMessage
                       int messageType, int optionType)
     {
         Box box = Box.createVerticalBox();
-        JLabel label =
-            new JLabel(GuiUtil.formatMessage(mainMessage, optionalMessage));
-        label.setHorizontalAlignment(SwingConstants.LEFT);
+        JLabel label = new JLabel(mainMessage);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        GuiUtil.setUnlimitedSize(label);
-        box.add(GuiUtil.createFiller());
+        if (m_labelFont == null)
+        {
+            m_labelFont = UIManager.getFont("Label.font");
+            m_labelFontBold = m_labelFont.deriveFont(Font.BOLD);
+        }
+        label.setFont(m_labelFontBold);
+        addFiller(box);
         box.add(label);
-        box.add(GuiUtil.createFiller());
-        box.add(GuiUtil.createFiller());
-        JPanel checkBoxPanel = new JPanel(new BorderLayout());
-        checkBoxPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        int columns = Math.min(30, optionalMessage.length());
+        JTextArea textArea = new JTextArea(optionalMessage, 0, columns);
+        textArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textArea.setEditable(false);
+        textArea.setFocusable(false);
+        textArea.setForeground(UIManager.getColor("Label.foreground"));
+        textArea.setBackground(UIManager.getColor("Label.background"));
+        textArea.setFont(m_labelFont);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        addFiller(box);
+        box.add(textArea);
+        addFiller(box);
+        addFiller(box);
         String title;
         Object defaultOption;
         if (messageType == JOptionPane.QUESTION_MESSAGE)
@@ -185,65 +211,20 @@ public class OptionalMessage
             m_options[0] = "Ok";
             defaultOption = m_options[0];
         }
-        if (Platform.isMac())
-            m_disabledCheckBox.setFont(m_disabledCheckBox.getFont().deriveFont(11f));
-        m_disabledCheckBox.setSelected(m_disabled);
         String toolTipText =
             "Disable this kind of messages for the current session";
-        m_disabledCheckBox.setToolTipText(toolTipText);
-        checkBoxPanel.add(m_disabledCheckBox, BorderLayout.WEST);
-        box.add(checkBoxPanel);
         if (Platform.isMac())
             // Don't show icons on Mac, proplem with icon generation in
             // Quaqua 3.7.2
             messageType = JOptionPane.PLAIN_MESSAGE;
-
-        // Workaround for bug in Java 1.6 (and earlier versions) on Linux and
-        // Windows:
-        // The label size is not computed correctly, lines are wrapped and
-        // the dialog buttons are not fully visible.
-        // Simple example to show this bug:
-        /*
-          Box box = Box.createVerticalBox();
-          JLabel label =
-              new JLabel("<html>" +
-                       "<b>Save current document?</b>" +
-                       "<p>" +
-                       "Your changes will be lost if you don't save them" +
-                       "</p>" +
-                       "</html>");
-          box.add(new Box.Filler(new Dimension(10, 10),
-                                 new Dimension(10, 10),
-                                 new Dimension(10, 10)));
-          box.add(label);
-          JOptionpane optionPane =
-              new JOptionPane(box, JOptionPane.QUESTION_MESSAGE,
-                              JOptionPane.YES_NO_CANCEL_OPTION);
-          dialog = optionPane.createDialog(null, "Warning");
-          dialog.pack();
-          dialog.setVisible(true);
-        */
-        // Second line of text gets wrapped between "save" and "then"
-        // and buttons are shifted by one text line height to the bottom
-        // out of the window.
-        // Since everything works if the label is directly the option pane
-        // message component, we first render such an option pane, get
-        // the label size and use it at the minimum size for the
-        // real option pane
-
-        JLabel tempLabel = new JLabel(label.getText());
-        JOptionPane tempOptionPane =
-            new JOptionPane(tempLabel, messageType, optionType, null,
-                            m_options, defaultOption);
-        JDialog tempDialog = tempOptionPane.createDialog(null, title);
-        tempDialog.pack();
-        Dimension labelSize = tempLabel.getSize();
-        tempDialog.dispose();
-        label.setMinimumSize(labelSize);
-
+        m_disabledCheckBox.setSelected(m_disabled);
+        m_disabledCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        box.add(m_disabledCheckBox);
         m_optionPane = new JOptionPane(box, messageType, optionType, null,
                                        m_options, defaultOption);
         JDialog dialog = m_optionPane.createDialog(m_parent, title);
+        // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
+        box.invalidate();
         dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();

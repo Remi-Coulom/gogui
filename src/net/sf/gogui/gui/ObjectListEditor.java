@@ -25,7 +25,8 @@ public class ObjectListEditor
 {
     interface ItemEditor
     {
-        Object editItem(Component parent, Object object);
+        Object editItem(Component parent, Object object,
+                        MessageDialogs messageDialogs);
 
         String getItemLabel(Object object);
 
@@ -33,8 +34,9 @@ public class ObjectListEditor
     }
 
     public boolean edit(Component parent, String title, ArrayList objects,
-                        ItemEditor editor)
+                        ItemEditor editor, MessageDialogs messageDialogs)
     {
+        m_messageDialogs = messageDialogs;
         m_editor = editor;
         m_actionListener = new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
@@ -108,6 +110,8 @@ public class ObjectListEditor
 
     private ItemEditor m_editor;
 
+    private MessageDialogs m_messageDialogs;
+
     private void cbMoveDown()
     {
         int index = m_list.getSelectedIndex();
@@ -124,7 +128,8 @@ public class ObjectListEditor
         int index = m_list.getSelectedIndex();
         if (index == -1)
             return;
-        Object object = m_editor.editItem(m_dialog, getObject(index));
+        Object object = m_editor.editItem(m_dialog, getObject(index),
+                                          m_messageDialogs);
         if (object == null)
             return;
         m_objects.set(index, object);

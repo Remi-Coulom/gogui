@@ -30,7 +30,8 @@ public class ParameterDialog
 {
     public static void editParameters(String paramCommand, Frame owner,
                                       String title, String response,
-                                      GuiGtpClient gtp)
+                                      GuiGtpClient gtp,
+                                      MessageDialogs messageDialogs)
     {
         ArrayList parameters = parseResponse(response);
         int numberParameters = parameters.size();
@@ -90,7 +91,7 @@ public class ParameterDialog
             }
             catch (GtpError e)
             {
-                SimpleDialogs.showError(owner,
+                messageDialogs.showError(owner,
                                         "Could not change parameter "
                                         + parameter.getKey(),
                                         StringUtil.capitalize(e.getMessage())

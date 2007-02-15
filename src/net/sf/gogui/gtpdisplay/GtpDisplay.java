@@ -27,7 +27,7 @@ import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiUtil;
-import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.gui.StatusBar;
 
 /** GTP adapter showing the current board in a window. */
@@ -109,9 +109,9 @@ public class GtpDisplay
                 {
                     if (m_frame != null)
                     {
-                        SimpleDialogs.showInfo(m_frame,
-                                               "GTP stream was closed",
-                                               "");
+                        m_messageDialogs.showInfo(m_frame,
+                                                  "GTP stream was closed",
+                                                  "");
                         showStatus("GTP stream was closed");
                     }
                     else if (m_gtp == null)
@@ -186,6 +186,8 @@ public class GtpDisplay
 
     private final String m_name;
 
+    private MessageDialogs m_messageDialogs = new MessageDialogs();
+
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -211,7 +213,7 @@ public class GtpDisplay
         assert(SwingUtilities.isEventDispatchThread());
         if (m_gtp == null)
         {
-            if (! SimpleDialogs.showQuestion(m_frame,
+            if (! m_messageDialogs.showQuestion(m_frame,
                                              "Terminate GtpDisplay?", null))
                 return;
             System.exit(0);
