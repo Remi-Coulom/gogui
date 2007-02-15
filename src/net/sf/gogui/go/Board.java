@@ -12,13 +12,13 @@ import net.sf.gogui.util.ObjectUtil;
 public final class Board
     implements ConstBoard
 {
-    public interface Placement
+    public interface Action
     {
-        UndoableAction createAction();
+        UndoableAction createUndoableAction();
     }
 
     public static class Play
-        implements Placement
+        implements Action
     {
         public Play(Move move)
         {
@@ -38,16 +38,16 @@ public final class Board
             return m_move;
         }
 
-        public UndoableAction createAction()
+        public UndoableAction createUndoableAction()
         {
-            return new PlayAction(this);
+            return new UndoablePlay(this);
         }
 
         private final Move m_move;
     }
 
     public static class Setup
-        implements Placement
+        implements Action
     {
         public Setup(ConstPointList black, ConstPointList white)
         {
@@ -108,9 +108,9 @@ public final class Board
             return m_toMove;
         }
 
-        public UndoableAction createAction()
+        public UndoableAction createUndoableAction()
         {
-            return new SetupAction(this);
+            return new UndoableSetup(this);
         }
 
         private PointList m_black;
@@ -122,8 +122,8 @@ public final class Board
         private GoColor  m_toMove;
     }
 
-    /** Handicap stones placements.
-        This placement is only allowed as the first placement on the board.
+    /** Handicap stones placement action.
+        This action is only allowed as the first action on the board.
     */
     public static class SetupHandicap
         extends Setup
@@ -141,10 +141,10 @@ public final class Board
         protected abstract void undo(Board board);
     }
 
-    public static class PlayAction
+    public static class UndoablePlay
         extends UndoableAction
     {
-        public PlayAction(Play play)
+        public UndoablePlay(Play play)
         {
             m_play = play;
         }
@@ -236,10 +236,10 @@ public final class Board
         private PointList m_suicide;
     }
 
-    public static class SetupAction
+    public static class UndoableSetup
         extends UndoableAction
     {
-        public SetupAction(Setup setup)
+        public UndoableSetup(Setup setup)
         {
             m_setup = setup;
         }
@@ -314,12 +314,12 @@ public final class Board
     */
     public boolean bothPassed()
     {
-        int n = getNumberPlacements();
+        int n = getNumberActions();
         return (n >= 2
-                && getPlacement(n - 1) instanceof Play
-                && ((Play)getPlacement(n - 1)).getMove().getPoint() == null
-                && getPlacement(n - 2) instanceof Play
-                && ((Play)getPlacement(n - 2)).getMove().getPoint() == null);
+                && getAction(n - 1) instanceof Play
+                && ((Play)getAction(n - 1)).getMove().getPoint() == null
+                && getAction(n - 2) instanceof Play
+                && ((Play)getAction(n - 2)).getMove().getPoint() == null);
     }
 
     /** Check if board contains a point.
@@ -332,16 +332,16 @@ public final class Board
     }
 
     /** Play move or setup stone.
-        @param placement The placement to play.
+        @param action The action to play.
     */
-    public void doPlacement(Placement placement)
+    public void doAction(Action action)
     {
-        assert(! (placement instanceof SetupHandicap)
-               || getNumberPlacements() == 0);
-        UndoableAction action = placement.createAction();
-        action.execute(this);
-        m_placements.add(placement);
+        assert(! (action instanceof SetupHandicap)
+               || getNumberActions() == 0);
+        UndoableAction undoableAction = action.createUndoableAction();
+        undoableAction.execute(this);
         m_actions.add(action);
+        m_undoableActions.add(undoableAction);
     }
 
     /** Get points adjacent to a point.
@@ -405,40 +405,40 @@ public final class Board
         Does not include player stones killed by suicide.
         Requires that there is a last move (or setup stone).
         @return List of opponent stones (go.Point) captured in last move;
-        empty if none were killed or if last placement was a setup stone.
+        empty if none were killed or if last action was a setup stone.
         @see #getSuicide()
     */
     public ConstPointList getKilled()
     {
-        int numberPlacements = getNumberPlacements();
-        assert(numberPlacements > 0);
-        int index = numberPlacements - 1;
-        Placement placement = (Placement)m_placements.get(index);
-        if (placement instanceof Play)
-            return ((PlayAction)m_actions.get(index)).m_killed;
+        int numberActions = getNumberActions();
+        assert(numberActions > 0);
+        int index = numberActions - 1;
+        Action action = (Action)m_actions.get(index);
+        if (action instanceof Play)
+            return ((UndoablePlay)m_undoableActions.get(index)).m_killed;
         return PointList.getEmptyList();
     }
 
     /** Return last move.
-        @return Last move or null if no placement was done yet or last
-        placement was not a move.
+        @return Last move or null if no action was done yet or last
+        action was not a move.
     */
     public Move getLastMove()
     {
-        int n = getNumberPlacements();
-        if (n > 0 && getPlacement(n - 1) instanceof Play)
-            return ((Play)getPlacement(n - 1)).getMove();
+        int n = getNumberActions();
+        if (n > 0 && getAction(n - 1) instanceof Play)
+            return ((Play)getAction(n - 1)).getMove();
         else
             return null;
     }
 
-    /** Get the number of placements (moves or setup stones) played so far.
-        @return The number of placements.
-        @see #getPlacement
+    /** Get the number of actions (moves or setup stones) played so far.
+        @return The number of actions.
+        @see #getAction
     */
-    public int getNumberPlacements()
+    public int getNumberActions()
     {
-        return m_placements.size();
+        return m_actions.size();
     }
 
     /** Get the number of points on the board.
@@ -458,15 +458,15 @@ public final class Board
         return m_positionHashCode;
     }
 
-    /** Get a placement (move or setup stone) from the sequence of placements
+    /** Get a action (move or setup stone) from the sequence of actions
         played so far.
-        @param i The number of the placement (starting with zero).
-        @return The placement with the given number.
-        @see #getNumberPlacements()
+        @param i The number of the action (starting with zero).
+        @return The action with the given number.
+        @see #getNumberActions()
     */
-    public Placement getPlacement(int i)
+    public Action getAction(int i)
     {
-        return (Placement)m_placements.get(i);
+        return (Action)m_actions.get(i);
     }
 
     /** Get a point on the board.
@@ -500,17 +500,17 @@ public final class Board
         Requires that there is a last move (or setup stone).
         @return List of stones (go.Point) killed by suicide in last move,
         including the stone played; empty if no stones were killed by suicide
-        or if last placement was a setup stone..
+        or if last action was a setup stone..
         @see #getKilled()
     */
     public ConstPointList getSuicide()
     {
-        int numberPlacements = getNumberPlacements();
-        assert(numberPlacements > 0);
-        int index = numberPlacements - 1;
-        Placement placement = (Placement)m_placements.get(index);
-        if (placement instanceof Play)
-            return ((PlayAction)m_actions.get(index)).m_suicide;
+        int numberActions = getNumberActions();
+        assert(numberActions > 0);
+        int index = numberActions - 1;
+        Action action = (Action)m_actions.get(index);
+        if (action instanceof Play)
+            return ((UndoablePlay)m_undoableActions.get(index)).m_suicide;
         return PointList.getEmptyList();
     }
 
@@ -573,12 +573,12 @@ public final class Board
         return point == m_koPoint;
     }
 
-    /** Check if any placements (moves or setup stones) were made on the
+    /** Check if any actions (moves or setup stones) were made on the
         board.
     */
     public boolean isModified()
     {
-        return (m_placements.size() > 0);
+        return (m_actions.size() > 0);
     }
 
     /** Check if a point would be a suicide move.
@@ -598,7 +598,7 @@ public final class Board
     }
 
     /** Start a new game.
-        Takes back the effects of any placements (moves or setup stones)
+        Takes back the effects of any actions (moves or setup stones)
         on the board.
     */
     public void newGame()
@@ -606,8 +606,8 @@ public final class Board
         m_positionHashCode = m_randomNumbersBoardSize[m_size];
         for (int i = 0; i < getNumberPoints(); ++i)
             setColor(getPoint(i), GoColor.EMPTY);
-        m_placements.clear();        
         m_actions.clear();        
+        m_undoableActions.clear();        
         m_capturedBlack = 0;
         m_capturedWhite = 0;
         m_toMove = GoColor.BLACK;
@@ -635,7 +635,7 @@ public final class Board
     */
     public void play(Move move)
     {
-        doPlacement(new Play(move));
+        doAction(new Play(move));
     }
 
     /** Change the color to move.
@@ -667,37 +667,37 @@ public final class Board
     public void setup(ConstPointList black, ConstPointList white,
                       ConstPointList empty, GoColor toMove)
     {
-        doPlacement(new Setup(black, white, empty, toMove));
+        doAction(new Setup(black, white, empty, toMove));
     }
 
     public void setupHandicap(ConstPointList points)
     {
-        doPlacement(new SetupHandicap(points));
+        doAction(new SetupHandicap(points));
     }
 
-    /** Undo the last placement (move or setup stone).
-        Restores any stones removed by the last placement (captured or
+    /** Undo the last action (move or setup stone).
+        Restores any stones removed by the last action (captured or
         suicide) if it was a move and restore the color who was to move before
-        the placement.
+        the action.
     */
     public void undo()
     {
-        int index = getNumberPlacements() - 1;
+        int index = getNumberActions() - 1;
         assert(index >= 0);
-        ((UndoableAction)m_actions.get(index)).undo(this);
-        m_placements.remove(index);
+        ((UndoableAction)m_undoableActions.get(index)).undo(this);
         m_actions.remove(index);
+        m_undoableActions.remove(index);
     }
 
     /** Undo a number of moves or setup stones.
         @param n Number of moves to undo. Must be between 0
-        and getNumberPlacements().
+        and getNumberActions().
         @see #undo()
     */
     public void undo(int n)
     {
         assert(n >= 0);
-        assert(n <= getNumberPlacements());
+        assert(n <= getNumberActions());
         for (int i = 0; i < n; ++i)
             undo();
     }
@@ -712,9 +712,9 @@ public final class Board
 
     private long m_positionHashCode;
 
-    private final ArrayList m_placements = new ArrayList(361);
-
     private final ArrayList m_actions = new ArrayList(361);
+
+    private final ArrayList m_undoableActions = new ArrayList(361);
 
     private GoColor[][] m_color;
 

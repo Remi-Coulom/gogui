@@ -25,9 +25,9 @@ public interface ConstBoard
 
     Move getLastMove();
 
-    Board.Placement getPlacement(int i);
+    Board.Action getAction(int i);
 
-    int getNumberPlacements();
+    int getNumberActions();
 
     int getNumberPoints();
 

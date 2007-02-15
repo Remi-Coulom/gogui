@@ -66,7 +66,7 @@ public class GtpSynchronizer
             m_board.init(size);
         m_gtp.sendClearBoard(size);
         ArrayList toExecuteAll = computeToExecuteAll(board);
-        doPlacements(toExecuteAll);
+        doActions(toExecuteAll);
         m_komi = null;
         m_timeSettings = null;
         sendGameInfo(komi, timeSettings);
@@ -88,8 +88,8 @@ public class GtpSynchronizer
         int numberUndo = computeToExecuteMissing(toExecuteMissing, board);
         if (canUndo(numberUndo))
         {
-            undoPlacements(numberUndo);
-            doPlacements(toExecuteMissing);
+            undoActions(numberUndo);
+            doActions(toExecuteMissing);
             sendGameInfo(komi, timeSettings);
             m_isOutOfSync = false;
         }
@@ -105,7 +105,7 @@ public class GtpSynchronizer
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
         ArrayList toExecuteAll = computeToExecuteAll(board);
-        assert(m_board.getNumberPlacements() == toExecuteAll.size());
+        assert(m_board.getNumberActions() == toExecuteAll.size());
         assert(findNumberCommonMoves(toExecuteAll) == toExecuteAll.size());
         GoColor toMove = m_board.getToMove();
         if (m_fillPasses && toMove != move.getColor())
@@ -127,7 +127,7 @@ public class GtpSynchronizer
         try
         {
             ArrayList toExecuteAll = computeToExecuteAll(board);
-            assert(m_board.getNumberPlacements() == toExecuteAll.size());
+            assert(m_board.getNumberActions() == toExecuteAll.size());
             assert(findNumberCommonMoves(toExecuteAll) == toExecuteAll.size());
         }
         catch (GtpError e)
@@ -171,13 +171,13 @@ public class GtpSynchronizer
         assert(n >= 0);
         boolean undoMove = false;
         boolean undoSetup = false;
-        int size = m_board.getNumberPlacements();
+        int size = m_board.getNumberActions();
         for (int i = size - 1; i >= size - n; --i)
         {
-            Board.Placement placement = m_board.getPlacement(i);
-            if (placement instanceof Board.Setup)
+            Board.Action action = m_board.getAction(i);
+            if (action instanceof Board.Setup)
                 undoSetup = true;
-            else if (placement instanceof Board.Play)
+            else if (action instanceof Board.Play)
                 undoMove = true;
             else
                 assert(false);
@@ -189,7 +189,7 @@ public class GtpSynchronizer
         return true;
     }
 
-    /** Computes all placements to execute.
+    /** Computes all actions to execute.
         Replaces setup stones by moves, if setup is not supported.
         Fills in passes between moves of same color if m_fillPasses.
     */
@@ -197,18 +197,18 @@ public class GtpSynchronizer
     {
         ArrayList toExecuteAll = new ArrayList();
         Board tempBoard = new Board(board.getSize());
-        for (int i = 0; i < board.getNumberPlacements(); ++i)
+        for (int i = 0; i < board.getNumberActions(); ++i)
         {
-            Board.Placement placement = board.getPlacement(i);
-            if (placement instanceof Board.Setup)
+            Board.Action action = board.getAction(i);
+            if (action instanceof Board.Setup)
             {
-                Board.Setup setup = (Board.Setup)placement;
+                Board.Setup setup = (Board.Setup)action;
                 if (m_isSupportedSetup
-                    || (placement instanceof Board.SetupHandicap
+                    || (action instanceof Board.SetupHandicap
                         && m_isSupportedHandicap))
                 {
-                    toExecuteAll.add(placement);
-                    tempBoard.doPlacement(placement);
+                    toExecuteAll.add(action);
+                    tempBoard.doAction(action);
                     continue;
                 }
                 // Translate into moves if possible
@@ -223,9 +223,9 @@ public class GtpSynchronizer
                     if (tempBoard.isCaptureOrSuicide(p, GoColor.BLACK))
                         throw new GtpError("cannot transmit setup as move "
                                            + "if stones are captured");
-                    placement = new Board.Play(Move.get(p, GoColor.BLACK));
-                    toExecuteAll.add(placement);
-                    tempBoard.doPlacement(placement);
+                    action = new Board.Play(Move.get(p, GoColor.BLACK));
+                    toExecuteAll.add(action);
+                    tempBoard.doAction(action);
                 }
                 for (int j = 0; j < setupWhite.size(); ++j)
                 {
@@ -233,19 +233,19 @@ public class GtpSynchronizer
                     if (tempBoard.isCaptureOrSuicide(p, GoColor.WHITE))
                         throw new GtpError("cannot transmit setup as move "
                                            + "if stones are captured");
-                    placement = new Board.Play(Move.get(p, GoColor.WHITE));
-                    toExecuteAll.add(placement);
-                    tempBoard.doPlacement(placement);
+                    action = new Board.Play(Move.get(p, GoColor.WHITE));
+                    toExecuteAll.add(action);
+                    tempBoard.doAction(action);
                 }
             }
-            else if (placement instanceof Board.Play)
+            else if (action instanceof Board.Play)
             {
                 GoColor toMove = tempBoard.getToMove();
                 if (m_fillPasses
-                    && ((Board.Play)placement).getMove().getColor() != toMove)
+                    && ((Board.Play)action).getMove().getColor() != toMove)
                     toExecuteAll.add(new Board.Play(Move.getPass(toMove)));
-                toExecuteAll.add(placement);
-                tempBoard.doPlacement(placement);
+                toExecuteAll.add(action);
+                tempBoard.doAction(action);
             }
         }
         return toExecuteAll;
@@ -259,38 +259,38 @@ public class GtpSynchronizer
     {
         ArrayList toExecuteAll = computeToExecuteAll(board);
         int numberCommonMoves = findNumberCommonMoves(toExecuteAll);
-        int numberUndo = m_board.getNumberPlacements() - numberCommonMoves;
+        int numberUndo = m_board.getNumberActions() - numberCommonMoves;
         toExecuteMissing.clear();
         for (int i = numberCommonMoves; i < toExecuteAll.size(); ++i)
         {
-            Board.Placement placement = (Board.Placement)toExecuteAll.get(i);
-            toExecuteMissing.add(placement);
+            Board.Action action = (Board.Action)toExecuteAll.get(i);
+            toExecuteMissing.add(action);
         }
         return numberUndo;
     }
 
-    private void doPlacements(ArrayList placements) throws GtpError
+    private void doActions(ArrayList actions) throws GtpError
     {
-        for (int i = 0; i < placements.size(); ++i)
+        for (int i = 0; i < actions.size(); ++i)
         {
-            Board.Placement placement = (Board.Placement)placements.get(i);
-            if (placement instanceof Board.SetupHandicap
+            Board.Action action = (Board.Action)actions.get(i);
+            if (action instanceof Board.SetupHandicap
                 && m_isSupportedHandicap)
-                doSetupHandicap((Board.SetupHandicap)placement);
-            else if (placement instanceof Board.Setup)
-                doSetup((Board.Setup)placement);
-            else if (placement instanceof Board.Play)
+                doSetupHandicap((Board.SetupHandicap)action);
+            else if (action instanceof Board.Setup)
+                doSetup((Board.Setup)action);
+            else if (action instanceof Board.Play)
             {
                 ArrayList sequence = new ArrayList();
                 while (true)
                 {
-                    sequence.add(((Board.Play)placement).getMove());
-                    if (i == placements.size() - 1
-                        || ! ((Board.Placement)placements.get(i + 1)
+                    sequence.add(((Board.Play)action).getMove());
+                    if (i == actions.size() - 1
+                        || ! ((Board.Action)actions.get(i + 1)
                               instanceof Board.Play))
                         break;
                     ++i;
-                    placement = (Board.Placement)placements.get(i);
+                    action = (Board.Action)actions.get(i);
                 }
                 playSequence(sequence);
             }
@@ -350,10 +350,10 @@ public class GtpSynchronizer
         int i;
         for (i = 0; i < toExecuteAll.size(); ++i)
         {
-            if (i >= m_board.getNumberPlacements())
+            if (i >= m_board.getNumberActions())
                 break;
-            Board.Placement placement = ((Board.Placement)toExecuteAll.get(i));
-            if (! placement.equals(m_board.getPlacement(i)))
+            Board.Action action = ((Board.Action)toExecuteAll.get(i));
+            if (! action.equals(m_board.getAction(i)))
                 break;
         }
         return i;
@@ -361,12 +361,12 @@ public class GtpSynchronizer
 
     private static int getHandicap(ConstBoard board)
     {
-        if (board.getNumberPlacements() == 0)
+        if (board.getNumberActions() == 0)
             return 0;
-        Board.Placement placement = board.getPlacement(0);
-        if (! (placement instanceof Board.SetupHandicap))
+        Board.Action action = board.getAction(0);
+        if (! (action instanceof Board.SetupHandicap))
             return 0;
-        return ((Board.SetupHandicap)placement).getBlack().size();
+        return ((Board.SetupHandicap)action).getBlack().size();
     }
 
     private void initSupportedCommands()
@@ -451,18 +451,18 @@ public class GtpSynchronizer
         }
     }
 
-    private void undoPlacements(int n) throws GtpError
+    private void undoActions(int n) throws GtpError
     {
         assert(n >= 0);
         if (n == 0)
             return;
-        int size = m_board.getNumberPlacements();
+        int size = m_board.getNumberActions();
         for (int i = size - 1; i >= size - n; --i)
         {
-            Board.Placement placement = m_board.getPlacement(i);
-            if (placement instanceof Board.Setup)
+            Board.Action action = m_board.getAction(i);
+            if (action instanceof Board.Setup)
             {
-                Board.Setup setup = (Board.Setup)placement;
+                Board.Setup setup = (Board.Setup)action;
                 if (setup.getBlack().size() + setup.getWhite().size()
                     + setup.getEmpty().size() > 0)
                     m_gtp.send("gogui-undo_setup");
@@ -474,14 +474,14 @@ public class GtpSynchronizer
                                + (toMove == GoColor.BLACK ? "b" : "w"));
                 }
             }
-            else if (placement instanceof Board.Play)
+            else if (action instanceof Board.Play)
             {
                 int numberUndo = 0;
                 while (true)
                 {
                     ++numberUndo;
                     if (i == size - n
-                        || ! (m_board.getPlacement(i - 1)
+                        || ! (m_board.getAction(i - 1)
                               instanceof Board.Play))
                         break;
                     --i;
@@ -515,6 +515,6 @@ public class GtpSynchronizer
     private void updateListener()
     {
         if (m_listener != null)
-            m_listener.moveNumberChanged(m_board.getNumberPlacements());
+            m_listener.moveNumberChanged(m_board.getNumberActions());
     }
 }

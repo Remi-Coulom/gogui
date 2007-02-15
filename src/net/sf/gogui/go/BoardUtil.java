@@ -13,8 +13,8 @@ public final class BoardUtil
     public static void copy(Board target, ConstBoard source)
     {
         target.init(source.getSize());
-        for (int i = 0; i < source.getNumberPlacements(); ++i)
-            target.doPlacement(source.getPlacement(i));
+        for (int i = 0; i < source.getNumberActions(); ++i)
+            target.doAction(source.getAction(i));
     }
 
     public static String toString(ConstBoard board)

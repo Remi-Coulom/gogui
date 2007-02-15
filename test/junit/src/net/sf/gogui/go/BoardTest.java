@@ -296,7 +296,7 @@ public final class BoardTest
         board1.setup(list, null);
         board1.setup(null, null, list);
         board2.setup(null, list);
-        board2.doPlacement(board1.getPlacement(1));
+        board2.doAction(board1.getAction(1));
         board1.undo();
         assertEquals(GoColor.BLACK, board1.getColor(p));
     }
