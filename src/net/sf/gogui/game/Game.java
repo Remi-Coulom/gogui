@@ -316,7 +316,7 @@ public class Game
                 return;
             }
         }
-        if (color == GoColor.EMPTY)
+        if (color == GoColor.EMPTY && father != null)
             m_current.addEmpty(point);
         else if (color == GoColor.BLACK)
             m_current.addBlack(point);
