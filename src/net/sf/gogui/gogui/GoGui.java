@@ -2367,17 +2367,19 @@ public class GoGui
             disableKey = "net.sf.gogui.gogui.GoGui.save";
         result = m_messageDialogs.showYesNoCancelQuestion(disableKey, this,
                                                           mainMessage,
-                                                          optionalMessage);
+                                                          optionalMessage,
+                                                          "Don't Save",
+                                                          "Save");
         switch (result)
         {
         case 0:
+            m_game.clearModified();
+            return true;
+        case 1:
             if (m_file == null)
                 return saveDialog();
             else
                 return save(m_file);
-        case 1:
-            m_game.clearModified();
-            return true;
         case 2:
             return false;
         default:

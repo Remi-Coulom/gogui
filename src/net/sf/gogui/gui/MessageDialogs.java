@@ -116,20 +116,30 @@ public final class MessageDialogs
     }
 
     public int showYesNoCancelQuestion(Component parent, String mainMessage,
-                                       String optionalMessage)
+                                       String optionalMessage,
+                                       String destructiveOption,
+                                       String nonDestructiveOption)
     {
         return showYesNoCancelQuestion(null, parent, mainMessage,
-                                       optionalMessage);
+                                       optionalMessage, destructiveOption,
+                                       nonDestructiveOption);
     }
 
+    /** Show a question with two options and cancel.
+        @return 0 for the destructive option; 1 for the non-destructive
+        option; 2 for cancel
+    */
     public int showYesNoCancelQuestion(String disableKey, Component parent,
                                        String mainMessage,
-                                       String optionalMessage)
+                                       String optionalMessage,
+                                       String destructiveOption,
+                                       String nonDestructiveOption)
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return 2;
-        Object[] options = { "Yes", "No", "Cancel" };
-        Object defaultOption = options[2];
+        Object[] options =
+            { destructiveOption, nonDestructiveOption, "Cancel" };
+        Object defaultOption = options[1];
         int type = JOptionPane.QUESTION_MESSAGE;
         Object value = show(disableKey, parent, "Question", mainMessage,
                             optionalMessage, type, options, defaultOption);
