@@ -90,7 +90,8 @@ public final class AboutDialog
         m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_J);
         ++tabIndex;
         setMessage(m_tabbedPane);
-        setOptionType(DEFAULT_OPTION);
+        Object[] options = { "Close" };
+        setOptions(options);
     }
 
     private JPanel createPanel(String text)
