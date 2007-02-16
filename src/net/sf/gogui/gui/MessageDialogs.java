@@ -205,6 +205,8 @@ public final class MessageDialogs
                         int messageType, Object[] options,
                         Object defaultOption)
     {
+        if (optionalMessage == null)
+            optionalMessage = "";
         Box box = Box.createVerticalBox();
         JLabel label = new JLabel(mainMessage);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
