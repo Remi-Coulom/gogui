@@ -32,8 +32,8 @@ public final class TexWriterTest
         mark[0][0] = true;
         mark[0][1] = true;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        TexWriter writer = new TexWriter(null, out, board, true, markLabel,
-                                         mark, null, null, null, null);
+        new TexWriter(null, out, board, true, markLabel, mark, null, null,
+                      null, null);
         String s = out.toString();
         //System.err.println(s);
         assertTrue(s.indexOf("\\stone[\\markma]{black}{a}{1}") >= 0);
