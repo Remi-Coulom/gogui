@@ -1061,7 +1061,8 @@ public class GoGui
                 String disableKey = "net.sf.gogui.GoGui.overwrite";
                 if (! m_messageDialogs.showWarningQuestion(disableKey, this,
                                                            mainMessage,
-                                                           optionalMessage))
+                                                           optionalMessage,
+                                                           "Replace"))
                     return;
             }
             save(m_file);
@@ -1772,28 +1773,35 @@ public class GoGui
 
         public void run()
         {
+            String name = getProgramName();
+            String mainMessage = name + " sent a malformed response";
             if (m_line.trim().equals(""))
             {
                 String disableKey =
                     "net.sf.gogui.gogui.GoGui.invalid-empty-response";
+                String optionalMessage =
+                    "Empty lines before the response are not allowed" +
+                    " by the GTP standard. This error can probably be" +
+                    " ignored, but could indicate a more serious problem" +
+                    " with the Go program. You should inform the author of " +
+                    name + ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
-                                             getProgramName() +
-                                             " sent a malformed GTP " +
-                                             "response",
-                                             "Empty line before " +
-                                             "response start", false);
+                                             mainMessage, optionalMessage, 
+                                             false);
             }
             else
             {
                 String disableKey =
                     "net.sf.gogui.gogui.GoGui.invalid-response";
+                String optionalMessage =
+                    "Text lines before the status character of the first" +
+                    " response line are not allowed by the GTP standard." +
+                    " This error can probably be ignored, but could indicate" +
+                    " a more serious problem with the Go program. You " +
+                    " should inform the author of " + name + ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
-                                             getProgramName() +
-                                             " sent a malformed GTP " +
-                                             "response",
-                                             "First line not " +
-                                             "starting with status " +
-                                             "character", false);
+                                             mainMessage, optionalMessage, 
+                                             false);
             }
         }
         

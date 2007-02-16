@@ -181,21 +181,28 @@ public final class MessageDialogs
     }
 
     public boolean showWarningQuestion(Component parent, String mainMessage,
-                                       String optionalMessage)
+                                       String optionalMessage,
+                                       String destructiveOption)
     {
         return showWarningQuestion(null, parent, mainMessage,
-                                   optionalMessage);
+                                   optionalMessage, destructiveOption);
     }
 
+    /** Show warning message to confirm destructive actions.
+        @return true, if destructive was chosen; false if cancel was chosen.
+    */
     public boolean showWarningQuestion(String disableKey, Component parent,
                                        String mainMessage,
-                                       String optionalMessage)
+                                       String optionalMessage,
+                                       String destructiveOption)
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
-        Object[] options = { "Yes", "No" };
+        Object[] options = { destructiveOption, "Cancel" };
         Object defaultOption = options[1];
-        int type = JOptionPane.WARNING_MESSAGE;
+        // No reason to show a warning icon for confirmation dialogs
+        // of frequent actions
+        int type = JOptionPane.QUESTION_MESSAGE;
         Object result = show(disableKey, parent, "Question", mainMessage,
                              optionalMessage, type, options, defaultOption);
         return (result == options[0]);

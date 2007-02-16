@@ -154,8 +154,12 @@ public class ObjectListEditor
         String name = m_editor.getItemLabel(object);
         String disableKey = "net.sf.gogui.gui.ObjectListEditor.remove";
         String mainMessage = "Really remove " + name + "?";
+        String optionalMessage =
+            "Removing an entry from the list will delete the entry.";
         if (! m_messageDialogs.showWarningQuestion(disableKey, m_dialog,
-                                                   mainMessage, ""))
+                                                   mainMessage,
+                                                   optionalMessage,
+                                                   "Remove"))
             return;
         m_objects.remove(object);
         if (index >= m_objects.size())

@@ -148,7 +148,8 @@ public final class FileDialogs
                     "If you overwrite the file, the previous " +
                     "version will be lost.";
                 if (! messageDialogs.showWarningQuestion(parent, mainMessage,
-                                                         optionalMessage))
+                                                         optionalMessage,
+                                                         "Replace"))
                 {
                     file = showFileChooser(parent, FILE_SAVE, lastFile,
                                            setSgfFilter, title);
