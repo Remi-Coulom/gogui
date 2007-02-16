@@ -18,6 +18,23 @@ public final class GoColor
         return super.equals(object);
     }
 
+    /** Get next color in an iteration from Black to White.
+        @return Next color or null, if end of iteration.
+    */
+    public GoColor getNextBlackWhite()
+    {
+        assert(this != EMPTY);
+        return m_nextBlackWhite;
+    }
+
+    /** Get next color in an iteration from Black to White to Empty.
+        @return Next color or null, if end of iteration.
+    */
+    public GoColor getNextBlackWhiteEmpty()
+    {
+        return m_nextBlackWhiteEmpty;
+    }
+
     public int hashCode()
     {
         return super.hashCode();
@@ -36,6 +53,14 @@ public final class GoColor
         return m_otherColor;
     }
 
+    /** Convert color to an integer that can be used as an array index.
+        Black is 0; White 1; Empty 2
+    */
+    public int toInteger()
+    {
+        return m_index;
+    }
+
     /** Return string representation.
         @return "black", "white" or "empty"
     */
@@ -44,23 +69,39 @@ public final class GoColor
         return m_string;
     }
 
+    private int m_index;
+
     private GoColor m_otherColor;
+
+    private GoColor m_nextBlackWhite;
+
+    private GoColor m_nextBlackWhiteEmpty;
 
     private final String m_string;
 
     static
     {
-        BLACK = new GoColor("black");
-        WHITE = new GoColor("white");
-        EMPTY = new GoColor("empty");
+        BLACK = new GoColor("black", 0);
+        WHITE = new GoColor("white", 1);
+        EMPTY = new GoColor("empty", 2);
         BLACK.setOtherColor(WHITE);
         WHITE.setOtherColor(BLACK);
         EMPTY.setOtherColor(EMPTY);
+        BLACK.setNext(WHITE, WHITE);
+        WHITE.setNext(null, EMPTY);
+        EMPTY.setNext(null, null);
     }
 
-    private GoColor(String string)
+    private GoColor(String string, int index)
     {
+        m_index = index;
         m_string = string;
+    }
+
+    private void setNext(GoColor nextBlackWhite, GoColor nextBlackWhiteEmpty)
+    {
+        m_nextBlackWhite = nextBlackWhite;
+        m_nextBlackWhiteEmpty = nextBlackWhiteEmpty;
     }
 
     private void setOtherColor(GoColor color)
