@@ -158,7 +158,7 @@ public final class Main
             "<p><b>The application GoGui has quit unexpectedly</b></p>" +
             "<p>Please take a moment to submit a bug report at the " +
             "<a href=\"http://sf.net/tracker/?group_id=59117&atid=489964\">" +
-            "GoGui bug tracker</a> and include the following " +
+            "GoGui bug tracker</a> at and include the following " +
             "information:</p>" +
             "<p>GoGui version: " + Version.get() + "<br>" +
             "Java version: " + 
@@ -180,8 +180,11 @@ public final class Main
                     }
                 }
             });
+        Object[] options = { "Close" };
         JOptionPane optionPane =
-            new JOptionPane(panel, JOptionPane.ERROR_MESSAGE);
+            new JOptionPane(panel, JOptionPane.ERROR_MESSAGE,
+                            JOptionPane.DEFAULT_OPTION, null, options,
+                            options[0]);
         JDialog dialog = optionPane.createDialog(null, "Error");
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
         panel.invalidate();
