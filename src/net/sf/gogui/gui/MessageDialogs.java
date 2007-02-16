@@ -249,7 +249,7 @@ public final class MessageDialogs
             box.add(disableCheckBox);
         }
         if (Platform.isMac())
-            // Don't show icons on Mac, proplem with icon generation in
+            // Don't show icons on Mac, problem with icon generation in
             // Quaqua 3.7.2
             messageType = JOptionPane.PLAIN_MESSAGE;
         JOptionPane optionPane =

@@ -431,7 +431,7 @@ ${quaqua.zipfile}
 <fileset dir="build" includes="
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
- net/sf/gogui/drawboard/*.class
+ net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
@@ -485,7 +485,7 @@ ${quaqua.zipfile}
 <attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/drawboard/*.class
+ net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gui/*.class
@@ -624,7 +624,7 @@ ${quaqua.zipfile}
  overview="src/net/sf/gogui/overview.html"
  classpath="external/javacomm/commapi/comm.jar"
  packagenames="
-  net/sf/gogui/drawboard.*,
+  net/sf/gogui/boardpainter.*,
   net/sf/gogui/game.*,
   net/sf/gogui/gmp.*,
   net/sf/gogui/gmptogtp.*,
@@ -806,7 +806,7 @@ ${quaqua.zipfile}
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/drawboard/*.class
+ net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/sgf/*.class

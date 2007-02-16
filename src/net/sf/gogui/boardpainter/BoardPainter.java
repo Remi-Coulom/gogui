@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: BoardPainter.java 4163 2007-02-08 03:54:35Z enz $
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.drawboard;
+package net.sf.gogui.boardpainter;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -23,9 +23,9 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
 
 /** Draws a board. */
-public class BoardDrawer
+public class BoardPainter
 {
-    public BoardDrawer()
+    public BoardPainter()
     {
         ClassLoader classLoader = getClass().getClassLoader();
         m_image = null;

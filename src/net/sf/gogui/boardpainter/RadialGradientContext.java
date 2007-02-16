@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: RadialGradientContext.java 3869 2007-01-26 05:36:40Z enz $
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.drawboard;
+package net.sf.gogui.boardpainter;
 
 import java.awt.Color;
 import java.awt.PaintContext;

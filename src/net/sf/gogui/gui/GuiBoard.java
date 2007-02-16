@@ -24,8 +24,8 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import javax.swing.JPanel;
-import net.sf.gogui.drawboard.BoardDrawer;
-import net.sf.gogui.drawboard.GuiField;
+import net.sf.gogui.boardpainter.BoardPainter;
+import net.sf.gogui.boardpainter.GuiField;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -69,7 +69,7 @@ public final class GuiBoard
     */
     public GuiBoard(int size)
     {
-        m_drawer = new BoardDrawer();
+        m_painter = new BoardPainter();
         setPreferredFieldSize();
         initSize(size);
     }
@@ -174,7 +174,7 @@ public final class GuiBoard
 
     public Dimension getFieldSize()
     {
-        int size = m_drawer.getFieldSize();
+        int size = m_painter.getFieldSize();
         return new Dimension(size, size);
     }
 
@@ -193,7 +193,7 @@ public final class GuiBoard
     */
     public Point getLocationOnScreen(GoPoint point)
     {
-        Point center = m_drawer.getCenter(point.getX(), point.getY());
+        Point center = m_painter.getCenter(point.getX(), point.getY());
         Point location = m_panel.getLocationOnScreen();
         location.x += center.x;
         location.y += center.y;
@@ -652,13 +652,13 @@ public final class GuiBoard
         {
             if (m_listener == null)
                 return;
-            Point center = m_drawer.getCenter(point.getX(), point.getY());
+            Point center = m_painter.getCenter(point.getX(), point.getY());
             m_listener.contextMenu(point, this, center.x, center.y);
         }
 
         public GoPoint getPoint(MouseEvent event)
         {
-            return m_drawer.getPoint(event.getPoint());
+            return m_painter.getPoint(event.getPoint());
         }
 
         public void paintComponent(Graphics graphics)
@@ -689,14 +689,14 @@ public final class GuiBoard
         {
             if (DEBUG_REPAINT)
                 System.err.println("paintImmediately " + point);
-            Point location = m_drawer.getLocation(point.getX(), point.getY());
+            Point location = m_painter.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            int offset = m_drawer.getShadowOffset()
-                - GuiField.getStoneMargin(m_drawer.getFieldSize());
-            dirty.width = m_drawer.getFieldSize() + offset;
-            dirty.height = m_drawer.getFieldSize() + offset;
+            int offset = m_painter.getShadowOffset()
+                - GuiField.getStoneMargin(m_painter.getFieldSize());
+            dirty.width = m_painter.getFieldSize() + offset;
+            dirty.height = m_painter.getFieldSize() + offset;
             addDirty(dirty);
             Rectangle oldDirty = m_dirty;
             m_dirty = dirty;
@@ -708,12 +708,12 @@ public final class GuiBoard
         {
             if (DEBUG_REPAINT)
                 System.err.println("repaint " + point);
-            Point location = m_drawer.getLocation(point.getX(), point.getY());
+            Point location = m_painter.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            dirty.width = m_drawer.getFieldSize();
-            dirty.height = m_drawer.getFieldSize();
+            dirty.width = m_painter.getFieldSize();
+            dirty.height = m_painter.getFieldSize();
             addDirty(dirty);
             repaint(dirty);
         }
@@ -722,14 +722,14 @@ public final class GuiBoard
         {
             if (DEBUG_REPAINT)
                 System.err.println("repaintWithShadow " + point);
-            Point location = m_drawer.getLocation(point.getX(), point.getY());
+            Point location = m_painter.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            int offset = m_drawer.getShadowOffset()
-                - GuiField.getStoneMargin(m_drawer.getFieldSize());
-            dirty.width = m_drawer.getFieldSize() + offset;
-            dirty.height = m_drawer.getFieldSize() + offset;
+            int offset = m_painter.getShadowOffset()
+                - GuiField.getStoneMargin(m_painter.getFieldSize());
+            dirty.width = m_painter.getFieldSize() + offset;
+            dirty.height = m_painter.getFieldSize() + offset;
             addDirty(dirty);
             repaint(dirty);
         }
@@ -737,7 +737,7 @@ public final class GuiBoard
         public void setPreferredFieldSize()
         {
             int preferredFieldSize = getPreferredFieldSize().width;
-            setPreferredSize(BoardDrawer.getPreferredSize(preferredFieldSize,
+            setPreferredSize(BoardPainter.getPreferredSize(preferredFieldSize,
                                                           m_size, m_showGrid));
             int minimumSize = 4 * m_size + 2;
             setMinimumSize(new Dimension(minimumSize, minimumSize));
@@ -778,7 +778,7 @@ public final class GuiBoard
 
     private GoPoint m_lastMove;
 
-    private BoardDrawer m_drawer;
+    private BoardPainter m_painter;
 
     private GuiField m_field[][];
 
@@ -817,7 +817,7 @@ public final class GuiBoard
                                + m_dirty.height);
         Graphics graphics = m_image.getGraphics();
         graphics.setClip(m_dirty);
-        m_drawer.draw(graphics, m_field, m_imageWidth, m_showGrid);
+        m_painter.draw(graphics, m_field, m_imageWidth, m_showGrid);
         m_dirty = null;
     }
 

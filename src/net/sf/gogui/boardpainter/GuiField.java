@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: GuiField.java 4174 2007-02-08 17:25:50Z enz $
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.drawboard;
+package net.sf.gogui.boardpainter;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;

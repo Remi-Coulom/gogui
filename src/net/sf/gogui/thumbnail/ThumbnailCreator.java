@@ -25,8 +25,8 @@ import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
-import net.sf.gogui.drawboard.GuiField;
-import net.sf.gogui.drawboard.BoardDrawer;
+import net.sf.gogui.boardpainter.GuiField;
+import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
@@ -61,7 +61,7 @@ public final class ThumbnailCreator
     public ThumbnailCreator(boolean verbose)
     {
         m_verbose = verbose;
-        m_drawer = new BoardDrawer();
+        m_painter = new BoardPainter();
     }
 
     /** Create thumbnail at standard location.
@@ -177,7 +177,7 @@ public final class ThumbnailCreator
 
     private File m_lastThumbnail;
 
-    private final BoardDrawer m_drawer;
+    private final BoardPainter m_painter;
 
     private BufferedImage createImage(int width, int height)
     {
@@ -236,7 +236,7 @@ public final class ThumbnailCreator
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
-        m_drawer.draw(graphics, field, width, false);
+        m_painter.draw(graphics, field, width, false);
         graphics.dispose();
         return image;
     }
