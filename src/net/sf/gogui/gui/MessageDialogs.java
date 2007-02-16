@@ -23,6 +23,7 @@ import java.io.File;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Locale;
+import java.util.TreeSet;
 import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -47,15 +48,14 @@ import net.sf.gogui.util.StringUtil;
 /** Simple message dialogs. */
 public final class MessageDialogs
 {
-    public static void showError(Component frame, String mainMessage,
-                                 String optionalMessage)
+    public void showError(Component frame, String mainMessage,
+                          String optionalMessage)
     {
         showError(frame, mainMessage, optionalMessage, true);
     }
 
-    public static void showError(Component frame, String mainMessage,
-                                 String optionalMessage,
-                                 boolean isCritical)
+    public void showError(Component frame, String mainMessage,
+                          String optionalMessage, boolean isCritical)
     {
         int type;
         if (! isCritical)
@@ -64,50 +64,75 @@ public final class MessageDialogs
             type = JOptionPane.ERROR_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
-        show(frame, "Error", mainMessage, optionalMessage, type,
+        show(null, frame, "Error", mainMessage, optionalMessage, type,
              options, defaultOption);
     }
 
-    public static void showError(Component frame, String message, Exception e)
+    public void showError(Component frame, String message, Exception e)
     {
         showError(frame, message, e, true);
     }
 
-    public static void showError(Component frame, String message, Exception e,
-                                 boolean isCritical)
+    public void showError(Component frame, String message, Exception e,
+                          boolean isCritical)
     {
         showError(frame, message, StringUtil.getErrorMessage(e), isCritical);
     }
 
-    public static void showInfo(Component frame, String mainMessage,
-                                String optionalMessage)
+    public void showInfo(Component frame, String mainMessage,
+                         String optionalMessage)
     {        
+        showInfo(null, frame, mainMessage, optionalMessage);
+    }
+
+    public void showInfo(String disableKey, Component frame,
+                         String mainMessage, String optionalMessage)
+    {        
+        if (disableKey != null && m_disabled.contains(disableKey))
+            return;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
-        show(frame, "Information", mainMessage, optionalMessage,
+        show(disableKey, frame, "Information", mainMessage, optionalMessage,
              JOptionPane.INFORMATION_MESSAGE, options, defaultOption);
     }
 
-    public static boolean showQuestion(Component frame, String mainMessage,
-                                       String optionalMessage)
+    public boolean showQuestion(Component frame, String mainMessage,
+                                String optionalMessage)
     {
+        return showQuestion(null, frame, mainMessage, optionalMessage);
+    }
+
+    public boolean showQuestion(String disableKey, Component frame,
+                                String mainMessage, String optionalMessage)
+    {
+        if (disableKey != null && m_disabled.contains(disableKey))
+            return true;
         Object[] options = { "Yes", "No" };
         Object defaultOption = options[1];
         int type = JOptionPane.QUESTION_MESSAGE;
-        Object result = show(frame, "Question", mainMessage, optionalMessage,
-                             type, options, defaultOption);
+        Object result = show(disableKey, frame, "Question", mainMessage,
+                             optionalMessage, type, options, defaultOption);
         return (result == options[0]);
     }
 
-    public static int showYesNoCancelQuestion(Component parent,
-                                              String mainMessage,
-                                              String optionalMessage)
+    public int showYesNoCancelQuestion(Component parent, String mainMessage,
+                                       String optionalMessage)
     {
+        return showYesNoCancelQuestion(null, parent, mainMessage,
+                                       optionalMessage);
+    }
+
+    public int showYesNoCancelQuestion(String disableKey, Component parent,
+                                       String mainMessage,
+                                       String optionalMessage)
+    {
+        if (disableKey != null && m_disabled.contains(disableKey))
+            return 2;
         Object[] options = { "Yes", "No", "Cancel" };
         Object defaultOption = options[2];
         int type = JOptionPane.QUESTION_MESSAGE;
-        Object value = show(parent, "Question", mainMessage, optionalMessage,
-                            type, options, defaultOption);
+        Object value = show(disableKey, parent, "Question", mainMessage,
+                            optionalMessage, type, options, defaultOption);
         int result;
         if (value == options[0])
             result = 0;
@@ -122,9 +147,18 @@ public final class MessageDialogs
         return result;
     }
 
-    public static void showWarning(Component parent, String mainMessage,
-                                   String optionalMessage, boolean isCritical)
+    public void showWarning(Component parent, String mainMessage,
+                            String optionalMessage, boolean isCritical)
     {
+        showWarning(null, parent, mainMessage, optionalMessage, isCritical);
+    }
+
+    public void showWarning(String disableKey, Component parent,
+                            String mainMessage, String optionalMessage,
+                            boolean isCritical)
+    {
+        if (disableKey != null && m_disabled.contains(disableKey))
+            return;
         int type;
         if (! isCritical)
             type = JOptionPane.PLAIN_MESSAGE;
@@ -132,21 +166,32 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
-        show(parent, "Error", mainMessage, optionalMessage, type,
+        show(disableKey, parent, "Error", mainMessage, optionalMessage, type,
              options, defaultOption);
     }
 
-    public static boolean showWarningQuestion(Component parent,
-                                              String mainMessage,
-                                              String optionalMessage)
+    public boolean showWarningQuestion(Component parent, String mainMessage,
+                                       String optionalMessage)
     {
+        return showWarningQuestion(null, parent, mainMessage,
+                                   optionalMessage);
+    }
+
+    public boolean showWarningQuestion(String disableKey, Component parent,
+                                       String mainMessage,
+                                       String optionalMessage)
+    {
+        if (disableKey != null && m_disabled.contains(disableKey))
+            return true;
         Object[] options = { "Yes", "No" };
         Object defaultOption = options[1];
-        int type = JOptionPane.QUESTION_MESSAGE;
-        Object result = show(parent, "Question", mainMessage, optionalMessage,
-                             type, options, defaultOption);
+        int type = JOptionPane.WARNING_MESSAGE;
+        Object result = show(disableKey, parent, "Question", mainMessage,
+                             optionalMessage, type, options, defaultOption);
         return (result == options[0]);
     }
+
+    private TreeSet m_disabled = new TreeSet();
 
     private static void addFiller(JComponent component)
     {
@@ -155,10 +200,10 @@ public final class MessageDialogs
         component.add(filler);
     }
 
-    private static Object show(Component parent, String title,
-                               String mainMessage, String optionalMessage,
-                               int messageType, Object[] options,
-                               Object defaultOption)
+    private Object show(String disableKey, Component parent, String title,
+                        String mainMessage, String optionalMessage,
+                        int messageType, Object[] options,
+                        Object defaultOption)
     {
         Box box = Box.createVerticalBox();
         JLabel label = new JLabel(mainMessage);
@@ -182,6 +227,23 @@ public final class MessageDialogs
         box.add(textArea);
         addFiller(box);
         addFiller(box);
+        JCheckBox disableCheckBox = null;
+        if (disableKey != null)
+        {
+            if (messageType == JOptionPane.QUESTION_MESSAGE)
+                disableCheckBox = new JCheckBox("Do not ask again");
+            else if (messageType == JOptionPane.WARNING_MESSAGE)
+                disableCheckBox =
+                    new JCheckBox("Do not show this warning again");
+            else
+                disableCheckBox =
+                    new JCheckBox("Do not show this message again");
+            String toolTipText =
+                "Disable this kind of messages for the current session";
+            disableCheckBox.setToolTipText(toolTipText);
+            disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+            box.add(disableCheckBox);
+        }
         if (Platform.isMac())
             // Don't show icons on Mac, proplem with icon generation in
             // Quaqua 3.7.2
@@ -195,6 +257,8 @@ public final class MessageDialogs
         dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();
+        if (disableKey != null && disableCheckBox.isSelected())
+            m_disabled.add(disableKey);
         return optionPane.getValue();
     }
 }

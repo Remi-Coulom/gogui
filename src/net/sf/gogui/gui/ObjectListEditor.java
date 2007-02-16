@@ -102,8 +102,6 @@ public class ObjectListEditor
 
     private JList m_list;
 
-    private OptionalMessage m_removeWarning;
-
     private JDialog m_dialog;
 
     private ArrayList m_objects;
@@ -154,10 +152,10 @@ public class ObjectListEditor
             return;
         Object object = getObject(index);
         String name = m_editor.getItemLabel(object);
-        if (m_removeWarning == null)
-            m_removeWarning = new OptionalMessage(m_dialog);
-        if (! m_removeWarning.showWarningQuestion("Really remove " + name
-                                                  + "?", null, true))
+        String disableKey = "net.sf.gogui.gui.ObjectListEditor.remove";
+        String mainMessage = "Really remove " + name + "?";
+        if (! m_messageDialogs.showWarningQuestion(disableKey, m_dialog,
+                                                   mainMessage, ""))
             return;
         m_objects.remove(object);
         if (index >= m_objects.size())

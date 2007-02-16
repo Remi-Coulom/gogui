@@ -91,7 +91,6 @@ import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.gui.ObjectListEditor;
-import net.sf.gogui.gui.OptionalMessageSession;
 import net.sf.gogui.gui.ParameterDialog;
 import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.ProgramEditor;
@@ -1059,10 +1058,10 @@ public class GoGui
                 String optionalMessage =
                     "If you overwrite the file with your changed version, " +
                     "the previous version will be lost.";
-                if (! m_optionalMessages.showWarningQuestion("overwrite",
-                                                             mainMessage,
-                                                             optionalMessage,
-                                                             true))
+                String disableKey = "net.sf.gogui.GoGui.overwrite";
+                if (! m_messageDialogs.showWarningQuestion(disableKey, this,
+                                                           mainMessage,
+                                                           optionalMessage))
                     return;
             }
             save(m_file);
@@ -1084,10 +1083,10 @@ public class GoGui
             return;
         if (m_gtp == null)
         {
-            m_optionalMessages.showMessage("score-no-program",
-                                           "Please mark dead groups "
-                                           + "manually",
-                                           "No program is attached.");
+            String disableKey = "net.sf.gogui.gogui.GoGui.score-no-program";
+            m_messageDialogs.showInfo(disableKey, this,
+                                      "Please mark dead groups manually",
+                                      "No program is attached.");
             initScore(null);
             updateViews(false);
             return;
@@ -1104,11 +1103,12 @@ public class GoGui
         }
         else
         {
-            m_optionalMessages.showMessage("score-not-supported",
-                                           "Please mark dead groups "
-                                           + "manually",
-                                           getProgramName()
-                                           + " does not support scoring.");
+            String disableKey =
+                "net.sf.gogui.gogui.GoGui.score-not-supported";
+            m_messageDialogs.showInfo(disableKey, this,
+                                      "Please mark dead groups manually",
+                                      getProgramName()
+                                      + " does not support scoring.");
             initScore(null);
             updateViews(false);
         }
@@ -1773,20 +1773,28 @@ public class GoGui
         public void run()
         {
             if (m_line.trim().equals(""))
-                m_optionalMessages.showWarning("invalid-empty-response",
-                                               getProgramName() +
-                                               " sent a malformed GTP " +
-                                               "response",
-                                               "Empty line before " +
-                                               "response start", false);
+            {
+                String disableKey =
+                    "net.sf.gogui.gogui.GoGui.invalid-empty-response";
+                m_messageDialogs.showWarning(disableKey, GoGui.this,
+                                             getProgramName() +
+                                             " sent a malformed GTP " +
+                                             "response",
+                                             "Empty line before " +
+                                             "response start", false);
+            }
             else
-                m_optionalMessages.showWarning("invalid-response",
-                                               getProgramName() +
-                                               " sent a malformed GTP " +
-                                               "response",
-                                               "First line not " +
-                                               "starting with status " +
-                                               "character", false);
+            {
+                String disableKey =
+                    "net.sf.gogui.gogui.GoGui.invalid-response";
+                m_messageDialogs.showWarning(disableKey, GoGui.this,
+                                             getProgramName() +
+                                             " sent a malformed GTP " +
+                                             "response",
+                                             "First line not " +
+                                             "starting with status " +
+                                             "character", false);
+            }
         }
         
         private final String m_line;
@@ -1910,9 +1918,6 @@ public class GoGui
     private GoColor m_setupColor;
 
     private MessageDialogs m_messageDialogs = new MessageDialogs();
-
-    private OptionalMessageSession m_optionalMessages =
-        new OptionalMessageSession(this);
 
     private Pattern m_pattern;
 
@@ -2357,16 +2362,12 @@ public class GoGui
         String optionalMessage =
             "Your changes will be lost if you don't save them.";
         int result;
+        String disableKey = null;
         if (! isProgramTerminating)
-            result =
-                m_optionalMessages.showYesNoCancelQuestion("save",
-                                                           mainMessage,
-                                                           optionalMessage);
-        else
-            result =
-                m_messageDialogs.showYesNoCancelQuestion(this,
-                                                         mainMessage,
-                                                         optionalMessage);
+            disableKey = "net.sf.gogui.gogui.GoGui.save";
+        result = m_messageDialogs.showYesNoCancelQuestion(disableKey, this,
+                                                          mainMessage,
+                                                          optionalMessage);
         switch (result)
         {
         case 0:
@@ -2483,9 +2484,13 @@ public class GoGui
                 m_game.play(move);
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
-                    m_optionalMessages.showMessage("computer-passed",
-                                                   getProgramName() +
-                                                   " passes", null);
+                {
+                    String disableKey =
+                        "net.sf.gogui.gogui.GoGui.computer-passed";
+                    m_messageDialogs.showInfo(disableKey, this,
+                                              getProgramName() + " passes",
+                                              "");
+                }
                 m_resigned = false;
                 gameTreeChanged = true;
                 ConstNode currentNode = getCurrentNode();
@@ -3672,8 +3677,8 @@ public class GoGui
 
     private void showGameFinished()
     {
-        m_optionalMessages.showMessage("game-finished", "Game finished",
-                                       null);
+        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
+        m_messageDialogs.showInfo(disableKey, this, "Game finished", "");
     }
 
     private void showInfo(String mainMessage, String optionalMessage)
@@ -3706,8 +3711,9 @@ public class GoGui
     private boolean showOptionalQuestion(String id, String mainMessage,
                                          String optionalMessage)
     {
-        return m_optionalMessages.showQuestion(id, mainMessage,
-                                               optionalMessage);
+        String disableKey = "net.sf.gogui.gogui.GoGui" + id;
+        return m_messageDialogs.showQuestion(disableKey, this, mainMessage,
+                                             optionalMessage);
     }
 
     private boolean showQuestion(String mainMessage, String optionalMessage)

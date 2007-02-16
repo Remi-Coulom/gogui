@@ -8,7 +8,6 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiGtpClient;
-import net.sf.gogui.gui.OptionalMessage;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.util.Platform;
 
@@ -37,11 +36,11 @@ public final class Interrupt
             if (n == 0)
                 gtp.destroyGtp();
             return false;
-        }
-        if (m_question == null)
-            m_question = new OptionalMessage(parent);
-        if (! m_question.showQuestion("Interrupt " + gtp.getProgramName()
-                                      + "?", null))
+        }        
+        String disableKey = "net.sf.gogui.gogui.Interrupt.interrupt";
+        if (! messageDialogs.showQuestion(disableKey, parent,
+                                          "Interrupt " + gtp.getProgramName()
+                                          + "?", null))
             return false;
         try
         {
@@ -54,7 +53,5 @@ public final class Interrupt
         }
         return true;
     }
-
-    private OptionalMessage m_question;
 }
 
