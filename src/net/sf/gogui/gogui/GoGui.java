@@ -1186,8 +1186,10 @@ public class GoGui
     public void actionSetup(GoColor color)
     {
         assert(color.isBlackWhite());
-        if (! checkStateChangePossible())
-            return;
+        if (! checkCommandInProgress())
+            return ;
+        if (m_scoreMode)
+            scoreDone(null);
         ConstNode node = getCurrentNode();
         if (m_setupMode)
         {
