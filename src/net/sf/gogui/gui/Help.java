@@ -157,7 +157,8 @@ public class Help
         toolBar.add(m_buttonBack);
         m_buttonForward = createToolBarButton("go-next", "forward", "Forward");
         toolBar.add(m_buttonForward);
-        toolBar.setRollover(true);
+        if (! Platform.isMac())
+            toolBar.setRollover(true);
         toolBar.setFloatable(false);
         // For com.jgoodies.looks
         toolBar.putClientProperty("jgoodies.headerStyle", "Single");

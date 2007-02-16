@@ -13,6 +13,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.JToggleButton;
+import net.sf.gogui.util.Platform;
 
 
 /** Tool bar for GoGui. */
@@ -44,7 +45,8 @@ public class GoGuiToolBar
         addSeparator();
         addButton(actions.m_actionNextVariation);
         addButton(actions.m_actionPreviousVariation);
-        setRollover(true);
+        if (! Platform.isMac())
+            setRollover(true);
         setFloatable(false);
         // For com.jgoodies.looks
         putClientProperty("jgoodies.headerStyle", "Both");
