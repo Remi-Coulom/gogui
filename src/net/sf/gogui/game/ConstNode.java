@@ -15,11 +15,7 @@ import net.sf.gogui.go.Move;
 */
 public interface ConstNode
 {
-    GoPoint getAddBlack(int i);
-
-    GoPoint getAddEmpty(int i);
-
-    GoPoint getAddWhite(int i);
+    ConstPointList getAddStones(GoColor c);
 
     String getComment();
 
@@ -42,12 +38,6 @@ public interface ConstNode
     Move getMove();
 
     int getMovesLeft(GoColor color);
-
-    int getNumberAddBlack();
-
-    int getNumberAddEmpty();
-
-    int getNumberAddWhite();
 
     int getNumberChildren();
 

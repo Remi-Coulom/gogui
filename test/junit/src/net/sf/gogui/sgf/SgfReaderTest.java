@@ -249,9 +249,9 @@ public final class SgfReaderTest
     private void checkSetup(ConstNode node, int black, int white, int empty)
         throws GoPoint.InvalidPoint
     {
-        assertEquals(node.getNumberAddBlack(), black);
-        assertEquals(node.getNumberAddWhite(), white);
-        assertEquals(node.getNumberAddEmpty(), empty);
+        assertEquals(node.getAddStones(GoColor.BLACK).size(), black);
+        assertEquals(node.getAddStones(GoColor.WHITE).size(), white);
+        assertEquals(node.getAddStones(GoColor.EMPTY).size(), empty);
         assertNull(node.getMove());
     }
 

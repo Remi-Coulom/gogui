@@ -83,7 +83,7 @@ public final class NodeUtilTest
     {
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
-        node.addBlack(point);
+        node.addStone(GoColor.BLACK, point);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
@@ -94,7 +94,7 @@ public final class NodeUtilTest
     {
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
-        node.addBlack(point);
+        node.addStone(GoColor.BLACK, point);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
@@ -108,8 +108,8 @@ public final class NodeUtilTest
         Node node = new Node(move);
         GoPoint point1 = GoPoint.get(1, 1);
         GoPoint point2 = GoPoint.get(2, 2);
-        node.addBlack(point1);
-        node.addBlack(point2);
+        node.addStone(GoColor.BLACK, point1);
+        node.addStone(GoColor.BLACK, point2);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
@@ -123,8 +123,8 @@ public final class NodeUtilTest
         Node node = new Node();
         GoPoint point1 = GoPoint.get(1, 1);
         GoPoint point2 = GoPoint.get(2, 2);
-        node.addBlack(point1);
-        node.addWhite(point2);
+        node.addStone(GoColor.BLACK, point1);
+        node.addStone(GoColor.WHITE, point2);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
@@ -138,8 +138,8 @@ public final class NodeUtilTest
         Node node = new Node(move);
         GoPoint point1 = GoPoint.get(1, 1);
         GoPoint point2 = GoPoint.get(2, 2);
-        node.addBlack(point1);
-        node.addWhite(point2);
+        node.addStone(GoColor.BLACK, point1);
+        node.addStone(GoColor.WHITE, point2);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
@@ -153,8 +153,8 @@ public final class NodeUtilTest
         Node node = new Node();
         GoPoint point1 = GoPoint.get(1, 1);
         GoPoint point2 = GoPoint.get(2, 2);
-        node.addBlack(point1);
-        node.addWhite(point2);
+        node.addStone(GoColor.BLACK, point1);
+        node.addStone(GoColor.WHITE, point2);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
@@ -167,7 +167,7 @@ public final class NodeUtilTest
     {
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
-        node.addWhite(point);
+        node.addStone(GoColor.WHITE, point);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
@@ -180,7 +180,7 @@ public final class NodeUtilTest
     {
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
-        node.addWhite(point);
+        node.addStone(GoColor.WHITE, point);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());

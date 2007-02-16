@@ -242,8 +242,7 @@ public final class SgfReader
     {
         Node root = m_tree.getRoot();
         GameInformation info = m_tree.getGameInformation(root);
-        if ((root.getNumberAddWhite() + root.getNumberAddBlack() > 0)
-            && root.getPlayer() == null)
+        if (root.hasSetup() && root.getPlayer() == null)
         {
             if (info.getHandicap() > 0)
             {
@@ -739,20 +738,17 @@ public final class SgfReader
             if (p == "AB")
             {
                 parsePointList();
-                for (int i = 0; i < m_pointList.size(); ++i)
-                    node.addBlack(getPointList(i));
+                node.addStones(GoColor.BLACK, m_pointList);
             }
             else if (p == "AE")
             {
                 parsePointList();
-                for (int i = 0; i < m_pointList.size(); ++i)
-                    node.addEmpty(getPointList(i));
+                node.addStones(GoColor.EMPTY, m_pointList);
             }
             else if (p == "AW")
             {
                 parsePointList();
-                for (int i = 0; i < m_pointList.size(); ++i)
-                    node.addWhite(getPointList(i));
+                node.addStones(GoColor.WHITE, m_pointList);
             }
             else if (p == "B")
             {

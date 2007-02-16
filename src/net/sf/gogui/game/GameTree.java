@@ -39,9 +39,8 @@ public class GameTree
             info.setHandicap(handicap.size());
             if (handicap.size() > 0)
             {
+                m_root.addStones(GoColor.BLACK, handicap);
                 m_root.setPlayer(GoColor.WHITE);
-                for (int i = 0; i < handicap.size(); ++i)
-                    m_root.addBlack(handicap.get(i));
             }
         }
     }

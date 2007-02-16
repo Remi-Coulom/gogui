@@ -34,9 +34,9 @@ public class BoardUpdater
             if (node.hasSetup())
             {
                 if (isFirstPlacement
-                    && node.getNumberAddWhite() == 0
-                    && node.getNumberAddEmpty() == 0
-                    && node.getNumberAddBlack() == handicap)
+                    && node.getAddStones(GoColor.BLACK).size() == handicap
+                    && node.getAddStones(GoColor.WHITE).size() == 0
+                    && node.getAddStones(GoColor.EMPTY).size() == 0)
                     doSetupHandicap(node, board);
                 else
                     doSetup(node, board);
@@ -60,24 +60,14 @@ public class BoardUpdater
 
     private void doSetup(ConstNode node, Board board)
     {
-        PointList setupBlack = new PointList();
-        for (int i = 0; i < node.getNumberAddBlack(); ++i)
-            setupBlack.add(node.getAddBlack(i));
-        PointList setupWhite = new PointList();
-        for (int i = 0; i < node.getNumberAddWhite(); ++i)
-            setupWhite.add(node.getAddWhite(i));
-        PointList setupEmpty = new PointList();
-        for (int i = 0; i < node.getNumberAddEmpty(); ++i)
-            setupEmpty.add(node.getAddEmpty(i));
-        board.setup(setupBlack, setupWhite, setupEmpty, node.getPlayer());
+        board.setup(node.getAddStones(GoColor.BLACK),
+                    node.getAddStones(GoColor.WHITE),
+                    node.getAddStones(GoColor.EMPTY), node.getPlayer());
     }
 
     private void doSetupHandicap(ConstNode node, Board board)
     {
-        PointList points = new PointList();
-        for (int i = 0; i < node.getNumberAddBlack(); ++i)
-            points.add(node.getAddBlack(i));
-        board.setupHandicap(points);
+        board.setupHandicap(node.getAddStones(GoColor.BLACK));
     }
 }
 

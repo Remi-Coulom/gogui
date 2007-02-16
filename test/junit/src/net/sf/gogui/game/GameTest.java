@@ -30,12 +30,12 @@ public final class GameTest
         ConstNode node = game.getCurrentNode();
         GoPoint p = GoPoint.get(0, 0);
         game.setup(p, GoColor.BLACK);
-        assertEquals(1, node.getNumberAddBlack());
-        assertEquals(0, node.getNumberAddWhite());
-        assertEquals(0, node.getNumberAddEmpty());
+        assertEquals(1, node.getAddStones(GoColor.BLACK).size());
+        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
+        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
         game.setup(p, GoColor.EMPTY);
-        assertEquals(0, node.getNumberAddBlack());
-        assertEquals(0, node.getNumberAddWhite());
-        assertEquals(0, node.getNumberAddEmpty());
+        assertEquals(0, node.getAddStones(GoColor.BLACK).size());
+        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
+        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
     }
 }

@@ -169,28 +169,29 @@ public final class NodeUtil
         Move move = node.getMove();
         if (node.hasSetup())
         {
-            int numberAddBlack = node.getNumberAddBlack();
-            int numberAddWhite = node.getNumberAddWhite();
+            ConstPointList addBlack = node.getAddStones(GoColor.BLACK);
+            ConstPointList addWhite = node.getAddStones(GoColor.WHITE);
+            ConstPointList addEmpty = node.getAddStones(GoColor.EMPTY);
             boolean switchSetup = (move == null
                                    && node.getPlayer() == GoColor.WHITE
-                                   && numberAddBlack > 0
-                                   && numberAddWhite > 0);
+                                   && addBlack.size() > 0
+                                   && addWhite.size() > 0);
             if (switchSetup)
             {
-                for (int i = 0; i < numberAddWhite; ++i)
-                    moves.add(Move.get(node.getAddWhite(i), GoColor.WHITE));
-                for (int i = 0; i < numberAddBlack; ++i)
-                    moves.add(Move.get(node.getAddBlack(i), GoColor.BLACK));
+                for (int i = 0; i < addWhite.size(); ++i)
+                    moves.add(Move.get(addWhite.get(i), GoColor.WHITE));
+                for (int i = 0; i < addBlack.size(); ++i)
+                    moves.add(Move.get(addBlack.get(i), GoColor.BLACK));
             }
             else
             {
-                for (int i = 0; i < numberAddBlack; ++i)
-                    moves.add(Move.get(node.getAddBlack(i), GoColor.BLACK));
-                for (int i = 0; i < numberAddWhite; ++i)
-                    moves.add(Move.get(node.getAddWhite(i), GoColor.WHITE));
+                for (int i = 0; i < addBlack.size(); ++i)
+                    moves.add(Move.get(addBlack.get(i), GoColor.BLACK));
+                for (int i = 0; i < addWhite.size(); ++i)
+                    moves.add(Move.get(addWhite.get(i), GoColor.WHITE));
             }
-            for (int i = 0; i < node.getNumberAddEmpty(); ++i)
-                moves.add(Move.get(node.getAddEmpty(i), GoColor.EMPTY));
+            for (int i = 0; i < addEmpty.size(); ++i)
+                moves.add(Move.get(addEmpty.get(i), GoColor.EMPTY));
         }
         if (move != null)
             moves.add(move);
@@ -513,12 +514,10 @@ public final class NodeUtil
         Node root = tree.getRoot();
         for (int i = 0; i < board.getNumberPoints(); ++i)
         {
-            GoPoint point = board.getPoint(i);
-            GoColor color = board.getColor(point);
-            if (color == GoColor.BLACK)
-                root.addBlack(point);
-            else if (color == GoColor.WHITE)
-                root.addWhite(point);
+            GoPoint p = board.getPoint(i);
+            GoColor c = board.getColor(p);
+            if (c.isBlackWhite())
+                root.addStone(c, p);
         }
         root.setPlayer(board.getToMove());
         return tree;
@@ -554,20 +553,14 @@ public final class NodeUtil
             appendInfo(buffer, "MoveNumber", getMoveNumber(node));
         }
         appendInfo(buffer, "Variation", getVariationString(node));
-        PointList addBlack = new PointList();
-        for (int i = 0; i < node.getNumberAddBlack(); ++i)
-            addBlack.add(node.getAddBlack(i));
-        if (node.getNumberAddBlack() > 0)
+        ConstPointList addBlack = node.getAddStones(GoColor.BLACK);
+        if (addBlack.size() > 0)
             appendInfo(buffer, "AddBlack", addBlack);
-        PointList addWhite = new PointList();
-        for (int i = 0; i < node.getNumberAddWhite(); ++i)
-            addWhite.add(node.getAddWhite(i));
-        if (node.getNumberAddWhite() > 0)
+        ConstPointList addWhite = node.getAddStones(GoColor.WHITE);
+        if (addWhite.size() > 0)
             appendInfo(buffer, "AddWhite", addWhite);
-        PointList addEmpty = new PointList();
-        for (int i = 0; i < node.getNumberAddEmpty(); ++i)
-            addEmpty.add(node.getAddEmpty(i));
-        if (node.getNumberAddEmpty() > 0)
+        ConstPointList addEmpty = node.getAddStones(GoColor.EMPTY);
+        if (addEmpty.size() > 0)
             appendInfo(buffer, "AddEmpty", addEmpty);
         if (node.getPlayer() != null)
             appendInfo(buffer, "Player", node.getPlayer().toString());

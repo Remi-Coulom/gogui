@@ -50,11 +50,13 @@ final class SetupInfo
 {
     public GoColor m_player;
 
-    public PointList m_black = new PointList();
-
-    public PointList m_white = new PointList();
-
-    public PointList m_empty = new PointList();
+    /** Stones added or removed.
+        The array is indexed by Black, White, Empty.
+    */
+    public PointList[] m_stones = {
+        new PointList(),
+        new PointList(),
+        new PointList() };
 }
 
 final class TimeInfo
@@ -115,24 +117,6 @@ public final class Node
         node.m_father = this;
     }
 
-    /** Add a black setup stone.
-        @param point The location of the setup stone.
-    */
-    public void addBlack(GoPoint point)
-    {
-        assert(point != null);
-        createSetupInfo().m_black.add(point);
-    }
-
-    /** Add an empty setup point.
-        @param point The location that should be set to empty.
-    */
-    public void addEmpty(GoPoint point)
-    {
-        assert(point != null);
-        createSetupInfo().m_empty.add(point);
-    }
-
     /** Add a markup.
         @param point The location that should be marked.
         @param type The type of the markup from Node.MARK_TYPES.
@@ -169,13 +153,28 @@ public final class Node
         createSgfProperties().put(label, value);
     }
 
-    /** Add a white setup stone.
-        @param point The location of the setup stone.
+    /** Add or remove a setup stone.
+        It is not checked, if this stone is already in the list of added
+        or removed stones.
+        @param c The color of the stone (Black or White; Empty for removal).
+        @param p The location of the setup stone.
     */
-    public void addWhite(GoPoint point)
+    public void addStone(GoColor c, GoPoint p)
     {
-        assert(point != null);
-        createSetupInfo().m_white.add(point);
+        assert(p != null);
+        createSetupInfo().m_stones[c.toInteger()].add(p);
+    }
+
+    /** Add or remove a list of setup stones.
+        It is not checked, if this stone is already in the list of added
+        or removed stones.
+        @param c The color of the stone (Black or White; Empty for removal).
+        @param list The locations of the setup stones.
+    */
+    public void addStones(GoColor c, ConstPointList list)
+    {
+        assert(list != null);
+        createSetupInfo().m_stones[c.toInteger()].addAll(list);
     }
 
     /** Create game information or return it if already existing. */
@@ -187,34 +186,16 @@ public final class Node
         return moreExtraInfo.m_gameInformation;
     }
 
-    /** Get black setup stone.
-        @param i The index of the setup stone in [0...getNumberAddBlack() - 1]
-        @return The black setup stone
+    /** Get setup stones.
+        @param c Color of the stones; GoColor.EMPTY for removed stones.
+        @return The added or removed stones.
     */
-    public GoPoint getAddBlack(int i)
+    public ConstPointList getAddStones(GoColor c)
     {
-        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
-        return setupInfo.m_black.get(i);
-    }
-
-    /** Get empty setup point.
-        @param i The index of the setup point in [0...getNumberAddEmpty() - 1]
-        @return The empty setup point
-    */
-    public GoPoint getAddEmpty(int i)
-    {
-        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
-        return setupInfo.m_empty.get(i);
-    }
-
-    /** Get white setup stone.
-        @param i The index of the setup stone in [0...getNumberAddWhite() - 1]
-        @return The white setup stone
-    */
-    public GoPoint getAddWhite(int i)
-    {
-        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
-        return setupInfo.m_white.get(i);
+        SetupInfo setupInfo = getSetupInfo();
+        if (setupInfo == null)
+            return PointList.getEmptyList();
+        return setupInfo.m_stones[c.toInteger()];
     }
 
     /** Child of main variation or null if no child.
@@ -390,39 +371,6 @@ public final class Node
         return timeInfo.m_movesLeftWhite;
     }
 
-    /** Get number of black setup stones.
-        @return Number of setup stones.
-    */
-    public int getNumberAddBlack()
-    {
-        SetupInfo setupInfo = getSetupInfo();
-        if (setupInfo == null)
-            return 0;
-        return setupInfo.m_black.size();
-    }
-
-    /** Get number of empty setup points.
-        @return Number of setup points.
-    */
-    public int getNumberAddEmpty()
-    {
-        SetupInfo setupInfo = getSetupInfo();
-        if (setupInfo == null)
-            return 0;
-        return setupInfo.m_empty.size();
-    }
-
-    /** Get number of white setup stones.
-        @return Number of setup stones.
-    */
-    public int getNumberAddWhite()
-    {
-        SetupInfo setupInfo = getSetupInfo();
-        if (setupInfo == null)
-            return 0;
-        return setupInfo.m_white.size();
-    }
-
     /** Get number of children.
         @return Number of children.
     */
@@ -539,8 +487,11 @@ public final class Node
     */
     public boolean hasSetup()
     {
-        return getNumberAddBlack() > 0 || getNumberAddWhite() > 0
-            || getNumberAddEmpty() > 0;
+        for (GoColor c = GoColor.BLACK; c != null;
+             c = c.getNextBlackWhiteEmpty())
+            if (getAddStones(c).size() > 0)
+                return true;
+        return false;
     }
 
     /** Check if node is child of this node.
@@ -604,17 +555,15 @@ public final class Node
         at a certain point.
         @param point Location of the setup.
     */
-    public void removeSetup(GoPoint point)
+    public void removeSetup(GoPoint p)
     {
-        assert(point != null);
-        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
-            return;
-        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
+        assert(p != null);
+        SetupInfo setupInfo = getSetupInfo();
         if (setupInfo == null)
             return;
-        while (setupInfo.m_black.remove(point));
-        while (setupInfo.m_white.remove(point));
-        while (setupInfo.m_empty.remove(point));
+        for (GoColor c = GoColor.BLACK; c != null;
+             c = c.getNextBlackWhiteEmpty())
+            while (setupInfo.m_stones[c.toInteger()].remove(p));
     }
 
     /** Remove all children but the first. */

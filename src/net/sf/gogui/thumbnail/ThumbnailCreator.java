@@ -225,8 +225,7 @@ public final class ThumbnailCreator
             m_description = "";
         Board board = new Board(size);
         net.sf.gogui.game.ConstNode node = tree.getRoot();
-        while (node.hasChildren() && node.getNumberAddBlack() == 0
-               && node.getNumberAddWhite() == 0)
+        while (node.hasChildren() && ! node.hasSetup())
             node = node.getChildConst();
         new BoardUpdater().update(tree, node, board);
         //System.err.print(net.sf.gogui.go.BoardUtil.toString(board));

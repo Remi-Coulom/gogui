@@ -300,28 +300,24 @@ public class Game
         m_clock.setTimeSettings(timeSettings);
     }
 
-    public void setup(GoPoint point, GoColor color)
+    public void setup(GoPoint p, GoColor c)
     {
-        assert(point != null);
+        assert(p != null);
         m_modified = true;
-        m_current.removeSetup(point);
+        m_current.removeSetup(p);
         Node father = m_current.getFather();
         if (father != null)
         {
             m_boardUpdater.update(getTree(), father, m_board);
-            GoColor oldColor = m_board.getColor(point);
-            if (oldColor == color)
+            GoColor oldColor = m_board.getColor(p);
+            if (oldColor == c)
             {
                 updateBoard();
                 return;
             }
         }
-        if (color == GoColor.EMPTY && father != null)
-            m_current.addEmpty(point);
-        else if (color == GoColor.BLACK)
-            m_current.addBlack(point);
-        else if (color == GoColor.WHITE)
-            m_current.addWhite(point);
+        if (c != GoColor.EMPTY || father != null)
+            m_current.addStone(c, p);
         updateBoard();
     }
 

@@ -13,6 +13,7 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -147,10 +148,13 @@ public class TexWriter
         ConstNode node = tree.getRootConst();
         while (node != null)
         {
-            for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                printStone(GoColor.BLACK, node.getAddBlack(i), null);
-            for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                printStone(GoColor.WHITE, node.getAddWhite(i), null);
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhite())
+            {
+                ConstPointList stones = node.getAddStones(c);
+                for (int i = 0; i < stones.size(); ++i)
+                    printStone(c, stones.get(i), null);
+            }
             Move move = node.getMove();
             if (move == null)
             {

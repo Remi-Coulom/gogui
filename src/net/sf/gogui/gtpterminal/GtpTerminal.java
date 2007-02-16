@@ -19,6 +19,7 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
@@ -273,12 +274,14 @@ public class GtpTerminal
             ConstNode node = tree.getRoot();
             while (node != null)
             {
-                for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                    if (! cmdPlay(GoColor.BLACK, node.getAddBlack(i)))
-                        return;
-                for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                    if (! cmdPlay(GoColor.WHITE, node.getAddWhite(i)))
-                        return;
+                for (GoColor c = GoColor.BLACK; c != null;
+                     c = c.getNextBlackWhite())
+                {
+                    ConstPointList stones = node.getAddStones(c);
+                    for (int i = 0; i < stones.size(); ++i)
+                        if (! cmdPlay(c, stones.get(i)))
+                            return;
+                }
                 Move move = node.getMove();
                 if (move != null
                     && ! cmdPlay(move.getColor(), move.getPoint()))

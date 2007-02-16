@@ -313,28 +313,21 @@ public class SgfWriter
             else
                 print("W" + point);
         }
-        if (node.getNumberAddBlack() > 0)
+        for (GoColor c = GoColor.BLACK; c != null;
+             c = c.getNextBlackWhiteEmpty())
         {
+            ConstPointList points = node.getAddStones(c);
+            if (points.size() == 0)
+                continue;
             StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
-            buffer.append("AB");
-            for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                buffer.append(getPointValue(node.getAddBlack(i)));
-            print(buffer.toString());
-        }
-        if (node.getNumberAddWhite() > 0)
-        {
-            StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
-            buffer.append("AW");
-            for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                buffer.append(getPointValue(node.getAddWhite(i)));
-            print(buffer.toString());
-        }
-        if (node.getNumberAddEmpty() > 0)
-        {
-            StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
-            buffer.append("AE");
-            for (int i = 0; i < node.getNumberAddEmpty(); ++i)
-                buffer.append(getPointValue(node.getAddEmpty(i)));
+            if (c == GoColor.BLACK)
+                buffer.append("AB");
+            else if (c == GoColor.WHITE)
+                buffer.append("AW");
+            else
+                buffer.append("AE");
+            for (int i = 0; i < points.size(); ++i)
+                buffer.append(getPointValue(points.get(i)));
             print(buffer.toString());
         }
         String comment = node.getComment();

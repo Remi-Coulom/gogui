@@ -181,7 +181,7 @@ public class GtpStatistics
         GoColor toMove = GoColor.BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
-            if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
+            if (node.hasSetup())
             {
                 if (m_allowSetup)
                 {
@@ -374,7 +374,7 @@ public class GtpStatistics
         GoColor toMove = GoColor.BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
-            if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
+            if (node.hasSetup())
             {
                 assert(m_allowSetup && node != root); // checked in checkGame
                 toMove = sendSetup(node);
@@ -407,7 +407,7 @@ public class GtpStatistics
         GoColor toMove = GoColor.BLACK;
         while (true)
         {
-            if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
+            if (node.hasSetup())
             {
                 assert(m_allowSetup && node == root); // checked in checkGame
                 toMove = sendSetup(node);
@@ -431,7 +431,7 @@ public class GtpStatistics
         for ( ; node != root; node = node.getFatherConst())
         {
             // checked in checkGame
-            assert(node.getNumberAddWhite() + node.getNumberAddBlack() == 0);
+            assert(! node.hasSetup());
             Move move = node.getMove();
             if (move != null)
             {

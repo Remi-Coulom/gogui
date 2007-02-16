@@ -119,9 +119,9 @@ class GameTreeNode
         else if (m_node.hasSetup() || player != null)
         {
             toolTip.append("Setup (");
-            int numberAddBlack = m_node.getNumberAddBlack();
-            int numberAddWhite = m_node.getNumberAddWhite();
-            int numberAddEmpty = m_node.getNumberAddEmpty();
+            int numberAddBlack = m_node.getAddStones(GoColor.BLACK).size();
+            int numberAddWhite = m_node.getAddStones(GoColor.WHITE).size();
+            int numberAddEmpty = m_node.getAddStones(GoColor.EMPTY).size();
             if (numberAddBlack > 0)
             {
                 toolTip.append("B ");

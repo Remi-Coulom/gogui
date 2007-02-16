@@ -56,7 +56,7 @@ public class FileCheck
         GoColor toMove = GoColor.BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
-            if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
+            if (node.hasSetup())
             {
                 if (m_allowSetup)
                 {
