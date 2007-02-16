@@ -178,12 +178,6 @@ public final class AboutDialog
             String vendor = System.getProperty("java.vm.vendor");
             if (vendor != null)
                 buffer.append(vendor);
-            String lafName = "unknown";
-            LookAndFeel laf = UIManager.getLookAndFeel();
-            if (laf != null)
-                lafName = laf.getName();
-            buffer.append("<br>Look and Feel: ");
-            buffer.append(lafName);
             buffer.append("<br>");
         }
         Runtime runtime = Runtime.getRuntime();
@@ -197,6 +191,12 @@ public final class AboutDialog
         buffer.append(" current, ");
         buffer.append(getMemorySizeString(runtime.freeMemory()));
         buffer.append(" free)");
+        String lafName = "unknown";
+        LookAndFeel laf = UIManager.getLookAndFeel();
+        if (laf != null)
+            lafName = laf.getName();
+        buffer.append("<br>Look and Feel: ");
+        buffer.append(lafName);
         return createPanel(buffer.toString());
     }
 
