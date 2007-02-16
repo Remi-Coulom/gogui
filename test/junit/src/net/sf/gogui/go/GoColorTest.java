@@ -44,6 +44,13 @@ public final class GoColorTest
         assertSame(GoColor.EMPTY.otherColor(), GoColor.EMPTY);
     }
 
+    public void testGetPreviousBlackWhiteEmpty()
+    {
+        assertSame(GoColor.WHITE, GoColor.EMPTY.getPreviousBlackWhiteEmpty());
+        assertSame(GoColor.BLACK, GoColor.WHITE.getPreviousBlackWhiteEmpty());
+        assertNull(GoColor.BLACK.getPreviousBlackWhiteEmpty());
+    }
+
     public void testToInteger()
     {
         assertEquals(0, GoColor.BLACK.toInteger());

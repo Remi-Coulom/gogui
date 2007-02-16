@@ -64,11 +64,11 @@ public final class Board
                      ConstPointList empty, GoColor toMove)
         {
             if (black != null && black.size() > 0)
-                m_black = new PointList(black);
+                m_stones[GoColor.BLACK.toInteger()] = new PointList(black);
             if (white != null && white.size() > 0)
-                m_white = new PointList(white);
+                m_stones[GoColor.WHITE.toInteger()] = new PointList(white);
             if (empty != null && empty.size() > 0)
-                m_empty = new PointList(empty);
+                m_stones[GoColor.EMPTY.toInteger()] = new PointList(empty);
             m_toMove = toMove;
         }
 
@@ -77,30 +77,27 @@ public final class Board
             if (object == null || object.getClass() != getClass())
                 return false;        
             Setup setup = (Setup)object;
-            return (ObjectUtil.equals(setup.m_black, m_black)
-                    && ObjectUtil.equals(setup.m_white, m_white)
-                    && ObjectUtil.equals(setup.m_empty, m_empty));
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhiteEmpty())
+            {
+                int index = c.toInteger();
+                if (! ObjectUtil.equals(setup.m_stones[index],
+                                        m_stones[index]))
+                    return false;
+            }
+            return true;
         }
 
-        public ConstPointList getEmpty()
+        /** Get location of added or removed stones.
+            @param c The color of the added stones or GoColor.EMPTY for
+            removed stones.
+        */
+        public ConstPointList getStones(GoColor c)
         {
-            if (m_empty == null)
+            ConstPointList stones = m_stones[c.toInteger()];
+            if (stones == null)
                 return PointList.getEmptyList();
-            return m_empty;
-        }
-
-        public ConstPointList getWhite()
-        {
-            if (m_white == null)
-                return PointList.getEmptyList();
-            return m_white;
-        }
-
-        public ConstPointList getBlack()
-        {
-            if (m_black == null)
-                return PointList.getEmptyList();
-            return m_black;
+            return stones;
         }
 
         public GoColor getToMove()
@@ -108,18 +105,27 @@ public final class Board
             return m_toMove;
         }
 
+        /** Check if setup contains any added or removed stones. */
+        public boolean hasStones()
+        {
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhiteEmpty())
+            {
+                int index = c.toInteger();
+                if (m_stones[index] != null && m_stones[index].size() > 0)
+                    return true;
+            }
+            return false;
+        }
+
         public UndoableAction createUndoableAction()
         {
             return new UndoableSetup(this);
         }
 
-        private PointList m_black;
+        private PointList[] m_stones = new PointList[3];
 
-        private PointList m_white;
-
-        private PointList m_empty;
-
-        private GoColor  m_toMove;
+        private GoColor m_toMove;
     }
 
     /** Handicap stones placement action.
@@ -131,6 +137,11 @@ public final class Board
         public SetupHandicap(ConstPointList points)
         {
             super(points, null, null, GoColor.WHITE);
+        }
+
+        public ConstPointList getHandicapStones()
+        {
+            return getStones(GoColor.BLACK);
         }
     }
 
@@ -236,16 +247,16 @@ public final class Board
             if (m_setup.getToMove() != null)
                 board.m_toMove = m_setup.getToMove();
             m_oldColor = new ArrayList();
-            setup(board, GoColor.BLACK, m_setup.getBlack());
-            setup(board, GoColor.WHITE, m_setup.getWhite());
-            setup(board, GoColor.EMPTY, m_setup.getEmpty());
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhiteEmpty())
+                setup(board, c, m_setup.getStones(c));
         }
 
         protected void undo(Board board)
         {
-            undoSetup(board, GoColor.EMPTY, m_setup.getEmpty());
-            undoSetup(board, GoColor.WHITE, m_setup.getWhite());
-            undoSetup(board, GoColor.BLACK, m_setup.getBlack());
+            for (GoColor c = GoColor.EMPTY; c != null;
+                 c = c.getPreviousBlackWhiteEmpty())
+                undoSetup(board, c, m_setup.getStones(c));
             board.m_koPoint = m_oldKoPoint;
             board.m_toMove = m_oldToMove;
         }

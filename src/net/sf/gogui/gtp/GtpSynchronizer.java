@@ -212,30 +212,26 @@ public class GtpSynchronizer
                     continue;
                 }
                 // Translate into moves if possible
-                ConstPointList setupBlack = setup.getBlack();
-                ConstPointList setupWhite = setup.getWhite();
-                ConstPointList setupEmpty = setup.getEmpty();
-                if (setupEmpty.size() > 0)
+                if (setup.getStones(GoColor.EMPTY).size() > 0)
                     throw new GtpError("cannot transmit setup empty as move");
-                for (int j = 0; j < setupBlack.size(); ++j)
+                for (GoColor c = GoColor.BLACK; c != null;
+                     c = c.getNextBlackWhite())
                 {
-                    GoPoint p = setupBlack.get(j);
-                    if (tempBoard.isCaptureOrSuicide(p, GoColor.BLACK))
-                        throw new GtpError("cannot transmit setup as move "
-                                           + "if stones are captured");
-                    action = new Board.Play(Move.get(p, GoColor.BLACK));
-                    toExecuteAll.add(action);
-                    tempBoard.doAction(action);
-                }
-                for (int j = 0; j < setupWhite.size(); ++j)
-                {
-                    GoPoint p = setupWhite.get(j);
-                    if (tempBoard.isCaptureOrSuicide(p, GoColor.WHITE))
-                        throw new GtpError("cannot transmit setup as move "
-                                           + "if stones are captured");
-                    action = new Board.Play(Move.get(p, GoColor.WHITE));
-                    toExecuteAll.add(action);
-                    tempBoard.doAction(action);
+                    ConstPointList stones = setup.getStones(c);   
+                    for (int j = 0; j < stones.size(); ++j)
+                    {
+                        GoPoint p = stones.get(j);
+                        if (tempBoard.isCaptureOrSuicide(p, c))
+                        {
+                            String message =
+                                "cannot transmit setup as " +
+                                "move if stones are captured";
+                            throw new GtpError(message);
+                        }
+                        action = new Board.Play(Move.get(p, c));
+                        toExecuteAll.add(action);
+                        tempBoard.doAction(action);
+                    }
                 }
             }
             else if (action instanceof Board.Play)
@@ -301,32 +297,31 @@ public class GtpSynchronizer
 
     private void doSetup(Board.Setup setup) throws GtpError
     {
-        ConstPointList black = setup.getBlack();
-        ConstPointList white = setup.getWhite();
-        ConstPointList empty = setup.getEmpty();
         GoColor toMove = setup.getToMove();        
-        if (black.size() + white.size() + empty.size() > 0)
+        if (setup.hasStones())
         {
             StringBuffer command = new StringBuffer(128);
             command.append("gogui-setup");
-            for (int i = 0; i < black.size(); ++i)
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhiteEmpty())
             {
-                command.append(" b ");
-                command.append(black.get(i));
+                ConstPointList stones = setup.getStones(c);
+                for (int i = 0; i < stones.size(); ++i)
+                {
+                    if (c == GoColor.BLACK)
+                        command.append(" b ");
+                    else if (c == GoColor.WHITE)
+                        command.append(" w ");
+                    else
+                        command.append(" e ");
+                    command.append(stones.get(i));
+                }
             }
-            for (int i = 0; i < white.size(); ++i)
-            {
-                command.append(" w ");
-                command.append(white.get(i));
-            }
-            for (int i = 0; i < empty.size(); ++i)
-            {
-                command.append(" e ");
-                command.append(empty.get(i));
-            }        
             m_gtp.send(command.toString());
         }
-        m_board.setup(black, white, empty, toMove);
+        m_board.setup(setup.getStones(GoColor.BLACK),
+                      setup.getStones(GoColor.WHITE),
+                      setup.getStones(GoColor.EMPTY), toMove);
         if (toMove != null && m_isSupportedSetupPlayer)
             m_gtp.send("gogui-setup_player "
                        + (toMove == GoColor.BLACK ? "b" : "w"));
@@ -334,15 +329,16 @@ public class GtpSynchronizer
 
     private void doSetupHandicap(Board.SetupHandicap setup) throws GtpError
     {
+        ConstPointList stones = setup.getStones(GoColor.BLACK);
         StringBuffer command = new StringBuffer(128);
         command.append("set_free_handicap");
-        for (int i = 0; i < setup.getBlack().size(); ++i)
+        for (int i = 0; i < stones.size(); ++i)
         {
             command.append(' ');
-            command.append(setup.getBlack().get(i));
+            command.append(stones.get(i));
         }
         m_gtp.send(command.toString());
-        m_board.setupHandicap(setup.getBlack());
+        m_board.setupHandicap(stones);
     }
 
     private int findNumberCommonMoves(ArrayList toExecuteAll)
@@ -366,7 +362,7 @@ public class GtpSynchronizer
         Board.Action action = board.getAction(0);
         if (! (action instanceof Board.SetupHandicap))
             return 0;
-        return ((Board.SetupHandicap)action).getBlack().size();
+        return ((Board.SetupHandicap)action).getHandicapStones().size();
     }
 
     private void initSupportedCommands()
@@ -463,8 +459,7 @@ public class GtpSynchronizer
             if (action instanceof Board.Setup)
             {
                 Board.Setup setup = (Board.Setup)action;
-                if (setup.getBlack().size() + setup.getWhite().size()
-                    + setup.getEmpty().size() > 0)
+                if (setup.hasStones())
                     m_gtp.send("gogui-undo_setup");
                 m_board.undo();
                 if (setup.getToMove() != null && m_isSupportedSetupPlayer)

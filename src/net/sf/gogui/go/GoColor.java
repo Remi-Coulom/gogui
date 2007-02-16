@@ -35,6 +35,14 @@ public final class GoColor
         return m_nextBlackWhiteEmpty;
     }
 
+    /** Get previous color in an iteration from Black to White to Empty.
+        @return Previous color or null, if end of iteration.
+    */
+    public GoColor getPreviousBlackWhiteEmpty()
+    {
+        return m_previousBlackWhiteEmpty;
+    }
+
     /** Return color name if used for specifying player.
         Returns the capitalized color name (e.g. "Black" for GoColor.BLACK).
         This name will also potentially be internationalized in the future.
@@ -86,6 +94,8 @@ public final class GoColor
 
     private GoColor m_nextBlackWhiteEmpty;
 
+    private GoColor m_previousBlackWhiteEmpty;
+
     private final String m_string;
 
     private final String m_capitalizedName;
@@ -98,9 +108,9 @@ public final class GoColor
         BLACK.setOtherColor(WHITE);
         WHITE.setOtherColor(BLACK);
         EMPTY.setOtherColor(EMPTY);
-        BLACK.setNext(WHITE, WHITE);
-        WHITE.setNext(null, EMPTY);
-        EMPTY.setNext(null, null);
+        BLACK.setNext(WHITE, WHITE, null);
+        WHITE.setNext(null, EMPTY, BLACK);
+        EMPTY.setNext(null, null, WHITE);
     }
 
     private GoColor(String string, int index, String capitalizedName)
@@ -110,10 +120,12 @@ public final class GoColor
         m_capitalizedName = capitalizedName;
     }
 
-    private void setNext(GoColor nextBlackWhite, GoColor nextBlackWhiteEmpty)
+    private void setNext(GoColor nextBlackWhite, GoColor nextBlackWhiteEmpty,
+                         GoColor previousBlackWhiteEmpty)
     {
         m_nextBlackWhite = nextBlackWhite;
         m_nextBlackWhiteEmpty = nextBlackWhiteEmpty;
+        m_previousBlackWhiteEmpty = previousBlackWhiteEmpty;
     }
 
     private void setOtherColor(GoColor color)
