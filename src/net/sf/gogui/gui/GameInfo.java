@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -37,32 +38,26 @@ public class GameInfo
             new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));
         add(panel, BorderLayout.CENTER);
         m_game = game;
-        Box boxBlack = Box.createVerticalBox();
-        panel.add(boxBlack);
-        m_iconBlack = new JLabel(GuiUtil.getIcon("gogui-black-32x32",
-                                                 "Black"));
-        m_iconBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boxBlack.add(m_iconBlack);
-        boxBlack.add(GuiUtil.createFiller());
-        m_clockBlack = new GuiClock(GoColor.BLACK);
-        m_clockBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boxBlack.add(m_clockBlack);
-        m_prisonersWhite = new Prisoners(GoColor.WHITE);
-        boxBlack.add(m_prisonersWhite);
-
-        Box boxWhite = Box.createVerticalBox();
-        panel.add(boxWhite);
-        m_iconWhite = new JLabel(GuiUtil.getIcon("gogui-white-32x32",
-                                                 "White"));
-        m_iconWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boxWhite.add(m_iconWhite);
-        boxWhite.add(GuiUtil.createFiller());
-        m_clockWhite = new GuiClock(GoColor.WHITE);
-        m_clockWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boxWhite.add(m_clockWhite);
-        m_prisonersBlack = new Prisoners(GoColor.BLACK);
-        boxWhite.add(m_prisonersBlack);
-
+        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        {
+            int index = c.toInteger();
+            Box box = Box.createVerticalBox();
+            panel.add(box);
+            ImageIcon icon;
+            if (c == GoColor.BLACK)
+                icon = GuiUtil.getIcon("gogui-black-32x32", "Black");
+            else
+                icon = GuiUtil.getIcon("gogui-white-32x32", "White");
+            m_icon[index] = new JLabel(icon);
+            m_icon[index].setAlignmentX(Component.CENTER_ALIGNMENT);
+            box.add(m_icon[index]);
+            box.add(GuiUtil.createFiller());
+            m_clock[index] = new GuiClock(c);
+            m_clock[index].setAlignmentX(Component.CENTER_ALIGNMENT);
+            box.add(m_clock[index]);
+            m_prisoners[index] = new Prisoners(c);
+            box.add(m_prisoners[index]);
+        }
         Clock.Listener listener = new Clock.Listener() {
                 public void clockChanged(ConstClock clock)
                 {
@@ -78,12 +73,13 @@ public class GameInfo
         ConstNode node = game.getCurrentNode();
         ConstGameTree tree = game.getTree();
         ConstGameInformation info = tree.getGameInformationConst(node);
-        updatePlayerToolTip(m_iconBlack, info.getPlayer(GoColor.BLACK),
-                            info.getRank(GoColor.BLACK), "Black");
-        updatePlayerToolTip(m_iconWhite, info.getPlayer(GoColor.WHITE),
-                            info.getRank(GoColor.WHITE), "White");
-        m_prisonersBlack.setCount(board.getCapturedBlack());
-        m_prisonersWhite.setCount(board.getCapturedWhite());
+        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        {
+            int index = c.toInteger();
+            updatePlayerToolTip(m_icon[index], info.getPlayer(c),
+                                info.getRank(c), c.getCapitalizedName());
+            m_prisoners[index].setCount(board.getCaptured(c));
+        }
         // Usually time left information is stored in a node only for the
         // player who moved, so we check the father node too
         ConstNode father = node.getFatherConst();
@@ -94,8 +90,8 @@ public class GameInfo
 
     public void updateTimeFromClock(ConstClock clock)
     {
-        updateTimeFromClock(clock, GoColor.BLACK);
-        updateTimeFromClock(clock, GoColor.WHITE);
+        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+            updateTimeFromClock(clock, c);
     }
 
     private class UpdateTimeRunnable
@@ -112,17 +108,11 @@ public class GameInfo
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final GuiClock m_clockBlack;
+    private final GuiClock[] m_clock = new GuiClock[2];
 
-    private final GuiClock m_clockWhite;
+    private JLabel[] m_icon = new JLabel[2];
 
-    private JLabel m_iconBlack;
-
-    private JLabel m_iconWhite;
-
-    private Prisoners m_prisonersBlack;
-
-    private Prisoners m_prisonersWhite;
+    private Prisoners[] m_prisoners = new Prisoners[2];
 
     private final Game m_game;
 
@@ -150,29 +140,27 @@ public class GameInfo
         label.setToolTipText(buffer.toString());
     }
 
-    private void updateTimeFromClock(ConstClock clock, GoColor color)
+    private void updateTimeFromClock(ConstClock clock, GoColor c)
     {
-        String text = clock.getTimeString(color);
+        assert(c.isBlackWhite());
+        String text = clock.getTimeString(c);
         if (text == null)
             text = " ";
-        if (color == GoColor.BLACK)
-            m_clockBlack.setText(text);
-        else
-            m_clockWhite.setText(text);
+        m_clock[c.toInteger()].setText(text);
     }
 
     private void updateTimeFromNode(ConstNode node)
     {
-        double timeLeftBlack = node.getTimeLeft(GoColor.BLACK);
-        int movesLeftBlack = node.getMovesLeft(GoColor.BLACK);
-        if (! Double.isNaN(timeLeftBlack))
-            m_clockBlack.setText(Clock.getTimeString(timeLeftBlack,
-                                                     movesLeftBlack));
-        double timeLeftWhite = node.getTimeLeft(GoColor.WHITE);
-        int movesLeftWhite = node.getMovesLeft(GoColor.WHITE);
-        if (! Double.isNaN(timeLeftWhite))
-            m_clockWhite.setText(Clock.getTimeString(timeLeftWhite,
-                                                     movesLeftWhite));
+        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        {
+            double timeLeft = node.getTimeLeft(c);
+            int movesLeft = node.getMovesLeft(c);
+            if (! Double.isNaN(timeLeft))
+            {
+                String text = Clock.getTimeString(timeLeft, movesLeft);
+                m_clock[c.toInteger()].setText(text);
+            }
+        }
     }
 }
 

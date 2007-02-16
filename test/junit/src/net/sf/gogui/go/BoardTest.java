@@ -44,8 +44,8 @@ public final class BoardTest
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 1)));
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(1, 1)));
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(2, 0)));
-        assertEquals(2, board.getCapturedBlack());
-        assertEquals(0, board.getCapturedWhite());
+        assertEquals(2, board.getCaptured(GoColor.BLACK));
+        assertEquals(0, board.getCaptured(GoColor.WHITE));
     }
 
     public void testContains()

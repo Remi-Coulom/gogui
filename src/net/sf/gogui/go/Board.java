@@ -175,16 +175,8 @@ public final class Board
                 if (board.m_koPoint != null
                     && ! board.isSingleStoneSingleLib(p, c))
                     board.m_koPoint = null;
-                if (c == GoColor.BLACK)
-                {
-                    board.m_capturedBlack += m_suicide.size();
-                    board.m_capturedWhite += m_killed.size();
-                }
-                else
-                {
-                    board.m_capturedWhite += m_suicide.size();
-                    board.m_capturedBlack += m_killed.size();
-                }
+                board.m_captured[c.toInteger()] += m_suicide.size();
+                board.m_captured[otherColor.toInteger()] += m_killed.size();
             }
             m_oldToMove = board.m_toMove;
             board.m_toMove = otherColor;        
@@ -208,16 +200,8 @@ public final class Board
                     GoPoint stone = m_killed.get(i);
                     board.setColor(stone, otherColor);
                 }
-                if (c == GoColor.BLACK)
-                {
-                    board.m_capturedBlack -= m_suicide.size();
-                    board.m_capturedWhite -= m_killed.size();
-                }
-                else
-                {
-                    board.m_capturedWhite -= m_suicide.size();
-                    board.m_capturedBlack -= m_killed.size();
-                }
+                board.m_captured[c.toInteger()] -= m_suicide.size();
+                board.m_captured[otherColor.toInteger()] -= m_killed.size();
             }
             board.m_toMove = m_oldToMove;
             board.m_koPoint = m_oldKoPoint;
@@ -365,20 +349,14 @@ public final class Board
         return result;
     }
 
-    /** Get number of black captured stones.
-        @return The total number of black stones captured by all moves played.
+    /** Get number of captured stones.
+        @return The total number of stones of the given color captured by
+        opponent moves or by suicide.
     */
-    public int getCapturedBlack()
+    public int getCaptured(GoColor c)
     {
-        return m_capturedBlack;
-    }
-
-    /** Get number of white captured stones.
-        @return The total number of white stones captured by all moves played.
-    */
-    public int getCapturedWhite()
-    {
-        return m_capturedWhite;
+        assert(c.isBlackWhite());
+        return m_captured[c.toInteger()];
     }
 
     /** Get state of a point on the board.
@@ -608,8 +586,8 @@ public final class Board
             setColor(getPoint(i), GoColor.EMPTY);
         m_actions.clear();        
         m_undoableActions.clear();        
-        m_capturedBlack = 0;
-        m_capturedWhite = 0;
+        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+            m_captured[c.toInteger()] = 0;
         m_toMove = GoColor.BLACK;
         m_koPoint = null;
     }
@@ -706,9 +684,7 @@ public final class Board
 
     private int m_size;
 
-    private int m_capturedBlack;
-
-    private int m_capturedWhite;
+    private int[] m_captured = { 0, 0 };
 
     private long m_positionHashCode;
 

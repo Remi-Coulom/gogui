@@ -35,6 +35,15 @@ public final class GoColor
         return m_nextBlackWhiteEmpty;
     }
 
+    /** Return color name if used for specifying player.
+        Returns the capitalized color name (e.g. "Black" for GoColor.BLACK).
+        This name will also potentially be internationalized in the future.
+    */
+    public String getCapitalizedName()
+    {
+        return m_capitalizedName;
+    }
+
     public int hashCode()
     {
         return super.hashCode();
@@ -79,11 +88,13 @@ public final class GoColor
 
     private final String m_string;
 
+    private final String m_capitalizedName;
+
     static
     {
-        BLACK = new GoColor("black", 0);
-        WHITE = new GoColor("white", 1);
-        EMPTY = new GoColor("empty", 2);
+        BLACK = new GoColor("black", 0, "Black");
+        WHITE = new GoColor("white", 1, "White");
+        EMPTY = new GoColor("empty", 2, "Empty");
         BLACK.setOtherColor(WHITE);
         WHITE.setOtherColor(BLACK);
         EMPTY.setOtherColor(EMPTY);
@@ -92,10 +103,11 @@ public final class GoColor
         EMPTY.setNext(null, null);
     }
 
-    private GoColor(String string, int index)
+    private GoColor(String string, int index, String capitalizedName)
     {
         m_index = index;
         m_string = string;
+        m_capitalizedName = capitalizedName;
     }
 
     private void setNext(GoColor nextBlackWhite, GoColor nextBlackWhiteEmpty)

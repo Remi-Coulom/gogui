@@ -101,8 +101,8 @@ public class CountScore
         Score s = new Score();
         s.m_rules = rules;
         s.m_komi = komi;
-        s.m_capturedBlack = m_board.getCapturedBlack();
-        s.m_capturedWhite = m_board.getCapturedWhite();
+        s.m_capturedBlack = m_board.getCaptured(GoColor.BLACK);
+        s.m_capturedWhite = m_board.getCaptured(GoColor.WHITE);
         int areaDiff = 0;
         int territoryDiff = 0;
         for (int i = 0; i < m_board.getNumberPoints(); ++i)

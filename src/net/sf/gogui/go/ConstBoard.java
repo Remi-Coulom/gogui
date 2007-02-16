@@ -15,9 +15,7 @@ public interface ConstBoard
 
     ConstPointList getAdjacentPoints(GoPoint point);
 
-    int getCapturedBlack();
-
-    int getCapturedWhite();
+    int getCaptured(GoColor c);
 
     GoColor getColor(GoPoint p);
 
