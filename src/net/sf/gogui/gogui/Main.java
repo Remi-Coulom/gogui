@@ -4,12 +4,17 @@
 
 package net.sf.gogui.gogui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
@@ -135,7 +140,7 @@ public final class Main
             showError("GNU libgcj is not supported", "");
             return;
         }
-        JPanel panel = new JPanel(new GridLayout(1, 1));
+        JPanel panel = new JPanel(new BorderLayout());
         JEditorPane editorPane = new JEditorPane();
         editorPane.setBorder(GuiUtil.createEmptyBorder());        
         editorPane.setEditable(false);
@@ -146,27 +151,40 @@ public final class Main
                 editorPane.setBackground(color);
         }
         JScrollPane scrollPane = new JScrollPane(editorPane);
-        panel.add(scrollPane);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        JButton copyButton = new JButton("Copy Information");
+        final String goguiVersion = "GoGui version: " + Version.get();
+        final String javaVersion = "Java version: " +
+            System.getProperty("java.vm.name") + " " +
+            System.getProperty("java.vm.version");
+        final String osVersion = "Operating system: " +
+            System.getProperty("os.name");
+        final StringWriter stackTrace = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stackTrace);
+        e.printStackTrace(printWriter);
+        copyButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    GuiUtil.copyToClipboard(goguiVersion + "\n" +
+                                            javaVersion  + "\n" +
+                                            osVersion + "\n\n" +
+                                            stackTrace);
+                }
+            });
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(copyButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
         scrollPane.setPreferredSize(new Dimension(600, 400));
         EditorKit editorKit =
             JEditorPane.createEditorKitForContentType("text/html");
         editorPane.setEditorKit(editorKit);
-        StringWriter stackTrace = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stackTrace);
-        e.printStackTrace(printWriter);
         String text =
             "<p><b>The application GoGui has quit unexpectedly</b></p>" +
             "<p>Please take a moment to submit a bug report at the " +
             "<a href=\"http://sf.net/tracker/?group_id=59117&atid=489964\">" +
-            "GoGui bug tracker</a> at and include the following " +
-            "information:</p>" +
-            "<p>GoGui version: " + Version.get() + "<br>" +
-            "Java version: " + 
-            System.getProperty("java.vm.name") + " " +
-            System.getProperty("java.vm.version")+ "<br>" +
-            "Operating system: " + System.getProperty("os.name")
-            + "</p>" +
-            "<pre>" + stackTrace + "</pre>";
+            "GoGui bug tracker</a> at and include a short description of " +
+            " the problem together with the following information:</p>" +
+            "<p>" + goguiVersion + "<br>" + javaVersion + "<br>" +
+            osVersion + "</p>" + "<pre>" + stackTrace + "</pre>";
         editorPane.setText(text);
         editorPane.addHyperlinkListener(new HyperlinkListener() {
                 public void hyperlinkUpdate(HyperlinkEvent event) {
