@@ -750,7 +750,9 @@ public class GameTreePanel
             && ! m_messageDialogs.showQuestion(m_owner,
                                                "Really expand large subtree?",
                                                "This action might fail if not "
-                                               + "enough memory is available"))
+                                               + "enough memory is "
+                                               + "available.",
+                                               "Expand", true))
             return;
         boolean changed = false;
         ConstNode node = root;

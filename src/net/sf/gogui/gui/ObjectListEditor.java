@@ -156,10 +156,8 @@ public class ObjectListEditor
         String mainMessage = "Really remove " + name + "?";
         String optionalMessage =
             "Removing an entry from the list will delete the entry.";
-        if (! m_messageDialogs.showWarningQuestion(disableKey, m_dialog,
-                                                   mainMessage,
-                                                   optionalMessage,
-                                                   "Remove"))
+        if (! m_messageDialogs.showQuestion(disableKey, m_dialog, mainMessage,
+                                            optionalMessage, "Remove", false))
             return;
         m_objects.remove(object);
         if (index >= m_objects.size())

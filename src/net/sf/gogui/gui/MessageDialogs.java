@@ -96,25 +96,6 @@ public final class MessageDialogs
              JOptionPane.INFORMATION_MESSAGE, options, defaultOption);
     }
 
-    public boolean showQuestion(Component frame, String mainMessage,
-                                String optionalMessage)
-    {
-        return showQuestion(null, frame, mainMessage, optionalMessage);
-    }
-
-    public boolean showQuestion(String disableKey, Component frame,
-                                String mainMessage, String optionalMessage)
-    {
-        if (disableKey != null && m_disabled.contains(disableKey))
-            return true;
-        Object[] options = { "Yes", "No" };
-        Object defaultOption = options[1];
-        int type = JOptionPane.QUESTION_MESSAGE;
-        Object result = show(disableKey, frame, "Question", mainMessage,
-                             optionalMessage, type, options, defaultOption);
-        return (result == options[0]);
-    }
-
     public int showYesNoCancelQuestion(Component parent, String mainMessage,
                                        String optionalMessage,
                                        String destructiveOption,
@@ -138,15 +119,15 @@ public final class MessageDialogs
         if (disableKey != null && m_disabled.contains(disableKey))
             return 2;
         Object[] options =
-            { destructiveOption, nonDestructiveOption, "Cancel" };
-        Object defaultOption = options[1];
+            { nonDestructiveOption, destructiveOption, "Cancel" };
+        Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
         Object value = show(disableKey, parent, "Question", mainMessage,
                             optionalMessage, type, options, defaultOption);
         int result;
-        if (value == options[0])
+        if (value == options[1])
             result = 0;
-        else if (value == options[1])
+        else if (value == options[0])
             result = 1;
         else
         {
@@ -180,29 +161,33 @@ public final class MessageDialogs
              options, defaultOption);
     }
 
-    public boolean showWarningQuestion(Component parent, String mainMessage,
-                                       String optionalMessage,
-                                       String destructiveOption)
+    public boolean showQuestion(Component parent, String mainMessage,
+                                String optionalMessage,
+                                String destructiveOption, boolean isCritical)
     {
-        return showWarningQuestion(null, parent, mainMessage,
-                                   optionalMessage, destructiveOption);
+        return showQuestion(null, parent, mainMessage, optionalMessage,
+                            destructiveOption, isCritical);
     }
 
     /** Show warning message to confirm destructive actions.
         @return true, if destructive was chosen; false if cancel was chosen.
     */
-    public boolean showWarningQuestion(String disableKey, Component parent,
-                                       String mainMessage,
-                                       String optionalMessage,
-                                       String destructiveOption)
+    public boolean showQuestion(String disableKey, Component parent,
+                                String mainMessage,
+                                String optionalMessage,
+                                String destructiveOption, boolean isCritical)
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
         Object[] options = { destructiveOption, "Cancel" };
         Object defaultOption = options[1];
-        // No reason to show a warning icon for confirmation dialogs
-        // of frequent actions
-        int type = JOptionPane.QUESTION_MESSAGE;
+        int type;
+        if (isCritical)
+            // No reason to show a warning icon for confirmation dialogs
+            // of frequent actions
+            type = JOptionPane.QUESTION_MESSAGE;
+        else
+            type = JOptionPane.PLAIN_MESSAGE;
         Object result = show(disableKey, parent, "Question", mainMessage,
                              optionalMessage, type, options, defaultOption);
         return (result == options[0]);

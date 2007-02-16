@@ -214,7 +214,8 @@ public class GtpDisplay
         if (m_gtp == null)
         {
             if (! m_messageDialogs.showQuestion(m_frame,
-                                             "Terminate GtpDisplay?", null))
+                                                "Terminate GtpDisplay?",
+                                                "", "Terminate", true))
                 return;
             System.exit(0);
         }

@@ -40,7 +40,9 @@ public final class Interrupt
         String disableKey = "net.sf.gogui.gogui.Interrupt.interrupt";
         if (! messageDialogs.showQuestion(disableKey, parent,
                                           "Interrupt " + gtp.getProgramName()
-                                          + "?", null))
+                                          + "?",
+                                          "The command in progress might " +
+                                          "fail.", "Interrupt", false))
             return false;
         try
         {

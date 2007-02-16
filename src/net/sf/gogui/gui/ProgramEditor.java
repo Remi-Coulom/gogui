@@ -188,7 +188,11 @@ public class ProgramEditor
                         String message =
                             "Append option '--mode gtp' for GNU Go?";
                         if (messageDialogs.showQuestion(m_dialog, message,
-                                                        null))
+                                                        "GNU Go needs this " +
+                                                        "option to startup " +
+                                                        "in GTP mode.",
+                                                        "Append --mode gtp",
+                                                        false))
                             text = text + " --mode gtp";
                     }
                     m_command.setText(text);

@@ -406,7 +406,9 @@ public class GoGui
             return;
         if (! NodeUtil.isInMainVariation(getCurrentNode()))
             return;
-        if (! showQuestion("Delete all variations but main?", null))
+        if (! showQuestion("Delete variations?",
+                           "All variations but the main variation will be " +
+                           "deleted.", "Delete", false))
             return;
         m_game.keepOnlyMainVariation();
         boardChangedBegin(false, true);
@@ -418,7 +420,7 @@ public class GoGui
             return;
         if (isCommandInProgress()
             && ! showQuestion("Terminate " + getProgramName() + "?",
-                              "A command is in progress."))
+                              "A command is in progress.", "Terminate", true))
             return;
         m_prefs.putInt("program", -1);
         protectGui();
@@ -626,7 +628,8 @@ public class GoGui
         if (node == null)
             if (getCurrentNode() != root)
                 if (showQuestion("Continue from start?",
-                                 "The end of the tree was reached."))
+                                 "The end of the tree was reached.",
+                                 "Continue", false))
                 {
                     node = root;
                     if (! NodeUtil.commentContains(node, m_pattern))
@@ -823,7 +826,9 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showQuestion("Delete all moves?", null))
+        if (! showQuestion("Delete all moves?",
+                           "All moves and variations will be deleted.",
+                           "Delete", true))
             return;
         m_game.keepOnlyPosition();
         initGtp();
@@ -839,7 +844,9 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showQuestion("Make current to main variation?", null))
+        if (! showQuestion("Make current to main variation?",
+                           "The variations in the tree will be reordered.",
+                           "Make Main Variation", false))
             return;
         m_game.makeMainVariation();
         boardChangedBegin(false, true);
@@ -969,7 +976,9 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showOptionalQuestion("pass", "Really pass?", null))
+        if (! showOptionalQuestion("pass", "Play a pass?",
+                                   "After a pass it is the opponent's turn.",
+                                   "Play Pass", false))
             return;
         humanMoved(Move.getPass(getToMove()));
     }
@@ -1059,10 +1068,10 @@ public class GoGui
                     "If you overwrite the file with your changed version, " +
                     "the previous version will be lost.";
                 String disableKey = "net.sf.gogui.GoGui.overwrite";
-                if (! m_messageDialogs.showWarningQuestion(disableKey, this,
-                                                           mainMessage,
-                                                           optionalMessage,
-                                                           "Replace"))
+                if (! m_messageDialogs.showQuestion(disableKey, this,
+                                                    mainMessage,
+                                                    optionalMessage,
+                                                    "Replace", true))
                     return;
             }
             save(m_file);
@@ -1204,9 +1213,11 @@ public class GoGui
                 (node.getMove() != null || node.hasChildren());
             if (needsNewNode)
             {
-                String message = "Create new setup node in game tree?";
+                String message = "Create new setup node?";
                 if (! showOptionalQuestion("create-setup-node", message,
-                                           null))
+                                           "A new node for setup stones " +
+                                           "will be created in the game tree.",
+                                           "Create Node", false))
                 {
                     m_setupMode = false;
                     updateViews(false);
@@ -1440,7 +1451,10 @@ public class GoGui
             return;
         if (! getCurrentNode().hasFather())
             return;
-        if (! showQuestion("Truncate current?", null))
+        if (! showQuestion("Truncate current?",
+                           "The current node and all children nodes " +
+                           " will be deleted from the game tree.",
+                           "Truncate", false))
             return;
         m_game.truncate();
         boardChangedBegin(false, true);
@@ -1453,7 +1467,10 @@ public class GoGui
         int numberChildren = getCurrentNode().getNumberChildren();
         if (numberChildren == 0)
             return;
-        if (! showQuestion("Truncate children?", null))
+        if (! showQuestion("Truncate children?",
+                           "All children nodes of this position" +
+                           " will be deleted from the game tree", "Truncate",
+                           false))
             return;
         m_game.truncateChildren();
         boardChangedBegin(false, true);
@@ -1647,10 +1664,19 @@ public class GoGui
         else
         {
             if (getBoard().isSuicide(p, getToMove())
-                && ! showQuestion("Play suicide?", null))
+                && ! showQuestion("Play suicide?",
+                                  "Playing at this point will leave the " +
+                                  "stone without liberties and it will be " +
+                                  "immediately captured. Suicide is not " +
+                                  "allowed under all Go rule sets.",
+                                  "Play Suicide", false))
                 return;
             else if (getBoard().isKo(p)
-                && ! showQuestion("Play illegal Ko move?", null))
+                && ! showQuestion("Play illegal Ko move?",
+                                  "This move violates the Ko rule, because " +
+                                  "it repeats the previous position for " +
+                                  "the color to play.",
+                                  "Play Illegal Ko", false))
                 return;
             Move move = Move.get(p, getToMove());
             humanMoved(move);
@@ -3540,8 +3566,10 @@ public class GoGui
         String oldResult = getGameInformation().getResult();
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
-            && ! showQuestion("Overwrite old result " + oldResult + "\n" +
-                              "with " + result + "?", null))
+            && ! showQuestion("Replace old result " + oldResult + "\n" +
+                              "with " + result + "?",
+                              "The old result in the game information will " +
+                              "be overwritten.", "Replace", false))
             return;
         m_game.setResult(result);
     }
@@ -3719,17 +3747,22 @@ public class GoGui
     }
 
     private boolean showOptionalQuestion(String id, String mainMessage,
-                                         String optionalMessage)
+                                         String optionalMessage,
+                                         String destructiveOption,
+                                         boolean isCritical)
     {
         String disableKey = "net.sf.gogui.gogui.GoGui" + id;
         return m_messageDialogs.showQuestion(disableKey, this, mainMessage,
-                                             optionalMessage);
+                                             optionalMessage,
+                                             destructiveOption, isCritical);
     }
 
-    private boolean showQuestion(String mainMessage, String optionalMessage)
+    private boolean showQuestion(String mainMessage, String optionalMessage,
+                                 String destructiveOption, boolean isCritical)
     {
         return m_messageDialogs.showQuestion(this, mainMessage,
-                                             optionalMessage);
+                                             optionalMessage,
+                                             destructiveOption, isCritical);
     }
 
     private void showStatus(String text)
