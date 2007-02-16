@@ -19,7 +19,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.Platform;
 

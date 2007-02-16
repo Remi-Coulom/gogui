@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater

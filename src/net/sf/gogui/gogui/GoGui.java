@@ -84,7 +84,6 @@ import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiGtpClient;
-import net.sf.gogui.gui.GuiGtpUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.FileDialogs;
 import net.sf.gogui.gui.Help;
