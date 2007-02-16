@@ -243,7 +243,6 @@ public class TexWriter
             GoColor color = board.getColor(point);
             int x = point.getX();
             int y = point.getY();
-            String string = null;
             StringBuffer buffer = new StringBuffer();
             if (mark != null && mark[x][y])
                 buffer.append("\\markma");
