@@ -61,14 +61,9 @@ final class SetupInfo
 
 final class TimeInfo
 {
-    public int m_movesLeftBlack = -1;
+    public int[] m_movesLeft = { -1, -1 };
 
-    public int m_movesLeftWhite = -1;
-
-    public double m_timeLeftBlack = Double.NaN;
-
-    public double m_timeLeftWhite = Double.NaN;
-
+    public double[] m_timeLeft = { Double.NaN, Double.NaN };
 }
 
 /** Node in a game tree.
@@ -356,19 +351,17 @@ public final class Node
     }
 
     /** Moves left in byoyomi.
-        @param color The color.
+        @param c The color.
         @return Moves left in byoyomi for that color or -1 if not in byyomi or
         unknown.
     */
-    public int getMovesLeft(GoColor color)
+    public int getMovesLeft(GoColor c)
     {
+        assert(c.isBlackWhite());
         TimeInfo timeInfo = getTimeInfo();
         if (timeInfo == null)
             return -1;
-        if (color == GoColor.BLACK)
-            return timeInfo.m_movesLeftBlack;
-        assert(color == GoColor.WHITE);
-        return timeInfo.m_movesLeftWhite;
+        return timeInfo.m_movesLeft[c.toInteger()];
     }
 
     /** Get number of children.
@@ -424,15 +417,13 @@ public final class Node
         @param color The color
         @return Time left in seconds for this color or Double.NaN if unknown
     */
-    public double getTimeLeft(GoColor color)
+    public double getTimeLeft(GoColor c)
     {
+        assert(c.isBlackWhite());
         TimeInfo timeInfo = getTimeInfo();
         if (timeInfo == null)
             return Double.NaN;
-        if (color == GoColor.BLACK)
-            return timeInfo.m_timeLeftBlack;
-        assert(color == GoColor.WHITE);
-        return timeInfo.m_timeLeftWhite;
+        return timeInfo.m_timeLeft[c.toInteger()];
     }
 
     /** Get color to move.
@@ -635,27 +626,21 @@ public final class Node
     }
 
     /** Set byoyomi moves left.
-        @param moves Number of moves left.
+        @param n Number of moves left.
     */
-    public void setMovesLeft(GoColor color, int moves)
+    public void setMovesLeft(GoColor c, int n)
     {
-        assert(color.isBlackWhite());
-        if (color == GoColor.BLACK)
-            createTimeInfo().m_movesLeftBlack = moves;
-        else
-            createTimeInfo().m_movesLeftWhite = moves;
+        assert(c.isBlackWhite());
+        createTimeInfo().m_movesLeft[c.toInteger()] = n;
     }
 
     /** Set byoyomi time left.
-        @param timeLeft Time left in seconds.
+        @param seconds Time left in seconds.
     */
-    public void setTimeLeft(GoColor color, double timeLeft)
+    public void setTimeLeft(GoColor c, double seconds)
     {
-        assert(color.isBlackWhite());
-        if (color == GoColor.BLACK)
-            createTimeInfo().m_timeLeftBlack = timeLeft;
-        else
-            createTimeInfo().m_timeLeftWhite = timeLeft;
+        assert(c.isBlackWhite());
+        createTimeInfo().m_timeLeft[c.toInteger()] = seconds;
     }
 
     /** Explicitely set color to play.
