@@ -60,9 +60,8 @@ public class StatusBar
         m_labelSetup.setVisible(false);
         m_labelSetup.setToolTipText("Setup mode");
         m_iconBox.add(m_labelSetup);
-        m_distanceSetup = GuiUtil.createFiller();
-        m_distanceSetup.setVisible(false);
-        m_iconBox.add(m_distanceSetup);
+
+        m_iconBox.add(GuiUtil.createSmallFiller());
 
         m_text = new TextFieldWithToolTip();
         m_text.setFocusable(false);
@@ -75,7 +74,6 @@ public class StatusBar
         m_moveText.setBorder(null);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
         m_moveTextSeparator = new JSeparator(SwingConstants.VERTICAL);
-        m_moveTextSeparator.setVisible(false);
         moveTextBox.add(m_moveTextSeparator);
         moveTextBox.add(GuiUtil.createSmallFiller());
         moveTextBox.add(m_moveText);
@@ -106,13 +104,6 @@ public class StatusBar
     */
     public void setMoveText(String text, String toolTip)
     {
-        if (text == null || text.trim().equals(""))
-        {
-            m_moveText.setText("");
-            m_moveTextSeparator.setVisible(false);
-            return;
-        }
-        m_moveTextSeparator.setVisible(true);
         if (text.length() > 18)
             text = text.substring(0, 18) + " ...";
         m_moveText.setText(text);
@@ -122,7 +113,6 @@ public class StatusBar
     public void setSetupMode(boolean enabled)
     {
         m_labelSetup.setVisible(enabled);
-        m_distanceSetup.setVisible(enabled);
     }
 
     public void setScoreMode(boolean enabled)
@@ -175,8 +165,6 @@ public class StatusBar
     private final JTextField m_text;
 
     private final JSeparator m_moveTextSeparator;
-
-    Box.Filler m_distanceSetup;
 }
 
 /** Non-ediatable text field with tool tip if text is truncated. */
