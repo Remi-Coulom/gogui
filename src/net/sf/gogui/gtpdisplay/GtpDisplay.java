@@ -111,7 +111,7 @@ public class GtpDisplay
                     {
                         m_messageDialogs.showInfo(m_frame,
                                                   "GTP stream was closed",
-                                                  "");
+                                                  "", true);
                         showStatus("GTP stream was closed");
                     }
                     else if (m_gtp == null)

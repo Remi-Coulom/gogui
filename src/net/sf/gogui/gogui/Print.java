@@ -27,7 +27,6 @@ public final class Print
         {
             messageDialogs.showError(parent, "Printing failed", "");
         }
-        messageDialogs.showInfo(parent, "Printing done", "");
     }
 
     /** Make constructor unavailable; class is for namespace only. */

@@ -52,6 +52,16 @@ public final class GoColor
         return m_capitalizedName;
     }
 
+    /** Return uppercase letter identifying the color.
+        Returns "B", "W", or "E". This letter is not internationalized,
+        such that it can be used for instance in standard language independent
+        game results (e.g. "W+3").
+    */
+    public String getUppercaseLetter()
+    {
+        return m_uppercaseLetter;
+    }
+
     public int hashCode()
     {
         return super.hashCode();
@@ -100,11 +110,13 @@ public final class GoColor
 
     private final String m_capitalizedName;
 
+    private final String m_uppercaseLetter;
+
     static
     {
-        BLACK = new GoColor("black", 0, "Black");
-        WHITE = new GoColor("white", 1, "White");
-        EMPTY = new GoColor("empty", 2, "Empty");
+        BLACK = new GoColor("black", 0, "Black", "B");
+        WHITE = new GoColor("white", 1, "White", "W");
+        EMPTY = new GoColor("empty", 2, "Empty", "E");
         BLACK.setOtherColor(WHITE);
         WHITE.setOtherColor(BLACK);
         EMPTY.setOtherColor(EMPTY);
@@ -113,11 +125,13 @@ public final class GoColor
         EMPTY.setNext(null, null, WHITE);
     }
 
-    private GoColor(String string, int index, String capitalizedName)
+    private GoColor(String string, int index, String capitalizedName,
+                    String uppercaseLetter)
     {
         m_index = index;
         m_string = string;
         m_capitalizedName = capitalizedName;
+        m_uppercaseLetter = uppercaseLetter;
     }
 
     private void setNext(GoColor nextBlackWhite, GoColor nextBlackWhiteEmpty,

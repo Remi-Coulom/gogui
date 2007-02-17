@@ -53,20 +53,26 @@ public final class MessageDialogs
     }
 
     public void showInfo(Component frame, String mainMessage,
-                         String optionalMessage)
+                         String optionalMessage, boolean isCritical)
     {        
-        showInfo(null, frame, mainMessage, optionalMessage);
+        showInfo(null, frame, mainMessage, optionalMessage, isCritical);
     }
 
     public void showInfo(String disableKey, Component frame,
-                         String mainMessage, String optionalMessage)
+                         String mainMessage, String optionalMessage,
+                         boolean isCritical)
     {        
         if (disableKey != null && m_disabled.contains(disableKey))
             return;
+        int type;
+        if (! isCritical)
+            type = JOptionPane.PLAIN_MESSAGE;
+        else
+            type = JOptionPane.INFORMATION_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         show(disableKey, frame, "Information", mainMessage, optionalMessage,
-             JOptionPane.INFORMATION_MESSAGE, options, defaultOption);
+             type, options, defaultOption);
     }
 
     public int showYesNoCancelQuestion(Component parent, String mainMessage,

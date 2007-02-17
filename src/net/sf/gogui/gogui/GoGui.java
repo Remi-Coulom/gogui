@@ -651,7 +651,9 @@ public class GoGui
                 }
         if (node == null)
         {
-            showInfo("Not found", null);
+            showInfo("Not found",
+                     "The search pattern \"" + m_pattern + "\" was not found.",
+                     false);
             m_pattern = null;
         }
         else
@@ -777,7 +779,9 @@ public class GoGui
             return;
         m_handicap = handicap;
         if (isModified())
-            showInfo("Handicap will take effect on next game.", null);
+            showInfo("Handicap will take effect on next game.",
+                     "You can change the handicap settings only directly " +
+                     "after a new games was started.", true);
         else
         {
             m_computerBlack = false;
@@ -990,9 +994,10 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showOptionalQuestion("pass", "Play a pass?",
-                                   "After a pass it is the opponent's turn.",
-                                   "Play Pass", false))
+        String optionalMessage =
+            "After a pass, it will be the opponent's turn.";
+        if (! showOptionalQuestion("pass", "Play a pass?", optionalMessage,
+                                   "Pass", false))
             return;
         humanMoved(Move.getPass(getToMove()));
     }
@@ -1110,7 +1115,7 @@ public class GoGui
             String disableKey = "net.sf.gogui.gogui.GoGui.score-no-program";
             m_messageDialogs.showInfo(disableKey, this,
                                       "Please mark dead groups manually",
-                                      "No program is attached.");
+                                      "No program is attached.", true);
             initScore(null);
             updateViews(false);
             return;
@@ -1132,7 +1137,7 @@ public class GoGui
             m_messageDialogs.showInfo(disableKey, this,
                                       "Please mark dead groups manually",
                                       getProgramName()
-                                      + " does not support scoring.");
+                                      + " does not support scoring.", true);
             initScore(null);
             updateViews(false);
         }
@@ -1827,7 +1832,7 @@ public class GoGui
                     name + ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage, 
-                                             false);
+                                             true);
             }
             else
             {
@@ -1841,7 +1846,7 @@ public class GoGui
                     " should inform the author of " + name + ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage, 
-                                             false);
+                                             true);
             }
         }
         
@@ -2342,17 +2347,14 @@ public class GoGui
             && ! getClock().lostOnTime(color.otherColor())
             && ! m_lostOnTimeShown)
         {
-            if (color == GoColor.BLACK)
-            {
-                showInfo("Black lost on time.", null);
-                setResult("W+Time");
-            }
-            else
-            {
-                assert(color == GoColor.WHITE);
-                showInfo("White lost on time.", null);
-                setResult("B+Time");
-            }
+            String name = color.getCapitalizedName();
+            String result = color.otherColor().getUppercaseLetter() + "+Time";
+            String mainMessage = name + " lost on time";
+            String optionalMessage =
+                name + " run out of time. The result \"" + result +
+                "\" was added to the game information.";
+            showInfo(mainMessage, optionalMessage, false);
+            setResult(result);
             m_lostOnTimeShown = true;
         }
     }
@@ -2505,10 +2507,14 @@ public class GoGui
             boolean gameTreeChanged = false;
             if (response.equalsIgnoreCase("resign"))
             {
+                String result =
+                    toMove.otherColor().getUppercaseLetter() + "+Resign";
                 if (! isComputerBoth())
-                    showInfo(getProgramName() + " resigns", null);
+                    showInfo(getProgramName() + " resigns",
+                             "The result \"" + result
+                             + "\" was added to the game information.", false);
                 m_resigned = true;
-                setResult((toMove == GoColor.BLACK ? "W" : "B") + "+Resign");
+                setResult(result);
             }
             else
             {
@@ -2537,9 +2543,13 @@ public class GoGui
                 {
                     String disableKey =
                         "net.sf.gogui.gogui.GoGui.computer-passed";
+                    String name = getProgramName();
                     m_messageDialogs.showInfo(disableKey, this,
-                                              getProgramName() + " passes",
-                                              "");
+                                              name + " passes",
+                                              name + " played a pass. " +
+                                              "When both players pass in "
+                                              + "succession, the game ends.",
+                                              false);
                 }
                 m_resigned = false;
                 gameTreeChanged = true;
@@ -3730,12 +3740,24 @@ public class GoGui
     private void showGameFinished()
     {
         String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
-        m_messageDialogs.showInfo(disableKey, this, "Game finished", "");
+        String optionalMessage;
+        if (m_resigned)
+            optionalMessage =
+                getProgramName() + " lost the game by resignation.";
+        else
+            optionalMessage =
+                "The game is finished because both players passed. " +
+                "Use Score from the Game menu to count the score " +
+                "in final positions.";
+        m_messageDialogs.showInfo(disableKey, this, "Game finished",
+                                  optionalMessage, false);
     }
 
-    private void showInfo(String mainMessage, String optionalMessage)
+    private void showInfo(String mainMessage, String optionalMessage,
+                          boolean isCritical)
     {
-        m_messageDialogs.showInfo(this, mainMessage, optionalMessage);
+        m_messageDialogs.showInfo(this, mainMessage, optionalMessage,
+                                  isCritical);
     }
 
     private void showInfoPanel(boolean enable)

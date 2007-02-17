@@ -42,7 +42,7 @@ public final class Interrupt
                                           "Interrupt " + gtp.getProgramName()
                                           + "?",
                                           "The command in progress might " +
-                                          "fail.", "Interrupt", false))
+                                          "fail.", "Interrupt", true))
             return false;
         try
         {
