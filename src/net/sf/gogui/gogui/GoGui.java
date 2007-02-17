@@ -2038,7 +2038,7 @@ public class GoGui
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
                           new AnalyzeContinue(checkComputerMove));
-        showStatus(m_analyzeCommand.getResultTitle() + "...");
+        showStatus("Running " + m_analyzeCommand.getResultTitle() + "...");
     }
 
     private void analyzeContinue(boolean checkComputerMove)
@@ -2263,7 +2263,7 @@ public class GoGui
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
         m_shell.setCommandInProgess(true);
-        showStatus("Thinking...");
+        showStatus(getProgramName() + " is thinking...");
         updateViews(false);
     }
 
