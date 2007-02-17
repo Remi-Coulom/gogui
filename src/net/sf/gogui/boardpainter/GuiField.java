@@ -574,8 +574,8 @@ public class GuiField
             graphics.setFont(s_cachedFont);
             return;
         }
-        int fontSize = (int)(0.4 * fieldSize);
-        s_cachedFont = new Font("SansSerif", Font.BOLD, fontSize);
+        int fontSize = (int)(0.4f * fieldSize);
+        s_cachedFont = new Font("Dialog", Font.BOLD, fontSize);
         s_cachedFontFieldSize = fieldSize;
         graphics.setFont(s_cachedFont);
     }
