@@ -248,6 +248,9 @@ public class GuiField
     */
     private static final long serialVersionUID = 0L; // SUID
 
+    private static final AlphaComposite COMPOSITE_4
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f);
+
     private static final AlphaComposite COMPOSITE_5
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
 
@@ -511,7 +514,7 @@ public class GuiField
 
     private void drawTerritoryGraphics2D()
     {
-        setComposite(COMPOSITE_5);
+        setComposite(COMPOSITE_4);
         if (m_territory == GoColor.BLACK)
             m_graphics2D.setColor(Color.darkGray);
         else
