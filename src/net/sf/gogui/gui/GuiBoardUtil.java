@@ -157,14 +157,11 @@ public final class GuiBoardUtil
         GoColor c = board.getColor(p);
         if (c == GoColor.EMPTY)
             return;
-        PointList stones = new PointList(board.getNumberPoints());
-        board.getStones(p, c, stones);
-        boolean dead = ! countScore.getDead(stones.get(0));
+        PointList stones = countScore.changeStatus(p);
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint stone = stones.get(i);
-            countScore.setDead(stone, dead);
-            guiBoard.setCrossHair(stone, dead);
+            guiBoard.setCrossHair(stone, countScore.isDead(stone));
         }
         computeScore(guiBoard, countScore, board);
     }

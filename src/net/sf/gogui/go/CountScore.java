@@ -33,6 +33,32 @@ public class CountScore
         compute();
     }
 
+    /** Change the life and death status of a group of stones.
+        Will change the life and death status of all stones of the same color
+        in the connected region surrounded by opponent stones, if all
+        surrounding opponent stones are alive. Otherwise it only changes the
+        life death status of all stones in the block the stone belongs to.
+        @param p Location of a stone.
+        @return List of all points that changed their life and death status.
+     */
+    public PointList changeStatus(GoPoint p)
+    {
+        GoColor c = m_board.getColor(p);
+        assert(c.isBlackWhite());
+        PointList stones = new PointList();
+        Marker marker = new Marker(m_board.getSize());
+        boolean allSurroundingAlive = findRegion(p, c, marker, stones);
+        if (! allSurroundingAlive)
+        {
+            stones.clear();
+            m_board.getStones(p, c, stones);
+        }
+        boolean isDead = ! isDead(p);
+        for (int i = 0; i < stones.size(); ++i)
+            setDead(stones.get(i), isDead);
+        return stones;
+    }
+
     /** Update score after changing the life-death status of stones. */
     public void compute()
     {
@@ -87,7 +113,7 @@ public class CountScore
         @param p The stone.
         @return true, if stone is dead, false if stone is alive.
     */
-    public boolean getDead(GoPoint p)
+    public boolean isDead(GoPoint p)
     {
         return m_dead.get(p);
     }
@@ -179,6 +205,24 @@ public class CountScore
     private GoColor m_score[][];
 
     private ConstBoard m_board;
+
+    private boolean findRegion(GoPoint p, GoColor color, Marker marker,
+                               PointList stones)
+    {
+        if (marker.get(p))
+            return true;
+        GoColor c = m_board.getColor(p);
+        if (c == color.otherColor())
+            return ! isDead(p);
+        marker.set(p);
+        if (c == color)
+            stones.add(p);
+        ConstPointList adj = m_board.getAdjacentPoints(p);
+        for (int i = 0; i < adj.size(); ++i)
+            if (! findRegion(adj.get(i), color, marker, stones))
+                return false;
+        return true;
+    }
 
     private boolean isTerritory(Marker mark, GoPoint p,
                                 PointList territory, GoColor color)
