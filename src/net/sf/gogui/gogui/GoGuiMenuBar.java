@@ -454,15 +454,9 @@ public class GoGuiMenuBar
                                          RecentFileMenu.Listener listener)
     {
         JMenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
-        GoGuiCheckBoxMenuItem itemTree =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowTree);
-        menu.addItem(itemTree, KeyEvent.VK_R);
-        GoGuiCheckBoxMenuItem itemAnalyzeDialog =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowAnalyzeDialog);
-        menu.addItem(itemAnalyzeDialog, KeyEvent.VK_A);
-        GoGuiCheckBoxMenuItem itemShell =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowShell);
-        menu.addItem(itemShell, KeyEvent.VK_S);
+        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
+        menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
         menu.addSeparator();
         menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
         menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);

@@ -600,6 +600,27 @@ public class GoGuiActions
              "Add white stones and set White to play",
              "gogui-setup-white");
 
+    public final GoGuiAction m_actionShowAnalyzeDialog =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShowAnalyzeDialog(); } },
+             "Analyze Dialog", "Show window with analyze commands",
+             KeyEvent.VK_F9, getFunctionKeyShortcut());
+
+    public final GoGuiAction m_actionShowShell =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShowShell(); } },
+             "GTP Shell", "Show GTP shell window",
+             KeyEvent.VK_F8, getFunctionKeyShortcut());
+
+    public final GoGuiAction m_actionShowTree =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShowTree(); } },
+             "Tree Viewer", "Show game tree window",
+             KeyEvent.VK_F7, getFunctionKeyShortcut());
+
     public final GoGuiAction m_actionToggleAutoNumber =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -654,27 +675,6 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowSubtreeSizes(); } },
              "Subtree Sizes", null);
-
-    public final GoGuiAction m_actionToggleShowAnalyzeDialog =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionToggleShowAnalyzeDialog(); } },
-             "Analyze Dialog", "Show window with analyze commands",
-             KeyEvent.VK_F9, getFunctionKeyShortcut());
-
-    public final GoGuiAction m_actionToggleShowShell =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionToggleShowShell(); } },
-             "GTP Shell", "Show GTP shell window",
-             KeyEvent.VK_F8, getFunctionKeyShortcut());
-
-    public final GoGuiAction m_actionToggleShowTree =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionToggleShowTree(); } },
-             "Tree Viewer", "Show game tree window",
-             KeyEvent.VK_F7, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowToolbar =
         new GoGuiAction(new ActionListener() {
@@ -879,24 +879,21 @@ public class GoGuiActions
         m_actionShellSave.setEnabled(isProgramAttached);
         m_actionShellSaveCommands.setEnabled(isProgramAttached);
         m_actionShellSendFile.setEnabled(isProgramAttached);
+        m_actionShowAnalyzeDialog.setEnabled(isProgramAttached);
+        m_actionShowShell.setEnabled(isProgramAttached);
         m_actionToggleAutoNumber.setSelected(m_goGui.getAutoNumber());
         m_actionToggleBeepAfterMove.setEnabled(isProgramAttached);
         m_actionToggleBeepAfterMove.setSelected(m_goGui.getBeepAfterMove());
         boolean commentMonoFont = m_goGui.getCommentMonoFont();
         m_actionToggleCommentMonoFont.setSelected(commentMonoFont);
         m_actionToggleCompletion.setSelected(m_goGui.getCompletion());
-        m_actionToggleShowAnalyzeDialog.setEnabled(isProgramAttached);
-        m_actionToggleShowAnalyzeDialog.setSelected(isAnalyzeDialogShown);
         m_actionToggleShowCursor.setSelected(guiBoard.getShowCursor());
         m_actionToggleShowGrid.setSelected(guiBoard.getShowGrid());
         m_actionToggleShowInfoPanel.setSelected(m_goGui.isInfoPanelShown());
         m_actionToggleShowLastMove.setSelected(m_goGui.getShowLastMove());
-        m_actionToggleShowShell.setEnabled(isProgramAttached);
-        m_actionToggleShowShell.setSelected(isShellShown);
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
         m_actionToggleShowToolbar.setSelected(m_goGui.isToolbarShown());
-        m_actionToggleShowTree.setSelected(isTreeShown);
         m_actionToggleShowVariations.setSelected(m_goGui.getShowVariations());
         m_actionToggleTimeStamp.setSelected(m_goGui.getTimeStamp());
         m_actionTreeLabelsNumber.setSelected(

@@ -1282,6 +1282,37 @@ public class GoGui
         updateViews(false);
     }
 
+    public void actionShowAnalyzeDialog()
+    {        
+        if (m_gtp == null)
+            return;
+        if (m_analyzeDialog == null)
+            createAnalyzeDialog();
+        else
+            m_analyzeDialog.toFront();
+    }
+
+    public void actionShowShell()
+    {
+        if (m_gtp == null)
+            return;
+        if (! m_shell.isVisible())
+        {
+            restoreSize(m_shell, "shell");
+            m_shell.setVisible(true);
+        }
+        else
+            m_shell.toFront();
+    }
+
+    public void actionShowTree()
+    {
+        if (m_gameTreeViewer == null)
+            createTree();
+        else
+            m_gameTreeViewer.toFront();
+    }
+
     public void actionToggleBeepAfterMove()
     {
         m_beepAfterMove = ! m_beepAfterMove;
@@ -1309,16 +1340,6 @@ public class GoGui
             m_shell.setCommandCompletion(m_commandCompletion);
         m_prefs.putBoolean("gtpshell-disable-completions",
                            ! m_commandCompletion);
-    }
-
-    public void actionToggleShowAnalyzeDialog()
-    {        
-        if (m_gtp == null)
-            return;
-        if (m_analyzeDialog == null)
-            createAnalyzeDialog();
-        else
-            actionDisposeAnalyzeDialog();
     }
 
     public void actionToggleShowCursor()
@@ -1355,20 +1376,6 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionToggleShowShell()
-    {
-        if (m_gtp == null)
-            return;
-        if (! m_shell.isVisible())
-        {
-            restoreSize(m_shell, "shell");
-            m_shell.setVisible(true);
-        }
-        else
-            m_shell.setVisible(false);
-        updateViews(false);
-    }
-
     public void actionToggleShowSubtreeSizes()
     {
         m_showSubtreeSizes = ! m_showSubtreeSizes;
@@ -1391,15 +1398,6 @@ public class GoGui
             m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         }
         showToolbar(! m_showToolbar);
-        updateViews(false);
-    }
-
-    public void actionToggleShowTree()
-    {
-        if (m_gameTreeViewer == null)
-            createTree();
-        else
-            actionDisposeTree();
         updateViews(false);
     }
 
