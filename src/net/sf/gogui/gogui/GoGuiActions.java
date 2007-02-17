@@ -564,7 +564,8 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionReattachProgram(); } },
              "Reattach",
-             "Restart Go program and attach it to the currrent position");
+             "Restart Go program and attach it to the currrent position",
+             KeyEvent.VK_T);
 
     public final GoGuiAction m_actionSave =
         new GoGuiAction(new ActionListener() {
