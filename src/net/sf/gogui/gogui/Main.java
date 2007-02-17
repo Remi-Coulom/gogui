@@ -113,7 +113,9 @@ public final class Main
                     {
                         new GoGui(settings.m_program, settings.m_file,
                                   settings.m_move, settings.m_time,
-                                  settings.m_verbose, settings.m_computerBlack,
+                                  settings.m_verbose,
+                                  settings.m_initComputerColor,
+                                  settings.m_computerBlack,
                                   settings.m_computerWhite, settings.m_auto,
                                   settings.m_gtpFile, settings.m_gtpCommand,
                                   settings.m_initAnalyze);

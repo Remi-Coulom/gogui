@@ -21,6 +21,8 @@ public final class GoGuiSettings
 {
     public boolean m_auto;
 
+    public boolean m_initComputerColor;
+
     public boolean m_computerBlack;
 
     public boolean m_computerWhite;
@@ -60,6 +62,7 @@ public final class GoGuiSettings
             "computer-black",
             "computer-both",
             "computer-none",
+            "computer-white",
             "config:",
             "gtpfile:",
             "help",
@@ -89,17 +92,31 @@ public final class GoGuiSettings
         m_prefs = Preferences.userNodeForPackage(c);
         m_initAnalyze = opt.get("analyze");
         m_auto = opt.contains("auto");
-        m_computerBlack = false;
-        m_computerWhite = true;
+        m_initComputerColor = false;
         if (opt.contains("computer-none"))
+        {
+            m_computerBlack = false;
             m_computerWhite = false;
+            m_initComputerColor = true;
+        }
         else if (opt.contains("computer-black"))
         {
             m_computerBlack = true;
             m_computerWhite = false;
+            m_initComputerColor = true;
+        }
+        else if (opt.contains("computer-white"))
+        {
+            m_computerBlack = false;
+            m_computerWhite = true;
+            m_initComputerColor = true;
         }
         else if (opt.contains("computer-both"))
+        {
             m_computerBlack = true;
+            m_computerWhite = true;
+            m_initComputerColor = true;
+        }
         m_program = opt.get("program", null);
         m_gtpFile = opt.get("gtpfile", "");
         m_gtpCommand = opt.get("command", "");
@@ -136,6 +153,7 @@ public final class GoGuiSettings
             "-command cmd    Send GTP command at startup\n" +
             "-computer-both  Computer plays both sides\n" +
             "-computer-black Computer plays black\n" +
+            "-computer-white Computer plays white\n" +
             "-computer-none  Computer plays no side\n" +
             "-config         Config file\n" +
             "-gtpfile file   Send GTP file at startup\n" +

@@ -20,6 +20,7 @@
 <arg><option>-auto</option></arg>
 <group choice="opt">
 <arg choice="plain"><option>-computer-black</option></arg>
+<arg choice="plain"><option>-computer-white</option></arg>
 <arg choice="plain"><option>-computer-both</option></arg>
 <arg choice="plain"><option>-computer-none</option></arg>
 </group>
@@ -105,7 +106,7 @@ commands separated by '\n'.
 </term>
 <listitem>
 <para>
-Computer plays black.
+Computer plays Black.
 </para>
 </listitem>
 </varlistentry>
@@ -128,6 +129,17 @@ Computer plays both sides.
 <listitem>
 <para>
 Computer plays no side.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-computer-white</option>
+</term>
+<listitem>
+<para>
+Computer plays White.
 </para>
 </listitem>
 </varlistentry>

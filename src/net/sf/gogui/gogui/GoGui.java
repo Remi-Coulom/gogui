@@ -120,9 +120,9 @@ public class GoGui
                ContextMenu.Listener
 {
     public GoGui(String program, File file, int move, String time,
-                 boolean verbose, boolean computerBlack,
-                 boolean computerWhite, boolean auto, String gtpFile,
-                 String gtpCommand, String initAnalyze)
+                 boolean verbose, boolean initComputerColor,
+                 boolean computerBlack, boolean computerWhite, boolean auto,
+                 String gtpFile, String gtpCommand, String initAnalyze)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -131,8 +131,21 @@ public class GoGui
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
         m_move = move;
-        m_computerBlack = computerBlack;
-        m_computerWhite = computerWhite;
+        if (initComputerColor)
+        {
+            m_computerBlack = computerBlack;
+            m_computerWhite = computerWhite;
+        }
+        else if (m_prefs.getBoolean("computer-none", false))
+        {
+            m_computerBlack = false;
+            m_computerWhite = false;
+        }
+        else
+        {
+            m_computerBlack = false;
+            m_computerWhite = true;
+        }
         m_auto = auto;
         m_verbose = verbose;
         m_initAnalyze = initAnalyze;
@@ -392,6 +405,8 @@ public class GoGui
 
     public void actionComputerColor(boolean isBlack, boolean isWhite)
     {
+        boolean computerNone = (! isBlack && ! isWhite);
+        m_prefs.putBoolean("computer-none", computerNone);
         m_computerBlack = isBlack;
         m_computerWhite = isWhite;
         if (! isCommandInProgress())
