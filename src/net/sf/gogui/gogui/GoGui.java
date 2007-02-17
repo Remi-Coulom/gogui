@@ -2021,11 +2021,6 @@ public class GoGui
 
     private TimeSettings m_timeSettings;
 
-    /** Timer to make progress bar visible with some delay.
-        Avoids showing the progress bar for short thinking times.
-    */
-    private Timer m_progressBarTimer;
-
     private final GoGuiActions m_actions = new GoGuiActions(this);
 
     private final GoGuiToolBar m_toolBar;
@@ -2266,7 +2261,7 @@ public class GoGui
 
     private void beginLengthyCommand()
     {
-        m_progressBarTimer.restart();
+        setBoardCursor(Cursor.WAIT_CURSOR);
         m_shell.setCommandInProgess(true);
         showStatus("Thinking...");
         updateViews(false);
@@ -2736,7 +2731,6 @@ public class GoGui
         }
         resetBoard();
         clearStatus();
-        m_statusBar.clearProgress();
         setTitle();
     }
 
@@ -2753,7 +2747,7 @@ public class GoGui
     private boolean endLengthyCommand(boolean isCritical,
                                       boolean showError)
     {
-        m_statusBar.clearProgress();     
+        setBoardCursor(Cursor.DEFAULT_CURSOR);
         clearStatus();
         if (m_shell != null)
             m_shell.setCommandInProgess(false);
@@ -3047,7 +3041,6 @@ public class GoGui
             attachProgram(m_programCommand, m_program);
         setTitle();
         registerSpecialMacHandler();
-        initProgressBarTimer();
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
         if (m_shell != null && m_session.isVisible("shell"))
@@ -3072,22 +3065,6 @@ public class GoGui
         unprotectGui();
         toFrontLater();
         checkComputerMove();
-    }
-
-    private void initProgressBarTimer()
-    {
-        m_progressBarTimer = new Timer(500, new ActionListener() {
-                public void actionPerformed(ActionEvent e)
-                {
-                    if (isCommandInProgress())
-                    {
-                        if (! m_statusBar.isProgressShown())
-                            m_statusBar.setProgress(-1);
-                    }
-                }
-            });
-        m_progressBarTimer.setRepeats(false);
-        m_progressBarTimer.stop();
     }
 
     private void initScore(ConstPointList deadStones)
@@ -3533,13 +3510,11 @@ public class GoGui
     private void setBoardCursor(int type)
     {
         setCursor(m_guiBoard, type);
-        setCursor(m_infoPanel, type);
     }
 
     private void setBoardCursorDefault()
     {
         setCursorDefault(m_guiBoard);
-        setCursorDefault(m_infoPanel);
     }
 
     private void setCursor(Component component, int type)

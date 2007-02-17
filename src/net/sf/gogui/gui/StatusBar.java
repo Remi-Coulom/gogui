@@ -14,7 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -65,15 +64,6 @@ public class StatusBar
         m_distanceSetup.setVisible(false);
         m_iconBox.add(m_distanceSetup);
 
-        m_progressBar = new JProgressBar();
-        m_progressBar.setVisible(false);
-        m_progressBar.setPreferredSize(new Dimension(72, 16));
-        m_iconBox.add(m_progressBar);
-        m_progressBarDistance = GuiUtil.createFiller();
-        m_progressBarDistance.setVisible(false);
-        m_iconBox.add(m_progressBarDistance);
-        m_iconBox.add(GuiUtil.createSmallFiller());
-
         m_text = new TextFieldWithToolTip();
         m_text.setFocusable(false);
         m_text.setBorder(null);
@@ -96,12 +86,6 @@ public class StatusBar
         setText("");
     }
 
-    public void clearProgress()
-    {
-        m_progressBar.setVisible(false);
-        m_progressBarDistance.setVisible(false);
-    }
-
     public String getText()
     {
         return m_text.getText();
@@ -114,45 +98,6 @@ public class StatusBar
         setMoveText(text, null);
         GuiUtil.paintImmediately(m_moveText);
         GuiUtil.paintImmediately(m_moveTextSeparator);
-    }
-
-    public boolean isProgressShown()
-    {
-        return m_progressBar.isVisible();
-    }
-
-    /** Show progress bar.
-        @param percent Percentage between 0 and 100, -1 if unknown.
-    */
-    public void setProgress(int percent)
-    {
-        m_progressBar.setVisible(true);
-        m_progressBarDistance.setVisible(true);
-        // Don't use text on progress bar, because otherwise it will
-        // be green in indeterminate and blue in dterminate mode on
-        // Windows XP JDK 1.6
-        if (percent < 0)
-        {
-            if (Platform.isMac())
-            {
-                // Don't use indeterminate progress bar on Mac Java 1.4
-                // looks totally ugly (a blue white candy bar)
-                clearProgress();
-            }
-            else
-            {
-                // First set to minimum to reset indeterminate animation
-                m_progressBar.setIndeterminate(false);
-                m_progressBar.setValue(m_progressBar.getMinimum());
-                m_progressBar.setIndeterminate(true);
-            }
-        }
-        else
-        {
-            m_progressBar.setIndeterminate(false);
-            m_progressBar.setValue(percent);
-            m_progressBar.setStringPainted(false);
-        }
     }
 
     /** Set text with move information.
@@ -225,15 +170,11 @@ public class StatusBar
 
     private final JLabel m_labelScore;
 
-    private final JProgressBar m_progressBar;
-
     private final JTextField m_moveText;
 
     private final JTextField m_text;
 
     private final JSeparator m_moveTextSeparator;
-
-    Box.Filler m_progressBarDistance;
 
     Box.Filler m_distanceSetup;
 }

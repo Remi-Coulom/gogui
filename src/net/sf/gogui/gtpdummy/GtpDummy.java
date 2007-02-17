@@ -222,41 +222,31 @@ public class GtpDummy
     public void cmdLiveGfx(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        System.err.println("gogui-gfx: PROGRESS 0");
         System.err.println("gogui-gfx: TEXT Live Graphics Demo");
         System.err.println("gogui-gfx: LABEL A4 test");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 11");
         System.err.println("gogui-gfx: COLOR green A5 A7 B9");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 22");
         System.err.println("gogui-gfx: COLOR #980098 B7 B8");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 33");
         System.err.println("gogui-gfx:\n" +
                            "SQUARE B5 C9\n" +
                            "MARK A6 B6\n" +
                            "TRIANGLE A9\n");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 44");
         System.err.println("gogui-gfx: WHITE A1");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 55");
         System.err.println("gogui-gfx: BLACK B1");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 66");
         System.err.println("gogui-gfx: CIRCLE c8");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 77");
         System.err.println("gogui-gfx: INFLUENCE a7 -1 b7 -0.75 c7 "
                            + "-0.5 d7 -0.25 e7 0 f7 0.25 g7 0.5 h7 0.75 "
                            + "j7 1");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 88");
         System.err.println("gogui-gfx: VAR b c1 w c2 b c3 b c4 w pass "
                            + "b c5");
         sleep(1000);
-        System.err.println("gogui-gfx: PROGRESS 99");
         System.err.println("gogui-gfx: CLEAR");
     }
 
@@ -301,7 +291,7 @@ public class GtpDummy
         long remaining = millis - steps * showProgressInterval;
         for (long i = 0; i < steps && ! isInterrupted(); ++i)
         {
-            System.err.println("gogui-gfx: PROGRESS " + (100L * i / steps));
+            System.err.println("gogui-gfx: TEXT " + (100L * i / steps) + " %");
             sleep(showProgressInterval);
         }
         sleep(remaining);

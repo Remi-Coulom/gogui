@@ -259,8 +259,6 @@ public final class AnalyzeShow
             showGfxLabel(args, guiBoard);
         else if (cmd.equals("MARK"))
             showGfxMark(args, guiBoard);
-        else if (cmd.equals("PROGRESS"))
-            showGfxProgress(args, statusBar);
         else if (cmd.equals("SQUARE"))
             showGfxSquare(args, guiBoard);
         else if (cmd.equals("TEXT"))
@@ -293,24 +291,6 @@ public final class AnalyzeShow
             catch (GoPoint.InvalidPoint e)
             {
             }
-        }
-    }
-
-    public static void showGfxProgress(String[] args, StatusBar statusBar)
-    {
-        if (args.length < 1)
-            return;
-        try
-        {
-            int percent = Integer.parseInt(args[1]);
-            if (percent < 0)
-                percent = 0;
-            if (percent > 100)
-                percent = 100;
-            statusBar.setProgress(percent);
-        }
-        catch (NumberFormatException e)
-        {
         }
     }
 

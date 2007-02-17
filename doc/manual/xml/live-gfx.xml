@@ -30,10 +30,6 @@ line will be interpreted as draw commands.
 See the <userinput>dummy_live_gfx</userinput> command in
 <xref linkend="reference-gtpdummy"/> for an example.
 </para>
-<para>
-The additional command PROGRESS, followed by an integer between 0 and 100,
-can be used to update the progress bar in the status bar.
-</para>
 
 <note>
 <simpara>
