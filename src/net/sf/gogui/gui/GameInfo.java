@@ -53,8 +53,10 @@ public class GameInfo
             m_clock[index] = new GuiClock(c);
             m_clock[index].setAlignmentX(Component.CENTER_ALIGNMENT);
             box.add(m_clock[index]);
-            m_prisoners[index] = new Prisoners(c);
-            box.add(m_prisoners[index]);
+            GoColor otherColor = c.otherColor();
+            int otherColorIndex = otherColor.toInteger();
+            m_prisoners[otherColorIndex] = new Prisoners(otherColor);
+            box.add(m_prisoners[otherColorIndex]);
         }
         Clock.Listener listener = new Clock.Listener() {
                 public void clockChanged(ConstClock clock)
