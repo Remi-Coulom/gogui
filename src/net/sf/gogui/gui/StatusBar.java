@@ -69,7 +69,8 @@ public class StatusBar
         panel.add(m_text, BorderLayout.CENTER);
         Box moveTextBox = Box.createHorizontalBox();
         panel.add(moveTextBox, BorderLayout.EAST);
-        m_moveText = new TextFieldWithToolTip(12);
+        m_moveText = new JTextField(12);
+        GuiUtil.setEditableFalse(m_moveText);
         m_moveText.setFocusable(false);
         m_moveText.setBorder(null);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
