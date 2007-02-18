@@ -119,40 +119,33 @@ class GameTreeNode
         else if (m_node.hasSetup() || player != null)
         {
             toolTip.append("Setup (");
-            int numberAddBlack = m_node.getAddStones(GoColor.BLACK).size();
-            int numberAddWhite = m_node.getAddStones(GoColor.WHITE).size();
-            int numberAddEmpty = m_node.getAddStones(GoColor.EMPTY).size();
-            if (numberAddBlack > 0)
+            boolean anyStones = false;
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhiteEmpty())
             {
-                toolTip.append("B ");
-                toolTip.append(numberAddBlack);
-            }
-            if (numberAddWhite > 0)
-            {
-                if (numberAddBlack > 0)
+                int n = m_node.getAddStones(c).size();
+                if (n == 0)
+                    continue;
+                if (anyStones)
                     toolTip.append(", ");
-                toolTip.append("W ");
-                toolTip.append(numberAddWhite);
-            }
-            if (numberAddEmpty > 0)
-            {
-                if (numberAddBlack + numberAddWhite > 0)
-                    toolTip.append(", ");
-                toolTip.append("E ");
-                toolTip.append(numberAddEmpty);
+                anyStones = true;
+                toolTip.append(c.getUppercaseLetter());
+                toolTip.append(' ');
+                toolTip.append(n);
             }
             if (player != null)
             {
-                if (numberAddBlack + numberAddWhite + numberAddEmpty > 0)
+                if (anyStones)
                     toolTip.append(", ");
                 toolTip.append("Player ");
-                toolTip.append(player == GoColor.BLACK ? 'B' : 'W');
+                toolTip.append(player.getUppercaseLetter());
             }
             toolTip.append(")");
         }
         String comment = NodeUtil.getCommentStart(m_node, false, 80);
         if (comment != null)
         {
+            comment = comment.replaceAll("\n *\n", "\n");
             comment = comment.replaceAll("\n", "<br>");
             if (comment.length() > 50)
             {
