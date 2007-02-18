@@ -32,6 +32,10 @@ public final class GoGuiUtil
         TextViewer.Listener listener = null;
         if (type == AnalyzeCommand.PSTRING || type == AnalyzeCommand.HPSTRING)
             listener = new PointSelectionMarker(guiBoard);
+        // Remove first line, if empty (formatted responses frequently start
+        // with an empty line to avoid text on the line with the status
+        // character)
+        response = response.replaceAll("\\A *\n", "");
         TextViewer textViewer = new TextViewer(owner, title, response,
                                                highlight, listener);
         if (pointArg == null)
