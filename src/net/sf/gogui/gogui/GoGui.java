@@ -3388,11 +3388,13 @@ public class GoGui
     }
 
     private void saveSession()
-    {
+    {        
         if (m_shell != null)
             m_shell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
+        if (! isVisible())
+            return;
         if (m_help != null)
             m_session.saveSize(m_help, "help");
         saveSizeAndVisible(m_gameTreeViewer, "tree");
