@@ -21,7 +21,7 @@ public final class TableUtil
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
             String value = table.get(column, row);
-            if (value != null && ! value.trim().equals(""))
+            if (! StringUtil.isEmpty(value))
                 return false;
         }
         return true;
@@ -102,7 +102,7 @@ public final class TableUtil
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
             String value = table.get(col, row);
-            if (value != null && ! value.trim().equals(""))
+            if (! StringUtil.isEmpty(value))
                 result.add(value);
         }
         return result;

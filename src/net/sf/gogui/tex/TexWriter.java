@@ -17,6 +17,7 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.util.StringUtil;
 
 /** Write a game or board position in PSGO style to a stream. */
 public class TexWriter
@@ -29,7 +30,7 @@ public class TexWriter
         m_out = new PrintStream(out);
         m_usePass = usePass;
         printBeginDocument();
-        if (title != null && ! title.trim().equals(""))
+        if (! StringUtil.isEmpty(title))
             m_out.println("\\section*{" + escape(title) + "}");
         printBeginPSGo(board.getSize());
         printPosition(board, markLabel, mark, markTriangle, markCircle,
@@ -49,7 +50,7 @@ public class TexWriter
         m_out = new PrintStream(out);
         m_usePass = usePass;
         printBeginDocument();
-        if (title != null && ! title.trim().equals(""))
+        if (! StringUtil.isEmpty(title))
             m_out.println("\\section*{" + escape(title) + "}");
         printBeginPSGo(tree.getBoardSize());
         String comment = printTree(tree);
@@ -252,8 +253,7 @@ public class TexWriter
                 buffer.append("\\markcr");
             if (markSquare != null && markSquare[x][y])
                 buffer.append("\\marksq");
-            if (markLabel != null && markLabel[x][y] != null
-                     && ! markLabel[x][y].trim().equals(""))
+            if (markLabel != null && ! StringUtil.isEmpty(markLabel[x][y]))
             {
                 buffer.append("\\marklb{");
                 buffer.append(markLabel[x][y]);

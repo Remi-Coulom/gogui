@@ -105,7 +105,7 @@ public final class StringUtil
     public static String getErrorMessage(Throwable e)
     {
         String message = e.getMessage();
-        boolean hasMessage = (message != null && ! message.trim().equals(""));
+        boolean hasMessage = ! StringUtil.isEmpty(message);
         String className = e.getClass().getName();
         String result;
         if (e instanceof ErrorMessage)
@@ -126,6 +126,14 @@ public final class StringUtil
         format.setMaximumFractionDigits(maximumFractionDigits);
         format.setGroupingUsed(false);
         return format;
+    }
+
+    /** Check if string is null, empty, or contains only whitespaces. */
+    public static boolean isEmpty(String s)
+    {
+        if (s == null)
+            return true;
+        return (s.trim().length() == 0);
     }
 
     /** Print exception to standard error.

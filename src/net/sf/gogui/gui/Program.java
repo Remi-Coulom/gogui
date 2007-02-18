@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.ObjectUtil;
+import net.sf.gogui.util.StringUtil;
 
 /** Command line and other information to run a GTP engine. */
 public final class Program
@@ -76,7 +77,7 @@ public final class Program
     public void setUniqueLabel(ArrayList programs)
     {
         String label = m_name;
-        if (label == null || label.trim().equals(""))
+        if (StringUtil.isEmpty(label))
             label = "Unknown Program";
         boolean alreadyExists = false;
         for (int i = 0; i < programs.size(); ++i)
@@ -90,7 +91,7 @@ public final class Program
             m_label = label;
             return;
         }
-        if (m_version != null && ! m_version.trim().equals(""))
+        if (StringUtil.isEmpty(m_version))
             label = label + " " + m_version.trim();
         alreadyExists = false;
         for (int i = 0; i < programs.size(); ++i)

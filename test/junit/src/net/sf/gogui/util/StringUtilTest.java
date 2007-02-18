@@ -35,6 +35,16 @@ public final class StringUtilTest
         }
     }
 
+    public void testIsEmpty()
+    {
+        assertTrue(StringUtil.isEmpty(null));
+        assertTrue(StringUtil.isEmpty(""));
+        assertTrue(StringUtil.isEmpty(" "));
+        assertTrue(StringUtil.isEmpty(" \t"));
+        assertFalse(StringUtil.isEmpty("a"));
+        assertFalse(StringUtil.isEmpty(" ab"));
+    }
+
     public void testSplit()
     {
         String[] s = StringUtil.split("1//23/ ", '/');

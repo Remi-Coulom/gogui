@@ -24,6 +24,7 @@ import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.util.StringUtil;
 
 /** Panel displaying information about the current position. */
 public class GameInfo
@@ -125,10 +126,10 @@ public class GameInfo
         buffer.append(color);
         buffer.append(" player");
         buffer.append(" (");
-        if (player != null && ! player.trim().equals(""))
+        if (! StringUtil.isEmpty(player))
         {
             buffer.append(player);
-            if (rank != null && ! rank.trim().equals(""))
+            if (! StringUtil.isEmpty(rank))
             {
                 buffer.append(" ");
                 buffer.append(rank);

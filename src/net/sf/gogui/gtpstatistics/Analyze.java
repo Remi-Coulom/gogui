@@ -175,7 +175,7 @@ public class Analyze
             for (int game = 0; game < m_results.size(); ++game)
             {
                 String result = getResult(game);
-                if (result != null && ! result.trim().equals(""))
+                if (! StringUtil.isEmpty(result))
                     return;
             }
             m_allEmpty = true;

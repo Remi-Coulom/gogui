@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import net.sf.gogui.util.PrefUtil;
+import net.sf.gogui.util.StringUtil;
 
 /** Dialog for entering a search pattern. */
 public class FindDialog
@@ -70,7 +71,7 @@ public class FindDialog
         dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
         String regex = dialog.m_pattern;
-        if (regex == null || regex.trim().equals(""))
+        if (StringUtil.isEmpty(regex))
             return null;
         int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
         return Pattern.compile(regex, flags);

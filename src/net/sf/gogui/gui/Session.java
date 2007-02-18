@@ -11,6 +11,7 @@ import java.awt.Window;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 import net.sf.gogui.util.PrefUtil;
+import net.sf.gogui.util.StringUtil;
 
 /** Utilities for saving and restoring windows between session.
     Window sizes and locations are saved separately for different Go board
@@ -24,8 +25,7 @@ public final class Session
     */
     public Session(String path)
     {
-        assert(path != null);
-        assert(! path.trim().equals(""));
+        assert(! StringUtil.isEmpty(path));
         m_path = path;
     }
 

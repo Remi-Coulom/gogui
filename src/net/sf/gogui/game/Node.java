@@ -13,6 +13,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.util.StringUtil;
 
 /** Extended info.
     Contains markups and value, because these are used in the large SGF
@@ -573,7 +574,7 @@ public final class Node
     */
     public void setComment(String comment)
     {
-        if (comment == null || comment.trim().equals(""))
+        if (StringUtil.isEmpty(comment))
         {
             m_comment = null;
             return;

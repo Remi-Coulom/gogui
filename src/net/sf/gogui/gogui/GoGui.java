@@ -109,6 +109,7 @@ import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 /** Graphical user interface to a Go program. */
@@ -3684,7 +3685,7 @@ public class GoGui
             optionalMessage =
                 "The Go program could not be executed using the command" +
                 " \"" + program + "\"";
-            if (e.getMessage() != null && ! e.getMessage().trim().equals(""))
+            if (! StringUtil.isEmpty(e.getMessage()))
                 optionalMessage = optionalMessage +
                     " (" + e.getMessage() + ")";
             optionalMessage = optionalMessage

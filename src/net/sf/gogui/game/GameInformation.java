@@ -193,10 +193,8 @@ public class GameInformation
     {
         String playerBlack = m_playerBlack;
         String playerWhite = m_playerWhite;
-        boolean playerBlackKnown =
-            (playerBlack != null && ! playerBlack.trim().equals(""));
-        boolean playerWhiteKnown =
-            (playerWhite != null && ! playerWhite.trim().equals(""));
+        boolean playerBlackKnown = ! StringUtil.isEmpty(playerBlack);
+        boolean playerWhiteKnown = ! StringUtil.isEmpty(playerWhite);
         if (! playerBlackKnown && ! playerWhiteKnown)
             return null;
         if (playerBlackKnown)

@@ -21,6 +21,7 @@ import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.util.StringUtil;
 
 /** Write in SGF format. */
 public class SgfWriter
@@ -331,7 +332,7 @@ public class SgfWriter
             print(buffer.toString());
         }
         String comment = node.getComment();
-        if (comment != null && ! comment.trim().equals(""))
+        if (! StringUtil.isEmpty(comment))
         {
             print("C[" + getEscaped(comment) + "]");
         }
