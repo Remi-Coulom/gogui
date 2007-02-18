@@ -3401,7 +3401,9 @@ public class GoGui
         if (GuiUtil.isNormalSizeMode(this))
         {            
             String name = "windows/main/size-" + getBoardSize() + "/fieldsize";
-            m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
+            int fieldSize = m_guiBoard.getFieldSize().width;
+            assert(fieldSize > 0);
+            m_prefs.putInt(name, fieldSize);
             name = "windows/main/size-" + getBoardSize() + "/comment/width";
             m_prefs.putInt(name, m_comment.getWidth());
             name = "windows/main/size-" + getBoardSize() + "/comment/height";
