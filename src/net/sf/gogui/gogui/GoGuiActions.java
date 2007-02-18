@@ -832,7 +832,7 @@ public class GoGuiActions
         m_actionBoardSizeOther.setSelected(boardSize < 9 || boardSize > 19
                                            || boardSize % 2 == 0);
         m_actionClockHalt.setEnabled(clock.isRunning());
-        m_actionClockResume.setEnabled(! clock.isRunning());
+        updateActionClockResume(clock);
         updateActionClockRestore(node, clock);
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
@@ -958,6 +958,19 @@ public class GoGuiActions
         }
         m_actionClockRestore.setEnabled(enabled);
         m_actionClockRestore.setDescription(desc);
+    }
+
+    private void updateActionClockResume(ConstClock clock)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Resume clock");
+        buffer.append(" (B ");
+        buffer.append(clock.getTimeString(GoColor.BLACK));
+        buffer.append(", W ");
+        buffer.append(clock.getTimeString(GoColor.WHITE));
+        buffer.append(")");
+        m_actionClockResume.setEnabled(! clock.isRunning());
+        m_actionClockResume.setDescription(buffer.toString());
     }
 
     private void updateActionDetachProgram(boolean isProgramAttached,
