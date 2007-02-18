@@ -3148,8 +3148,15 @@ public class GoGui
             setFile(file);
             String warnings = reader.getWarnings();
             if (warnings != null)
-                showWarning("File does not follow SGF standard",
-                            warnings, false);
+            {
+                String optionalMessage =
+                    "This file does not strictly follow the SGF standard. " +
+                    "Some information might have been not read correctly " +
+                    "or will be lost when modifying and saving the file.\n" +
+                    "(" +
+                    warnings.replaceAll("\n\\z", ")").replaceAll("\n", ")\n(");
+                showWarning("Non-standard SGF file", optionalMessage, true);
+            }
             FileDialogs.setLastFile(file);
             m_computerBlack = false;
             m_computerWhite = false;
