@@ -169,9 +169,16 @@ public final class Main
         optionalMessageArea.setForeground(UIManager.getColor("Label.foreground"));
         optionalMessageArea.setBackground(UIManager.getColor("Label.background"));
         optionalMessageArea.setFont(UIManager.getFont("Label.font"));
-        String optionalMessage =
-            "Please take a moment to submit a bug report at the GoGui bug tracker and include\n" +
-            "a short summary of the problem together with the following information:";
+        String optionalMessage;
+        if (Version.get().trim().toLowerCase().endsWith(".x"))
+            optionalMessage = 
+                "You are running an unreleased version of GoGui. Please don't report this bug to\n" +
+                "the GoGui bug tracker, but email the author of GoGui directly instead.\n";
+        else
+            optionalMessage =
+                "Please take a moment to submit a bug report at the GoGui bug tracker.\n";
+        optionalMessage = optionalMessage +
+                "Include a short summary of the problem together with the following information:";
         optionalMessageArea.setText(optionalMessage);
         box.add(GuiUtil.createSmallFiller());
         JTextArea textArea = new JTextArea();
@@ -220,7 +227,7 @@ public final class Main
         buttonPanel.add(urlButton);
         buttonPanel.add(copyButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
-        scrollPane.setPreferredSize(new Dimension(512, 384));
+        scrollPane.setPreferredSize(new Dimension(512, 256));
         String text = goguiVersion + "\n" + javaVersion + "\n" + osVersion
             + "\n\n" + stackTrace;
         textArea.setText(text);
