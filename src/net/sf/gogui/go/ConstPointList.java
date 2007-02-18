@@ -20,4 +20,6 @@ public interface ConstPointList
     boolean isEmpty();
 
     int size();
+
+    String toString();
 }

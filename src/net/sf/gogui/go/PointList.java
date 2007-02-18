@@ -93,6 +93,29 @@ public final class PointList
         return m_list.size();
     }
 
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < size(); ++i)
+        {
+            if (i > 0)
+                buffer.append(' ');
+            buffer.append(get(i).toString());
+        }
+        return buffer.toString();
+    }
+
+    /** Convert point list to string.
+        Null arguments will be converted to an empty string.
+    */
+    public static String toString(ConstPointList list)
+    {
+        if (list == null)
+            return "";
+        else
+            return list.toString();
+    }
+
     private static final ConstPointList m_emptyList = new PointList();
 
     private ArrayList m_list;
