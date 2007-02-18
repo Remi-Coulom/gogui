@@ -220,7 +220,7 @@ public final class Main
         buttonPanel.add(urlButton);
         buttonPanel.add(copyButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
-        scrollPane.setPreferredSize(new Dimension(512, 256));
+        scrollPane.setPreferredSize(new Dimension(512, 384));
         String text = goguiVersion + "\n" + javaVersion + "\n" + osVersion
             + "\n\n" + stackTrace;
         textArea.setText(text);
