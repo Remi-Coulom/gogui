@@ -381,9 +381,9 @@ public class GoGuiMenuBar
         JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
         menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
         menu.addSeparator();
-        menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
         menu.add(createBoardSizeMenu(actions));
         menu.add(createHandicapMenu(actions));
+        menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
         menu.addSeparator();
         m_computerColor = createComputerColorMenu(actions);
         menu.add(m_computerColor);

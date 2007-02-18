@@ -215,19 +215,6 @@ Start a new game.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Game Info</guimenuitem></term>
-<listitem>
-<para>
-Edit the game information.
-Changes to the komi and rules are transmitted to the Go program.
-The only supported rules are "Chinese" and "Japanese".
-The program is informed about the komi and the rules
-with GTP commands, if supported (see <xref linkend="compatibility"/>).
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guisubmenu>Board Size</guisubmenu></term>
 <listitem>
 <para>
@@ -241,6 +228,19 @@ Change the board size and start a new game.
 <listitem>
 <para>
 Set the number of handicap stones.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Game Info</guimenuitem></term>
+<listitem>
+<para>
+Edit the game information.
+Changes to the komi and rules are transmitted to the Go program.
+The only supported rules are "Chinese" and "Japanese".
+The program is informed about the komi and the rules
+with GTP commands, if supported (see <xref linkend="compatibility"/>).
 </para>
 </listitem>
 </varlistentry>
