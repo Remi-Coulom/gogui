@@ -47,7 +47,7 @@ public final class NodeUtilTest
 
     public void testGetAllAsMovesMoveOnly()
     {
-        Move move = Move.get(1, 1, GoColor.BLACK);
+        Move move = Move.get(GoColor.BLACK, 1, 1);
         Node node = new Node(move);
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
@@ -57,7 +57,7 @@ public final class NodeUtilTest
 
     public void testGetAllAsMovesMoveAndPlayerBlack()
     {
-        Move move = Move.get(1, 1, GoColor.BLACK);
+        Move move = Move.get(GoColor.BLACK, 1, 1);
         Node node = new Node(move);
         node.setPlayer(GoColor.BLACK);
         ArrayList moves = new ArrayList();
@@ -69,7 +69,7 @@ public final class NodeUtilTest
 
     public void testGetAllAsMovesMoveAndPlayerWhite()
     {
-        Move move = Move.get(1, 1, GoColor.WHITE);
+        Move move = Move.get(GoColor.WHITE, 1, 1);
         Node node = new Node(move);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
@@ -87,7 +87,7 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
-        assertSame(Move.get(point, GoColor.BLACK), moves.get(0));
+        assertSame(Move.get(GoColor.BLACK, point), moves.get(0));
     }
 
     public void testGetAllAsMovesSetupBlackAndPlayer()
@@ -99,12 +99,12 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
-        assertSame(Move.get(point, GoColor.BLACK), moves.get(0));
+        assertSame(Move.get(GoColor.BLACK, point), moves.get(0));
     }
 
     public void testGetAllAsMovesSetupBlackAndMove()
     {
-        Move move = Move.get(1, 1, GoColor.BLACK);
+        Move move = Move.get(GoColor.BLACK, 1, 1);
         Node node = new Node(move);
         GoPoint point1 = GoPoint.get(1, 1);
         GoPoint point2 = GoPoint.get(2, 2);
@@ -113,8 +113,8 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
-        assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
-        assertSame(Move.get(point2, GoColor.BLACK), moves.get(1));
+        assertSame(Move.get(GoColor.BLACK, point1), moves.get(0));
+        assertSame(Move.get(GoColor.BLACK, point2), moves.get(1));
         assertSame(move, moves.get(2));
     }
 
@@ -128,13 +128,13 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
-        assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
-        assertSame(Move.get(point2, GoColor.WHITE), moves.get(1));
+        assertSame(Move.get(GoColor.BLACK, point1), moves.get(0));
+        assertSame(Move.get(GoColor.WHITE, point2), moves.get(1));
     }
 
     public void testGetAllAsMovesSetupBothAndMove()
     {
-        Move move = Move.get(1, 1, GoColor.BLACK);
+        Move move = Move.get(GoColor.BLACK, 1, 1);
         Node node = new Node(move);
         GoPoint point1 = GoPoint.get(1, 1);
         GoPoint point2 = GoPoint.get(2, 2);
@@ -143,8 +143,8 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
-        assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
-        assertSame(Move.get(point2, GoColor.WHITE), moves.get(1));
+        assertSame(Move.get(GoColor.BLACK, point1), moves.get(0));
+        assertSame(Move.get(GoColor.WHITE, point2), moves.get(1));
         assertSame(move, moves.get(2));
     }
 
@@ -159,8 +159,8 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
-        assertSame(Move.get(point2, GoColor.WHITE), moves.get(0));
-        assertSame(Move.get(point1, GoColor.BLACK), moves.get(1));
+        assertSame(Move.get(GoColor.WHITE, point2), moves.get(0));
+        assertSame(Move.get(GoColor.BLACK, point1), moves.get(1));
     }
 
     public void testGetAllAsMovesSetupWhiteAndPlayer()
@@ -172,7 +172,7 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
-        assertSame(Move.get(point, GoColor.WHITE), moves.get(0));
+        assertSame(Move.get(GoColor.WHITE, point), moves.get(0));
         assertSame(Move.getPass(GoColor.BLACK), moves.get(1));
     }
 
@@ -184,7 +184,7 @@ public final class NodeUtilTest
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
-        assertSame(Move.get(point, GoColor.WHITE), moves.get(0));
+        assertSame(Move.get(GoColor.WHITE, point), moves.get(0));
     }
 
     public void testGetBackToMainVariation()
@@ -208,10 +208,10 @@ public final class NodeUtilTest
     public void testGetChildWithMove()
     {
         assertTrue(NodeUtil.getChildWithMove(m_node7,
-                                             Move.get(0, 0, GoColor.BLACK))
+                                             Move.get(GoColor.BLACK, 0, 0))
                    == m_node8);
         assertNull(NodeUtil.getChildWithMove(m_node7,
-                                             Move.get(2, 3, GoColor.BLACK)));
+                                             Move.get(GoColor.BLACK, 2, 3)));
     }
 
     public void testGetDepth()
@@ -279,23 +279,23 @@ public final class NodeUtilTest
         m_node0 = new Node();
         m_node1 = new Node();
         m_node0.append(m_node1);
-        m_node2 = new Node(Move.get(2, 2, GoColor.BLACK));
+        m_node2 = new Node(Move.get(GoColor.BLACK, 2, 2));
         m_node1.append(m_node2);
-        m_node3 = new Node(Move.get(5, 3, GoColor.WHITE));
+        m_node3 = new Node(Move.get(GoColor.WHITE, 5, 3));
         m_node2.append(m_node3);
         m_node4 = new Node();
         m_node3.append(m_node4);
-        m_node5 = new Node(Move.get(6, 3, GoColor.BLACK));
+        m_node5 = new Node(Move.get(GoColor.BLACK, 6, 3));
         m_node4.append(m_node5);
         m_node6 = new Node();
         m_node5.append(m_node6);
         m_node7 = new Node();
         m_node1.append(m_node7);
-        m_node8 = new Node(Move.get(0, 0, GoColor.BLACK));
+        m_node8 = new Node(Move.get(GoColor.BLACK, 0, 0));
         m_node7.append(m_node8);
-        m_node9 = new Node(Move.get(0, 0, GoColor.BLACK));
+        m_node9 = new Node(Move.get(GoColor.BLACK, 0, 0));
         m_node7.append(m_node9);
-        m_node10 = new Node(Move.get(0, 1, GoColor.WHITE));
+        m_node10 = new Node(Move.get(GoColor.WHITE, 0, 1));
         m_node7.append(m_node10);
         m_node11 = new Node(Move.getPass(GoColor.BLACK));
         m_node7.append(m_node11);

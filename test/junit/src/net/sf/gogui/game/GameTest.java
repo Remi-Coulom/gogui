@@ -54,7 +54,7 @@ public final class GameTest
         TimeSettings timeSettings = new TimeSettings(600000);
         Game game = new Game(19, null, null, null, timeSettings);
         ConstNode root = game.getRoot();
-        game.play(Move.get(null, GoColor.BLACK));
+        game.play(Move.get(GoColor.BLACK, null));
         assertNotSame(root, game.getCurrentNode());
         ConstGameInformation oldInfo = game.getGameInformation(root);
         GameInformation newInfo = new GameInformation(oldInfo);

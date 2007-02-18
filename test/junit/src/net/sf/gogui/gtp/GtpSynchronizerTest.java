@@ -41,13 +41,13 @@ public final class GtpSynchronizerTest
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoPoint.get(3, 4), GoColor.BLACK);
+        play(GoColor.BLACK, 3, 4);
         expect("play b D5", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoPoint.get(4, 4), GoColor.BLACK);
-        play(GoPoint.get(5, 5), GoColor.WHITE);
-        play(null, GoColor.BLACK);
+        play(GoColor.BLACK, 4, 4);
+        play(GoColor.WHITE, 5, 5);
+        play(GoColor.BLACK, null);
         expect("play b E5", "");
         expect("play w F6", "");
         expect("play b PASS", "");
@@ -58,8 +58,8 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
         undo(2);
-        play(GoPoint.get(5, 5), GoColor.WHITE);
-        play(GoPoint.get(4, 4), GoColor.BLACK);
+        play(GoColor.WHITE, 5, 5);
+        play(GoColor.BLACK, 4, 4);
         expect("undo", "");
         expect("undo", "");
         expect("play w F6", "");
@@ -78,13 +78,13 @@ public final class GtpSynchronizerTest
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoPoint.get(3, 4), GoColor.BLACK);
+        play(GoColor.BLACK, 3, 4);
         expect("play b D5", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoPoint.get(4, 4), GoColor.BLACK);
-        play(GoPoint.get(5, 5), GoColor.WHITE);
-        play(null, GoColor.BLACK);
+        play(GoColor.BLACK, 4, 4);
+        play(GoColor.WHITE, 5, 5);
+        play(GoColor.BLACK, null);
         expect("play w PASS", "");
         expect("play b E5", "");
         expect("play w F6", "");
@@ -96,8 +96,8 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
         undo(2);
-        play(GoPoint.get(5, 5), GoColor.WHITE);
-        play(GoPoint.get(4, 4), GoColor.BLACK);
+        play(GoColor.WHITE, 5, 5);
+        play(GoColor.BLACK, 4, 4);
         expect("undo", "");
         expect("undo", "");
         expect("undo", "");
@@ -150,7 +150,7 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
 
         // Playing a move should not trigger a re-transmission
-        play(GoPoint.get(5, 5), GoColor.WHITE);
+        play(GoColor.WHITE, 5, 5);
         expect("play w F6", "");
         synchronize();
         assertExpectQueueEmpty();
@@ -238,9 +238,14 @@ public final class GtpSynchronizerTest
         m_expect.expect(command, response);
     }
 
-    private void play(GoPoint point, GoColor color)
+    private void play(GoColor c, GoPoint p)
     {
-        m_board.play(point, color);
+        m_board.play(c, p);
+    }
+
+    private void play(GoColor c, int x, int y)
+    {
+        m_board.play(c, GoPoint.get(x, y));
     }
 
     private void synchronize() throws GtpError

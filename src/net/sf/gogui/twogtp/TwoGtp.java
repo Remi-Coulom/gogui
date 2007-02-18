@@ -448,7 +448,7 @@ public class TwoGtp
         checkInconsistentState();
         GoColor color = cmd.getColorArg(0);
         GoPoint point = cmd.getPointArg(1, m_size);
-        Move move = Move.get(point, color);
+        Move move = Move.get(color, point);
         m_game.play(move);
         synchronize();
     }
@@ -1014,7 +1014,7 @@ public class TwoGtp
                 throw new GtpError(name + " played invalid move: "
                                    + responseGenmove);
             }
-            Move move = Move.get(point, color);
+            Move move = Move.get(color, point);
             m_game.play(move);
             synchronizer.updateAfterGenmove(board);
             synchronize();

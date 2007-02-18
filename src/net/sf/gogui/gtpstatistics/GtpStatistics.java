@@ -249,7 +249,7 @@ public class GtpStatistics
             try
             {
                 GoPoint point = GoPoint.parsePoint(response, m_size); 
-                return Move.get(point, toMove) == move ? "1" : "0";
+                return Move.get(toMove, point) == move ? "1" : "0";
             }
             catch (GoPoint.InvalidPoint e)
             {

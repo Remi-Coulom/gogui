@@ -28,7 +28,7 @@ public final class TexWriterTest
         Board board = new Board(size);
         String[][] markLabel = new String[size][size];
         boolean[][] mark = new boolean[size][size];
-        board.play(GoPoint.get(0, 0), GoColor.BLACK);
+        board.play(GoColor.BLACK, GoPoint.get(0, 0));
         mark[0][0] = true;
         mark[0][1] = true;
         ByteArrayOutputStream out = new ByteArrayOutputStream();

@@ -6,29 +6,32 @@ package net.sf.gogui.go;
 
 /** Move.
     Contains a point (null for pass move) and a color.
-    The color is usually black or white, but empty can be used for
-    removing a stone on the board.
+    The color is black or white
+    (empty can still be used for removing a stone on the board, but this will
+    be deprecated in the future)
     This class is immutable, references are unique.
 */
 public final class Move
 {
     /** Factory method for constructing a move.
+        @param color The color of the move (empty for stone removal)
         @param x Column in [0..GoPoint.MAXSIZE - 1]
         @param y Row in [0..GoPoint.MAXSIZE - 1]
-        @param color The color of the move (empty for stone removal)
         @return Reference to this move
     */
-    public static Move get(int x, int y, GoColor color)
+    public static Move get(GoColor color, int x, int y)
     {
-        return get(GoPoint.get(x, y), color);
+        return get(color, GoPoint.get(x, y));
     }
 
     /** Factory method for constructing a move.
+        @param color The color of the move (empty can still be used for
+        removing a stone on the board, but this will be deprecated in the
+        future)
         @param point Location of the move (null for pass move)
-        @param color The color of the move (empty for stone removal)
         @return Reference to this move
     */
-    public static Move get(GoPoint point, GoColor color)
+    public static Move get(GoColor color, GoPoint point)
     {
         if (point == null)
         {
@@ -48,12 +51,13 @@ public final class Move
     }
     
     /** Factory method for constructing a pass move.
-        @param color The color of the move (empty for stone removal)
+        @param color The color of the move.
         @return Reference to this move
     */
-    public static Move getPass(GoColor color)
+    public static Move getPass(GoColor c)
     {
-        return get(null, color);
+        assert(c.isBlackWhite());
+        return get(c, null);
     }
 
     /** Get color of move.
@@ -98,8 +102,8 @@ public final class Move
 
     static
     {
-        s_passBlack = new Move(null, GoColor.BLACK);
-        s_passWhite = new Move(null, GoColor.WHITE);
+        s_passBlack = new Move(GoColor.BLACK, null);
+        s_passWhite = new Move(GoColor.WHITE, null);
         s_movesBlack = init(GoColor.BLACK);
         s_movesWhite = init(GoColor.WHITE);
         s_movesEmpty = init(GoColor.EMPTY);
@@ -110,11 +114,11 @@ public final class Move
         Move[][] result = new Move[GoPoint.MAXSIZE][GoPoint.MAXSIZE];
         for (int x = 0; x < GoPoint.MAXSIZE; ++x)
             for (int y = 0; y < GoPoint.MAXSIZE; ++y)
-                result[x][y] = new Move(GoPoint.get(x, y), color);
+                result[x][y] = new Move(color, GoPoint.get(x, y));
         return result;
     }
 
-    private Move(GoPoint point, GoColor color)
+    private Move(GoColor color, GoPoint point)
     {
         m_point = point;
         m_color = color;

@@ -752,7 +752,7 @@ public final class SgfReader
             }
             else if (p == "B")
             {
-                node.setMove(Move.get(parsePoint(v), GoColor.BLACK));
+                node.setMove(Move.get(GoColor.BLACK, parsePoint(v)));
             }
             else if (p == "BL")
             {
@@ -917,7 +917,7 @@ public final class SgfReader
             else if (p == "TR")
                 parseMarked(node, MarkType.TRIANGLE);
             else if (p == "W")
-                node.setMove(Move.get(parsePoint(v), GoColor.WHITE));
+                node.setMove(Move.get(GoColor.WHITE, parsePoint(v)));
             else if (p == "TW")
                 parseMarked(node, MarkType.TERRITORY_WHITE);
             else if (p == "V")

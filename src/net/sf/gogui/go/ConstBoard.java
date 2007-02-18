@@ -39,7 +39,7 @@ public interface ConstBoard
 
     GoColor getToMove();
 
-    boolean isCaptureOrSuicide(GoPoint point, GoColor toMove);
+    boolean isCaptureOrSuicide(GoColor c, GoPoint p);
 
     boolean isHandicap(GoPoint point);
 
@@ -47,6 +47,6 @@ public interface ConstBoard
 
     boolean isModified();
 
-    boolean isSuicide(GoPoint point, GoColor toMove);
+    boolean isSuicide(GoColor c, GoPoint p);
 }
 

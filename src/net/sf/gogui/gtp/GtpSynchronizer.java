@@ -221,14 +221,14 @@ public class GtpSynchronizer
                     for (int j = 0; j < stones.size(); ++j)
                     {
                         GoPoint p = stones.get(j);
-                        if (tempBoard.isCaptureOrSuicide(p, c))
+                        if (tempBoard.isCaptureOrSuicide(c, p))
                         {
                             String message =
                                 "cannot transmit setup as " +
                                 "move if stones are captured";
                             throw new GtpError(message);
                         }
-                        action = new Board.Play(Move.get(p, c));
+                        action = new Board.Play(Move.get(c, p));
                         toExecuteAll.add(action);
                         tempBoard.doAction(action);
                     }

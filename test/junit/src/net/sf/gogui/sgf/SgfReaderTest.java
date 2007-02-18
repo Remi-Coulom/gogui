@@ -51,17 +51,17 @@ public final class SgfReaderTest
         Node node = tree.getRoot();
         assertNull(node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(16, 15, GoColor.BLACK), node.getMove());
+        assertEquals(Move.get(GoColor.BLACK, 16, 15), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(3, 3, GoColor.WHITE), node.getMove());
+        assertEquals(Move.get(GoColor.WHITE, 3, 3), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(2, 15, GoColor.BLACK), node.getMove());
+        assertEquals(Move.get(GoColor.BLACK, 2, 15), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(15, 3, GoColor.WHITE), node.getMove());
+        assertEquals(Move.get(GoColor.WHITE, 15, 3), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(16, 5, GoColor.BLACK), node.getMove());
+        assertEquals(Move.get(GoColor.BLACK, 16, 5), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(null, GoColor.WHITE), node.getMove());
+        assertEquals(Move.get(GoColor.WHITE, null), node.getMove());
         node = node.getChild();
         assertNull(node);
     }

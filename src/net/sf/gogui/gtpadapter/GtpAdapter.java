@@ -127,7 +127,7 @@ public class GtpAdapter
         if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
             return;
         GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
-        m_board.play(point, color);
+        m_board.play(color, point);
         m_synchronizer.updateAfterGenmove(m_board);
         cmd.setResponse(response);
     }
@@ -418,7 +418,7 @@ public class GtpAdapter
 
     private void play(GoColor color, GoPoint point) throws GtpError
     {
-        Move move = Move.get(point, color);
+        Move move = Move.get(color, point);
         m_board.play(move);
         synchronize();
     }

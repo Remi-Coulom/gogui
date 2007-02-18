@@ -532,11 +532,11 @@ public final class Board
         @return true, if a move on the given point by the given player would
         capture any opponent stones, or be a suicide move.
     */
-    public boolean isCaptureOrSuicide(GoPoint point, GoColor toMove)
+    public boolean isCaptureOrSuicide(GoColor c, GoPoint p)
     {
-        if (getColor(point) != GoColor.EMPTY)
+        if (getColor(p) != GoColor.EMPTY)
             return false;
-        play(point, toMove);
+        play(c, p);
         boolean result = (getKilled().size() > 0 || getSuicide().size() > 0);
         undo();
         return result;
@@ -572,15 +572,15 @@ public final class Board
 
     /** Check if a point would be a suicide move.
         @param point The point to check.
-        @param toMove The player color to check.
+        @param c The player color to check.
         @return true, if a move at the given point by the given player
         would be a suicide move.
     */
-    public boolean isSuicide(GoPoint point, GoColor toMove)
+    public boolean isSuicide(GoColor c, GoPoint p)
     {
-        if (getColor(point) != GoColor.EMPTY)
+        if (getColor(p) != GoColor.EMPTY)
             return false;
-        play(point, toMove);
+        play(c, p);
         boolean result = (getSuicide().size() > 0);
         undo();
         return result;
@@ -604,13 +604,13 @@ public final class Board
     }
 
     /** Play a move.
-        @param point The location of the move.
         @param color The player who played the move.
+        @param point The location of the move.
         @see #play(Move)
     */
-    public void play(GoPoint point, GoColor color)
+    public void play(GoColor color, GoPoint point)
     {
-        play(Move.get(point, color));
+        play(Move.get(color, point));
     }
 
     /** Play a move.

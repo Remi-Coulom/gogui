@@ -179,19 +179,19 @@ public final class NodeUtil
             if (switchSetup)
             {
                 for (int i = 0; i < addWhite.size(); ++i)
-                    moves.add(Move.get(addWhite.get(i), GoColor.WHITE));
+                    moves.add(Move.get(GoColor.WHITE, addWhite.get(i)));
                 for (int i = 0; i < addBlack.size(); ++i)
-                    moves.add(Move.get(addBlack.get(i), GoColor.BLACK));
+                    moves.add(Move.get(GoColor.BLACK, addBlack.get(i)));
             }
             else
             {
                 for (int i = 0; i < addBlack.size(); ++i)
-                    moves.add(Move.get(addBlack.get(i), GoColor.BLACK));
+                    moves.add(Move.get(GoColor.BLACK, addBlack.get(i)));
                 for (int i = 0; i < addWhite.size(); ++i)
-                    moves.add(Move.get(addWhite.get(i), GoColor.WHITE));
+                    moves.add(Move.get(GoColor.WHITE, addWhite.get(i)));
             }
             for (int i = 0; i < addEmpty.size(); ++i)
-                moves.add(Move.get(addEmpty.get(i), GoColor.EMPTY));
+                moves.add(Move.get(GoColor.EMPTY, addEmpty.get(i)));
         }
         if (move != null)
             moves.add(move);

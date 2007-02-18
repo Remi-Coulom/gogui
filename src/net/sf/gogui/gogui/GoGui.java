@@ -1680,7 +1680,7 @@ public class GoGui
             m_guiBoard.contextMenu(p);
         else
         {
-            if (getBoard().isSuicide(p, getToMove())
+            if (getBoard().isSuicide(getToMove(), p)
                 && ! showQuestion("Play suicide?",
                                   "Playing at this point will leave the " +
                                   "stone without liberties and it will be " +
@@ -1695,7 +1695,7 @@ public class GoGui
                                   "the color to play.",
                                   "Play Illegal Ko", false))
                 return;
-            Move move = Move.get(p, getToMove());
+            Move move = Move.get(getToMove(), p);
             humanMoved(move);
         }
     }
@@ -2536,7 +2536,7 @@ public class GoGui
                         m_computerWhite = false;
                     }
                 }
-                Move move = Move.get(point, toMove);
+                Move move = Move.get(toMove, point);
                 m_game.play(move);
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
