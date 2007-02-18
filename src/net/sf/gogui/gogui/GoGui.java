@@ -2208,6 +2208,7 @@ public class GoGui
             };
         try
         {
+            showStatusImmediately("Attaching program...");
             GtpClient gtp =
                 new GtpClient(m_programCommand, m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
@@ -2215,46 +2216,50 @@ public class GoGui
             m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback);
             m_gtp.start();
             m_gtp.queryName();
+            m_gtp.queryProtocolVersion();
+            try
+            {
+                m_version = m_gtp.queryVersion();
+                m_shell.setProgramVersion(m_version);
+                m_gtp.querySupportedCommands();
+                m_gtp.queryInterruptSupport();
+            }
+            catch (GtpError e)
+            {
+            }        
+            if (m_program != null
+                && m_program.updateInfo(getProgramName(), m_version))
+            {
+                Program.save(m_programs);
+                m_menuBar.setPrograms(m_programs);
+            }
+            m_programCommandAnalyzeCommands = m_gtp.getAnalyzeCommands();
+            restoreSize(m_shell, "shell");
+            m_shell.setProgramName(getProgramName());
+            ArrayList supportedCommands =
+                m_gtp.getSupportedCommands();
+            m_shell.setInitialCompletions(supportedCommands);
+            if (! m_gtpFile.equals(""))
+                sendGtpFile(new File(m_gtpFile));
+            if (! m_gtpCommand.equals(""))
+                sendGtpString(m_gtpCommand);
+            if (! m_gtp.isGenmoveSupported())
+            {
+                m_computerBlack = false;
+                m_computerWhite = false;
+            }
+            initGtp();
+            setTitle();
         }
         catch (GtpError e)
         {
             showError(e);
             return false;
         }
-        m_gtp.queryProtocolVersion();
-        try
+        finally
         {
-            m_version = m_gtp.queryVersion();
-            m_shell.setProgramVersion(m_version);
-            m_gtp.querySupportedCommands();
-            m_gtp.queryInterruptSupport();
+            clearStatus();
         }
-        catch (GtpError e)
-        {
-        }        
-        if (m_program != null
-            && m_program.updateInfo(getProgramName(), m_version))
-        {
-            Program.save(m_programs);
-            m_menuBar.setPrograms(m_programs);
-        }
-        m_programCommandAnalyzeCommands = m_gtp.getAnalyzeCommands();
-        restoreSize(m_shell, "shell");
-        m_shell.setProgramName(getProgramName());
-        ArrayList supportedCommands =
-            m_gtp.getSupportedCommands();
-        m_shell.setInitialCompletions(supportedCommands);
-        if (! m_gtpFile.equals(""))
-            sendGtpFile(new File(m_gtpFile));
-        if (! m_gtpCommand.equals(""))
-            sendGtpString(m_gtpCommand);
-        if (! m_gtp.isGenmoveSupported())
-        {
-            m_computerBlack = false;
-            m_computerWhite = false;
-        }
-        initGtp();
-        setTitle();
         currentNodeChanged();
         return true;
     }    
@@ -2695,6 +2700,8 @@ public class GoGui
 
     private void detachProgram()
     {
+        if (m_gtp != null)            
+            showStatusImmediately("Detaching " + getProgramName() + "...");
         if (isCommandInProgress())
         {
             m_gtp.destroyGtp();
@@ -3779,6 +3786,11 @@ public class GoGui
     private void showStatus(String text)
     {
         m_statusBar.setText(text);
+    }
+
+    private void showStatusImmediately(String text)
+    {
+        m_statusBar.immediatelyPaintText(text);
     }
 
     private void showStatusSelectPointList()

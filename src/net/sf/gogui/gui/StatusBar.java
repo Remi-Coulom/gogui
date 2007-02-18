@@ -98,6 +98,13 @@ public class StatusBar
         GuiUtil.paintImmediately(m_moveTextSeparator);
     }
 
+    public void immediatelyPaintText(String text)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        setText(text);
+        GuiUtil.paintImmediately(m_text);
+    }
+
     /** Set text with move information.
         This text is displayed right and contains e.g. information about
         the last move, current move number etc.
@@ -105,7 +112,7 @@ public class StatusBar
     public void setMoveText(String text, String toolTip)
     {
         if (text.length() > 18)
-            text = text.substring(0, 18) + " ...";
+            text = text.substring(0, 18) + "...";
         m_moveText.setText(text);
         m_moveText.setToolTipText(toolTip);
     }
