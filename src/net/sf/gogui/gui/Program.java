@@ -79,37 +79,38 @@ public final class Program
         String label = m_name;
         if (StringUtil.isEmpty(label))
             label = "Unknown Program";
+        String tryLabel = label;
         boolean alreadyExists = false;
         for (int i = 0; i < programs.size(); ++i)
-            if (label.equals(((Program)programs.get(i)).m_label))
+            if (tryLabel.equals(((Program)programs.get(i)).m_label))
             {
                 alreadyExists = true;
                 break;
             }
         if (! alreadyExists)
         {
-            m_label = label;
+            m_label = tryLabel;
             return;
         }
-        if (StringUtil.isEmpty(m_version))
-            label = label + " " + m_version.trim();
-        alreadyExists = false;
-        for (int i = 0; i < programs.size(); ++i)
-            if (label.equals(((Program)programs.get(i)).m_label))
+        if (! StringUtil.isEmpty(m_version))
+        {
+            tryLabel = label + " " + m_version.trim();
+            alreadyExists = false;
+            for (int i = 0; i < programs.size(); ++i)
+                if (tryLabel.equals(((Program)programs.get(i)).m_label))
+                {
+                    alreadyExists = true;
+                    break;
+                }
+            if (! alreadyExists)
             {
-                alreadyExists = true;
-                break;
+                m_label = tryLabel;
+                return;
             }
-        if (! alreadyExists)
-        {
-            m_label = label;
-            return;
         }
-        for (int i = 1; ; ++i)
+        for (int i = 2; ; ++i)
         {
-            String tryLabel = label;
-            if (i > 1)
-                tryLabel = tryLabel + " (" + i + ")";
+            tryLabel = label + " (" + i + ")";
             alreadyExists = false;
             for (int j = 0; j < programs.size(); ++j)
                 if (tryLabel.equals(((Program)programs.get(j)).m_label))
@@ -119,7 +120,7 @@ public final class Program
                 }
             if (! alreadyExists)
             {
-                m_label = label;
+                m_label = tryLabel;
                 return;
             }
         }
