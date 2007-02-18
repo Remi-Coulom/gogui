@@ -6,6 +6,7 @@ package net.sf.gogui.gogui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -13,12 +14,17 @@ import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.net.MalformedURLException;
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -92,6 +98,13 @@ public final class Main
     {
     }
 
+    private static void addFiller(JComponent component)
+    {
+        Box.Filler filler = GuiUtil.createFiller();
+        filler.setAlignmentX(Component.LEFT_ALIGNMENT);
+        component.add(filler);
+    }
+
     private static void startGoGui(final GoGuiSettings settings)
         throws GtpError, ErrorMessage
     {
@@ -142,16 +155,31 @@ public final class Main
             return;
         }
         JPanel panel = new JPanel(new BorderLayout());
-        JEditorPane editorPane = new JEditorPane();
-        editorPane.setBorder(GuiUtil.createEmptyBorder());        
-        editorPane.setEditable(false);
-        if (Platform.isMac())
-        {
-            Color color = UIManager.getColor("Label.background");
-            if (color != null)
-                editorPane.setBackground(color);
-        }
-        JScrollPane scrollPane = new JScrollPane(editorPane);
+        Box box = Box.createVerticalBox();
+        panel.add(box, BorderLayout.NORTH);
+        String mainText =
+            "<html><b>The application GoGui has quit unexpectedly</b></html>";
+        JLabel label = new JLabel(mainText);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        box.add(label);
+        addFiller(box);
+        JTextArea optionalMessageArea = new JTextArea();
+        box.add(optionalMessageArea);
+        optionalMessageArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+        optionalMessageArea.setForeground(UIManager.getColor("Label.foreground"));
+        optionalMessageArea.setBackground(UIManager.getColor("Label.background"));
+        optionalMessageArea.setFont(UIManager.getFont("Label.font"));
+        String optionalMessage =
+            "Please take a moment to submit a bug report at the GoGui bug tracker and include\n" +
+            "a short summary of the problem together with the following information:";
+        optionalMessageArea.setText(optionalMessage);
+        box.add(GuiUtil.createSmallFiller());
+        JTextArea textArea = new JTextArea();
+        textArea.setForeground(Color.black);
+        textArea.setBackground(Color.white);
+        textArea.setBorder(GuiUtil.createEmptyBorder());        
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
         panel.add(scrollPane, BorderLayout.CENTER);
         JButton copyButton = new JButton("Copy Information");
         final String goguiVersion = "GoGui version: " + Version.get();
@@ -171,34 +199,31 @@ public final class Main
                                             stackTrace);
                 }
             });
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.add(copyButton);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        scrollPane.setPreferredSize(new Dimension(600, 400));
-        EditorKit editorKit =
-            JEditorPane.createEditorKitForContentType("text/html");
-        editorPane.setEditorKit(editorKit);
-        String text =
-            "<p><b>The application GoGui has quit unexpectedly</b></p>" +
-            "<p>Please take a moment to submit a bug report at the " +
-            "<a href=\"http://sf.net/tracker/?group_id=59117&atid=489964\">" +
-            "GoGui bug tracker</a> at and include a short description of " +
-            " the problem together with the following information:</p>" +
-            "<p>" + goguiVersion + "<br>" + javaVersion + "<br>" +
-            osVersion + "</p>" + "<pre>" + stackTrace + "</pre>";
-        editorPane.setText(text);
-        editorPane.addHyperlinkListener(new HyperlinkListener() {
-                public void hyperlinkUpdate(HyperlinkEvent event) {
-                    HyperlinkEvent.EventType type = event.getEventType();
-                    if (type == HyperlinkEvent.EventType.ACTIVATED)
+
+        JButton urlButton = new JButton("Go to Bug Tracker");
+        urlButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try
                     {
-                        URL url = event.getURL();
+                        URL url =
+                            new URL("http://sf.net/tracker/?group_id=59117&atid=489964");
                         if (! Platform.openInExternalBrowser(url))
-                            showError("Could not open URL in external "
-                                      + "browser", "");
+                            showError("Could not open URL in external browser",
+                                      "");
+                    }
+                    catch (MalformedURLException e2)
+                    {
                     }
                 }
             });
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(urlButton);
+        buttonPanel.add(copyButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        scrollPane.setPreferredSize(new Dimension(512, 256));
+        String text = goguiVersion + "\n" + javaVersion + "\n" + osVersion
+            + "\n\n" + stackTrace;
+        textArea.setText(text);
         Object[] options = { "Close" };
         JOptionPane optionPane =
             new JOptionPane(panel, JOptionPane.ERROR_MESSAGE,
