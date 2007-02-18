@@ -3688,10 +3688,10 @@ public class GoGui
             mainMessage = "Command failed";
             optionalMessage = formatCommand(e.getCommand());
             optionalMessage = optionalMessage + " sent to " + name
-                + " failed.\n";
+                + " failed.";
             if (! e.getMessage().trim().equals(""))
             {
-                optionalMessage = optionalMessage + "\nThe response was \""
+                optionalMessage = optionalMessage + " The response was \""
                     + e.getMessage() + "\"";
                 if (! e.getMessage().endsWith("."))
                     optionalMessage = optionalMessage + ".";
