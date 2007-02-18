@@ -809,9 +809,6 @@ public class GoGuiActions
         boolean isCommandInProgress = m_goGui.isCommandInProgress();
         boolean isProgramAttached = m_goGui.isProgramAttached();
         boolean isInterruptSupported = m_goGui.isInterruptSupported();
-        boolean isAnalyzeDialogShown = m_goGui.isAnalyzeDialogShown();
-        boolean isShellShown = m_goGui.isShellShown();
-        boolean isTreeShown = m_goGui.isTreeShown();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
         boolean hasPattern = (m_goGui.getPattern() != null);
