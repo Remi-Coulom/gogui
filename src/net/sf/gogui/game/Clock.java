@@ -186,6 +186,11 @@ public final class Clock
         m_listener = listener;
     }
 
+    /** Set time settings.
+        Changing the time settings does not change the current state of the
+        clock. The time settings are only used when the clock is reset or
+        the next byoyomi period is initialized.
+    */
     public void setTimeSettings(TimeSettings settings)
     {
         m_timeSettings = settings;

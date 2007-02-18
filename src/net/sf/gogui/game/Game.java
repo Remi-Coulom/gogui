@@ -98,6 +98,11 @@ public class Game
         return NodeUtil.getMoveNumber(getCurrentNode());
     }
 
+    public ConstNode getRoot()
+    {
+        return m_tree.getRoot();
+    }
+
     public int getSize()
     {
         return m_board.getSize();
@@ -132,6 +137,7 @@ public class Game
         m_tree = new GameTree(boardSize, komi, handicap, rules, timeSettings);
         m_current = m_tree.getRoot();
         updateBoard();
+        updateClock();
         m_clock.reset();
         m_clock.halt();
         m_modified = false;
@@ -142,6 +148,7 @@ public class Game
         m_tree = tree;
         m_current = m_tree.getRoot();
         updateBoard();
+        updateClock();
         m_clock.reset();
         m_clock.halt();
         m_modified = false;
@@ -249,8 +256,9 @@ public class Game
         if (! ((Node)node).getGameInformation().equals(info))
         {
             ((Node)node).getGameInformation().copyFrom(info);
+            updateClock();
             m_modified = true;
-        }
+        }        
     }
 
     public void setKomi(Komi komi)
@@ -292,12 +300,6 @@ public class Game
                       || color.equals(m_board.getToMove()));
         m_current.setPlayer(color);
         updateBoard();
-    }
-
-    public void setTimeSettings(TimeSettings timeSettings)
-    {
-        // TODO: update game information in root node?
-        m_clock.setTimeSettings(timeSettings);
     }
 
     public void setup(GoPoint p, GoColor c)
@@ -360,13 +362,16 @@ public class Game
 
     private final Clock m_clock;
 
-    private ConstNode getRoot()
-    {
-        return m_tree.getRoot();
-    }
-
     private void updateBoard()
     {
         m_boardUpdater.update(m_tree, m_current, m_board);
+    }
+
+    private void updateClock()
+    {
+        ConstNode node = getGameInformationNode();
+        ConstGameInformation info = node.getGameInformationConst();
+        if (info != null)
+            m_clock.setTimeSettings(info.getTimeSettings());
     }
 }
