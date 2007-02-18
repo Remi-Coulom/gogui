@@ -1827,7 +1827,9 @@ public class GoGui
                     "net.sf.gogui.gogui.GoGui.invalid-empty-response";
                 String optionalMessage =
                     "Empty lines before the response are not allowed" +
-                    " by the GTP standard. This error can probably be" +
+                    " by the GTP standard. This error can also occur if the" +
+                    " program ended the last response with three newlines" +
+                    " instead of two. This error can probably be" +
                     " ignored, but could indicate a more serious problem" +
                     " with the Go program. You should inform the author of " +
                     name + ".";
