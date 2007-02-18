@@ -948,8 +948,7 @@ public class GoGuiActions
             tempClock.setTimeSettings(clock.getTimeSettings());
             NodeUtil.restoreClock(node, tempClock);
             StringBuffer buffer = new StringBuffer();
-            buffer.append("Restore clock");
-            buffer.append(" (B ");
+            buffer.append("Restore saved time (B ");
             buffer.append(tempClock.getTimeString(GoColor.BLACK));
             buffer.append(", W ");
             buffer.append(tempClock.getTimeString(GoColor.WHITE));
@@ -962,15 +961,21 @@ public class GoGuiActions
 
     private void updateActionClockResume(ConstClock clock)
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("Resume clock");
-        buffer.append(" (B ");
-        buffer.append(clock.getTimeString(GoColor.BLACK));
-        buffer.append(", W ");
-        buffer.append(clock.getTimeString(GoColor.WHITE));
-        buffer.append(")");
-        m_actionClockResume.setEnabled(! clock.isRunning());
-        m_actionClockResume.setDescription(buffer.toString());
+        boolean enabled = false;
+        String desc = null;
+        if (! clock.isRunning())
+        {
+            enabled = true;
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Start or resume clock (B ");
+            buffer.append(clock.getTimeString(GoColor.BLACK));
+            buffer.append(", W ");
+            buffer.append(clock.getTimeString(GoColor.WHITE));
+            buffer.append(")");
+            desc = buffer.toString();
+        }
+        m_actionClockResume.setEnabled(enabled);
+        m_actionClockResume.setDescription(desc);
     }
 
     private void updateActionDetachProgram(boolean isProgramAttached,
