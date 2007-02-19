@@ -2728,7 +2728,7 @@ public class GoGui
     private void detachProgram()
     {
         if (m_gtp != null)            
-            showStatusImmediately("Detaching " + getProgramName() + "...");
+            showStatusImmediately("Detaching program...");
         if (isCommandInProgress())
         {
             m_gtp.destroyGtp();
