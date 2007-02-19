@@ -17,6 +17,7 @@
 <cmdsynopsis>
 <command>gogui</command>
 <arg><option>-analyze</option> <replaceable>command</replaceable></arg>
+<arg><option>-analyze-commands</option> <replaceable>file</replaceable></arg>
 <arg><option>-auto</option></arg>
 <group choice="opt">
 <arg choice="plain"><option>-computer-black</option></arg>
@@ -72,6 +73,17 @@ and use GTP (Go Text Protocol).
 Initialize analyze command and automatically run it after
 changes on the board.
 Works only for commands not containing wildcards.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-analyze-commands</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Use file to read analyze command configuration.
 </para>
 </listitem>
 </varlistentry>

@@ -62,7 +62,7 @@ public final class AnalyzeDialog
     }
 
     public AnalyzeDialog(Frame owner, Listener listener,
-                         ArrayList supportedCommands,
+                         ArrayList supportedCommands, File analyzeCommands,
                          String programAnalyzeCommands, GuiGtpClient gtp,
                          MessageDialogs messageDialogs)
     {
@@ -73,7 +73,7 @@ public final class AnalyzeDialog
         m_programAnalyzeCommands = programAnalyzeCommands;
         m_listener = listener;
         Container contentPane = getContentPane();
-        JPanel commandPanel = createCommandPanel();
+        JPanel commandPanel = createCommandPanel(analyzeCommands);
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
         //int minWidth = commandPanel.getPreferredSize().width;
@@ -289,7 +289,7 @@ public final class AnalyzeDialog
         return m_colorBox;
     }
 
-    private JPanel createCommandPanel()
+    private JPanel createCommandPanel(File analyzeCommands)
     {
         JPanel panel = new JPanel(new BorderLayout());
         m_list = new JList();
@@ -319,7 +319,18 @@ public final class AnalyzeDialog
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
-        reload();
+        try
+        {
+            AnalyzeCommand.read(m_commands, m_labels, m_supportedCommands,
+                                analyzeCommands, m_programAnalyzeCommands);
+            m_list.setListData(m_labels.toArray());
+            comboBoxChanged();
+        }
+        catch (Exception e)
+        {            
+            showError("Loading analyze configuration file failed",
+                      e.getMessage());
+        }
         loadRecent();
         return panel;
     }
@@ -405,23 +416,6 @@ public final class AnalyzeDialog
         if (index >= 0)
             selectCommand(index);
         m_firstIsTemp = false;
-    }
-
-    private void reload()
-    {
-        try
-        {
-            ArrayList supportedCommands = m_supportedCommands;
-            AnalyzeCommand.read(m_commands, m_labels, supportedCommands,
-                                m_programAnalyzeCommands);
-            m_list.setListData(m_labels.toArray());
-            comboBoxChanged();
-        }
-        catch (Exception e)
-        {            
-            showError("Loading analyze configuration file failed",
-                      e.getMessage());
-        }
     }
 
     private void runCommand()

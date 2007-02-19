@@ -19,15 +19,12 @@ result.
 </para>
 
 <para>
-The Go program can implement the GTP extension command
+It is recommended that the Go program implements the extension command
 <command>gogui-analyze_commands</command>, which allows GoGui to query
-program specific analyze commands from the program when a new program is
+what analyze commands are supported from the program when a new program is
 attached.
 Otherwise a default configuration is used that knows some standard GTP
 and GNU Go extension commands.
-Analyze commands can also be defined in the
-configuration file <filename>~/.gogui/analyze-commands</filename>
-in the user's home directory.
 </para>
 
 <para>

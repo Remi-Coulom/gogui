@@ -7,6 +7,7 @@ package net.sf.gogui.gui;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
@@ -36,7 +37,7 @@ public class ContextMenu
     }
 
     public ContextMenu(GoPoint point, boolean noProgram,
-                       ArrayList supportedCommands,
+                       ArrayList supportedCommands, File analyzeCommands,
                        String programAnalyzeCommands, boolean mark,
                        boolean markCircle, boolean markSquare,
                        boolean markTriangle, Listener listener)
@@ -50,7 +51,7 @@ public class ContextMenu
             try
             {
                 AnalyzeCommand.read(commands, labels, supportedCommands,
-                                    programAnalyzeCommands);
+                                    analyzeCommands, programAnalyzeCommands);
             }
             catch (ErrorMessage e)
             {

@@ -98,8 +98,8 @@ default commands is used.
 If gogui-analyze_commands is supported, only the response will be used to
 configure analyze commands, so that the Go engine has full control over what
 is shown in what order in the analyze dialog.
-Analyze command configuration files in the .gogui directory are still
-supported, but deprecated.
+Analyze command configuration files in the .gogui directory are no longer
+supported.
 </simpara>
 </listitem>
 <listitem>

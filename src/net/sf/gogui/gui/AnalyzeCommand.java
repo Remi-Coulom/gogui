@@ -145,7 +145,7 @@ public class AnalyzeCommand
         ArrayList labels = new ArrayList(128);
         try
         {
-            read(commands, labels, null, null);
+            read(commands, labels, null, null, null);
         }
         catch (Exception e)
         {            
@@ -310,50 +310,52 @@ public class AnalyzeCommand
     }
 
     public static void read(ArrayList commands, ArrayList labels,
-                            ArrayList supportedCommands,
+                            ArrayList supportedCommands, File analyzeCommands,
                             String programAnalyzeCommands)
         throws ErrorMessage
     {
         commands.clear();
         labels.clear();
-        if (programAnalyzeCommands != null)
+        if (analyzeCommands != null)
+        {
+            try
+            {
+                Reader fileReader = new FileReader(analyzeCommands);
+                BufferedReader reader = new BufferedReader(fileReader);
+                readConfig(reader, analyzeCommands.getName(), commands, labels,
+                           null);
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new ErrorMessage("File \"" + analyzeCommands
+                                       + "\" not found");
+            }
+        }
+        else if (programAnalyzeCommands != null)
         {
             Reader stringReader = new StringReader(programAnalyzeCommands);
             BufferedReader reader = new BufferedReader(stringReader);
             readConfig(reader, "program response to gogui-analyze_commands",
-                       commands, labels, supportedCommands);
+                       commands, labels, null);
             return;
         }
-        String resource = "net/sf/gogui/gui/analyze-commands";
-        URL url = ClassLoader.getSystemClassLoader().getResource(resource);
-        if (url == null)
-            return;
-        try
+        else
         {
-            InputStream inputStream = url.openStream();
-            Reader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader reader = new BufferedReader(inputStreamReader);
-            readConfig(reader, "builtin default commands", commands, labels,
-                       supportedCommands);
-        }
-        catch (IOException e)
-        {
-            throw new ErrorMessage(e.getMessage());
-        }
-        ArrayList files = getFiles();
-        for (int i = 0; i < files.size(); ++i)
-        {
-            File file = (File)files.get(i);
+            String resource = "net/sf/gogui/gui/analyze-commands";
+            URL url = ClassLoader.getSystemClassLoader().getResource(resource);
+            if (url == null)
+                return;
             try
             {
-                Reader fileReader = new FileReader(file);
-                BufferedReader reader = new BufferedReader(fileReader);
-                readConfig(reader, file.getName(), commands, labels,
-                           supportedCommands);
+                InputStream inputStream = url.openStream();
+                Reader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader reader = new BufferedReader(inputStreamReader);
+                readConfig(reader, "builtin default commands", commands,
+                           labels, supportedCommands);
             }
-            catch (FileNotFoundException e)
+            catch (IOException e)
             {
-                throw new ErrorMessage("File " + file + " not found");
+                throw new ErrorMessage(e.getMessage());
             }
         }
     }
@@ -481,28 +483,6 @@ public class AnalyzeCommand
     private GoPoint m_pointArg;
 
     private PointList m_pointListArg = new PointList();
-
-    private static File getDir()
-    {
-        String home = System.getProperty("user.home");
-        return new File(home, ".gogui");
-    }
-
-    private static ArrayList getFiles()
-    {
-        ArrayList result = new ArrayList();
-        File[] files = getDir().listFiles();
-        if (files == null)
-            return result;
-        String s = new File(getDir(), "analyze-commands").toString();
-        for (int i = 0; i < files.length; ++i)
-        {
-            File f = files[i];
-            if (f.toString().startsWith(s) && ! f.toString().endsWith("~"))
-                result.add(f);
-        }
-        return result;
-    }
 
     private static void readConfig(BufferedReader reader, String name,
                                    ArrayList commands, ArrayList labels,

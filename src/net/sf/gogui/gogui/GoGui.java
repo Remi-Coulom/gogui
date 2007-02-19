@@ -120,7 +120,8 @@ public class GoGui
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
-                 String gtpFile, String gtpCommand, String initAnalyze)
+                 String gtpFile, String gtpCommand, String initAnalyze,
+                 File analyzeCommands)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -128,6 +129,7 @@ public class GoGui
         m_file = file;
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
+        m_analyzeCommands = analyzeCommands;
         m_move = move;
         if (initComputerColor)
         {
@@ -2001,6 +2003,8 @@ public class GoGui
 
     private Pattern m_pattern;
 
+    private File m_analyzeCommands;
+
     private AnalyzeCommand m_analyzeCommand;
 
     private final Session m_session =
@@ -2612,6 +2616,7 @@ public class GoGui
     {
         m_analyzeDialog =
             new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
+                              m_analyzeCommands,
                               m_programCommandAnalyzeCommands, m_gtp,
                               m_messageDialogs);
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
@@ -2632,6 +2637,7 @@ public class GoGui
         if (! noProgram)
             supportedCommands = m_gtp.getSupportedCommands();
         return new ContextMenu(point, noProgram, supportedCommands,
+                               m_analyzeCommands,
                                m_programCommandAnalyzeCommands,
                                m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),

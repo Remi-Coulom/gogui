@@ -39,6 +39,8 @@ public final class GoGuiSettings
 
     public File m_file;
 
+    public File m_analyzeCommands;
+
     public String m_gtpCommand;
 
     public String m_gtpFile;
@@ -57,6 +59,7 @@ public final class GoGuiSettings
     {
         String options[] = {
             "analyze:",
+            "analyze-commands:",
             "auto",
             "command:",
             "computer-black",
@@ -91,6 +94,9 @@ public final class GoGuiSettings
         }
         m_prefs = Preferences.userNodeForPackage(c);
         m_initAnalyze = opt.get("analyze");
+        String analyzeCommandsFilename = opt.get("analyze-commands", null);
+        if (analyzeCommandsFilename != null)
+            m_analyzeCommands = new File(analyzeCommandsFilename);
         m_auto = opt.contains("auto");
         m_initComputerColor = false;
         if (opt.contains("computer-none"))
