@@ -3076,7 +3076,11 @@ public class GoGui
         getLayeredPane().setVisible(false);
         setVisible(true);
         if (m_programCommand != null)
+        {
             attachProgram(m_programCommand, m_program);
+            if (m_gtp == null || m_gtp.isProgramDead())
+                m_prefs.putInt("program", -1);
+        }
         setTitle();
         registerSpecialMacHandler();
         // Children dialogs should be set visible after main window, otherwise
