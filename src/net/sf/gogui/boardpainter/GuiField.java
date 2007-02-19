@@ -313,8 +313,6 @@ public class GuiField
 
     private RadialGradientPaint m_paintWhite;
 
-    private final Color m_gridColor = new Color(80, 80, 80);
-
     private void drawCircle(Color color)
     {
         m_graphics.setColor(color);
@@ -423,7 +421,7 @@ public class GuiField
                                     null);
             boardGraphics.setClip(boardClip.x, boardClip.y,
                                   boardClip.width, boardClip.height);
-            m_graphics.setColor(m_gridColor);
+            m_graphics.setColor(Color.black);
         }
         m_graphics.drawString(m_label, x, y);
         m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
