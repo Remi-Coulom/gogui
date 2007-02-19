@@ -346,13 +346,12 @@ public class GoGui
         actionBackward(NodeUtil.getDepth(getCurrentNode()));
     }
 
-    public void actionBoardSize(int boardSize)
+    public void actionBoardSize(int size)
     {
         if (! checkCommandInProgress())
             return;
-        newGame(boardSize, false);
-        m_gameInfo.updateTimeFromClock(getClock());
-        m_prefs.putInt("boardsize", boardSize);
+        actionNewGame(size);
+        m_prefs.putInt("boardsize", size);
     }
 
     public void actionBoardSizeOther()
@@ -363,10 +362,7 @@ public class GoGui
                                         m_messageDialogs);
         if (size < 1 || size > GoPoint.MAXSIZE)
             return;
-        saveSession();
-        newGame(size, false);
-        m_prefs.putInt("boardsize", size);
-        m_gameInfo.updateTimeFromClock(getClock());
+        actionBoardSize(size);
     }
     
     public void actionClearAnalyzeCommand()
@@ -690,6 +686,7 @@ public class GoGui
             m_timeSettings = info.getTimeSettings();
         setTitle();
         updateViews(false);
+        m_gameInfo.updateTimeFromClock(getClock());
     }
 
     public void actionGoto()
@@ -887,9 +884,39 @@ public class GoGui
 
     public void actionNewGame()
     {
+        actionNewGame(getBoardSize());
+    }
+
+    private void actionNewGame(int size)
+    {
         if (! checkStateChangePossible())
             return;
-        newGame(getBoardSize(), true);
+        if (! checkSaveGame())
+            return;
+        setFile(null);
+        newGame(size);
+        m_gameInfo.updateTimeFromClock(getClock());
+        if (m_gtp != null && ! m_gtp.isGenmoveSupported())
+        {
+            m_computerBlack = false;
+            m_computerWhite = false;
+        }
+        else if (m_computerBlack || m_computerWhite)
+        {
+            // Set computer color to the color not to move to avoid automatic
+            // move generation after starting a new game
+            if (m_handicap == 0)
+            {
+                m_computerBlack = false;
+                m_computerWhite = true;
+            }
+            else
+            {
+                m_computerBlack = true;
+                m_computerWhite = false;
+            }
+        }
+        boardChangedBegin(true, true);
     }
 
     public void actionNewProgram()
@@ -3192,37 +3219,6 @@ public class GoGui
         setTitle();
         setTitleFromProgram();
         clearStatus();
-    }
-
-    private void newGame(int size, boolean startClock)
-    {
-        if (! checkSaveGame())
-            return;
-        setFile(null);
-        newGame(size);
-        if (m_gtp != null && ! m_gtp.isGenmoveSupported())
-        {
-            m_computerBlack = false;
-            m_computerWhite = false;
-        }
-        else if (m_computerBlack || m_computerWhite)
-        {
-            // Set computer color to the color not to move to avoid automatic
-            // move generation after starting a new game
-            if (m_handicap == 0)
-            {
-                m_computerBlack = false;
-                m_computerWhite = true;
-            }
-            else
-            {
-                m_computerBlack = true;
-                m_computerWhite = false;
-            }
-        }
-        if (startClock)
-            m_game.startClock();
-        boardChangedBegin(true, true);
     }
 
     private void newGameFile(int size, int move)
