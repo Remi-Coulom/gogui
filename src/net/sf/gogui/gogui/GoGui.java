@@ -3390,7 +3390,7 @@ public class GoGui
             m_shell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        if (! isVisible())
+        if (! isVisible()) // can that happen?
             return;
         if (m_help != null)
             m_session.saveSize(m_help, "help");
@@ -3405,7 +3405,8 @@ public class GoGui
         {            
             String name = "windows/main/size-" + getBoardSize() + "/fieldsize";
             int fieldSize = m_guiBoard.getFieldSize().width;
-            assert(fieldSize > 0);
+            if (fieldSize == 0) // BoardPainter was never invoked
+                return;
             m_prefs.putInt(name, fieldSize);
             name = "windows/main/size-" + getBoardSize() + "/comment/width";
             m_prefs.putInt(name, m_comment.getWidth());
