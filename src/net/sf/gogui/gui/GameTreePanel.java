@@ -29,7 +29,6 @@ import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
@@ -492,14 +491,9 @@ public class GameTreePanel
             m_iconWhite = GuiUtil.getIcon("gogui-white-24x24", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-24x24", "");
         }
-        Font font = UIManager.getFont("Label.font");
-        if (font != null)
-        {
-            Font derivedFont = font.deriveFont((float)(0.4 * m_nodeSize));
-            if (derivedFont != null)
-                font = derivedFont;
-        }
-        m_font = font;
+
+
+        m_font = new Font("Dialog", Font.PLAIN, (int)(0.4 * m_nodeSize));;
         m_preferredNodeSize = new Dimension(m_nodeFullSize, m_nodeFullSize);
     }
 
