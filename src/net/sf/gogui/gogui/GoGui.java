@@ -3106,7 +3106,9 @@ public class GoGui
                                    m_messageDialogs);
             if (analyzeCommand == null)
                 showError("Unknown analyze command \"" + m_initAnalyze
-                          + "\"", "");
+                          + "\"",
+                          "An analyze command with this label is not " +
+                          "supported by " + getProgramName() + ".");
             else
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
