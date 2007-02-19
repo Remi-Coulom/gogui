@@ -190,7 +190,7 @@ public class ProgramEditor
                                                         "GNU Go needs this " +
                                                         "option to startup " +
                                                         "in GTP mode.",
-                                                        "Append --mode gtp",
+                                                        "Append Option",
                                                         false))
                             text = text + " --mode gtp";
                     }
