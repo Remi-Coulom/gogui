@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.font.LineMetrics;
@@ -33,7 +34,8 @@ public class GuiField
         m_influence = 0;
     }
 
-    public void draw(Graphics graphics, int size, int x, int y)
+    public void draw(Graphics graphics, int size, int x, int y,
+                     Image boardImage, int boardWidth)
     {
         if (! graphics.hitClip(x, y, size, size))
             return;
@@ -51,6 +53,8 @@ public class GuiField
             drawStone(m_color, false);
         if (m_shadowStoneColor != null)
             drawStone(m_shadowStoneColor, true);
+        if (m_label != null && ! m_label.equals(""))
+            drawLabel(x, y, graphics, boardImage, boardWidth);
         if (m_territory != GoColor.EMPTY && m_graphics2D != null)
             drawTerritoryGraphics2D();
         if (m_influenceSet)
@@ -62,8 +66,6 @@ public class GuiField
             drawLastMoveMarker();
         if (m_select)
             drawSelect();
-        if (m_label != null && ! m_label.equals(""))
-            drawLabel();
         if (m_cursor)
             drawCursor();
         m_graphics = null;
@@ -282,8 +284,6 @@ public class GuiField
 
     private static final Color COLOR_INFLUENCE_WHITE = Color.white;
 
-    private static final Color COLOR_LABEL_EMPTY = Color.decode("#E0FFFF");
-
     private static final Color COLOR_LAST_MOVE
         = Color.decode("#888888");
 
@@ -312,6 +312,8 @@ public class GuiField
     private RadialGradientPaint m_paintBlack;
 
     private RadialGradientPaint m_paintWhite;
+
+    private final Color m_gridColor = new Color(80, 80, 80);
 
     private void drawCircle(Color color)
     {
@@ -381,7 +383,8 @@ public class GuiField
         m_graphics.fillRect(dd / 2, dd / 2, width, width);
     }
 
-    private void drawLabel()
+    private void drawLabel(int fieldX, int fieldY, Graphics boardGraphics,
+                           Image boardImage, int boardWidth)
     {
         setComposite(COMPOSITE_97);
         setFont(m_graphics, m_size);
@@ -389,35 +392,41 @@ public class GuiField
         LineMetrics lineMetrics =
             fontMetrics.getLineMetrics(m_label, m_graphics);
         int width = fontMetrics.stringWidth(m_label);
+        int height = fontMetrics.getHeight();
         int ascent = (int)lineMetrics.getAscent();
         int x = Math.max((m_size - width) / 2, 0);
         int y = (ascent + m_size) / 2;
         if (m_shadowStoneColor != null)
         {
-            if (m_shadowStoneColor == GoColor.WHITE)
-                m_graphics.setColor(Color.black);
-            else
+            if (m_shadowStoneColor == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
+            else
+                m_graphics.setColor(Color.black);
         }
         else
         {
-            if (m_color == GoColor.WHITE)
-                m_graphics.setColor(Color.black);
-            else if (m_color == GoColor.BLACK)
+            if (m_color == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
             else
-                m_graphics.setColor(COLOR_LABEL_EMPTY);
+                m_graphics.setColor(Color.black);
         }
-        Rectangle clip = null;
-        if (width > 0.95 * m_size)
+        Rectangle clip = m_graphics.getClipBounds();
+        width = Math.min(width, (int)(0.95 * m_size));
+        clip = m_graphics.getClipBounds();
+        m_graphics.setClip(x, y - ascent, width, height);
+        if (m_color == GoColor.EMPTY && m_shadowStoneColor == null)
         {
-            clip = m_graphics.getClipBounds();
-            m_graphics.setClip(clip.x, clip.y,
-                               (int)(0.95 * clip.width), clip.height);
+            Rectangle boardClip = boardGraphics.getClipBounds();
+            boardGraphics.setClip(fieldX + x, fieldY + y - ascent,
+                                  width, height);
+            boardGraphics.drawImage(boardImage, 0, 0, boardWidth, boardWidth,
+                                    null);
+            boardGraphics.setClip(boardClip.x, boardClip.y,
+                                  boardClip.width, boardClip.height);
+            m_graphics.setColor(m_gridColor);
         }
         m_graphics.drawString(m_label, x, y);
-        if (clip != null)
-            m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
+        m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
     }
 
     private void drawLastMoveMarker()
@@ -577,8 +586,14 @@ public class GuiField
             graphics.setFont(s_cachedFont);
             return;
         }
-        int fontSize = (int)(0.4f * fieldSize);
-        s_cachedFont = new Font("Dialog", Font.BOLD, fontSize);
+        int fontSize;
+        if (fieldSize < 29)
+            fontSize = (int)(0.45 * fieldSize);
+        else if (fieldSize < 40)
+            fontSize = 13;
+        else
+            fontSize = (int)(13 + 0.15 * (fieldSize - 40));
+        s_cachedFont = new Font("Dialog", Font.PLAIN, fontSize);
         s_cachedFontFieldSize = fieldSize;
         graphics.setFont(s_cachedFont);
     }

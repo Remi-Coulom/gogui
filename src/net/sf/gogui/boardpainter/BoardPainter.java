@@ -168,7 +168,7 @@ public class BoardPainter
             {
                 Point location = getLocation(x, y);
                 field[x][y].draw(graphics, m_fieldSize, location.x,
-                                 location.y);
+                                 location.y, m_image, m_width);
             }
         }
     }
@@ -323,7 +323,13 @@ public class BoardPainter
             graphics.setFont(s_cachedFont);
             return;
         }
-        int fontSize = (int)((double)fieldSize / 3);
+        int fontSize;
+        if (fieldSize < 29)
+            fontSize = (int)(0.33 * fieldSize);
+        else if (fieldSize < 40)
+            fontSize = 10;
+        else
+            fontSize = (int)(10 + 0.1 * (fieldSize - 40));
         s_cachedFont = new Font("SansSerif", Font.PLAIN, fontSize);
         s_cachedFontFieldSize = fieldSize;
         graphics.setFont(s_cachedFont);
