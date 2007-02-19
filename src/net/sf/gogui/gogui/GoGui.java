@@ -2035,7 +2035,7 @@ public class GoGui
 
     private ScoreDialog m_scoreDialog;
 
-    private String m_programCommandAnalyzeCommands;
+    private String m_programAnalyzeCommands;
 
     /** Program information.
         Can be null even if a program is attached, if only m_programName
@@ -2264,7 +2264,7 @@ public class GoGui
                 Program.save(m_programs);
                 m_menuBar.setPrograms(m_programs);
             }
-            m_programCommandAnalyzeCommands = m_gtp.getAnalyzeCommands();
+            m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
             restoreSize(m_shell, "shell");
             m_shell.setProgramName(getProgramName());
             ArrayList supportedCommands =
@@ -2617,7 +2617,7 @@ public class GoGui
         m_analyzeDialog =
             new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
                               m_analyzeCommands,
-                              m_programCommandAnalyzeCommands, m_gtp,
+                              m_programAnalyzeCommands, m_gtp,
                               m_messageDialogs);
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
@@ -2638,7 +2638,7 @@ public class GoGui
             supportedCommands = m_gtp.getSupportedCommands();
         return new ContextMenu(point, noProgram, supportedCommands,
                                m_analyzeCommands,
-                               m_programCommandAnalyzeCommands,
+                               m_programAnalyzeCommands,
                                m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),
                                m_guiBoard.getMarkSquare(point),
@@ -3100,7 +3100,10 @@ public class GoGui
         if (! m_initAnalyze.equals(""))
         {
             AnalyzeCommand analyzeCommand =
-                AnalyzeCommand.get(this, m_initAnalyze, m_messageDialogs);
+                AnalyzeCommand.get(this, m_initAnalyze,
+                                   m_gtp.getSupportedCommands(),
+                                   m_analyzeCommands, m_programAnalyzeCommands,
+                                   m_messageDialogs);
             if (analyzeCommand == null)
                 showError("Unknown analyze command \"" + m_initAnalyze
                           + "\"", "");
@@ -3112,7 +3115,10 @@ public class GoGui
         getLayeredPane().setVisible(true);
         unprotectGui();
         toFrontLater();
-        checkComputerMove();
+        if (! m_initAnalyze.equals(""))
+            analyzeBegin(true);
+        else
+            checkComputerMove();
     }
 
     private void initScore(ConstPointList deadStones)

@@ -139,13 +139,17 @@ public class AnalyzeCommand
     }
 
     public static AnalyzeCommand get(Frame owner, String label,
+                                     ArrayList supportedCommands,
+                                     File analyzeCommands,
+                                     String programAnalyzeCommands,
                                      MessageDialogs messageDialogs)
     {
         ArrayList commands = new ArrayList(128);
         ArrayList labels = new ArrayList(128);
         try
         {
-            read(commands, labels, null, null, null);
+            read(commands, labels, supportedCommands, analyzeCommands,
+                            programAnalyzeCommands);
         }
         catch (Exception e)
         {            
