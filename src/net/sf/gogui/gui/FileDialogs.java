@@ -231,6 +231,8 @@ public final class FileDialogs
             if (lastFile != null && lastFile.isFile() && lastFile.exists())
                 chooser.setSelectedFile(lastFile);
         }
+        if (title != null)
+            chooser.setDialogTitle(title);
         int ret;
         switch (type)
         {
@@ -241,8 +243,6 @@ public final class FileDialogs
             ret = chooser.showOpenDialog(parent);
             break;
         default:
-            if (title != null)
-                chooser.setDialogTitle(title);
             ret = chooser.showDialog(parent, "Select");
             break;
         }
