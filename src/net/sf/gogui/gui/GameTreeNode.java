@@ -62,21 +62,10 @@ class GameTreeNode
             graphics.fillRect(0, 0, size, size > 10 ? size : fullSize - 1);
         }
         graphics.setColor(COLOR_GRID);
-        if ((numberChildren > 1 &&
-             (isExpanded || ! m_gameTreePanel.getShowSubtreeSizes()))
-            || numberChildren == 1)
+        if (numberChildren > 0)
             graphics.drawLine(size, halfSize, fullSize, halfSize);
-        if (numberChildren > 1)
-        {
-            if (isExpanded)
-                graphics.drawLine(halfSize, size, halfSize, fullSize);
-            else
-            {
-                int d = size * 7 / 10;
-                graphics.drawLine(d, d, size, size);
-                graphics.drawLine(size, size, fullSize - size / 5, size);
-            }
-        }
+        if (numberChildren > 1 && isExpanded)
+            graphics.drawLine(halfSize, size, halfSize, fullSize);
         Move move = m_node.getMove();
         if (m_node.hasSetup())
             graphics.drawImage(m_imageSetup, 0, 0, null);

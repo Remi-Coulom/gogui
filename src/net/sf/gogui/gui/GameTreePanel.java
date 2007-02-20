@@ -81,12 +81,12 @@ public class GameTreePanel
                     if (event.getClickCount() == 2)
                     {
                         ConstNode node = gameNode.getNode();
-                        if (node.getNumberChildren() > 1)
+                        if (node.hasChildren())
                         {
-                            if (m_expanded.contains(node))
+                            if (isExpanded(node))
                                 hideSubtree(node);
                             else
-                                showVariations(node);
+                                showChildren(node);
                         }
                     }
                     else
@@ -195,7 +195,7 @@ public class GameTreePanel
 
     public boolean isExpanded(ConstNode node)
     {
-        return m_expanded.contains(node);
+        return m_isExpanded.contains(node);
     }
 
     public void paintComponent(Graphics graphics)
@@ -281,7 +281,6 @@ public class GameTreePanel
             assert(false);
             return;
         }
-        assert(! isExpanded(father));
         int moveNumber = NodeUtil.getMoveNumber(node);
         GameTreeNode gameNode = createNode(node, moveNumber);
         m_map.put(node, gameNode);
@@ -316,7 +315,7 @@ public class GameTreePanel
         m_minHeight = minHeight;
         boolean gameTreeChanged = (tree != m_tree);
         if (gameTreeChanged)
-            m_expanded.clear();
+            m_isExpanded.clear();
         ensureVisible(currentNode);
         m_tree = tree;
         m_currentNode = currentNode;
@@ -330,15 +329,13 @@ public class GameTreePanel
             createNodes(this, root, 0, 0, MARGIN, MARGIN, 0);
             if (gameTreeChanged)
             {
-                if (NodeUtil.subtreeGreaterThan(root, 10000))
-                    showVariations(root);
-                else
+                if (! NodeUtil.subtreeGreaterThan(root, 10000))
                     showSubtree(root);
             }
         }
         catch (OutOfMemoryError e)
         {
-            m_expanded.clear();
+            m_isExpanded.clear();
             removeAll();
             m_messageDialogs.showError(m_owner,
                                        "Could not show game tree", 
@@ -447,7 +444,7 @@ public class GameTreePanel
 
     private final HashMap m_map = new HashMap(500, 0.8f);
 
-    private final HashSet m_expanded = new HashSet(200);
+    private final HashSet m_isExpanded = new HashSet(200);
 
     private final MouseListener m_mouseListener;
 
@@ -504,7 +501,8 @@ public class GameTreePanel
     {
         return new GameTreeNode(node, moveNumber, this, m_mouseListener,
                                 m_font, m_iconBlack.getImage(),
-                                m_iconWhite.getImage(), m_iconSetup.getImage(),
+                                m_iconWhite.getImage(),
+                                m_iconSetup.getImage(),
                                 m_preferredNodeSize);
     }
 
@@ -522,37 +520,37 @@ public class GameTreePanel
         int numberChildren = node.getNumberChildren();
         dx = m_nodeFullSize;
         dy = 0;
-        int maxChildren = numberChildren;
-        boolean notExpanded =
-            (numberChildren > 1 && ! m_expanded.contains(node));
-        if (notExpanded)
+        boolean isExpanded = isExpanded(node);
+        if (! isExpanded)
         {
-            if (! m_showSubtreeSizes)
-                maxChildren = Math.min(numberChildren, 1);
-            else
+            if (m_showSubtreeSizes && node.hasChildren())
             {
-                maxChildren = 0;
-                String text = Integer.toString(NodeUtil.subtreeSize(node));
-                int estimatedWidth = text.length() * m_nodeFullSize / 3;
-                m_maxX = Math.max(x + estimatedWidth, m_maxX);
+                int subtreeSize = NodeUtil.subtreeSize(node) - 1;
+                String text = Integer.toString(subtreeSize);
+                // Use upper limit for textWidth
+                int textWidth = text.length() + m_font.getSize();
+                int textHeight = m_font.getSize();
+                int pad = GuiUtil.SMALL_PAD;
+                m_maxX = Math.max(x + textWidth + pad, m_maxX);
                 JLabel label = new JLabel(text);
                 label.setFont(m_font);
                 add(label);
-                putConstraint(gameNode, label, dx, m_nodeFullSize / 2);
+                putConstraint(gameNode, label, dx + pad,
+                              (m_nodeSize - textHeight) / 2);
             }
         }
-        if (maxChildren > 0)
+        else
         {
-            int[] childrenDy = new int[maxChildren];
-            for (int i = 0; i < maxChildren; ++i)
+            int[] childrenDy = new int[numberChildren];
+            for (int i = 0; i < numberChildren; ++i)
             {
                 childrenDy[i] = dy;
                 dy += createNodes(gameNode, node.getChildConst(i),
                                   x + dx, y + dy, dx, dy, moveNumber);
-                if (! notExpanded && i < numberChildren - 1)
+                if (i < numberChildren - 1)
                     dy += m_nodeFullSize;
             }
-            if (maxChildren > 1)
+            if (numberChildren > 1)
             {
                 GameTreeJunction junction =
                     new GameTreeJunction(childrenDy, this);
@@ -580,10 +578,8 @@ public class GameTreePanel
         while (node != null)
         {
             ConstNode father = node.getFatherConst();
-            if (father != null
-                && (father.getChildConst() != node
-                    || (showSubtreeSizes && father.getNumberChildren() > 1)))
-                if (m_expanded.add(father))
+            if (father != null)
+                if (m_isExpanded.add(father))
                     changed = true;
             node = father;
         }
@@ -592,7 +588,7 @@ public class GameTreePanel
 
     private void hideOthers(ConstNode node)
     {
-        m_expanded.clear();
+        m_isExpanded.clear();
         ensureVisible(node);
         update(m_tree, m_currentNode, getWidth(), getHeight());
     }
@@ -611,7 +607,7 @@ public class GameTreePanel
                 currentChanged = true;
                 changed = true;
             }
-            if (m_expanded.remove(node))
+            if (m_isExpanded.remove(node))
                 changed = true;
             node = NodeUtil.nextNode(node, depth);
         }
@@ -673,7 +669,7 @@ public class GameTreePanel
                     if (command.equals("goto"))
                         gotoNode(m_popupNode);
                     else if (command.equals("show-variations"))
-                        showVariations(m_popupNode);
+                        showChildren(m_popupNode);
                     else if (command.equals("show-subtree"))
                         showSubtree(m_popupNode);
                     else if (command.equals("hide-others"))
@@ -704,7 +700,7 @@ public class GameTreePanel
             popup.add(item);
             popup.addSeparator();
         }
-        item = new JMenuItem("Hide Variations");
+        item = new JMenuItem("Hide Subtree");
         if (! node.hasChildren())
             item.setEnabled(false);
         item.setActionCommand("hide-subtree");
@@ -714,9 +710,8 @@ public class GameTreePanel
         item.setActionCommand("hide-others");
         item.addActionListener(listener);
         popup.add(item);
-        item = new JMenuItem("Show Variations");
-        if (m_expanded.contains(node) || node.getNumberChildren() <= 1)
-            item.setEnabled(false);
+        item = new JMenuItem("Show Children");
+        item.setEnabled(node.hasChildren());
         item.setActionCommand("show-variations");
         item.addActionListener(listener);
         popup.add(item);
@@ -743,23 +738,24 @@ public class GameTreePanel
 
     private void showSubtree(ConstNode root)
     {
-        String mainMessage = "Expand large subtree?";
-        String optionalMessage = 
-            "The user interface can become unresponsive, if large trees " +
-            "are shown. " +
-            "Showing the tree will fail completely if not enough memory is " +
-            " available.";
-        if (NodeUtil.subtreeGreaterThan(root, 10000)
-            && ! m_messageDialogs.showWarningQuestion(m_owner, mainMessage,
-                                                      optionalMessage,
-                                                      "Expand", true))
-            return;
+        if (NodeUtil.subtreeGreaterThan(root, 10000))
+        {
+            String mainMessage = "Expand large subtree?";
+            String optionalMessage = 
+                "The user interface can become unresponsive, if large " +
+                "trees are shown. Showing the tree will fail completely " +
+                "if not enough memory is available.";
+            if (! m_messageDialogs.showWarningQuestion(m_owner, mainMessage,
+                                                       optionalMessage,
+                                                       "Expand", true))
+                return;
+        }
         boolean changed = false;
         ConstNode node = root;
         int depth = NodeUtil.getDepth(node);
         while (node != null)
         {
-            if (node.getNumberChildren() > 1 && m_expanded.add(node))
+            if (m_isExpanded.add(node))
                 changed = true;
             node = NodeUtil.nextNode(node, depth);
         }
@@ -777,9 +773,9 @@ public class GameTreePanel
         }
     }
 
-    private void showVariations(ConstNode node)
+    private void showChildren(ConstNode node)
     {
-        if (node.getNumberChildren() > 1 && m_expanded.add(node))
+        if (m_isExpanded.add(node))
         {
             update(m_tree, m_currentNode, m_minWidth, m_minHeight);
             scrollTo(node);
