@@ -55,6 +55,9 @@ public final class AboutDialog
     {
         m_messageDialogs = messageDialogs;
         m_tabbedPane = new JTabbedPane();
+        if (! Platform.isMac())
+            m_tabbedPane.putClientProperty("jgoodies.noContentBorder",
+                                           Boolean.TRUE);
         boolean isProgramAvailable = (name != null && ! name.equals(""));
         int tabIndex = 0;
         m_tabbedPane.add("GoGui", createPanelGoGui());
@@ -96,11 +99,18 @@ public final class AboutDialog
     {
         JPanel panel = new JPanel(new GridLayout(1, 1));
         JEditorPane editorPane = new JEditorPane();
-        //editorPane.setBorder(GuiUtil.createEmptyBorder());        
+        editorPane.setBorder(GuiUtil.createEmptyBorder());        
         editorPane.setEditable(false);
-        editorPane.setForeground(UIManager.getColor("Label.foreground"));
-        editorPane.setBackground(UIManager.getColor("Label.background"));
-        editorPane.setFont(UIManager.getFont("Label.font"));
+        if (Platform.isMac())
+        {
+            editorPane.setForeground(UIManager.getColor("Label.foreground"));
+            editorPane.setBackground(UIManager.getColor("Label.background"));
+        }
+        else
+        {
+            editorPane.setForeground(Color.black);
+            editorPane.setBackground(Color.white);
+        }
         panel.add(editorPane);
         EditorKit editorKit =
             JEditorPane.createEditorKitForContentType("text/html");
