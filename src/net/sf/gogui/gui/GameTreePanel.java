@@ -269,7 +269,6 @@ public class GameTreePanel
             assert(false);
             return;
         }
-        m_isExpanded.add(father);
         int moveNumber = NodeUtil.getMoveNumber(node);
         GameTreeNode gameNode = createNode(node, moveNumber);
         m_map.put(node, gameNode);
@@ -358,7 +357,7 @@ public class GameTreePanel
         gameNode = getGameTreeNode(currentNode);
         if (gameNode == null)
         {
-            assert(false);
+            update(m_tree, currentNode, minWidth, minHeight);
             return;
         }
         Point location = gameNode.getLocation();
@@ -563,7 +562,6 @@ public class GameTreePanel
     private boolean ensureVisible(ConstNode node)
     {
         boolean changed = false;
-        boolean showSubtreeSizes = getShowSubtreeSizes();
         while (node != null)
         {
             ConstNode father = node.getFatherConst();
