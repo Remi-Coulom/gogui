@@ -3932,18 +3932,36 @@ public class GoGui
         setTitle();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(getToMove());
-        if (m_gameTreeViewer != null)
-        {
-            if (! gameTreeChanged)
-                m_gameTreeViewer.update(getCurrentNode());
-            else
-                m_gameTreeViewer.update(getTree(), getCurrentNode());
-        }
         GoGuiUtil.updateMoveText(m_statusBar, game);
         m_statusBar.setSetupMode(m_setupMode);
         if (m_setupMode)
             m_statusBar.setToPlay(m_setupColor);
         m_statusBar.setScoreMode(m_scoreMode);
+        if (m_gameTreeViewer != null)
+        {
+            if (! gameTreeChanged)
+                m_gameTreeViewer.update(getCurrentNode());
+            else
+            {
+                protectGui();
+                showStatus("Updating game tree window...");
+                Runnable runnable = new Runnable() {
+                        public void run() {
+                            try
+                            {
+                                m_gameTreeViewer.update(getTree(),
+                                                        getCurrentNode());
+                            }
+                            finally
+                            {
+                                unprotectGui();
+                                clearStatus();
+                            }
+                        }
+                    };
+                SwingUtilities.invokeLater(runnable);
+            }
+        }
     }
 
     private void updateFromGoBoard()
