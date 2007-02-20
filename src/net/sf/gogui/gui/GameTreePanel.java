@@ -740,13 +740,16 @@ public class GameTreePanel
 
     private void showSubtree(ConstNode root)
     {
+        String mainMessage = "Expand large subtree?";
+        String optionalMessage = 
+            "The user interface can become unresponsive, if large trees " +
+            "are shown. " +
+            "Showing the tree will fail completely if not enough memory is " +
+            " available.";
         if (NodeUtil.subtreeGreaterThan(root, 10000)
-            && ! m_messageDialogs.showQuestion(m_owner,
-                                               "Really expand large subtree?",
-                                               "This action might fail if not "
-                                               + "enough memory is "
-                                               + "available.",
-                                               "Expand", true))
+            && ! m_messageDialogs.showWarningQuestion(m_owner, mainMessage,
+                                                      optionalMessage,
+                                                      "Expand", true))
             return;
         boolean changed = false;
         ConstNode node = root;
