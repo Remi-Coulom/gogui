@@ -707,6 +707,8 @@ Configure the size of the tree nodes.
 <listitem>
 <para>
 Show the number of nodes in the subtree for nodes that are not expanded.
+Showing the subtree size can slow down the updating of the game tree window
+if large trees are edited.
 </para>
 </listitem>
 </varlistentry>
