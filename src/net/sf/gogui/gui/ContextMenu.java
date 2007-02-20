@@ -110,7 +110,7 @@ public class ContextMenu
             };
         JLabel label = new JLabel("Point " + point);
         label.setFont(UIManager.getFont("Label.font").deriveFont(Font.BOLD));
-        label.setBorder(GuiUtil.createSmallEmptyBorder());
+        label.setBorder(GuiUtil.createEmptyBorder());
         add(label);
         addSeparator();
         m_mark = createCheckBox("Mark", "mark");
