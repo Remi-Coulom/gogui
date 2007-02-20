@@ -633,31 +633,62 @@ public class GoGui
             return;
         if (m_pattern == null)
             return;
-        ConstNode root = getTree().getRootConst();
-        ConstNode node = NodeUtil.findInComments(getCurrentNode(), m_pattern);
-        if (node == null)
-            if (getCurrentNode() != root)
-                if (showQuestion("Continue from start?",
-                                 "The end of the tree was reached.",
-                                 "Continue", false))
-                {
-                    node = root;
-                    if (! NodeUtil.commentContains(node, m_pattern))
-                        node = NodeUtil.findInComments(node, m_pattern);
+        protectGui();
+        showStatus("Searching pattern...");
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    try
+                    {
+                        ConstNode root = getTree().getRootConst();
+                        ConstNode currentNode = getCurrentNode();
+                        ConstNode node =
+                            NodeUtil.findInComments(currentNode, m_pattern);
+                        if (node == null)
+                            if (getCurrentNode() != root)
+                            {
+                                unprotectGui();
+                                String optionalMessage =
+                                    "The end of the tree was reached. " +
+                                    "Continue the search from the start of " +
+                                    "the tree?";
+                                if (showQuestion("Continue from start?",
+                                                 optionalMessage, "Continue",
+                                                 false))
+                                {
+                                    protectGui();
+                                    node = root;
+                                    if (! NodeUtil.commentContains(node,
+                                                                   m_pattern))
+                                        node =
+                                            NodeUtil.findInComments(node,
+                                                                    m_pattern);
+                                }
+                            }
+                        if (node == null)
+                        {
+                            unprotectGui();
+                            String optionalMessage =
+                                "The search pattern \"" + m_pattern +
+                                "\" was not found.";
+                            showInfo("Pattern not found", optionalMessage,
+                                     false);
+                            m_pattern = null;
+                        }
+                        else
+                        {
+                            gotoNode(node);
+                            boardChangedBegin(false, false);
+                            m_comment.markAll(m_pattern);
+                        }
+                    }
+                    finally
+                    {
+                        unprotectGui();
+                        clearStatus();
+                    }
                 }
-        if (node == null)
-        {
-            showInfo("Not found",
-                     "The search pattern \"" + m_pattern + "\" was not found.",
-                     false);
-            m_pattern = null;
-        }
-        else
-        {
-            gotoNode(node);
-            boardChangedBegin(false, false);
-            m_comment.markAll(m_pattern);
-        }
+            };
+        SwingUtilities.invokeLater(runnable);
     }
 
     public void actionForward(int n)
