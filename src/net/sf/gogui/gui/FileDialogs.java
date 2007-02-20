@@ -395,6 +395,8 @@ class SgfPreview
         {
             try
             {
+                if (m_file.length() > 500000)
+                    throw new ThumbnailCreator.Error("File too large for preview");
                 m_thumbnailCreator.create(m_file);
                 File thumbnail = m_thumbnailCreator.getLastThumbnail();
                 m_image = loadImage(thumbnail);
