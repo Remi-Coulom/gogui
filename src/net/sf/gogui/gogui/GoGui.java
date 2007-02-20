@@ -2438,7 +2438,7 @@ public class GoGui
             String optionalMessage =
                 "Check the GTP shell window for error messages of " + name +
                 " that might be helpful to find the reason for " +
-                " this unexpected failure.\n" +
+                " this unexpected failure. " +
                 "You can reattach " + name + " from the Program menu.";
             showError(mainMessage, optionalMessage, false);
             return false;
