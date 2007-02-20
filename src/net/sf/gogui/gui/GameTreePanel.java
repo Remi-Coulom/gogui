@@ -269,6 +269,7 @@ public class GameTreePanel
             assert(false);
             return;
         }
+        m_isExpanded.add(father);
         int moveNumber = NodeUtil.getMoveNumber(node);
         GameTreeNode gameNode = createNode(node, moveNumber);
         m_map.put(node, gameNode);
