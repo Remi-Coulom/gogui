@@ -96,7 +96,7 @@ public final class MessageDialogs
                                        String nonDestructiveOption)
     {
         if (disableKey != null && m_disabled.contains(disableKey))
-            return 2;
+            return 0;
         Object[] options =
             { nonDestructiveOption, destructiveOption, "Cancel" };
         Object defaultOption = options[0];
