@@ -78,19 +78,7 @@ public class GameTreePanel
                     if (event.getButton() != MouseEvent.BUTTON1)
                         return;
                     GameTreeNode gameNode = (GameTreeNode)event.getSource();
-                    if (event.getClickCount() == 2)
-                    {
-                        ConstNode node = gameNode.getNode();
-                        if (node.hasChildren())
-                        {
-                            if (isExpanded(node))
-                                hideSubtree(node);
-                            else
-                                showChildren(node);
-                        }
-                    }
-                    else
-                        gotoNode(gameNode.getNode());
+                    gotoNode(gameNode.getNode());
                 }
 
                 public void mousePressed(MouseEvent event)
