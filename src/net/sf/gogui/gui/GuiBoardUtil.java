@@ -194,12 +194,12 @@ public final class GuiBoardUtil
             String s = guiBoard.getLabel(point);
             if (! s.equals(""))
             {
-                if (! s.endsWith("."))
-                    guiBoard.setLabel(point, s + ".");
+                if (! s.endsWith(">"))
+                    guiBoard.setLabel(point, s + ">");
                 continue;
             }
             if (numberMarked >= 26)
-                guiBoard.setLabel(point, "+");
+                guiBoard.setLabel(point, "*");
             else
                 guiBoard.setLabel(point, Character.toString(label));
             if (numberMarked < 26)
