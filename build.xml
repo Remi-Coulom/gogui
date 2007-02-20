@@ -156,7 +156,7 @@ $URL$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="check-dist-settings,all,check,man">
+<target name="dist" depends="check-dist-settings,all,check">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
@@ -249,6 +249,12 @@ $URL$
 <copy todir="doc/manual/html">
 <fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
 </copy>
+<exec executable="xsltproc">
+<arg line="--param chunk.quietly 1"/>
+<arg line="-o doc/manual/man/"/>
+<arg line="${docbook.path}/manpages/docbook.xsl"/>
+<arg line="doc/manual/xml/manpages.xml"/>
+</exec>
 </target>
 
 <!--
@@ -681,15 +687,6 @@ ${quaqua.nestedzipfile}
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.png"/>
 </copy>
-</target>
-
-<target name="man" depends="extract-docbook">
-<exec executable="xsltproc">
-<arg line="--param chunk.quietly 1"/>
-<arg line="-o doc/manual/man/"/>
-<arg line="${docbook.path}/manpages/docbook.xsl"/>
-<arg line="doc/manual/xml/manpages.xml"/>
-</exec>
 </target>
 
 <target name="netgtp.jar" depends="compile">
