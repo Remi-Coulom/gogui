@@ -108,11 +108,7 @@ public class ContextMenu
                     }
                 }
             };
-        JLabel label = new JLabel("Point " + point);
-        label.setFont(UIManager.getFont("Label.font").deriveFont(Font.BOLD));
-        label.setBorder(GuiUtil.createEmptyBorder());
-        add(label);
-        addSeparator();
+        setLabel("Point " + point);
         m_mark = createCheckBox("Mark", "mark");
         m_mark.setSelected(mark);
         add(m_mark);
