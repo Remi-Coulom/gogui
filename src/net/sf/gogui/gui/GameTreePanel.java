@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -310,6 +311,7 @@ public class GameTreePanel
                        int minWidth, int minHeight)
     {
         assert(currentNode != null);
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         m_minWidth = minWidth;
         m_minHeight = minHeight;
         boolean gameTreeChanged = (tree != m_tree);
@@ -349,6 +351,7 @@ public class GameTreePanel
         scrollToCurrent();
         if (m_scrollPane != null)
             m_scrollPane.requestFocusInWindow();
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
     public void update(ConstNode currentNode, int minWidth, int minHeight)
