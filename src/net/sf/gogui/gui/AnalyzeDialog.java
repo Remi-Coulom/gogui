@@ -489,8 +489,16 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError("Command '" + commandWithoutArg + "' failed",
-                          e.getMessage(), false);
+                showError("Command \"" + commandWithoutArg + "\" failed",
+                          e.getMessage(), true);
+                return;
+            }
+            catch (GtpUtil.ResponseFormatError e)
+            {
+                showError("Invalid response to command \""
+                          + commandWithoutArg + "\"",
+                          "The response had an unexpected format ("
+                          + e.getMessage() + ").", true);
                 return;
             }
         }

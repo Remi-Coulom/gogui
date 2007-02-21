@@ -257,7 +257,14 @@ public class GtpCommand
     */
     public GoPoint getPointArg(int i, int boardSize) throws GtpError
     {
-        return GtpUtil.parsePoint(getArg(i), boardSize);
+        try
+        {
+            return GoPoint.parsePoint(getArg(i), boardSize);
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+            throw new GtpError("argument " + (i + 1) + " is not a point");
+        }
     }
 
     /** Get point arguments.

@@ -149,7 +149,7 @@ public class GtpTerminal
             play(Move.get(toMove, point));
             printBoard();
         }
-        catch (GtpError error)
+        catch (GtpUtil.ResponseFormatError e)
         {
             System.out.println(response);
         }
@@ -196,7 +196,7 @@ public class GtpTerminal
                     = GtpUtil.parsePoint(cmdLine, m_board.getSize());
                 cmdPlay(point);
             }
-            catch (GtpError error)
+            catch (GtpUtil.ResponseFormatError e)
             {
                 StringBuffer response = new StringBuffer();
                 send(cmdLine, response);

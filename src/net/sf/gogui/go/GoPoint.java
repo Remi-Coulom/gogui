@@ -20,7 +20,7 @@ public final class GoPoint
     {
         public InvalidPoint(String text)
         {
-            super("Invalid point: " + text);
+            super("Invalid point \"" + text + "\"");
         }
         
         /** Serial version to suppress compiler warning.

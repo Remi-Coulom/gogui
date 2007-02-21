@@ -126,10 +126,17 @@ public class GtpAdapter
         String response = send(command);
         if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
             return;
-        GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
-        m_board.play(color, point);
-        m_synchronizer.updateAfterGenmove(m_board);
-        cmd.setResponse(response);
+        try
+        {
+            GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
+            m_board.play(color, point);
+            m_synchronizer.updateAfterGenmove(m_board);
+            cmd.setResponse(response);
+        }
+        catch (GtpUtil.ResponseFormatError e)
+        {
+            throw new GtpError(e.getMessage());
+        }
     }
 
     public void cmdGGUndo(GtpCommand cmd) throws GtpError
@@ -199,7 +206,14 @@ public class GtpAdapter
         if (m_gtp.isSupported("place_free_handicap"))
         {
             String response = send(cmd.getLine());
-            stones = GtpUtil.parsePointList(response, m_board.getSize());
+            try
+            {
+                stones = GtpUtil.parsePointList(response, m_board.getSize());
+            }
+            catch (GtpUtil.ResponseFormatError e)
+            {
+                throw new GtpError(e.getMessage());
+            }
         }
         else
         {

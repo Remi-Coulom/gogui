@@ -302,7 +302,14 @@ public class GtpDisplay
             send(command, response);
             if (response.toString().trim().equalsIgnoreCase("resign"))
                 return;
-            point = GtpUtil.parsePoint(response.toString(), m_size);
+            try
+            {
+                point = GtpUtil.parsePoint(response.toString(), m_size);
+            }
+            catch (GtpUtil.ResponseFormatError e)
+            {
+                throw new GtpError(e.getMessage());
+            }
         }
         m_move = Move.get(color, point);
         invokeAndWait(new Runnable()

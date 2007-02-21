@@ -1009,7 +1009,7 @@ public class TwoGtp
             {
                 point = GtpUtil.parsePoint(responseGenmove, board.getSize());
             }
-            catch (GtpError e)
+            catch (GtpUtil.ResponseFormatError e)
             {
                 throw new GtpError(name + " played invalid move: "
                                    + responseGenmove);

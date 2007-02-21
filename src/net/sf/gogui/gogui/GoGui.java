@@ -2155,10 +2155,10 @@ public class GoGui
             if (checkComputerMove)
                 checkComputerMove();
         }
-        catch (GtpError e)
+        catch (GtpUtil.ResponseFormatError e)
         {                
             showStatus(title);
-            showError(e, false);
+            showError(e);
         }
         finally
         {
@@ -2628,7 +2628,7 @@ public class GoGui
                    && ! (isComputerBoth() && m_interruptComputerBoth));
             boardChangedBegin(doCheckComputerMove, gameTreeChanged);
         }
-        catch (GtpError e)
+        catch (GtpUtil.ResponseFormatError e)
         {
             showError(e);
             clearStatus();
@@ -3483,11 +3483,12 @@ public class GoGui
             String response = m_gtp.getResponse();
             try
             {
-                isDeadStone = GtpUtil.parsePointList(response, getBoardSize());
+                isDeadStone
+                    = GtpUtil.parsePointList(response, getBoardSize());
             }
-            catch (GtpError error)
+            catch (GtpUtil.ResponseFormatError e)
             {
-                showError(error);
+                showError(e);
             }
         }
         initScore(isDeadStone);
@@ -3722,6 +3723,15 @@ public class GoGui
     private void showError(GtpError error)
     {        
         showError(error, true);
+    }
+
+    private void showError(GtpUtil.ResponseFormatError e)
+    {        
+        String mainMessage = "Invalid response";
+        String optionalMessage =
+            getProgramName() + " sent a response in an unexpected format ("
+            + e.getMessage() + ").";
+        showError(mainMessage, optionalMessage, true);
     }
 
     private void showError(GtpError e, boolean isCritical)

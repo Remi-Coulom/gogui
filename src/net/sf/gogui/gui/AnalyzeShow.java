@@ -27,7 +27,7 @@ public final class AnalyzeShow
     public static void show(AnalyzeCommand command, GuiBoard guiBoard,
                             StatusBar statusBar, ConstBoard board,
                             String response)
-        throws GtpError
+        throws GtpUtil.ResponseFormatError
     {
         GoPoint pointArg = command.getPointArg();
         PointList pointListArg = command.getPointListArg();

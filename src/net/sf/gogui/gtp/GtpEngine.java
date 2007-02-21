@@ -170,7 +170,14 @@ public class GtpEngine
     {
         if (cmdArray.length != 2)
             throw new GtpError("Missing point argument");
-        return GtpUtil.parsePoint(cmdArray[1], boardSize);
+        try
+        {
+            return GoPoint.parsePoint(cmdArray[1], boardSize);
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+            throw new GtpError(e.getMessage());
+        }
     }
 
     /** Utility function for parsing an point list argument.
@@ -182,15 +189,22 @@ public class GtpEngine
                                                    int boardSize)
         throws GtpError
     {
-        int length = cmdArray.length;
-        assert(length >= 1);
-        PointList pointList = new PointList();
-        for (int i = 1; i < length; ++i)
+        try
         {
-            GoPoint point = GtpUtil.parsePoint(cmdArray[i], boardSize);
-            pointList.add(point);
+            int length = cmdArray.length;
+            assert(length >= 1);
+            PointList pointList = new PointList();
+            for (int i = 1; i < length; ++i)
+            {
+                GoPoint p = GoPoint.parsePoint(cmdArray[i], boardSize);
+                pointList.add(p);
+            }
+            return pointList;
         }
-        return pointList;
+        catch (GoPoint.InvalidPoint e)
+        {
+            throw new GtpError(e.getMessage());
+        }
     }
 
     /** Print invalid response directly to output stream.
