@@ -190,7 +190,7 @@ public class CountScore
     /** Change the life-death status of a stone.
         All stones in a block have to be marked as dead or alive (see comment
         in the description of this class).
-        You have to call #update() to update the score after changing the
+        You have to call #compute to update the score after changing the
         life-death status of one or more stones.
         @param p The stone.
         @param value true, if stone is dead, false if stone is alive.

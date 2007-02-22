@@ -543,8 +543,7 @@ public final class Node
     }
 
     /** Remove setup at point.
-        Remove any setup that was added with #AddBlack, #AddWhite or #AddEmpty
-        at a certain point.
+        Remove any setup that was added with #addStone at a point.
         @param p Location of the setup.
     */
     public void removeSetup(GoPoint p)
@@ -627,6 +626,7 @@ public final class Node
     }
 
     /** Set byoyomi moves left.
+        @param c The player.
         @param n Number of moves left.
     */
     public void setMovesLeft(GoColor c, int n)
@@ -636,6 +636,7 @@ public final class Node
     }
 
     /** Set byoyomi time left.
+        @param c The player.
         @param seconds Time left in seconds.
     */
     public void setTimeLeft(GoColor c, double seconds)

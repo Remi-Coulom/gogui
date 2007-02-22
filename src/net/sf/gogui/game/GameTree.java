@@ -81,7 +81,7 @@ public class GameTree
         return (Node)node;
     }
 
-    /** @see #getGameInformation(ConstNode) */
+    /** @see #getGameInformation */
     public ConstGameInformation getGameInformationConst(ConstNode node)
     {
         return getGameInformation((Node)node);

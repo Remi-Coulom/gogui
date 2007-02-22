@@ -18,6 +18,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.Platform;
 
@@ -64,14 +65,17 @@ public class StatusBar
         m_iconBox.add(GuiUtil.createSmallFiller());
 
         m_text = new TextFieldWithToolTip();
-        m_text.setFocusable(false);
         m_text.setBorder(null);
         panel.add(m_text, BorderLayout.CENTER);
         Box moveTextBox = Box.createHorizontalBox();
         panel.add(moveTextBox, BorderLayout.EAST);
         m_moveText = new JTextField(12);
         GuiUtil.setEditableFalse(m_moveText);
-        m_moveText.setFocusable(false);
+        if (Platform.isMac())
+        {
+            m_moveText.setForeground(UIManager.getColor("Label.foreground"));
+            m_moveText.setBackground(UIManager.getColor("Label.background"));
+        }
         m_moveText.setBorder(null);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
         m_moveTextSeparator = new JSeparator(SwingConstants.VERTICAL);
@@ -183,6 +187,11 @@ class TextFieldWithToolTip
     {
         super(cols);
         GuiUtil.setEditableFalse(this);
+        if (Platform.isMac())
+        {
+            setForeground(UIManager.getColor("Label.foreground"));
+            setBackground(UIManager.getColor("Label.background"));
+        }
     }
 
     public TextFieldWithToolTip()

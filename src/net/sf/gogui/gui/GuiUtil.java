@@ -329,19 +329,11 @@ public class GuiUtil
 
     /** Set text field non-editable.
         Also sets it non-focusable.
-        Java 1.4 on Mac does not render non-editable text fields
-        differently as editable ones, so we use a label background and
-        forground there.
     */
     public static void setEditableFalse(JTextField field)
     {
         field.setEditable(false);
         field.setFocusable(false);
-        if (Platform.isMac())
-        {
-            field.setForeground(UIManager.getColor("Label.foreground"));
-            field.setBackground(UIManager.getColor("Label.background"));
-        }
     }
 
     /** Set Go icon on frame. */

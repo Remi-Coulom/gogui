@@ -43,8 +43,22 @@ public class GtpStatistics
     }
 
     /** Construct with existing GTP engine.
+        @param gtp The GTP engine
         @param program Program command (null, if gtp is not an instance of
         GtpClient)
+        @param sgfFiles List of strings containing the SGF file names
+        @param size The board size used in the games (all games must have the
+        same board size)
+        @param commands List of strings containing the commands to run in
+        every position
+        @param beginCommands List of strings containing the commands to run in
+        the first position
+        @param finalCommands List of strings containing the commands to run in
+        the last position
+        @param allowSetup true, if setup stones in the games are allowed and
+        should not generate en error
+        @param backward true, if games should be iterated backwards (counting
+        the moves starting with one at the last move)
     */
     public void run(GtpClientBase gtp, String program, ArrayList sgfFiles,
                     int size, ArrayList commands, ArrayList beginCommands,
