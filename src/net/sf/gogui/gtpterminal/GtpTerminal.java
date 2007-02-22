@@ -25,6 +25,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
@@ -149,7 +150,7 @@ public class GtpTerminal
             play(Move.get(toMove, point));
             printBoard();
         }
-        catch (GtpUtil.ResponseFormatError e)
+        catch (GtpResponseFormatError e)
         {
             System.out.println(response);
         }
@@ -196,7 +197,7 @@ public class GtpTerminal
                     = GtpUtil.parsePoint(cmdLine, m_board.getSize());
                 cmdPlay(point);
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 StringBuffer response = new StringBuffer();
                 send(cmdLine, response);

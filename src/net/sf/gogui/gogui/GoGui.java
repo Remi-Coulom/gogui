@@ -61,6 +61,7 @@ import net.sf.gogui.go.Score;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeCommand;
@@ -2155,7 +2156,7 @@ public class GoGui
             if (checkComputerMove)
                 checkComputerMove();
         }
-        catch (GtpUtil.ResponseFormatError e)
+        catch (GtpResponseFormatError e)
         {                
             showStatus(title);
             showError(e);
@@ -2628,7 +2629,7 @@ public class GoGui
                    && ! (isComputerBoth() && m_interruptComputerBoth));
             boardChangedBegin(doCheckComputerMove, gameTreeChanged);
         }
-        catch (GtpUtil.ResponseFormatError e)
+        catch (GtpResponseFormatError e)
         {
             showError(e);
             clearStatus();
@@ -3486,7 +3487,7 @@ public class GoGui
                 isDeadStone
                     = GtpUtil.parsePointList(response, getBoardSize());
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 showError(e);
             }
@@ -3725,7 +3726,7 @@ public class GoGui
         showError(error, true);
     }
 
-    private void showError(GtpUtil.ResponseFormatError e)
+    private void showError(GtpResponseFormatError e)
     {        
         String mainMessage = "Invalid response";
         String optionalMessage =

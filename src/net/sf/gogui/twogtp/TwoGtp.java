@@ -28,6 +28,7 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
@@ -1009,7 +1010,7 @@ public class TwoGtp
             {
                 point = GtpUtil.parsePoint(responseGenmove, board.getSize());
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 throw new GtpError(name + " played invalid move: "
                                    + responseGenmove);

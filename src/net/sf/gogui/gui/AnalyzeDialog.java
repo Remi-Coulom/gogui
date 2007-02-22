@@ -43,6 +43,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.PrefUtil;
@@ -493,7 +494,7 @@ public final class AnalyzeDialog
                           e.getMessage(), true);
                 return;
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 showError("Invalid response to command \""
                           + commandWithoutArg + "\"",

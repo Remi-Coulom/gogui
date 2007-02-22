@@ -23,6 +23,7 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
@@ -306,7 +307,7 @@ public class GtpDisplay
             {
                 point = GtpUtil.parsePoint(response.toString(), m_size);
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 throw new GtpError(e.getMessage());
             }

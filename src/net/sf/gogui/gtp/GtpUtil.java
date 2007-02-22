@@ -21,20 +21,6 @@ import net.sf.gogui.util.StringUtil;
 /** Utility functions used in package gtp. */
 public final class GtpUtil
 {
-    public static class ResponseFormatError
-        extends Exception
-    {
-        public ResponseFormatError(String s)
-        {
-            super(s);
-        }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sourceforge.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
-    }
-
     /** Get GTP time settings command .
         @param settings The time settings. If null, this function will return
         a GTP command for "no time limit" ("time_settings 0 1 0" with zero
@@ -106,7 +92,7 @@ public final class GtpUtil
     }
 
     public static double[][] parseDoubleBoard(String response, int boardSize)
-        throws ResponseFormatError
+        throws GtpResponseFormatError
     {
         try
         {
@@ -119,12 +105,12 @@ public final class GtpUtil
         }
         catch (NumberFormatException e)
         {
-            throw new ResponseFormatError("Floating point number expected");
+            throw new GtpResponseFormatError("Floating point number expected");
         }
     }
 
     public static GoPoint parsePoint(String s, int boardSize)
-        throws ResponseFormatError
+        throws GtpResponseFormatError
     {
         try
         {
@@ -132,13 +118,13 @@ public final class GtpUtil
         }
         catch (GoPoint.InvalidPoint e)
         {
-            throw new ResponseFormatError("Invalid point " + s + " (size "
+            throw new GtpResponseFormatError("Invalid point " + s + " (size "
                                           + boardSize + ")");
         }
     }
     
     public static PointList parsePointList(String s, int boardSize)
-        throws ResponseFormatError
+        throws GtpResponseFormatError
     {
         try
         {
@@ -146,7 +132,7 @@ public final class GtpUtil
         }
         catch (GoPoint.InvalidPoint e)
         {
-            throw new ResponseFormatError(e.getMessage());
+            throw new GtpResponseFormatError(e.getMessage());
         }
     }
 
@@ -172,7 +158,7 @@ public final class GtpUtil
             {
                 point = parsePoint(text.substring(start, end), boardSize);
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 assert(false);
                 continue;
@@ -185,7 +171,7 @@ public final class GtpUtil
     public static void parsePointStringList(String s, PointList pointList,
                                             ArrayList stringList,
                                             int boardsize)
-        throws ResponseFormatError
+        throws GtpResponseFormatError
     {
         pointList.clear();
         stringList.clear();
@@ -208,11 +194,11 @@ public final class GtpUtil
                 }
             }
         if (! nextIsPoint)
-            throw new ResponseFormatError("Missing string");
+            throw new GtpResponseFormatError("Missing string");
     }
 
     public static String[][] parseStringBoard(String s, int boardSize)
-        throws ResponseFormatError
+        throws GtpResponseFormatError
     {
         String result[][] = new String[boardSize][boardSize];
         try
@@ -222,7 +208,7 @@ public final class GtpUtil
             {
                 String line = reader.readLine();
                 if (line == null)
-                    throw new ResponseFormatError("Incomplete string board");
+                    throw new GtpResponseFormatError("Incomplete string board");
                 if (line.trim().equals(""))
                 {
                     ++y;
@@ -230,14 +216,14 @@ public final class GtpUtil
                 }
                 String[] args = StringUtil.splitArguments(line);
                 if (args.length < boardSize)
-                    throw new ResponseFormatError("Incomplete string board");
+                    throw new GtpResponseFormatError("Incomplete string board");
                 for (int x = 0; x < boardSize; ++x)
                     result[x][y] = args[x];
             }
         }
         catch (IOException e)
         {
-            throw new ResponseFormatError("I/O error");
+            throw new GtpResponseFormatError("I/O error");
         }
         return result;
     }
@@ -269,7 +255,7 @@ public final class GtpUtil
                 {
                     point = parsePoint(t, boardSize);
                 }
-                catch (GtpUtil.ResponseFormatError e)
+                catch (GtpResponseFormatError e)
                 {
                     continue;
                 }

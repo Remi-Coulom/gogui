@@ -16,6 +16,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.StringUtil;
 
@@ -26,7 +27,7 @@ public final class AnalyzeShow
     public static void show(AnalyzeCommand command, GuiBoard guiBoard,
                             StatusBar statusBar, ConstBoard board,
                             String response)
-        throws GtpUtil.ResponseFormatError
+        throws GtpResponseFormatError
     {
         GoPoint pointArg = command.getPointArg();
         PointList pointListArg = command.getPointListArg();

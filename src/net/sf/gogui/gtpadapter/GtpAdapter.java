@@ -27,6 +27,7 @@ import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfUtil;
@@ -133,7 +134,7 @@ public class GtpAdapter
             m_synchronizer.updateAfterGenmove(m_board);
             cmd.setResponse(response);
         }
-        catch (GtpUtil.ResponseFormatError e)
+        catch (GtpResponseFormatError e)
         {
             throw new GtpError(e.getMessage());
         }
@@ -210,7 +211,7 @@ public class GtpAdapter
             {
                 stones = GtpUtil.parsePointList(response, m_board.getSize());
             }
-            catch (GtpUtil.ResponseFormatError e)
+            catch (GtpResponseFormatError e)
             {
                 throw new GtpError(e.getMessage());
             }
