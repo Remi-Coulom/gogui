@@ -18,6 +18,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
@@ -37,6 +38,22 @@ public class GtpStatistics
                          int min, int max, boolean backward)
         throws Exception
     {
+        this(new GtpClient(program, verbose, null), program, sgfFiles, output,
+             size, commands, beginCommands, finalCommands, force, allowSetup,
+             min, max, backward);
+    }
+
+    /** Construct with existing GTP engine.
+        @param program Program command (null, if gtp is not an instance of
+        GtpClient)
+    */
+    public GtpStatistics(GtpClientBase gtp, String program, ArrayList sgfFiles,
+                         File output, int size, ArrayList commands,
+                         ArrayList beginCommands, ArrayList finalCommands,
+                         boolean force, boolean allowSetup, int min, int max,
+                         boolean backward)
+        throws Exception
+    {
         if (output.exists() && ! force)
             throw new ErrorMessage("File " + output + " already exists");
         new FileCheck(sgfFiles, size, allowSetup);
@@ -54,32 +71,19 @@ public class GtpStatistics
             columnHeaders.add(getCommand(i).m_columnTitle);
         m_table = new Table(columnHeaders);
         m_table.setProperty("Size", Integer.toString(size));
-        m_gtp = new GtpClient(program, verbose, null);
+        m_gtp = gtp;
         m_gtp.queryProtocolVersion();
-        m_table.setProperty("Program", program);
-        try
-        {
-            m_table.setProperty("Name", m_gtp.send("name"));
-        }
-        catch (GtpError e)
-        {
-            m_table.setProperty("Name", "");
-            if (m_gtp.isProgramDead())
-                throw e;
-        }
-        try
-        {
-            m_table.setProperty("Version", m_gtp.send("version"));
-        }
-        catch (GtpError e)
-        {
-            m_table.setProperty("Version", "");
-        }
+        m_gtp.queryName();
+        if (program != null)
+            m_table.setProperty("Program", program);
+        m_table.setProperty("Name", m_gtp.getName());
+        m_table.setProperty("Version", m_gtp.queryVersion());
         String host = Platform.getHostInfo();
         m_table.setProperty("Host", host);
         m_table.setProperty("Date", StringUtil.getDate());
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
+        m_gtp.send("quit");
         m_table.setProperty("Games", Integer.toString(m_numberGames));
         m_table.setProperty("Backward", backward ? "yes" : "no");
         FileWriter writer = new FileWriter(output);
@@ -125,7 +129,7 @@ public class GtpStatistics
 
     private double m_lastCpuTime = 0;
 
-    private final GtpClient m_gtp;
+    private final GtpClientBase m_gtp;
 
     private final NumberFormat m_format1 = StringUtil.getNumberFormat(1);
 

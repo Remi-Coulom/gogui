@@ -18,6 +18,12 @@ public final class GtpExpectEngine
         super(log);
     }
 
+    public void expect(String command)
+    {
+        String response = "";
+        expect(command, response);
+    }
+
     public void expect(String command, String response)
     {
         m_commands.add(command);
