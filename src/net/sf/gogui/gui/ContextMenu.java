@@ -4,17 +4,14 @@
 
 package net.sf.gogui.gui;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
