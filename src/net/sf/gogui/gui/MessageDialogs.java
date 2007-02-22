@@ -267,16 +267,10 @@ public final class MessageDialogs
             new JOptionPane(box, messageType, JOptionPane.DEFAULT_OPTION,
                             null, options, defaultOption);
         JDialog dialog = optionPane.createDialog(parent, title);
-        if (! Platform.isMac())
-        {
-            // Workaround for Sun Bug ID 4545951 (still in Linux JDK
-            // 1.5.0_04-b05)
-            // On the Mac this is not necessary and has the negative side
-            // effect that Quaqua 3.7.3 gets the default button sometimes
-            // wrong if the dialog is packed twice
-            box.invalidate();
-            dialog.pack();
-        }
+        // Workaround for Sun Bug ID 4545951 (still in Linux JDK
+        // 1.5.0_04-b05 or Mac 1.4.2_12)
+        box.invalidate();
+        dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();
         if (disableKey != null && disableCheckBox.isSelected())
