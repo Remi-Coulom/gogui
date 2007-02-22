@@ -56,6 +56,7 @@ public final class GtpStatisticsTest
         expect.expect("foo");
         expect.expect("quit");
         GtpStatistics gtpStatistics = new GtpStatistics();
+        gtpStatistics.setQuiet(true);
         gtpStatistics.run(gtp, program, sgfFiles, size, commands,
                           beginCommands, finalCommands, allowSetup, backward);
         assertTrue(expect.isExpectQueueEmpty());

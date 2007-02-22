@@ -34,6 +34,7 @@ public final class Main
                 "output:",
                 "precision:",
                 "program:",
+                "quiet",
                 "setup",
                 "size:",
                 "verbose",
@@ -64,6 +65,7 @@ public final class Main
                 program = opt.get("program");
             }
             boolean verbose = opt.contains("verbose");
+            boolean quiet = opt.contains("quiet");
             boolean force = opt.contains("force");
             int min = opt.getInteger("min", 0, 0);
             int max = opt.getInteger("max", Integer.MAX_VALUE, 0);
@@ -104,6 +106,7 @@ public final class Main
                 GtpStatistics gtpStatistics = new GtpStatistics();
                 gtpStatistics.setMin(min);
                 gtpStatistics.setMax(max);
+                gtpStatistics.setQuiet(quiet);
                 gtpStatistics.run(program, arguments, boardSize, commands,
                                   beginCommands, finalCommands, verbose,
                                   allowSetup, backward);

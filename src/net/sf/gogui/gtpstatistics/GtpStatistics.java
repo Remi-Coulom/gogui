@@ -97,6 +97,14 @@ public class GtpStatistics
         m_min = min;
     }
 
+    /** Don't write information about progress.
+        Default is false.
+    */
+    public void setQuiet(boolean enable)
+    {
+        m_quiet = enable;
+    }
+
     /** Save result table of last run. */
     public void saveTable(File output) throws IOException
     {
@@ -125,6 +133,8 @@ public class GtpStatistics
     private boolean m_allowSetup;
 
     private boolean m_backward;
+
+    private boolean m_quiet;
 
     private int m_max = Integer.MAX_VALUE;
 
@@ -341,7 +351,8 @@ public class GtpStatistics
                                 boolean finalCommands)
         throws GtpError
     {
-        System.err.println(name + ":" + number);
+        if (! m_quiet)
+            System.err.println(name + ":" + number);
         m_table.startRow();
         try
         {

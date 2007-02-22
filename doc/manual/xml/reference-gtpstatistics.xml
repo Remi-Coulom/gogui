@@ -26,6 +26,7 @@ Runs GTP commands on all positions of game collections.
 <arg><option>-min</option> <replaceable>n</replaceable></arg>
 <arg><option>-max</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
+<arg><option>-quiet</option></arg>
 <arg><option>-setup</option> <replaceable>n</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -248,6 +249,17 @@ Maximum number of fraction digits for floating point numbers in output file.
 <listitem>
 <para>
 Command line for running Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-quiet</option>
+</term>
+<listitem>
+<para>
+Don't write information about progress to standard error stream.
 </para>
 </listitem>
 </varlistentry>
