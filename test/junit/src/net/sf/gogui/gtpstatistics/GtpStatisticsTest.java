@@ -35,17 +35,12 @@ public final class GtpStatisticsTest
         String program = null;
         ArrayList sgfFiles = new ArrayList();
         sgfFiles.add(getClass().getResource("game-1.sgf").getFile());
-        File output = File.createTempFile("gogui-gtpstatisticstest", ".dat");
-        output.deleteOnExit();
         int size = 9;
         ArrayList commands = new ArrayList();
         commands.add("foo");
         ArrayList beginCommands = null;
         ArrayList finalCommands = null;
-        boolean force = true;
         boolean allowSetup = false;
-        int min = 0;
-        int max = Integer.MAX_VALUE;
         boolean backward = false;
         expect.expect("protocol_version", "2");
         expect.expect("name");
@@ -60,9 +55,9 @@ public final class GtpStatisticsTest
         expect.expect("play b C7");
         expect.expect("foo");
         expect.expect("quit");
-        new GtpStatistics(gtp, program, sgfFiles, output, size, commands,
-                          beginCommands, finalCommands, force, allowSetup, min,
-                          max, backward);
+        GtpStatistics gtpStatistics = new GtpStatistics();
+        gtpStatistics.run(gtp, program, sgfFiles, size, commands,
+                          beginCommands, finalCommands, allowSetup, backward);
         assertTrue(expect.isExpectQueueEmpty());
     }
 }

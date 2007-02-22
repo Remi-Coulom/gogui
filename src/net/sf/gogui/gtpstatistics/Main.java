@@ -98,12 +98,16 @@ public final class Main
                     output = new File(opt.get("output"));
                 else
                     output = new File("gtpstatistics.dat");
-                GtpStatistics gtpStatistics
-                    = new GtpStatistics(program, arguments, output, boardSize,
-                                        commands, beginCommands,
-                                        finalCommands, verbose, force,
-                                        allowSetup, min, max, backward);
-                System.exit(gtpStatistics.getResult() ? 0 : -1);
+                if (output.exists() && ! force)
+                    throw new ErrorMessage("File \"" + output +
+                                           "\" already exists");
+                GtpStatistics gtpStatistics = new GtpStatistics();
+                gtpStatistics.setMin(min);
+                gtpStatistics.setMax(max);
+                gtpStatistics.run(program, arguments, boardSize, commands,
+                                  beginCommands, finalCommands, verbose,
+                                  allowSetup, backward);
+                gtpStatistics.saveTable(output);
             }
         }
         catch (Throwable t)

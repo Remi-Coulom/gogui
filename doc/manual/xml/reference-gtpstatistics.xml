@@ -104,10 +104,6 @@ The result is "1", if the result is the same move as played in the game,
 </varlistentry>
 </variablelist>
 </para>
-<para>
-The return value of <command>gtpstatistics</command> is 0, if the run
-completed successfully, -1 otherwise.
-</para>
 </refsection>
 
 <refsection>

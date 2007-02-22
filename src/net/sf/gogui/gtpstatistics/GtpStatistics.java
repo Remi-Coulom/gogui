@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
@@ -31,37 +32,29 @@ import net.sf.gogui.util.Table;
 */
 public class GtpStatistics
 {
-    public GtpStatistics(String program, ArrayList sgfFiles, File output,
-                         int size, ArrayList commands,
-                         ArrayList beginCommands, ArrayList finalCommands,
-                         boolean verbose, boolean force, boolean allowSetup,
-                         int min, int max, boolean backward)
-        throws Exception
+    public void run(String program, ArrayList sgfFiles, int size,
+                    ArrayList commands, ArrayList beginCommands,
+                    ArrayList finalCommands, boolean verbose,
+                    boolean allowSetup, boolean backward)
+        throws ErrorMessage, GtpError, IOException
     {
-        this(new GtpClient(program, verbose, null), program, sgfFiles, output,
-             size, commands, beginCommands, finalCommands, force, allowSetup,
-             min, max, backward);
+        run(new GtpClient(program, verbose, null), program, sgfFiles, size,
+            commands, beginCommands, finalCommands, allowSetup, backward);
     }
 
     /** Construct with existing GTP engine.
         @param program Program command (null, if gtp is not an instance of
         GtpClient)
     */
-    public GtpStatistics(GtpClientBase gtp, String program, ArrayList sgfFiles,
-                         File output, int size, ArrayList commands,
-                         ArrayList beginCommands, ArrayList finalCommands,
-                         boolean force, boolean allowSetup, int min, int max,
-                         boolean backward)
-        throws Exception
+    public void run(GtpClientBase gtp, String program, ArrayList sgfFiles,
+                    int size, ArrayList commands, ArrayList beginCommands,
+                    ArrayList finalCommands, boolean allowSetup,
+                    boolean backward)
+        throws ErrorMessage, IOException
     {
-        if (output.exists() && ! force)
-            throw new ErrorMessage("File " + output + " already exists");
         new FileCheck(sgfFiles, size, allowSetup);
         m_size = size;
-        m_result = false;
         m_allowSetup = allowSetup;
-        m_min = min;
-        m_max = max;
         m_backward = backward;
         initCommands(commands, beginCommands, finalCommands);
         ArrayList columnHeaders = new ArrayList();
@@ -86,6 +79,27 @@ public class GtpStatistics
         m_gtp.send("quit");
         m_table.setProperty("Games", Integer.toString(m_numberGames));
         m_table.setProperty("Backward", backward ? "yes" : "no");
+    }
+
+    /** Set maximum move number for positions to run the commands on.
+        Default is Integer.MAX_VALUE.
+    */
+    public void setMax(int max)
+    {
+        m_max = max;
+    }
+
+    /** Set minimum move number for positions to run the commands on.
+        Default is zero.
+    */
+    public void setMin(int min)
+    {
+        m_min = min;
+    }
+
+    /** Save result table of last run. */
+    public void saveTable(File output) throws IOException
+    {
         FileWriter writer = new FileWriter(output);
         try
         {
@@ -95,11 +109,6 @@ public class GtpStatistics
         {
             writer.close();
         }
-    }
-
-    public boolean getResult()
-    {
-        return m_result;
     }
 
     private static class Command
@@ -113,29 +122,29 @@ public class GtpStatistics
         public String m_columnTitle;
     }
 
-    private final boolean m_allowSetup;
+    private boolean m_allowSetup;
 
-    private final boolean m_backward;
+    private boolean m_backward;
 
-    private boolean m_result;
+    private int m_max = Integer.MAX_VALUE;
 
-    private final int m_max;
-
-    private final int m_min;
+    private int m_min = 0;
 
     private int m_numberGames;
 
-    private final int m_size;
+    private int m_size;
 
     private double m_lastCpuTime = 0;
 
-    private final GtpClientBase m_gtp;
+    private GtpClientBase m_gtp;
 
-    private final NumberFormat m_format1 = StringUtil.getNumberFormat(1);
+    private static final NumberFormat m_format1 =
+        StringUtil.getNumberFormat(1);
 
-    private final NumberFormat m_format2 = StringUtil.getNumberFormat(2);
+    private static final NumberFormat m_format2 =
+        StringUtil.getNumberFormat(2);
 
-    private final Table m_table;
+    private Table m_table;
 
     private ArrayList m_commands;
 
