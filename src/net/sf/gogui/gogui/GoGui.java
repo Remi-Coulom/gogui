@@ -2438,7 +2438,7 @@ public class GoGui
             String mainMessage = name + " has terminated";
             String optionalMessage =
                 "Check the GTP shell window for error messages of " + name +
-                " that might be helpful to find the reason for " +
+                ", which could be helpful to find the reason for" +
                 " this unexpected failure. " +
                 "You can reattach " + name + " from the Program menu.";
             showError(mainMessage, optionalMessage, false);
@@ -3745,22 +3745,20 @@ public class GoGui
             mainMessage = name + " terminated unexpectedly";
             optionalMessage =
                 "Check the GTP shell window for error messages of " + name +
-                " that might be helpful to find the reason for " +
-                " this unexpected failure.\n" +
+                ", which could be helpful to find the reason for" +
+                " this unexpected failure. " +
                 "You can reattach " + name + " from the Program menu.";
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
             String program = ((GtpClient.ExecFailed)e).m_program;
             mainMessage = "Could not execute Go program";
-            optionalMessage =
-                "The Go program could not be executed using the command" +
-                " \"" + program + "\"";
+            optionalMessage = "The Go program could not be executed";
             if (! StringUtil.isEmpty(e.getMessage()))
                 optionalMessage = optionalMessage +
                     " (" + e.getMessage() + ")";
             optionalMessage = optionalMessage
-                + ".\nPlease correct the command for executing the program.";
+                + ". Please correct the command for executing the program.";
         }
         else
         {
