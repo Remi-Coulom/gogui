@@ -415,7 +415,7 @@ public final class Node
     }
 
     /** Time left for color after move was made.
-        @param color The color
+        @param c The color
         @return Time left in seconds for this color or Double.NaN if unknown
     */
     public double getTimeLeft(GoColor c)
@@ -545,7 +545,7 @@ public final class Node
     /** Remove setup at point.
         Remove any setup that was added with #AddBlack, #AddWhite or #AddEmpty
         at a certain point.
-        @param point Location of the setup.
+        @param p Location of the setup.
     */
     public void removeSetup(GoPoint p)
     {

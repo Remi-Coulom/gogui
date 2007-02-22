@@ -51,7 +51,7 @@ public final class Move
     }
     
     /** Factory method for constructing a pass move.
-        @param color The color of the move.
+        @param c The color of the move.
         @return Reference to this move
     */
     public static Move getPass(GoColor c)

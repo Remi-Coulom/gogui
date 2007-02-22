@@ -18,7 +18,7 @@ public final class SgfUtil
 {
     /** Load position from SGF file.
         @param file The file.
-        @param move A move number (or -1 for last position)
+        @param maxMove A move number (or -1 for last position)
         @return Position of main variation before that move number or last
         position if game has less moves (same convention as in the loadsgf GTP
         command).

@@ -527,8 +527,8 @@ public final class Board
     }
 
     /** Check if a move would capture anything (including suicide).
-        @param point The point to check.
-        @param toMove The player color.
+        @param c The player color.
+        @param p The point to check.
         @return true, if a move on the given point by the given player would
         capture any opponent stones, or be a suicide move.
     */
@@ -571,8 +571,8 @@ public final class Board
     }
 
     /** Check if a point would be a suicide move.
-        @param point The point to check.
         @param c The player color to check.
+        @param p The point to check.
         @return true, if a move at the given point by the given player
         would be a suicide move.
     */

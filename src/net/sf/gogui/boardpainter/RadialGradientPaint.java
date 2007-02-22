@@ -21,7 +21,7 @@ public class RadialGradientPaint
     /** Create a radial gradient paint.
         @param center The center point.
         @param radius1 The radius along the first axis of the ellipse.
-        @param radius1 The radius along the second axis of the ellipse.
+        @param radius2 The radius along the second axis of the ellipse.
         @param focus Focus shift away from the center along second radius
         normalized to interval between zero and one.
         @param color1 First color.

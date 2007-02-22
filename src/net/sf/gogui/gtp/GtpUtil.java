@@ -63,7 +63,7 @@ public final class GtpUtil
         commands (e.g. <code>gg-undo</code> from GNU Go and
         <code>gogui-play_sequence</code> from GoGui). Does not include
         non-criticlal state changing commands like <code>komi</code>.
-        @param cmd The command or complete command line
+        @param line The command or complete command line
         @return <code>true</code> if command is a state-changing command
     */
     public static boolean isStateChangingCommand(String line)

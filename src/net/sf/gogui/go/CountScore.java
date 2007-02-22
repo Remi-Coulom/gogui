@@ -17,7 +17,7 @@ public class CountScore
 {
     /** Begin counting a score.
         @param board The board.
-        @param isDeadStone Initial set of stones to be marked as dead.
+        @param deadStones Initial set of stones to be marked as dead.
      */
     public void begin(ConstBoard board, ConstPointList deadStones)
     {
