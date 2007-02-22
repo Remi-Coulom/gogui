@@ -38,7 +38,7 @@ public final class MessageDialogs
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         show(null, frame, "Error", mainMessage, optionalMessage, type,
-             options, defaultOption);
+             JOptionPane.DEFAULT_OPTION, options, defaultOption);
     }
 
     public void showError(Component frame, String message, Exception e)
@@ -72,7 +72,7 @@ public final class MessageDialogs
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         show(disableKey, frame, "Information", mainMessage, optionalMessage,
-             type, options, defaultOption);
+             type, JOptionPane.DEFAULT_OPTION, options, defaultOption);
     }
 
     public int showYesNoCancelQuestion(Component parent, String mainMessage,
@@ -102,7 +102,9 @@ public final class MessageDialogs
         Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
         Object value = show(disableKey, parent, "Question", mainMessage,
-                            optionalMessage, type, options, defaultOption);
+                            optionalMessage, type,
+                            JOptionPane.YES_NO_CANCEL_OPTION, options,
+                            defaultOption);
         int result;
         if (value == options[1])
             result = 0;
@@ -137,7 +139,7 @@ public final class MessageDialogs
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         show(disableKey, parent, "Error", mainMessage, optionalMessage, type,
-             options, defaultOption);
+             JOptionPane.DEFAULT_OPTION, options, defaultOption);
     }
 
     public boolean showQuestion(Component parent, String mainMessage,
@@ -168,7 +170,8 @@ public final class MessageDialogs
         else
             type = JOptionPane.PLAIN_MESSAGE;
         Object result = show(disableKey, parent, "Question", mainMessage,
-                             optionalMessage, type, options, defaultOption);
+                             optionalMessage, type, JOptionPane.YES_NO_OPTION,
+                             options, defaultOption);
         return (result == options[0]);
     }
 
@@ -200,7 +203,8 @@ public final class MessageDialogs
         else
             type = JOptionPane.PLAIN_MESSAGE;
         Object result = show(disableKey, parent, "Question", mainMessage,
-                             optionalMessage, type, options, defaultOption);
+                             optionalMessage, type, JOptionPane.YES_NO_OPTION,
+                             options, defaultOption);
         return (result == options[0]);
     }
 
@@ -215,7 +219,7 @@ public final class MessageDialogs
 
     private Object show(String disableKey, Component parent, String title,
                         String mainMessage, String optionalMessage,
-                        int messageType, Object[] options,
+                        int messageType, int optionType, Object[] options,
                         Object defaultOption)
     {
         if (optionalMessage == null)
@@ -264,8 +268,8 @@ public final class MessageDialogs
             // Quaqua 3.7.2
             messageType = JOptionPane.PLAIN_MESSAGE;
         JOptionPane optionPane =
-            new JOptionPane(box, messageType, JOptionPane.DEFAULT_OPTION,
-                            null, options, defaultOption);
+            new JOptionPane(box, messageType, optionType, null, options,
+                            defaultOption);
         JDialog dialog = optionPane.createDialog(parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK
         // 1.5.0_04-b05 or Mac 1.4.2_12)
