@@ -8,9 +8,9 @@ $URL$
 
 <project name="GoGui" default="all">
 
-<tstamp/>
+<property name="version" value="0.9.x"/>
 
-<property file="build.properties"/>
+<tstamp/>
 
 <property environment="env"/>
 
@@ -64,14 +64,6 @@ $URL$
 
 <available property="quaqua.zip-available" file="${quaqua.nestedzipfile}"/>
 
-<condition property="build.notdist">
-<not>
-<and>
-<istrue value="${optimize}"/>
-</and>
-</not>
-</condition>
-
 <target name="all"
  description="Compile all programs (default target)"
  depends="
@@ -89,10 +81,6 @@ $URL$
   sgfthumbnail.jar,
   twogtp.jar
 "/>
-
-<target name="check-dist-settings" unless="no-check-dist-settings">
-<fail if="build.notdist" message="Not dist settings in build.properties"/>
-</target>
 
 <target name="clean" depends="clean-build-dir"
  description="Delete class and jar files built by target all">
@@ -137,7 +125,7 @@ $URL$
 <target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}" debug="true" listfiles="yes"
+ deprecation="true" debug="true" listfiles="yes"
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
 <fileset dir="src"
@@ -156,14 +144,13 @@ $URL$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="check-dist-settings,all,check">
+<target name="dist" depends="all,check">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
  CONTRIBUTE
  COPYING
  INSTALL
- build.properties
  build.xml
  config/gogui*.desktop
  config/gogui-application-x-go-sgf.png
@@ -681,8 +668,7 @@ ${quaqua.nestedzipfile}
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
 <javac srcdir="test/junit/src" destdir="build/test" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}" debug="true" listfiles="yes"
- classpath="build"/>
+ deprecation="true" debug="true" listfiles="yes" classpath="build"/>
 <copy todir="build/test">
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.png"/>
@@ -818,7 +804,7 @@ ${quaqua.nestedzipfile}
 <target name="specialmac" depends="compile"
  description="Compile special MAC classes depending on com.apple">
 <javac srcdir="mac/src" source="1.4" deprecation="true" classpath="build"
- optimize="true" listfiles="yes"
+ listfiles="yes"
  includes="net/sf/gogui/specialmac/RegisterSpecialMacHandler.java"/>
 </target>
 
@@ -853,8 +839,7 @@ ${quaqua.nestedzipfile}
 </jar>
 </target>
 
-<target name="version" depends="version-check-uptodate"
- unless="version-uptodate">
+<target name="version">
 <copy
 file="src/net/sf/gogui/version/Version.java.in"
 tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
@@ -870,19 +855,6 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
  tofile="mac/packaging/Info.plist" overwrite="true"/>
 <replace file="mac/packaging/Info.plist" token="@VERSION@"
  value="${version}"/>
-</target>
-
-<target name="version-check-uptodate">
-<uptodate property="version-uptodate"
- targetfile="src/net/sf/gogui/version/Version.java">
-<srcfiles dir="."
- includes="
-  build.properties,
-  doc/manual/xml/version.xml.in,
-  mac/packaging/Info.plist.in,
-  src/version/Version.java.in,
-"/>
-</uptodate>
 </target>
 
 </project>
