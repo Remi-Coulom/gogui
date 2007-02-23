@@ -839,7 +839,8 @@ ${quaqua.nestedzipfile}
 </jar>
 </target>
 
-<target name="version">
+<target name="version" depends="version-check-uptodate"
+ unless="version-uptodate">
 <copy
 file="src/net/sf/gogui/version/Version.java.in"
 tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
@@ -855,6 +856,19 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
  tofile="mac/packaging/Info.plist" overwrite="true"/>
 <replace file="mac/packaging/Info.plist" token="@VERSION@"
  value="${version}"/>
+</target>
+
+<target name="version-check-uptodate">
+<uptodate property="version-uptodate"
+ targetfile="src/net/sf/gogui/version/Version.java">
+<srcfiles dir="."
+ includes="
+  build.xml,
+  doc/manual/xml/version.xml.in,
+  mac/packaging/Info.plist.in,
+  src/version/Version.java.in,
+"/>
+</uptodate>
 </target>
 
 </project>
