@@ -33,7 +33,7 @@ Do not edit Info.plist
 <string>JavaApplicationStub</string>
 
 <key>CFBundleGetInfoString</key>
-<string>0.9.x, Copyright 2005 Markus Enzenberger</string>
+<string>0.9.x, Copyright 2007 Markus Enzenberger</string>
 
 <key>CFBundleHelpBookFolder</key>
 <string>GoGui Help</string>
