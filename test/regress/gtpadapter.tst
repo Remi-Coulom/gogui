@@ -4,7 +4,6 @@
 # gtpadapter gtpdummy
 #
 # $Id$
-# $Source$
 #-----------------------------------------------------------------------------
 
 # Name should be passed through from GtpDummy

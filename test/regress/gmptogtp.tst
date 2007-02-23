@@ -5,7 +5,6 @@
 # (GNU Go version 3.6)
 #
 # $Id$
-# $Source$
 #-----------------------------------------------------------------------------
 
 10 name
@@ -18,9 +17,9 @@
 
 40 list_commands
 
-50 gogui_interrupt
+50 gogui-interrupt
 
-60 gogui_title
+60 gogui-title
 #? [Go Modem .*]
 
 70 boardsize 19
@@ -47,6 +46,5 @@
 150 genmove black
 #? [[A-T]1?[0-9]]
 
-# Expected failure. GNU Go 3.6 cannot handle talk text and terminates.
-160 gmp_talk Test talk
-#? []*
+160 gmptogtp-talk Test talk
+#? []

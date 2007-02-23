@@ -5,7 +5,6 @@
 # netgtp localhost <p>
 #
 # $Id$
-# $Source$
 #-----------------------------------------------------------------------------
 
 # Name should be passed through from GtpDummy

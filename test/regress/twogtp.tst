@@ -4,7 +4,6 @@
 # twogtp -black gtpdummy -white "gnugo --mode gtp" (GNU Go version 3.6)
 #
 # $Id$
-# $Source$
 #-----------------------------------------------------------------------------
 
 10 name
@@ -17,15 +16,15 @@
 
 40 list_commands
 
-50 gogui_interrupt
+50 gogui-interrupt
 
-60 gogui_title
+60 gogui-title
 #? [GNU Go vs GtpDummy \(B\)]
 
-70 twogtp_black name
+70 twogtp-black name
 #? [GtpDummy]
 
-80 twogtp_white name
+80 twogtp-white name
 #? [GNU Go]
 
 90 play b c3

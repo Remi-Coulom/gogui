@@ -2,7 +2,6 @@
 # Tests for GtpDummy.
 #
 # $Id$
-# $Source$
 #-----------------------------------------------------------------------------
 
 10 name
@@ -34,36 +33,36 @@
 
 120 echo_err Test text
 
-130 dummy_bwboard
+130 gtpdummy-bwboard
 #? [\n?(([WB] ){18}[WB]\n){18}([WB] ){18}[WB]]
 
-140 dummy_delay
+140 gtpdummy-delay
 #? [0]
 
-150 dummy_delay 0
+150 gtpdummy-delay 0
 
-160 dummy_eplist show
+160 gtpdummy-eplist show
 #? []
 
-170 dummy_eplist a1 B2 C18
+170 gtpdummy-eplist a1 B2 C18
 
-180 dummy_eplist show
+180 gtpdummy-eplist show
 #? [A1 B2 C18]
 
-190 dummy_eplist
+190 gtpdummy-eplist
 
-200 dummy_eplist show
+200 gtpdummy-eplist show
 #? []
 
-210 dummy_long_response 5
+210 gtpdummy-long_response 5
 #? [([1-4]\n){4}[5]]
 
-220 dummy_sleep 0
+220 gtpdummy-sleep 0
 
-230 dummy_next_success Test response
+230 gtpdummy-next_success Test response
 #? []
 
 240 unknown_command
 #? [Test response]
 
-250 gogui_interrupt
+250 gogui-interrupt
