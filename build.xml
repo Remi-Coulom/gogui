@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 <!--
 Build file for Apache Ant (http://ant.apache.org/)
-
 $Id$
-$URL$
 -->
 
 <project name="GoGui" default="all">
 
 <exec executable="svnversion" outputproperty="svnversion"/>
 
+<!--
+Use 123.SVN.${svnversion} for unreleased versions if the last released
+version in the branch was 123. The crash dialog in gogui/Main.java assumes
+that unreleased versions contain the string SVN.
+-->
 <property name="version" value="0.9.SVN.${svnversion}"/>
 
 <tstamp/>
