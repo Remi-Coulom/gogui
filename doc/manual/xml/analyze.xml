@@ -328,9 +328,11 @@ default is the color which is to play.
 <para>
 Will be replaced by a filename entered by the user.
 <note>
+<simpara>
 This wildcard is deprecated and might not be supported in the future.
-It has been superseded by the more specific wildcards <userinput>%r</userinput>
-and <userinput>%w</userinput>.
+It has been superseded by the more specific wildcards
+<userinput>%r</userinput> and <userinput>%w</userinput>.
+</simpara>
 </note>
 </para>
 </listitem>
