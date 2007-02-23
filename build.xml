@@ -8,7 +8,9 @@ $URL$
 
 <project name="GoGui" default="all">
 
-<property name="version" value="0.9.x"/>
+<exec executable="svnversion" outputproperty="svnversion"/>
+
+<property name="version" value="0.9.SVN.${svnversion}"/>
 
 <tstamp/>
 

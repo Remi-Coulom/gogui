@@ -16,7 +16,7 @@ public final class Version
     */
     public static String get()
     {
-        return "0.9.x";
+        return "0.9.SVN.4422:4427M";
     }
 
     /** Make constructor unavailable; class is for namespace only. */

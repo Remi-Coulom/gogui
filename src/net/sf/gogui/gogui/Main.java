@@ -167,7 +167,7 @@ public final class Main
         optionalMessageArea.setBackground(UIManager.getColor("Label.background"));
         optionalMessageArea.setFont(UIManager.getFont("Label.font"));
         String optionalMessage;
-        if (Version.get().trim().toLowerCase().endsWith(".x"))
+        if (Version.get().indexOf("SVN") >= 0)
             optionalMessage = 
                 "You are running an unreleased version of GoGui. Please don't report this bug to\n" +
                 "the GoGui bug tracker, but email the author of GoGui directly instead.\n";
