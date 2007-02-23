@@ -22,16 +22,16 @@ public final class ProgramTest
     public void testSetUniqueLabel()
     {
         ArrayList programs = new ArrayList();
-        programs.add(new Program("Foo", "Foo", "", ""));
+        programs.add(new Program("Foo", "Foo", "", "", ""));
         Program p;
 
         // Label already exists, version not empty
-        p = new Program("Foo", "Foo", "1.1", "");
+        p = new Program("Foo", "Foo", "1.1", "", "");
         p.setUniqueLabel(programs);
         assertEquals("Foo 1.1", p.m_label);
 
         // Label already exists, version empty
-        p = new Program("Foo", "Foo", "", "");
+        p = new Program("Foo", "Foo", "", "", "");
         p.setUniqueLabel(programs);
         assertEquals("Foo (2)", p.m_label);
     }
