@@ -955,7 +955,7 @@ public class GoGui
 
     public void actionNewProgram()
     {
-        m_newProgram = new Program("", "", "", "");
+        m_newProgram = new Program("", "", "", "", "");
         final ProgramEditor editor = new ProgramEditor();
         m_newProgram =
             editor.editItem(this, "New Program", m_newProgram, true,
@@ -1119,7 +1119,7 @@ public class GoGui
                 public void run() {
                     try
                     {
-                        attachNewProgram(m_programCommand, null);
+                        attachNewProgram(m_programCommand, m_program);
                     }
                     finally
                     {
@@ -2272,8 +2272,12 @@ public class GoGui
         try
         {
             showStatusImmediately("Attaching program...");
+            String workingDirectory = null;
+            if (program != null)
+                workingDirectory = program.m_workingDirectory;
             GtpClient gtp =
-                new GtpClient(m_programCommand, m_verbose, ioCallback);
+                new GtpClient(m_programCommand, workingDirectory,
+                              m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_autoNumber);
             m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback);

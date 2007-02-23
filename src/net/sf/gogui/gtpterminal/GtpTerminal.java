@@ -42,7 +42,7 @@ public class GtpTerminal
         if (program.equals(""))
             throw new Exception("No program set");
         m_verbose = verbose;
-        m_gtp = new GtpClient(program, verbose, this);
+        m_gtp = new GtpClient(program, null, verbose, this);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         initGame(size);

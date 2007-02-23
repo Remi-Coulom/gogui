@@ -42,8 +42,11 @@ public final class FileDialogs
     /** Dialog type for opening a file. */
     public static final int FILE_OPEN = 0;
 
+    /** Dialog type for opening a directory. */
+    public static final int DIR_OPEN = 1;
+
     /** Dialog type for saving to a file. */
-    public static final int FILE_SAVE = 1;
+    public static final int FILE_SAVE = 2;
 
     /** Dialog type for selecting a file.
         Use this type, if a file name should be selected, but it is not known
@@ -54,6 +57,11 @@ public final class FileDialogs
     public static File showOpen(Component parent, String title)
     {
         return showFileChooser(parent, FILE_OPEN, null, false, title);
+    }
+
+    public static File showOpenDir(Component parent, String title)
+    {
+        return showFileChooser(parent, DIR_OPEN, null, false, title);
     }
 
     public static File showOpenSgf(Component parent)
@@ -164,6 +172,9 @@ public final class FileDialogs
             case FILE_OPEN:
                 title = "Open";
                 break;
+            case DIR_OPEN:
+                title = "Select Directory";
+                break;
             case FILE_SAVE:
                 title = "Save";
                 break;
@@ -175,6 +186,8 @@ public final class FileDialogs
         int mode = FileDialog.LOAD;
         if (type == FILE_SAVE)
             mode = FileDialog.SAVE;
+        if (type == DIR_OPEN)
+            System.setProperty("apple.awt.fileDialogForDirectories", "true");
         dialog.setMode(mode);
         /* Commented out, because there is no way to change the filter by the
            user (at least not on Linux)
@@ -188,6 +201,8 @@ public final class FileDialogs
         */
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
+        if (type == DIR_OPEN)
+            System.setProperty("apple.awt.fileDialogForDirectories", "false");
         if (dialog.getFile() == null)
             return null;
         return new File(dialog.getDirectory(), dialog.getFile());
@@ -240,6 +255,10 @@ public final class FileDialogs
             ret = chooser.showSaveDialog(parent);
             break;
         case FILE_OPEN:
+            ret = chooser.showOpenDialog(parent);
+            break;
+        case DIR_OPEN:
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             ret = chooser.showOpenDialog(parent);
             break;
         default:

@@ -13,20 +13,31 @@ import net.sf.gogui.util.StringUtil;
 /** Command line and other information to run a GTP engine. */
 public final class Program
 {
+    public String m_label;
+
+    public String m_name;
+
+    public String m_version;
+
+    public String m_command;
+
+    public String m_workingDirectory;
+
     public Program(Program program)
     {
         copyFrom(program);
     }
 
-    public Program(String label, String name, String version, String command)
+    public Program(String label, String name, String version, String command,
+                   String workingDirectory)
     {
-        init(label, name, version, command);
+        init(label, name, version, command, workingDirectory);
     }
 
     public void copyFrom(Program program)
     {
         init(program.m_label, program.m_name, program.m_version,
-             program.m_command);
+             program.m_command, program.m_workingDirectory);
     }
 
     public static ArrayList load()
@@ -47,7 +58,9 @@ public final class Program
             String name = prefs.get("name", "");
             String version = prefs.get("version", "");
             String command = prefs.get("command", "");
-            programs.add(new Program(label, name, version, command));
+            String workingDirectory = prefs.get("working-directory", "");
+            programs.add(new Program(label, name, version, command,
+                                     workingDirectory));
         }
         return programs;
     }
@@ -68,6 +81,7 @@ public final class Program
             prefs.put("name", p.m_name);
             prefs.put("version", p.m_version);
             prefs.put("command", p.m_command);
+            prefs.put("working-directory", p.m_workingDirectory);
         }
     }
 
@@ -149,21 +163,14 @@ public final class Program
         return changed;
     }
 
-    public String m_label;
-
-    public String m_name;
-
-    public String m_version;
-
-    public String m_command;
-
     private void init(String label, String name, String version,
-                      String command)
+                      String command, String workingDirectory)
     {
         m_label = label.trim();
         m_name = name.trim();
         m_version = version.trim();
         m_command = command.trim();
+        m_workingDirectory = workingDirectory.trim();
     }
 }
 

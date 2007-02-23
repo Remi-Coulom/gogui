@@ -706,7 +706,7 @@ public class GtpRegress
         BufferedReader reader = new BufferedReader(fileReader);
         try
         {
-            m_gtp = new GtpClient(m_program, m_verbose, this);
+            m_gtp = new GtpClient(m_program, null, m_verbose, this);
             m_lastSgf = null;
             queryNameAndVersion();
             double cpuTime = getCpuTime();

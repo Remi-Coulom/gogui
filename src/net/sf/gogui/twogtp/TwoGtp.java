@@ -60,16 +60,16 @@ public class TwoGtp
         m_sgfFile = sgfFile;
         if (force)
             getResultFile().delete();
-        m_black = new GtpClient(black, verbose, null);
+        m_black = new GtpClient(black, null, verbose, null);
         m_black.setLogPrefix("B");
         m_synchronizerBlack = new GtpSynchronizer(m_black);
-        m_white = new GtpClient(white, verbose, null);
+        m_white = new GtpClient(white, null, verbose, null);
         m_white.setLogPrefix("W");
         m_synchronizerWhite = new GtpSynchronizer(m_white);
         m_refereeCommand = referee;
         if (! referee.equals(""))
         {
-            m_referee = new GtpClient(referee, verbose, null);
+            m_referee = new GtpClient(referee, null, verbose, null);
             m_referee.setLogPrefix("R");
             m_synchronizerReferee = new GtpSynchronizer(m_referee);
         }
@@ -80,7 +80,7 @@ public class TwoGtp
         }
         if (! observer.equals(""))
         {
-            m_observer = new GtpClient(observer, verbose, null);
+            m_observer = new GtpClient(observer, null, verbose, null);
             m_observer.setLogPrefix("O");
             m_synchronizerObserver = new GtpSynchronizer(m_observer);
         }

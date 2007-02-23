@@ -38,8 +38,9 @@ public class GtpStatistics
                     boolean allowSetup, boolean backward)
         throws ErrorMessage, GtpError, IOException
     {
-        run(new GtpClient(program, verbose, null), program, sgfFiles, size,
-            commands, beginCommands, finalCommands, allowSetup, backward);
+        run(new GtpClient(program, null, verbose, null), program, sgfFiles,
+            size, commands, beginCommands, finalCommands, allowSetup,
+            backward);
     }
 
     /** Construct with existing GTP engine.

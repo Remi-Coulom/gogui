@@ -5,6 +5,7 @@
 package net.sf.gogui.gtp;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -98,10 +99,13 @@ public final class GtpClient
         a command line option to produce deterministic randomness (the
         command returned by getProgramCommand() will contain the actual
         random seed used).
+        @param workingDirectory The working directory to run the program in or
+        null for the current directory
         @param log Log input, output and error stream to standard error.
         @param callback Callback for external display of the streams.
     */
-    public GtpClient(String program, boolean log, IOCallback callback)
+    public GtpClient(String program, String workingDirectory, boolean log,
+                     IOCallback callback)
         throws GtpError
     {
         m_log = log;
@@ -122,10 +126,14 @@ public final class GtpClient
         Runtime runtime = Runtime.getRuntime();
         try
         {
+            File dir = null;
+            if (! StringUtil.isEmpty(workingDirectory))
+                dir = new File(workingDirectory);
             // Create command array with StringUtil::splitArguments
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
-            m_process = runtime.exec(StringUtil.splitArguments(program));
+            m_process = runtime.exec(StringUtil.splitArguments(program),
+                                     null, dir);
         }
         catch (IOException e)
         {

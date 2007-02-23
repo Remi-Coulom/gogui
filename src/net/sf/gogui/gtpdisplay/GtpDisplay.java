@@ -41,7 +41,7 @@ public class GtpDisplay
         super(null);
         if (! (program == null || program.equals("")))
         {
-            m_gtp = new GtpClient(program, verbose, null);
+            m_gtp = new GtpClient(program, null, verbose, null);
             m_gtp.queryProtocolVersion();
             m_gtp.querySupportedCommands();
         }

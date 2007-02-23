@@ -45,12 +45,20 @@ public class ProgramEditor
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         if (! disableName)
-            m_label = createEntry("Label", 18, program.m_label);
-        createCommandEntry(program.m_command, messageDialogs);
+            m_label = createEntry("Label", 20, program.m_label);
+        m_command = createFileEntry("Command", program.m_command,
+                                    messageDialogs, "Browse for Go program",
+                                    "Select Go Program", false, true);
+        m_workingDirectory = createFileEntry("Working directory",
+                                             program.m_workingDirectory,
+                                             messageDialogs,
+                                             "Browse for working directory",
+                                             "Select Working Directory",
+                                             true, false);
         if (! disableName)
         {
-            m_name = createEntry("Name", 18, program.m_name, false);
-            m_version = createEntry("Version", 18, program.m_version, false);
+            m_name = createEntry("Name", 20, program.m_name, false);
+            m_version = createEntry("Version", 20, program.m_version, false);
         }
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
@@ -84,8 +92,9 @@ public class ProgramEditor
             newVersion = m_version.getText().trim();
         }
         String newCommand = m_command.getText().trim();
+        String newWorkingDirectory = m_workingDirectory.getText().trim();
         Program newProgram = new Program(newLabel, newName, newVersion,
-                                         newCommand);
+                                         newCommand, newWorkingDirectory);
         m_dialog.dispose();
         return newProgram;
     }
@@ -116,6 +125,8 @@ public class ProgramEditor
     private JTextField m_version;
 
     private JTextField m_command;
+
+    private JTextField m_workingDirectory;
 
     private JDialog m_dialog;
 
@@ -154,52 +165,46 @@ public class ProgramEditor
         box.add(label);
         return box;
     }
-    private void createCommandEntry(String text,
-                                    final MessageDialogs messageDialogs)
+    private JTextField createFileEntry(String label, String text,
+                                       final MessageDialogs messageDialogs,
+                                       String browseToolTip,
+                                       final String title,
+                                       final boolean isDirectory,
+                                       final boolean isCommand)
     {
-        m_panelLeft.add(createEntryLabel("Command"));
+        m_panelLeft.add(createEntryLabel(label));
         Box box = Box.createVerticalBox();
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         box.add(Box.createVerticalGlue());
         box.add(panel);
         box.add(Box.createVerticalGlue());
-        m_command = new JTextField(30);
-        m_command.setText(text);
-        panel.add(m_command);
+        final JTextField field = new JTextField(30);
+        field.setText(text);
+        panel.add(field);
         panel.add(GuiUtil.createSmallFiller());
         JButton button = new JButton();
         panel.add(button);
         button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
-        button.setToolTipText("Browse for Go program");
+        button.setToolTipText(browseToolTip);
         button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    File file =
-                        FileDialogs.showOpen(m_dialog, "Select Go Program");
+                    File file;
+                    if (isDirectory)
+                        file = FileDialogs.showOpenDir(m_dialog, title);
+                    else
+                        file = FileDialogs.showOpen(m_dialog, title);
                     if (file == null)
                         return;
                     String text = file.toString();
-                    if (text.indexOf(' ') >= 0)
+                    if (isCommand && text.indexOf(' ') >= 0)
                         text = "\"" + text + "\"";        
-                    String fileNameToLower =
-                        file.getName().toLowerCase(Locale.ENGLISH);
-                    if (fileNameToLower.startsWith("gnugo"))
-                    {
-                        String message =
-                            "Append option '--mode gtp' for GNU Go?";
-                        if (messageDialogs.showQuestion(m_dialog, message,
-                                                        "GNU Go needs this " +
-                                                        "option to startup " +
-                                                        "in GTP mode.",
-                                                        "Append Option",
-                                                        false))
-                            text = text + " --mode gtp";
-                    }
-                    m_command.setText(text);
-                    m_command.setCaretPosition(text.length());
-                    m_command.requestFocusInWindow();
+                    field.setText(text);
+                    field.setCaretPosition(text.length());
+                    field.requestFocusInWindow();
                 }
             });
         m_panelRight.add(box);
+        return field;
     }
 
     private boolean validate(Component parent, MessageDialogs messageDialogs)
@@ -223,6 +228,18 @@ public class ProgramEditor
             String optionalMessage =
                 "You need to specify the command line for invoking the Go " +
                 "program.";
+            messageDialogs.showError(parent, mainMessage, optionalMessage,
+                                     false);
+            return false;
+        }
+        String workingDirectory = m_workingDirectory.getText().trim();
+        if (! workingDirectory.equals("")
+            && ! new File(workingDirectory).isDirectory())
+        {
+            String mainMessage = "Invalid working directory";
+            String optionalMessage =
+                "The specified working directory does not exist or " +
+                "is not a directory.";
             messageDialogs.showError(parent, mainMessage, optionalMessage,
                                      false);
             return false;
