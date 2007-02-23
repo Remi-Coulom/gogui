@@ -397,7 +397,7 @@ ${quaqua.nestedzipfile}
  token="&lt;head&gt;"
  value="&lt;head&gt;&lt;meta name=&quot;AppleTitle&quot; content=&quot;GoGui Help&quot;&gt;"/>
 <copy todir="${appdir}/Contents/Resources/Java" overwrite="true">
-<fileset dir="lib" includes="*.jar"/>
+<fileset dir="lib" includes="*.jar" excludes="looks-*.jar"/>
 </copy>
 <copy todir="${appdir}/Contents/bin" overwrite="true">
 <fileset dir="bin" includes="${scripts}"/>
