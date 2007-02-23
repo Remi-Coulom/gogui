@@ -861,16 +861,12 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
 </target>
 
 <target name="version-check-uptodate">
-<uptodate property="version-uptodate"
- targetfile="src/net/sf/gogui/version/Version.java">
-<srcfiles dir="."
- includes="
-  build.xml,
-  doc/manual/xml/version.xml.in,
-  mac/packaging/Info.plist.in,
-  src/version/Version.java.in,
-"/>
-</uptodate>
+<loadfile property="version_java_contents"
+ srcFile="src/net/sf/gogui/version/Version.java"/>
+<condition property="version-uptodate">
+<contains string="${version_java_contents}"
+ substring="&quot;${version}&quot;"/>
+</condition>
 </target>
 
 </project>
