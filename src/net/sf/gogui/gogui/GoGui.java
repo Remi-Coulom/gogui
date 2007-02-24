@@ -1398,7 +1398,10 @@ public class GoGui
     public void actionShowTree()
     {
         if (m_gameTreeViewer == null)
+        {
             createTree();
+            updateViews(false);
+        }
         else
             m_gameTreeViewer.toFront();
     }
