@@ -387,7 +387,7 @@ public class GoGui
     {
         if (getClock().isRunning())
             return;
-        m_game.startClock();
+        m_game.resumeClock();
         updateViews(false);
     }
 
@@ -397,6 +397,14 @@ public class GoGui
             return;
         m_game.restoreClock();
         m_gameInfo.updateTimeFromClock(getClock());
+        updateViews(false);
+    }
+
+    public void actionClockStart()
+    {
+        if (getClock().isRunning())
+            return;
+        m_game.startClock();
         updateViews(false);
     }
 
@@ -1084,9 +1092,6 @@ public class GoGui
         }
         m_interruptComputerBoth = false;
         generateMove(isSingleMove);
-        if (getCurrentNode() == getTree().getRootConst()
-            && ! getCurrentNode().hasChildren())
-            m_game.resetClock();
         m_game.startClock();
     }
 

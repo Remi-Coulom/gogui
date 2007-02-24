@@ -226,6 +226,11 @@ public class Game
         NodeUtil.restoreClock(getCurrentNode(), m_clock);
     }
 
+    public void resumeClock()
+    {
+        m_clock.resume();
+    }
+
     /** Set clock listener.
         If the clock has a listener, the clock should be stopped with
         haltClock() if it is no longer used, otherwise the timer thread can
@@ -325,8 +330,7 @@ public class Game
 
     public void startClock()
     {
-        if (! m_clock.isRunning())
-            m_clock.startMove(getToMove());
+        m_clock.startMove(getToMove());
     }
 
     /** Truncate current node and subtree.

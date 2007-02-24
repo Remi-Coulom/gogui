@@ -227,6 +227,12 @@ public class GoGuiActions
                     m_goGui.actionClockRestore(); } },
              "Restore", "Restore clock to time stored at current position");
 
+    public final GoGuiAction m_actionClockStart =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionClockStart(); } },
+             "Start", "Start clock");
+
     public final GoGuiAction m_actionComputerBlack =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -831,6 +837,7 @@ public class GoGuiActions
         m_actionClockHalt.setEnabled(clock.isRunning());
         updateActionClockResume(clock);
         updateActionClockRestore(node, clock);
+        updateActionClockStart(clock);
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
         m_actionComputerBoth.setEnabled(isProgramAttached);
@@ -960,11 +967,11 @@ public class GoGuiActions
     {
         boolean enabled = false;
         String desc = null;
-        if (! clock.isRunning())
+        if (! clock.isRunning() && clock.getToMove() != null)
         {
             enabled = true;
             StringBuffer buffer = new StringBuffer();
-            buffer.append("Start or resume clock (B ");
+            buffer.append("Resume clock (B ");
             buffer.append(clock.getTimeString(GoColor.BLACK));
             buffer.append(", W ");
             buffer.append(clock.getTimeString(GoColor.WHITE));
@@ -973,6 +980,25 @@ public class GoGuiActions
         }
         m_actionClockResume.setEnabled(enabled);
         m_actionClockResume.setDescription(desc);
+    }
+
+    private void updateActionClockStart(ConstClock clock)
+    {
+        boolean enabled = false;
+        String desc = null;
+        if (! clock.isRunning() && clock.getToMove() == null)
+        {
+            enabled = true;
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Start clock (B ");
+            buffer.append(clock.getTimeString(GoColor.BLACK));
+            buffer.append(", W ");
+            buffer.append(clock.getTimeString(GoColor.WHITE));
+            buffer.append(")");
+            desc = buffer.toString();
+        }
+        m_actionClockStart.setEnabled(enabled);
+        m_actionClockStart.setDescription(desc);
     }
 
     private void updateActionDetachProgram(boolean isProgramAttached,

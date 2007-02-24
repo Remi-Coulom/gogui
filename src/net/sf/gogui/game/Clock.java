@@ -118,6 +118,14 @@ public final class Clock
         return buffer.toString();
     }
 
+    /** Return color the clock is currently measuring the time for.
+        Returns null, if clock is between a #stopMove and #startMove.
+    */
+    public GoColor getToMove()
+    {
+        return m_toMove;
+    }
+
     public void halt()
     {
         if (m_toMove == null)
@@ -175,6 +183,14 @@ public final class Clock
         updateListener();
     }
 
+    /** Resume clock, if it was halted during a player's move time. */
+    public void resume()
+    {
+        if (m_toMove == null)
+            return;
+        startTimer();
+    }
+
     /** Register listener for clock changes.
         Only one listener supported at the moment.
         If the clock has a listener, the clock should be stopped with halt()
@@ -224,14 +240,12 @@ public final class Clock
     }
 
     /** Start time for a move.
-        If the clock was already running for the same color, the passed time
-        for this color and the current move is discarded.
+        If the clock was already running, the passed time for the current move
+        is discarded.
     */
     public void startMove(GoColor color)
     {
         assert(color == GoColor.BLACK || color == GoColor.WHITE);
-        if  (m_toMove != null)
-            stopMove();
         m_toMove = color;
         m_startMoveTime = currentTimeMillis();
         startTimer();

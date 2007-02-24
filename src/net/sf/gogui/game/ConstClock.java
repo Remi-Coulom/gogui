@@ -19,6 +19,8 @@ public interface ConstClock
 
     String getTimeString(GoColor color);
 
+    GoColor getToMove();
+
     boolean isInitialized();
 
     boolean isInByoyomi(GoColor color);
