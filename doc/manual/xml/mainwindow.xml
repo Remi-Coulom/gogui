@@ -795,10 +795,10 @@ Show the game tree window.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Analyze Dialog</guimenuitem></term>
+<term><guimenuitem>Analyze Commands</guimenuitem></term>
 <listitem>
 <para>
-Show the Analyze window.
+Show a window to select analyze commands (see <xref linkend="analyze"/>).
 </para>
 </listitem>
 </varlistentry>

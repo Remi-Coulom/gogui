@@ -605,7 +605,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionShowAnalyzeDialog(); } },
-             "Analyze Dialog", "Show window with analyze commands",
+             "Analyze Commands", "Show window with analyze commands",
              KeyEvent.VK_F9, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionShowShell =
