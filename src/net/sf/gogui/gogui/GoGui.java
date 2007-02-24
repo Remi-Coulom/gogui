@@ -506,7 +506,12 @@ public class GoGui
     public void actionEditLabel(GoPoint point)
     {
         String value = getCurrentNode().getLabel(point);
-        value = JOptionPane.showInputDialog(this, "Label " + point, value);
+        Object message = "Label " + point;
+        String title = "Edit Label";
+        int messageType = JOptionPane.PLAIN_MESSAGE;
+        value = (String)JOptionPane.showInputDialog(this, message, title,
+                                                    messageType, null, null,
+                                                    value);
         if (value == null)
             return;
         m_game.setLabel(point, value);
