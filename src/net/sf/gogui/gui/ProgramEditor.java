@@ -159,9 +159,9 @@ public class ProgramEditor
     private JComponent createEntryLabel(String text)
     {
         Box box = Box.createHorizontalBox();
+        box.add(Box.createHorizontalGlue());
         JLabel label = new JLabel(text + ":");
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
-        GuiUtil.setUnlimitedSize(label);
         box.add(label);
         return box;
     }
