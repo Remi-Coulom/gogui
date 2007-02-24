@@ -958,7 +958,7 @@ public class GoGui
         m_newProgram = new Program("", "", "", "", "");
         final ProgramEditor editor = new ProgramEditor();
         m_newProgram =
-            editor.editItem(this, "New Program", m_newProgram, true,
+            editor.editItem(this, "New Program", m_newProgram, true, false,
                             m_messageDialogs);
         if (m_newProgram == null)
             return;
@@ -972,6 +972,7 @@ public class GoGui
                         m_newProgram = editor.editItem(GoGui.this,
                                                        "New Program",
                                                        m_newProgram, true,
+                                                       false,
                                                        m_messageDialogs);
                         if (m_newProgram == null)
                             return;
@@ -982,7 +983,7 @@ public class GoGui
                     m_newProgram.m_version = m_version;
                     m_newProgram.setUniqueLabel(m_programs);
                     m_newProgram = editor.editItem(GoGui.this, "New Program",
-                                                   m_newProgram, false,
+                                                   m_newProgram, false, true,
                                                    m_messageDialogs);
                     if (m_newProgram == null)
                     {

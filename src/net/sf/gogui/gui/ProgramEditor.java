@@ -30,32 +30,45 @@ public class ProgramEditor
     public Object editItem(Component parent, Object object,
                            MessageDialogs messageDialogs)
     {
-        return editItem(parent, "Edit Program", (Program)object, false,
+        return editItem(parent, "Edit Program", (Program)object, false, false,
                         messageDialogs);
     }
 
+    /** Edit an instance of Program.
+        @param parent Parent component for message dialog
+        @param title Title for this dialog
+        @param program Program instance to edit
+        @param editOnlyCommand Show and edit only command and working directory
+        (as a first step, such that name, version and suggested label can be
+        set after querying the program)
+        @param editOnlyLabel Edit only the label (show the other information
+        non-editable)
+        @param messageDialogs Message dialog manager
+    */
     public Program editItem(Component parent, String title, Program program,
-                            boolean disableName,
+                            boolean editOnlyCommand, boolean editOnlyLabel,
                             MessageDialogs messageDialogs)
     {
-        m_disableName = disableName;
+        m_editOnlyCommand = editOnlyCommand;
+        m_editOnlyLabel = editOnlyLabel;
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
         m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelLeft, BorderLayout.WEST);
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        if (! disableName)
+        if (! editOnlyCommand)
             m_label = createEntry("Label", 20, program.m_label);
         m_command = createFileEntry("Command", program.m_command,
                                     messageDialogs, "Browse for Go program",
-                                    "Select Go Program", false, true);
+                                    "Select Go Program", false, true,
+                                    ! m_editOnlyLabel);
         m_workingDirectory = createFileEntry("Working directory",
                                              program.m_workingDirectory,
                                              messageDialogs,
                                              "Browse for working directory",
                                              "Select Working Directory",
-                                             true, false);
-        if (! disableName)
+                                             true, false, ! m_editOnlyLabel);
+        if (! editOnlyCommand)
         {
             m_name = createEntry("Name", 20, program.m_name, false);
             m_version = createEntry("Version", 20, program.m_version, false);
@@ -85,7 +98,7 @@ public class ProgramEditor
         String newLabel = "";
         String newName = "";
         String newVersion = "";
-        if (! disableName)
+        if (! editOnlyCommand)
         {
             newLabel = m_label.getText().trim();
             newName = m_name.getText().trim();
@@ -130,7 +143,9 @@ public class ProgramEditor
 
     private JDialog m_dialog;
 
-    private boolean m_disableName;
+    private boolean m_editOnlyCommand;
+
+    private boolean m_editOnlyLabel;
 
     private JTextField createEntry(String labelText, int cols, String text)
     {
@@ -170,7 +185,8 @@ public class ProgramEditor
                                        String browseToolTip,
                                        final String title,
                                        final boolean isDirectory,
-                                       final boolean isCommand)
+                                       final boolean isCommand,
+                                       boolean editable)
     {
         m_panelLeft.add(createEntryLabel(label));
         Box box = Box.createVerticalBox();
@@ -181,35 +197,40 @@ public class ProgramEditor
         final JTextField field = new JTextField(30);
         field.setText(text);
         panel.add(field);
-        panel.add(GuiUtil.createSmallFiller());
-        JButton button = new JButton();
-        panel.add(button);
-        button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
-        button.setToolTipText(browseToolTip);
-        button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    File file;
-                    if (isDirectory)
-                        file = FileDialogs.showOpenDir(m_dialog, title);
-                    else
-                        file = FileDialogs.showOpen(m_dialog, title);
-                    if (file == null)
-                        return;
-                    String text = file.toString();
-                    if (isCommand && text.indexOf(' ') >= 0)
-                        text = "\"" + text + "\"";        
-                    field.setText(text);
-                    field.setCaretPosition(text.length());
-                    field.requestFocusInWindow();
-                }
-            });
+        if (! editable)
+            GuiUtil.setEditableFalse(field);
+        else
+        {
+            panel.add(GuiUtil.createSmallFiller());
+            JButton button = new JButton();
+            panel.add(button);
+            button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
+            button.setToolTipText(browseToolTip);
+            button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        File file;
+                        if (isDirectory)
+                            file = FileDialogs.showOpenDir(m_dialog, title);
+                        else
+                            file = FileDialogs.showOpen(m_dialog, title);
+                        if (file == null)
+                            return;
+                        String text = file.toString();
+                        if (isCommand && text.indexOf(' ') >= 0)
+                            text = "\"" + text + "\"";        
+                        field.setText(text);
+                        field.setCaretPosition(text.length());
+                        field.requestFocusInWindow();
+                    }
+                });
+        }
         m_panelRight.add(box);
         return field;
     }
 
     private boolean validate(Component parent, MessageDialogs messageDialogs)
     {
-        if (! m_disableName)
+        if (! m_editOnlyCommand)
         {
             if (m_label.getText().trim().equals(""))
             {
