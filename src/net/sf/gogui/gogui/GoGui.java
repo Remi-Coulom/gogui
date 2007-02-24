@@ -3795,16 +3795,13 @@ public class GoGui
 
     private void showGameFinished()
     {
-        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
-        String optionalMessage;
         if (m_resigned)
-            optionalMessage =
-                getProgramName() + " lost the game by resignation.";
-        else
-            optionalMessage =
-                "The game is finished because both players passed. " +
-                "Use Score from the Game menu to count the score " +
-                "in final positions.";
+            return;
+        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
+        String optionalMessage =
+            "The game is finished because both players passed. " +
+            "Use Score from the Game menu to count the score " +
+            "in final positions.";
         m_messageDialogs.showInfo(disableKey, this, "Game finished",
                                   optionalMessage, false);
     }
