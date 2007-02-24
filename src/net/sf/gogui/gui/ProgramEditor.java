@@ -21,7 +21,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 /** Dialog for displaying and editing a program. */
 public class ProgramEditor
@@ -52,6 +55,54 @@ public class ProgramEditor
         m_editOnlyCommand = editOnlyCommand;
         m_editOnlyLabel = editOnlyLabel;
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.SMALL_PAD, 0));
+        Box box = null;
+        if (editOnlyCommand || editOnlyLabel)
+        {
+            box = Box.createVerticalBox();        
+            panel.add(box, BorderLayout.NORTH);
+            String mainMessage;
+            String optionalMessage;
+            if (editOnlyCommand)
+            {
+                mainMessage = "Enter the command for the Go program";
+                optionalMessage =
+                    "Often the command is simply the name of an executable " +
+                    "file, but some programs need options to start in " +
+                    "Go Text Protocol mode (e.g. \"gnugo --mode gtp\"). " +
+                    "Check the documentation of the Go program what command " +
+                    "should be used. " +
+                    "The working directory can be left blank if the program " +
+                    "does not need a special working directory.";
+            }
+            else
+            {
+                mainMessage = "Edit the menu label";
+                optionalMessage =
+                    "The label will be used to create a menu item for " +
+                    "the Go program.";
+                
+            }
+            JLabel label =
+                new JLabel("<html><b>" + mainMessage + "</b></html>");
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            addFiller(box);
+            box.add(label);
+            int columns = Math.min(30, optionalMessage.length());
+            JTextArea textArea = new JTextArea(optionalMessage, 0, columns);
+            textArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+            textArea.setEditable(false);
+            textArea.setFocusable(false);
+            textArea.setForeground(UIManager.getColor("Label.foreground"));
+            textArea.setBackground(UIManager.getColor("Label.background"));
+            textArea.setFont(UIManager.getFont("Label.font"));
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            addFiller(box);
+            box.add(textArea);
+            addFiller(box);
+            addFiller(box);
+            addFiller(box);
+        }
         m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelLeft, BorderLayout.WEST);
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
@@ -85,6 +136,13 @@ public class ProgramEditor
                         m_command.requestFocusInWindow();
                 }
             });
+        if (box != null)
+        {
+            // Workaround for Sun Bug ID 4545951 (still in Linux JDK
+            // 1.5.0_04-b05 or Mac 1.4.2_12)
+            box.invalidate();
+            m_dialog.pack();
+        }
         boolean done = false;
         while (! done)
         {
@@ -146,6 +204,13 @@ public class ProgramEditor
     private boolean m_editOnlyCommand;
 
     private boolean m_editOnlyLabel;
+
+    private static void addFiller(JComponent component)
+    {
+        Box.Filler filler = GuiUtil.createFiller();
+        filler.setAlignmentX(Component.LEFT_ALIGNMENT);
+        component.add(filler);
+    }
 
     private JTextField createEntry(String labelText, int cols, String text)
     {
