@@ -864,7 +864,7 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
 </target>
 
 <target name="version-check-uptodate">
-<loadfile property="version_java_contents"
+<loadfile property="version_java_contents" failonerror="false"
  srcFile="src/net/sf/gogui/version/Version.java"/>
 <condition property="version-uptodate">
 <contains string="${version_java_contents}"
