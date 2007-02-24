@@ -225,11 +225,8 @@ public final class MessageDialogs
         if (optionalMessage == null)
             optionalMessage = "";
         Box box = Box.createVerticalBox();
-        JLabel label = new JLabel(mainMessage);
+        JLabel label = new JLabel("<html><b>" + mainMessage + "</b></html>");
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        Font labelFont = UIManager.getFont("Label.font");
-        Font labelFontBold = labelFont.deriveFont(Font.BOLD);
-        label.setFont(labelFontBold);
         addFiller(box);
         box.add(label);
         int columns = Math.min(30, optionalMessage.length());
@@ -239,7 +236,7 @@ public final class MessageDialogs
         textArea.setFocusable(false);
         textArea.setForeground(UIManager.getColor("Label.foreground"));
         textArea.setBackground(UIManager.getColor("Label.background"));
-        textArea.setFont(labelFont);
+        textArea.setFont(UIManager.getFont("Label.font"));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         addFiller(box);
