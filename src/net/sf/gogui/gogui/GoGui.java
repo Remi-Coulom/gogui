@@ -257,7 +257,7 @@ public class GoGui
         String command = null;
         if (m_gtp != null)
             command = m_gtp.getProgramCommand();
-        AboutDialog.show(this, getProgramName(), m_version, command,
+        AboutDialog.show(this, getProgramLabel(), m_version, command,
                          m_messageDialogs);
     }
 
@@ -437,10 +437,12 @@ public class GoGui
     {        
         if (m_gtp == null)
             return;
-        if (isCommandInProgress()
-            && ! showQuestion("Terminate " + getProgramName() + "?",
-                              "A command is in progress.", "Terminate", true))
-            return;
+        if (isCommandInProgress())
+        {
+            if (! showQuestion("Terminate " + getProgramLabel() + "?",
+                               "A command is in progress.", "Terminate", true))
+                return;
+        }
         m_prefs.putInt("program", -1);
         protectGui();
         Runnable runnable = new Runnable() {
@@ -992,7 +994,7 @@ public class GoGui
                         SwingUtilities.invokeLater(this);
                         return;
                     }
-                    m_newProgram.m_name = getProgramName();
+                    m_newProgram.m_name = m_gtp.getProgramLabel();
                     m_newProgram.m_version = m_version;
                     m_newProgram.setUniqueLabel(m_programs);
                     m_newProgram = editor.editItem(GoGui.this, "New Program",
@@ -1204,10 +1206,13 @@ public class GoGui
         {
             String disableKey =
                 "net.sf.gogui.gogui.GoGui.score-not-supported";
+            String name = getProgramName();
+            if (name == null)
+                name = "The attached Go program";
             m_messageDialogs.showInfo(disableKey, this,
                                       "Please mark dead groups manually",
-                                      getProgramName()
-                                      + " does not support scoring.", true);
+                                      name + " does not support scoring.",
+                                      true);
             initScore(null);
             updateViews(false);
         }
@@ -1598,8 +1603,23 @@ public class GoGui
         return m_programs.size();
     }
 
+    /** Get label for currently attached program.
+        @return Label from Program instance, if program was created with a
+        Program instance, otherwise label as in GtpClientBase#getLabel; null
+        if no program is attached.
+    */
+    public String getProgramLabel()
+    {
+        if (m_gtp == null)
+            return null;
+        else if (m_program != null && ! StringUtil.isEmpty(m_program.m_label))
+            return m_program.m_label;
+        else
+            return m_gtp.getProgramLabel();
+    }
+
     /** Get name of currently attached program.
-        @return Name or null, if no program is attached
+        @return Name or null, if no program is attached or name is not known.
     */
     public String getProgramName()
     {
@@ -1892,7 +1912,9 @@ public class GoGui
         public void run()
         {
             String name = getProgramName();
-            String mainMessage = name + " sent a malformed response";
+            String mainMessage =
+                (name == null ? "The Go program" : name) +
+                " sent a malformed response";
             if (m_line.trim().equals(""))
             {
                 String disableKey =
@@ -1904,7 +1926,8 @@ public class GoGui
                     " instead of two. This error can probably be" +
                     " ignored, but could indicate a more serious problem" +
                     " with the Go program. You should inform the author of " +
-                    name + ".";
+                    (name == null ? "the Go program" : name) +
+                    ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage, 
                                              true);
@@ -1918,7 +1941,9 @@ public class GoGui
                     " response line are not allowed by the GTP standard." +
                     " This error can probably be ignored, but could indicate" +
                     " a more serious problem with the Go program. You " +
-                    " should inform the author of " + name + ".";
+                    " should inform the author of " +
+                    (name == null ? "the Go program" : name) +
+                    ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage, 
                                              true);
@@ -2316,7 +2341,7 @@ public class GoGui
             }
             m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
             restoreSize(m_shell, "shell");
-            m_shell.setProgramName(getProgramName());
+            m_shell.setProgramName(getProgramLabel());
             ArrayList supportedCommands =
                 m_gtp.getSupportedCommands();
             m_shell.setInitialCompletions(supportedCommands);
@@ -2349,7 +2374,10 @@ public class GoGui
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
         m_shell.setCommandInProgess(true);
-        showStatus(getProgramName() + " is thinking...");
+        String name = getProgramName();
+        if (name == null)
+            name = "The Go Program";
+        showStatus(name + " is thinking...");
         updateViews(false);
     }
 
@@ -2450,24 +2478,33 @@ public class GoGui
         }
         if (! checkCommandInProgress())
             return false;
-        String name = getProgramName();
+        String nameCapitalized = getProgramName();
+        String nameNotCapitalized = getProgramName();
+        if (nameCapitalized == null)
+        {
+            nameCapitalized = "The Go program";
+            nameNotCapitalized = "the Go program";
+        }
         if (m_gtp.isProgramDead())
         {
-            String mainMessage = name + " has terminated";
+            String mainMessage = nameCapitalized + " has terminated";
             String optionalMessage =
-                "Check the GTP shell window for error messages of " + name +
+                "Check the GTP shell window for error messages of " +
+                nameNotCapitalized +
                 ", which could be helpful to find the reason for" +
                 " this unexpected failure. " +
-                "You can reattach " + name + " from the Program menu.";
+                "You can reattach " + nameNotCapitalized +
+                " from the Program menu.";
             showError(mainMessage, optionalMessage, false);
             return false;
         }
         if (isOutOfSync())
         {
-            showError(name + " is not in sync with current position",
-                      "A previous command to synchronize " + name
+            showError(nameCapitalized +
+                      " is not in sync with current position",
+                      "A previous command to synchronize " + nameNotCapitalized
                       + " with the current position failed. " +
-                      "You won't be able to use " + name +
+                      "You won't be able to use " + nameNotCapitalized +
                       " until you go to a position " +
                       "that can be synchronized again.",
                       false);
@@ -2586,12 +2623,18 @@ public class GoGui
             String response = m_gtp.getResponse();
             checkLostOnTime(toMove);
             boolean gameTreeChanged = false;
+            String nameCapitalized = getProgramName();
+            if (nameCapitalized == null)
+                nameCapitalized = "The Go program";
+            String nameNotCapitalized = getProgramName();
+            if (nameCapitalized == null)
+                nameCapitalized = "the Go program";
             if (response.equalsIgnoreCase("resign"))
             {
                 String result =
                     toMove.otherColor().getUppercaseLetter() + "+Resign";
                 if (! isComputerBoth())
-                    showInfo(getProgramName() + " resigns",
+                    showInfo(nameCapitalized + " resigns",
                              "The result \"" + result
                              + "\" was added to the game information.", false);
                 m_resigned = true;
@@ -2605,14 +2648,20 @@ public class GoGui
                 {
                     if (board.getColor(point) != GoColor.EMPTY)
                     {
-                        showWarning("Program played move on non-empty point",
-                                    "", true);
+                        showWarning(nameCapitalized +
+                                    " played on a non-empty point",
+                                    "Playing on occupied points is illegal." +
+                                    "You should inform the author of " +
+                                    nameNotCapitalized + ".", true);
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
                     else if (board.isKo(point))
                     {
-                        showWarning("Program violated Ko rule", "", true);
+                        showWarning(nameCapitalized + " violated the Ko rule",
+                                    "The move is not legal in normal Go " +
+                                    "games.",
+                                    true);
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
@@ -2624,10 +2673,10 @@ public class GoGui
                 {
                     String disableKey =
                         "net.sf.gogui.gogui.GoGui.computer-passed";
-                    String name = getProgramName();
                     m_messageDialogs.showInfo(disableKey, this,
-                                              name + " passes",
-                                              name + " played a pass. " +
+                                              nameCapitalized + " passes",
+                                              nameCapitalized +
+                                              " played a pass. " +
                                               "When both players pass in "
                                               + "succession, the game ends.",
                                               false);
@@ -2750,6 +2799,8 @@ public class GoGui
             if (! wasOutOfSync)
             {
                 String name = getProgramName();
+                if (name == null)
+                    name = "the Go program";
                 String mainMessage =
                     "Could not synchronize position with " + name;
                 String optionalMessage;
@@ -2774,8 +2825,8 @@ public class GoGui
                     }
                 }
                 optionalMessage = optionalMessage
-                    + "You will not be able to use functionality of "
-                    + name + " in the current position.";
+                    + "You will not be able to use " + name +
+                    " in the current position.";
                 showWarning(mainMessage, optionalMessage, true);
             }
         }
@@ -2872,7 +2923,7 @@ public class GoGui
         ConstGameInformation info = getGameInformation();
         String playerToMove = info.getPlayer(toMove);
         String playerOther = info.getPlayer(toMove.otherColor());
-        String name = getProgramName();
+        String name = getProgramLabel();
         if (! isSingleMove && m_file == null && playerToMove == null
             && (father == null
                 || (! father.hasFather()
@@ -3155,10 +3206,15 @@ public class GoGui
                                    m_analyzeCommands, m_programAnalyzeCommands,
                                    m_messageDialogs);
             if (analyzeCommand == null)
+            {
+                String name = getProgramName();
+                if (name == null)
+                    name = "the Go program";
                 showError("Unknown analyze command \"" + m_initAnalyze
                           + "\"",
                           "An analyze command with this label is not " +
-                          "supported by " + getProgramName() + ".");
+                          "supported by " + name + ".");
+            }
             else
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
@@ -3670,7 +3726,7 @@ public class GoGui
         }
         String appName = "GoGui";        
         if (m_gtp != null)
-            appName = getProgramName();
+            appName = getProgramLabel();
         String filename = null;
         if (m_file != null)
         {
@@ -3693,7 +3749,7 @@ public class GoGui
             setTitle(appName);        
         else
         {
-            String name = getProgramName();
+            String name = getProgramLabel();
             if (! appName.equals("GoGui")
                 && (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), name)
                     || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), name)))
@@ -3747,25 +3803,38 @@ public class GoGui
     private void showError(GtpResponseFormatError e)
     {        
         String mainMessage = "Invalid response";
+        String name = getProgramName();
+        if (name == null)
+            name = "The Go program";
         String optionalMessage =
-            getProgramName() + " sent a response in an unexpected format ("
+            name + " sent a response in an unexpected format ("
             + e.getMessage() + ").";
         showError(mainMessage, optionalMessage, true);
     }
 
     private void showError(GtpError e, boolean isCritical)
     {        
-        String name = getProgramName();
+        String nameCapitalized = getProgramName();
+        String nameNotCapitalized = getProgramName();
+        if (nameCapitalized == null)
+        {
+            nameCapitalized = "The Go program";
+            nameNotCapitalized = "the Go program";
+        }
         String mainMessage;
         String optionalMessage;
         if (m_gtp != null && m_gtp.isProgramDead())
         {
-            mainMessage = name + " terminated unexpectedly";
+            mainMessage = nameCapitalized + " terminated unexpectedly";
             optionalMessage =
-                "Check the GTP shell window for error messages of " + name +
+                "Check the GTP shell window for error messages of " +
+                nameNotCapitalized +
                 ", which could be helpful to find the reason for" +
-                " this unexpected failure. " +
-                "You can reattach " + name + " from the Program menu.";
+                " this unexpected failure.";
+            if (m_gtp.getAnyCommandsResponded())
+                optionalMessage = optionalMessage +
+                    " You can reattach " + nameNotCapitalized +
+                    " from the Program menu.";
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
@@ -3782,8 +3851,8 @@ public class GoGui
         {
             mainMessage = "Command failed";
             optionalMessage = formatCommand(e.getCommand());
-            optionalMessage = optionalMessage + " sent to " + name
-                + " failed.";
+            optionalMessage = optionalMessage + " sent to " +
+                nameNotCapitalized + " failed.";
             if (! e.getMessage().trim().equals(""))
             {
                 optionalMessage = optionalMessage + " The response was \""

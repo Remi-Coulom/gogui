@@ -84,7 +84,7 @@ public class GtpStatistics
         m_gtp.queryName();
         if (program != null)
             m_table.setProperty("Program", program);
-        m_table.setProperty("Name", m_gtp.getName());
+        m_table.setProperty("Name", m_gtp.getLabel());
         m_table.setProperty("Version", m_gtp.queryVersion());
         String host = Platform.getHostInfo();
         m_table.setProperty("Host", host);

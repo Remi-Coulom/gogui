@@ -86,6 +86,11 @@ public class GuiGtpClient
         }
     }
 
+    public boolean getAnyCommandsResponded()
+    {
+        return m_gtp.getAnyCommandsResponded();
+    }
+
     public String getCommandClearBoard(int size)
     {
         return m_gtp.getCommandClearBoard(size);
@@ -115,6 +120,12 @@ public class GuiGtpClient
         }
     }
 
+    public String getProgramLabel()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        return m_gtp.getLabel();
+    }
+    
     public String getProgramName()
     {
         assert(SwingUtilities.isEventDispatchThread());

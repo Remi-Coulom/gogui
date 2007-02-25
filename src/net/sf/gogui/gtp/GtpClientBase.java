@@ -124,6 +124,15 @@ public abstract class GtpClientBase
         }
     }    
 
+    /** Get program name or "Unknown Program" if unknown.
+        If queryName() was not called or the name command failed, the
+        string "Unknown Program" is returned.
+    */
+    public String getLabel()
+    {
+        return (m_name == null ? "Unknown Program" : m_name);
+    }
+
     /** Get program name.
         If queryName() was not called or the name command failed, the
         string "Unknown Program" is returned.
@@ -314,7 +323,7 @@ public abstract class GtpClientBase
     */
     public abstract void waitForExit();
 
-    protected String m_name = "Unknown Program";
+    protected String m_name;
 
     private boolean m_lowerCase;
 

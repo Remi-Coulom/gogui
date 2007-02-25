@@ -171,6 +171,12 @@ public final class GtpClient
         }
     }
 
+    /** Did the engine ever send a valid response to a command? */
+    public boolean getAnyCommandsResponded()
+    {
+        return m_anyCommandsResponded;
+    }
+
     /** Get response to last command sent. */
     public String getResponse()
     {
@@ -607,6 +613,8 @@ public final class GtpClient
 
     private boolean m_autoNumber;
 
+    private boolean m_anyCommandsResponded;
+
     private boolean m_exitInProgress;
 
     private boolean m_isInterruptCommentSupported;
@@ -744,6 +752,7 @@ public final class GtpClient
                     readRemainingErrorMessages();
                     throwProgramDied();
                 }
+                m_anyCommandsResponded = true;
                 boolean error = (response.charAt(0) != '=');
                 m_fullResponse = response;
                 if (m_callback != null)
@@ -770,10 +779,13 @@ public final class GtpClient
     private void throwProgramDied() throws GtpError
     {
         m_isProgramDead = true;
+        String name = m_name;
+        if (name == null)
+            name = "The Go program";
         if (m_wasKilled)
-            throw new GtpError(getName() + " terminated.");
+            throw new GtpError(name + " terminated.");
         else
-            throw new GtpError(getName() + " terminated unexpectedly.");
+            throw new GtpError(name + " terminated unexpectedly.");
     }
 
     private Message waitForMessage(long timeout) throws GtpError
