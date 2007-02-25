@@ -30,6 +30,13 @@ public final class GtpExpectEngine
         m_responses.add(response);
     }
 
+    public String getNextExpectedCommand()
+    {
+        if (m_commands.size() == 0)
+            return null;
+        return (String)m_commands.get(0);
+    }
+
     public void interruptCommand()
     {
     }

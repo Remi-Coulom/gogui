@@ -6,6 +6,7 @@ package net.sf.gogui.gtp;
 
 import java.io.IOException;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
@@ -127,7 +128,7 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(3, 4));
         black.add(GoPoint.get(4, 4));
 
-        m_board.setupHandicap(black);
+        setupHandicap(black);
         // Changed handicap setup should trigger a re-transmission from scratch
         expect("boardsize 19", "");
         expect("clear_board", "");
@@ -135,14 +136,14 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
 
-        m_board.undo();
+        undo();
         // There is no GTP command to undo a handicap placement
         expect("boardsize 19", "");
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
 
-        m_board.setupHandicap(black);
+        setupHandicap(black);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("set_free_handicap D5 E5", "");
@@ -161,8 +162,7 @@ public final class GtpSynchronizerTest
     {
         createSynchronizer();
         expect("list_commands",
-               "gogui-setup\n" +
-               "gogui-undo_setup\n");
+               "gogui-setup\n");
         m_gtp.querySupportedCommands();
         assertExpectQueueEmpty();
         expect("boardsize 19", "");
@@ -174,12 +174,44 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(4, 4));
         PointList white = new PointList();
         white.add(GoPoint.get(5, 5));
-        m_board.setup(black, white);
+        setup(black, white);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
         expect("gogui-setup b D5 b E5 w F6", "");
         synchronize();
         assertExpectQueueEmpty();
-        m_board.undo();
-        expect("gogui-undo_setup", "");
+        undo();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
+    /** Test setup with removed stones, if engine doesn't support
+        gogui-setup.
+    */
+    public void testSetupEmptyAsMoves() throws GtpError
+    {
+        createSynchronizer();
+        assertExpectQueueEmpty();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        PointList black = new PointList();
+        black.add(GoPoint.get(3, 4));
+        black.add(GoPoint.get(4, 4));
+        setup(black, null);
+        expect("play b D5", "");
+        expect("play b E5", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        PointList empty = new PointList();
+        empty.add(GoPoint.get(3, 4));
+        setup(null, null, empty);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("play b E5", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -192,20 +224,22 @@ public final class GtpSynchronizerTest
         createSynchronizer();
         expect("list_commands",
                "gogui-setup\n" +
-               "gogui-setup_player\n" +
-               "gogui-undo_setup\n");
+               "gogui-setup_player\n");
         m_gtp.querySupportedCommands();
         assertExpectQueueEmpty();
         expect("boardsize 19", "");
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        m_board.setup(null, null, null, GoColor.WHITE);
+        setup(null, null, null, GoColor.WHITE);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
         expect("gogui-setup_player w", "");
         synchronize();
         assertExpectQueueEmpty();
-        m_board.undo();
-        expect("gogui-setup_player b", "");
+        undo();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -220,7 +254,8 @@ public final class GtpSynchronizerTest
 
     private void assertExpectQueueEmpty()
     {
-        assertTrue(m_expect.isExpectQueueEmpty());
+        assertTrue("Command not sent: " + m_expect.getNextExpectedCommand(),
+                   m_expect.isExpectQueueEmpty());
     }
 
     private void createSynchronizer()
@@ -248,6 +283,28 @@ public final class GtpSynchronizerTest
         m_board.play(c, GoPoint.get(x, y));
     }
 
+    private void setup(ConstPointList black, ConstPointList white)
+    {
+        m_board.setup(black, white);
+    }
+
+    private void setup(ConstPointList black, ConstPointList white,
+                       ConstPointList empty)
+    {
+        m_board.setup(black, white, empty);
+    }
+
+    private void setup(ConstPointList black, ConstPointList white,
+                       ConstPointList empty, GoColor player)
+    {
+        m_board.setup(black, white, empty, player);
+    }
+
+    private void setupHandicap(ConstPointList black)
+    {
+        m_board.setupHandicap(black);
+    }
+
     private void synchronize() throws GtpError
     {
         m_synchronizer.synchronize(m_board, null, null);
@@ -263,4 +320,3 @@ public final class GtpSynchronizerTest
         m_board.undo(n);
     }
 }
-

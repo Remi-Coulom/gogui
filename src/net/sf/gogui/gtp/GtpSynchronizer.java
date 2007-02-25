@@ -13,6 +13,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ObjectUtil;
 
 /** Synchronizes a GTP engine with a Go board.
@@ -59,14 +60,13 @@ public class GtpSynchronizer
         initSupportedCommands();
         m_isOutOfSync = true;
         int size = board.getSize();
+        m_engineState = new EngineState(-1);
         m_gtp.sendBoardsize(size);
-        if (m_board == null)
-            m_board = new Board(size);
-        else
-            m_board.init(size);
+        m_engineState.m_boardSize = size;
         m_gtp.sendClearBoard(size);
-        ArrayList toExecuteAll = computeToExecuteAll(board);
-        doActions(toExecuteAll);
+        EngineState targetState = computeTargetState(board);
+        setup(targetState);
+        play(targetState.m_moves);
         m_komi = null;
         m_timeSettings = null;
         sendGameInfo(komi, timeSettings);
@@ -77,19 +77,20 @@ public class GtpSynchronizer
                             TimeSettings timeSettings) throws GtpError
     {
         int size = board.getSize();
-        if (m_board == null || size != m_board.getSize()
-            || getHandicap(board) != getHandicap(m_board))
+        EngineState targetState = computeTargetState(board);
+        if (m_engineState == null || size != m_engineState.m_boardSize
+            || m_engineState.isSetupDifferent(targetState))
         {
             init(board, komi, timeSettings);
             return;
         }
         m_isOutOfSync = true;
-        ArrayList toExecuteMissing = new ArrayList();
-        int numberUndo = computeToExecuteMissing(toExecuteMissing, board);
-        if (canUndo(numberUndo))
+        ArrayList moves = new ArrayList();
+        int numberUndo = computeToPlay(moves, targetState);
+        if (numberUndo == 0 || m_isSupportedUndo || m_isSupportedGGUndo)
         {
-            undoActions(numberUndo);
-            doActions(toExecuteMissing);
+            undo(numberUndo);
+            play(moves);
             sendGameInfo(komi, timeSettings);
             m_isOutOfSync = false;
         }
@@ -104,12 +105,17 @@ public class GtpSynchronizer
     */
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
-        ArrayList toExecuteAll = computeToExecuteAll(board);
-        assert(m_board.getNumberActions() == toExecuteAll.size());
-        assert(findNumberCommonMoves(toExecuteAll) == toExecuteAll.size());
-        GoColor toMove = m_board.getToMove();
-        if (m_fillPasses && toMove != move.getColor())
-            play(Move.getPass(toMove));
+        EngineState targetState = computeTargetState(board);
+        assert(findNumberCommonMoves(targetState)
+               == targetState.m_moves.size());
+        int engineMoves = m_engineState.m_moves.size();
+        if (m_fillPasses && engineMoves > 0)
+        {
+            Move lastMove = (Move)m_engineState.m_moves.get(engineMoves - 1);
+            GoColor c = move.getColor();
+            if (lastMove.getColor() == c)
+                play(Move.getPass(c.otherColor()));
+        }
         play(move);
     }
 
@@ -123,17 +129,64 @@ public class GtpSynchronizer
     {
         Move move = board.getLastMove();
         assert(move != null);
-        m_board.play(move);
+        m_engineState.m_moves.add(move);
         try
         {
-            ArrayList toExecuteAll = computeToExecuteAll(board);
-            assert(m_board.getNumberActions() == toExecuteAll.size());
-            assert(findNumberCommonMoves(toExecuteAll) == toExecuteAll.size());
+            EngineState targetState = computeTargetState(board);
+            assert(findNumberCommonMoves(targetState)
+                   == targetState.m_moves.size());
         }
         catch (GtpError e)
         {
-            // computeToExecuteAll should not throw (no new setup
+            // computeTargetState should not throw (no new setup
             assert(false);
+        }
+    }
+
+    private static class EngineState
+    {
+        public int m_boardSize;
+
+        public boolean m_isSetupHandicap;
+
+        /** Black and white setup stones. */
+        public PointList[] m_setup;
+
+        public GoColor m_setupPlayer;
+
+        public ArrayList m_moves;
+
+        public EngineState(int boardSize)
+        {
+            m_boardSize = boardSize;
+            clear();
+        }
+
+        public void clear()
+        {
+            m_isSetupHandicap = false;
+            m_setup = new PointList[2];
+            m_setup[0] = new PointList();
+            m_setup[1] = new PointList();
+            m_moves = new ArrayList();
+        }
+
+        PointList getSetup(GoColor c)
+        {
+            return m_setup[c.toInteger()];
+        }
+
+        public boolean isSetupDifferent(EngineState state)
+        {
+            if (m_isSetupHandicap != state.m_isSetupHandicap)
+                return true;
+            if (! ObjectUtil.equals(m_setupPlayer, state.m_setupPlayer))
+                return true;
+            for (GoColor c = GoColor.BLACK; c != null;
+                 c = c.getNextBlackWhite())
+                if (! getSetup(c).equals(state.getSetup(c)))
+                    return true;
+            return false;
         }
     }
 
@@ -151,86 +204,68 @@ public class GtpSynchronizer
 
     private boolean m_isSupportedUndo;
 
-    private boolean m_isSupportedUndoSetup;
-
     private boolean m_isSupportedSetup;
-
-    /** Board representing the engine state. */
-    private Board m_board;
-
+    
     private Komi m_komi;
 
     private TimeSettings m_timeSettings;
 
     private final Listener m_listener;
 
-    private GtpClientBase m_gtp;
+    private GtpClientBase m_gtp;    
 
-    private boolean canUndo(int n)
-    {
-        assert(n >= 0);
-        boolean undoMove = false;
-        boolean undoSetup = false;
-        int size = m_board.getNumberActions();
-        for (int i = size - 1; i >= size - n; --i)
-        {
-            Board.Action action = m_board.getAction(i);
-            if (action instanceof Board.Setup)
-                undoSetup = true;
-            else if (action instanceof Board.Play)
-                undoMove = true;
-            else
-                assert(false);
-        }
-        if (undoMove && ! m_isSupportedUndo && ! m_isSupportedGGUndo)
-            return false;
-        if (undoSetup && ! m_isSupportedUndoSetup)
-            return false;
-        return true;
-    }
+    private EngineState m_engineState;
 
     /** Computes all actions to execute.
         Replaces setup stones by moves, if setup is not supported.
         Fills in passes between moves of same color if m_fillPasses.
     */
-    private ArrayList computeToExecuteAll(ConstBoard board) throws GtpError
+    private EngineState computeTargetState(ConstBoard board) throws GtpError
     {
-        ArrayList toExecuteAll = new ArrayList();
-        Board tempBoard = new Board(board.getSize());
+        int size = board.getSize();
+        EngineState engineState = new EngineState(size);
+        Board tempBoard = new Board(size);
         for (int i = 0; i < board.getNumberActions(); ++i)
         {
             Board.Action action = board.getAction(i);
             if (action instanceof Board.Setup)
             {
+                engineState.clear();
                 Board.Setup setup = (Board.Setup)action;
+                boolean isHandicap = (action instanceof Board.SetupHandicap);
                 if (m_isSupportedSetup
-                    || (action instanceof Board.SetupHandicap
-                        && m_isSupportedHandicap))
+                    || (isHandicap && m_isSupportedHandicap))
                 {
-                    toExecuteAll.add(action);
                     tempBoard.doAction(action);
-                    continue;
-                }
-                // Translate into moves if possible
-                if (setup.getStones(GoColor.EMPTY).size() > 0)
-                    throw new GtpError("cannot transmit setup empty as move");
-                for (GoColor c = GoColor.BLACK; c != null;
-                     c = c.getNextBlackWhite())
-                {
-                    ConstPointList stones = setup.getStones(c);   
-                    for (int j = 0; j < stones.size(); ++j)
+                    engineState.m_isSetupHandicap = isHandicap;
+                    for (int j = 0; j < board.getNumberPoints(); ++j)
                     {
-                        GoPoint p = stones.get(j);
-                        if (tempBoard.isCaptureOrSuicide(c, p))
+                        GoPoint p = board.getPoint(j);
+                        GoColor c = tempBoard.getColor(p);
+                        if (c != GoColor.EMPTY)
+                            engineState.getSetup(c).add(p);
+                    }
+                    engineState.m_setupPlayer = setup.getToMove();
+                }
+                else
+                {
+                    tempBoard.doAction(action);
+                    for (int j = 0; j < board.getNumberPoints(); ++j)
+                    {
+                        GoPoint p = board.getPoint(j);
+                        GoColor c = tempBoard.getColor(p);
+                        if (c != GoColor.EMPTY)
                         {
-                            String message =
-                                "cannot transmit setup as " +
-                                "move if stones are captured";
-                            throw new GtpError(message);
+                            if (tempBoard.isCaptureOrSuicide(c, p))
+                            {
+                                String message =
+                                    "cannot transmit setup as " +
+                                    "move if stones are captured";
+                                throw new GtpError(message);
+                            }
+                            Move move = Move.get(c, p);
+                            engineState.m_moves.add(move);
                         }
-                        action = new Board.Play(Move.get(c, p));
-                        toExecuteAll.add(action);
-                        tempBoard.doAction(action);
                     }
                 }
             }
@@ -239,117 +274,38 @@ public class GtpSynchronizer
                 GoColor toMove = tempBoard.getToMove();
                 if (m_fillPasses
                     && ((Board.Play)action).getMove().getColor() != toMove)
-                    toExecuteAll.add(new Board.Play(Move.getPass(toMove)));
-                toExecuteAll.add(action);
-                tempBoard.doAction(action);
+                    engineState.m_moves.add(Move.getPass(toMove));
+                Move move = ((Board.Play)action).getMove();
+                engineState.m_moves.add(move);
+                tempBoard.play(move);
             }
         }
-        return toExecuteAll;
+        return engineState;
     }
 
     /** Compute number of moves to undo and moves to execute.
         @return Number of moves to undo.
     */
-    private int computeToExecuteMissing(ArrayList toExecuteMissing,
-                                        ConstBoard board) throws GtpError
+    private int computeToPlay(ArrayList moves, EngineState targetState)
+        throws GtpError
     {
-        ArrayList toExecuteAll = computeToExecuteAll(board);
-        int numberCommonMoves = findNumberCommonMoves(toExecuteAll);
-        int numberUndo = m_board.getNumberActions() - numberCommonMoves;
-        toExecuteMissing.clear();
-        for (int i = numberCommonMoves; i < toExecuteAll.size(); ++i)
-        {
-            Board.Action action = (Board.Action)toExecuteAll.get(i);
-            toExecuteMissing.add(action);
-        }
+        int numberCommonMoves = findNumberCommonMoves(targetState);
+        int numberUndo = m_engineState.m_moves.size() - numberCommonMoves;
+        moves.clear();
+        for (int i = numberCommonMoves; i < targetState.m_moves.size(); ++i)
+            moves.add(targetState.m_moves.get(i));
         return numberUndo;
     }
 
-    private void doActions(ArrayList actions) throws GtpError
-    {
-        for (int i = 0; i < actions.size(); ++i)
-        {
-            Board.Action action = (Board.Action)actions.get(i);
-            if (action instanceof Board.SetupHandicap
-                && m_isSupportedHandicap)
-                doSetupHandicap((Board.SetupHandicap)action);
-            else if (action instanceof Board.Setup)
-                doSetup((Board.Setup)action);
-            else if (action instanceof Board.Play)
-            {
-                ArrayList sequence = new ArrayList();
-                while (true)
-                {
-                    sequence.add(((Board.Play)action).getMove());
-                    if (i == actions.size() - 1
-                        || ! ((Board.Action)actions.get(i + 1)
-                              instanceof Board.Play))
-                        break;
-                    ++i;
-                    action = (Board.Action)actions.get(i);
-                }
-                playSequence(sequence);
-            }
-            else
-                assert(false);
-        }
-    }
-
-    private void doSetup(Board.Setup setup) throws GtpError
-    {
-        GoColor toMove = setup.getToMove();        
-        if (setup.hasStones())
-        {
-            StringBuffer command = new StringBuffer(128);
-            command.append("gogui-setup");
-            for (GoColor c = GoColor.BLACK; c != null;
-                 c = c.getNextBlackWhiteEmpty())
-            {
-                ConstPointList stones = setup.getStones(c);
-                for (int i = 0; i < stones.size(); ++i)
-                {
-                    if (c == GoColor.BLACK)
-                        command.append(" b ");
-                    else if (c == GoColor.WHITE)
-                        command.append(" w ");
-                    else
-                        command.append(" e ");
-                    command.append(stones.get(i));
-                }
-            }
-            m_gtp.send(command.toString());
-        }
-        m_board.setup(setup.getStones(GoColor.BLACK),
-                      setup.getStones(GoColor.WHITE),
-                      setup.getStones(GoColor.EMPTY), toMove);
-        if (toMove != null && m_isSupportedSetupPlayer)
-            m_gtp.send("gogui-setup_player "
-                       + (toMove == GoColor.BLACK ? "b" : "w"));
-    }
-
-    private void doSetupHandicap(Board.SetupHandicap setup) throws GtpError
-    {
-        ConstPointList stones = setup.getStones(GoColor.BLACK);
-        StringBuffer command = new StringBuffer(128);
-        command.append("set_free_handicap");
-        for (int i = 0; i < stones.size(); ++i)
-        {
-            command.append(' ');
-            command.append(stones.get(i));
-        }
-        m_gtp.send(command.toString());
-        m_board.setupHandicap(stones);
-    }
-
-    private int findNumberCommonMoves(ArrayList toExecuteAll)
+    private int findNumberCommonMoves(EngineState targetState)
     {
         int i;
-        for (i = 0; i < toExecuteAll.size(); ++i)
+        for (i = 0; i < targetState.m_moves.size(); ++i)
         {
-            if (i >= m_board.getNumberActions())
+            if (i >= m_engineState.m_moves.size())
                 break;
-            Board.Action action = ((Board.Action)toExecuteAll.get(i));
-            if (! action.equals(m_board.getAction(i)))
+            Move move = (Move)targetState.m_moves.get(i);
+            if (! move.equals(m_engineState.m_moves.get(i)))
                 break;
         }
         return i;
@@ -372,7 +328,6 @@ public class GtpSynchronizer
         m_isSupportedUndo = isSupported("undo");
         m_isSupportedGGUndo = isSupported("gg-undo");
         m_isSupportedSetup = isSupported("gogui-setup");
-        m_isSupportedUndoSetup = isSupported("gogui-undo_setup");
         m_isSupportedSetupPlayer = isSupported("gogui-setup_player");
         m_isSupportedHandicap = isSupported("set_free_handicap");
     }
@@ -385,17 +340,19 @@ public class GtpSynchronizer
     private void play(Move move) throws GtpError
     {
         m_gtp.sendPlay(move);
-        m_board.play(move);
+        m_engineState.m_moves.add(move);
     }
 
-    private void playSequence(ArrayList moves) throws GtpError
+    private void play(ArrayList moves) throws GtpError
     {
+        if (moves.size() == 0)
+            return;
         if (moves.size() > 1 && m_isSupportedPlaySequence)
         {
             String cmd = GtpClientUtil.getPlaySequenceCommand(m_gtp, moves);
             m_gtp.send(cmd);
             for (int i = 0; i < moves.size(); ++i)
-                m_board.play((Move)moves.get(i));
+                m_engineState.m_moves.add((Move)moves.get(i));
         }
         else
         {
@@ -447,53 +404,68 @@ public class GtpSynchronizer
         }
     }
 
-    private void undoActions(int n) throws GtpError
+    private void setup(EngineState targetState) throws GtpError
     {
-        assert(n >= 0);
-        if (n == 0)
-            return;
-        int size = m_board.getNumberActions();
-        for (int i = size - 1; i >= size - n; --i)
+        if (targetState.m_isSetupHandicap)
         {
-            Board.Action action = m_board.getAction(i);
-            if (action instanceof Board.Setup)
+            ConstPointList stones = targetState.getSetup(GoColor.BLACK);
+            StringBuffer command = new StringBuffer(128);
+            command.append("set_free_handicap");
+            for (int i = 0; i < stones.size(); ++i)
             {
-                Board.Setup setup = (Board.Setup)action;
-                if (setup.hasStones())
-                    m_gtp.send("gogui-undo_setup");
-                m_board.undo();
-                if (setup.getToMove() != null && m_isSupportedSetupPlayer)
-                {
-                    GoColor toMove = m_board.getToMove();
-                    m_gtp.send("gogui-setup_player "
-                               + (toMove == GoColor.BLACK ? "b" : "w"));
-                }
+                command.append(' ');
+                command.append(stones.get(i));
             }
-            else if (action instanceof Board.Play)
+            m_gtp.send(command.toString());
+            m_engineState.m_isSetupHandicap = true;
+            m_engineState.m_setup[GoColor.BLACK.toInteger()]
+                = new PointList(stones);
+            m_engineState.m_setupPlayer = GoColor.WHITE;
+        }
+        else
+        {
+            if (targetState.getSetup(GoColor.BLACK).size() > 0
+                || targetState.getSetup(GoColor.WHITE).size() > 0)
             {
-                int numberUndo = 0;
-                while (true)
+                StringBuffer command = new StringBuffer(128);
+                command.append("gogui-setup");
+                for (GoColor c = GoColor.BLACK; c != null;
+                     c = c.getNextBlackWhite())
                 {
-                    ++numberUndo;
-                    if (i == size - n
-                        || ! (m_board.getAction(i - 1)
-                              instanceof Board.Play))
-                        break;
-                    --i;
+                    ConstPointList stones = targetState.getSetup(c);
+                    for (int i = 0; i < stones.size(); ++i)
+                    {
+                        if (c == GoColor.BLACK)
+                            command.append(" b ");
+                        else
+                            command.append(" w ");
+                        command.append(stones.get(i));
+                    }
                 }
-                undoMoves(numberUndo);
+                m_gtp.send(command.toString());
+                m_engineState.m_isSetupHandicap = false;
+                m_engineState.m_setup[GoColor.BLACK.toInteger()] =
+                    new PointList(targetState.getSetup(GoColor.BLACK));
+                m_engineState.m_setup[GoColor.WHITE.toInteger()] =
+                    new PointList(targetState.getSetup(GoColor.WHITE));
             }
-            else
-                assert(false);
+            GoColor player = targetState.m_setupPlayer;
+            if (player != null && m_isSupportedSetupPlayer)
+                m_gtp.send("gogui-setup_player "
+                           + (player == GoColor.BLACK ? "b" : "w"));
+            m_engineState.m_setupPlayer = player;
         }
     }
 
-    private void undoMoves(int n) throws GtpError
+    private void undo(int n) throws GtpError
     {
+        if (n == 0)
+            return;
         if (m_isSupportedGGUndo && (n > 1 || ! m_isSupportedUndo))
         {
             m_gtp.send("gg-undo " + n);
-            m_board.undo(n);
+            for (int i = 0; i < n; ++i)
+                m_engineState.m_moves.remove(m_engineState.m_moves.size() - 1);
         }
         else
         {
@@ -501,7 +473,7 @@ public class GtpSynchronizer
             for (int i = 0; i < n; ++i)
             {
                 m_gtp.send("undo");
-                m_board.undo();
+                m_engineState.m_moves.remove(m_engineState.m_moves.size() - 1);
                 updateListener();
             }
         }
@@ -510,6 +482,6 @@ public class GtpSynchronizer
     private void updateListener()
     {
         if (m_listener != null)
-            m_listener.moveNumberChanged(m_board.getNumberActions());
+            m_listener.moveNumberChanged(m_engineState.m_moves.size());
     }
 }

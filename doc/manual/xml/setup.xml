@@ -16,12 +16,9 @@ For example, the program cannot know that these moves are not real moves
 and if it maintains its own game tree for saving information like search
 traces, the internal trees will start with a long series of move nodes, if
 an initial setup position was transmitted by moves.
-Also, it is not possible to remove stones with setup commands, which is
-possible in the SGF file format, and therefore the Go program cannot be
-synchronized to some positions in SGF files that use this feature.
 </para>
 <para>
-Therefore, GoGui defines a set of GTP extension commands for setting up
+Therefore, GoGui defines the following GTP extension commands for setting up
 positions, which will be used if the Go program supports them:
 <variablelist>
 <varlistentry>
@@ -30,24 +27,9 @@ positions, which will be used if the Go program supports them:
 <para>
 The argument to this command is a sequence of color point
 pairs (like for <command>gogui-play_sequence</command>).
-Stones can be removed from the board by using the color
-<userinput>e</userinput> (empty).
-This command does not have to succeed always. For instance some engines may
-only allow setup positions if no moves were played yet.
-However, as with all GTP commands, the state should not be changed, if the
-command fails.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><command>gogui-undo_setup</command></term>
-<listitem>
-<para>
-This command takes no argument and undoes the effects of the previous
-<command>gogui-setup</command> command. It should fail, if the last change
-on the board was not a setup.
-If this command is not supported, sequences containing setup stones will
-be re-transmitted from the start of the game.
+The effect of the command is that the stones are placed on the board.
+This command should only be sent after a <command>clear_board</command> and
+return a failure, if the board is not empty.
 </para>
 </listitem>
 </varlistentry>
@@ -56,23 +38,15 @@ be re-transmitted from the start of the game.
 <listitem>
 <para>
 The argument is a color (<userinput>b</userinput> or <userinput>w</userinput>)
-and should set the color to play in the current position.
-This command is only sent, if the color to play is known (e.g. by a player
-property in the SGF file) and if the command is supported by the Go program.
+and should set the color to play in the setup position.
+This command is sent after the <command>gogui-setup</command> command, but
+only, if the color to play is known (e.g. by a player property in the SGF
+file) and if it is supported by the Go program.
 Support for this command is optional, because the color to play is not
-always defined (e.g. for combinatorial subgames) and if it is, it is not a
-critical condition that the engine is informed about it, although it might
-be desirable in some sitiations. Therefore
-<command>gogui-setup_player</command> is not an undoable
-action. It should not add an entry to the history of the Go program's board.
-Instead <command>gogui-undo_setup</command> (and also commands for undoing
-moves) should always restore the old color to play.
-In the rare cases that there are subsequent states that differ only in
-the color to play (e.g. a SGF node with only a player property), the
-controller program can restore the old color to play by sending
-another <command>gogui-setup_player</command> with the old color as an
-argument to go back to the first state (which GoGui will do in these
-situations).
+always defined (e.g. for combinatorial subgames) or known (e.g. SGF files
+without a setup stones, but no player property).
+It is not a critical condition if the engine is not informed about
+the color to play, although it can be desirable in some sitiations.
 </para>
 </listitem>
 </varlistentry>
