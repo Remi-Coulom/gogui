@@ -237,6 +237,7 @@ public final class Board
         public UndoableSetup(Setup setup)
         {
             m_setup = setup;
+            m_wasExecuted = false;
         }
 
         protected void execute(Board board)
@@ -250,6 +251,22 @@ public final class Board
             for (GoColor c = GoColor.BLACK; c != null;
                  c = c.getNextBlackWhiteEmpty())
                 setup(board, c, m_setup.getStones(c));
+            int size = board.getSize();
+            m_colorAfterSetup = new GoColor[size][size];
+            for (int x = 0; x < size; ++x)
+                for (int y = 0; y < size; ++y)
+                {
+                    GoPoint p = GoPoint.get(x, y);
+                    m_colorAfterSetup[x][y] = board.getColor(p);
+                }
+            m_wasExecuted = true;
+        }
+
+        /** Get color of point on board after setup was executed. */
+        public GoColor getColorAfterSetup(GoPoint p)
+        {
+            assert(m_wasExecuted);
+            return m_colorAfterSetup[p.getX()][p.getY()];
         }
 
         protected void undo(Board board)
@@ -259,7 +276,10 @@ public final class Board
                 undoSetup(board, c, m_setup.getStones(c));
             board.m_koPoint = m_oldKoPoint;
             board.m_toMove = m_oldToMove;
+            m_wasExecuted = false;
         }
+
+        private boolean m_wasExecuted;
 
         private Setup m_setup;
 
@@ -267,7 +287,9 @@ public final class Board
 
         private GoPoint m_oldKoPoint;
 
-        private GoColor  m_oldToMove;
+        private GoColor m_oldToMove;
+
+        private GoColor[][] m_colorAfterSetup;
 
         private void setup(Board board, GoColor c, ConstPointList points)
         {
@@ -376,6 +398,18 @@ public final class Board
     public GoColor getColor(GoPoint p)
     {
         return m_color[p.getX()][p.getY()];
+    }
+
+    /** Query previous state of point on the board after a setup action.
+        @param p The point
+        @param index Index in action history of a previous setup action
+        @return The color of this point after the specified setup action was
+        executed.
+    */
+    public GoColor getColorAfterSetup(GoPoint p, int index)
+    {
+        UndoableSetup setup = (UndoableSetup)m_undoableActions.get(index);
+        return setup.getColorAfterSetup(p);
     }
 
     /** Get location of handicap stones for a given board size.
