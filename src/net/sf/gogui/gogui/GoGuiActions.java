@@ -798,8 +798,6 @@ public class GoGuiActions
         boolean isModified = m_goGui.isModified();
         ConstGuiBoard guiBoard = m_goGui.getGuiBoard();
         String name = m_goGui.getProgramName();
-        if (name == null)
-            name = "computer";
         ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = node.hasChildren();
@@ -1005,8 +1003,8 @@ public class GoGuiActions
                                            String name)
     {
         m_actionDetachProgram.setEnabled(isProgramAttached);
-        if (! isProgramAttached)
-            m_actionDetachProgram.setName("Detach");
+        if (! isProgramAttached || name == null)
+            m_actionDetachProgram.setName("Detach Program");
         else
             m_actionDetachProgram.setName("Detach " + name);
     }
@@ -1021,6 +1019,8 @@ public class GoGuiActions
             desc = "Interrupt (no program attached)";
         else
         {
+            if (name == null)
+                name = "program";
             if (! isInterruptSupported)
                 desc = "Interrupt (not supported by " + name + ")";
             else if (! isCommandInProgress)
@@ -1047,6 +1047,8 @@ public class GoGuiActions
     {
         m_actionPlay.setEnabled(isProgramAttached);
         String desc;
+        if (name == null)
+            name = "computer";
         if (toMove == GoColor.BLACK)
             desc = "Make " + name + " play Black";
         else
@@ -1060,8 +1062,8 @@ public class GoGuiActions
                                              String name)
     {
         m_actionReattachProgram.setEnabled(isProgramAttached);
-        if (! isProgramAttached)
-            m_actionReattachProgram.setName("Reattach");
+        if (! isProgramAttached || name == null)
+            m_actionReattachProgram.setName("Reattach Program");
         else
             m_actionReattachProgram.setName("Reattach " + name);
     }

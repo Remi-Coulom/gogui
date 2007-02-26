@@ -32,33 +32,39 @@ class GtpShellText
 
     public void appendComment(String text)
     {
+        m_isLastTextNonGTP = false;
         appendText(text, "log");
     }
 
     public void appendError(String text)
     {
+        m_isLastTextNonGTP = false;
         appendTimeStamp();
         appendText(text, "error");
     }
 
     public void appendInput(String text)
     {
+        m_isLastTextNonGTP = false;
         appendTimeStamp();
         appendText(text, null);
     }
 
     public void appendInvalidResponse(String text)
     {
+        m_isLastTextNonGTP = true;
         appendText(text, "invalid");
     }
 
     public void appendLog(String text)
     {
+        m_isLastTextNonGTP = true;
         appendText(text, "log");
     }
 
     public void appendOutput(String text)
     {
+        m_isLastTextNonGTP = false;
         appendTimeStamp();
         appendText(text, "output");
     }
@@ -96,6 +102,15 @@ class GtpShellText
         }
     }
 
+    /** Check if last text appended is not part of the GTP streams.
+        Returns true, if last text is standard error of program or invalid
+        response lines.
+    */
+    public boolean isLastTextNonGTP()
+    {
+        return m_isLastTextNonGTP;
+    }
+
     public void setPositionToEnd()
     {
         int length = getDocument().getLength();
@@ -106,6 +121,8 @@ class GtpShellText
     {
         m_timeStamp = enable;
     }
+
+    private boolean m_isLastTextNonGTP;
 
     private boolean m_timeStamp;
 

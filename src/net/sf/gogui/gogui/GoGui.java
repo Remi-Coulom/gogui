@@ -835,14 +835,6 @@ public class GoGui
         }
     }
 
-    public void actionHideShell()
-    {
-        if (m_shell == null)
-            return;
-        saveSession();
-        m_shell.setVisible(false);
-    }
-
     public void actionImportTextPosition()
     {
         if (! checkStateChangePossible())
@@ -984,6 +976,9 @@ public class GoGui
                     unprotectGui();
                     if (m_gtp == null || m_gtp.isProgramDead())
                     {
+                        if (! m_shell.isVisible()
+                            && m_shell.isLastTextNonGTP())
+                            showShell();
                         m_newProgram = editor.editItem(GoGui.this,
                                                        "New Program",
                                                        m_newProgram, true,
@@ -1390,15 +1385,7 @@ public class GoGui
 
     public void actionShowShell()
     {
-        if (m_gtp == null)
-            return;
-        if (! m_shell.isVisible())
-        {
-            restoreSize(m_shell, "shell");
-            m_shell.setVisible(true);
-        }
-        else
-            m_shell.toFront();
+        showShell();
     }
 
     public void actionShowTree()
@@ -2250,7 +2237,7 @@ public class GoGui
         m_actions.registerAll(m_shell.getLayeredPane());
         m_shell.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
-                    actionHideShell();
+                    hideShell();
                 }
             });
         // Don't restore size yet, see workaround GtpShell.setFinalSize()
@@ -2489,11 +2476,14 @@ public class GoGui
         if (m_gtp.isProgramDead())
         {
             String mainMessage = nameCapitalized + " has terminated";
-            String optionalMessage =
-                "Check the GTP shell window for error messages of " +
-                nameNotCapitalized +
-                ", which could be helpful to find the reason for" +
-                " this unexpected failure. " +
+            String optionalMessage = "";
+            if (m_shell.isLastTextNonGTP())
+                optionalMessage = optionalMessage +
+                    "Check the GTP shell window for error messages of " +
+                    nameNotCapitalized +
+                    ", which could be helpful to find the reason for" +
+                    " this unexpected failure. ";
+            optionalMessage = optionalMessage +
                 "You can reattach " + nameNotCapitalized +
                 " from the Program menu.";
             showError(mainMessage, optionalMessage, false);
@@ -3015,6 +3005,14 @@ public class GoGui
             return;
         m_game.gotoNode(node);
         currentNodeChanged();
+    }
+
+    private void hideShell()
+    {
+        if (m_shell == null)
+            return;
+        saveSession();
+        m_shell.setVisible(false);
     }
 
     private void humanMoved(Move move)
@@ -3827,15 +3825,21 @@ public class GoGui
         if (m_gtp != null && m_gtp.isProgramDead())
         {
             mainMessage = nameCapitalized + " terminated unexpectedly";
-            optionalMessage =
-                "Check the GTP shell window for error messages of " +
-                nameNotCapitalized +
-                ", which could be helpful to find the reason for" +
-                " this unexpected failure.";
-            if (m_gtp.getAnyCommandsResponded())
+            optionalMessage = "";
+            if (m_shell.isLastTextNonGTP())
                 optionalMessage = optionalMessage +
-                    " You can reattach " + nameNotCapitalized +
+                    "Check the GTP shell window for error messages of " +
+                    nameNotCapitalized +
+                    ", which could be helpful to find the reason for" +
+                    " this unexpected failure.";
+            if (m_gtp.getAnyCommandsResponded())
+            {
+                if (optionalMessage.length() > 0)
+                    optionalMessage = optionalMessage + " ";
+                optionalMessage = optionalMessage +
+                    "You can reattach " + nameNotCapitalized +
                     " from the Program menu.";
+            }
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
@@ -3936,6 +3940,19 @@ public class GoGui
         return m_messageDialogs.showQuestion(this, mainMessage,
                                              optionalMessage,
                                              destructiveOption, isCritical);
+    }
+
+    private void showShell()
+    {
+        if (m_gtp == null)
+            return;
+        if (! m_shell.isVisible())
+        {
+            restoreSize(m_shell, "shell");
+            m_shell.setVisible(true);
+        }
+        else
+            m_shell.toFront();
     }
 
     private void showStatus(String text)
