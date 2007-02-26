@@ -3838,7 +3838,7 @@ public class GoGui
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
-            String program = ((GtpClient.ExecFailed)e).m_program;
+            //String program = ((GtpClient.ExecFailed)e).m_program;
             mainMessage = "Could not execute Go program";
             optionalMessage = "The Go program could not be executed";
             if (! StringUtil.isEmpty(e.getMessage()))
