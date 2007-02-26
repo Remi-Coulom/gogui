@@ -372,8 +372,11 @@ public class GoGuiMenuBar
         menu.add(createMenuExport(actions));
         menu.addSeparator();
         menu.addItem(actions.m_actionPrint, KeyEvent.VK_P);
-        menu.addSeparator();
-        menu.addItem(actions.m_actionQuit, KeyEvent.VK_Q);
+        if (! Platform.isMac())
+        {
+            menu.addSeparator();
+            menu.addItem(actions.m_actionQuit, KeyEvent.VK_Q);
+        }
         return menu;
     }
 

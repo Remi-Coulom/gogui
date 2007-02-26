@@ -21,7 +21,7 @@ public final class MainWrapper
         // language in Swing dialogs
         Locale.setDefault(Locale.ENGLISH);
         System.setProperty("apple.awt.brushMetalLook", "true");
-        System.setProperty("apple.laf.useScreenMenuBar", "false");
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
         GoGuiSettings settings;
