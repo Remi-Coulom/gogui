@@ -40,6 +40,7 @@ import net.sf.gogui.util.ProcessUtil;
 public final class GtpClient
     extends GtpClientBase
 {
+    /** Exception thrown if executing a GTP engine failed. */
     public static class ExecFailed
         extends GtpError
     {

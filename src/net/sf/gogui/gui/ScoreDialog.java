@@ -31,6 +31,7 @@ import net.sf.gogui.go.Score;
 public class ScoreDialog
     extends JDialog
 {
+    /** Callback to be called when a score was computed and accepted. */
     public interface Listener
     {
         void actionScoreDone(Score score);

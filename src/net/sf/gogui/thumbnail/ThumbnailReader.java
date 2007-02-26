@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 /** Thumbnail reader. */
 public final class ThumbnailReader
 {
+    /** Information about the original file stored in a thumbnail. */
     public static class MetaData
     {
         URI m_uri;

@@ -6,7 +6,7 @@ package net.sf.gogui.text;
 
 import net.sf.gogui.util.ErrorMessage;
 
-/** Exception indication the failure of TextParser. */
+/** Exception indicating the failure of TextParser. */
 public class ParseError
     extends ErrorMessage
 {

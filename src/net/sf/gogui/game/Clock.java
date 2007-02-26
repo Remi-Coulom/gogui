@@ -18,11 +18,13 @@ import net.sf.gogui.util.StringUtil;
 public final class Clock
     implements ConstClock
 {
+    /** Provides the time for a clock. */
     public interface TimeSource
     {
         long currentTimeMillis();
     }
 
+    /** Time source using the system time. */
     public static final class SystemTimeSource
         implements TimeSource
     {

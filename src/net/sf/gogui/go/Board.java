@@ -345,7 +345,7 @@ public final class Board
         Clears the board and move history and sets up a position.
         @param black Black stones to add on the board.
         @param white White stones to add on the board.
-        @param toMove Color to play
+        @param player Color to play
     */
     public void setup(ConstPointList black, ConstPointList white,
                       GoColor player)

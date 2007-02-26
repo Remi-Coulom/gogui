@@ -87,7 +87,7 @@ public class GtpShell
             setVisible(false);
     }
 
-    /** @see GtpShellText#isLastTextNonGTP */
+    /** @see net.sf.gogui.gui.GtpShellText#isLastTextNonGTP */
     public boolean isLastTextNonGTP()
     {
         return m_gtpShellText.isLastTextNonGTP();
