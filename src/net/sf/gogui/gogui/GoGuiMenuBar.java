@@ -23,6 +23,7 @@ import javax.swing.JSeparator;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.RecentFileMenu;
+import net.sf.gogui.util.Platform;
 
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
