@@ -7,6 +7,7 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +16,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -41,12 +42,12 @@ class AntialiasingEditorPane
 
 /** Dialog for displaying help in HTML format. */
 public class Help
-    extends JFrame
+    extends JDialog
     implements ActionListener, HyperlinkListener
 {
     public Help(URL contents, MessageDialogs messageDialogs)
     {
-        super("Documentation - GoGui");
+        super((Frame)null, "Documentation - GoGui");
         m_messageDialogs = messageDialogs;
         m_contents = contents;
         Container contentPane = getContentPane();
@@ -64,7 +65,7 @@ public class Help
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(width, height));
         panel.add(scrollPane, BorderLayout.CENTER);
-        GuiUtil.setGoIcon(this);
+        //GuiUtil.setGoIcon(this);
         pack();
         loadURL(m_contents);
         appendHistory(m_contents);
