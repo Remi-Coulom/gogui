@@ -5,7 +5,6 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.util.TreeSet;
 import javax.swing.Box;
 import javax.swing.JComponent;

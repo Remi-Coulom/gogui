@@ -5,8 +5,6 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
-import java.util.Random;
-import net.sf.gogui.util.ObjectUtil;
 
 /** Go board. */
 public final class Board
