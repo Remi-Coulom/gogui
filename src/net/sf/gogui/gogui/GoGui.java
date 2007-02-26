@@ -3840,6 +3840,13 @@ public class GoGui
                     "You can reattach " + nameNotCapitalized +
                     " from the Program menu.";
             }
+            else if (optionalMessage.equals(""))
+            {
+                optionalMessage =
+                    "The Go program did not respond to any commands. " +
+                    "One possible reason is that the command for executing " +
+                    "the program in GTP mode was not correct.";
+            }
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
