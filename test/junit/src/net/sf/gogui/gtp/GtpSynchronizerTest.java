@@ -129,21 +129,6 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(4, 4));
 
         setupHandicap(black);
-        // Changed handicap setup should trigger a re-transmission from scratch
-        expect("boardsize 19", "");
-        expect("clear_board", "");
-        expect("set_free_handicap D5 E5", "");
-        synchronize();
-        assertExpectQueueEmpty();
-
-        undo();
-        // There is no GTP command to undo a handicap placement
-        expect("boardsize 19", "");
-        expect("clear_board", "");
-        synchronize();
-        assertExpectQueueEmpty();
-
-        setupHandicap(black);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("set_free_handicap D5 E5", "");
@@ -174,23 +159,15 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(4, 4));
         PointList white = new PointList();
         white.add(GoPoint.get(5, 5));
-        setup(black, white);
+        setup(black, white, GoColor.BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("gogui-setup b D5 b E5 w F6", "");
         synchronize();
         assertExpectQueueEmpty();
-        undo();
-        expect("boardsize 19", "");
-        expect("clear_board", "");
-        synchronize();
-        assertExpectQueueEmpty();
     }
 
-    /** Test setup with removed stones, if engine doesn't support
-        gogui-setup.
-    */
-    public void testSetupEmptyAsMoves() throws GtpError
+    public void testSetupWithMoves() throws GtpError
     {
         createSynchronizer();
         assertExpectQueueEmpty();
@@ -201,14 +178,14 @@ public final class GtpSynchronizerTest
         PointList black = new PointList();
         black.add(GoPoint.get(3, 4));
         black.add(GoPoint.get(4, 4));
-        setup(black, null);
+        setup(black, null, GoColor.BLACK);
         expect("play b D5", "");
         expect("play b E5", "");
         synchronize();
         assertExpectQueueEmpty();
-        PointList empty = new PointList();
-        empty.add(GoPoint.get(3, 4));
-        setup(null, null, empty);
+        black = new PointList();
+        black.add(GoPoint.get(4, 4));
+        setup(black, null, GoColor.BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("play b E5", "");
@@ -216,10 +193,7 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
     }
 
-    /** Test setup that changes only color to play.
-        Should only send gogui-setup_player (no gogui-setup with no arguments).
-    */
-    public void testSetupOnlyPlayer() throws GtpError
+    public void testSetupPlayer() throws GtpError
     {
         createSynchronizer();
         expect("list_commands",
@@ -231,15 +205,11 @@ public final class GtpSynchronizerTest
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        setup(null, null, null, GoColor.WHITE);
+        setup(new PointList(GoPoint.get(1, 1)), null, GoColor.WHITE);
         expect("boardsize 19", "");
         expect("clear_board", "");
+        expect("gogui-setup b B2", "");
         expect("gogui-setup_player w", "");
-        synchronize();
-        assertExpectQueueEmpty();
-        undo();
-        expect("boardsize 19", "");
-        expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -283,21 +253,10 @@ public final class GtpSynchronizerTest
         m_board.play(c, GoPoint.get(x, y));
     }
 
-    private void setup(ConstPointList black, ConstPointList white)
-    {
-        m_board.setup(black, white);
-    }
-
     private void setup(ConstPointList black, ConstPointList white,
-                       ConstPointList empty)
+                       GoColor player)
     {
-        m_board.setup(black, white, empty);
-    }
-
-    private void setup(ConstPointList black, ConstPointList white,
-                       ConstPointList empty, GoColor player)
-    {
-        m_board.setup(black, white, empty, player);
+        m_board.setup(black, white, player);
     }
 
     private void setupHandicap(ConstPointList black)

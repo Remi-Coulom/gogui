@@ -23,13 +23,17 @@ public interface ConstBoard
 
     Move getLastMove();
 
-    Board.Action getAction(int i);
+    Move getMove(int i);
 
-    int getNumberActions();
+    int getNumberMoves();
 
     int getNumberPoints();
 
     GoPoint getPoint(int i);
+
+    ConstPointList getSetup(GoColor c);
+
+    GoColor getSetupPlayer();
 
     int getSize();
 
@@ -46,6 +50,8 @@ public interface ConstBoard
     boolean isKo(GoPoint point);
 
     boolean isModified();
+
+    boolean isSetupHandicap();
 
     boolean isSuicide(GoColor c, GoPoint p);
 }

@@ -264,7 +264,7 @@ public class GtpDisplay
             {
                 public void run()
                 {
-                    m_board.newGame();
+                    m_board.clear();
                     updateFromGoBoard();
                 }
             });

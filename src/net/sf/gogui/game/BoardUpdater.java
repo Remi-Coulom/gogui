@@ -6,8 +6,11 @@ package net.sf.gogui.game;
 
 import java.util.ArrayList;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater
@@ -32,17 +35,41 @@ public class BoardUpdater
             GoColor player = node.getPlayer();
             if (node.hasSetup())
             {
-                if (isFirstPlacement
-                    && node.getAddStones(GoColor.BLACK).size() == handicap
-                    && node.getAddStones(GoColor.WHITE).size() == 0
-                    && node.getAddStones(GoColor.EMPTY).size() == 0)
-                    doSetupHandicap(node, board);
+                ConstPointList addBlack = node.getAddStones(GoColor.BLACK);
+                ConstPointList addWhite = node.getAddStones(GoColor.WHITE);
+                ConstPointList addEmpty = node.getAddStones(GoColor.EMPTY);
+                if (isFirstPlacement && addBlack.size() == handicap
+                    && addWhite.size() == 0 && addEmpty.size() == 0)
+                    board.setupHandicap(addBlack);
                 else
-                    doSetup(node, board);
+                {
+                    PointList black = new PointList();
+                    PointList white = new PointList();
+                    for (int j = 0; j < board.getNumberPoints(); ++j)
+                    {
+                        GoPoint p = board.getPoint(j);
+                        if (board.getColor(p) == GoColor.BLACK)
+                            black.add(p);
+                        else if (board.getColor(p) == GoColor.WHITE)
+                            white.add(p);
+                    }
+                    for (int j = 0; j < addBlack.size(); ++j)
+                        if (! black.contains(addBlack.get(j)))
+                            black.add(addBlack.get(j));
+                    for (int j = 0; j < addWhite.size(); ++j)
+                        if (! white.contains(addWhite.get(j)))
+                            white.add(addWhite.get(j));
+                    for (int j = 0; j < addEmpty.size(); ++j)
+                    {
+                        black.remove(addEmpty.get(j));
+                        white.remove(addEmpty.get(j));
+                    }
+                    board.setup(black, white, player);
+                }
                 isFirstPlacement = false;
             }
-            else if (player != null && ! board.getToMove().equals(player))
-                doSetup(node, board);
+            else if (player != null)
+                board.setToMove(player);
             Move move = node.getMove();
             if (move != null)
             {
@@ -56,17 +83,5 @@ public class BoardUpdater
         Member variable for avoiding frequent new memory allocations.
     */
     private ArrayList m_nodes;
-
-    private void doSetup(ConstNode node, Board board)
-    {
-        board.setup(node.getAddStones(GoColor.BLACK),
-                    node.getAddStones(GoColor.WHITE),
-                    node.getAddStones(GoColor.EMPTY), node.getPlayer());
-    }
-
-    private void doSetupHandicap(ConstNode node, Board board)
-    {
-        board.setupHandicap(node.getAddStones(GoColor.BLACK));
-    }
 }
 

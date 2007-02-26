@@ -132,7 +132,7 @@ public class TextParser
             else if (c == GoColor.WHITE)
                 white.add(p);
         }
-        newBoard.setup(black, white);
+        newBoard.setup(black, white, m_board.getToMove());
         m_board = newBoard;
     }
 
@@ -199,14 +199,24 @@ public class TextParser
             {
                 if (x >= m_board.getSize())
                     increaseBoardSize();
-                m_board.setup(new PointList(GoPoint.get(x, y)), null);
+                PointList black =
+                    new PointList(m_board.getSetup(GoColor.BLACK));
+                PointList white =
+                    new PointList(m_board.getSetup(GoColor.WHITE));
+                black.add(GoPoint.get(x, y));
+                m_board.setup(black, white, m_board.getToMove());
                 ++x;
             }
             else if (isWhite(c))
             {
                 if (x >= m_board.getSize())
                     increaseBoardSize();
-                m_board.setup(null, new PointList(GoPoint.get(x, y)));
+                PointList black =
+                    new PointList(m_board.getSetup(GoColor.BLACK));
+                PointList white =
+                    new PointList(m_board.getSetup(GoColor.WHITE));
+                white.add(GoPoint.get(x, y));
+                m_board.setup(black, white, m_board.getToMove());
                 ++x;
             }
             else if (isEmpty(c))

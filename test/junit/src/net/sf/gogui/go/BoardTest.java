@@ -79,17 +79,13 @@ public final class BoardTest
         white.add(GoPoint.get(1, 1));
         white.add(GoPoint.get(2, 2));
         white.add(GoPoint.get(3, 1));
-        board.setup(black, white);
+        board.setup(black, white, GoColor.BLACK);
         board.play(GoColor.WHITE, GoPoint.get(2, 0));
         ConstPointList killed = board.getKilled();
         assertEquals(3, killed.size());
         assertTrue(killed.contains(GoPoint.get(0, 0)));
         assertTrue(killed.contains(GoPoint.get(1, 0)));
         assertTrue(killed.contains(GoPoint.get(2, 1)));
-        board.undo();
-        board.setup(null, new PointList(GoPoint.get(3, 0)));
-        killed = board.getKilled();
-        assertEquals(0, killed.size());
         board.undo();
         board.play(GoColor.WHITE, GoPoint.get(3, 0));
         assertTrue(board.getKilled().isEmpty());
@@ -111,52 +107,13 @@ public final class BoardTest
         white.add(GoPoint.get(0, 2));
         white.add(GoPoint.get(1, 1));
         white.add(GoPoint.get(2, 0));
-        board.setup(black, white);
+        board.setup(black, white, GoColor.BLACK);
         board.play(GoColor.BLACK, GoPoint.get(0, 0));
         ConstPointList suicide = board.getSuicide();
         assertEquals(3, suicide.size());
         assertTrue(suicide.contains(GoPoint.get(0, 0)));
         assertTrue(suicide.contains(GoPoint.get(0, 1)));
         assertTrue(suicide.contains(GoPoint.get(1, 0)));
-        board.undo();
-        board.setup(new PointList(GoPoint.get(0, 0)), null);
-        assertTrue(board.getSuicide().isEmpty());
-    }
-
-    public void testGetPositionHashCode1()
-    {
-        Board board = new Board(19);
-        long hashCode = board.getPositionHashCode();
-        // Hash code should depend on size
-        assertTrue(hashCode != (new Board(9)).getPositionHashCode());
-        board.play(GoColor.BLACK, GoPoint.get(0, 1));
-        assertTrue(hashCode != board.getPositionHashCode());
-        board.undo();
-        assertEquals(hashCode, board.getPositionHashCode());
-    }
-
-    public void testGetPositionHashCode2()
-    {
-        Board board = new Board(19);
-        // 3 . . . .
-        // 2 @ O . .
-        // 1 . @ O .
-        //   A B C D
-        PointList black = new PointList();
-        PointList white = new PointList();
-        black.add(GoPoint.get(0, 1));
-        black.add(GoPoint.get(1, 0));
-        white.add(GoPoint.get(1, 1));
-        white.add(GoPoint.get(2, 0));
-        board.setup(black, white);
-        long hashCode = board.getPositionHashCode();
-        board.play(GoColor.WHITE, GoPoint.get(0, 0));
-        assertTrue(hashCode != board.getPositionHashCode());
-        board.play(GoColor.BLACK, GoPoint.get(1, 0));
-        assertEquals(hashCode, board.getPositionHashCode());
-        board.play(Move.getPass(GoColor.BLACK));
-        // Hash code should not depend on color to move
-        assertEquals(hashCode, board.getPositionHashCode());
     }
 
     /** Test Board.isKo() */
@@ -173,7 +130,7 @@ public final class BoardTest
         black.add(GoPoint.get(1, 0));
         white.add(GoPoint.get(1, 1));
         white.add(GoPoint.get(2, 0));
-        board.setup(black, white);
+        board.setup(black, white, GoColor.BLACK);
         assertFalse(board.isKo(GoPoint.get(0, 0)));
         board.play(GoColor.WHITE, GoPoint.get(0, 0));
         assertTrue(board.isKo(GoPoint.get(1, 0)));
@@ -205,7 +162,7 @@ public final class BoardTest
         assertNull(board.getLastMove());
         board.play(GoColor.BLACK, GoPoint.get(0, 0));
         assertEquals(Move.get(GoColor.BLACK, 0, 0), board.getLastMove());
-        board.setup(new PointList(GoPoint.get(1, 1)), null);        
+        board.setup(new PointList(GoPoint.get(1, 1)), null, GoColor.BLACK);
         assertNull(board.getLastMove());
     }
 
@@ -229,7 +186,7 @@ public final class BoardTest
         Board board = new Board(19);
         board.play(GoColor.BLACK, GoPoint.get(1, 0));
         board.play(GoColor.BLACK, GoPoint.get(0, 1));
-        board.setup(null, new PointList(GoPoint.get(0, 0)));
+        board.setup(null, new PointList(GoPoint.get(0, 0)), GoColor.BLACK);
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
     }
 
@@ -241,18 +198,7 @@ public final class BoardTest
         board.play(GoColor.WHITE, GoPoint.get(2, 0));
         board.play(GoColor.BLACK, GoPoint.get(0, 1));
         board.play(GoColor.WHITE, GoPoint.get(1, 1));
-        board.setup(null, new PointList(GoPoint.get(0, 0)));
-        assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
-    }
-
-    /** Test removing a stone. */
-    public void testSetupEmpty()
-    {
-        Board board = new Board(19);
-        board.play(GoColor.WHITE, GoPoint.get(0, 0));
-        board.setup(null, null, new PointList(GoPoint.get(0, 0)));
-        assertEquals(GoColor.EMPTY, board.getColor(GoPoint.get(0, 0)));
-        board.undo();
+        board.setup(null, new PointList(GoPoint.get(0, 0)), GoColor.BLACK);
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
     }
 
@@ -266,10 +212,7 @@ public final class BoardTest
         assertEquals(GoColor.WHITE, board.getToMove());
         assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(4, 4)));
         assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(5, 5)));
-        board.undo();
-        assertEquals(GoColor.BLACK, board.getToMove());
-        assertEquals(GoColor.EMPTY, board.getColor(GoPoint.get(4, 4)));
-        assertEquals(GoColor.EMPTY, board.getColor(GoPoint.get(5, 5)));
+        assertEquals(stones, board.getSetup(GoColor.BLACK));
     }
 
     public void testToMove()
@@ -278,27 +221,8 @@ public final class BoardTest
         assertEquals(GoColor.BLACK, board.getToMove());
         board.play(GoColor.BLACK, GoPoint.get(0, 0));
         assertEquals(GoColor.WHITE, board.getToMove());
-        // Setup should not change to move
-        board.setup(new PointList(GoPoint.get(1, 1)), null);        
-        assertEquals(GoColor.WHITE, board.getToMove());
-    }
-
-    /** Test that a placement from one board can be executed on another board.
-        This happens should Board.Placement contain data for restoring
-        the state specific to one board.
-    */
-    public void testTransferPlacement()
-    {
-        Board board1 = new Board(19);
-        Board board2 = new Board(19);
-        GoPoint p = GoPoint.get(0, 0);
-        PointList list = new PointList(p);
-        board1.setup(list, null);
-        board1.setup(null, null, list);
-        board2.setup(null, list);
-        board2.doAction(board1.getAction(1));
-        board1.undo();
-        assertEquals(GoColor.BLACK, board1.getColor(p));
+        board.setup(new PointList(GoPoint.get(1, 1)), null, GoColor.BLACK);
+        assertEquals(GoColor.BLACK, board.getToMove());
     }
 
     public void testUndo()

@@ -13,8 +13,18 @@ public final class BoardUtil
     public static void copy(Board target, ConstBoard source)
     {
         target.init(source.getSize());
-        for (int i = 0; i < source.getNumberActions(); ++i)
-            target.doAction(source.getAction(i));
+        ConstPointList setupBlack = source.getSetup(GoColor.BLACK);
+        ConstPointList setupWhite = source.getSetup(GoColor.WHITE);
+        GoColor setupPlayer = source.getSetupPlayer();
+        if (setupBlack.size() > 0 || setupWhite.size() > 0)
+        {
+            if (source.isSetupHandicap())
+                target.setupHandicap(setupBlack);
+            else
+                target.setup(setupBlack, setupWhite, setupPlayer);
+        }
+        for (int i = 0; i < source.getNumberMoves(); ++i)
+            target.play(source.getMove(i));
     }
 
     public static String toString(ConstBoard board)

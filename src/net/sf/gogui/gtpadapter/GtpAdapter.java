@@ -145,7 +145,7 @@ public class GtpAdapter
         cmd.checkNuArgLessEqual(1);
         int n = 1;
         if (cmd.getNuArg() == 1)
-            n = cmd.getIntArg(0, 1, m_board.getNumberActions());
+            n = cmd.getIntArg(0, 1, m_board.getNumberMoves());
         m_board.undo(n);
         synchronize();
     }
