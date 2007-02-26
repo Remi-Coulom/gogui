@@ -5,6 +5,7 @@
 package net.sf.gogui.util;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 
 public final class TableTest
     extends junit.framework.TestCase
@@ -35,6 +36,96 @@ public final class TableTest
         assertEquals("2", table.get(0, 1));
         assertEquals("foo", table.get(1, 1));
         assertEquals("bar", table.get(2, 1));
+    }
+
+    public void testGetDouble() throws ErrorMessage
+    {
+        ArrayList columnTitles = new ArrayList();
+        columnTitles.add("Column 1");
+        columnTitles.add("Column 2");
+        Table table = new Table(columnTitles);
+        table.startRow();
+        table.set(0, "1.23");
+        table.set(1, "abc");
+        table.startRow();
+        table.set(0, "");
+        table.set(1, null);
+        assertEquals(1.23, table.getDouble(0, 0), 1e-3);
+        boolean errorThrown = false;
+        try
+        {
+            table.getDouble(1, 0);
+        }
+        catch (ErrorMessage e)
+        {
+            errorThrown = true;
+        }
+        assertTrue(errorThrown);
+        errorThrown = false;
+        try
+        {
+            table.getDouble(0, 1);
+        }
+        catch (ErrorMessage e)
+        {
+            errorThrown = true;
+        }
+        assertTrue(errorThrown);
+        errorThrown = false;
+        try
+        {
+            table.getDouble(1, 1);
+        }
+        catch (ErrorMessage e)
+        {
+            errorThrown = true;
+        }
+        assertTrue(errorThrown);
+    }
+
+    public void testGetInt() throws ErrorMessage
+    {
+        ArrayList columnTitles = new ArrayList();
+        columnTitles.add("Column 1");
+        columnTitles.add("Column 2");
+        Table table = new Table(columnTitles);
+        table.startRow();
+        table.set(0, "123");
+        table.set(1, "abc");
+        table.startRow();
+        table.set(0, "");
+        table.set(1, null);
+        assertEquals(123, table.getInt(0, 0));
+        boolean errorThrown = false;
+        try
+        {
+            table.getInt(1, 0);
+        }
+        catch (ErrorMessage e)
+        {
+            errorThrown = true;
+        }
+        assertTrue(errorThrown);
+        errorThrown = false;
+        try
+        {
+            table.getInt(0, 1);
+        }
+        catch (ErrorMessage e)
+        {
+            errorThrown = true;
+        }
+        assertTrue(errorThrown);
+        errorThrown = false;
+        try
+        {
+            table.getInt(1, 1);
+        }
+        catch (ErrorMessage e)
+        {
+            errorThrown = true;
+        }
+        assertTrue(errorThrown);
     }
 
     private static Table get(String string) throws Exception

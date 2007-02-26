@@ -45,7 +45,10 @@ public class Table
     {
         try
         {
-            return Double.parseDouble(get(column, row));
+            String s = get(column, row);
+            if (s == null)
+                s = "";
+            return Double.parseDouble(s);
         }
         catch (NumberFormatException e)
         {
@@ -64,7 +67,10 @@ public class Table
     {
         try
         {
-            return Integer.parseInt(get(column, row));
+            String s = get(column, row);
+            if (s == null)
+                s = "";
+            return Integer.parseInt(s);
         }
         catch (NumberFormatException e)
         {
