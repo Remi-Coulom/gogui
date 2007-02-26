@@ -1006,6 +1006,7 @@ public class GoGui
                         return;
                     }
                     m_programs.add(m_newProgram);
+                    m_program = m_newProgram;
                     m_prefs.putInt("program", m_programs.size() - 1);
                     m_menuBar.setPrograms(m_programs);
                     Program.save(m_programs);
