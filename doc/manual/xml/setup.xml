@@ -30,6 +30,9 @@ pairs (like for <command>gogui-play_sequence</command>).
 The effect of the command is that the stones are placed on the board.
 This command should only be sent after a <command>clear_board</command> and
 return a failure, if the board is not empty.
+It is allowed to setup positions that contain blocks with no liberties.
+If the Go program cannot handle such positions it should detect it and
+respond with a failure.
 </para>
 </listitem>
 </varlistentry>
@@ -41,12 +44,13 @@ The argument is a color (<userinput>b</userinput> or <userinput>w</userinput>)
 and should set the color to play in the setup position.
 This command is sent after the <command>gogui-setup</command> command, but
 only, if the color to play is known (e.g. by a player property in the SGF
-file) and if it is supported by the Go program.
+file) and if the command is supported by the Go program.
 Support for this command is optional, because the color to play is not
-always defined (e.g. for combinatorial subgames) or known (e.g. SGF files
+always well-defined (e.g. for combinatorial subgames) or known (e.g. SGF files
 without a setup stones, but no player property).
-It is not a critical condition if the engine is not informed about
-the color to play, although it can be desirable in some sitiations.
+Support for this command is optional, because it is not a critical condition if
+the engine is not informed about the color to play, although it can be
+desirable in some sitiations.
 </para>
 </listitem>
 </varlistentry>
