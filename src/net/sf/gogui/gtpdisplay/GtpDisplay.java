@@ -187,7 +187,7 @@ public class GtpDisplay
 
     private final String m_name;
 
-    private MessageDialogs m_messageDialogs = new MessageDialogs();
+    private MessageDialogs m_messageDialogs = new MessageDialogs("GtpDisplay");
 
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {

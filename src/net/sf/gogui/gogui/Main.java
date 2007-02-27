@@ -243,7 +243,7 @@ public final class Main
 
     private static void showError(String mainMessage, String optionalMessage)
     {
-        MessageDialogs messageDialogs = new MessageDialogs();
+        MessageDialogs messageDialogs = new MessageDialogs("GoGui");
         messageDialogs.showError(null, mainMessage, optionalMessage);
     }
 }

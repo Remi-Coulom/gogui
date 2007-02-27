@@ -2055,7 +2055,7 @@ public class GoGui
 
     private GoColor m_setupColor;
 
-    private MessageDialogs m_messageDialogs = new MessageDialogs();
+    private MessageDialogs m_messageDialogs = new MessageDialogs("GoGui");
 
     private Pattern m_pattern;
 

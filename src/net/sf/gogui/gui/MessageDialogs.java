@@ -20,6 +20,11 @@ import net.sf.gogui.util.StringUtil;
 /** Simple message dialogs. */
 public final class MessageDialogs
 {
+    public MessageDialogs(String applicationName)
+    {
+        m_applicationName = applicationName;
+    }
+
     public void showError(Component frame, String mainMessage,
                           String optionalMessage)
     {
@@ -36,7 +41,8 @@ public final class MessageDialogs
             type = JOptionPane.ERROR_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
-        show(null, frame, "Error", mainMessage, optionalMessage, type,
+        String title = "Error - " + m_applicationName;
+        show(null, frame, title, mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption);
     }
 
@@ -70,7 +76,8 @@ public final class MessageDialogs
             type = JOptionPane.INFORMATION_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
-        show(disableKey, frame, "Information", mainMessage, optionalMessage,
+        String title = "Information - " + m_applicationName;
+        show(disableKey, frame, title, mainMessage, optionalMessage,
              type, JOptionPane.DEFAULT_OPTION, options, defaultOption);
     }
 
@@ -100,7 +107,8 @@ public final class MessageDialogs
             { nonDestructiveOption, destructiveOption, "Cancel" };
         Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
-        Object value = show(disableKey, parent, "Question", mainMessage,
+        String title = "Question - " + m_applicationName;
+        Object value = show(disableKey, parent, title, mainMessage,
                             optionalMessage, type,
                             JOptionPane.YES_NO_CANCEL_OPTION, options,
                             defaultOption);
@@ -137,7 +145,8 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
-        show(disableKey, parent, "Error", mainMessage, optionalMessage, type,
+        String title = "Warning - " + m_applicationName;
+        show(disableKey, parent, title, mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption);
     }
 
@@ -180,7 +189,8 @@ public final class MessageDialogs
             type = JOptionPane.QUESTION_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object result = show(disableKey, parent, "Question", mainMessage,
+        String title = "Question - " + m_applicationName;
+        Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption);
         return (result == options[0]);
@@ -213,11 +223,14 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object result = show(disableKey, parent, "Question", mainMessage,
+        String title = "Warning - " + m_applicationName;
+        Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption);
         return (result == options[0]);
     }
+
+    private String m_applicationName;
 
     private TreeSet m_disabled = new TreeSet();
 

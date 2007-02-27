@@ -232,7 +232,7 @@ public class GuiUtil
         {
             if (showError)
             {
-                MessageDialogs messageDialogs = new MessageDialogs();
+                MessageDialogs messageDialogs = new MessageDialogs("GoGui");
                 messageDialogs.showWarning(null,
                                            "Look and Feel not found",
                                            "The look and feel\n\""
