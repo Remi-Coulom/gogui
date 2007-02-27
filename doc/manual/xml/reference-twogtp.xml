@@ -373,7 +373,7 @@ Indicate interrupt ability for GoGui.
 <application>TwoGtp</application> will forward the interrupt to both
 programs, with the appropriate method, if they implement either
 <command>gogui_interrupt</command> or <command>gogui_sigint</command>.
-See <xref linkend="interrupt"/> of the <application>GoGui</application>
+See the chapter "Interrupting Commands" in the <application>GoGui</application>
 documentation.
 </para>
 </listitem>
