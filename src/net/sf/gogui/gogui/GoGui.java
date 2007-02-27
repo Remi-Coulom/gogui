@@ -2480,11 +2480,14 @@ public class GoGui
             String mainMessage = nameCapitalized + " has terminated";
             String optionalMessage = "";
             if (m_shell.isLastTextNonGTP())
+            {
+                showShell();
                 optionalMessage = optionalMessage +
                     "Check the GTP shell window for error messages of " +
                     nameNotCapitalized +
                     ", which could be helpful to find the reason for" +
                     " this unexpected failure. ";
+            }
             optionalMessage = optionalMessage +
                 "You can reattach " + nameNotCapitalized +
                 " from the Program menu.";
