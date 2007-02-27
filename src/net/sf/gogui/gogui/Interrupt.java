@@ -47,7 +47,8 @@ public final class Interrupt
                                           "not complete successfully.",
                                           "Interrupt", true))
             return false;
-        
+        if (! gtp.isCommandInProgress())
+            return false;
         try
         {
             gtp.sendInterrupt();
