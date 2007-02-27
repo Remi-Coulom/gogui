@@ -25,9 +25,9 @@ that unreleased versions contain the string SVN.
 
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
 
-<property name="looks.zipfile" value="external/jgoodies/looks-2_1_2.zip"/>
-<property name="looks.dir" value="looks-2.1.2"/>
-<property name="looks.jarfile" value="looks-2.1.2.jar"/>
+<property name="looks.zipfile" value="external/jgoodies/looks-2_1_3.zip"/>
+<property name="looks.dir" value="looks-2.1.3"/>
+<property name="looks.jarfile" value="looks-2.1.3.jar"/>
 
 <property name="quaqua.nestedzipfile"
  value="external/quaqua/quaqua-3.7.4.nested.zip"/>
