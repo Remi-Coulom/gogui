@@ -976,9 +976,6 @@ public class GoGui
                     unprotectGui();
                     if (m_gtp == null || m_gtp.isProgramDead())
                     {
-                        if (! m_shell.isVisible()
-                            && m_shell.isLastTextNonGTP())
-                            showShell();
                         m_newProgram = editor.editItem(GoGui.this,
                                                        "New Program",
                                                        m_newProgram, true,
@@ -2205,6 +2202,9 @@ public class GoGui
         if (! attachProgram(command, program))
         {
             m_prefs.putInt("program", -1);
+            if (m_gtp == null || m_gtp.isProgramDead())
+                if (! m_shell.isVisible() && m_shell.isLastTextNonGTP())
+                    showShell();
             updateViews(false);
             return;
         }

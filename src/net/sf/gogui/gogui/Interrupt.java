@@ -47,6 +47,7 @@ public final class Interrupt
                                           "not complete successfully.",
                                           "Interrupt", true))
             return false;
+        
         try
         {
             gtp.sendInterrupt();
