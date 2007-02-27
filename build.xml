@@ -177,8 +177,8 @@ that unreleased versions contain the string SVN.
  ${docbook.path}.zip
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
- external/jgoodies/${looks.zipfile}
- external/quaqua/${quaqua.zipfile}
+ ${looks.zipfile}
+ ${quaqua.nestedzipfile}
  lib/*.jar
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
