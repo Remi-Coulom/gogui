@@ -127,17 +127,17 @@ public final class Session
 
     public void saveSize(Window window, String name)
     {
-        saveLocation(window, name);
-        if (isFrameSpecialMode(window))
+        if (isFrameSpecialMode(window) || ! window.isVisible())
             return;
+        saveLocation(window, name);
         saveWidthHeight(window, name);
     }
 
     public void saveSize(Window window, Window owner, String name)
     {
-        saveLocation(window, owner, name);
-        if (isFrameSpecialMode(window))
+        if (isFrameSpecialMode(window) || ! window.isVisible())
             return;
+        saveLocation(window, owner, name);
         saveWidthHeight(window, name);
     }
 

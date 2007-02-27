@@ -2237,6 +2237,7 @@ public class GoGui
         m_actions.registerAll(m_shell.getLayeredPane());
         m_shell.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
+                    saveSession();
                     hideShell();
                 }
             });
