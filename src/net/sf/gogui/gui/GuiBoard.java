@@ -45,13 +45,13 @@ public final class GuiBoard
         /** Callback for click on a field.
             This callback is triggered with mouse clicks or the enter key
             if the cursor is shown.
-            @param point The point clicked.
+            @param p The point clicked.
             @param modifiedSelect Modified select. True if the click was a
             double click or with the right mouse button or if a modifier key
             (Ctrl, Alt, Meta) was pressed while clicking, as long as it was
             not a (platform-dependent) popup menu trigger.
         */
-        void fieldClicked(GoPoint point, boolean modifiedSelect);
+        void fieldClicked(GoPoint p, boolean modifiedSelect);
 
         /** Callback for context menu.
             This callback is triggered with mouse clicks that trigger

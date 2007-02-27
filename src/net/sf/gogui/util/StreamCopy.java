@@ -12,7 +12,8 @@ import java.io.OutputStream;
 public class StreamCopy
     implements Runnable
 {
-    /** @param verbose Also copy everything to stderr
+    /** Constructor.
+        @param verbose Also copy everything to stderr
         @param src Source stream
         @param dest Destination stream
         @param close Close destination after eof in source

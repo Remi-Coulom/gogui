@@ -21,7 +21,8 @@ import java.util.ArrayList;
 /** Connects a Go program supporting GTP to a socket. */
 public final class GtpServer
 {
-    /** @param verbose Log everything sent and received to stderr
+    /** Constructor.
+        @param verbose Log everything sent and received to stderr
         @param loop Restart program and wait for new connection after
         connection is closed (only for incoming connections)
         @param program Command line for Go program
