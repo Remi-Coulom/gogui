@@ -2307,7 +2307,8 @@ public class GoGui
                               m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_autoNumber);
-            m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback);
+            m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback,
+                                     m_messageDialogs);
             m_gtp.start();
             m_gtp.queryName();
             m_gtp.queryProtocolVersion();

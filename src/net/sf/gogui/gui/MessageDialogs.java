@@ -149,17 +149,29 @@ public final class MessageDialogs
                             destructiveOption, isCritical);
     }
 
+    public boolean showQuestion(String disableKey, Component parent,
+                                String mainMessage,
+                                String optionalMessage,
+                                String destructiveOption,
+                                boolean isCritical)
+    {
+        return showQuestion(disableKey, parent, mainMessage, optionalMessage,
+                            destructiveOption, "Cancel", isCritical);
+    }
+
     /** Show warning message to confirm destructive actions.
         @return true, if destructive was chosen; false if cancel was chosen.
     */
     public boolean showQuestion(String disableKey, Component parent,
                                 String mainMessage,
                                 String optionalMessage,
-                                String destructiveOption, boolean isCritical)
+                                String destructiveOption,
+                                String nonDestructiveOption,
+                                boolean isCritical)
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
-        Object[] options = { destructiveOption, "Cancel" };
+        Object[] options = { destructiveOption, nonDestructiveOption };
         Object defaultOption = options[1];
         int type;
         if (isCritical)

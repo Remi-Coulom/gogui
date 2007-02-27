@@ -35,10 +35,12 @@ public class GuiGtpClient
     extends Thread
 {
     public GuiGtpClient(GtpClient gtp, Component owner,
-                        GtpSynchronizer.Listener listener)
+                        GtpSynchronizer.Listener listener,
+                        MessageDialogs messageDialogs)
     {
         m_gtp = gtp;
         m_owner = owner;
+        m_messageDialogs = messageDialogs;
         m_gtpSynchronizer = new GtpSynchronizer(gtp, listener, false);
     }
 
@@ -363,25 +365,23 @@ public class GuiGtpClient
 
         public boolean askContinue()
         {
-            String message;
+            String mainMessage = "Terminate Go program?";
+            String optionalMessage;
             if (m_command == null)
-                message = "Program did not terminate";
+                optionalMessage =
+                    "The Go program did not quit after the command" +
+                    " stream was closed.";
             else
-                message = "Program did not respond to command"
-                    + " \"" + m_command + "\"";
-            message = message + "\nKill program?";
-            String title = "Error";
-            String options[] = { "Kill Program", "Wait" };
-            int type = JOptionPane.ERROR_MESSAGE;
-            if (Platform.isMac())
-                type = JOptionPane.PLAIN_MESSAGE;
-            int result =
-                JOptionPane.showOptionDialog(m_owner, message, title,
-                                             JOptionPane.YES_NO_OPTION,
-                                             type, null, options, options[1]);
-            if (result == 0)
-                return false;
-            return true;
+                optionalMessage =
+                    "The Go program did not respond to the command \""
+                    + m_command + "\".";
+            optionalMessage = optionalMessage +
+                " Would you like to terminate the Go program now" +
+                " or wait?";
+            return ! m_messageDialogs.showQuestion(null, m_owner, mainMessage,
+                                                   optionalMessage,
+                                                   "Terminate Program", "Wait",
+                                                   true);
         }
 
         private final String m_command;
@@ -398,6 +398,8 @@ public class GuiGtpClient
     private GtpSynchronizer m_gtpSynchronizer;
 
     private Component m_owner;
+
+    MessageDialogs m_messageDialogs;
 
     private final Object m_mutex = new Object();
 
