@@ -368,7 +368,7 @@ public class GuiGtpClient
                 message = "Program did not terminate";
             else
                 message = "Program did not respond to command"
-                    + " '" + m_command + "'";
+                    + " \"" + m_command + "\"";
             message = message + "\nKill program?";
             String title = "Error";
             String options[] = { "Kill Program", "Wait" };

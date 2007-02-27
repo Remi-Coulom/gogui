@@ -473,7 +473,7 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError("Command '" + commandWithoutArg + "' failed",
+                showError("Command \"" + commandWithoutArg + "\" failed",
                           e.getMessage(), false);
                 return;
             }

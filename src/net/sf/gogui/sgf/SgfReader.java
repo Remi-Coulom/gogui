@@ -732,7 +732,7 @@ public final class SgfReader
             while ((s = readValue()) != null)
                 m_values.add(s);
             if (m_values.size() == 0)
-                throw getError("Property '" + p + "' has no value");
+                throw getError("Property \"" + p + "\" has no value");
             String v = getValue(0);
             p = checkForObsoleteLongProps(p);
             if (p == "AB")
@@ -1065,7 +1065,7 @@ public final class SgfReader
 
     private void throwInvalidCoordinates(String s) throws SgfError
     {
-        throw getError("Invalid coordinates: '" + s + "'");
+        throw getError("Invalid coordinates \"" + s + "\"");
     }
 }
 
