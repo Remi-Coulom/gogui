@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
@@ -16,7 +15,6 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
-import net.sf.gogui.util.Platform;
 
 /** Wrapper around gtp.GtpClient to be used in a GUI environment.
     Allows to send fast commands immediately in the event dispatch thread
