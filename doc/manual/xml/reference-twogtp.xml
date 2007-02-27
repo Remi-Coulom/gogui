@@ -366,13 +366,13 @@ Command for white program.
 <variablelist>
 
 <varlistentry>
-<term><command>gogui_interrupt</command></term>
+<term><command>gogui-interrupt</command></term>
 <listitem>
 <para>
 Indicate interrupt ability for GoGui.
 <application>TwoGtp</application> will forward the interrupt to both
 programs, with the appropriate method, if they implement either
-<command>gogui_interrupt</command> or <command>gogui_sigint</command>.
+<command>gogui-interrupt</command> or <command>gogui-sigint</command>.
 See the chapter "Interrupting Commands" in the <application>GoGui</application>
 documentation.
 </para>
@@ -380,7 +380,7 @@ documentation.
 </varlistentry>
 
 <varlistentry>
-<term><command>gogui_title</command></term>
+<term><command>gogui-title</command></term>
 <listitem>
 <para>
 Return a title for the current game, consisting of the game number (if option
