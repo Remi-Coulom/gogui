@@ -182,12 +182,7 @@ public class GtpTerminal
             save(cmdArray);
         else if (cmd.equals("undo"))
             undo();
-        else if (cmd.equals("black")
-                 || cmd.equals("boardsize")
-                 || cmd.equals("clear_board")
-                 || cmd.equals("genmove_white")
-                 || cmd.equals("genmove_black")
-                 || cmd.equals("white"))
+        else if (GtpUtil.isStateChangingCommand(cmd))
             System.out.println("Command not allowed");
         else
         {
@@ -209,19 +204,12 @@ public class GtpTerminal
 
     private void help()
     {
-        System.out.print("Enter a move or one of the following commands:\n" +
-                         "  genmove\n" +
-                         "  help\n" +
-                         "  load\n" +
-                         "  list\n" +
-                         "  newgame\n" +
-                         "  save\n" +
-                         "  undo\n" +
-                         "  quit\n" +
-                         "The following commands are not allowed:\n" +
-                         "  black, boardsize, clear_board, genmove_black\n" +
-                         "  genmove_white, white\n" +
-                         "Other commands are forwarded to the program.\n");
+        String text =
+            "Enter a move or one of the following commands:\n" +
+            "genmove, help, load, list, newgame, save, undo, quit.\n" +
+            "GTP commands that change the board state are not allowed.\n" +
+            "Other GTP commands are forwarded to the program.\n";
+        System.out.print(text);
     }
 
     private void initGame(int size)

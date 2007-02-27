@@ -112,14 +112,8 @@ Terminate program and exit.
 </varlistentry>
 </variablelist>
 <para>
-The following commands are not allowed:
-<command>black</command>,
-<command>boardsize</command>,
-<command>clear_board</command>,
-<command>genmove_black</command>,
-<command>genmove_white</command>,
-<command>white</command>.
-All other commands are forwarded directly to the program as GTP commands.
+GTP commands that change the board state are not allowed.
+Other GTP commands are forwarded to the program.
 </para>
 </refsection>
 
