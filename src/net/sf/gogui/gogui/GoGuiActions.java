@@ -612,14 +612,14 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionShowAnalyzeDialog(); } },
              "Analyze Commands", "Show window with analyze commands",
-             KeyEvent.VK_F9, getFunctionKeyShortcut());
+             KeyEvent.VK_F8, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionShowShell =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionShowShell(); } },
              "GTP Shell", "Show GTP shell window",
-             KeyEvent.VK_F8, getFunctionKeyShortcut());
+             KeyEvent.VK_F9, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionShowTree =
         new GoGuiAction(new ActionListener() {
