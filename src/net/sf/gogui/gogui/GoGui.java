@@ -3829,7 +3829,9 @@ public class GoGui
         String optionalMessage;
         if (m_gtp != null && m_gtp.isProgramDead())
         {
-            mainMessage = nameCapitalized + " terminated unexpectedly";
+            mainMessage = nameCapitalized + " terminated";
+            if (! m_gtp.wasKilled())
+                mainMessage = mainMessage + " unexpectedly";
             optionalMessage = "";
             if (m_shell.isLastTextNonGTP())
                 optionalMessage = optionalMessage +

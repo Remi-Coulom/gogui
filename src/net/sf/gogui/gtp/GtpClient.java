@@ -427,6 +427,12 @@ public final class GtpClient
         }        
     }
 
+    /** Was program forcefully terminated by calling destroyProcess() */
+    public boolean wasKilled()
+    {
+        return m_wasKilled;
+    }
+
     private static final class Message
     {
         public Message(int type, String text)

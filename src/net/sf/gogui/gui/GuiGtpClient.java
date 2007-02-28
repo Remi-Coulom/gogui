@@ -353,6 +353,11 @@ public class GuiGtpClient
         m_gtpSynchronizer.updateHumanMove(board, move);
     }
 
+    public boolean wasKilled()
+    {
+        return m_gtp.wasKilled();
+    }
+
     private class TimeoutCallback
         implements GtpClient.TimeoutCallback
     {
