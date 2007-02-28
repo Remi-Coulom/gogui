@@ -19,6 +19,48 @@ import java.util.ArrayList;
 /** Table of string elements. */
 public class Table
 {
+    public static class InvalidLocation
+        extends ErrorMessage
+    {
+        public InvalidLocation(String message)
+        {
+            super(message);
+        }        
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
+    }
+
+    public static class InvalidFormat
+        extends ErrorMessage
+    {
+        public InvalidFormat(String message)
+        {
+            super(message);
+        }        
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
+    }
+
+    public static class InvalidElement
+        extends ErrorMessage
+    {
+        public InvalidElement(String message)
+        {
+            super(message);
+        }        
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
+    }
+
     public Table()
     {
         m_columnTitles = new ArrayList();
@@ -36,12 +78,13 @@ public class Table
         return (String)getRow(row).get(column);
     }
 
-    public String get(String columnTitle, int row) throws ErrorMessage
+    public String get(String columnTitle, int row) throws InvalidLocation
     {
         return get(getColumnIndex(columnTitle), row);
     }
 
-    public double getDouble(int column, int row) throws ErrorMessage
+    public double getDouble(int column, int row)
+        throws InvalidLocation, InvalidElement
     {
         try
         {
@@ -52,18 +95,19 @@ public class Table
         }
         catch (NumberFormatException e)
         {
-            throw new ErrorMessage("Expected floating point number in table "
-                                   + "(column=" + column + ", row=" + row
-                                   + ")");
+            throw new InvalidElement("Expected floating point number in "
+                                     + "table (column=" + column + ", row="
+                                     + row + ")");
         }
     }
 
-    public double getDouble(String columnTitle, int row) throws ErrorMessage
+    public double getDouble(String columnTitle, int row)
+        throws InvalidLocation, InvalidElement
     {
         return getDouble(getColumnIndex(columnTitle), row);
     }
 
-    public int getInt(int column, int row) throws ErrorMessage
+    public int getInt(int column, int row) throws InvalidElement
     {
         try
         {
@@ -74,17 +118,18 @@ public class Table
         }
         catch (NumberFormatException e)
         {
-            throw new ErrorMessage("Expected integer in table (column="
-                                   + column + ", row=" + row + ")");
+            throw new InvalidElement("Expected integer in table (column="
+                                     + column + ", row=" + row + ")");
         }
     }
 
-    public int getInt(String columnTitle, int row) throws ErrorMessage
+    public int getInt(String columnTitle, int row)
+        throws InvalidLocation, InvalidElement
     {
         return getInt(getColumnIndex(columnTitle), row);
     }
 
-    public int getColumnIndex(String column) throws ErrorMessage
+    public int getColumnIndex(String column) throws InvalidLocation
     {
         for (int i = 0; i < m_numberColumns; ++i)
         {
@@ -92,7 +137,7 @@ public class Table
             if (title.equals(column))
                 return i;
         }
-        throw new ErrorMessage("No such column in table: " + column);
+        throw new InvalidLocation("No such column in table: " + column);
     }
 
     public String getColumnTitle(int index)
@@ -130,12 +175,12 @@ public class Table
     }
 
     public void read(File file) throws FileNotFoundException, IOException,
-                                       ErrorMessage
+                                       InvalidFormat
     {
         read(new FileReader(file));
     }
 
-    public void read(Reader reader) throws IOException, ErrorMessage
+    public void read(Reader reader) throws IOException, InvalidFormat
     {
         BufferedReader bufferedReader = new BufferedReader(reader);
         m_lineNumber = 0;
@@ -209,17 +254,17 @@ public class Table
         m_lastRow.set(column, value);
     }
 
-    public void set(String column, int value) throws ErrorMessage
+    public void set(String column, int value) throws InvalidLocation
     {
         set(column, Integer.toString(value));
     }
 
-    public void set(String column, double value) throws ErrorMessage
+    public void set(String column, double value) throws InvalidLocation
     {
         set(column, Double.toString(value));
     }
 
-    public void set(String column, String value) throws ErrorMessage
+    public void set(String column, String value) throws InvalidLocation
     {
         set(getColumnIndex(column), value);
     }
@@ -294,7 +339,7 @@ public class Table
         setProperty(key, value);
     }
 
-    private void handleLine(String line) throws ErrorMessage
+    private void handleLine(String line) throws InvalidFormat
     {
         line = line.trim();
         if (line.startsWith("#"))
@@ -304,8 +349,8 @@ public class Table
         }
         String[] array = line.split("\\t");
         if (array.length > getNumberColumns())
-            throw new ErrorMessage("Invalid line " + m_lineNumber
-                                   + ": " + line);
+            throw new InvalidFormat("Invalid line " + m_lineNumber
+                                    + ": " + line);
         startRow();
         for (int i = 0; i < array.length; ++i)
             set(i, array[i]);

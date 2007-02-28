@@ -16,7 +16,7 @@ public final class TableUtil
         containing only whitespaces.
     */
     public static boolean allEmpty(Table table, String column)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
@@ -53,7 +53,7 @@ public final class TableUtil
     public static int findRow(Table table,
                               String compareColumn1, String compareValue1,
                               String compareColumn2, String compareValue2)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
@@ -85,7 +85,7 @@ public final class TableUtil
                 result.set(name, histogram.getValue(i));
                 result.set("Count", count);
             }
-            catch (ErrorMessage e)
+            catch (Table.InvalidLocation e)
             {
                 assert(false);
             }
@@ -95,7 +95,7 @@ public final class TableUtil
 
     /** Get elements of a column without null and whitespace-only elements. */
     public static ArrayList getColumnNotEmpty(Table table, String column)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         ArrayList result = new ArrayList();
         int col = table.getColumnIndex(column);
@@ -109,7 +109,7 @@ public final class TableUtil
     }
 
     public static ArrayList getColumnUnique(Table table, String column)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         ArrayList result = new ArrayList();
         int col = table.getColumnIndex(column);
@@ -124,7 +124,7 @@ public final class TableUtil
     }
 
     public static double getMax(Table table, String column)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         double max = Double.NEGATIVE_INFINITY;
         int col = table.getColumnIndex(column);
@@ -143,7 +143,7 @@ public final class TableUtil
     }
 
     public static Statistics getStatistics(Table table, String column)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         Statistics statistics = new Statistics();
         int col = table.getColumnIndex(column);
@@ -199,7 +199,7 @@ public final class TableUtil
 
     public static Table select(Table table, String compareColumn,
                                String compareValue)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         Table result = new Table(table.getColumnTitles());
         int numberColumns = table.getNumberColumns();
@@ -217,7 +217,7 @@ public final class TableUtil
 
     public static Table select(Table table, String compareColumn,
                                String compareValue, String selectColumn)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         ArrayList columnTitles = new ArrayList(1);
         columnTitles.add(selectColumn);
@@ -236,7 +236,7 @@ public final class TableUtil
     public static Table select(Table table, String compareColumn,
                                String compareValue, String selectColumn1,
                                String selectColumn2)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         ArrayList columnTitles = new ArrayList(2);
         columnTitles.add(selectColumn1);
@@ -256,7 +256,7 @@ public final class TableUtil
 
     public static Table selectIntRange(Table table, String compareColumn,
                                        int min, int max)
-        throws ErrorMessage
+        throws Table.InvalidLocation
     {
         Table result = new Table(table.getColumnTitles());
         int numberColumns = table.getNumberColumns();

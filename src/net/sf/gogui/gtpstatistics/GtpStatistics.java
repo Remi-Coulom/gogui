@@ -401,8 +401,10 @@ public class GtpStatistics
                 }
             }
         }
-        catch (ErrorMessage e)
+        catch (Table.InvalidLocation e)
         {
+            System.err.println(e.getMessage());
+            // Table was created by this class in correct format
             assert(false);
         }
     }

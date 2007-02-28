@@ -28,7 +28,7 @@ public final class PositionStatistics
     public PositionStatistics(String command, Table table,
                               boolean noAutoScaleHisto,
                               double histoMin, double histoMax)
-        throws ErrorMessage
+        throws Table.InvalidLocation, ErrorMessage
     {
         m_statistics = new Statistics();
         boolean onlyIntValues = true;

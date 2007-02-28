@@ -340,7 +340,11 @@ public class Plot
                     m_graphics2D.fillRect(point.x - 1, point.y - 1, 3, 3);
                 last = point;
             }
-            catch (ErrorMessage e)
+            catch (Table.InvalidElement e)
+            {
+                last = null;
+            }
+            catch (Table.InvalidLocation e)
             {
                 last = null;
             }
@@ -553,7 +557,7 @@ public class Plot
                 minY = Math.min(minY, y);
                 maxY = Math.max(maxY, y);
             }
-            catch (ErrorMessage e)
+            catch (Table.InvalidLocation e)
             {
             }
         }
