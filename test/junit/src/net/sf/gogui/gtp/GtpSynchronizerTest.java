@@ -142,6 +142,73 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
     }
 
+    /** Test that handicap stones are transmitted as moves if neither
+        set_free_handicap nor gogui-setup is supported.
+    */
+    public void testSetupHandicapAsMoves() throws GtpError
+    {
+        createSynchronizer();
+
+        expect("list_commands", "");
+        m_gtp.querySupportedCommands();
+        assertExpectQueueEmpty();
+
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        PointList black = new PointList();
+        black.add(GoPoint.get(3, 4));
+        black.add(GoPoint.get(4, 4));
+
+        setupHandicap(black);
+        expect("play b D5", "");
+        expect("play b E5", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        // Playing a move should not trigger a re-transmission
+        play(GoColor.WHITE, 5, 5);
+        expect("play w F6", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
+    /** Test that handicap stones are transmitted using gogui-setup if
+        set_free_handicap is not supported, but gogui-setup is supported.
+    */
+    public void testSetupHandicapAsSetup() throws GtpError
+    {
+        createSynchronizer();
+
+        expect("list_commands", "gogui-setup");
+        m_gtp.querySupportedCommands();
+        assertExpectQueueEmpty();
+
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        PointList black = new PointList();
+        black.add(GoPoint.get(3, 4));
+        black.add(GoPoint.get(4, 4));
+
+        setupHandicap(black);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("gogui-setup b D5 b E5", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        // Playing a move should not trigger a re-transmission
+        play(GoColor.WHITE, 5, 5);
+        expect("play w F6", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
     /** Test that gogui-setup command is used if supported by the engine. */
     public void testSetup() throws GtpError
     {

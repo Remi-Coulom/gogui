@@ -185,13 +185,10 @@ public class GtpSynchronizer
         {
             targetState.clear();
             boolean isHandicap = board.isSetupHandicap();
-            if (m_isSupportedSetup || (isHandicap && m_isSupportedHandicap))
-            {
-                if (isHandicap)
-                    targetState.setupHandicap(setupBlack);
-                else
-                    targetState.setup(setupBlack, setupWhite, setupPlayer);
-            }
+            if (isHandicap && m_isSupportedHandicap)
+                targetState.setupHandicap(setupBlack);
+            else if (m_isSupportedSetup)
+                targetState.setup(setupBlack, setupWhite, setupPlayer);
             else
             {
                 // Translate setup into moves
