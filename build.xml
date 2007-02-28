@@ -653,7 +653,7 @@ ${quaqua.nestedzipfile}
 </target>
 
 <target name="junit" depends="compile,junit-compile"
- description="Run JUnit tests (define property testcase for a single test)" >
+ description="Run JUnit tests (define property test for a single test)" >
 <junit printsummary="withOutAndErr" fork="true" timeout="60000"
  haltonfailure="true">
 <assertions><enable/></assertions>
@@ -662,8 +662,8 @@ ${quaqua.nestedzipfile}
 <pathelement location="build/test"/>
 </classpath>
 <formatter type="brief" usefile="false"/>
-<test name="${testcase}" todir="build" if="testcase"/>
-<batchtest todir="build" unless="testcase">
+<test name="${test}" todir="build" if="test"/>
+<batchtest todir="build" unless="test">
 <fileset dir="build/test" includes="**/*Test.class"/>
 </batchtest>
 </junit>
