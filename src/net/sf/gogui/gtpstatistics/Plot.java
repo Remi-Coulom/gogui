@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import net.sf.gogui.gui.GuiUtil;
-import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.util.TableUtil;
 
