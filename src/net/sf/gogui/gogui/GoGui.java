@@ -1551,8 +1551,8 @@ public class GoGui
             return;
         if (! showQuestion("Truncate children?",
                            "All children nodes of this position" +
-                           " will be deleted from the game tree", "Truncate",
-                           false))
+                           " will be deleted from the game tree.",
+                           "Truncate", false))
             return;
         m_game.truncateChildren();
         boardChangedBegin(false, true);
