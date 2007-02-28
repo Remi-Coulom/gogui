@@ -247,10 +247,18 @@ public class Table
             }
         }
     }
-    
+
+    /** Set element in last row.
+        @param column Column in last row.
+        @param value The value (must not contain newlines or tabs).
+    */
     public void set(int column, String value)
     {
         assert(m_lastRow.get(column) == null);
+        // Values containing newlines and tabs are not supported by save()
+        // yet
+        assert(value.indexOf("\n") < 0);
+        assert(value.indexOf("\t") < 0);
         m_lastRow.set(column, value);
     }
 
