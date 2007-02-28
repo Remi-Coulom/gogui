@@ -492,7 +492,9 @@ public class GtpStatistics
         throws GtpError
     {
         String cmd = convertCommand(command, toMove);
-        String response = m_gtp.send(cmd);
+        String response = m_gtp.send(cmd).trim();
+        response.replaceAll("\t", " ");
+        response.replaceAll("\n", " ");
         return convertResponse(command, response, toMove, move);
     }
 
