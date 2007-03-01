@@ -540,6 +540,7 @@ public class GtpShell
         m_runButton.setFocusable(false);
         m_runButton.setToolTipText("Send command line");
         m_runButton.addActionListener(this);
+        m_runButton.putClientProperty("Quaqua.Button.style", "bevel");
         JPanel buttonPanel =
             new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.add(buttonPanel, BorderLayout.EAST);
