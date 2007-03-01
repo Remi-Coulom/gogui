@@ -43,7 +43,7 @@ public final class MessageDialogs
         Object defaultOption = options[0];
         String title = "Error - " + m_applicationName;
         show(null, frame, title, mainMessage, optionalMessage, type,
-             JOptionPane.DEFAULT_OPTION, options, defaultOption);
+             JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
 
     public void showError(Component frame, String message, Exception e)
@@ -78,7 +78,7 @@ public final class MessageDialogs
         Object defaultOption = options[0];
         String title = "Information - " + m_applicationName;
         show(disableKey, frame, title, mainMessage, optionalMessage,
-             type, JOptionPane.DEFAULT_OPTION, options, defaultOption);
+             type, JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
 
     public int showYesNoCancelQuestion(Component parent, String mainMessage,
@@ -103,19 +103,33 @@ public final class MessageDialogs
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return 0;
-        Object[] options =
-            { nonDestructiveOption, destructiveOption, "Cancel" };
+        Object[] options = new Object[3];
+        int destructiveIndex;
+        if (Platform.isMac())
+        {
+            options[0] = nonDestructiveOption;
+            options[1] = "Cancel";
+            options[2] = destructiveOption;
+            destructiveIndex = 2;
+        }
+        else
+        {
+            options[0] = nonDestructiveOption;
+            options[1] = destructiveOption;
+            options[2] = "Cancel";
+            destructiveIndex = -1;
+        }
         Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
         String title = "Question - " + m_applicationName;
         Object value = show(disableKey, parent, title, mainMessage,
                             optionalMessage, type,
                             JOptionPane.YES_NO_CANCEL_OPTION, options,
-                            defaultOption);
+                            defaultOption, destructiveIndex);
         int result;
-        if (value == options[1])
+        if (value == destructiveOption)
             result = 0;
-        else if (value == options[0])
+        else if (value == nonDestructiveOption)
             result = 1;
         else
             result = 2;
@@ -143,7 +157,7 @@ public final class MessageDialogs
         Object defaultOption = options[0];
         String title = "Warning - " + m_applicationName;
         show(disableKey, parent, title, mainMessage, optionalMessage, type,
-             JOptionPane.DEFAULT_OPTION, options, defaultOption);
+             JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
 
     public boolean showQuestion(Component parent, String mainMessage,
@@ -176,7 +190,20 @@ public final class MessageDialogs
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
-        Object[] options = { destructiveOption, nonDestructiveOption };
+        Object[] options = new Object[2];
+        int destructiveIndex;
+        if (Platform.isMac())
+        {
+            options[0] = nonDestructiveOption;
+            options[1] = destructiveOption;
+            destructiveIndex = 1;
+        }
+        else
+        {
+            options[0] = destructiveOption;
+            options[1] = nonDestructiveOption;
+            destructiveIndex = -1;
+        }
         Object defaultOption = options[1];
         int type;
         if (isCritical)
@@ -188,8 +215,8 @@ public final class MessageDialogs
         String title = "Question - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
-                             options, defaultOption);
-        return (result == options[0]);
+                             options, defaultOption, destructiveIndex);
+        return (result == destructiveOption);
     }
 
     public boolean showWarningQuestion(Component parent, String mainMessage,
@@ -212,7 +239,20 @@ public final class MessageDialogs
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
-        Object[] options = { destructiveOption, "Cancel" };
+        Object[] options = new Object[2];
+        int destructiveIndex;
+        if (Platform.isMac())
+        {
+            options[0] = "Cancel";
+            options[1] = destructiveOption;
+            destructiveIndex = 1;
+        }
+        else
+        {
+            options[0] = destructiveOption;
+            options[1] = "Cancel";
+            destructiveIndex = -1;
+        }
         Object defaultOption = options[1];
         int type;
         if (isCritical)
@@ -222,8 +262,8 @@ public final class MessageDialogs
         String title = "Warning - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
-                             options, defaultOption);
-        return (result == options[0]);
+                             options, defaultOption, destructiveIndex);
+        return (result == destructiveOption);
     }
 
     private String m_applicationName;
@@ -240,7 +280,7 @@ public final class MessageDialogs
     private Object show(String disableKey, Component parent, String title,
                         String mainMessage, String optionalMessage,
                         int messageType, int optionType, Object[] options,
-                        Object defaultOption)
+                        Object defaultOption, int destructiveIndex)
     {
         if (optionalMessage == null)
             optionalMessage = "";
@@ -287,6 +327,11 @@ public final class MessageDialogs
         JOptionPane optionPane =
             new JOptionPane(box, messageType, optionType, null, options,
                             defaultOption);
+        if (destructiveIndex >= 0)
+        {
+            String key = "Quaqua.OptionPane.destructiveOption";
+            optionPane.putClientProperty(key, new Integer(destructiveIndex));
+        }
         JDialog dialog = optionPane.createDialog(parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK
         // 1.5.0_04-b05 or Mac 1.4.2_12)
