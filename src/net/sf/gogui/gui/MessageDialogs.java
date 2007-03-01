@@ -5,6 +5,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.util.TreeSet;
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -318,6 +319,11 @@ public final class MessageDialogs
                 "Disable this kind of messages for the current session";
             disableCheckBox.setToolTipText(toolTipText);
             disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+            if (Platform.isMac())
+            {
+                Font font = new Font("Lucida Grande", Font.PLAIN, 11);
+                disableCheckBox.setFont(font);
+            }
             box.add(disableCheckBox);
         }
         if (Platform.isMac())
