@@ -46,6 +46,7 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.GuiUtil;
+import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 
 /** Dialog for selecting an AnalyzeCommand. */
@@ -318,6 +319,9 @@ public final class AnalyzeDialog
             });
         m_list.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(m_list);
+        if (Platform.isMac())
+            // Default Apple L&F uses no border, but Quaqua 3.7.4 does
+            scrollPane.setBorder(null);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
         try

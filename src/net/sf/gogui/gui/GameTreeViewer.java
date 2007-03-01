@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.util.Platform;
 
 /** Dialog for displaying the game tree. */
 public class GameTreeViewer
@@ -43,6 +44,9 @@ public class GameTreeViewer
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        if (Platform.isMac())
+            // Default Apple L&F uses no border, but Quaqua 3.7.4 does
+            m_scrollPane.setBorder(null);
         GuiUtil.removeKeyBinding(m_scrollPane, "control END");
         KeyAdapter keyAdapter = new KeyAdapter()
             {
