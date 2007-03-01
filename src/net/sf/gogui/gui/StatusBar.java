@@ -179,24 +179,18 @@ public class StatusBar
     private final JSeparator m_moveTextSeparator;
 }
 
-/** Non-ediatable text field with tool tip if text is truncated. */
+/** Non-editable text field with tool tip if text is truncated. */
 class TextFieldWithToolTip
     extends JTextField
 {
-    public TextFieldWithToolTip(int cols)
+    public TextFieldWithToolTip()
     {
-        super(cols);
         GuiUtil.setEditableFalse(this);
         if (Platform.isMac())
         {
             setForeground(UIManager.getColor("Label.foreground"));
             setBackground(UIManager.getColor("Label.background"));
         }
-    }
-
-    public TextFieldWithToolTip()
-    {
-        GuiUtil.setEditableFalse(this);
     }
 
     protected void paintComponent(Graphics g)
