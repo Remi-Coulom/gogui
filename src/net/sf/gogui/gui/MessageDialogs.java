@@ -118,11 +118,7 @@ public final class MessageDialogs
         else if (value == options[0])
             result = 1;
         else
-        {
-            assert(value == options[2] || value == null
-                   || value.equals(new Integer(-1)));
             result = 2;
-        }
         return result;
     }
 
