@@ -865,12 +865,7 @@ public class GoGui
 
     public void actionInterrupt()
     {
-        if (! isCommandInProgress())
-        {
-            showError("Computer is not thinking", "", false);
-            return;
-        }
-        if (m_gtp == null || m_gtp.isProgramDead())
+        if (m_gtp == null || m_gtp.isProgramDead() || ! isCommandInProgress())
             return;
         if (m_interrupt.run(this, m_gtp, m_messageDialogs))
             showStatus("Interrupting...");
