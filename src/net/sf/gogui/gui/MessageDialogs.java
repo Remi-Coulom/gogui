@@ -280,6 +280,7 @@ public final class MessageDialogs
     {
         if (optionalMessage == null)
             optionalMessage = "";
+        boolean isMac = Platform.isMac();
         Box box = Box.createVerticalBox();
         JLabel label = new JLabel("<html><b>" + mainMessage + "</b></html>");
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -314,14 +315,14 @@ public final class MessageDialogs
                 "Disable this kind of messages for the current session";
             disableCheckBox.setToolTipText(toolTipText);
             disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-            if (Platform.isMac())
+            if (isMac)
             {
                 Font font = new Font("Lucida Grande", Font.PLAIN, 11);
                 disableCheckBox.setFont(font);
             }
             box.add(disableCheckBox);
         }
-        if (Platform.isMac())
+        if (isMac)
             // Don't show icons on Mac, problem with icon generation in
             // Quaqua 3.7.2
             messageType = JOptionPane.PLAIN_MESSAGE;
@@ -333,6 +334,8 @@ public final class MessageDialogs
             String key = "Quaqua.OptionPane.destructiveOption";
             optionPane.putClientProperty(key, new Integer(destructiveIndex));
         }
+        if (isMac)
+            title = null; // Dialogs don't have titles on the Mac
         JDialog dialog = optionPane.createDialog(parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK
         // 1.5.0_04-b05 or Mac 1.4.2_12)
