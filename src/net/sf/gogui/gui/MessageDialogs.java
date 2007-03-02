@@ -185,27 +185,24 @@ public final class MessageDialogs
     public boolean showQuestion(String disableKey, Component parent,
                                 String mainMessage,
                                 String optionalMessage,
-                                String destructiveOption,
-                                String nonDestructiveOption,
+                                String affirmativeOption,
+                                String cancelOption,
                                 boolean isCritical)
     {
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
         Object[] options = new Object[2];
-        int destructiveIndex;
         if (Platform.isMac())
         {
-            options[0] = nonDestructiveOption;
-            options[1] = destructiveOption;
-            destructiveIndex = 1;
+            options[0] = cancelOption;
+            options[1] = affirmativeOption;
         }
         else
         {
-            options[0] = destructiveOption;
-            options[1] = nonDestructiveOption;
-            destructiveIndex = -1;
+            options[0] = affirmativeOption;
+            options[1] = cancelOption;
         }
-        Object defaultOption = options[1];
+        Object defaultOption = affirmativeOption;
         int type;
         if (isCritical)
             // No reason to show a warning icon for confirmation dialogs
@@ -216,8 +213,8 @@ public final class MessageDialogs
         String title = "Question - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
-                             options, defaultOption, destructiveIndex);
-        return (result == destructiveOption);
+                             options, defaultOption, -1);
+        return (result == affirmativeOption);
     }
 
     public boolean showWarningQuestion(Component parent, String mainMessage,
@@ -241,20 +238,18 @@ public final class MessageDialogs
         if (disableKey != null && m_disabled.contains(disableKey))
             return true;
         Object[] options = new Object[2];
-        int destructiveIndex;
+        String cancelOption = "Cancel";
         if (Platform.isMac())
         {
-            options[0] = "Cancel";
+            options[0] = cancelOption;
             options[1] = destructiveOption;
-            destructiveIndex = 1;
         }
         else
         {
             options[0] = destructiveOption;
-            options[1] = "Cancel";
-            destructiveIndex = -1;
+            options[1] = cancelOption;
         }
-        Object defaultOption = options[1];
+        Object defaultOption = cancelOption;
         int type;
         if (isCritical)
             type = JOptionPane.WARNING_MESSAGE;
@@ -263,7 +258,7 @@ public final class MessageDialogs
         String title = "Warning - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
-                             options, defaultOption, destructiveIndex);
+                             options, defaultOption, -1);
         return (result == destructiveOption);
     }
 
