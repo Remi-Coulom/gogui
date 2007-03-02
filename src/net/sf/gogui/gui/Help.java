@@ -63,6 +63,9 @@ public class Help
             new JScrollPane(m_editorPane,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        if (Platform.isMac())
+            // Default Apple L&F uses no border, but Quaqua 3.7.4 does
+            scrollPane.setBorder(null);
         scrollPane.setPreferredSize(new Dimension(width, height));
         panel.add(scrollPane, BorderLayout.CENTER);
         //GuiUtil.setGoIcon(this);
