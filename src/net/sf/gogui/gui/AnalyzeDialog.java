@@ -81,8 +81,7 @@ public final class AnalyzeDialog
         comboBoxChanged();
         setSelectedColor(GoColor.BLACK);
         int minWidth = commandPanel.getPreferredSize().width;
-        // Only has an effect in Java 1.6
-        setMinimumSize(new Dimension(minWidth, 192));
+        GuiUtil.setMinimumSize(this, new Dimension(minWidth, 192));
         pack();
         addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent e) {

@@ -82,8 +82,7 @@ public class GameTreeViewer
                     m_scrollPane.requestFocusInWindow();
                 }
             });
-        // Only has an effect in Java 1.6
-        setMinimumSize(new Dimension(128, 96));
+        GuiUtil.setMinimumSize(this, new Dimension(128, 96));
         pack();
     }
 

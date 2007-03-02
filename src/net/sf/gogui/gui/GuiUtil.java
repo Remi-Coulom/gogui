@@ -22,6 +22,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
@@ -342,6 +343,32 @@ public class GuiUtil
         URL url = s_iconURL;
         if (url != null)
             frame.setIconImage(new ImageIcon(url).getImage());
+    }
+
+    /** Invoke Window.setMinimumSize, if available.
+        Window.setMinimumSize is not available in Java 1.4 (and seems to have
+        no effect in Java 1.5)
+    */
+    public static void setMinimumSize(Window window, Dimension size)
+    {
+        try
+        {
+            Class [] argsClasses = new Class[1];
+            argsClasses[0] = Class.forName("java.awt.Dimension");
+            Class windowClass = Class.forName("java.awt.Window");
+            Method method =
+                windowClass.getMethod("setMinimumSize", argsClasses);
+            Object[] argsObjects = new Object[1];
+            argsObjects[0] = size;
+            method.invoke(window, argsObjects);
+        }
+        catch (NoSuchMethodException e)
+        {
+        }
+        catch (Exception e)
+        {
+            assert(false);
+        }
     }
 
     public static void setMonospacedFont(JComponent component)

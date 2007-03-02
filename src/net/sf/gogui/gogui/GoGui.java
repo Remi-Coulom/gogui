@@ -3699,8 +3699,7 @@ public class GoGui
             height += (int)toolBarSize.getHeight();
         }
         height += 224;
-        // Only has an effect in Java 1.6
-        setMinimumSize(new Dimension(width, height));
+        GuiUtil.setMinimumSize(this, new Dimension(width, height));
     }
 
     private void setResult(String result)
