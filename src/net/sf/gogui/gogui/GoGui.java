@@ -2236,8 +2236,7 @@ public class GoGui
                     hideShell();
                 }
             });
-        // Don't restore size yet, see workaround GtpShell.setFinalSize()
-        restoreLocation(m_shell, "shell");
+        restoreSize(m_shell, "shell");
         m_shell.setProgramCommand(programCommand);
         m_shell.setTimeStamp(m_timeStamp);
         m_shell.setCommandCompletion(m_commandCompletion);
