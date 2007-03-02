@@ -28,7 +28,7 @@ public final class TableUtilTest
         table.startRow();
         table.set("column2", "value");
         table.startRow();
-        table.set("column1", " \t");
+        table.set("column1", "  ");
         assertTrue(TableUtil.allEmpty(table, "column1"));
         assertFalse(TableUtil.allEmpty(table, "column2"));
     }
