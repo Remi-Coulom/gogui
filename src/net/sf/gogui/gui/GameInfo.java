@@ -170,21 +170,37 @@ class GuiClock
 {
     public GuiClock(GoColor color)
     {
-        super(11);
-        GuiUtil.setMonospacedFont(this);
+        super(COLUMNS);
+        //Monspace font doesn't center correctly on the Mac
+        //GuiUtil.setMonospacedFont(this);
         GuiUtil.setEditableFalse(this);
         setHorizontalAlignment(SwingConstants.CENTER);
         setMinimumSize(getPreferredSize());
-        if (color == GoColor.BLACK)
-            setToolTipText("Time for Black");
+        m_color = color;
+        setText("00:00");
+    }
+
+    public void setText(String text)
+    {
+        super.setText(text);
+        String toolTip;
+        if (m_color == GoColor.BLACK)
+            toolTip = "Time for Black";
         else
-            setToolTipText("Time for White");
+            toolTip = "Time for White";
+        if (text.length() > COLUMNS)
+            toolTip = toolTip + " (" + text + ")";
+        setToolTipText(toolTip);
     }
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+
+    private static final int COLUMNS = 8;
+
+    private GoColor m_color;
 }
 
 class Prisoners
