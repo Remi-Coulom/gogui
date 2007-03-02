@@ -268,6 +268,7 @@ public class ProgramEditor
             JButton button = new JButton();
             panel.add(button);
             button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
+            button.putClientProperty("Quaqua.Button.style", "bevel");
             button.setToolTipText(browseToolTip);
             button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
