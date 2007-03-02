@@ -2370,6 +2370,8 @@ public class GoGui
     {
         updateFromGoBoard();
         updateViews(gameTreeChanged);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setSelectedColor(getToMove());
         if (m_gtp != null
             && ! isOutOfSync()
             && m_analyzeCommand != null
@@ -4049,8 +4051,6 @@ public class GoGui
         getRootPane().putClientProperty("windowModified",
                                         Boolean.valueOf(isModified()));
         setTitle();
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.setSelectedColor(getToMove());
         GoGuiUtil.updateMoveText(m_statusBar, game);
         m_statusBar.setSetupMode(m_setupMode);
         if (m_setupMode)

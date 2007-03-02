@@ -78,6 +78,7 @@ public final class AnalyzeDialog
         JPanel commandPanel = createCommandPanel(analyzeCommands);
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
+        setSelectedColor(GoColor.BLACK);
         //int minWidth = commandPanel.getPreferredSize().width;
         // not supported in Java 1.4
         //setMinimumSize(new Dimension(minWidth, 192));
