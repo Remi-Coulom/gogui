@@ -257,8 +257,8 @@ public class Table
         assert(m_lastRow.get(column) == null);
         // Values containing newlines and tabs are not supported by save()
         // yet
-        assert(value.indexOf("\n") < 0);
-        assert(value.indexOf("\t") < 0);
+        assert(value == null || value.indexOf("\n") < 0);
+        assert(value == null || value.indexOf("\t") < 0);
         m_lastRow.set(column, value);
     }
 
