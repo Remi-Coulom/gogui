@@ -261,6 +261,7 @@ public final class AnalyzeDialog
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
         m_runButton.setEnabled(false);
+        m_runButton.putClientProperty("Quaqua.Button.style", "bevel");
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
         m_clearButton = new JButton("Clear");
@@ -268,6 +269,7 @@ public final class AnalyzeDialog
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
         m_clearButton.setMnemonic(KeyEvent.VK_C);
+        m_clearButton.putClientProperty("Quaqua.Button.style", "bevel");
         innerPanel.add(m_clearButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
