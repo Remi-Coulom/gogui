@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -79,9 +80,9 @@ public final class AnalyzeDialog
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
         setSelectedColor(GoColor.BLACK);
-        //int minWidth = commandPanel.getPreferredSize().width;
-        // not supported in Java 1.4
-        //setMinimumSize(new Dimension(minWidth, 192));
+        int minWidth = commandPanel.getPreferredSize().width;
+        // Only has an effect in Java 1.6
+        setMinimumSize(new Dimension(minWidth, 192));
         pack();
         addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent e) {

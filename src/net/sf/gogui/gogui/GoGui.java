@@ -10,6 +10,7 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -3680,8 +3681,6 @@ public class GoGui
 
     private void setMinimumSize()
     {
-        // setMinimumSize not available in Java 1.4
-        /*
         int width = 128;
         int height = 32;
         Insets rootInsets = getRootPane().getInsets();
@@ -3700,8 +3699,8 @@ public class GoGui
             height += (int)toolBarSize.getHeight();
         }
         height += 224;
+        // Only has an effect in Java 1.6
         setMinimumSize(new Dimension(width, height));
-        */
     }
 
     private void setResult(String result)
