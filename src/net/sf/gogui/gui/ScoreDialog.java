@@ -43,7 +43,8 @@ public class ScoreDialog
         m_initialRules = initialRules;
         WindowAdapter windowAdapter = new WindowAdapter() {
                 public void windowClosing(WindowEvent event) {
-                    close();
+                    listener.actionScoreDone(null);
+                    dispose();
                 }
             };
         addWindowListener(windowAdapter);
@@ -151,12 +152,6 @@ public class ScoreDialog
 
     private static final ImageIcon m_iconWhite =
         GuiUtil.getIcon("gogui-white-16x16", "White");
-
-    private void close()
-    {
-        m_cancelButton.doClick();
-        dispose();
-    }
 
     private JComponent createEntryLabel(String text)
     {
