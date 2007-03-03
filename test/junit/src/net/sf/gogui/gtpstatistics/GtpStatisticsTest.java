@@ -38,8 +38,6 @@ public final class GtpStatisticsTest
         int size = 9;
         ArrayList commands = new ArrayList();
         commands.add("foo");
-        ArrayList beginCommands = null;
-        ArrayList finalCommands = null;
         boolean allowSetup = false;
         boolean backward = false;
         expect.expect("protocol_version", "2");
@@ -57,8 +55,8 @@ public final class GtpStatisticsTest
         expect.expect("quit");
         GtpStatistics gtpStatistics = new GtpStatistics();
         gtpStatistics.setQuiet(true);
-        gtpStatistics.run(gtp, program, sgfFiles, size, commands,
-                          beginCommands, finalCommands, allowSetup, backward);
+        gtpStatistics.run(gtp, program, sgfFiles, size, commands, null, null,
+                          allowSetup, backward);
         assertTrue(expect.isExpectQueueEmpty());
     }
 }

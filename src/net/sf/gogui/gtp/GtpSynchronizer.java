@@ -329,7 +329,7 @@ public class GtpSynchronizer
                 // Avoid sending "no time limit" settings, if not necessary
                 // because it could confuse some programs
                 // (see GtpUtil.getTimeSettingsCommand())
-                m_timeSettings = timeSettings;
+                m_timeSettings = null;
                 return;
             }
             m_timeSettings = timeSettings;

@@ -469,11 +469,10 @@ public final class AnalyzeDialog
             try
             {
                 String value = m_gtp.send(commandWithoutArg);
-                Object[] values = null;
                 Object optStringArg =
                     JOptionPane.showInputDialog(this, label, "Input",
                                                 JOptionPane.PLAIN_MESSAGE,
-                                                null, values, value);
+                                                null, null, value);
                 if (optStringArg == null || optStringArg.equals(value))
                     return;
                 command.setOptStringArg((String)optStringArg);
