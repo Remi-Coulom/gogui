@@ -263,7 +263,6 @@ public final class AnalyzeDialog
         m_runButton.setMnemonic(KeyEvent.VK_R);
         m_runButton.setEnabled(false);
         m_runButton.putClientProperty("Quaqua.Button.style", "bevel");
-        getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
         m_clearButton = new JButton("Clear");
         m_clearButton.setToolTipText("Clear board and cancel auto run");
