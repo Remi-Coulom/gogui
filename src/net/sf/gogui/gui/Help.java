@@ -9,6 +9,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -40,17 +42,31 @@ class AntialiasingEditorPane
     private static final long serialVersionUID = 0L; // SUID
 }
 
-/** Dialog for displaying help in HTML format. */
+/** Window for displaying help in HTML format.
+    The window is a JFrame on all platforms but the Mac, where it is a
+    parent-less JDialog (to avoid the brushed-metal look, which shouldn't be
+    used for the help window)
+ */
 public class Help
-    extends JDialog
     implements ActionListener, HyperlinkListener
 {
     public Help(URL contents, MessageDialogs messageDialogs)
     {
-        super((Frame)null, "Documentation - GoGui");
         m_messageDialogs = messageDialogs;
         m_contents = contents;
-        Container contentPane = getContentPane();
+        String title = "Documentation - GoGui";
+        Container contentPane;
+        if (Platform.isMac())
+        {
+            m_window = new JDialog((Frame)null, title);
+            contentPane = ((JDialog)m_window).getContentPane();
+        }
+        else
+        {
+            m_window = new JFrame(title);
+            GuiUtil.setGoIcon((Frame)m_window);
+            contentPane = ((JFrame)m_window).getContentPane();
+        }
         JPanel panel = new JPanel(new BorderLayout());
         contentPane.add(panel);
         panel.add(createButtons(), BorderLayout.NORTH);
@@ -68,8 +84,7 @@ public class Help
             scrollPane.setBorder(null);
         scrollPane.setPreferredSize(new Dimension(width, height));
         panel.add(scrollPane, BorderLayout.CENTER);
-        //GuiUtil.setGoIcon(this);
-        pack();
+        m_window.pack();
         loadURL(m_contents);
         appendHistory(m_contents);
     }
@@ -80,7 +95,7 @@ public class Help
         if (command.equals("back"))
             back();
         else if (command.equals("close"))
-            setVisible(false);
+            m_window.setVisible(false);
         else if (command.equals("contents"))
         {
             loadURL(m_contents);
@@ -88,6 +103,11 @@ public class Help
         }
         else if (command.equals("forward"))
             forward();
+    }
+
+    public Window getWindow()
+    {
+        return m_window;
     }
 
     public void hyperlinkUpdate(HyperlinkEvent e)
@@ -124,6 +144,8 @@ public class Help
     private final URL m_contents;
 
     private MessageDialogs m_messageDialogs;
+
+    private Window m_window;
 
     private void appendHistory(URL url)
     {
@@ -217,7 +239,7 @@ public class Help
         }
         catch (IOException e)
         {
-            m_messageDialogs.showError(this,
+            m_messageDialogs.showError(m_window,
                                        "Could not load page\n" +
                                        url.toString(), e.getMessage(), false);
         }

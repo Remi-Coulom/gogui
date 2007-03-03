@@ -497,10 +497,10 @@ public class GoGui
         if (m_help == null)
         {
             m_help = new Help(url, m_messageDialogs);
-            m_session.restoreSize(m_help, "help");
+            m_session.restoreSize(m_help.getWindow(), "help");
         }
-        m_help.setVisible(true);
-        m_help.toFront();
+        m_help.getWindow().setVisible(true);
+        m_help.getWindow().toFront();
     }
 
     public void actionEditBookmarks()
@@ -3514,7 +3514,7 @@ public class GoGui
         if (! isVisible()) // can that happen?
             return;
         if (m_help != null)
-            m_session.saveSize(m_help, "help");
+            m_session.saveSize(m_help.getWindow(), "help");
         saveSizeAndVisible(m_gameTreeViewer, "tree");
         if (m_gtp != null)
         {
