@@ -493,8 +493,8 @@ public class GtpStatistics
     {
         String cmd = convertCommand(command, toMove);
         String response = m_gtp.send(cmd).trim();
-        response.replaceAll("\t", " ");
-        response.replaceAll("\n", " ");
+        response = response.replaceAll("\t", " ");
+        response = response.replaceAll("\n", " ");
         return convertResponse(command, response, toMove, move);
     }
 
