@@ -410,7 +410,6 @@ public class GuiField
         }
         Rectangle clip = m_graphics.getClipBounds();
         width = Math.min(width, (int)(0.95 * m_size));
-        clip = m_graphics.getClipBounds();
         m_graphics.setClip(x, y - ascent, width, height);
         if (m_color == GoColor.EMPTY && m_shadowStoneColor == null)
         {
