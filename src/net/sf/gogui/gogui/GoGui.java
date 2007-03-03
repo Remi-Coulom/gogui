@@ -824,9 +824,9 @@ public class GoGui
             return;
         m_handicap = handicap;
         if (isModified())
-            showInfo("Handicap will take effect on next game.",
-                     "You can change the handicap settings only directly " +
-                     "after a new games was started.", true);
+            showInfo("Handicap will take effect on next game",
+                     "You can change the handicap settings for a game only " +
+                     "before any moves were played.", true);
         else
         {
             m_computerBlack = false;
