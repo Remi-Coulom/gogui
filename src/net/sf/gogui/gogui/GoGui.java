@@ -2620,8 +2620,8 @@ public class GoGui
             if (nameCapitalized == null)
                 nameCapitalized = "The Go program";
             String nameNotCapitalized = getProgramName();
-            if (nameCapitalized == null)
-                nameCapitalized = "the Go program";
+            if (nameNotCapitalized == null)
+                nameNotCapitalized = "the Go program";
             if (response.equalsIgnoreCase("resign"))
             {
                 String result =
