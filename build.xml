@@ -6,13 +6,13 @@ $Id$
 
 <project name="GoGui" default="all">
 
-<exec executable="svnversion" outputproperty="svnversion"/>
-
 <!--
 Use 123.SVN${svnversion} for unreleased versions if the last released
 version in the branch was 123. The crash dialog in gogui/Main.java assumes
 that unreleased versions contain the string SVN.
+Comment out the exec svnversion for releases.
 -->
+<exec executable="svnversion" outputproperty="svnversion"/>
 <property name="version" value="0.9.SVN${svnversion}"/>
 
 <tstamp/>
