@@ -94,7 +94,7 @@ public final class Board
         Does not include player stones killed by suicide.
         Requires that there is a last move (or setup stone).
         @return List of opponent stones (go.Point) captured in last move;
-        empty if none were killed or if last action was a setup stone.
+        empty if none were killed or there is no last move.
         @see #getSuicide()
     */
     public ConstPointList getKilled()
@@ -105,8 +105,7 @@ public final class Board
     }
 
     /** Return last move.
-        @return Last move or null if no action was done yet or last
-        action was not a move.
+        @return Last move or null if there is no last move.
     */
     public Move getLastMove()
     {
@@ -155,11 +154,22 @@ public final class Board
         return m_constants.getPoint(i);
     }
 
+    /** Get initial setup stones of a color.
+        @param c Black or White.
+        @return Initial stones of this color placed on the board by calling
+        <code>setup</code>.
+        @see #setup
+    */
     public ConstPointList getSetup(GoColor c)
     {
         return m_setup[c.toInteger()];
     }
 
+    /** Get player of initial setup position.
+        @return Player of initial setup position as used in the call to
+        <code>setup</code>; <code>null</code> means unknown player color.
+        @see #setup        
+    */
     public GoColor getSetupPlayer()
     {
         return m_setupPlayer;
@@ -186,7 +196,7 @@ public final class Board
         Requires that there is a last move (or setup stone).
         @return List of stones (go.Point) killed by suicide in last move,
         including the stone played; empty if no stones were killed by suicide
-        or if last action was a setup stone..
+        or if there is no last move.
         @see #getKilled()
     */
     public ConstPointList getSuicide()
@@ -255,9 +265,7 @@ public final class Board
         return point == m_koPoint;
     }
 
-    /** Check if any actions (moves or setup stones) were made on the
-        board.
-    */
+    /** Check if any moves were played or setup stones placed on the board. */
     public boolean isModified()
     {
         return (m_stack.size() > 0
@@ -266,6 +274,11 @@ public final class Board
                 || m_toMove != GoColor.BLACK);
     }
 
+    /** Check if the initial setup position was a handicap.
+        @return <code>true</code>, if the initial position was setup by
+        calling setupHandicap, <code>false</code> otherwise.
+        @see #setupHandicap
+    */
     public boolean isSetupHandicap()
     {
         return m_isSetupHandicap;
@@ -370,6 +383,12 @@ public final class Board
         }
     }
 
+    /** Setup initial handicap stones.
+        This function is similar to an initial setup with only black stones,
+        but it is remembered that the setup was a handicap and it can later
+        be checked with <code>isSetupHandicap</code>.
+        @see #isSetupHandicap
+    */
     public void setupHandicap(ConstPointList points)
     {
         setup(points, null, GoColor.WHITE);
