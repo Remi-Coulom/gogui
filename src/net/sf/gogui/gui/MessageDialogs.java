@@ -334,8 +334,9 @@ public final class MessageDialogs
             String key = "Quaqua.OptionPane.destructiveOption";
             optionPane.putClientProperty(key, new Integer(destructiveIndex));
         }
-        if (isMac)
-            title = null; // Dialogs don't have titles on the Mac
+        if (isMac && parent.isVisible())
+            // Dialogs don't have titles on the Mac
+            title = null;
         JDialog dialog = optionPane.createDialog(parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK
         // 1.5.0_04-b05 or Mac 1.4.2_12)
