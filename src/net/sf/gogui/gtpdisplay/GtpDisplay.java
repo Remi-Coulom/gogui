@@ -504,5 +504,6 @@ public class GtpDisplay
     private void updateFromGoBoard()
     {
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true);
+        m_statusBar.setToPlay(m_board.getToMove());
     }
 }
