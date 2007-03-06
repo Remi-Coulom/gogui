@@ -18,5 +18,46 @@ to facilitate debugging and reproducing errors.
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
+<section>
+<title>License</title>
+
+<para>
+Copyright &copy; 2001-2007 Markus Enzenberger (enz@users.sourceforge.net)
+</para>
+
+<para>
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+</para>
+
+<para>
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+</para>
+
+<para>
+A full copy of the GNU General Public License is included in
+Appendix E of the GoGui documentation.
+</para>
+
+<note>
+<simpara>
+This copyright does *not* cover Go engines that use GoGui
+services by the GTP protocol - this is merely considered normal use
+of GoGui, and does *not* fall under the heading of "derived work".
+</simpara>
+</note>
+
+<para>
+The files in the directory "external" are from third parties. They are not
+part of GoGui and have different licenses and copyright holders. They are
+included in the GoGui distribution only for convenience.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
 
 </article>
