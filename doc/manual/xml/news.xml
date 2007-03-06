@@ -16,8 +16,37 @@ Future versions are going to require Java 1.5.
 <itemizedlist>
 <listitem>
 <simpara>
+The preferred way to configure analyze commands is now that the program
+implements the command gogui-analyze_commands, otherwise an internal list with
+some standard commands and GNU Go extensions is used.
+If gogui-analyze_commands is supported, only the response will be used to
+configure analyze commands, so that the Go engine has full control over what
+is shown in what order in the analyze dialog.
+Analyze command configuration files in the .gogui directory are no longer
+supported; the only way to use external configuration files is to invoke
+GoGui with the option -analyze-commands.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New optional commands for setting up positions; see section Setup Commands
 in the manual
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The following GoGui extension commands use the prefix gogui- now according to
+the GTP standard for extension commands: gogui-play_sequence,
+gogui-analyze_commands, gogui-interrupt, gogui-sigint, gogui-title.
+The old versions (play_sequence, gogui_analyze_commands, gogui_interrupt,
+gogui_sigint, gogui_title) are deprecated and may not be supported in the
+future.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use platform specific storage of preferences; don't use .gogui/config
+anymore
 </simpara>
 </listitem>
 <listitem>
@@ -45,16 +74,6 @@ kgs-genmove_cleanup
 </listitem>
 <listitem>
 <simpara>
-The following GoGui extension commands use the prefix gogui- now according to
-the GTP standard for extension commands: gogui-play_sequence,
-gogui-analyze_commands, gogui-interrupt, gogui-sigint, gogui-title.
-The old versions (play_sequence, gogui_analyze_commands, gogui_interrupt,
-gogui_sigint, gogui_title) are deprecated and may not be supported in the
-future.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 The scoring_system command is no longer supported
 </simpara>
 </listitem>
@@ -71,7 +90,6 @@ Allow setup stones in non-root position
 <listitem>
 <simpara>
 Don't use default komi anymore if game is loaded with unknown komi
-anymore
 </simpara>
 </listitem>
 <listitem>
@@ -81,25 +99,7 @@ Store lost on time information in game result
 </listitem>
 <listitem>
 <simpara>
-Use platform specific storage of preferences; don't use .gogui/config
-anymore
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 Analyze command wildcard %f is deprecated; use new wildcards %r and %w instead
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-The preferred way to configure analyze commands is now that the program
-implements the command gogui-analyze_commands, otherwise an internal list with
-default commands is used.
-If gogui-analyze_commands is supported, only the response will be used to
-configure analyze commands, so that the Go engine has full control over what
-is shown in what order in the analyze dialog.
-Analyze command configuration files in the .gogui directory are no longer
-supported.
 </simpara>
 </listitem>
 <listitem>
@@ -164,8 +164,8 @@ TwoGtp: new option -maxmoves
 <listitem>
 <simpara>
 TwoGtp: option -loadsgf no longer exists; programs should implement
-play_sequence if the transmission of openings with many stones or moves is
-slow
+gogui-play_sequence if the transmission of openings with many stones or moves
+is slow
 </simpara>
 </listitem>
 <listitem>
