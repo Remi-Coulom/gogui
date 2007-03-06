@@ -4,16 +4,10 @@
 
 package net.sf.gogui.gtpstatistics;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpEngineClient;
-import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpExpectEngine;
-import net.sf.gogui.util.ErrorMessage;
 
 public final class GtpStatisticsTest
     extends junit.framework.TestCase
