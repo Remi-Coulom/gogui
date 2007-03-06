@@ -32,9 +32,6 @@
 <arg><option>-laf</option> <replaceable>name</replaceable></arg>
 <arg><option>-move</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>command</replaceable></arg>
-<arg><option>-rules</option> <group choice="plain">
-  <arg choice="plain">chinese</arg> <arg choice="plain">japanese</arg>
-  </group></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -301,17 +298,6 @@ Load SGF file until move number.
 <listitem>
 <para>
 Go program to attach.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<option>-rules</option> chinese | japanese
-</term>
-<listitem>
-<para>
-Set rules.
 </para>
 </listitem>
 </varlistentry>
