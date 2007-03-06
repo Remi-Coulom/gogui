@@ -74,7 +74,7 @@ kgs-genmove_cleanup
 </listitem>
 <listitem>
 <simpara>
-The scoring_system command is no longer supported
+The scoring_system command and GoGui option -rules are no longer supported
 </simpara>
 </listitem>
 <listitem>

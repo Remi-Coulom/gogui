@@ -51,8 +51,6 @@ public final class GoGuiSettings
 
     public String m_program;
 
-    public String m_rules;
-
     public String m_time;
 
     public GoGuiSettings(String args[], Class c) throws ErrorMessage
@@ -73,7 +71,6 @@ public final class GoGuiSettings
             "laf:",
             "move:",
             "program:",
-            "rules:",
             "size:",
             "time:",
             "verbose",
@@ -132,8 +129,6 @@ public final class GoGuiSettings
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
             m_prefs.putInt("boardsize", opt.getInteger("size"));
-        m_rules = opt.get("rules", "");
-        m_prefs.put("rules", m_rules);
         m_time = opt.get("time", null);
         m_verbose = opt.contains("verbose");
         ArrayList arguments = opt.getArguments();
@@ -169,7 +164,6 @@ public final class GoGuiSettings
             "-laf              Set Swing look and feel\n" +
             "-move             Load SGF file until move number\n" +
             "-program          Go program to attach\n" +
-            "-rules            Use rules (chinese|japanese)\n" +
             "-size             Set board size\n" +
             "-time             Set time limits (min[+min/moves])\n" +
             "-verbose          Print debugging messages\n" +
