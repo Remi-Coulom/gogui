@@ -120,7 +120,7 @@ public class Comment
     }
 
     /** Enable/disable fixed size font. */
-    public void setMonoFont(boolean enable)
+    public final void setMonoFont(boolean enable)
     {
         if (enable)
             GuiUtil.setMonospacedFont(m_textPane.get());
@@ -144,7 +144,7 @@ public class Comment
         m_duringSetText = false;
     }
 
-    public void setPreferredSize()
+    public final void setPreferredSize()
     {
         int fontSize = GuiUtil.getDefaultMonoFontSize();
         setPreferredSize(new Dimension(15 * fontSize, 5 * fontSize));

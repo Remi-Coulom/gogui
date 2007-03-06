@@ -17,7 +17,7 @@ public final class MoveUtil
     public static ArrayList fillPasses(ArrayList moves, GoColor toMove)
     {
         ArrayList result = new ArrayList(moves.size() * 2);
-        if (moves.size() == 0)
+        if (moves.isEmpty())
             return result;
         for (int i = 0; i < moves.size(); ++i)
         {

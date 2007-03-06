@@ -108,12 +108,11 @@ public class ProgramEditor
         if (! editOnlyCommand)
             m_label = createEntry("Label", 20, program.m_label);
         m_command = createFileEntry("Command", program.m_command,
-                                    messageDialogs, "Browse for Go program",
+                                    "Browse for Go program",
                                     "Select Go Program", false, true,
                                     ! m_editOnlyLabel);
         m_workingDirectory = createFileEntry("Working directory",
                                              program.m_workingDirectory,
-                                             messageDialogs,
                                              "Browse for working directory",
                                              "Select Working Directory",
                                              true, false, ! m_editOnlyLabel);
@@ -128,10 +127,10 @@ public class ProgramEditor
         m_dialog = optionPane.createDialog(parent, title);
         m_dialog.addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent e) {
-                    if (m_label != null)
-                        m_label.requestFocusInWindow();
-                    else
+                    if (m_label == null)
                         m_command.requestFocusInWindow();
+                    else
+                        m_label.requestFocusInWindow();
                 }
             });
         if (box != null)
@@ -244,7 +243,6 @@ public class ProgramEditor
         return box;
     }
     private JTextField createFileEntry(String label, String text,
-                                       final MessageDialogs messageDialogs,
                                        String browseToolTip,
                                        final String title,
                                        final boolean isDirectory,
@@ -260,9 +258,7 @@ public class ProgramEditor
         final JTextField field = new JTextField(30);
         field.setText(text);
         panel.add(field);
-        if (! editable)
-            GuiUtil.setEditableFalse(field);
-        else
+        if (editable)
         {
             panel.add(GuiUtil.createSmallFiller());
             JButton button = new JButton();
@@ -288,6 +284,8 @@ public class ProgramEditor
                     }
                 });
         }
+        else
+            GuiUtil.setEditableFalse(field);
         m_panelRight.add(box);
         return field;
     }

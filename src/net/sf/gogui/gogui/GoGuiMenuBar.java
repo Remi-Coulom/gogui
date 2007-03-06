@@ -97,7 +97,7 @@ public class GoGuiMenuBar
             m_menuBookmarks.remove(m_bookmarksSeparator);
             m_bookmarksSeparator = null;
         }
-        if (bookmarks.size() == 0)
+        if (bookmarks.isEmpty())
             return;
         m_bookmarksSeparator = new JSeparator();
         m_menuBookmarks.add(m_bookmarksSeparator);
@@ -118,13 +118,13 @@ public class GoGuiMenuBar
                 {
                     toolTip.append(" (move ");
                     toolTip.append(bookmark.m_move);
-                    toolTip.append(")");
+                    toolTip.append(')');
                 }
                 if (! bookmark.m_variation.trim().equals(""))
                 {
                     toolTip.append(" (variation ");
                     toolTip.append(bookmark.m_variation);
-                    toolTip.append(")");
+                    toolTip.append(')');
                 }
                 item.setToolTipText(toolTip.toString());
             }
@@ -135,10 +135,10 @@ public class GoGuiMenuBar
 
     public void setPrograms(ArrayList programs)
     {
-        m_menuAttach.setEnabled(programs.size() > 0);
+        m_menuAttach.setEnabled(! programs.isEmpty());
         for (int i = 0; i < m_programItems.size(); ++i)
             m_menuAttach.remove((JMenuItem)m_programItems.get(i));
-        if (programs.size() == 0)
+        if (programs.isEmpty())
             return;
         for (int i = 0; i < programs.size(); ++i)
         {
@@ -154,14 +154,14 @@ public class GoGuiMenuBar
                 toolTip.append(program.m_name);
             if (program.m_version != null && ! program.m_version.equals(""))
             {
-                toolTip.append(" ");
+                toolTip.append(' ');
                 toolTip.append(program.m_version);
             }
             if (program.m_command != null)
             {
                 toolTip.append(" (");
                 toolTip.append(program.m_command);
-                toolTip.append(")");
+                toolTip.append(')');
             }
             item.setToolTipText(toolTip.toString());
             m_menuAttach.add(item);
@@ -170,7 +170,7 @@ public class GoGuiMenuBar
     }
 
     /** Is it a single menu bar or does a tool bar exist? */
-    public void setHeaderStyleSingle(boolean isSingle)
+    public final void setHeaderStyleSingle(boolean isSingle)
     {
         // For com.jgoodies.looks
         getMenuBar().putClientProperty("jgoodies.headerStyle",
@@ -180,10 +180,10 @@ public class GoGuiMenuBar
     public void update(boolean isProgramAttached, boolean isTreeShown,
                        boolean isShellShown)
     {
-        if (! isProgramAttached)
-            m_recentGtp.getMenu().setEnabled(false);
-        else
+        if (isProgramAttached)
             m_recentGtp.updateEnabled();
+        else
+            m_recentGtp.getMenu().setEnabled(false);
         m_recent.updateEnabled();
         m_computerColor.setEnabled(isProgramAttached);
         m_menuViewTree.setEnabled(isTreeShown);

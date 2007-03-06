@@ -80,10 +80,7 @@ public class GtpShell
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-        if (command.equals("comboBoxEdited"))
-        {
-        }
-        else if (command.equals("run"))
+        if (command.equals("run"))
             commandEntered();
         else if (command.equals("close"))
             setVisible(false);
@@ -372,7 +369,7 @@ public class GtpShell
 
     private String m_programVersion = "unknown";
 
-    private MessageDialogs m_messageDialogs;
+    private final MessageDialogs m_messageDialogs;
 
     private void addAllCompletions(ArrayList completions)
     {

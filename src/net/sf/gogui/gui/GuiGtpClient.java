@@ -394,15 +394,15 @@ public class GuiGtpClient
 
     private boolean m_commandInProgress;
 
-    private GtpClient m_gtp;
+    private final GtpClient m_gtp;
 
     private GtpError m_exception;    
 
-    private GtpSynchronizer m_gtpSynchronizer;
+    private final GtpSynchronizer m_gtpSynchronizer;
 
-    private Component m_owner;
+    private final Component m_owner;
 
-    MessageDialogs m_messageDialogs;
+    private final MessageDialogs m_messageDialogs;
 
     private final Object m_mutex = new Object();
 

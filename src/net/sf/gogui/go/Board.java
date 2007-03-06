@@ -268,7 +268,7 @@ public final class Board
     /** Check if any moves were played or setup stones placed on the board. */
     public boolean isModified()
     {
-        return (m_stack.size() > 0
+        return (! m_stack.isEmpty()
                 || m_setup[GoColor.BLACK.toInteger()].size() > 0
                 || m_setup[GoColor.WHITE.toInteger()].size() > 0
                 || m_toMove != GoColor.BLACK);
@@ -372,14 +372,14 @@ public final class Board
         {
             ConstPointList stones = (c == GoColor.BLACK ? black : white);
             int index = c.toInteger();
-            if (stones != null)
+            if (stones == null)
+                m_setup[index] = new PointList();
+            else
             {
                 for (int i = 0; i < stones.size(); ++i)
                     setColor(stones.get(i), c);
                 m_setup[index] = new PointList(stones);
             }
-            else
-                m_setup[index] = new PointList();
         }
     }
 

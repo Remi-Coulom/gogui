@@ -67,27 +67,27 @@ public class TwoGtp
         m_white.setLogPrefix("W");
         m_synchronizerWhite = new GtpSynchronizer(m_white);
         m_refereeCommand = referee;
-        if (! referee.equals(""))
+        if (referee.equals(""))
+        {
+            m_referee = null;
+            m_synchronizerReferee = null;
+        }
+        else
         {
             m_referee = new GtpClient(referee, null, verbose, null);
             m_referee.setLogPrefix("R");
             m_synchronizerReferee = new GtpSynchronizer(m_referee);
         }
-        else
+        if (observer.equals(""))
         {
-            m_referee = null;
-            m_synchronizerReferee = null;
+            m_observer = null;
+            m_synchronizerObserver = null;
         }
-        if (! observer.equals(""))
+        else
         {
             m_observer = new GtpClient(observer, null, verbose, null);
             m_observer.setLogPrefix("O");
             m_synchronizerObserver = new GtpSynchronizer(m_observer);
-        }
-        else
-        {
-            m_observer = null;
-            m_synchronizerObserver = null;
         }
         m_black.queryProtocolVersion();
         m_white.queryProtocolVersion();
@@ -99,18 +99,18 @@ public class TwoGtp
         m_white.querySupportedCommands();
         m_black.queryInterruptSupport();
         m_white.queryInterruptSupport();
-        if (m_referee != null)
+        if (m_referee == null)
+        {
+            m_nameReferee = null;
+            m_refereeVersion = null;
+        }
+        else
         {
             m_referee.queryProtocolVersion();
             m_nameReferee = getName(m_referee, "Referee");        
             m_refereeVersion = getVersion(m_referee);        
             m_referee.querySupportedCommands();
             m_referee.queryInterruptSupport();
-        }
-        else
-        {
-            m_nameReferee = null;
-            m_refereeVersion = null;
         }
         if (m_observer != null)
         {
@@ -326,7 +326,7 @@ public class TwoGtp
         Contains komi if komi is enforced by command line option, null
         otherwise.
     */
-    private Komi m_komi;
+    private final Komi m_komi;
 
     private double m_cpuTimeBlack;
 
@@ -360,9 +360,9 @@ public class TwoGtp
 
     private final GtpClient m_black;
 
-    private GtpClient m_observer;
+    private final GtpClient m_observer;
 
-    private GtpClient m_referee;
+    private final GtpClient m_referee;
 
     private final GtpClient m_white;
 

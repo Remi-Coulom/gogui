@@ -56,7 +56,7 @@ public final class SgfToTex
                 System.exit(-1);
             }
             String inFileName = null;
-            if (arguments.size() == 0)
+            if (arguments.isEmpty())
             {
                 in = System.in;
                 out = System.out;

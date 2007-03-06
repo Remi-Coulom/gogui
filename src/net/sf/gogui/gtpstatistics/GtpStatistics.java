@@ -331,7 +331,7 @@ public class GtpStatistics
             addCommands(commands, false, false);
         if (finalCommands != null)
             addCommands(finalCommands, false, true);
-        if (m_commands.size() == 0)
+        if (m_commands.isEmpty())
             throw new ErrorMessage("No commands defined");
     }
 
@@ -505,7 +505,7 @@ public class GtpStatistics
     {
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
-        assert(moves.size() > 0);
+        assert(! moves.isEmpty());
         GoColor toMove = null;
         for (int i = 0; i < moves.size(); ++i)
         {

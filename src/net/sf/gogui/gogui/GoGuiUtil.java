@@ -61,11 +61,11 @@ public final class GoGuiUtil
         if (moveNumber > 0)
         {
             moveText.append(moveNumber);
-            moveText.append(" ");
+            moveText.append(' ');
         }
         if (movesLeft > 0)
         {
-            moveText.append("(");
+            moveText.append('(');
             moveText.append(moveNumber + movesLeft);
             moveText.append(") ");
         }
@@ -76,15 +76,23 @@ public final class GoGuiUtil
             GoPoint p = move.getPoint();
             moveText.append(c == GoColor.BLACK ? "B " : "W ");
             moveText.append(GoPoint.toString(p));
-            moveText.append(" ");
+            moveText.append(' ');
         }
         if (! "".equals(variation))
         {
-            moveText.append("[");
+            moveText.append('[');
             moveText.append(variation);
-            moveText.append("]");
+            moveText.append(']');
         }
-        if (move != null)
+        if (move == null)
+        {
+            toolTip.append(moveNumber);
+            if (moveNumber == 1)
+                toolTip.append(" move played ");
+            else
+                toolTip.append(" moves played ");
+        }
+        else
         {
             GoColor c = move.getColor();
             GoPoint p = move.getPoint();
@@ -92,15 +100,7 @@ public final class GoGuiUtil
             toolTip.append(moveNumber);
             toolTip.append(c == GoColor.BLACK ? " B " : " W ");
             toolTip.append(GoPoint.toString(p));
-            toolTip.append(" ");
-        }
-        else
-        {
-            toolTip.append(moveNumber);
-            if (moveNumber == 1)
-                toolTip.append(" move played ");
-            else
-                toolTip.append(" moves played ");
+            toolTip.append(' ');
         }
         if (movesLeft > 0)
         {
@@ -111,13 +111,13 @@ public final class GoGuiUtil
             else
                 toolTip.append(" moves ");
         }
-        if (! "".equals(variation))
+        if ("".equals(variation))
+            toolTip.append("in main variation");
+        else
         {
             toolTip.append("in variation ");
             toolTip.append(variation);
         }
-        else
-            toolTip.append("in main variation");
         statusBar.setMoveText(moveText.toString(), toolTip.toString());
     }
 
@@ -137,7 +137,7 @@ public final class GoGuiUtil
             GuiBoardUtil.showPointList(m_guiBoard, points);
         }
 
-        private GuiBoard m_guiBoard;
+        private final GuiBoard m_guiBoard;
     }
 
     /** Make constructor unavailable; class is for namespace only. */

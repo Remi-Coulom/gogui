@@ -199,7 +199,7 @@ public class Analyze
 
     private int m_movePrintInterval;
 
-    private int m_precision;
+    private final int m_precision;
 
     private static final String COLOR_HEADER = "#b5c8f0";
 
@@ -207,13 +207,13 @@ public class Analyze
 
     private final String m_output;
 
-    private Table m_table;
+    private final Table m_table;
 
     private Table m_tableFinal;
 
-    private ArrayList m_commandStatistics;
+    private final ArrayList m_commandStatistics;
 
-    private ArrayList m_commands;
+    private final ArrayList m_commands;
 
     private ArrayList m_gameGlobalCommands;
 

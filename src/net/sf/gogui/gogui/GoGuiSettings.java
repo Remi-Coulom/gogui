@@ -55,6 +55,7 @@ public final class GoGuiSettings
 
     public GoGuiSettings(String args[], Class c) throws ErrorMessage
     {
+        m_prefs = Preferences.userNodeForPackage(c);
         String options[] = {
             "analyze:",
             "analyze-commands:",
@@ -89,7 +90,6 @@ public final class GoGuiSettings
             System.out.println("GoGui " + Version.get());
             return;
         }
-        m_prefs = Preferences.userNodeForPackage(c);
         m_initAnalyze = opt.get("analyze");
         String analyzeCommandsFilename = opt.get("analyze-commands", null);
         if (analyzeCommandsFilename != null)
@@ -140,7 +140,7 @@ public final class GoGuiSettings
         validate();
     }
 
-    private Preferences m_prefs;
+    private final Preferences m_prefs;
 
     private void printHelp()
     {

@@ -26,5 +26,10 @@ public final class ThumbnailPlatform
         String home = System.getProperty("user.home", "");
         return new File(new File(home, ".thumbnails"), "normal");
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private ThumbnailPlatform()
+    {
+    }
 }
 

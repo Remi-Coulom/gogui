@@ -189,7 +189,7 @@ public class SgfWriter
         StringBuffer header = new StringBuffer(128);
         header.append(";FF[4]CA[");
         header.append(getEscaped(ENCODING));
-        header.append("]");
+        header.append(']');
         if (application != null && ! application.equals(""))
         {
             String appName = application;
@@ -197,13 +197,13 @@ public class SgfWriter
                 appName = appName + ":" + version;
             header.append("AP[");
             header.append(getEscaped(appName));
-            header.append("]");
+            header.append(']');
         }
         if (m_size != 19)
         {
             header.append("SZ[");
             header.append(m_size);
-            header.append("]");
+            header.append(']');
         }
         print(header.toString());
     }

@@ -171,7 +171,7 @@ public class Analyze
                 double cpuBlack = m_table.getDouble("CPU_B", i);
                 double cpuWhite = m_table.getDouble("CPU_W", i);
                 boolean error = (m_table.getInt("ERR", i) != 0);
-                String errorMessage = m_table.get("ERR_MSG", i);;
+                String errorMessage = m_table.get("ERR_MSG", i);
                 m_entries.add(new Entry(gameIndex, resultBlack, resultWhite,
                                         resultReferee, alternated, duplicate,
                                         length, cpuBlack, cpuWhite, error,
@@ -190,7 +190,7 @@ public class Analyze
         if (file.getName().endsWith(".html"))
         {
             String name = file.getName();
-            gamePrefix = name.substring(0, name.length() - 5);;
+            gamePrefix = name.substring(0, name.length() - 5);
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format = StringUtil.getNumberFormat(1);

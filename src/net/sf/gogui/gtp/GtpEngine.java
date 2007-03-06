@@ -222,7 +222,7 @@ public class GtpEngine
         If a command was already registered with the same name,
         it will be replaced by the new command.
     */
-    public void register(String command, GtpCallback callback)
+    public final void register(String command, GtpCallback callback)
     {
         unregister(command);
         m_commands.put(command, callback);

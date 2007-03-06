@@ -171,7 +171,7 @@ public class FindDialog
 
     private ArrayList getHistory()
     {
-        ArrayList result = PrefUtil.getList("net/sf/gogui/gui/finddialog");;
+        ArrayList result = PrefUtil.getList("net/sf/gogui/gui/finddialog");
         if (m_initialValue != null)
             result.add(0, m_initialValue);
         return result;

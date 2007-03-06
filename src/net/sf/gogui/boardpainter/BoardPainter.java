@@ -175,13 +175,13 @@ public class BoardPainter
 
     private void drawBackground(Graphics graphics)
     {
-        if (m_image != null)
-            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
-        else
+        if (m_image == null)
         {
             graphics.setColor(new Color(212, 167, 102));
             graphics.fillRect(0, 0, m_width, m_width);
         }
+        else
+            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
     }
 
     private void drawGrid(Graphics graphics)

@@ -99,7 +99,7 @@ public class GoGuiActions
             m_listener.actionPerformed(e);
         }
 
-        public void setDescription(String desc)
+        public final void setDescription(String desc)
         {
             putValue(AbstractAction.SHORT_DESCRIPTION, desc);
         }
@@ -954,7 +954,7 @@ public class GoGuiActions
             buffer.append(tempClock.getTimeString(GoColor.BLACK));
             buffer.append(", W ");
             buffer.append(tempClock.getTimeString(GoColor.WHITE));
-            buffer.append(")");
+            buffer.append(')');
             desc = buffer.toString();
         }
         m_actionClockRestore.setEnabled(enabled);
@@ -973,7 +973,7 @@ public class GoGuiActions
             buffer.append(clock.getTimeString(GoColor.BLACK));
             buffer.append(", W ");
             buffer.append(clock.getTimeString(GoColor.WHITE));
-            buffer.append(")");
+            buffer.append(')');
             desc = buffer.toString();
         }
         m_actionClockResume.setEnabled(enabled);
@@ -992,7 +992,7 @@ public class GoGuiActions
             buffer.append(clock.getTimeString(GoColor.BLACK));
             buffer.append(", W ");
             buffer.append(clock.getTimeString(GoColor.WHITE));
-            buffer.append(")");
+            buffer.append(')');
             desc = buffer.toString();
         }
         m_actionClockStart.setEnabled(enabled);
@@ -1015,9 +1015,7 @@ public class GoGuiActions
                                        String name)
     {
         String desc;
-        if (! isProgramAttached)
-            desc = "Interrupt (no program attached)";
-        else
+        if (isProgramAttached)
         {
             if (name == null)
                 name = "program";
@@ -1028,6 +1026,8 @@ public class GoGuiActions
             else
                 desc = "Interrupt " + name;
         }
+        else
+            desc = "Interrupt (no program attached)";
         m_actionInterrupt.setDescription(desc);
         m_actionInterrupt.setEnabled(isProgramAttached
                                      && isInterruptSupported);

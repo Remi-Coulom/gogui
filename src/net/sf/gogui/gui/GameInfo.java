@@ -111,9 +111,9 @@ public class GameInfo
 
     private final GuiClock[] m_clock = new GuiClock[2];
 
-    private JLabel[] m_icon = new JLabel[2];
+    private final JLabel[] m_icon = new JLabel[2];
 
-    private Prisoners[] m_prisoners = new Prisoners[2];
+    private final Prisoners[] m_prisoners = new Prisoners[2];
 
     private final Game m_game;
 
@@ -124,20 +124,19 @@ public class GameInfo
     {
         StringBuffer buffer = new StringBuffer(128);
         buffer.append(color);
-        buffer.append(" player");
-        buffer.append(" (");
-        if (! StringUtil.isEmpty(player))
+        buffer.append(" player (");
+        if (StringUtil.isEmpty(player))
+            buffer.append("unknown");
+        else
         {
             buffer.append(player);
             if (! StringUtil.isEmpty(rank))
             {
-                buffer.append(" ");
+                buffer.append(' ');
                 buffer.append(rank);
             }
         }
-        else
-            buffer.append("unknown");
-        buffer.append(")");
+        buffer.append(')');
         label.setToolTipText(buffer.toString());
     }
 
@@ -180,7 +179,7 @@ class GuiClock
         setText("00:00");
     }
 
-    public void setText(String text)
+    public final void setText(String text)
     {
         super.setText(text);
         String toolTip;
@@ -200,7 +199,7 @@ class GuiClock
 
     private static final int COLUMNS = 8;
 
-    private GoColor m_color;
+    private final GoColor m_color;
 }
 
 class Prisoners
@@ -221,7 +220,7 @@ class Prisoners
         setCount(0);
     }
 
-    public void setCount(int n)
+    public final void setCount(int n)
     {
         m_text.setText(Integer.toString(n));
         StringBuffer buffer = new StringBuffer(64);
@@ -242,7 +241,7 @@ class Prisoners
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JLabel m_text;
+    private final JLabel m_text;
 
-    private GoColor m_color;
+    private final GoColor m_color;
 }

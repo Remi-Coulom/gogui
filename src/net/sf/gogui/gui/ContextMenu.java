@@ -120,7 +120,7 @@ public class ContextMenu
         add(m_markTriangle);
         add(createItem("Edit Label", "edit-label"));
         addSeparator();
-        if (! noProgram && commands.size() > 0)
+        if (! noProgram && ! commands.isEmpty())
         {
             m_analyzeMenu = new JMenu("Analyze at " + point);
             // For com.jgoodies.looks
@@ -160,7 +160,7 @@ public class ContextMenu
 
     public boolean isEmpty()
     {
-        return (m_commands.size() == 0);
+        return m_commands.isEmpty();
     }
 
     /** Serial version to suppress compiler warning.

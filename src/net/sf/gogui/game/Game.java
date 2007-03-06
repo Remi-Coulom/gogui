@@ -131,8 +131,8 @@ public class Game
         m_clock.halt();
     }
 
-    public void init(int boardSize, Komi komi, ConstPointList handicap,
-                     String rules, TimeSettings timeSettings)
+    public final void init(int boardSize, Komi komi, ConstPointList handicap,
+                           String rules, TimeSettings timeSettings)
     {
         m_tree = new GameTree(boardSize, komi, handicap, rules, timeSettings);
         m_current = m_tree.getRoot();
@@ -143,7 +143,7 @@ public class Game
         m_modified = false;
     }
 
-    public void init(GameTree tree)
+    public final void init(GameTree tree)
     {
         m_tree = tree;
         m_current = m_tree.getRoot();

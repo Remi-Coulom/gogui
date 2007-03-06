@@ -23,15 +23,15 @@ public final class ThumbnailReader
     /** Information about the original file stored in a thumbnail. */
     public static class MetaData
     {
-        URI m_uri;
+        public URI m_uri;
 
-        long m_lastModified;
+        public long m_lastModified;
 
-        String m_mimeType;
+        public String m_mimeType;
 
-        String m_description;
+        public String m_description;
 
-        String m_software;
+        public String m_software;
     }
 
     public static void main(String argv[]) throws IOException

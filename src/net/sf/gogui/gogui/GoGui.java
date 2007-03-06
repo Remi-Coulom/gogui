@@ -166,7 +166,7 @@ public class GoGui
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
         m_guiBoard = new GuiBoard(boardSize);
         m_guiBoard.setListener(this);
-        m_statusBar = new StatusBar(true);
+        m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
         Comment.Listener commentListener = new Comment.Listener()
             {
@@ -438,12 +438,10 @@ public class GoGui
     {        
         if (m_gtp == null)
             return;
-        if (isCommandInProgress())
-        {
-            if (! showQuestion("Terminate " + getProgramLabel() + "?",
-                               "A command is in progress.", "Terminate", true))
+        if (isCommandInProgress()
+            && ! showQuestion("Terminate " + getProgramLabel() + "?",
+                              "A command is in progress.", "Terminate", true))
                 return;
-        }
         m_prefs.putInt("program", -1);
         protectGui();
         Runnable runnable = new Runnable() {
@@ -660,27 +658,26 @@ public class GoGui
                         ConstNode currentNode = getCurrentNode();
                         ConstNode node =
                             NodeUtil.findInComments(currentNode, m_pattern);
-                        if (node == null)
-                            if (getCurrentNode() != root)
+                        if (node == null && getCurrentNode() != root)
+                        {
+                            unprotectGui();
+                            String optionalMessage =
+                                "The end of the tree was reached. " +
+                                "Continue the search from the start of " +
+                                "the tree?";
+                            if (showQuestion("Continue from start?",
+                                             optionalMessage, "Continue",
+                                             false))
                             {
-                                unprotectGui();
-                                String optionalMessage =
-                                    "The end of the tree was reached. " +
-                                    "Continue the search from the start of " +
-                                    "the tree?";
-                                if (showQuestion("Continue from start?",
-                                                 optionalMessage, "Continue",
-                                                 false))
-                                {
-                                    protectGui();
-                                    node = root;
-                                    if (! NodeUtil.commentContains(node,
-                                                                   m_pattern))
-                                        node =
-                                            NodeUtil.findInComments(node,
-                                                                    m_pattern);
-                                }
+                                protectGui();
+                                node = root;
+                                if (! NodeUtil.commentContains(node,
+                                                               m_pattern))
+                                    node =
+                                        NodeUtil.findInComments(node,
+                                                                m_pattern);
                             }
+                        }
                         if (node == null)
                         {
                             unprotectGui();
@@ -1459,13 +1456,13 @@ public class GoGui
     {
         m_showSubtreeSizes = ! m_showSubtreeSizes;
         m_prefs.putBoolean("gametree-show-subtree-sizes", m_showSubtreeSizes);
-        if (m_gameTreeViewer != null)
+        if (m_gameTreeViewer == null)
+            updateViews(false);
+        else
         {
             m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
             updateViews(true);
         }
-        else
-            updateViews(false);
     }
 
     public void actionToggleShowToolbar()
@@ -1501,26 +1498,26 @@ public class GoGui
     {
         m_treeLabels = mode;
         m_prefs.putInt("gametree-labels", mode);
-        if (m_gameTreeViewer != null)
+        if (m_gameTreeViewer == null)
+            updateViews(false);
+        else
         {
             m_gameTreeViewer.setLabelMode(mode);
             updateViews(true);
         }
-        else
-            updateViews(false);
     }
 
     public void actionTreeSize(int mode)
     {
         m_treeSize = mode;
         m_prefs.putInt("gametree-size", mode);
-        if (m_gameTreeViewer != null)
+        if (m_gameTreeViewer == null)
+            updateViews(false);
+        else
         {
             m_gameTreeViewer.setSizeMode(mode);
             updateViews(true);
         }
-        else
-            updateViews(false);
     }
 
     public void actionTruncate()
@@ -1604,10 +1601,9 @@ public class GoGui
     */
     public String getProgramName()
     {
-        if (m_gtp != null)
-            return m_gtp.getProgramName();
-        else
+        if (m_gtp == null)
             return null;
+        return m_gtp.getProgramName();
     }
 
     public GoColor getSetupColor()
@@ -2047,15 +2043,16 @@ public class GoGui
 
     private final GoGuiMenuBar m_menuBar;
 
-    private Game m_game;
+    private final Game m_game;
 
     private GoColor m_setupColor;
 
-    private MessageDialogs m_messageDialogs = new MessageDialogs("GoGui");
+    private final MessageDialogs m_messageDialogs =
+        new MessageDialogs("GoGui");
 
     private Pattern m_pattern;
 
-    private File m_analyzeCommands;
+    private final File m_analyzeCommands;
 
     private AnalyzeCommand m_analyzeCommand;
 
@@ -3224,10 +3221,10 @@ public class GoGui
         getLayeredPane().setVisible(true);
         unprotectGui();
         toFrontLater();
-        if (! m_initAnalyze.equals(""))
-            analyzeBegin(true);
-        else
+        if (m_initAnalyze.equals(""))
             checkComputerMove();
+        else
+            analyzeBegin(true);
     }
 
     private void initScore(ConstPointList deadStones)
@@ -3954,13 +3951,13 @@ public class GoGui
     {
         if (m_gtp == null)
             return;
-        if (! m_shell.isVisible())
+        if (m_shell.isVisible())
+            m_shell.toFront();
+        else
         {
             restoreSize(m_shell, "shell");
             m_shell.setVisible(true);
         }
-        else
-            m_shell.toFront();
     }
 
     private void showStatus(String text)
@@ -4056,9 +4053,7 @@ public class GoGui
         m_statusBar.setScoreMode(m_scoreMode);
         if (m_gameTreeViewer != null)
         {
-            if (! gameTreeChanged)
-                m_gameTreeViewer.update(getCurrentNode());
-            else
+            if (gameTreeChanged)
             {
                 protectGui();
                 showStatus("Updating game tree window...");
@@ -4078,6 +4073,8 @@ public class GoGui
                     };
                 SwingUtilities.invokeLater(runnable);
             }
+            else
+                m_gameTreeViewer.update(getCurrentNode());
         }
     }
 

@@ -93,7 +93,7 @@ class GameTreeNode
         }
     }
 
-    public void updateToolTip()
+    public final void updateToolTip()
     {
         StringBuffer toolTip = new StringBuffer(128);
         Move move = m_node.getMove();
@@ -101,7 +101,7 @@ class GameTreeNode
         if (move != null)
         {
             toolTip.append(m_moveNumber);
-            toolTip.append(" ");
+            toolTip.append(' ');
             toolTip.append(move.getColor() == GoColor.BLACK ? "B " :"W ");
             toolTip.append(GoPoint.toString(move.getPoint()));
         }
@@ -129,7 +129,7 @@ class GameTreeNode
                 toolTip.append("Player ");
                 toolTip.append(player.getUppercaseLetter());
             }
-            toolTip.append(")");
+            toolTip.append(')');
         }
         String comment = NodeUtil.getCommentStart(m_node, false, 80);
         if (comment != null)

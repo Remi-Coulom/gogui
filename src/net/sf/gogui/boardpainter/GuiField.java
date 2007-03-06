@@ -394,16 +394,16 @@ public class GuiField
         int ascent = (int)lineMetrics.getAscent();
         int x = Math.max((m_size - width) / 2, 0);
         int y = (ascent + m_size) / 2;
-        if (m_shadowStoneColor != null)
+        if (m_shadowStoneColor == null)
         {
-            if (m_shadowStoneColor == GoColor.BLACK)
+            if (m_color == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
             else
                 m_graphics.setColor(Color.black);
         }
         else
         {
-            if (m_color == GoColor.BLACK)
+            if (m_shadowStoneColor == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
             else
                 m_graphics.setColor(Color.black);

@@ -55,7 +55,7 @@ public final class Main
             }
             boolean verbose = opt.contains("verbose");
             ArrayList arguments = opt.getArguments();
-            if (arguments.size() == 0 || arguments.size() > 2)
+            if (arguments.isEmpty() || arguments.size() > 2)
             {
                 printUsage(System.err);
                 System.exit(-1);

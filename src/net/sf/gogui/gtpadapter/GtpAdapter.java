@@ -355,7 +355,7 @@ public class GtpAdapter
 
     private Board m_board;
 
-    private GtpCallback m_callbackForward = new GtpCallback() {
+    private final GtpCallback m_callbackForward = new GtpCallback() {
             public void run(GtpCommand cmd) throws GtpError {
                 cmdForward(cmd); } };
 
@@ -420,7 +420,7 @@ public class GtpAdapter
         return cmd.getPointArg(i, m_board.getSize());
     }
 
-    private void init(boolean noScore, boolean version1, int size)
+    private final void init(boolean noScore, boolean version1, int size)
         throws GtpError
     {
         m_gtp.queryProtocolVersion();

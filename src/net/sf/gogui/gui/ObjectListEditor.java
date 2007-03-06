@@ -71,7 +71,7 @@ public class ObjectListEditor
                                                  JOptionPane.OK_CANCEL_OPTION);
         m_objects = new ArrayList();
         copyObjects(objects, m_objects);
-        updateList(m_objects.size() == 0 ? -1 : 0);
+        updateList(m_objects.isEmpty() ? -1 : 0);
         m_dialog = optionPane.createDialog(parent, title);
         m_dialog.setVisible(true);
         Object value = optionPane.getValue();

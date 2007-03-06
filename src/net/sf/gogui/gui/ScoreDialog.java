@@ -113,12 +113,12 @@ public class ScoreDialog
 
     private static class ColorFields
     {
-        JTextField m_black;
+        public JTextField m_black;
 
-        JTextField m_white;
+        public JTextField m_white;
     }
 
-    private int m_initialRules;
+    private final int m_initialRules;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net

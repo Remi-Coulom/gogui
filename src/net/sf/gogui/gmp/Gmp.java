@@ -590,7 +590,7 @@ class MainThread
                 response.append("GMP connection broken");
                 return false;
             }
-            if (m_cmdQueue.size() > 0)
+            if (! m_cmdQueue.isEmpty())
             {
                 Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
                 if (! stackCmd.equals(cmd))
@@ -652,7 +652,7 @@ class MainThread
             result.m_success = false;
             while (true)
             {
-                if (m_cmdQueue.size() > 0)
+                if (! m_cmdQueue.isEmpty())
                 {
                     Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
                     if (stackCmd.m_cmd != cmd

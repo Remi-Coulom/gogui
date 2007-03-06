@@ -26,7 +26,7 @@ import net.sf.gogui.util.Platform;
 public class StatusBar
     extends JPanel
 {
-    public StatusBar(boolean showToPlay)
+    public StatusBar()
     {
         super(new BorderLayout());
         JPanel outerPanel = new JPanel(new BorderLayout());
@@ -138,7 +138,7 @@ public class StatusBar
         m_text.setText(text);
     }
 
-    public void setToPlay(GoColor color)
+    public final void setToPlay(GoColor color)
     {
         if (color == GoColor.BLACK)
         {
@@ -164,7 +164,7 @@ public class StatusBar
     private static final Icon m_iconWhite =
         GuiUtil.getIcon("gogui-white-16x16", "White");
 
-    private Box m_iconBox;
+    private final Box m_iconBox;
 
     private final JLabel m_toPlayLabel;
 

@@ -96,7 +96,7 @@ public final class GoColor
         return m_string;
     }
 
-    private int m_index;
+    private final int m_index;
 
     private GoColor m_otherColor;
 

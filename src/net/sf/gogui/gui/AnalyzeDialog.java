@@ -46,7 +46,6 @@ import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 
@@ -201,7 +200,7 @@ public final class AnalyzeDialog
 
     private GoColor m_selectedColor = GoColor.EMPTY;
 
-    private MessageDialogs m_messageDialogs;
+    private final MessageDialogs m_messageDialogs;
 
     private final GuiGtpClient m_gtp;
 

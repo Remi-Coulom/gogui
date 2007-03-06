@@ -143,9 +143,9 @@ public class Help
 
     private final URL m_contents;
 
-    private MessageDialogs m_messageDialogs;
+    private final MessageDialogs m_messageDialogs;
 
-    private Window m_window;
+    private final Window m_window;
 
     private void appendHistory(URL url)
     {

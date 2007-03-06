@@ -320,11 +320,6 @@ public class GtpDummy
         }
     }
 
-    public void interruptCommand()
-    {
-        super.interruptCommand();
-    }
-
     private boolean m_nextResponseFixed;
 
     private boolean m_nextStatus;

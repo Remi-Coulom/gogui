@@ -46,9 +46,9 @@ public final class AboutDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JTabbedPane m_tabbedPane;
+    private final JTabbedPane m_tabbedPane;
 
-    private MessageDialogs m_messageDialogs;
+    private final MessageDialogs m_messageDialogs;
 
     private AboutDialog(String name, String version, String command,
                         MessageDialogs messageDialogs)

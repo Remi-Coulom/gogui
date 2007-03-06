@@ -6,7 +6,6 @@ package net.sf.gogui.game;
 
 import java.util.TimerTask;
 import java.util.Timer;
-import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.StringUtil;
 
@@ -328,7 +327,7 @@ public final class Clock
 
     private Timer m_timer;
 
-    private TimeSource m_timeSource;
+    private final TimeSource m_timeSource;
 
     private long currentTimeMillis()
     {

@@ -90,7 +90,7 @@ public class GtpDisplay
                 }
             });
         contentPane.add(m_guiBoard);
-        m_statusBar = new StatusBar(false);
+        m_statusBar = new StatusBar();
         contentPane.add(m_statusBar, BorderLayout.SOUTH);
         GuiUtil.setGoIcon(m_frame);
         m_frame.pack();
@@ -187,7 +187,8 @@ public class GtpDisplay
 
     private final String m_name;
 
-    private MessageDialogs m_messageDialogs = new MessageDialogs("GtpDisplay");
+    private final MessageDialogs m_messageDialogs =
+        new MessageDialogs("GtpDisplay");
 
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {

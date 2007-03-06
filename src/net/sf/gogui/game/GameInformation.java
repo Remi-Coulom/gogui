@@ -26,7 +26,7 @@ public class GameInformation
         copyFrom(info);
     }
 
-    public void copyFrom(ConstGameInformation info)
+    public final void copyFrom(ConstGameInformation info)
     {
         m_handicap = info.getHandicap();
         m_komi = info.getKomi();

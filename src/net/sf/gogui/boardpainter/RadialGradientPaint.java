@@ -84,7 +84,7 @@ public class RadialGradientPaint
 
     private RadialGradientContext m_cachedContext;    
 
-    private double m_focus;
+    private final double m_focus;
 
     private final Point2D m_center;
 

@@ -734,7 +734,7 @@ public final class GuiBoard
             repaint(dirty);
         }
 
-        public void setPreferredFieldSize()
+        public final void setPreferredFieldSize()
         {
             int preferredFieldSize = getPreferredFieldSize().width;
             setPreferredSize(BoardPainter.getPreferredSize(preferredFieldSize,
@@ -778,7 +778,7 @@ public final class GuiBoard
 
     private GoPoint m_lastMove;
 
-    private BoardPainter m_painter;
+    private final BoardPainter m_painter;
 
     private GuiField m_field[][];
 

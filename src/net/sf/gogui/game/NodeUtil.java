@@ -195,7 +195,7 @@ public final class NodeUtil
         }
         if (move != null)
             moves.add(move);
-        if (moves.size() > 0)
+        if (! moves.isEmpty())
         {
             GoColor toMove = node.getToMove();
             Move lastMove = (Move)moves.get(moves.size() - 1);
@@ -275,7 +275,7 @@ public final class NodeUtil
             if (maxChar > 30)
             {
                 // Try to find a cut-off at a space
-                int pos = comment.lastIndexOf(" ");
+                int pos = comment.lastIndexOf(' ');
                 if (pos > 20)
                 {
                     if (comment.charAt(pos) == '.')
@@ -586,7 +586,7 @@ public final class NodeUtil
                            StringUtil.capitalize(type.toString()), marked);
         }
         Map labels = node.getLabelsConst();
-        if (labels != null && labels.size() > 0)
+        if (labels != null && ! labels.isEmpty())
         {
             StringBuffer labelsBuffer = new StringBuffer();
             Iterator iter = labels.entrySet().iterator();

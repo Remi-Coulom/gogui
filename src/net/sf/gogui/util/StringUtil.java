@@ -133,7 +133,10 @@ public final class StringUtil
     {
         if (s == null)
             return true;
-        return (s.trim().length() == 0);
+        for (int i = 0; i < s.length(); ++i)
+            if (! Character.isWhitespace(s.charAt(i)))
+                return false;
+        return true;
     }
 
     /** Print exception to standard error.

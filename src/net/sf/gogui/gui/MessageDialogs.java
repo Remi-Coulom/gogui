@@ -36,10 +36,10 @@ public final class MessageDialogs
                           String optionalMessage, boolean isCritical)
     {
         int type;
-        if (! isCritical)
-            type = JOptionPane.PLAIN_MESSAGE;
-        else
+        if (isCritical)
             type = JOptionPane.ERROR_MESSAGE;
+        else
+            type = JOptionPane.PLAIN_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         String title = "Error - " + m_applicationName;
@@ -71,10 +71,10 @@ public final class MessageDialogs
         if (disableKey != null && m_disabled.contains(disableKey))
             return;
         int type;
-        if (! isCritical)
-            type = JOptionPane.PLAIN_MESSAGE;
-        else
+        if (isCritical)
             type = JOptionPane.INFORMATION_MESSAGE;
+        else
+            type = JOptionPane.PLAIN_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         String title = "Information - " + m_applicationName;
@@ -150,10 +150,10 @@ public final class MessageDialogs
         if (disableKey != null && m_disabled.contains(disableKey))
             return;
         int type;
-        if (! isCritical)
-            type = JOptionPane.PLAIN_MESSAGE;
-        else
+        if (isCritical)
             type = JOptionPane.WARNING_MESSAGE;
+        else
+            type = JOptionPane.PLAIN_MESSAGE;
         Object[] options = { "Close" };
         Object defaultOption = options[0];
         String title = "Warning - " + m_applicationName;
@@ -262,9 +262,9 @@ public final class MessageDialogs
         return (result == destructiveOption);
     }
 
-    private String m_applicationName;
+    private final String m_applicationName;
 
-    private TreeSet m_disabled = new TreeSet();
+    private final TreeSet m_disabled = new TreeSet();
 
     private static void addFiller(JComponent component)
     {

@@ -82,6 +82,6 @@ public class BoardUpdater
     /** Local variable used in update.
         Member variable for avoiding frequent new memory allocations.
     */
-    private ArrayList m_nodes;
+    private final ArrayList m_nodes;
 }
 

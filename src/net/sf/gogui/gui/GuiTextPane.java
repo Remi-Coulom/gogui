@@ -67,17 +67,17 @@ public class GuiTextPane
             StyleConstants.setLineSpacing(style, 0f);
     }
 
-    JTextComponent get()
+    public JTextComponent get()
     {
         return m_textComponent;
     }
 
-    Document getDocument()
+    public Document getDocument()
     {
         return m_textComponent.getDocument();
     }
 
-    Style getStyle(String name)
+    public Style getStyle(String name)
     {
         if (m_textPane == null)
             return null;

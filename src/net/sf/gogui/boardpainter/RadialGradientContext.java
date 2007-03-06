@@ -114,11 +114,11 @@ public class RadialGradientContext
 
     private int m_width;
 
-    private double m_length1;
+    private final double m_length1;
 
-    private double m_length2;
+    private final double m_length2;
 
-    private double m_focus;
+    private final double m_focus;
 
     private final Point2D m_center;
 

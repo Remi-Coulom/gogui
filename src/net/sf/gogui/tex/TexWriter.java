@@ -244,7 +244,7 @@ public class TexWriter
             GoColor color = board.getColor(point);
             int x = point.getX();
             int y = point.getY();
-            StringBuffer buffer = new StringBuffer();
+            StringBuffer buffer = new StringBuffer(128);
             if (mark != null && mark[x][y])
                 buffer.append("\\markma");
             if (markTriangle != null && markTriangle[x][y])
@@ -257,7 +257,7 @@ public class TexWriter
             {
                 buffer.append("\\marklb{");
                 buffer.append(markLabel[x][y]);
-                buffer.append("}");
+                buffer.append('}');
             }
             if (markSelect != null && markSelect[x][y])
                 buffer.append("\\marksl");

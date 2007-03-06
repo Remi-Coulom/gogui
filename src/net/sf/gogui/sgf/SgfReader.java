@@ -195,7 +195,7 @@ public final class SgfReader
 
     private int m_byoyomiMoves;
 
-    private long m_size;
+    private final long m_size;
 
     private long m_byoyomi;
 
@@ -731,7 +731,7 @@ public final class SgfReader
             String s;
             while ((s = readValue()) != null)
                 m_values.add(s);
-            if (m_values.size() == 0)
+            if (m_values.isEmpty())
                 throw getError("Property \"" + p + "\" has no value");
             String v = getValue(0);
             p = checkForObsoleteLongProps(p);
@@ -808,12 +808,8 @@ public final class SgfReader
             {
                 // Some SGF files contain GM[], interpret as GM[1]
                 v = v.trim();
-                if (! v.equals(""))
-                {
-                    if (! v.equals("1"))
-                        throw getError("Not a Go game");
-                }
-                
+                if (! v.equals("") && ! v.equals("1"))
+                    throw getError("Not a Go game");
             }
             else if (p == "HA")
             {
@@ -1022,21 +1018,21 @@ public final class SgfReader
             int c = m_reader.read();
             if (c < 0)
                 throw getError("Property value incomplete");
-            if (! quoted)
-            {
-                if (c == ']')
-                    break;
-                quoted = (c == '\\');
-                if (! quoted)
-                    m_buffer.append((char)c);
-            }
-            else
+            if (quoted)
             {
                 if (c != '\n' && c != '\r')
                 {
                     m_buffer.append((char)c);
                     quoted = false;
                 }
+            }
+            else
+            {
+                if (c == ']')
+                    break;
+                quoted = (c == '\\');
+                if (! quoted)
+                    m_buffer.append((char)c);
             }
         }
         return m_buffer.toString();

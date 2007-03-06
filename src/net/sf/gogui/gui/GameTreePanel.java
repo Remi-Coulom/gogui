@@ -444,7 +444,7 @@ public class GameTreePanel
 
     private ImageIcon m_iconSetup;
 
-    private MessageDialogs m_messageDialogs;
+    private final MessageDialogs m_messageDialogs;
 
     private void initSize(int sizeMode)
     {
@@ -481,7 +481,7 @@ public class GameTreePanel
         }
 
 
-        m_font = new Font("Dialog", Font.PLAIN, (int)(0.4 * m_nodeSize));;
+        m_font = new Font("Dialog", Font.PLAIN, (int)(0.4 * m_nodeSize));
         m_preferredNodeSize = new Dimension(m_nodeFullSize, m_nodeFullSize);
     }
 

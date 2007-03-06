@@ -111,25 +111,22 @@ public final class BoardConstants
         return (isHandicapLine(x) && isHandicapLine(y));
     }
 
-    static BoardConstants[] s_boardConstants
+    private static BoardConstants[] s_boardConstants
         = new BoardConstants[GoPoint.MAXSIZE + 1];
 
     private final int m_size;
 
-    private int m_handicapLine1;
+    private final int m_handicapLine1;
 
-    private int m_handicapLine2;
+    private final int m_handicapLine2;
 
-    private int m_handicapLine3;
+    private final int m_handicapLine3;
 
     private GoPoint m_allPoints[];
 
     private BoardConstants(int size)
     {
         m_size = size;
-        m_handicapLine1 = -1;
-        m_handicapLine2 = -1;
-        m_handicapLine3 = -1;
         if (size >= 13)
         {
             m_handicapLine1 = 3;
@@ -140,8 +137,15 @@ public final class BoardConstants
             m_handicapLine1 = 2;
             m_handicapLine3 = size - 3;
         }
+        else
+        {
+            m_handicapLine1 = -1;
+            m_handicapLine3 = -1;
+        }
         if (size >= 9 && size % 2 != 0)
             m_handicapLine2 = size / 2;
+        else
+            m_handicapLine2 = -1;
         initAllPoints();
     }
 

@@ -287,7 +287,7 @@ public class GtpSynchronizer
 
     private void play(ArrayList moves) throws GtpError
     {
-        if (moves.size() == 0)
+        if (moves.isEmpty())
             return;
         if (moves.size() > 1 && m_isSupportedPlaySequence)
         {

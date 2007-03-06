@@ -62,19 +62,19 @@ public final class GameInfoDialog
 
     private JTextField m_byoyomiMoves;
 
-    private JTextField m_date;
+    private final JTextField m_date;
 
-    private JTextField m_komi;
+    private final JTextField m_komi;
 
-    private PlayerInfo m_black;
+    private final PlayerInfo m_black;
 
-    private PlayerInfo m_white;
+    private final PlayerInfo m_white;
 
     private TimeField m_preByoyomi;
 
-    private JTextField m_result;
+    private final JTextField m_result;
 
-    private JTextField m_rules;
+    private final JTextField m_rules;
 
     private GameInfoDialog(GameInformation info)
     {
@@ -416,7 +416,7 @@ class TimeField
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JTextField m_textField;
+    private final JTextField m_textField;
 
-    private JComboBox m_comboBox;
+    private final JComboBox m_comboBox;
 }
