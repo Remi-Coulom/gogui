@@ -154,25 +154,26 @@ public final class GoGuiSettings
             "Graphical user interface for Go programs\n" +
             "using the Go Text Protocol.\n" +
             "\n" +
-            "-analyze name   Initialize analyze command\n" +
-            "-auto           Auto play games (if computer both)\n" +
-            "-command cmd    Send GTP command at startup\n" +
-            "-computer-both  Computer plays both sides\n" +
-            "-computer-black Computer plays black\n" +
-            "-computer-white Computer plays white\n" +
-            "-computer-none  Computer plays no side\n" +
-            "-config         Config file\n" +
-            "-gtpfile file   Send GTP file at startup\n" +
-            "-help           Display this help and exit\n" +
-            "-komi value     Set komi\n" +
-            "-laf name       Set Swing look and feel\n" +
-            "-move n         Load SGF file until move number\n" +
-            "-program cmd    Go program to attach\n" +
-            "-rules name     Use rules (chinese|japanese)\n" +
-            "-size n         Set board size\n" +
-            "-time spec      Set time limits (min[+min/moves])\n" +
-            "-verbose        Print debugging messages\n" +
-            "-version        Print version and exit\n";
+            "-analyze          Initialize analyze command\n" +
+            "-analyze-commands Use analyze commands configuration file\n" +
+            "-auto             Auto play games (if computer both)\n" +
+            "-command          Send GTP command at startup\n" +
+            "-computer-black   Computer plays black\n" +
+            "-computer-both    Computer plays both sides\n" +
+            "-computer-none    Computer plays no side\n" +
+            "-computer-white   Computer plays white\n" +
+            "-config           Config file\n" +
+            "-gtpfile          Send GTP file at startup\n" +
+            "-help             Display this help and exit\n" +
+            "-komi             Set komi\n" +
+            "-laf              Set Swing look and feel\n" +
+            "-move             Load SGF file until move number\n" +
+            "-program          Go program to attach\n" +
+            "-rules            Use rules (chinese|japanese)\n" +
+            "-size             Set board size\n" +
+            "-time             Set time limits (min[+min/moves])\n" +
+            "-verbose          Print debugging messages\n" +
+            "-version          Print version and exit\n";
         System.out.print(helpText);
     }   
 
