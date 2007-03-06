@@ -377,6 +377,42 @@ public class GuiUtil
             component.setFont(MONOSPACED_FONT);
     }
 
+    public static void addStyle(JTextPane textPane, String name,
+                                Color foreground)
+    {
+        addStyle(textPane, name, foreground, null, false);
+    }
+
+    public static void addStyle(JTextPane textPane, String name,
+                                Color foreground, Color background,
+                                boolean bold)
+    {
+        StyledDocument doc = textPane.getStyledDocument();
+        StyleContext context = StyleContext.getDefaultStyleContext();
+        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style style = doc.addStyle(name, def);
+        if (foreground != null)
+            StyleConstants.setForeground(style, foreground);
+        if (background != null)
+            StyleConstants.setBackground(style, background);
+        StyleConstants.setBold(style, bold);
+    }
+
+    public static void setStyle(JTextPane textPane, int start, int length,
+                                String name)
+    {
+        StyledDocument doc = textPane.getStyledDocument();
+        Style style;
+        if (name == null)
+        {
+            StyleContext context = StyleContext.getDefaultStyleContext();
+            style = context.getStyle(StyleContext.DEFAULT_STYLE);
+        }
+        else
+            style = doc.getStyle(name);
+        doc.setCharacterAttributes(start, length, style, true);
+    }
+
     public static void setUnlimitedSize(JComponent component)
     {
         Dimension size = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);

@@ -63,13 +63,13 @@ public class GtpShell
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax, false);
         m_scrollPane =
-            new JScrollPane(m_gtpShellText.get(),
+            new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         if (Platform.isMac())
             // Default Apple L&F uses no border, but Quaqua 3.7.4 does
             m_scrollPane.setBorder(null);
-        int fontSize = m_gtpShellText.get().getFont().getSize();
+        int fontSize = m_gtpShellText.getFont().getSize();
         m_finalSize = new Dimension(fontSize * 40, fontSize * 30);
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
@@ -524,7 +524,7 @@ public class GtpShell
             };
         m_textField.addKeyListener(keyAdapter);
         m_comboBox.setEditable(true);
-        m_comboBox.setFont(m_gtpShellText.get().getFont());
+        m_comboBox.setFont(m_gtpShellText.getFont());
         m_comboBox.addActionListener(this);
         addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent e) {
@@ -672,7 +672,7 @@ public class GtpShell
         JViewport viewport = m_scrollPane.getViewport();
         Point position = viewport.getViewPosition();
         int delta = m_scrollPane.getSize().height
-            - m_gtpShellText.get().getFont().getSize();
+            - m_gtpShellText.getFont().getSize();
         if (up)
         {
             position.y -= delta;

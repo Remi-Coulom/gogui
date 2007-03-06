@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
@@ -67,7 +68,7 @@ public class TextViewer
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private GuiTextPane m_textPane;
+    private JTextPane m_textPane;
 
     private Listener m_listener;
 
@@ -76,19 +77,19 @@ public class TextViewer
 
     private void doSyntaxHighlight()
     {
-        m_textPane.addStyle("title", null, null, true);
-        m_textPane.addStyle("point", new Color(0.25f, 0.5f, 0.7f));
-        m_textPane.addStyle("number", new Color(0f, 0.54f, 0f));
-        m_textPane.addStyle("const", new Color(0.8f, 0f, 0f));
-        m_textPane.addStyle("color", new Color(0.54f, 0f, 0.54f));
-        m_textPane.get().setEditable(true);
+        GuiUtil.addStyle(m_textPane, "title", null, null, true);
+        GuiUtil.addStyle(m_textPane, "point", new Color(0.25f, 0.5f, 0.7f));
+        GuiUtil.addStyle(m_textPane, "number", new Color(0f, 0.54f, 0f));
+        GuiUtil.addStyle(m_textPane, "const", new Color(0.8f, 0f, 0f));
+        GuiUtil.addStyle(m_textPane, "color", new Color(0.54f, 0f, 0.54f));
+        m_textPane.setEditable(true);
         highlight("number", "\\b-?\\d+\\.?\\d*([Ee][+-]\\d+)?\\b");
         highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
         highlight("color",
                   "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
         highlight("point", "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b");
         highlight("title", "^\\S+:(\\s|$)");
-        m_textPane.get().setEditable(false);
+        m_textPane.setEditable(false);
     }
 
     private void highlight(String styleName, String regex)
@@ -103,7 +104,7 @@ public class TextViewer
             {
                 int start = matcher.start();
                 int end = matcher.end();
-                m_textPane.setStyle(start, end - start, styleName);
+                GuiUtil.setStyle(m_textPane, start, end - start, styleName);
             }
         }
         catch (BadLocationException e)
@@ -118,8 +119,8 @@ public class TextViewer
         JPanel panel = new JPanel(new BorderLayout());
         Container contentPane = getContentPane();
         contentPane.add(panel, BorderLayout.CENTER);
-        m_textPane = new GuiTextPane();
-        GuiUtil.setMonospacedFont(m_textPane.get());
+        m_textPane = new JTextPane();
+        GuiUtil.setMonospacedFont(m_textPane);
         Document doc = m_textPane.getDocument();
         while (text.charAt(text.length() - 1) == '\n')
             text = text.substring(0, text.length() - 1);
@@ -131,7 +132,7 @@ public class TextViewer
         {
             assert(false);
         }
-        JScrollPane scrollPane = new JScrollPane(m_textPane.get());
+        JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         KeyListener keyListener = new KeyAdapter()
@@ -143,15 +144,15 @@ public class TextViewer
                         dispose();
                 }
             };
-        m_textPane.get().addKeyListener(keyListener);
+        m_textPane.addKeyListener(keyListener);
         CaretListener caretListener = new CaretListener()
             {
                 public void caretUpdate(CaretEvent event)
                 {
                     if (m_listener == null)
                         return;
-                    int start = m_textPane.get().getSelectionStart();
-                    int end = m_textPane.get().getSelectionEnd();
+                    int start = m_textPane.getSelectionStart();
+                    int end = m_textPane.getSelectionEnd();
                     Document doc = m_textPane.getDocument();
                     try
                     {
@@ -170,11 +171,11 @@ public class TextViewer
                     }   
                 }
             };
-        m_textPane.get().addCaretListener(caretListener);
+        m_textPane.addCaretListener(caretListener);
         if (highlight)
             doSyntaxHighlight();
-        m_textPane.get().setCaretPosition(0);
-        m_textPane.get().setEditable(false);
+        m_textPane.setCaretPosition(0);
+        m_textPane.setEditable(false);
         pack();
         // Workaround for problems with oversized windows on some platforms
         // Also increase width by 10%, because automatic computation of

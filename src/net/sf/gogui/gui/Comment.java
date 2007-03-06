@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -40,10 +41,10 @@ public class Comment
     public Comment(Listener listener)
     {
         m_listener = listener;
-        m_textPane = new GuiTextPane();
+        m_textPane = new JTextPane();
         setFocusTraversalKeys(m_textPane);
-        m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"), 
-                            false);
+        GuiUtil.addStyle(m_textPane, "marked", Color.white,
+                         Color.decode("#38d878"), false);
         setPreferredSize();
         m_textPane.getDocument().addDocumentListener(this);
         CaretListener caretListener = new CaretListener()
@@ -52,12 +53,11 @@ public class Comment
                 {
                     if (m_listener == null)
                         return;
-                    JTextComponent textComponent = m_textPane.get();
-                    m_listener.textSelected(textComponent.getSelectedText());
+                    m_listener.textSelected(m_textPane.getSelectedText());
                 }
             };
-        m_textPane.get().addCaretListener(caretListener);
-        setViewportView(m_textPane.get());
+        m_textPane.addCaretListener(caretListener);
+        setViewportView(m_textPane);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setMonoFont(false);
     }
@@ -79,7 +79,7 @@ public class Comment
 
     public String getSelectedText()
     {
-        return m_textPane.get().getSelectedText();
+        return m_textPane.getSelectedText();
     }
 
     public void insertUpdate(DocumentEvent e)
@@ -101,11 +101,11 @@ public class Comment
                 int end = matcher.end();
                 if (firstMatch)
                 {
-                    m_textPane.setStyle(0, doc.getLength(), null);
-                    m_textPane.get().setCaretPosition(start);
+                    GuiUtil.setStyle(m_textPane, 0, doc.getLength(), null);
+                    m_textPane.setCaretPosition(start);
                     firstMatch = false;
                 }
-                m_textPane.setStyle(start, end - start, "marked");
+                GuiUtil.setStyle(m_textPane, start, end - start, "marked");
             }
         }
         catch (BadLocationException e)
@@ -123,24 +123,24 @@ public class Comment
     public final void setMonoFont(boolean enable)
     {
         if (enable)
-            GuiUtil.setMonospacedFont(m_textPane.get());
+            GuiUtil.setMonospacedFont(m_textPane);
         else
-            m_textPane.get().setFont(UIManager.getFont("TextPane.font"));
+            m_textPane.setFont(UIManager.getFont("TextPane.font"));
         m_monoFont = enable;
-        m_textPane.get().repaint();
+        m_textPane.repaint();
     }
 
     public void setComment(String comment)
     {
         if (comment == null)
             comment = "";
-        if (comment.equals(m_textPane.get().getText()))
+        if (comment.equals(m_textPane.getText()))
             return;
         // setText() generates a remove and insert event, and
         // we don't want to notify the listener about that yet
         m_duringSetText = true;
-        m_textPane.get().setText(comment);
-        m_textPane.get().setCaretPosition(0);
+        m_textPane.setText(comment);
+        m_textPane.setCaretPosition(0);
         m_duringSetText = false;
     }
 
@@ -159,7 +159,7 @@ public class Comment
     */
     private static final long serialVersionUID = 0L; // SUID    
 
-    private final GuiTextPane m_textPane;
+    private final JTextPane m_textPane;
 
     private final Listener m_listener;
 
@@ -167,16 +167,16 @@ public class Comment
     {
         if (m_duringSetText)
             return;
-        String comment = m_textPane.get().getText();
+        String comment = m_textPane.getText();
         m_listener.changed(comment);
     }
 
-    private static void setFocusTraversalKeys(GuiTextPane textPane)
+    private static void setFocusTraversalKeys(JTextPane textPane)
     {
         int id = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
         Set keystrokes = new TreeSet();
         keystrokes.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
-        textPane.get().setFocusTraversalKeys(id, keystrokes);
+        textPane.setFocusTraversalKeys(id, keystrokes);
     }
 }
 

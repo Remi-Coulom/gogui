@@ -5,6 +5,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Color;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -12,22 +13,21 @@ import javax.swing.text.Style;
 import net.sf.gogui.game.Clock;
 
 class GtpShellText
-    extends GuiTextPane
+    extends JTextPane
 {
     public GtpShellText(int historyMin, int historyMax, boolean timeStamp)
     {
-        GuiUtil.setMonospacedFont(get());
+        GuiUtil.setMonospacedFont(this);
         m_startTime = System.currentTimeMillis();
         m_timeStamp = timeStamp;
         m_historyMin = historyMin;
         m_historyMax = historyMax;
-        setNoLineSpacing();
-        addStyle("error", Color.red);
-        addStyle("output", null, null, true);
-        addStyle("log", new Color(0.5f, 0.5f, 0.5f));
-        addStyle("time", new Color(0, 0, 0.5f));
-        addStyle("invalid", new Color(1.0f, 0.58f, 0.25f));
-        get().setEditable(false);
+        GuiUtil.addStyle(this, "error", Color.red);
+        GuiUtil.addStyle(this, "output", null, null, true);
+        GuiUtil.addStyle(this, "log", new Color(0.5f, 0.5f, 0.5f));
+        GuiUtil.addStyle(this, "time", new Color(0, 0, 0.5f));
+        GuiUtil.addStyle(this, "invalid", new Color(1.0f, 0.58f, 0.25f));
+        setEditable(false);
     }
 
     public void appendComment(String text)
@@ -114,7 +114,7 @@ class GtpShellText
     public void setPositionToEnd()
     {
         int length = getDocument().getLength();
-        get().setCaretPosition(length);
+        setCaretPosition(length);
     }
 
     public void setTimeStamp(boolean enable)
