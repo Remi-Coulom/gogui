@@ -11,7 +11,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
 
-/** Interface to a Go program that uses GTP over the standard I/O streams.
+/** Interface to a Go program that uses GTP.
     Implements most of the functionality apart from that the commands are
     sent through and received from streams (to allow a more efficient testing
     implementaton of a GTP client that directly calls command callbacks at
