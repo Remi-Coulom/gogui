@@ -4,6 +4,7 @@
 
 <rule ref="rulesets/basic.xml">
 <exclude name="EmptyCatchBlock"/>
+<exclude name="UselessOverridingMethod"/>
 </rule>
 
 <rule ref="rulesets/controversial.xml/DefaultPackage"/>
