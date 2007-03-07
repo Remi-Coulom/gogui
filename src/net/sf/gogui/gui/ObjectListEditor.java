@@ -186,16 +186,16 @@ public class ObjectListEditor
         JPanel buttonPanel
             = new JPanel(new GridLayout(0, 1, GuiUtil.PAD, GuiUtil.PAD));
         m_moveUp = createButton("Move Up", "move-up");
-        m_moveUp.putClientProperty("Quaqua.Button.style", "bevel");
+        GuiUtil.setMacBevelButton(m_moveUp);
         buttonPanel.add(m_moveUp);
         m_moveDown = createButton("Move Down", "move-down");
-        m_moveDown.putClientProperty("Quaqua.Button.style", "bevel");
+        GuiUtil.setMacBevelButton(m_moveDown);
         buttonPanel.add(m_moveDown);
         m_edit = createButton("Edit", "edit");
-        m_edit.putClientProperty("Quaqua.Button.style", "bevel");
+        GuiUtil.setMacBevelButton(m_edit);
         buttonPanel.add(m_edit);
         m_remove = createButton("Remove", "remove");
-        m_remove.putClientProperty("Quaqua.Button.style", "bevel");
+        GuiUtil.setMacBevelButton(m_remove);
         buttonPanel.add(m_remove);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(buttonPanel, BorderLayout.NORTH);

@@ -54,6 +54,7 @@ public final class GoGuiUtil
         ConstNode node = game.getCurrentNode();
         int moveNumber = NodeUtil.getMoveNumber(node);
         int movesLeft = NodeUtil.getMovesLeft(node);
+        int totalMoves = moveNumber + movesLeft;
         Move move = node.getMove();
         String variation = NodeUtil.getVariationString(node);
         StringBuffer moveText = new StringBuffer(128);
@@ -66,7 +67,7 @@ public final class GoGuiUtil
         if (movesLeft > 0)
         {
             moveText.append('(');
-            moveText.append(moveNumber + movesLeft);
+            moveText.append(totalMoves);
             moveText.append(") ");
         }
 
@@ -105,8 +106,8 @@ public final class GoGuiUtil
         if (movesLeft > 0)
         {
             toolTip.append("of ");
-            toolTip.append(moveNumber + movesLeft);
-            if (moveNumber + movesLeft == 1)
+            toolTip.append(totalMoves);
+            if (totalMoves == 1)
                 toolTip.append(" move ");
             else
                 toolTip.append(" moves ");

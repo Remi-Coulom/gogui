@@ -329,7 +329,7 @@ public class GtpDummy
 
     private int m_numberGenmove;
 
-    private int m_resign;
+    private final int m_resign;
 
     private int m_size;
 

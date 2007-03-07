@@ -28,6 +28,7 @@ import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -343,6 +344,14 @@ public class GuiUtil
         URL url = s_iconURL;
         if (url != null)
             frame.setIconImage(new ImageIcon(url).getImage());
+    }
+
+    /** Set property to render button in bevel style on the Mac.
+        Only has an effect if Quaqua Look and Feel is used.
+    */
+    public static void setMacBevelButton(JButton button)
+    {
+        button.putClientProperty("Quaqua.Button.style", "bevel");
     }
 
     /** Invoke Window.setMinimumSize, if available.

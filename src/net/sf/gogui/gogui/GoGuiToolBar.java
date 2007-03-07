@@ -67,11 +67,11 @@ public class GoGuiToolBar
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private GoGui m_goGui;
+    private final GoGui m_goGui;
 
-    private JButton m_buttonSave;
+    private final JButton m_buttonSave;
 
-    private GoGuiActions m_actions;
+    private final GoGuiActions m_actions;
 
     private AbstractButton addButton(AbstractButton button)
     {

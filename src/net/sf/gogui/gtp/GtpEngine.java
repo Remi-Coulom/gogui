@@ -266,7 +266,7 @@ public class GtpEngine
         m_version = version;
     }
 
-    public void unregister(String command)
+    public final void unregister(String command)
     {
         if (m_commands.containsKey(command))
             m_commands.remove(command);

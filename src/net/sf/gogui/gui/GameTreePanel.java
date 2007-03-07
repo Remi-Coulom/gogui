@@ -315,11 +315,9 @@ public class GameTreePanel
         {
             ConstNode root = m_tree.getRootConst();
             createNodes(this, root, 0, 0, MARGIN, MARGIN, 0);
-            if (gameTreeChanged)
-            {
-                if (! NodeUtil.subtreeGreaterThan(root, 10000))
-                    showSubtree(root);
-            }
+            if (gameTreeChanged
+                && ! NodeUtil.subtreeGreaterThan(root, 10000))
+                showSubtree(root);
         }
         catch (OutOfMemoryError e)
         {
@@ -509,25 +507,7 @@ public class GameTreePanel
         dx = m_nodeFullSize;
         dy = 0;
         boolean isExpanded = isExpanded(node);
-        if (! isExpanded)
-        {
-            if (m_showSubtreeSizes && node.hasChildren())
-            {
-                int subtreeSize = NodeUtil.subtreeSize(node) - 1;
-                String text = Integer.toString(subtreeSize);
-                // Use upper limit for textWidth
-                int textWidth = text.length() + m_font.getSize();
-                int textHeight = m_font.getSize();
-                int pad = GuiUtil.SMALL_PAD;
-                m_maxX = Math.max(x + textWidth + pad, m_maxX);
-                JLabel label = new JLabel(text);
-                label.setFont(m_font);
-                add(label);
-                putConstraint(gameNode, label, dx + pad,
-                              (m_nodeSize - textHeight) / 2);
-            }
-        }
-        else
+        if (isExpanded)
         {
             int[] childrenDy = new int[numberChildren];
             for (int i = 0; i < numberChildren; ++i)
@@ -544,6 +524,24 @@ public class GameTreePanel
                     new GameTreeJunction(childrenDy, this);
                 add(junction);
                 putConstraint(gameNode, junction, 0, m_nodeFullSize);
+            }
+        }
+        else
+        {
+            if (m_showSubtreeSizes && node.hasChildren())
+            {
+                int subtreeSize = NodeUtil.subtreeSize(node) - 1;
+                String text = Integer.toString(subtreeSize);
+                // Use upper limit for textWidth
+                int textWidth = text.length() + m_font.getSize();
+                int textHeight = m_font.getSize();
+                int pad = GuiUtil.SMALL_PAD;
+                m_maxX = Math.max(x + textWidth + pad, m_maxX);
+                JLabel label = new JLabel(text);
+                label.setFont(m_font);
+                add(label);
+                putConstraint(gameNode, label, dx + pad,
+                              (m_nodeSize - textHeight) / 2);
             }
         }
         if (node == m_currentNode)

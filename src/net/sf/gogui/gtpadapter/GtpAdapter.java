@@ -420,7 +420,7 @@ public class GtpAdapter
         return cmd.getPointArg(i, m_board.getSize());
     }
 
-    private final void init(boolean noScore, boolean version1, int size)
+    private void init(boolean noScore, boolean version1, int size)
         throws GtpError
     {
         m_gtp.queryProtocolVersion();

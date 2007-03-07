@@ -30,6 +30,7 @@ import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.gui.StatusBar;
+import net.sf.gogui.util.StringUtil;
 
 /** GTP adapter showing the current board in a window. */
 public class GtpDisplay
@@ -39,7 +40,7 @@ public class GtpDisplay
         throws Exception
     {
         super(null);
-        if (! (program == null || program.equals("")))
+        if (! StringUtil.isEmpty(program))
         {
             m_gtp = new GtpClient(program, null, verbose, null);
             m_gtp.queryProtocolVersion();

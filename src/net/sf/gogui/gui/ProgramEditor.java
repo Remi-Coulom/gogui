@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import net.sf.gogui.util.StringUtil;
 
 /** Dialog for displaying and editing a program. */
 public class ProgramEditor
@@ -264,7 +265,7 @@ public class ProgramEditor
             JButton button = new JButton();
             panel.add(button);
             button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
-            button.putClientProperty("Quaqua.Button.style", "bevel");
+            GuiUtil.setMacBevelButton(button);
             button.setToolTipText(browseToolTip);
             button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
@@ -294,7 +295,7 @@ public class ProgramEditor
     {
         if (! m_editOnlyCommand)
         {
-            if (m_label.getText().trim().equals(""))
+            if (StringUtil.isEmpty(m_label.getText()))
             {
                 String mainMessage = "Label cannot be empty";
                 String optionalMessage =

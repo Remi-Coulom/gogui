@@ -35,6 +35,7 @@ import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.StringUtil;
 
 /** File dialogs. */
 public final class FileDialogs
@@ -420,7 +421,7 @@ class SgfPreview
                 File thumbnail = m_thumbnailCreator.getLastThumbnail();
                 m_image = loadImage(thumbnail);
                 String description = m_thumbnailCreator.getLastDescription();
-                if (description != null && ! description.trim().equals(""))
+                if (! StringUtil.isEmpty(description))
                     m_imagePanel.setToolTipText(description);
                 else
                     m_imagePanel.setToolTipText(null);
