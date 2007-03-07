@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
@@ -338,20 +339,16 @@ public class GtpRegress
     }
 
     private void handleLine(String line)
-        throws ProgramIsDeadException
+        throws ErrorMessage, ProgramIsDeadException
     {
         line = line.trim();
         if (line.startsWith("#?"))
         {
             if (m_lastFullResponse == null)
-            {
-                System.err.println("Warning: " + m_testFile
-                                   + ": Response pattern"
-                                   + " without preceding test command: "
-                                   + line);
-                printOutLine("comment", line);
-                return;
-            }
+                throw new ErrorMessage(m_testFile
+                                       + ": Response pattern"
+                                       + " without preceding test command: "
+                                       + line);
             printOutLine("test", line);
             handleTest(line.substring(2).trim());
             m_lastFullResponse = null;
@@ -397,21 +394,28 @@ public class GtpRegress
         }
     }
 
-    private void handleTest(String patternString)
+    private void handleTest(String patternString) throws ErrorMessage
     {
         boolean expectedFail = false;
+        if (StringUtil.isEmpty(patternString))
+        {
+            handleLastResponse();
+            return;
+        }
         if (patternString.endsWith("*"))
         {
             expectedFail = true;
             patternString =
                 patternString.substring(0, patternString.length() - 1);
         }
-        if (! patternString.startsWith("[")
-            || ! patternString.endsWith("]"))
-        {
-            handleLastResponse();
-            return;
-        }
+        if (! patternString.startsWith("["))
+            throw new ErrorMessage(m_testFile
+                                   + ": Pattern has no opening bracket: "
+                                   + patternString);
+        if (! patternString.endsWith("]"))
+            throw new ErrorMessage(m_testFile
+                                   + ": Pattern has no closing bracket: "
+                                   + patternString);
         patternString =
             patternString.substring(1, patternString.length() - 1).trim();
         String expectedResponse = patternString;
