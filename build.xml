@@ -370,7 +370,7 @@ ${quaqua.nestedzipfile}
 <copy file="external/javacomm/commapi/comm.jar" todir="lib"/>
 </target>
 
-<target name="gogui.app" depends="specialmac,gogui.jar"
+<target name="gogui.app" depends="specialmac,all"
  description="Make Mac application bundle">
 <property name="appdir" value="build/GoGui.app"/>
 <mkdir dir="${appdir}"/>
