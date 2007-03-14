@@ -130,8 +130,12 @@ public final class GtpClient
             // Create command array with StringUtil::splitArguments
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
-            m_process = runtime.exec(StringUtil.splitArguments(program),
-                                     null, workingDirectory);
+            String[] cmdArray = StringUtil.splitArguments(program);
+            // Make file name absolute, if working directory is not current
+            // directory
+            if (cmdArray.length > 0)
+                cmdArray[0] = new File(cmdArray[0]).getAbsolutePath();
+            m_process = runtime.exec(cmdArray, null, workingDirectory);
         }
         catch (IOException e)
         {
