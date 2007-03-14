@@ -105,7 +105,7 @@ public final class GtpClient
         @param log Log input, output and error stream to standard error.
         @param callback Callback for external display of the streams.
     */
-    public GtpClient(String program, String workingDirectory, boolean log,
+    public GtpClient(String program, File workingDirectory, boolean log,
                      IOCallback callback)
         throws GtpError
     {
@@ -127,14 +127,11 @@ public final class GtpClient
         Runtime runtime = Runtime.getRuntime();
         try
         {
-            File dir = null;
-            if (! StringUtil.isEmpty(workingDirectory))
-                dir = new File(workingDirectory);
             // Create command array with StringUtil::splitArguments
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
             m_process = runtime.exec(StringUtil.splitArguments(program),
-                                     null, dir);
+                                     null, workingDirectory);
         }
         catch (IOException e)
         {
