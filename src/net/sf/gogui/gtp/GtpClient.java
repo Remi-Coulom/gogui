@@ -46,10 +46,15 @@ public final class GtpClient
     {
         public String m_program;
 
+        public ExecFailed(String program, String message)
+        {
+            super(message);
+            m_program = program;
+        }        
+
         public ExecFailed(String program, IOException e)
         {
-            super(e.getMessage());
-            m_program = program;
+            this(program, e.getMessage());
         }        
 
         /** Serial version to suppress compiler warning.
@@ -107,7 +112,7 @@ public final class GtpClient
     */
     public GtpClient(String program, File workingDirectory, boolean log,
                      IOCallback callback)
-        throws GtpError
+        throws GtpClient.ExecFailed
     {
         m_log = log;
         m_callback = callback;
@@ -122,8 +127,9 @@ public final class GtpClient
         }
         m_program = program;
         if (StringUtil.isEmpty(program))
-            throw new GtpError("Command for invoking Go program must be"
-                               + " not empty.");
+            throw new ExecFailed(program,
+                                 "Command for invoking Go program must be"
+                                 + " not empty.");
         Runtime runtime = Runtime.getRuntime();
         try
         {
@@ -132,7 +138,11 @@ public final class GtpClient
             // which does not respect ".
             String[] cmdArray = StringUtil.splitArguments(program);
             // Make file name absolute, if working directory is not current
-            // directory
+            // directory. With Java 1.5, it seems that Runtime.exec succeeds
+            // if the relative path is valid from the current, but not from
+            // the given working directory, but the process is not usable
+            // (reading from its input stream immediately returns
+            // end-of-stream)
             if (cmdArray.length > 0)
                 cmdArray[0] = new File(cmdArray[0]).getAbsolutePath();
             m_process = runtime.exec(cmdArray, null, workingDirectory);
