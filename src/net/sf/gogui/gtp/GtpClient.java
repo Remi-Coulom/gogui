@@ -144,7 +144,13 @@ public final class GtpClient
             // (reading from its input stream immediately returns
             // end-of-stream)
             if (cmdArray.length > 0)
-                cmdArray[0] = new File(cmdArray[0]).getAbsolutePath();
+            {
+                File file = new File(cmdArray[0]);
+                // Only replace if executable is a path to a file, not
+                // an executable in the exec-path
+                if (file.exists())
+                    cmdArray[0] = file.getAbsolutePath();
+            }
             m_process = runtime.exec(cmdArray, null, workingDirectory);
         }
         catch (IOException e)
