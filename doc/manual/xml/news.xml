@@ -16,6 +16,12 @@ Future versions are going to require Java 1.5.
 <itemizedlist>
 <listitem>
 <simpara>
+New optional commands for setting up positions; see section Setup Commands
+in the manual
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 The preferred way to configure analyze commands is now that the program
 implements the command gogui-analyze_commands, otherwise an internal list with
 some standard commands and GNU Go extensions is used.
@@ -25,12 +31,6 @@ is shown in what order in the analyze dialog.
 Analyze command configuration files in the .gogui directory are no longer
 supported; the only way to use external configuration files is to invoke
 GoGui with the option -analyze-commands.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-New optional commands for setting up positions; see section Setup Commands
-in the manual
 </simpara>
 </listitem>
 <listitem>
@@ -159,6 +159,11 @@ GoGui, GtpDisplay: don't support option -fast anymore
 <listitem>
 <simpara>
 TwoGtp: new option -maxmoves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: support for test files not in the current directory
 </simpara>
 </listitem>
 <listitem>
