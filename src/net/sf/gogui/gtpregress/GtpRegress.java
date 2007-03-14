@@ -692,12 +692,9 @@ public class GtpRegress
         NumberFormat format1 = StringUtil.getNumberFormat(1);
         StringBuffer buffer = new StringBuffer(16);
         buffer.append(format1.format(seconds));
-        if (seconds > 60)
-        {
-            buffer.append("  (");
-            buffer.append(StringUtil.formatTime((long)seconds));
-            buffer.append(')');
-        }
+        buffer.append("  (");
+        buffer.append(StringUtil.formatTime((long)seconds));
+        buffer.append(')');
         return buffer.toString();
     }
 
@@ -951,8 +948,9 @@ public class GtpRegress
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td" + colorAttrOtherErrors + ">\n"
                   + summary.m_otherErrors + "</td>\n" +
-                  "<td>" + getTimeString(time) + "</td>\n" +
-                  "<td>" + getTimeString(summary.m_cpuTime) + "</td>\n" +
+                  "<td align=\"right\">" + getTimeString(time) + "</td>\n" +
+                  "<td align=\"right\">" + getTimeString(summary.m_cpuTime) +
+                  "</td>\n" +
                   "</tr>\n");
         if (foot)
             out.print("</tfoot>\n");
