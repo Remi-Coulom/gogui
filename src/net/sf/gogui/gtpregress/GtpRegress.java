@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +46,7 @@ public class GtpRegress
                 file.mkdir();
             m_prefix = output + File.separator;
         }
+        initOutNames(tests);
         for (int i = 0; i < tests.length; ++i)
         {
             if (tests.length > 1)
@@ -213,7 +215,7 @@ public class GtpRegress
     private String m_name;
 
     /** Name of m_outFile and the summary file of the test without directory
-        and file extension.
+        and file extension for the current test.
     */
     private String m_outName;
 
@@ -231,6 +233,11 @@ public class GtpRegress
     private String m_relativePath;
 
     private String m_version;
+
+    /** Name of m_outFile and the summary file of the test without directory
+        and file extension for the all tests.
+    */
+    private TreeMap m_outNames;
 
     private final ArrayList m_tests = new ArrayList();
 
@@ -511,27 +518,35 @@ public class GtpRegress
                              m_lastSgf, m_lastSgfMove));
     }
 
-    private void initOutName()
+    /** Compute unique names for output directory.
+        Appends a number, if tests with same name in different directories
+        exist.
+    */
+    private void initOutNames(String[] tests)
     {
-        String name =
-            FileUtil.removeExtension(new File(m_testFile.getName()), "tst");
-        if (new File(m_prefix + name + ".out.html").exists())
-            for (int i = 2; ; ++i)
-            {
-                String testName = name + "_" + i;
-                if (! new File(m_prefix + testName + ".out.html").exists())
+        m_outNames = new TreeMap();
+        for (int i = 0; i < tests.length; ++i)
+        {
+            File testFile = new File(tests[i]);
+            String name =
+                FileUtil.removeExtension(new File(testFile.getName()), "tst");
+            if (m_outNames.containsValue(name))
+                for (int j = 2; ; ++j)
                 {
-                    name = testName;
-                    break;
+                    String testName = name + "_" + j;
+                    if (! m_outNames.containsValue(testName))
+                    {
+                        name = testName;
+                        break;
+                    }
                 }
-            }
-        m_outName = name;
+            m_outNames.put(tests[i], name);
+        }
     }
 
     private void initOutFile()
         throws Exception
     {
-        initOutName();
         m_outFileRelativeName = m_outName + ".out.html";
         m_outFile = new File(m_prefix + m_outFileRelativeName);
         File parent = m_outFile.getParentFile();
@@ -732,6 +747,7 @@ public class GtpRegress
         m_dataFiles.clear();
         m_otherErrors = 0;
         m_testFile = new File(test);
+        m_outName = (String)m_outNames.get(test);
         initOutFile();
         File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
         m_relativePath = FileUtil.getRelativeURI(m_outFile, testFileDir);
