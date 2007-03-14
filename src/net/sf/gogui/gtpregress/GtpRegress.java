@@ -135,6 +135,9 @@ public class GtpRegress
     {
         public File m_file;
 
+        /** See GtpRegress#m_outName */
+        public String m_outName;
+
         public int m_numberTests;
 
         public int m_otherErrors;
@@ -191,6 +194,12 @@ public class GtpRegress
 
     private static final String COLOR_RED = "#ff5454";
 
+    /** Output file of the current test.
+        The file contains an HTML formatted log of the GTP streams and
+        the standard error of Go program.
+    */
+    private File m_outFile;
+
     private String m_currentStyle;
 
     private String m_lastCommand;
@@ -203,7 +212,10 @@ public class GtpRegress
 
     private String m_name;
 
-    private String m_outFileName;
+    /** Name of m_outFile and the summary file of the test without directory
+        and file extension.
+    */
+    private String m_outName;
 
     private String m_outFileRelativeName;
 
@@ -213,6 +225,9 @@ public class GtpRegress
 
     private final String m_program;
 
+    /** Relative URI path between m_outFile and the directory of the current
+        test.
+    */
     private String m_relativePath;
 
     private String m_version;
@@ -282,6 +297,7 @@ public class GtpRegress
     {
         TestSummary summary = new TestSummary();
         summary.m_file = m_testFile;
+        summary.m_outName = m_outName;
         summary.m_timeMillis = timeMillis;
         summary.m_cpuTime = cpuTime;
         summary.m_otherErrors = m_otherErrors;
@@ -495,18 +511,34 @@ public class GtpRegress
                              m_lastSgf, m_lastSgfMove));
     }
 
+    private void initOutName()
+    {
+        String name =
+            FileUtil.removeExtension(new File(m_testFile.getName()), "tst");
+        if (new File(m_prefix + name + ".out.html").exists())
+            for (int i = 2; ; ++i)
+            {
+                String testName = name + "_" + i;
+                if (! new File(m_prefix + testName + ".out.html").exists())
+                {
+                    name = testName;
+                    break;
+                }
+            }
+        m_outName = name;
+    }
+
     private void initOutFile()
         throws Exception
     {
-        m_outFileRelativeName =
-            FileUtil.replaceExtension(m_testFile, "tst", "out.html");
-        m_outFileName = m_prefix + m_outFileRelativeName;        
-        File file = new File(m_outFileName);
-        File parent = file.getParentFile();
+        initOutName();
+        m_outFileRelativeName = m_outName + ".out.html";
+        m_outFile = new File(m_prefix + m_outFileRelativeName);
+        File parent = m_outFile.getParentFile();
         if (parent != null && ! parent.exists())
             parent.mkdir();
         m_currentStyle = null;
-        m_out = new PrintStream(new FileOutputStream(file));
+        m_out = new PrintStream(new FileOutputStream(m_outFile));
         m_out.print("<html>\n" +
                     "<head>\n" +
                     "<title>Output: " + m_testFile + "</title>\n" +
@@ -701,9 +733,8 @@ public class GtpRegress
         m_otherErrors = 0;
         m_testFile = new File(test);
         initOutFile();
-        File outFile = new File(m_outFileName);
         File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
-        m_relativePath = FileUtil.getRelativeURI(outFile, testFileDir);
+        m_relativePath = FileUtil.getRelativeURI(m_outFile, testFileDir);
         if (! m_relativePath.equals("") && ! m_relativePath.endsWith("/"))
             m_relativePath = m_relativePath + "/";
         FileReader fileReader = new FileReader(m_testFile);
@@ -882,9 +913,8 @@ public class GtpRegress
             if (foot)
                 out.print("<td><b>Total</b></td>");
             else
-                out.print("<td><a href=\""
-                          + FileUtil.replaceExtension(file, "tst", "html")
-                          + "\">" + file + "</a></td>");
+                out.print("<td><a href=\"" + summary.m_outName + ".html" +
+                          "\">" + file + "</a></td>");
         }
         double time = ((double)summary.m_timeMillis) / 1000F;
         String colorAttrUnexpectedFails = "";
@@ -925,9 +955,7 @@ public class GtpRegress
                                + summary.m_unexpectedFails
                                + " unexpected failures");
         }
-        File file =
-            new File(m_prefix
-                     + FileUtil.replaceExtension(m_testFile, "tst", "html"));
+        File file = new File(m_prefix + m_outName + ".html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
         out.print("<html>\n" +
                   "<head>\n" +
