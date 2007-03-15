@@ -692,7 +692,7 @@ public class GtpRegress
         NumberFormat format1 = StringUtil.getNumberFormat(1);
         StringBuffer buffer = new StringBuffer(16);
         buffer.append(format1.format(seconds));
-        buffer.append("  (");
+        buffer.append("&nbsp;(");
         buffer.append(StringUtil.formatTime((long)seconds));
         buffer.append(')');
         return buffer.toString();
