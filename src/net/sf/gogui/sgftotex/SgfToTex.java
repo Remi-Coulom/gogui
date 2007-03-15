@@ -21,6 +21,7 @@ import net.sf.gogui.version.Version;
 /** SGF to LaTeX converter. */
 public final class SgfToTex
 {
+    /** Main function. */
     public static void main(String[] args)
     {
         try

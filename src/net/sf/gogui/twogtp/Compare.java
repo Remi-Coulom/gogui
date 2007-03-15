@@ -89,6 +89,8 @@ public final class Compare
         Prints the results to standard output, one line per game
         with the filename and the duplicate information as returned by
         Compare.checkDuplicate.
+        @param filenames List of filenames (String)
+        @throws Exception If reading one of the files fails.
     */
     public static void compare(ArrayList filenames) throws Exception
     {
@@ -119,6 +121,9 @@ public final class Compare
     /** Return moves in main variation from node.
         All setup stones are translated to moves and passes are filled in
         to ensure that moves are alternating beginning with black.
+        @param node The start node
+        @return List of moves (Move) corresponding to moves and setup stones
+        in main variation starting with the given node.
     */
     public static ArrayList getAllAsMoves(ConstNode node)
     {

@@ -18,6 +18,9 @@ public final class GoPoint
     /** Thrown if parsing a string representation of a GoPoint fails. */
     public static class InvalidPoint extends Exception
     {
+        /** Constructor.
+            @param text The text that could not be parsed as a point.
+        */
         public InvalidPoint(String text)
         {
             super("Invalid point \"" + text + "\"");

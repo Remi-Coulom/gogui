@@ -163,7 +163,9 @@ public class TwoGtp
         }
     }
 
-    /** Returns number of games left of -1 if no maximum set. */
+    /** Get games left to play.
+        @return number of games left of -1 if no maximum set.
+    */
     public int gamesLeft()
     {
         if (m_numberGames <= 0)
@@ -929,7 +931,7 @@ public class TwoGtp
                             String duplicate, int numberMoves, boolean error,
                             String errorMessage, double cpuTimeBlack,
                             double cpuTimeWhite)
-         throws ErrorMessage
+        throws ErrorMessage
     {
         if (m_sgfFile.equals(""))
             return;
