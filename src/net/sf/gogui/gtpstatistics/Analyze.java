@@ -193,7 +193,7 @@ public class Analyze
         public int m_numberPositions;
     }
 
-    private static final int m_imgHeight = 100;
+    private static final int IMAGE_HEIGHT = 100;
 
     private int m_maxMove;
 
@@ -360,7 +360,7 @@ public class Analyze
 
     private Plot generatePlotMove(int width, Color color)
     {
-        Plot plot = new Plot(width, m_imgHeight, color, m_precision);
+        Plot plot = new Plot(width, IMAGE_HEIGHT, color, m_precision);
         plot.setSolidLineInterval(10);
         plot.setXMin(0);
         plot.setXMax(m_maxMove);

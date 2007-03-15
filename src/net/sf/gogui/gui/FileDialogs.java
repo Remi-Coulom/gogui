@@ -396,7 +396,7 @@ class SgfPreview
     private final Preferences m_prefs =
         Preferences.userNodeForPackage(getClass());        
 
-    private static final Image m_missingImage =
+    private static final Image MISSING_IMAGE =
         GuiUtil.getIcon("image-missing", "No preview").getImage();
 
     public void preview()
@@ -408,7 +408,7 @@ class SgfPreview
         }
         else if (m_file.equals(m_lastFailure))
         {
-            m_image = m_missingImage;
+            m_image = MISSING_IMAGE;
             m_imagePanel.setToolTipText(m_lastError);
         }
         else
@@ -428,7 +428,7 @@ class SgfPreview
             }
             catch (ThumbnailCreator.Error e)
             {
-                m_image = m_missingImage;
+                m_image = MISSING_IMAGE;
                 m_lastError = e.getMessage();
                 if (m_lastError != null && m_lastError.trim().equals(""))
                     m_lastError = null;

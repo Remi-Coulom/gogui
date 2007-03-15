@@ -147,10 +147,10 @@ public class ScoreDialog
 
     private Score m_score;
 
-    private static final ImageIcon m_iconBlack =
+    private static final ImageIcon ICON_BLACK =
         GuiUtil.getIcon("gogui-black-16x16", "Black");
 
-    private static final ImageIcon m_iconWhite =
+    private static final ImageIcon ICON_WHITE =
         GuiUtil.getIcon("gogui-white-16x16", "White");
 
     private JComponent createEntryLabel(String text)
@@ -185,7 +185,7 @@ public class ScoreDialog
         labels.add(createEntryLabel(labelText));
         ColorFields colorFields = new ColorFields();
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        panel.add(new JLabel(m_iconBlack));
+        panel.add(new JLabel(ICON_BLACK));
         panel.add(GuiUtil.createSmallFiller());
         JTextField black = new JTextField(cols);
         black.setHorizontalAlignment(JTextField.CENTER);
@@ -195,7 +195,7 @@ public class ScoreDialog
             black.setToolTipText(toolTip.replaceAll("%c", "Black"));
         panel.add(black);
         panel.add(GuiUtil.createFiller());
-        panel.add(new JLabel(m_iconWhite));
+        panel.add(new JLabel(ICON_WHITE));
         panel.add(GuiUtil.createSmallFiller());
         JTextField white = new JTextField(cols);
         white.setHorizontalAlignment(JTextField.CENTER);
@@ -213,7 +213,7 @@ public class ScoreDialog
     {
         labels.add(createEntryLabel("Komi"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        panel.add(new JLabel(m_iconWhite));
+        panel.add(new JLabel(ICON_WHITE));
         panel.add(GuiUtil.createSmallFiller());
         JTextField field = new JTextField(cols);
         field.setHorizontalAlignment(JTextField.CENTER);

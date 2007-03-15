@@ -163,11 +163,9 @@ public class GtpStatistics
 
     private GtpClientBase m_gtp;
 
-    private static final NumberFormat m_format1 =
-        StringUtil.getNumberFormat(1);
+    private static final NumberFormat FORMAT1 = StringUtil.getNumberFormat(1);
 
-    private static final NumberFormat m_format2 =
-        StringUtil.getNumberFormat(2);
+    private static final NumberFormat FORMAT2 = StringUtil.getNumberFormat(2);
 
     private Table m_table;
 
@@ -262,7 +260,7 @@ public class GtpStatistics
                 double cpuTime = Double.parseDouble(response);
                 double diff = cpuTime - m_lastCpuTime;
                 m_lastCpuTime = cpuTime;
-                return m_format2.format(diff);
+                return FORMAT2.format(diff);
             }
             catch (NumberFormatException e)
             {
@@ -313,7 +311,7 @@ public class GtpStatistics
             score = score.substring(2);
         try
         {
-            return m_format1.format(sign * Double.parseDouble(score));
+            return FORMAT1.format(sign * Double.parseDouble(score));
         }
         catch (NumberFormatException e)
         {

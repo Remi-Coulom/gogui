@@ -70,7 +70,7 @@ public final class PointList
     */
     public static ConstPointList getEmptyList()
     {
-        return m_emptyList;
+        return EMPTY_LIST;
     }
 
     public int hashCode()
@@ -116,7 +116,7 @@ public final class PointList
             return list.toString();
     }
 
-    private static final ConstPointList m_emptyList = new PointList();
+    private static final ConstPointList EMPTY_LIST = new PointList();
 
     private ArrayList m_list;
 }

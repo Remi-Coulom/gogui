@@ -142,13 +142,13 @@ public class StatusBar
     {
         if (color == GoColor.BLACK)
         {
-            m_toPlayLabel.setIcon(m_iconBlack);
+            m_toPlayLabel.setIcon(ICON_BLACK);
             m_toPlayLabel.setToolTipText("Black to play");
         }
         else
         {
             assert(color == GoColor.WHITE);
-            m_toPlayLabel.setIcon(m_iconWhite);
+            m_toPlayLabel.setIcon(ICON_WHITE);
             m_toPlayLabel.setToolTipText("White to play");
         }
     }
@@ -158,10 +158,10 @@ public class StatusBar
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private static final Icon m_iconBlack =
+    private static final Icon ICON_BLACK =
         GuiUtil.getIcon("gogui-black-16x16", "Black");
 
-    private static final Icon m_iconWhite =
+    private static final Icon ICON_WHITE =
         GuiUtil.getIcon("gogui-white-16x16", "White");
 
     private final Box m_iconBox;
