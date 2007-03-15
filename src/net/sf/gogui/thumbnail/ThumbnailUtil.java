@@ -9,7 +9,7 @@ import java.io.IOException;
 import net.sf.gogui.util.FileUtil;
 
 /** Untility functions for managing the thumbnail directory. */
-public class ThumbnailUtil
+public final class ThumbnailUtil
 {
     /** Expire all thumbnails older than a certain age. */
     public static void expire(int seconds, boolean checkOnly)
