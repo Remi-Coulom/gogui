@@ -154,7 +154,7 @@ public class GtpAdapter
     {
         cmd.checkArgNone();
         String response =
-            "string/GtpAdapter ShowBoard/gtpadapter-showboard\n"  ;
+            "string/GtpAdapter ShowBoard/gtpadapter-showboard\n";
         String command = null;
         if (m_gtp.isSupported("gogui-analyze_commands"))
             command = "gogui-analyze_commands";

@@ -114,7 +114,8 @@ class GoGuiToggleButton
                 public void  propertyChange(PropertyChangeEvent e) {
                     if (e.getPropertyName().equals("selected"))
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
-                } } );
+                }
+            });
     }
 
     /** Serial version to suppress compiler warning.

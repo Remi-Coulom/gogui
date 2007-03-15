@@ -109,7 +109,8 @@ public class GoGuiMenuBar
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         m_listener.actionGotoBookmark(bookmarkIndex);
-                    } } );
+                    }
+                });
             if (bookmark.m_file != null)
             {
                 StringBuffer toolTip = new StringBuffer(256);
@@ -148,7 +149,8 @@ public class GoGuiMenuBar
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         m_listener.actionAttachProgram(index);
-                    } } );
+                    }
+                });
             StringBuffer toolTip = new StringBuffer(128);
             if (program.m_name != null)
                 toolTip.append(program.m_name);
@@ -593,7 +595,8 @@ class GoGuiRadioButtonMenuItem
                 public void  propertyChange(PropertyChangeEvent e) {
                     if (e.getPropertyName().equals("selected"))
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
-                } } );
+                }
+            });
     }
 
     /** Serial version to suppress compiler warning.
@@ -613,7 +616,8 @@ class GoGuiCheckBoxMenuItem
                 public void  propertyChange(PropertyChangeEvent e) {
                     if (e.getPropertyName().equals("selected"))
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
-                } } );
+                }
+            });
     }
 
     /** Serial version to suppress compiler warning.

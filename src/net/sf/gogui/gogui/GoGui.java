@@ -1267,7 +1267,7 @@ public class GoGui
     {
         assert(color.isBlackWhite());
         if (! checkCommandInProgress())
-            return ;
+            return;
         if (m_scoreMode)
             scoreDone(null);
         ConstNode node = getCurrentNode();

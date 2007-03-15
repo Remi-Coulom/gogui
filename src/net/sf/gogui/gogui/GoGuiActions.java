@@ -769,7 +769,7 @@ public class GoGuiActions
 
     public static void register(JComponent component, GoGuiAction action)
     {
-        int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ;
+        int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
         InputMap inputMap = component.getInputMap(condition);
         ActionMap actionMap = component.getActionMap();
         KeyStroke keyStroke =
