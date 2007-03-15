@@ -35,11 +35,14 @@ import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
 
 /** GTP adapter for logging or protocol translations.
-    @param fillPasses Fill moves of non-alternating colors with pass moves.
 */
 public class GtpAdapter
     extends GtpEngine
 {
+    /** Constructor.
+        @param fillPasses Fill moves of non-alternating colors with pass
+        moves.
+    */
     public GtpAdapter(String program, PrintStream log, String gtpFile,
                       boolean verbose, boolean noScore, boolean version1,
                       boolean fillPasses, boolean lowerCase, int size)
