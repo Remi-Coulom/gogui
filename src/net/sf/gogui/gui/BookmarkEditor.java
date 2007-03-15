@@ -144,7 +144,7 @@ public class BookmarkEditor
         {
             messageDialogs.showError(parent, "Name cannot be empty",
                                      "You need to enter a name for the "
-                                     +" item in the Bookmarks menu. ",
+                                     + " item in the Bookmarks menu. ",
                                      false);
             return false;
         }

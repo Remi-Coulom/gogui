@@ -31,7 +31,7 @@ public final class MoveNumberDialog
             {
                 messageDialogs.showError(parent, "No move with this number",
                                          "You need to enter a valid move "
-                                         +"number", false);
+                                         + "number", false);
                 return null;
             }
             return node;

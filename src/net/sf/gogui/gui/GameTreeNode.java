@@ -102,7 +102,7 @@ class GameTreeNode
         {
             toolTip.append(m_moveNumber);
             toolTip.append(' ');
-            toolTip.append(move.getColor() == GoColor.BLACK ? "B " :"W ");
+            toolTip.append(move.getColor() == GoColor.BLACK ? "B " : "W ");
             toolTip.append(GoPoint.toString(move.getPoint()));
         }
         else if (m_node.hasSetup() || player != null)
