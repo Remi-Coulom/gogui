@@ -29,7 +29,7 @@ public final class StringUtil
         return buffer.toString();
     }
 
-    /** Format elapsed time as [[h+]:[mm]]:ss */
+    /** Format elapsed time as [[h+]:[mm]]:ss. */
     public static String formatTime(long seconds)
     {
         StringBuffer buffer = new StringBuffer(8);

@@ -61,7 +61,7 @@ public final class BoardTest
         assertFalse(board.contains(GoPoint.get(20, 20)));
     }
 
-    /** Test Board.getKilled() */
+    /** Test Board.getKilled(). */
     public void testGetKilled()
     {
         Board board = new Board(19);
@@ -91,7 +91,7 @@ public final class BoardTest
         assertTrue(board.getKilled().isEmpty());
     }
 
-    /** Test Board.getSuicide() */
+    /** Test Board.getSuicide(). */
     public void testGetSuicide()
     {
         Board board = new Board(19);
@@ -116,7 +116,7 @@ public final class BoardTest
         assertTrue(suicide.contains(GoPoint.get(1, 0)));
     }
 
-    /** Test Board.isKo() */
+    /** Test Board.isKo(). */
     public void testIsKo()
     {
         Board board = new Board(19);

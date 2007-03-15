@@ -106,7 +106,7 @@ public final class Clock
         return getTimeString((double)time, movesLeft);
     }
 
-    /** If not in byoyomi movesLeft &lt; 0 */
+    /** If not in byoyomi movesLeft &lt; 0. */
     public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuffer buffer = new StringBuffer(8);
