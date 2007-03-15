@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import net.sf.gogui.go.GoPoint;
-
 public final class BoardConstantsTest
     extends junit.framework.TestCase
 {

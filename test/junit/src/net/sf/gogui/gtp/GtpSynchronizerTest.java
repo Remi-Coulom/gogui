@@ -10,7 +10,6 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
-import net.sf.gogui.gtp.GtpExpectEngine;
 
 public final class GtpSynchronizerTest
     extends junit.framework.TestCase
