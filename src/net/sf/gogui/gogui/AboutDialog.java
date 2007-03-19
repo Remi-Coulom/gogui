@@ -148,10 +148,11 @@ public final class AboutDialog
                            "Version " + Version.get() + "</p>" +
                            "<p align=\"center\">" +
                            "Graphical user interface to Go programs<br>" +
-                           "&copy; 2001-2007 Markus Enzenberger" +
-                           "<br>" +
-                           "<tt><a href=\"" + projectUrl + "\">"
-                           + projectUrl + "</a></tt>" +
+                           "<a href=\"" + projectUrl + "\">" + projectUrl +
+                           "</a><br>" +
+                           "&copy; 2001-2007 Markus Enzenberger<br>" +
+                           "You may use, distribute and copy GoGui under the terms<br>" +
+                           "of the GNU General Public License version 2 or later.<br>" +
                            "</p>" +
                            "<p align=\"center\">" +
                            "<a href=\"" + supportUrl + "\">"
