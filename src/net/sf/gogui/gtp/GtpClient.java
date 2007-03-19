@@ -114,6 +114,10 @@ public final class GtpClient
                      IOCallback callback)
         throws GtpClient.ExecFailed
     {
+        if (workingDirectory != null && ! workingDirectory.isDirectory())
+            throw new ExecFailed(program,
+                                 "Invalid working directory \""
+                                 + workingDirectory + "\"");
         m_log = log;
         m_callback = callback;
         m_wasKilled = false;
