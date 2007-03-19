@@ -3081,14 +3081,13 @@ public class GoGui
     }
 
     private void initGame(int size)
-    {
-        // Not sure if it makes sense to keep analyze command if board is
-        // cleared (we must clear it at least when board size changes,
-        // because eplist could contain points out of board)
-        clearAnalyzeCommand();
+    {        
         int oldSize = getBoardSize();
         if (size != oldSize)
         {
+            // Clear analyze command when board size changes, because eplist
+            // could contain points out of board)
+            clearAnalyzeCommand();
             saveSession();
             m_guiBoard.initSize(size);
             restoreMainWindow(size);
