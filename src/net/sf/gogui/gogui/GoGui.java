@@ -2293,7 +2293,8 @@ public class GoGui
         {
             showStatusImmediately("Attaching program...");
             File workingDirectory = null;
-            if (program != null && program.m_workingDirectory != null)
+            if (program != null
+                && ! StringUtil.isEmpty(program.m_workingDirectory))
                 workingDirectory = new File(program.m_workingDirectory);
             GtpClient gtp =
                 new GtpClient(m_programCommand, workingDirectory,
