@@ -110,11 +110,6 @@ synchronize position from start instead
 </listitem>
 <listitem>
 <simpara>
-Automatically clear board before drawing live graphics commands
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 Use same handicap locations as in GTP specification
 </simpara>
 </listitem>

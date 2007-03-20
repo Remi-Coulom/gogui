@@ -81,7 +81,6 @@ public class LiveGfx
         Runnable runnable = new Runnable() {
                 public void run()
                 {
-                    m_guiBoard.clearAll();
                     GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board,
                                                    false);
                     AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
