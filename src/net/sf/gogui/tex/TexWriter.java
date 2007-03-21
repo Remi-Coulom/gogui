@@ -237,10 +237,10 @@ public class TexWriter
                                boolean[][] markCircle, boolean[][] markSquare,
                                boolean[][] markSelect)
     {
-        int numberPoints = board.getNumberPoints();
+        int numberPoints = board.getPoints().size();
         for (int i = 0; i < numberPoints; ++i)
         {
-            GoPoint point = board.getPoint(i);
+            GoPoint point = board.getPoints().get(i);
             GoColor color = board.getColor(point);
             int x = point.getX();
             int y = point.getY();

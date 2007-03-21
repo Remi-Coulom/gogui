@@ -25,8 +25,8 @@ public class CountScore
         int size = board.getSize();
         m_dead = new Marker(size);
         m_score = new GoColor[size][size];
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            m_dead.clear(m_board.getPoint(i));
+        for (int i = 0; i < m_board.getPoints().size(); ++i)
+            m_dead.clear(m_board.getPoints().get(i));
         if (deadStones != null)
             for (int i = 0; i < deadStones.size(); ++i)
                 m_dead.set(deadStones.get(i));
@@ -64,9 +64,9 @@ public class CountScore
     {
         Marker mark = new Marker(m_board.getSize());
         boolean allEmpty = true;
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        for (int i = 0; i < m_board.getPoints().size(); ++i)
         {
-            GoPoint p = m_board.getPoint(i);
+            GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             setScore(p, GoColor.EMPTY);
             if (c != GoColor.EMPTY)
@@ -78,10 +78,10 @@ public class CountScore
         }
         if (allEmpty)
             return;
-        PointList territory = new PointList(m_board.getNumberPoints());
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        PointList territory = new PointList(m_board.getPoints().size());
+        for (int i = 0; i < m_board.getPoints().size(); ++i)
         {
-            GoPoint p = m_board.getPoint(i);
+            GoPoint p = m_board.getPoints().get(i);
             if (! mark.get(p))
             {
                 territory.clear();
@@ -131,9 +131,9 @@ public class CountScore
         s.m_capturedWhite = m_board.getCaptured(GoColor.WHITE);
         int areaDiff = 0;
         int territoryDiff = 0;
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        for (int i = 0; i < m_board.getPoints().size(); ++i)
         {
-            GoPoint p = m_board.getPoint(i);
+            GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             GoColor sc = getColor(p);
             if (sc == GoColor.BLACK)

@@ -74,14 +74,9 @@ public final class BoardConstants
         return result;
     }
 
-    public int getNumberPoints()
+    public ConstPointList getPoints()
     {
-        return m_allPoints.length;
-    }
-
-    public GoPoint getPoint(int i)
-    {
-        return m_allPoints[i];
+        return m_allPoints;
     }
 
     public int getSize()
@@ -122,7 +117,7 @@ public final class BoardConstants
 
     private final int m_handicapLine3;
 
-    private GoPoint m_allPoints[];
+    private PointList m_allPoints;
 
     private BoardConstants(int size)
     {
@@ -151,14 +146,10 @@ public final class BoardConstants
 
     private void initAllPoints()
     {
-        m_allPoints = new GoPoint[m_size * m_size];
-        int i = 0;
+        m_allPoints = new PointList();
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-            {
-                GoPoint point = GoPoint.get(x, y);
-                m_allPoints[i++] = point;
-            }
+                m_allPoints.add(GoPoint.get(x, y));
     }
 }
 

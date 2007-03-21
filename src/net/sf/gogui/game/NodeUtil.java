@@ -512,9 +512,9 @@ public final class NodeUtil
         GameTree tree = new GameTree(board.getSize(), info.getKomi(), null,
                                      info.getRules(), info.getTimeSettings());
         Node root = tree.getRoot();
-        for (int i = 0; i < board.getNumberPoints(); ++i)
+        for (int i = 0; i < board.getPoints().size(); ++i)
         {
-            GoPoint p = board.getPoint(i);
+            GoPoint p = board.getPoints().get(i);
             GoColor c = board.getColor(p);
             if (c.isBlackWhite())
                 root.addStone(c, p);

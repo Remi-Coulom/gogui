@@ -124,15 +124,6 @@ public final class Board
         return m_stack.size();
     }
 
-    /** Get the number of points on the board.
-        @return The number of points on the board (size * size).
-        @see #getPoint
-    */
-    public int getNumberPoints()
-    {
-        return m_constants.getNumberPoints();
-    }
-
     /** Get a move from the sequence of moves played so far.
         @param i The number of the move (starting with zero).
         @return The move with the given number.
@@ -143,15 +134,13 @@ public final class Board
         return ((StackEntry)m_stack.get(i)).m_move;
     }
 
-    /** Get a point on the board.
-        Can be used for iterating over all points.
-        @param i The index of the point between 0 and size * size - 1.
-        @return The point with the given index.
-        @see #getNumberPoints()
+    /** Get a all points on the board.
+        @return List of all points.
+        @see BoardCOnstants#getPoints()
     */
-    public GoPoint getPoint(int i)
+    public ConstPointList getPoints()
     {
-        return m_constants.getPoint(i);
+        return m_constants.getPoints();
     }
 
     /** Get initial setup stones of a color.
@@ -305,8 +294,8 @@ public final class Board
     */
     public void clear()
     {
-        for (int i = 0; i < getNumberPoints(); ++i)
-            setColor(getPoint(i), GoColor.EMPTY);
+        for (int i = 0; i < getPoints().size(); ++i)
+            setColor(getPoints().get(i), GoColor.EMPTY);
         m_stack.clear();        
         for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
         {

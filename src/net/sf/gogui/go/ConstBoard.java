@@ -27,9 +27,7 @@ public interface ConstBoard
 
     int getNumberMoves();
 
-    int getNumberPoints();
-
-    GoPoint getPoint(int i);
+    ConstPointList getPoints();
 
     ConstPointList getSetup(GoColor c);
 
