@@ -232,6 +232,8 @@ public final class AnalyzeDialog
 
     private final String m_programAnalyzeCommands;
 
+    private String m_lastUpdateOptionsCommand;
+
     private void clearCommand()
     {
         m_listener.actionClearAnalyzeCommand();
@@ -247,6 +249,7 @@ public final class AnalyzeDialog
             return;
         }
         String label = item.toString();
+        updateOptions(label);
         String selectedValue = (String)m_list.getSelectedValue();
         if (selectedValue != null && ! selectedValue.equals(label))
             m_list.clearSelection();
@@ -541,15 +544,8 @@ public final class AnalyzeDialog
 
     private void selectCommand(int index)
     {
-        AnalyzeCommand command =
-            new AnalyzeCommand((String)m_commands.get(index));
-        boolean needsColorArg = command.needsColorArg();
-        m_black.setEnabled(needsColorArg);
-        m_white.setEnabled(needsColorArg);
-        m_autoRun.setEnabled(command.getType() != AnalyzeCommand.PARAM);
-        m_clearBoard.setEnabled(command.getType() != AnalyzeCommand.PARAM);
-        m_runButton.setEnabled(true);
         String label = (String)m_labels.get(index);
+        updateOptions(label);
         m_comboBoxHistory.removeActionListener(this);
         if (m_firstIsTemp && getComboBoxItemCount() > 0)
             m_comboBoxHistory.removeItemAt(0);
@@ -580,6 +576,25 @@ public final class AnalyzeDialog
     {
         m_messageDialogs.showError(this, mainMessage, optionalMessage,
                                    isCritical);
+    }
+
+    private void updateOptions(String label)
+    {
+        if (label.equals(m_lastUpdateOptionsCommand))
+            return;
+        m_lastUpdateOptionsCommand = label;
+        int index = m_labels.indexOf(label);
+        if (index < 0)
+            return;
+        AnalyzeCommand command =
+            new AnalyzeCommand((String)m_commands.get(index));
+        boolean needsColorArg = command.needsColorArg();
+        m_black.setEnabled(needsColorArg);
+        m_white.setEnabled(needsColorArg);
+        m_autoRun.setEnabled(command.getType() != AnalyzeCommand.PARAM);
+        m_autoRun.setSelected(false);
+        m_clearBoard.setEnabled(command.getType() != AnalyzeCommand.PARAM);
+        m_runButton.setEnabled(true);
     }
 
     private void updateRecent(int index)
