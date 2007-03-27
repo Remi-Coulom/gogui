@@ -239,7 +239,7 @@ public class GoGui
         boolean showGrid = m_prefs.getBoolean("show-grid", true);
         m_guiBoard.setShowCursor(showCursor);
         m_guiBoard.setShowGrid(showGrid);
-        setJMenuBar(m_menuBar.getMenuBar());
+        setJMenuBar(m_menuBar);
         setMinimumSize();
         m_programCommand = program;
         if (m_programCommand != null && m_programCommand.trim().equals(""))

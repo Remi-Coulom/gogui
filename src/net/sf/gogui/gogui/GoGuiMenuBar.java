@@ -27,6 +27,7 @@ import net.sf.gogui.util.Platform;
 
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
+    extends JMenuBar
 {
     public interface Listener
     {
@@ -41,17 +42,16 @@ public class GoGuiMenuBar
                         GoGuiMenuBar.Listener bookmarkListener)
     {
         m_listener = bookmarkListener;
-        m_menuBar = new JMenuBar();
-        m_menuBar.add(createMenuFile(actions, recentListener));
-        m_menuBar.add(createMenuGame(actions));
-        m_menuBar.add(createMenuProgram(actions));
-        m_menuBar.add(createMenuGo(actions));
-        m_menuBar.add(createMenuEdit(actions));
-        m_menuBar.add(createMenuView(actions));
+        add(createMenuFile(actions, recentListener));
+        add(createMenuGame(actions));
+        add(createMenuProgram(actions));
+        add(createMenuGo(actions));
+        add(createMenuEdit(actions));
+        add(createMenuView(actions));
         m_menuBookmarks = createMenuBookMarks(actions);
-        m_menuBar.add(m_menuBookmarks);
-        m_menuBar.add(createMenuTools(actions, recentGtpListener));
-        m_menuBar.add(createMenuHelp(actions));
+        add(m_menuBookmarks);
+        add(createMenuTools(actions, recentGtpListener));
+        add(createMenuHelp(actions));
         setHeaderStyleSingle(true);
     }
 
@@ -81,11 +81,6 @@ public class GoGuiMenuBar
         {
         }
         m_recentGtp.add(file);
-    }
-
-    public JMenuBar getMenuBar()
-    {
-        return m_menuBar;
     }
 
     public void setBookmarks(ArrayList bookmarks)
@@ -175,8 +170,8 @@ public class GoGuiMenuBar
     public final void setHeaderStyleSingle(boolean isSingle)
     {
         // For com.jgoodies.looks
-        getMenuBar().putClientProperty("jgoodies.headerStyle",
-                                       isSingle ? "Single" : "Both");
+        putClientProperty("jgoodies.headerStyle",
+                          isSingle ? "Single" : "Both");
     }
 
     public void update(boolean isProgramAttached, boolean isTreeShown,
@@ -201,8 +196,6 @@ public class GoGuiMenuBar
     private JMenuChecked m_menuViewTree;
 
     private JMenuChecked m_menuViewShell;
-
-    private final JMenuBar m_menuBar;
 
     private JSeparator m_bookmarksSeparator;
 
