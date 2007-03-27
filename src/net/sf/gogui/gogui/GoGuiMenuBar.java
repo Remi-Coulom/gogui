@@ -189,13 +189,13 @@ public class GoGuiMenuBar
 
     private final Listener m_listener;
 
-    private final JMenuChecked m_menuBookmarks;
+    private final MenuChecked m_menuBookmarks;
 
-    private JMenuChecked m_menuAttach;
+    private MenuChecked m_menuAttach;
 
-    private JMenuChecked m_menuViewTree;
+    private MenuChecked m_menuViewTree;
 
-    private JMenuChecked m_menuViewShell;
+    private MenuChecked m_menuViewShell;
 
     private JSeparator m_bookmarksSeparator;
 
@@ -209,9 +209,9 @@ public class GoGuiMenuBar
 
     private JMenu m_computerColor;
 
-    private JMenuChecked createBoardSizeMenu(GoGuiActions actions)
+    private MenuChecked createBoardSizeMenu(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Board Size", KeyEvent.VK_S);
+        MenuChecked menu = createMenu("Board Size", KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         menu.addRadioItem(group, actions.m_actionBoardSize9);
         menu.addRadioItem(group, actions.m_actionBoardSize11);
@@ -223,9 +223,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createClockMenu(GoGuiActions actions)
+    private MenuChecked createClockMenu(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Clock", KeyEvent.VK_K);
+        MenuChecked menu = createMenu("Clock", KeyEvent.VK_K);
         menu.addItem(actions.m_actionClockStart, KeyEvent.VK_S);
         menu.addItem(actions.m_actionClockHalt, KeyEvent.VK_H);
         menu.addItem(actions.m_actionClockResume, KeyEvent.VK_R);
@@ -233,10 +233,10 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createComputerColorMenu(GoGuiActions actions)
+    private MenuChecked createComputerColorMenu(GoGuiActions actions)
     {
         ButtonGroup group = new ButtonGroup();
-        JMenuChecked menu = createMenu("Computer Color", KeyEvent.VK_C);
+        MenuChecked menu = createMenu("Computer Color", KeyEvent.VK_C);
         menu.addRadioItem(group, actions.m_actionComputerBlack, KeyEvent.VK_B);
         menu.addRadioItem(group, actions.m_actionComputerWhite, KeyEvent.VK_W);
         menu.addRadioItem(group, actions.m_actionComputerBoth, KeyEvent.VK_T);
@@ -244,9 +244,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createHandicapMenu(GoGuiActions actions)
+    private MenuChecked createHandicapMenu(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Handicap", KeyEvent.VK_H);
+        MenuChecked menu = createMenu("Handicap", KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
         menu.addRadioItem(group, actions.m_actionHandicapNone);
         menu.addRadioItem(group, actions.m_actionHandicap2);
@@ -260,24 +260,24 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenu(String name, int mnemonic)
+    private MenuChecked createMenu(String name, int mnemonic)
     {
-        JMenuChecked menu = new JMenuChecked(name);
+        MenuChecked menu = new MenuChecked(name);
         menu.setMnemonic(mnemonic);
         return menu;
     }
 
-    private JMenuChecked createMenuBookMarks(GoGuiActions actions)
+    private MenuChecked createMenuBookMarks(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Bookmarks", KeyEvent.VK_B);
+        MenuChecked menu = createMenu("Bookmarks", KeyEvent.VK_B);
         menu.addItem(actions.m_actionAddBookmark, KeyEvent.VK_A);
         menu.addItem(actions.m_actionEditBookmarks, KeyEvent.VK_E);
         return menu;
     }
 
-    private JMenuChecked createMenuConfigureShell(GoGuiActions actions)
+    private MenuChecked createMenuConfigureShell(GoGuiActions actions)
     {
-        m_menuViewShell = new JMenuChecked("Shell");
+        m_menuViewShell = new MenuChecked("Shell");
         m_menuViewShell.setMnemonic(KeyEvent.VK_H);
         GoGuiCheckBoxMenuItem itemCompletion =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleCompletion);
@@ -291,11 +291,11 @@ public class GoGuiMenuBar
         return m_menuViewShell;
     }
 
-    private JMenuChecked createMenuConfigureTree(GoGuiActions actions)
+    private MenuChecked createMenuConfigureTree(GoGuiActions actions)
     {
-        m_menuViewTree = new JMenuChecked("Tree");
+        m_menuViewTree = new MenuChecked("Tree");
         m_menuViewTree.setMnemonic(KeyEvent.VK_E);
-        JMenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
+        MenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
         menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNumber,
                                KeyEvent.VK_N);
@@ -304,7 +304,7 @@ public class GoGuiMenuBar
         menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNone,
                                KeyEvent.VK_O);
         m_menuViewTree.add(menuLabel);
-        JMenuChecked menuSize = createMenu("Size", KeyEvent.VK_S);
+        MenuChecked menuSize = createMenu("Size", KeyEvent.VK_S);
         group = new ButtonGroup();
         menuSize.addRadioItem(group, actions.m_actionTreeSizeLarge,
                               KeyEvent.VK_L);
@@ -321,9 +321,9 @@ public class GoGuiMenuBar
         return m_menuViewTree;
     }
 
-    private JMenuChecked createMenuEdit(GoGuiActions actions)
+    private MenuChecked createMenuEdit(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Edit", KeyEvent.VK_E);
+        MenuChecked menu = createMenu("Edit", KeyEvent.VK_E);
         menu.addItem(actions.m_actionFind, KeyEvent.VK_F);
         menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
         menu.addSeparator();
@@ -342,9 +342,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuExport(GoGuiActions actions)
+    private MenuChecked createMenuExport(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Export");
+        MenuChecked menu = new MenuChecked("Export");
         menu.setMnemonic(KeyEvent.VK_E);
         menu.addItem(actions.m_actionExportSgfPosition, KeyEvent.VK_S);
         menu.addItem(actions.m_actionExportLatexMainVariation, KeyEvent.VK_L);
@@ -355,10 +355,10 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuFile(GoGuiActions actions,
+    private MenuChecked createMenuFile(GoGuiActions actions,
                                         RecentFileMenu.Listener listener)
     {
-        JMenuChecked menu = createMenu("File", KeyEvent.VK_F);
+        MenuChecked menu = createMenu("File", KeyEvent.VK_F);
         menu.addItem(actions.m_actionOpen, KeyEvent.VK_O);
         menu.add(createRecentMenu(listener));
         menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
@@ -376,9 +376,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuGame(GoGuiActions actions)
+    private MenuChecked createMenuGame(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
+        MenuChecked menu = createMenu("Game", KeyEvent.VK_A);
         menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
         menu.addSeparator();
         menu.add(createBoardSizeMenu(actions));
@@ -394,9 +394,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuGo(GoGuiActions actions)
+    private MenuChecked createMenuGo(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Go", KeyEvent.VK_G);
+        MenuChecked menu = createMenu("Go", KeyEvent.VK_G);
         menu.addItem(actions.m_actionBeginning, KeyEvent.VK_B);
         menu.addItem(actions.m_actionBackwardTen, KeyEvent.VK_W);
         menu.addItem(actions.m_actionBackward, KeyEvent.VK_K);
@@ -414,17 +414,17 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuHelp(GoGuiActions actions)
+    private MenuChecked createMenuHelp(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Help", KeyEvent.VK_H);
+        MenuChecked menu = createMenu("Help", KeyEvent.VK_H);
         menu.addItem(actions.m_actionDocumentation, KeyEvent.VK_G);
         menu.addItem(actions.m_actionAbout, KeyEvent.VK_A);
         return menu;
     }
 
-    private JMenuChecked createMenuImport(GoGuiActions actions)
+    private MenuChecked createMenuImport(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Import");
+        MenuChecked menu = new MenuChecked("Import");
         menu.setMnemonic(KeyEvent.VK_I);
         menu.addItem(actions.m_actionImportTextPosition, KeyEvent.VK_T);
         menu.addItem(actions.m_actionImportTextPositionFromClipboard,
@@ -432,9 +432,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuProgram(GoGuiActions actions)
+    private MenuChecked createMenuProgram(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("Program", KeyEvent.VK_P);
+        MenuChecked menu = createMenu("Program", KeyEvent.VK_P);
         m_menuAttach = createMenu("Attach", KeyEvent.VK_A);
         m_menuAttach.setEnabled(false);
         menu.add(m_menuAttach);
@@ -450,10 +450,10 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuTools(GoGuiActions actions,
+    private MenuChecked createMenuTools(GoGuiActions actions,
                                          RecentFileMenu.Listener listener)
     {
-        JMenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
+        MenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
         menu.addItem(actions.m_actionShowTree, KeyEvent.VK_R);
         menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
         menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
@@ -469,9 +469,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuView(GoGuiActions actions)
+    private MenuChecked createMenuView(GoGuiActions actions)
     {
-        JMenuChecked menu = createMenu("View", KeyEvent.VK_V);
+        MenuChecked menu = createMenu("View", KeyEvent.VK_V);
         GoGuiCheckBoxMenuItem itemToggleShowToolbar =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowToolbar);
         menu.addItem(itemToggleShowToolbar, KeyEvent.VK_T);
@@ -515,10 +515,10 @@ public class GoGuiMenuBar
 }
 
 /** Menu with assertions for unique mnemonics. */
-class JMenuChecked
+class MenuChecked
     extends JMenu
 {
-    public JMenuChecked(String text)
+    public MenuChecked(String text)
     {
         super(text);
     }
