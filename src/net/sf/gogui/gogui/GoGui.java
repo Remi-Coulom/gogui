@@ -837,6 +837,8 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
+        if (! checkSaveGame())
+            return;
         File file = FileDialogs.showOpen(this, "Import Text Position");
         if (file == null)
             return;
@@ -853,6 +855,8 @@ public class GoGui
     public void actionImportTextPositionFromClipboard()
     {
         if (! checkStateChangePossible())
+            return;
+        if (! checkSaveGame())
             return;
         String text = GuiUtil.getClipboardText();
         if (text == null)
