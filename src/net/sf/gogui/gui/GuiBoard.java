@@ -57,7 +57,7 @@ public final class GuiBoard
             This callback is triggered with mouse clicks that trigger
             popup menus (platform-dependent).
             @param point The point clicked.
-            @param invoker The awt.Component that was clocked on.
+            @param invoker The awt.Component that was clicked on.
             @param x The x coordinate on the invoker component.
             @param y The y coordinate on the invoker component.
         */
