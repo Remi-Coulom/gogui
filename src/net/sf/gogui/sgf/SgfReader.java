@@ -505,7 +505,7 @@ public final class SgfReader
             }
             catch (NumberFormatException e)
             {
-                // should not happen if patterns match only integerr
+                // should not happen if patterns match only integer
                 assert(false);
                 return false;
             }
