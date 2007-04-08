@@ -894,11 +894,14 @@ public final class SgfReader
                 }
                 else
                 {
-                    if (m_boardSize != -1)
-                        throw getError("Size property after point properties");
                     try
                     {
-                        m_boardSize = parseInt(v);
+                        int boardSize = parseInt(v);
+                        if (m_boardSize != -1 && m_boardSize != boardSize)
+                            // Need to know the board size before parsing
+                            // points to do the y-conversion
+                            throw getError("Size property after point properties");
+                        m_boardSize = boardSize;
                     }
                     catch (NumberFormatException e)
                     {
