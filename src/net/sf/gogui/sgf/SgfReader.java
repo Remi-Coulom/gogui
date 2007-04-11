@@ -15,6 +15,8 @@ import java.io.StreamTokenizer;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -223,15 +225,16 @@ public final class SgfReader
 
     private final PointList m_pointList = new PointList();
 
-    private final ArrayList m_values = new ArrayList();
+    /** Map containing the properties of the current node. */
+    private final Map m_props = new TreeMap();
 
-    private void addSgfProperty(Node node, String property)
+    private void addSgfProperty(Node node, String property, ArrayList values)
     {
         m_buffer.setLength(0);
-        for (int i = 0; i < m_values.size(); ++i)
+        for (int i = 0; i < values.size(); ++i)
         {
             m_buffer.append('[');
-            m_buffer.append(getValue(i));
+            m_buffer.append((String)values.get(i));
             m_buffer.append(']');
         }
         node.addSgfProperty(property, m_buffer.toString());
@@ -393,9 +396,225 @@ public final class SgfReader
         return m_pointList.get(i);
     }
 
-    private String getValue(int i)
+    private void handleProps(Node node, boolean isRoot)
+        throws IOException, SgfError, SgfCharsetChanged
     {
-        return (String)m_values.get(i);
+        // Handle SZ property first to be able to parse points
+        if (m_props.containsKey("SZ"))
+        {
+            ArrayList values = (ArrayList)m_props.get("SZ");
+            m_props.remove("SZ");
+            if (! isRoot)
+                setWarning("Size property not in root node ignored");
+            else
+            {
+                try
+                {
+                    int size = parseInt((String)values.get(0));
+                    if (size <= 0 || size > GoPoint.MAXSIZE)
+                        setWarning("Invalid board size value");
+                    assert(m_boardSize == -1);
+                    m_boardSize = size;
+                }
+                catch (NumberFormatException e)
+                {
+                    setWarning("Invalid board size value");
+                }
+            }
+        }
+        Iterator it = m_props.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry entry = (Map.Entry)it.next();
+            String p = (String)entry.getKey();
+            ArrayList values = (ArrayList)entry.getValue();
+            String v = (String)values.get(0);
+            if (p == "AB")
+            {
+                parsePointList(values);
+                node.addStones(GoColor.BLACK, m_pointList);
+            }
+            else if (p == "AE")
+            {
+                parsePointList(values);
+                node.addStones(GoColor.EMPTY, m_pointList);
+            }
+            else if (p == "AW")
+            {
+                parsePointList(values);
+                node.addStones(GoColor.WHITE, m_pointList);
+            }
+            else if (p == "B")
+            {
+                node.setMove(Move.get(GoColor.BLACK, parsePoint(v)));
+            }
+            else if (p == "BL")
+            {
+                try
+                {
+                    node.setTimeLeft(GoColor.BLACK, Double.parseDouble(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+            else if (p == "BR")
+                createGameInformation(node).setRank(GoColor.BLACK, v);
+            else if (p == "C")
+            {
+                String comment;
+                if (node.getComment() == null)
+                    comment = v.trim();
+                else
+                    comment = node.getComment() + "\n" + v.trim();
+                node.setComment(comment);
+            }
+            else if (p == "CA")
+            {
+                if (isRoot && m_isFile && m_newCharset == null)
+                {
+                    m_newCharset = v.trim();
+                    if (Charset.isSupported(m_newCharset))
+                        throw new SgfCharsetChanged();
+                    else
+                        setWarning("Unknown character set \"" + m_newCharset
+                                   + "\"");
+                }
+            }
+            else if (p == "CR")
+                parseMarked(node, MarkType.CIRCLE, values);
+            else if (p == "DT")
+                createGameInformation(node).setDate(v);
+            else if (p == "FF")
+            {
+                int format = -1;
+                try
+                {
+                    format = Integer.parseInt(v);
+                }
+                catch (NumberFormatException e)
+                {
+                }
+                if (format < 1 || format > 4)
+                    setWarning("Unknown SGF file format version");
+            }
+            else if (p == "GM")
+            {
+                // Some SGF files contain GM[], interpret as GM[1]
+                v = v.trim();
+                if (! v.equals("") && ! v.equals("1"))
+                    throw getError("Not a Go game");
+            }
+            else if (p == "HA")
+            {
+                // Some SGF files contain HA[], interpret as no handicap
+                v = v.trim();
+                if (! v.equals(""))
+                {
+                    try
+                    {
+                        int handicap = Integer.parseInt(v);
+                        createGameInformation(node).setHandicap(handicap);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        setWarning("Invalid handicap value");
+                    }
+                }
+            }
+            else if (p == "KM")
+                parseKomi(node, v);
+            else if (p == "LB")
+            {
+                for (int i = 0; i < values.size(); ++i)
+                {
+                    String value = (String)values.get(i);
+                    int pos = value.indexOf(':');
+                    if (pos > 0)
+                    {
+                        GoPoint point = parsePoint(value.substring(0, pos));
+                        String text = value.substring(pos + 1);
+                        node.setLabel(point, text);
+                    }
+                }
+            }
+            else if (p == "MA" || p == "M")
+                parseMarked(node, MarkType.MARK, values);
+            else if (p == "OB")
+            {
+                try
+                {
+                    node.setMovesLeft(GoColor.BLACK, Integer.parseInt(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+            else if (p == "OM")
+                parseOverTimeMoves(v);
+            else if (p == "OP")
+                parseOverTimePeriod(v);
+            else if (p == "OT")
+                parseOverTime(node, v);
+            else if (p == "OW")
+            {
+                try
+                {
+                    node.setMovesLeft(GoColor.WHITE, Integer.parseInt(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+            else if (p == "PB")
+                createGameInformation(node).setPlayer(GoColor.BLACK, v);
+            else if (p == "PW")
+                createGameInformation(node).setPlayer(GoColor.WHITE, v);
+            else if (p == "PL")
+                node.setPlayer(parseColor(v));
+            else if (p == "RE")
+                createGameInformation(node).setResult(v);
+            else if (p == "RU")
+                createGameInformation(node).setRules(v);
+            else if (p == "SQ")
+                parseMarked(node, MarkType.SQUARE, values);
+            else if (p == "SL")
+                parseMarked(node, MarkType.SELECT, values);
+            else if (p == "TB")
+                parseMarked(node, MarkType.TERRITORY_BLACK, values);
+            else if (p == "TM")
+                parseTime(v);
+            else if (p == "TR")
+                parseMarked(node, MarkType.TRIANGLE, values);
+            else if (p == "W")
+                node.setMove(Move.get(GoColor.WHITE, parsePoint(v)));
+            else if (p == "TW")
+                parseMarked(node, MarkType.TERRITORY_WHITE, values);
+            else if (p == "V")
+            {
+                try
+                {
+                    node.setValue(Float.parseFloat(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+            else if (p == "WL")
+            {
+                try
+                {
+                    node.setTimeLeft(GoColor.WHITE, Double.parseDouble(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+            else if (p == "WR")
+                createGameInformation(node).setRank(GoColor.WHITE, v);
+            else if (p != "FF" && p != "GN" && p != "AP")
+                addSgfProperty(node, p, values);
+        }
     }
 
     private GoColor parseColor(String s) throws SgfError
@@ -437,9 +656,10 @@ public final class SgfReader
         }
     }
 
-    private void parseMarked(Node node, MarkType type) throws SgfError
+    private void parseMarked(Node node, MarkType type, ArrayList values)
+        throws SgfError
     {
-        parsePointList();
+        parsePointList(values);
         for (int i = 0; i < m_pointList.size(); ++i)
             node.addMarked(getPointList(i), type);
     }
@@ -472,7 +692,9 @@ public final class SgfReader
                           true, 1000L))
             return;
         setWarning("overtime settings in unknown format");
-        addSgfProperty(node, "OT");
+        ArrayList values = new ArrayList();
+        values.add(value);
+        addSgfProperty(node, "OT", values);
     }
 
     private boolean parseOverTime(String value, String regex,
@@ -554,14 +776,13 @@ public final class SgfReader
         s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals(""))
             return null;
-        int boardSize = getBoardSize();
         if (s.length() > 2
             || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
         {
             // Try human-readable encoding as used by SmartGo
             try
             {
-                return GoPoint.parsePoint(s, boardSize);
+                return GoPoint.parsePoint(s, GoPoint.MAXSIZE);
             }
             catch (GoPoint.InvalidPoint e)
             {
@@ -570,6 +791,7 @@ public final class SgfReader
         }
         else if (s.length() != 2)
             throwInvalidCoordinates(s);
+        int boardSize = getBoardSize();
         if (s.equals("tt") && boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
@@ -582,17 +804,18 @@ public final class SgfReader
                 setWarning("Non-standard pass move encoding");
                 return null;
             }
-            throwInvalidCoordinates(s);
+            throw getError("Coordinates \"" + s + "\" outside board size "
+                           + boardSize);
         }
         return GoPoint.get(x, y);
     }
 
-    private void parsePointList() throws SgfError
+    private void parsePointList(ArrayList values) throws SgfError
     {
         m_pointList.clear();
-        for (int i = 0; i < m_values.size(); ++i)
+        for (int i = 0; i < values.size(); ++i)
         {
-            String value = getValue(i);
+            String value = (String)values.get(i);
             int pos = value.indexOf(':');
             if (pos < 0)
             {
@@ -713,13 +936,15 @@ public final class SgfReader
         m_byoyomiMoves = -1;
         m_byoyomi = -1;
         m_preByoyomi = -1;
-        while (readProp(son, isRoot));
+        m_props.clear();
+        while (readProp(son));
+        handleProps(son, isRoot);
         setTimeSettings(son);
         return son;
     }
 
-    private boolean readProp(Node node, boolean isRoot)
-        throws IOException, SgfError, SgfCharsetChanged
+    private boolean readProp(Node node)
+        throws IOException, SgfError
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
@@ -727,222 +952,14 @@ public final class SgfReader
         {
             // Use intern() to allow fast comparsion with ==
             String p = m_tokenizer.sval.toUpperCase(Locale.ENGLISH).intern();
-            m_values.clear();
+            ArrayList values = new ArrayList();
             String s;
             while ((s = readValue()) != null)
-                m_values.add(s);
-            if (m_values.isEmpty())
+                values.add(s);
+            if (values.isEmpty())
                 throw getError("Property \"" + p + "\" has no value");
-            String v = getValue(0);
             p = checkForObsoleteLongProps(p);
-            if (p == "AB")
-            {
-                parsePointList();
-                node.addStones(GoColor.BLACK, m_pointList);
-            }
-            else if (p == "AE")
-            {
-                parsePointList();
-                node.addStones(GoColor.EMPTY, m_pointList);
-            }
-            else if (p == "AW")
-            {
-                parsePointList();
-                node.addStones(GoColor.WHITE, m_pointList);
-            }
-            else if (p == "B")
-            {
-                node.setMove(Move.get(GoColor.BLACK, parsePoint(v)));
-            }
-            else if (p == "BL")
-            {
-                try
-                {
-                    node.setTimeLeft(GoColor.BLACK, Double.parseDouble(v));
-                }
-                catch (NumberFormatException e)
-                {
-                }
-            }
-            else if (p == "BR")
-                createGameInformation(node).setRank(GoColor.BLACK, v);
-            else if (p == "C")
-            {
-                String comment;
-                if (node.getComment() == null)
-                    comment = v.trim();
-                else
-                    comment = node.getComment() + "\n" + v.trim();
-                node.setComment(comment);
-            }
-            else if (p == "CA")
-            {
-                if (isRoot && m_isFile && m_newCharset == null)
-                {
-                    m_newCharset = v.trim();
-                    if (Charset.isSupported(m_newCharset))
-                        throw new SgfCharsetChanged();
-                    else
-                        setWarning("Unknown character set \"" + m_newCharset
-                                   + "\"");
-                }
-            }
-            else if (p == "CR")
-                parseMarked(node, MarkType.CIRCLE);
-            else if (p == "DT")
-                createGameInformation(node).setDate(v);
-            else if (p == "FF")
-            {
-                int format = -1;
-                try
-                {
-                    format = Integer.parseInt(v);
-                }
-                catch (NumberFormatException e)
-                {
-                }
-                if (format < 1 || format > 4)
-                    setWarning("Unknown SGF file format version");
-            }
-            else if (p == "GM")
-            {
-                // Some SGF files contain GM[], interpret as GM[1]
-                v = v.trim();
-                if (! v.equals("") && ! v.equals("1"))
-                    throw getError("Not a Go game");
-            }
-            else if (p == "HA")
-            {
-                // Some SGF files contain HA[], interpret as no handicap
-                v = v.trim();
-                if (! v.equals(""))
-                {
-                    try
-                    {
-                        int handicap = Integer.parseInt(v);
-                        createGameInformation(node).setHandicap(handicap);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        setWarning("Invalid handicap value");
-                    }
-                }
-            }
-            else if (p == "KM")
-                parseKomi(node, v);
-            else if (p == "LB")
-            {
-                for (int i = 0; i < m_values.size(); ++i)
-                {
-                    String value = getValue(i);
-                    int pos = value.indexOf(':');
-                    if (pos > 0)
-                    {
-                        GoPoint point = parsePoint(value.substring(0, pos));
-                        String text = value.substring(pos + 1);
-                        node.setLabel(point, text);
-                    }
-                }
-            }
-            else if (p == "MA" || p == "M")
-                parseMarked(node, MarkType.MARK);
-            else if (p == "OB")
-            {
-                try
-                {
-                    node.setMovesLeft(GoColor.BLACK, Integer.parseInt(v));
-                }
-                catch (NumberFormatException e)
-                {
-                }
-            }
-            else if (p == "OM")
-                parseOverTimeMoves(v);
-            else if (p == "OP")
-                parseOverTimePeriod(v);
-            else if (p == "OT")
-                parseOverTime(node, v);
-            else if (p == "OW")
-            {
-                try
-                {
-                    node.setMovesLeft(GoColor.WHITE, Integer.parseInt(v));
-                }
-                catch (NumberFormatException e)
-                {
-                }
-            }
-            else if (p == "PB")
-                createGameInformation(node).setPlayer(GoColor.BLACK, v);
-            else if (p == "PW")
-                createGameInformation(node).setPlayer(GoColor.WHITE, v);
-            else if (p == "PL")
-                node.setPlayer(parseColor(v));
-            else if (p == "RE")
-                createGameInformation(node).setResult(v);
-            else if (p == "RU")
-                createGameInformation(node).setRules(v);
-            else if (p == "SQ")
-                parseMarked(node, MarkType.SQUARE);
-            else if (p == "SL")
-                parseMarked(node, MarkType.SELECT);
-            else if (p == "SZ")
-            {
-                if (! isRoot)
-                {
-                    setWarning("Size property not in root node");
-                }
-                else
-                {
-                    try
-                    {
-                        int boardSize = parseInt(v);
-                        if (m_boardSize != -1 && m_boardSize != boardSize)
-                            // Need to know the board size before parsing
-                            // points to do the y-conversion
-                            throw getError("Size property after point properties");
-                        m_boardSize = boardSize;
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        setWarning("Invalid board size value");
-                    }
-                }
-            }
-            else if (p == "TB")
-                parseMarked(node, MarkType.TERRITORY_BLACK);
-            else if (p == "TM")
-                parseTime(v);
-            else if (p == "TR")
-                parseMarked(node, MarkType.TRIANGLE);
-            else if (p == "W")
-                node.setMove(Move.get(GoColor.WHITE, parsePoint(v)));
-            else if (p == "TW")
-                parseMarked(node, MarkType.TERRITORY_WHITE);
-            else if (p == "V")
-            {
-                try
-                {
-                    node.setValue(Float.parseFloat(v));
-                }
-                catch (NumberFormatException e)
-                {
-                }
-            }
-            else if (p == "WL")
-            {
-                try
-                {
-                    node.setTimeLeft(GoColor.WHITE, Double.parseDouble(v));
-                }
-                catch (NumberFormatException e)
-                {
-                }
-            }
-            else if (p == "WR")
-                createGameInformation(node).setRank(GoColor.WHITE, v);
-            else if (p != "FF" && p != "GN" && p != "AP")
-                addSgfProperty(node, p);
+            m_props.put(p, values);
             return true;
         }
         if (ttype != '\n')

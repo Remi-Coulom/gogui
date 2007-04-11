@@ -78,6 +78,12 @@ public final class SgfReaderTest
         checkTimeSettings("time-settings-kgs.sgf", 1800000, 30000, 5);
     }
 
+    public void testSizeAfterPoints() throws Exception
+    {
+        readSgfFile("size-after-valid-points.sgf", false, false);
+        readSgfFile("size-after-invalid-points.sgf", true, false);
+    }
+
     /** Test that OT property in unknown format is preserved if not changed. */
     public void testTimeSettingsPreserveOvertime() throws Exception
     {

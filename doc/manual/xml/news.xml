@@ -8,10 +8,25 @@
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
+<itemizedlist>
+<listitem>
 <simpara>
-The coming version 1.0 (and the bugfix branch 1.0.N with N&gt;0) is the last
-version that will be compatible with Java 1.4.
-Future versions are going to require Java 1.5.
+Handle SGF files with size property after point properties
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0pre1</revnumber>
+<date>05 Apr 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<simpara>
+The coming version 1.0 (and its bugfix releases) are the last versions that
+will be compatible with Java 1.4. Future versions are going to require
+Java 1.5.
 </simpara>
 <itemizedlist>
 <listitem>
