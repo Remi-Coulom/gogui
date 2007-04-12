@@ -37,6 +37,11 @@ public final class SgfReaderTest
         return new junit.framework.TestSuite(SgfReaderTest.class);
     }
 
+    public void testDuplicateProperty() throws Exception
+    {
+        readSgfFile("duplicate-property.sgf", false, true);
+    }
+
     public void testFF4Example() throws Exception
     {
         SgfReader reader = getReader("ff4_ex.1.sgf");

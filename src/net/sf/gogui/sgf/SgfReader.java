@@ -959,6 +959,8 @@ public final class SgfReader
             if (values.isEmpty())
                 throw getError("Property \"" + p + "\" has no value");
             p = checkForObsoleteLongProps(p);
+            if (m_props.containsKey(p))
+                setWarning("Duplicate property " + p + " in node");
             m_props.put(p, values);
             return true;
         }
