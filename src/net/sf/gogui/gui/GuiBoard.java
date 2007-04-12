@@ -616,7 +616,7 @@ public final class GuiBoard
     public void setShadowStone(GoPoint point, GoColor color)
     {
         GuiField field = getField(point);
-        if (! ObjectUtil.equals(field.getShadowStoneColor(), color))
+        if (! ObjectUtil.equals(field.getShadowStone(), color))
         {
             field.setShadowStone(color);
             m_panel.repaintWithShadow(point);

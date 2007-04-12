@@ -51,8 +51,8 @@ public class GuiField
             drawTerritoryGraphics();
         if (m_color != GoColor.EMPTY)
             drawStone(m_color, false);
-        if (m_shadowStoneColor != null)
-            drawStone(m_shadowStoneColor, true);
+        if (m_shadowStone != null)
+            drawStone(m_shadowStone, true);
         if (m_label != null && ! m_label.equals(""))
             drawLabel(x, y, graphics, boardImage, boardWidth);
         if (m_territory != GoColor.EMPTY && m_graphics2D != null)
@@ -116,9 +116,10 @@ public class GuiField
         return m_select;
     }
 
-    public GoColor getShadowStoneColor()
+    /** @see setShadowStone() */
+    public GoColor getShadowStone()
     {
-        return m_shadowStoneColor;
+        return m_shadowStone;
     }
 
     public static int getStoneMargin(int size)
@@ -201,9 +202,16 @@ public class GuiField
         m_select = select;
     }
 
+    /** Set a shadow stone at this field.
+        A shadow stone is a stone which is drawn with some transparency.
+        It can be used to display stones which are not part of the current
+        board position (e.g. search variations)
+        @param color The color of the shadow stone or null to remove a
+        shadow stone.
+    */
     public void setShadowStone(GoColor color)
     {
-        m_shadowStoneColor = color;
+        m_shadowStone = color;
     }
 
     public void setLabel(String s)
@@ -303,7 +311,7 @@ public class GuiField
 
     private GoColor m_color = GoColor.EMPTY;
 
-    private GoColor m_shadowStoneColor;
+    private GoColor m_shadowStone;
 
     private Graphics m_graphics;
 
@@ -394,7 +402,7 @@ public class GuiField
         int ascent = (int)lineMetrics.getAscent();
         int x = Math.max((m_size - width) / 2, 0);
         int y = (ascent + m_size) / 2;
-        if (m_shadowStoneColor == null)
+        if (m_shadowStone == null)
         {
             if (m_color == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
@@ -403,7 +411,7 @@ public class GuiField
         }
         else
         {
-            if (m_shadowStoneColor == GoColor.BLACK)
+            if (m_shadowStone == GoColor.BLACK)
                 m_graphics.setColor(Color.white);
             else
                 m_graphics.setColor(Color.black);
@@ -411,7 +419,7 @@ public class GuiField
         Rectangle clip = m_graphics.getClipBounds();
         width = Math.min(width, (int)(0.95 * m_size));
         m_graphics.setClip(x, y - ascent, width, height);
-        if (m_color == GoColor.EMPTY && m_shadowStoneColor == null)
+        if (m_color == GoColor.EMPTY && m_shadowStone == null)
         {
             Rectangle boardClip = boardGraphics.getClipBounds();
             boardGraphics.setClip(fieldX + x, fieldY + y - ascent,
@@ -486,8 +494,8 @@ public class GuiField
                       isShadowStone);
     }
 
-    private void drawStone(GoColor color, Color colorNormal, Color colorBright,
-                           boolean isShadowStone)
+    private void drawStone(GoColor color, Color colorNormal,
+                           Color colorBright, boolean isShadowStone)
     {
         int margin = getStoneMargin(m_size);
         if (m_graphics2D != null && m_size >= 7)
