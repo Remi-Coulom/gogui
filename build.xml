@@ -13,7 +13,7 @@ that unreleased versions contain the string SVN.
 Comment out the exec svnversion for releases.
 -->
 <exec executable="svnversion" outputproperty="svnversion"/>
-<property name="version" value="0.9.SVN${svnversion}"/>
+<property name="version" value="1.0pre1.SVN${svnversion}"/>
 
 <tstamp/>
 
