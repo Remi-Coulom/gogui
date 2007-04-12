@@ -14,6 +14,11 @@
 Handle SGF files with size property after point properties
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Update to Quaqua 3.7.6
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
