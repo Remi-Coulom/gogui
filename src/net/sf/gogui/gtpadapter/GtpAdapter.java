@@ -40,8 +40,19 @@ public class GtpAdapter
     extends GtpEngine
 {
     /** Constructor.
+        @param program Command line for executing the actual GTP engine.
+        @param log Stream to log commands and responses of the adapter.
+        @param gtpFile File with GTP commands to send engine at startup.
+        @param verbose Enable logging of commands sent from the adapter to
+        the actual GTP engine to standard error.
+        @param noScore Hide final_score and final_status_list commands, even
+        if the angine supports them.
+        @param version1 Whether the adapter reports and implements GTP version
+        1 commands.
         @param fillPasses Fill moves of non-alternating colors with pass
         moves.
+        @param lowerCase Translate move commands to the engine to lower-case.
+        @param size Board size at startup.
     */
     public GtpAdapter(String program, PrintStream log, String gtpFile,
                       boolean verbose, boolean noScore, boolean version1,
