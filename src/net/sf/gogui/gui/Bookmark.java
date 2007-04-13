@@ -13,6 +13,14 @@ import net.sf.gogui.util.PrefUtil;
 /** Link to a position in a game file. */
 public final class Bookmark
 {
+    public int m_move;
+
+    public File m_file;
+
+    public String m_name;
+
+    public String m_variation;
+
     public Bookmark(Bookmark bookmark)
     {
         copyFrom(bookmark);
@@ -98,14 +106,6 @@ public final class Bookmark
             prefs.put("variation" , b.m_variation);
         }
     }
-
-    public int m_move;
-
-    public File m_file;
-
-    public String m_name;
-
-    public String m_variation;
 
     private void init(String name, File file, int move, String variation)
     {
