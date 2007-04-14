@@ -18,10 +18,7 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Point2D;
 import net.sf.gogui.go.GoColor;
 
-/** Component representing a field on the board.
-    The implementation assumes that the size of the component is a square,
-    which is automatically guaranteed if the board uses SquareLayout.
-*/
+/** State of a field on the board. */
 public class GuiField
 {
     public GuiField()
