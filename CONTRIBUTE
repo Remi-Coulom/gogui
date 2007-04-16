@@ -1,6 +1,12 @@
-Patches for fixing bugs in GoGui or adding functionality are welcome.
-The exclusive copyright holder of GoGui is Markus Enzenberger.
-By sending a patch, you implicitely transfer the copyright on the patch to him.
+Patches for fixing bugs in GoGui are always welcome. Patches that add
+a significant amount of functionality should first be discussed with the
+author.
+
+The copyright holder of GoGui is Markus Enzenberger. By sending a patch, you
+implicitely transfer the copyright on the patch to him. In countries where a
+copyright transfer is not possible, you give him unrestricted permission to
+use your code in any way, including changing the license of GoGui or
+offering it under multiple licenses.
 
 Larger patches should:
 
@@ -9,4 +15,5 @@ Larger patches should:
 - respect the existing formatting and coding style of the existing code
 - not contain tab-characters
 - be submitted as a diff (see http://en.wikipedia.org/wiki/Diff) to the source
-  in the main branch of the CVS repository
+  in the main branch of the SVN repository
+
