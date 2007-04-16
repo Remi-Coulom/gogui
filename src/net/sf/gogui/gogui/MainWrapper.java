@@ -15,7 +15,7 @@ import net.sf.gogui.util.ErrorMessage;
 */
 public final class MainWrapper
 {
-    public static void main(String [] args) throws Exception
+    public static void main(String[] args) throws Exception
     {
         // GoGui is not localized, avoid a mix between English and local
         // language in Swing dialogs
@@ -43,7 +43,7 @@ public final class MainWrapper
             System.err.println(e.getMessage());
             return;
         }
-        Class [] mainArgs = new Class[1];
+        Class[] mainArgs = new Class[1];
         mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
         Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
         Method mainMethod = mainClass.getMethod("main", mainArgs);
