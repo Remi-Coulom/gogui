@@ -16,6 +16,7 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.Platform;
 
 /** Context menu for fields on board. */
 public class ContextMenu
@@ -122,7 +123,12 @@ public class ContextMenu
         addSeparator();
         if (! noProgram && ! commands.isEmpty())
         {
-            m_analyzeMenu = new JMenu("Analyze at " + point);
+            String analyzeMenuLabel = "Analyze at " + point;
+            if (Platform.isMac())
+                // Workaround: Quaqua 3.7.6 computes size wrong, the arrow
+                // for the submenu overlaps the label
+                analyzeMenuLabel += "  ";
+            m_analyzeMenu = new JMenu(analyzeMenuLabel);
             // For com.jgoodies.looks
             m_analyzeMenu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
             add(m_analyzeMenu);            
