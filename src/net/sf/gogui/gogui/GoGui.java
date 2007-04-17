@@ -1699,15 +1699,10 @@ public class GoGui
 
     public void fieldClicked(GoPoint p, boolean modifiedSelect)
     {
-        if (isCommandInProgress() && modifiedSelect)
-        {
-            m_guiBoard.contextMenu(p);
-            return;
-        }
-        if (! checkCommandInProgress())
-            return;
         if (m_setupMode)
         {
+            if (! checkCommandInProgress())
+                return;
             GoColor color;
             if (modifiedSelect)
                 color = m_setupColor.otherColor();
@@ -1721,15 +1716,18 @@ public class GoGui
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
                  && ! modifiedSelect)
         {
+            if (! checkCommandInProgress())
+                return;
             m_analyzeCommand.setPointArg(p);
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
             analyzeBegin(false);
-            return;
         }
         else if (m_analyzeCommand != null
                  && m_analyzeCommand.needsPointListArg())
         {
+            if (! checkCommandInProgress())
+                return;
             PointList pointListArg = m_analyzeCommand.getPointListArg();
             if (pointListArg.contains(p))
             {
@@ -1743,19 +1741,23 @@ public class GoGui
             GuiBoardUtil.setSelect(m_guiBoard, pointListArg, true);
             if (modifiedSelect && pointListArg.size() > 0)
                 analyzeBegin(false);
-            return;
         }
         else if (m_scoreMode && ! modifiedSelect)
         {
+            if (! checkCommandInProgress())
+                return;
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
             Komi komi = getGameInformation().getKomi();
             m_scoreDialog.showScore(m_countScore, komi);
-            return;
         }
         else if (modifiedSelect)
             m_guiBoard.contextMenu(p);
         else
         {
+            if (getBoard().getColor(p) != GoColor.EMPTY)
+                return;
+            if (! checkCommandInProgress())
+                return;
             if (getBoard().isSuicide(getToMove(), p)
                 && ! showQuestion("Play suicide?",
                                   "Playing at this point will leave the " +
@@ -3021,11 +3023,9 @@ public class GoGui
 
     private void humanMoved(Move move)
     {
-        GoPoint point = move.getPoint();
-        if (point != null && getBoard().getColor(point) != GoColor.EMPTY)
-            return;
-        if (point != null)
-            paintImmediately(point, move.getColor(), true);
+        GoPoint p = move.getPoint();
+        if (p != null)
+            paintImmediately(p, move.getColor(), true);
         if (m_gtp != null && ! isOutOfSync() && ! m_gtp.isProgramDead())
         {
             try
