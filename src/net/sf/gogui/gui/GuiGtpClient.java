@@ -21,7 +21,7 @@ import net.sf.gogui.gtp.GtpSynchronizer;
     and potentially slow commands in a separate thread with a callback
     in the event thread after the command finished.
     Fast commands are ones that the Go engine is supposed to answer quickly
-    (like boardsize, play and undo), however they have a timeout (8 sec) to
+    (like boardsize, play and undo), however they have a timeout to
     prevent the GUI to hang, if the program does not respond.
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
@@ -390,7 +390,11 @@ public class GuiGtpClient
         private final String m_command;
     };
 
-    private static final int TIMEOUT = 12000;
+    /** The timeout for commands that are expected to be fast.
+        GoGui 0.9.4 used 8 sec, but this was not enough on some machines
+        when starting up engines like Aya in the Wine emulator.
+    */
+    private static final int TIMEOUT = 15000;
 
     private boolean m_commandInProgress;
 
