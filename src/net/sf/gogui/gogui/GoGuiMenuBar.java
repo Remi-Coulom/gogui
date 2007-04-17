@@ -188,7 +188,7 @@ public class GoGuiMenuBar
     }
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
+        Contains a marker comment for serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 
@@ -562,7 +562,7 @@ class MenuChecked
     }
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sourceforge.net
+        Contains a marker comment for use with serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 
@@ -598,7 +598,7 @@ class GoGuiRadioButtonMenuItem
     }
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
+        Contains a marker comment for serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 }
@@ -619,7 +619,7 @@ class GoGuiCheckBoxMenuItem
     }
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
+        Contains a marker comment for serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 }

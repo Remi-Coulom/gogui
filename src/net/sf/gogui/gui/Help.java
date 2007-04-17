@@ -37,7 +37,7 @@ class AntialiasingEditorPane
     }
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
+        Contains a marker comment for serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 }
@@ -129,7 +129,7 @@ public class Help
     private int m_historyIndex = -1;
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
+        Contains a marker comment for serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 

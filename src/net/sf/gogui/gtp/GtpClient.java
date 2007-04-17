@@ -58,7 +58,7 @@ public final class GtpClient
         }        
 
         /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sourceforge.net
+            Contains a marker comment for serialver.sf.net
         */
         private static final long serialVersionUID = 0L; // SUID
     }

@@ -2018,7 +2018,7 @@ public class GoGui
     private int m_treeSize;
 
     /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sourceforge.net
+        Contains a marker comment for use with serialver.sf.net
     */
     private static final long serialVersionUID = 0L; // SUID
 
