@@ -79,8 +79,9 @@ class ByteCountInputStream
 
 /** SGF reader.
     @bug The error messages sometimes contain wrong line numbers, because of
-    problems in StreamTokenizer.lineno(). The implementation should be
+    problems in StreamTokenizer.lineno(). Maybe the implementation should be
     replaced not using StreamTokenizer, because this class is a legacy class.
+    (Does this happen only on Windows?)
 */
 public final class SgfReader
 {
