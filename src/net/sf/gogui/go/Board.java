@@ -136,7 +136,7 @@ public final class Board
 
     /** Get a all points on the board.
         @return List of all points.
-        @see BoardCOnstants#getPoints()
+        @see BoardConstants#getPoints()
     */
     public ConstPointList getPoints()
     {

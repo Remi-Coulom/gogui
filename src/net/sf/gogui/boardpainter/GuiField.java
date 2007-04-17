@@ -113,7 +113,7 @@ public class GuiField
         return m_select;
     }
 
-    /** @see setShadowStone() */
+    /** @see #setShadowStone */
     public GoColor getShadowStone()
     {
         return m_shadowStone;
