@@ -104,7 +104,7 @@ public final class SgfReader
     }    
 
     /** Read SGF file from stream.
-        Default charset is ISO-8859-1.
+        Default charset is ISO-8859-1 according to the SGF version 4 standard.
         The charset property is only respected if the stream is a
         FileInputStream, because it has to be reopened with a different
         encoding.
