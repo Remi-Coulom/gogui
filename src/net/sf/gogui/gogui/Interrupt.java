@@ -24,7 +24,7 @@ public final class Interrupt
     {
         if (! gtp.isInterruptSupported())
         {
-            Object[] options = { "Kill Program", "Cancel" };
+            Object[] options = { "Terminate Program", "Cancel" };
             Object message = "Program does not support interrupt";
             int type = JOptionPane.WARNING_MESSAGE;
             if (Platform.isMac())
