@@ -114,14 +114,14 @@ public class TexWriter
             m_out.print("{black}");
         else
         {
-            assert(color == GoColor.WHITE);
+            assert color == GoColor.WHITE;
             m_out.print("{white}");
         }
     }
 
     private void printCoordinates(GoPoint point)
     {
-        assert(point != null);
+        assert point != null;
         String s = point.toString();
         m_out.print("{" + s.substring(0, 1).toLowerCase(Locale.ENGLISH) + "}{"
                     + s.substring(1) + "}");

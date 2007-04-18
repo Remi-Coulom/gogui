@@ -37,7 +37,7 @@ public final class Move
         {
             if (color == GoColor.BLACK)
                 return s_passBlack;
-            assert(color == GoColor.WHITE);
+            assert color == GoColor.WHITE;
             return s_passWhite;
         }
         int x = point.getX();
@@ -56,7 +56,7 @@ public final class Move
     */
     public static Move getPass(GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         return get(c, null);
     }
 

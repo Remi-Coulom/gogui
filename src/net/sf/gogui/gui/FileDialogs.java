@@ -180,7 +180,7 @@ public final class FileDialogs
                 title = "Save";
                 break;
             default:
-                assert(false);
+                assert false;
             }
         }
         dialog.setTitle(title);
@@ -450,7 +450,7 @@ class SgfPreview
         }
         catch (MalformedURLException e)
         {
-            assert(false); // Cannot happen
+            assert false; // Cannot happen
             return null;
         }
         Image image = Toolkit.getDefaultToolkit().getImage(url);

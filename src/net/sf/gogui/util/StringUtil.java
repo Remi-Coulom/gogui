@@ -183,7 +183,7 @@ public final class StringUtil
     */
     public static String[] splitArguments(String string)
     {
-        assert(string != null);
+        assert string != null;
         ArrayList vector = new ArrayList();
         boolean escape = false;
         boolean inString = false;

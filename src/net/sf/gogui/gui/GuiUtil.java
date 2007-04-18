@@ -296,7 +296,7 @@ public class GuiUtil
                                    ProgressRunnable runnable)
         throws Throwable
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         JDialog dialog = new JDialog(owner, message, true);
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         dialog.setResizable(false);
@@ -375,7 +375,7 @@ public class GuiUtil
         }
         catch (Exception e)
         {
-            assert(false);
+            assert false;
         }
     }
 
@@ -475,7 +475,7 @@ public class GuiUtil
                 }
                 catch (InterruptedException e)
                 {
-                    assert(false);
+                    assert false;
                 }
             }
             SwingUtilities.invokeLater(new Runnable()

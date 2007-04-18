@@ -50,7 +50,7 @@ public class ObjectListEditor
                     else if (command.equals("remove"))
                         cbRemove();
                     else
-                        assert(false);
+                        assert false;
                 }
             };
         JPanel panel = new JPanel(new BorderLayout(GuiUtil.PAD, 0));

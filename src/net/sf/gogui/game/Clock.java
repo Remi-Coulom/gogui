@@ -59,7 +59,7 @@ public final class Clock
     */
     public int getMovesLeft(GoColor color)
     {
-        assert(getUseByoyomi() && isInByoyomi(color));
+        assert getUseByoyomi() && isInByoyomi(color);
         return getRecord(color).m_movesLeft;
     }
 
@@ -68,7 +68,7 @@ public final class Clock
     */
     public long getTimeLeft(GoColor color)
     {
-        assert(isInitialized());
+        assert isInitialized();
         TimeRecord record = getRecord(color);
         long time = record.m_time;
         if (getUseByoyomi())
@@ -84,7 +84,7 @@ public final class Clock
 
     public String getTimeString(GoColor color)
     {
-        assert(color == GoColor.BLACK || color == GoColor.WHITE);
+        assert color == GoColor.BLACK || color == GoColor.WHITE;
         TimeRecord record = getRecord(color);
         long time = record.m_time;
         if (color.equals(m_toMove))
@@ -246,7 +246,7 @@ public final class Clock
     */
     public void startMove(GoColor color)
     {
-        assert(color == GoColor.BLACK || color == GoColor.WHITE);
+        assert color == GoColor.BLACK || color == GoColor.WHITE;
         m_toMove = color;
         m_startMoveTime = currentTimeMillis();
         startTimer();
@@ -271,19 +271,19 @@ public final class Clock
             {
                 record.m_isInByoyomi = true;
                 record.m_time -= getPreByoyomi();
-                assert(getByoyomiMoves() > 0);
+                assert getByoyomiMoves() > 0;
                 record.m_movesLeft = getByoyomiMoves();
             }
             if (record.m_isInByoyomi)
             {
                 if (record.m_time > getByoyomi())
                     record.m_byoyomiExceeded = true;
-                assert(record.m_movesLeft > 0);
+                assert record.m_movesLeft > 0;
                 --record.m_movesLeft;
                 if (record.m_movesLeft == 0)
                 {
                     record.m_time = 0;
-                    assert(getByoyomiMoves() > 0);
+                    assert getByoyomiMoves() > 0;
                     record.m_movesLeft = getByoyomiMoves();
                 }
             }
@@ -340,7 +340,7 @@ public final class Clock
             return m_timeRecordBlack;
         else
         {
-            assert(c == GoColor.WHITE);
+            assert c == GoColor.WHITE;
             return m_timeRecordWhite;
         }
     }

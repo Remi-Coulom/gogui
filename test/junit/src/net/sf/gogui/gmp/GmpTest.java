@@ -69,9 +69,9 @@ public final class GmpTest
 
     private void createGmp() throws IOException
     {
-        assert(m_gmp == null);
-        assert(m_in == null);
-        assert(m_out == null);
+        assert m_gmp == null;
+        assert m_in == null;
+        assert m_out == null;
         PipedInputStream gmpInput = new PipedInputStream();
         m_out = new PipedOutputStream(gmpInput);
         PipedInputStream in = new PipedInputStream();
@@ -85,7 +85,7 @@ public final class GmpTest
     {
         if (x == -1 && y == -1)
             return 0;
-        assert(x >= 0 && y >= 0);
+        assert x >= 0 && y >= 0;
         int val = y * 19 + x + 1;
         if (! isBlack)
             val |= 0x200;

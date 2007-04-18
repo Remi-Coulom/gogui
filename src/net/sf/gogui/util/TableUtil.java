@@ -35,7 +35,7 @@ public final class TableUtil
     */
     public static void appendRow(Table to, Table from, int row)
     {
-        assert(to.getNumberColumns() == from.getNumberColumns());
+        assert to.getNumberColumns() == from.getNumberColumns();
         to.startRow();
         for (int column = 0; column < to.getNumberColumns(); ++column)
             to.set(column, from.get(column, row));
@@ -87,7 +87,7 @@ public final class TableUtil
             }
             catch (Table.InvalidLocation e)
             {
-                assert(false);
+                assert false;
             }
         }
         return result;

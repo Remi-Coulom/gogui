@@ -99,7 +99,7 @@ public final class AnalyzeDialog
         else if (command.equals("run"))
             runCommand();
         else
-            assert(false);
+            assert false;
     }
 
     public void dispose()

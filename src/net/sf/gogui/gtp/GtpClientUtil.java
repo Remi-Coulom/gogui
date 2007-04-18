@@ -16,7 +16,7 @@ public final class GtpClientUtil
     public static String getPlaySequenceCommand(GtpClientBase gtp,
                                                 ArrayList moves)
     {
-        assert(isPlaySequenceSupported(gtp));
+        assert isPlaySequenceSupported(gtp);
         StringBuffer cmd = new StringBuffer(2048);
         cmd.append(getPlaySequenceCommand(gtp));
         for (int i = 0; i < moves.size(); ++i)

@@ -142,7 +142,7 @@ public class GameInfo
 
     private void updateTimeFromClock(ConstClock clock, GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         String text = clock.getTimeString(c);
         if (text == null)
             text = " ";

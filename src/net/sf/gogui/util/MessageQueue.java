@@ -61,7 +61,7 @@ public class MessageQueue
     */
     public Object unsynchronizedPeek()
     {
-        assert(Thread.holdsLock(m_mutex));
+        assert Thread.holdsLock(m_mutex);
         if (m_queue.isEmpty())
             return null;
         return m_queue.get(0);
@@ -81,7 +81,7 @@ public class MessageQueue
                 {
                 }
             }
-            assert(! m_queue.isEmpty());
+            assert ! m_queue.isEmpty();
             return m_queue.remove(0);
         }
     }

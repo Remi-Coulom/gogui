@@ -58,7 +58,7 @@ public abstract class GtpClientBase
     */
     public String getCommandGenmove(GoColor color)
     {
-        assert(color == GoColor.BLACK || color == GoColor.WHITE);
+        assert color == GoColor.BLACK || color == GoColor.WHITE;
         if (m_protocolVersion == 1)
         {
             if (color == GoColor.BLACK)

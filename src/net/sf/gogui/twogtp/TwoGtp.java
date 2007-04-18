@@ -51,8 +51,8 @@ public class TwoGtp
         throws Exception
     {
         super(null);
-        assert(size > 0);
-        assert(size <= GoPoint.MAXSIZE);
+        assert size > 0;
+        assert size <= GoPoint.MAXSIZE;
         if (black.equals(""))
             throw new ErrorMessage("No black program set");
         if (white.equals(""))
@@ -463,7 +463,7 @@ public class TwoGtp
         if (moveNumber == 0)
             throw new GtpError("cannot undo");
         m_game.gotoNode(getCurrentNode().getFatherConst());
-        assert(m_game.getMoveNumber() == moveNumber - 1);
+        assert m_game.getMoveNumber() == moveNumber - 1;
         synchronize();
     }
 
@@ -725,7 +725,7 @@ public class TwoGtp
                 }
                 catch (InterruptedException e)
                 {
-                    assert(false);
+                    assert false;
                 }
             }
             int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());

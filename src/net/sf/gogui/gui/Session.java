@@ -25,7 +25,7 @@ public final class Session
     */
     public Session(String path)
     {
-        assert(! StringUtil.isEmpty(path));
+        assert ! StringUtil.isEmpty(path);
         m_path = path;
     }
 

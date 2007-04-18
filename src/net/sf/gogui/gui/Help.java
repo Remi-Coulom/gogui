@@ -167,8 +167,8 @@ public class Help
 
     private void back()
     {
-        assert(m_historyIndex > 0);
-        assert(m_historyIndex < m_history.size());
+        assert m_historyIndex > 0;
+        assert m_historyIndex < m_history.size();
         --m_historyIndex;
         loadURL(getHistory(m_historyIndex));
         historyChanged();
@@ -205,7 +205,7 @@ public class Help
 
     private void forward()
     {
-        assert(m_historyIndex + 1 < m_history.size());
+        assert m_historyIndex + 1 < m_history.size();
         ++m_historyIndex;
         loadURL(getHistory(m_historyIndex));
         historyChanged();

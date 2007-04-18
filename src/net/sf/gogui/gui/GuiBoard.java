@@ -274,7 +274,7 @@ public final class GuiBoard
     */
     public void initSize(int size)
     {
-        assert(size > 0 && size <= GoPoint.MAXSIZE);
+        assert size > 0 && size <= GoPoint.MAXSIZE;
         m_size = size;
         m_constants = BoardConstants.get(size);
         m_field = new GuiField[size][size];
@@ -829,7 +829,7 @@ public final class GuiBoard
 
     private GuiField getField(GoPoint p)
     {
-        assert(p != null);
+        assert p != null;
         return m_field[p.getX()][p.getY()];
     }
 

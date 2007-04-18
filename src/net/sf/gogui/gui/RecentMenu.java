@@ -65,7 +65,7 @@ public final class RecentMenu
 
     public RecentMenu(String label, String path, Listener listener)
     {
-        assert(listener != null);
+        assert listener != null;
         m_path = path;
         m_listener = listener;
         m_menu = new JMenu(label);

@@ -22,7 +22,7 @@ public final class NodeUtil
 {
     public static ConstNode backward(ConstNode node, int n)
     {
-        assert(n >= 0);
+        assert n >= 0;
         for (int i = 0; i < n && node.getFatherConst() != null; ++i)
             node = node.getFatherConst();
         return node;
@@ -116,7 +116,7 @@ public final class NodeUtil
 
     public static ConstNode forward(ConstNode node, int n)
     {
-        assert(n >= 0);
+        assert n >= 0;
         for (int i = 0; i < n; ++i)
         {
             ConstNode child = node.getChildConst();
@@ -141,7 +141,7 @@ public final class NodeUtil
             nodeMoves.clear();
             getAllAsMoves(node, nodeMoves);
             moves.addAll(nodeMoves);
-            assert(i == 0 || node.isChildOf((Node)nodes.get(i - 1)));
+            assert i == 0 || node.isChildOf((Node)nodes.get(i - 1));
         }
         return moves;
     }
@@ -707,7 +707,7 @@ public final class NodeUtil
             ++numberNodes;
             int numberChildren = node.getNumberChildren();
             int depth = getDepth(node) - rootDepth;
-            assert(depth >= 0);
+            assert depth >= 0;
             if (depth > maxDepth)
                 maxDepth = depth;
             if (numberChildren > maxChildren)

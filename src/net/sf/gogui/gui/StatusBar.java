@@ -97,7 +97,7 @@ public class StatusBar
 
     public void immediatelyPaintMoveText(String text)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         setMoveText(text, null);
         GuiUtil.paintImmediately(m_moveText);
         GuiUtil.paintImmediately(m_moveTextSeparator);
@@ -105,7 +105,7 @@ public class StatusBar
 
     public void immediatelyPaintText(String text)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         setText(text);
         GuiUtil.paintImmediately(m_text);
     }
@@ -147,7 +147,7 @@ public class StatusBar
         }
         else
         {
-            assert(color == GoColor.WHITE);
+            assert color == GoColor.WHITE;
             m_toPlayLabel.setIcon(ICON_WHITE);
             m_toPlayLabel.setToolTipText("White to play");
         }

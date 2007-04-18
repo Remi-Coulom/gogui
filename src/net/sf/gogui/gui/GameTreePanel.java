@@ -216,7 +216,7 @@ public class GameTreePanel
             m_labelMode = mode;
             break;
         default:
-            assert(false);
+            assert false;
             break;
         }
     }
@@ -251,7 +251,7 @@ public class GameTreePanel
             }
             break;
         default:
-            assert(false);
+            assert false;
             break;
         }
     }
@@ -259,14 +259,14 @@ public class GameTreePanel
     /** Faster than update if a new node was added as the first child. */
     public void addNewSingleChild(ConstNode node)
     {
-        assert(! node.hasChildren());
+        assert ! node.hasChildren();
         ConstNode father = node.getFatherConst();
-        assert(father != null);
-        assert(father.getNumberChildren() == 1);
+        assert father != null;
+        assert father.getNumberChildren() == 1;
         GameTreeNode fatherGameNode = getGameTreeNode(father);
         if (fatherGameNode == null)
         {
-            assert(false);
+            assert false;
             return;
         }
         int moveNumber = NodeUtil.getMoveNumber(node);
@@ -297,7 +297,7 @@ public class GameTreePanel
     public void update(ConstGameTree tree, ConstNode currentNode,
                        int minWidth, int minHeight)
     {
-        assert(currentNode != null);
+        assert currentNode != null;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         m_minWidth = minWidth;
         m_minHeight = minHeight;
@@ -339,7 +339,7 @@ public class GameTreePanel
 
     public void update(ConstNode currentNode, int minWidth, int minHeight)
     {
-        assert(currentNode != null);
+        assert currentNode != null;
         if (ensureVisible(currentNode))
         {
             update(m_tree, currentNode, minWidth, minHeight);
@@ -348,7 +348,7 @@ public class GameTreePanel
         GameTreeNode gameNode = getGameTreeNode(m_currentNode);
         if (gameNode == null)
         {
-            assert(false);
+            assert false;
             return;
         }
         gameNode.repaint();
@@ -470,7 +470,7 @@ public class GameTreePanel
             m_iconSetup = GuiUtil.getIcon("gogui-setup-8x8", "");
             break;
         default:
-            assert(sizeMode == SIZE_NORMAL);
+            assert sizeMode == SIZE_NORMAL;
             m_nodeSize = 24;
             m_nodeFullSize = 30;
             m_iconBlack = GuiUtil.getIcon("gogui-black-24x24", "");
@@ -668,7 +668,7 @@ public class GameTreePanel
                     else if (command.equals("tree-info"))
                         treeInfo(m_popupLocation, m_popupNode);
                     else
-                        assert(false);
+                        assert false;
                 }
             };
         JPopupMenu popup = new JPopupMenu();

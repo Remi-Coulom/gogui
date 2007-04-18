@@ -53,7 +53,7 @@ public class BoardPainter
         m_size = field.length;
         if (m_constants == null || m_constants.getSize() != m_size)
             m_constants = BoardConstants.get(m_size);
-        assert(m_size <= GoPoint.MAXSIZE);
+        assert m_size <= GoPoint.MAXSIZE;
         double borderSize;
         if (showGrid)
             borderSize = BORDER_SIZE;
@@ -160,10 +160,10 @@ public class BoardPainter
 
     private void drawFields(Graphics graphics, GuiField field[][])
     {
-        assert(field.length == m_size);
+        assert field.length == m_size;
         for (int x = 0; x < m_size; ++x)
         {
-            assert(field[x].length == m_size);
+            assert field[x].length == m_size;
             for (int y = 0; y < m_size; ++y)
             {
                 Point location = getLocation(x, y);

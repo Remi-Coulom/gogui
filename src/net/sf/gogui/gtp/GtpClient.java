@@ -291,8 +291,8 @@ public final class GtpClient
     public String send(String command, long timeout,
                        TimeoutCallback timeoutCallback) throws GtpError
     {
-        assert(! command.trim().equals(""));
-        assert(! command.trim().startsWith("#"));
+        assert ! command.trim().equals("");
+        assert ! command.trim().startsWith("#");
         m_timeoutCallback = timeoutCallback;
         m_fullResponse = "";
         m_response = "";
@@ -332,7 +332,7 @@ public final class GtpClient
     */
     public void sendComment(String comment)
     {
-        assert(comment.trim().startsWith("#"));
+        assert comment.trim().startsWith("#");
         log(">> " + comment);
         if (m_callback != null)
             m_callback.sentCommand(comment);
@@ -458,7 +458,7 @@ public final class GtpClient
     {
         public Message(int type, String text)
         {
-            assert(type == RESPONSE || type == INVALID || type == ERROR);
+            assert type == RESPONSE || type == INVALID || type == ERROR;
             m_type = type;
             m_text = text;
         }
@@ -724,7 +724,7 @@ public final class GtpClient
 
     private void mergeErrorMessages(Message message)
     {
-        assert(message.m_type == Message.ERROR);
+        assert message.m_type == Message.ERROR;
         StringBuffer buffer = new StringBuffer(2048);
         while (message != null)
         {
@@ -772,7 +772,7 @@ public final class GtpClient
             }
             else
             {
-                assert(message.m_type == Message.RESPONSE);
+                assert message.m_type == Message.RESPONSE;
                 String response = message.m_text;
                 if (response == null)
                 {
@@ -785,7 +785,7 @@ public final class GtpClient
                 m_fullResponse = response;
                 if (m_callback != null)
                     m_callback.receivedResponse(error, m_fullResponse);
-                assert(response.length() >= 3);            
+                assert response.length() >= 3;
                 int index = response.indexOf(' ');
                 int length = response.length();
                 if (index < 0)
@@ -829,7 +829,7 @@ public final class GtpClient
                 message = (Message)m_queue.waitFor(timeout);
                 if (message == null)
                 {
-                    assert(m_timeoutCallback != null);
+                    assert m_timeoutCallback != null;
                     if (! m_timeoutCallback.askContinue())
                     {
                         destroyProcess();

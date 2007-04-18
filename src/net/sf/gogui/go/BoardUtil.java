@@ -42,7 +42,7 @@ public final class BoardUtil
         StringBuffer s = new StringBuffer(1024);
         int size = board.getSize();
         String separator = System.getProperty("line.separator");
-        assert(separator != null);
+        assert separator != null;
         printXCoords(size, s, separator);
         for (int y = size - 1; y >= 0; --y)
         {
@@ -99,7 +99,7 @@ public final class BoardUtil
     */
     public static GoPoint rotate(int rotationMode, GoPoint point, int size)
     {
-        assert(rotationMode < NUMBER_ROTATIONS);
+        assert rotationMode < NUMBER_ROTATIONS;
         if (point == null)
             return null;
         int x = point.getX();

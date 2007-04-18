@@ -160,7 +160,7 @@ public final class GtpUtil
             }
             catch (GtpResponseFormatError e)
             {
-                assert(false);
+                assert false;
                 continue;
             }
             list.add(point);

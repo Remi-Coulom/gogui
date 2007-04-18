@@ -97,7 +97,7 @@ class GtpShellText
         }
         catch (BadLocationException e)
         {
-            assert(false);
+            assert false;
             return "";
         }
     }
@@ -143,7 +143,7 @@ class GtpShellText
 
     private void appendText(String text, String style)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         if (text.equals(""))
             return;
         int indexNewLine = 0;
@@ -164,7 +164,7 @@ class GtpShellText
         }
         catch (BadLocationException e)
         {
-            assert(false);
+            assert false;
         }
         if (m_lines > m_historyMax)
         {
@@ -190,14 +190,14 @@ class GtpShellText
         {
             String text = doc.getText(0, doc.getLength());
             int truncateIndex = findTruncateIndex(text, truncateLines);
-            assert(truncateIndex != -1);
+            assert truncateIndex != -1;
             doc.remove(0, truncateIndex);
             m_lines -= truncateLines;
             m_truncated += truncateLines;
         }
         catch (BadLocationException e)
         {
-            assert(false);
+            assert false;
         }
     }
 }

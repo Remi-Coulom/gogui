@@ -25,9 +25,9 @@ public class GtpCommand
     public GtpCommand(String line)
     {
         StringBuffer buffer = preprocessLine(line);
-        assert(! line.trim().equals(""));
+        assert ! line.trim().equals("");
         String[] array = StringUtil.splitArguments(buffer.toString());
-        assert(array.length > 0);
+        assert array.length > 0;
         int commandIndex = 0;
         try
         {

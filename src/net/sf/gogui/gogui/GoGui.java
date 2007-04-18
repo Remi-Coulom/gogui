@@ -1269,7 +1269,7 @@ public class GoGui
 
     public void actionSetup(GoColor color)
     {
-        assert(color.isBlackWhite());
+        assert color.isBlackWhite();
         if (! checkCommandInProgress())
             return;
         if (m_scoreMode)
@@ -1660,7 +1660,7 @@ public class GoGui
     {
         if (color == GoColor.BLACK)
             return m_computerBlack;
-        assert(color == GoColor.WHITE);
+        assert color == GoColor.WHITE;
         return m_computerWhite;
     }
 
@@ -2548,7 +2548,7 @@ public class GoGui
         case 2:
             return false;
         default:
-            assert(false);
+            assert false;
             return true;
         }
     }
@@ -2939,7 +2939,7 @@ public class GoGui
             else if (toMove == GoColor.WHITE)
                 command += " w";
             else
-                assert(false);
+                assert false;
         }
         else
         {
@@ -3331,7 +3331,7 @@ public class GoGui
         catch (Throwable t)
         {
             t.printStackTrace();
-            assert(false);
+            assert false;
             return false;
         }
         return true;
@@ -3380,14 +3380,14 @@ public class GoGui
             {
                 public boolean handleAbout()
                 {
-                    assert(SwingUtilities.isEventDispatchThread());
+                    assert SwingUtilities.isEventDispatchThread();
                     actionAbout();
                     return true;
                 }
                 
                 public boolean handleOpenFile(String filename)
                 {
-                    assert(SwingUtilities.isEventDispatchThread());
+                    assert SwingUtilities.isEventDispatchThread();
                     if (! checkSaveGame())
                         return true;
                     loadFile(new File(filename), -1);
@@ -3397,7 +3397,7 @@ public class GoGui
                 
                 public boolean handleQuit()
                 {
-                    assert(SwingUtilities.isEventDispatchThread());
+                    assert SwingUtilities.isEventDispatchThread();
                     close();
                     // close() calls System.exit() if not cancelled
                     return false;
@@ -3461,7 +3461,7 @@ public class GoGui
 
     private void runLengthyCommand(String cmd, Runnable callback)
     {
-        assert(m_gtp != null);
+        assert m_gtp != null;
         m_gtp.send(cmd, callback);
         beginLengthyCommand();
     }
@@ -3770,7 +3770,7 @@ public class GoGui
 
     private void setup(GoPoint point, GoColor color)
     {
-        assert(point != null);
+        assert point != null;
         m_game.setup(point, color);
     }
 

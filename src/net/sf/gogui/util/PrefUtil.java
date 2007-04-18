@@ -17,7 +17,7 @@ public final class PrefUtil
     */
     public static Preferences createNode(String path)
     {
-        assert(! path.startsWith("/"));
+        assert ! path.startsWith("/");
         return Preferences.userRoot().node(path);
     }
 
@@ -54,7 +54,7 @@ public final class PrefUtil
     */
     public static Preferences getNode(String path)
     {
-        assert(! path.startsWith("/"));
+        assert ! path.startsWith("/");
         Preferences prefs = Preferences.userRoot();
         try
         {

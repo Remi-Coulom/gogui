@@ -109,7 +109,7 @@ public class TextViewer
         }
         catch (BadLocationException e)
         {
-            assert(false);
+            assert false;
         }
     }
 
@@ -130,7 +130,7 @@ public class TextViewer
         }
         catch (BadLocationException e)
         {
-            assert(false);
+            assert false;
         }
         JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -167,7 +167,7 @@ public class TextViewer
                     }
                     catch (BadLocationException e)
                     {
-                        assert(false);
+                        assert false;
                     }   
                 }
             };

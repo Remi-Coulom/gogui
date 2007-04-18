@@ -145,7 +145,7 @@ public final class AnalyzeShow
             }
             catch (IOException e)
             {
-                assert(false);
+                assert false;
                 break;
             }
             if (line == null)

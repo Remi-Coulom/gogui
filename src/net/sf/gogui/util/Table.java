@@ -254,11 +254,11 @@ public class Table
     */
     public void set(int column, String value)
     {
-        assert(m_lastRow.get(column) == null);
+        assert m_lastRow.get(column) == null;
         // Values containing newlines and tabs are not supported by save()
         // yet
-        assert(value == null || value.indexOf("\n") < 0);
-        assert(value == null || value.indexOf("\t") < 0);
+        assert value == null || value.indexOf("\n") < 0;
+        assert value == null || value.indexOf("\t") < 0;
         m_lastRow.set(column, value);
     }
 

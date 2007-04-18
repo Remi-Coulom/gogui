@@ -23,7 +23,7 @@ public final class GoColor
     */
     public GoColor getNextBlackWhite()
     {
-        assert(this != EMPTY);
+        assert this != EMPTY;
         return m_nextBlackWhite;
     }
 

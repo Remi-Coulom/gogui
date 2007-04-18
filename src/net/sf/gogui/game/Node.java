@@ -93,7 +93,7 @@ public final class Node
     */
     public void append(Node node)
     {
-        assert(node.m_father == null);
+        assert node.m_father == null;
         if (m_children == null)
         {
             m_children = node;
@@ -119,7 +119,7 @@ public final class Node
     */
     public void addMarked(GoPoint point, MarkType type)
     {
-        assert(point != null);
+        assert point != null;
         Map marked = createMarked();
         PointList pointList = (PointList)marked.get(type);
         if (pointList == null)
@@ -157,7 +157,7 @@ public final class Node
     */
     public void addStone(GoColor c, GoPoint p)
     {
-        assert(p != null);
+        assert p != null;
         createSetupInfo().m_stones[c.toInteger()].add(p);
     }
 
@@ -169,7 +169,7 @@ public final class Node
     */
     public void addStones(GoColor c, ConstPointList list)
     {
-        assert(list != null);
+        assert list != null;
         createSetupInfo().m_stones[c.toInteger()].addAll(list);
     }
 
@@ -358,7 +358,7 @@ public final class Node
     */
     public int getMovesLeft(GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         TimeInfo timeInfo = getTimeInfo();
         if (timeInfo == null)
             return -1;
@@ -420,7 +420,7 @@ public final class Node
     */
     public double getTimeLeft(GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         TimeInfo timeInfo = getTimeInfo();
         if (timeInfo == null)
             return Double.NaN;
@@ -500,7 +500,7 @@ public final class Node
     */
     public void makeMainVariation(Node child)
     {
-        assert(child.isChildOf(this));
+        assert child.isChildOf(this);
         if (getNumberChildren() <= 1)
             return;
         ArrayList list = (ArrayList)m_children;
@@ -513,7 +513,7 @@ public final class Node
     */
     public void removeChild(Node child)
     {
-        assert(child.isChildOf(this));
+        assert child.isChildOf(this);
         int numberChildren = getNumberChildren();
         if (numberChildren == 1)
             m_children = null;
@@ -525,7 +525,7 @@ public final class Node
                 m_children = list.get(0);
         }
         else
-            assert(false);
+            assert false;
         child.m_father = null;
     }
 
@@ -535,7 +535,7 @@ public final class Node
     */
     public void removeMarked(GoPoint point, MarkType type)
     {
-        assert(point != null);
+        assert point != null;
         Map marked = createMarked();
         PointList pointList = (PointList)marked.get(type);
         if (pointList != null)
@@ -548,7 +548,7 @@ public final class Node
     */
     public void removeSetup(GoPoint p)
     {
-        assert(p != null);
+        assert p != null;
         SetupInfo setupInfo = getSetupInfo();
         if (setupInfo == null)
             return;
@@ -606,7 +606,7 @@ public final class Node
     */
     public void setLabel(GoPoint point, String label)
     {
-        assert(point != null);
+        assert point != null;
         Map tree = createLabel();
         tree.remove(point);
         if (label == null)
@@ -631,7 +631,7 @@ public final class Node
     */
     public void setMovesLeft(GoColor c, int n)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         createTimeInfo().m_movesLeft[c.toInteger()] = n;
     }
 
@@ -641,7 +641,7 @@ public final class Node
     */
     public void setTimeLeft(GoColor c, double seconds)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         createTimeInfo().m_timeLeft[c.toInteger()] = seconds;
     }
 
@@ -650,7 +650,7 @@ public final class Node
     */
     public void setPlayer(GoColor color)
     {
-        assert(color == GoColor.BLACK || color == GoColor.WHITE);
+        assert color == GoColor.BLACK || color == GoColor.WHITE;
         createSetupInfo().m_player = color;
     }
 

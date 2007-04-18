@@ -261,7 +261,7 @@ public class GtpRegress
             }
             catch (NumberFormatException e)
             {
-                assert(false);
+                assert false;
             }
         }
         regex = "[0-9]*\\s*loadsgf\\s+(\\S+\\.[Ss][Gg][Ff])\\s*";
@@ -401,7 +401,7 @@ public class GtpRegress
                          m_lastCommandId);
             checkLastSgf(line);
             m_lastError = false;
-            assert(m_lastFullResponse == null);
+            assert m_lastFullResponse == null;
             try
             {
                 m_lastResponse = m_gtp.send(line);
@@ -1060,7 +1060,7 @@ public class GtpRegress
                 status = "pass";
             }
             else
-                assert(false);
+                assert false;
             String lastSgf = "";
             if (t.m_lastSgf != null)
             {

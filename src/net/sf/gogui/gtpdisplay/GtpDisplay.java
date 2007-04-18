@@ -193,7 +193,7 @@ public class GtpDisplay
 
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         if (m_board.getColor(point) != GoColor.EMPTY)
             return;
         synchronized (m_mutex)
@@ -213,7 +213,7 @@ public class GtpDisplay
 
     private void closeFrame()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         if (m_gtp == null)
         {
             if (! m_messageDialogs.showQuestion(m_frame,

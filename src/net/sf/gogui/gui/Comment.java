@@ -109,7 +109,7 @@ public class Comment
         }
         catch (BadLocationException e)
         {
-            assert(false);
+            assert false;
         }
     }
 

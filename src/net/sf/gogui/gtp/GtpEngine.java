@@ -120,7 +120,7 @@ public class GtpEngine
 
     public synchronized void log(String line)
     {
-        assert(m_log != null);
+        assert m_log != null;
         m_log.println(line);
     }
 
@@ -192,7 +192,7 @@ public class GtpEngine
         try
         {
             int length = cmdArray.length;
-            assert(length >= 1);
+            assert length >= 1;
             PointList pointList = new PointList();
             for (int i = 1; i < length; ++i)
             {
@@ -323,7 +323,7 @@ class ReadThread
     {
         synchronized (this)
         {
-            assert(! m_waitCommand);
+            assert ! m_waitCommand;
             m_waitCommand = true;
             notifyAll();
             try
@@ -334,7 +334,7 @@ class ReadThread
             {
                 System.err.println("Interrupted");
             }
-            assert(m_endOfFile || ! m_waitCommand);
+            assert m_endOfFile || ! m_waitCommand;
             GtpCommand result = m_command;
             m_command = null;
             return result;

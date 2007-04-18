@@ -228,7 +228,7 @@ public final class GameInfoDialog
         }
         catch (Komi.InvalidKomi e)
         {
-            assert(false); // already validated
+            assert false; // already validated
         }
         info.setKomi(komi);
         if (m_preByoyomi.isEmpty() && m_byoyomi.isEmpty()

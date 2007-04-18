@@ -482,10 +482,10 @@ class MainThread
     public MainThread(InputStream in, OutputStream out, int size,
                       int colorIndex, boolean simple, boolean verbose)
     {
-        assert(size >= 1);
-        assert(size <= 22);
-        assert(colorIndex >= 0);
-        assert(colorIndex <= 2);
+        assert size >= 1;
+        assert size <= 22;
+        assert colorIndex >= 0;
+        assert colorIndex <= 2;
         m_verbose = verbose;
         m_in = in;
         m_size = size;
@@ -828,8 +828,8 @@ class MainThread
         if (m_pending > 0)
         {
             int index = 4 - m_pending;
-            assert(index > 0);
-            assert(index < 4);
+            assert index > 0;
+            assert index < 4;
             m_inBuffer[index] = b;
             --m_pending;
             if (m_pending == 0)
@@ -944,7 +944,7 @@ class MainThread
         }
         else
         {
-            assert(m_state == STATE_IDLE);
+            assert m_state == STATE_IDLE;
             if (cmd.m_cmd == Cmd.OK)
             {
                 Util.log("ignoring unexpected OK", m_verbose);

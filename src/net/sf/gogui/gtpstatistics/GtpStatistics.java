@@ -403,7 +403,7 @@ public class GtpStatistics
         {
             System.err.println(e.getMessage());
             // Table was created by this class in correct format
-            assert(false);
+            assert false;
         }
     }
 
@@ -415,7 +415,7 @@ public class GtpStatistics
         {
             if (node.hasSetup())
             {
-                assert(m_allowSetup && node != root); // checked in checkGame
+                assert m_allowSetup && node != root; // checked in checkGame
                 toMove = sendSetup(node);
             }
             Move move = node.getMove();
@@ -448,7 +448,7 @@ public class GtpStatistics
         {
             if (node.hasSetup())
             {
-                assert(m_allowSetup && node == root); // checked in checkGame
+                assert m_allowSetup && node == root; // checked in checkGame
                 toMove = sendSetup(node);
             }
             Move move = node.getMove();
@@ -470,7 +470,7 @@ public class GtpStatistics
         for ( ; node != root; node = node.getFatherConst())
         {
             // checked in checkGame
-            assert(! node.hasSetup());
+            assert ! node.hasSetup();
             Move move = node.getMove();
             if (move != null)
             {
@@ -503,7 +503,7 @@ public class GtpStatistics
     {
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);
-        assert(! moves.isEmpty());
+        assert ! moves.isEmpty();
         GoColor toMove = null;
         for (int i = 0; i < moves.size(); ++i)
         {

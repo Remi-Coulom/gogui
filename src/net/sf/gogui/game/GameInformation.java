@@ -82,7 +82,7 @@ public class GameInformation
     */
     public String getPlayer(GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         if (c == GoColor.BLACK)
             return m_playerBlack;
         else
@@ -94,7 +94,7 @@ public class GameInformation
     */
     public String getRank(GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         if (c == GoColor.BLACK)
             return m_rankBlack;
         else
@@ -151,7 +151,7 @@ public class GameInformation
 
     public void setPlayer(GoColor c, String name)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         if (c == GoColor.BLACK)
             m_playerBlack = name;
         else
@@ -160,7 +160,7 @@ public class GameInformation
 
     public void setRank(GoColor c, String rank)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         if (c == GoColor.BLACK)
             m_rankBlack = rank;
         else

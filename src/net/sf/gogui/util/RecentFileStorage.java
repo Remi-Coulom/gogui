@@ -184,7 +184,7 @@ public final class RecentFileStorage
 
     private static void createEmptyDocument()
     {
-        assert(s_builder != null);
+        assert s_builder != null;
         s_document = s_builder.newDocument();
         Element recentFiles = s_document.createElement("RecentFiles");
         s_document.appendChild(recentFiles);

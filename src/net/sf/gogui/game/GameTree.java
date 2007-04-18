@@ -65,7 +65,7 @@ public class GameTree
     */
     public GameInformation getGameInformation(ConstNode node)
     {
-        assert(NodeUtil.getRoot(node) == getRoot());
+        assert NodeUtil.getRoot(node) == getRoot();
         return getGameInformationNode(node).getGameInformation();
     }
 
@@ -75,7 +75,7 @@ public class GameTree
     */
     public Node getGameInformationNode(ConstNode node)
     {
-        assert(NodeUtil.getRoot(node) == getRoot());
+        assert NodeUtil.getRoot(node) == getRoot();
         while (node.getGameInformationConst() == null)
             node = node.getFatherConst();
         return (Node)node;
@@ -92,7 +92,7 @@ public class GameTree
     */
     public Node getNode(ConstNode node)
     {
-        assert(NodeUtil.getRoot(node) == getRoot());
+        assert NodeUtil.getRoot(node) == getRoot();
         return (Node)node;
     }
 

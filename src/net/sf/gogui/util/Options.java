@@ -62,7 +62,7 @@ public class Options
     */
     public String get(String option, String defaultValue)
     {
-        assert(isValidOption(option));
+        assert isValidOption(option);
         String value = getValue(option);
         if (value == null)
             return defaultValue;
@@ -292,7 +292,7 @@ public class Options
 
     private String getValue(String option)
     {
-        assert(isValidOption(option));
+        assert isValidOption(option);
         if (m_map.containsKey(option))
             return (String)m_map.get(option);
         return (String)m_map.get(option + ":");

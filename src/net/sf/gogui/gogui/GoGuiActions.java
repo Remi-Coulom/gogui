@@ -1035,7 +1035,7 @@ public class GoGuiActions
 
     private void updateActionPass(GoColor toMove)
     {
-        assert(toMove.isBlackWhite());
+        assert toMove.isBlackWhite();
         if (toMove == GoColor.BLACK)
             m_actionPass.setDescription("Play a pass for Black");
         else

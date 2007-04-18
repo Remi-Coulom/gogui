@@ -21,7 +21,7 @@ public final class TimeSettings
     */
     public TimeSettings(long totalTime)
     {
-        assert(totalTime > 0);
+        assert totalTime > 0;
         m_preByoyomi = totalTime;
         m_byoyomi = 0;
         m_byoyomiMoves = -1;
@@ -34,9 +34,9 @@ public final class TimeSettings
     */
     public TimeSettings(long preByoyomi, long byoyomi, int byoyomiMoves)
     {
-        assert(preByoyomi >= 0);
-        assert(byoyomi > 0);
-        assert(byoyomiMoves > 0);
+        assert preByoyomi >= 0;
+        assert byoyomi > 0;
+        assert byoyomiMoves > 0;
         m_preByoyomi = preByoyomi;
         m_byoyomi = byoyomi;
         m_byoyomiMoves = byoyomiMoves;
@@ -59,7 +59,7 @@ public final class TimeSettings
     */
     public long getByoyomi()
     {
-        assert(getUseByoyomi());
+        assert getUseByoyomi();
         return m_byoyomi;
     }
 
@@ -69,7 +69,7 @@ public final class TimeSettings
     */
     public int getByoyomiMoves()
     {
-        assert(getUseByoyomi());
+        assert getUseByoyomi();
         return m_byoyomiMoves;
     }
 

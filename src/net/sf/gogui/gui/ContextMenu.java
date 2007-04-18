@@ -216,7 +216,7 @@ public class ContextMenu
 
     private JMenuItem createItem(AnalyzeCommand command, String label)
     {
-        assert(! m_commands.contains(command));
+        assert ! m_commands.contains(command);
         m_commands.add(command);
         return createItem(label, Integer.toString(m_commands.size() - 1));
     }

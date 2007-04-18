@@ -147,7 +147,7 @@ public final class SgfReader
             }
             catch (SgfCharsetChanged e3)
             {
-                assert(false);
+                assert false;
             }
         }
     }
@@ -414,7 +414,7 @@ public final class SgfReader
                     int size = parseInt((String)values.get(0));
                     if (size <= 0 || size > GoPoint.MAXSIZE)
                         setWarning("Invalid board size value");
-                    assert(m_boardSize == -1);
+                    assert m_boardSize == -1;
                     m_boardSize = size;
                 }
                 catch (NumberFormatException e)
@@ -708,7 +708,7 @@ public final class SgfReader
         int byoyomiMoves;
         if (matcher.matches())
         {
-            assert(matcher.groupCount() == 2);
+            assert matcher.groupCount() == 2;
             try
             {
                 String group1;
@@ -729,7 +729,7 @@ public final class SgfReader
             catch (NumberFormatException e)
             {
                 // should not happen if patterns match only integer
-                assert(false);
+                assert false;
                 return false;
             }
         }
@@ -869,7 +869,7 @@ public final class SgfReader
             matcher = pattern.matcher(value.trim());
             if (matcher.matches())
             {
-                assert(matcher.groupCount() == 2);
+                assert matcher.groupCount() == 2;
                 m_preByoyomi =
                     (Integer.parseInt(matcher.group(1)) * 60L
                      + Integer.parseInt(matcher.group(2))) * 1000L;
@@ -879,7 +879,7 @@ public final class SgfReader
             matcher = pattern.matcher(value.trim());
             if (matcher.matches())
             {
-                assert(matcher.groupCount() == 3);
+                assert matcher.groupCount() == 3;
                 m_preByoyomi =
                     (Integer.parseInt(matcher.group(1)) * 3600L
                      + Integer.parseInt(matcher.group(2)) * 60L
@@ -889,7 +889,7 @@ public final class SgfReader
         }
         catch (NumberFormatException e2)
         {
-            assert(false); // patterns should match only valid integers
+            assert false; // patterns should match only valid integers
             return;
         }
         setWarning("Invalid value for time");

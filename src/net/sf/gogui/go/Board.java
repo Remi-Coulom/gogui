@@ -66,7 +66,7 @@ public final class Board
     */
     public int getCaptured(GoColor c)
     {
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         return m_captured[c.toInteger()];
     }
 
@@ -100,7 +100,7 @@ public final class Board
     public ConstPointList getKilled()
     {
         int n = getNumberMoves();
-        assert(n > 0);
+        assert n > 0;
         return getStackEntry(n - 1).m_killed;
     }
 
@@ -175,10 +175,10 @@ public final class Board
     /** Get stones of a block. */
     public void getStones(GoPoint p, GoColor color, PointList stones)
     {
-        assert(m_mark.isCleared());
+        assert m_mark.isCleared();
         findStones(p, color, stones);
         m_mark.set(stones, false);
-        assert(m_mark.isCleared());
+        assert m_mark.isCleared();
     }
 
     /** Player stones killed by suicide in last move.
@@ -191,7 +191,7 @@ public final class Board
     public ConstPointList getSuicide()
     {
         int n = getNumberMoves();
-        assert(n > 0);
+        assert n > 0;
         return getStackEntry(n - 1).m_suicide;
     }
 
@@ -391,7 +391,7 @@ public final class Board
     public void undo()
     {
         int index = getNumberMoves() - 1;
-        assert(index >= 0);
+        assert index >= 0;
         getStackEntry(index).undo(this);
         m_stack.remove(index);
     }
@@ -403,8 +403,8 @@ public final class Board
     */
     public void undo(int n)
     {
-        assert(n >= 0);
-        assert(n <= getNumberMoves());
+        assert n >= 0;
+        assert n <= getNumberMoves();
         for (int i = 0; i < n; ++i)
             undo();
     }
@@ -441,7 +441,7 @@ public final class Board
             {
                 m_oldColor = board.getColor(p);
                 board.setColor(p, c);
-                assert(c != GoColor.EMPTY);
+                assert c != GoColor.EMPTY;
                 ConstPointList adj = board.getAdjacentPoints(p);
                 for (int i = 0; i < adj.size(); ++i)
                 {
@@ -537,7 +537,7 @@ public final class Board
 
     private void checkKill(GoPoint p, GoColor color, PointList killed)
     {
-        assert(m_mark.isCleared());
+        assert m_mark.isCleared();
         PointList stones = new PointList();
         if (isDead(p, color, stones))
         {
@@ -546,7 +546,7 @@ public final class Board
                 setColor(stones.get(i), GoColor.EMPTY);
         }
         m_mark.set(stones, false);
-        assert(m_mark.isCleared());
+        assert m_mark.isCleared();
     }
 
     private void findStones(GoPoint p, GoColor color, PointList stones)
@@ -583,7 +583,7 @@ public final class Board
 
     private void setColor(GoPoint p, GoColor c)
     {
-        assert(p != null);
+        assert p != null;
         m_color[p.getX()][p.getY()] = c;
     }
 }

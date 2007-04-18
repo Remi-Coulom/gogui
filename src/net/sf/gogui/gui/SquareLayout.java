@@ -34,7 +34,7 @@ public class SquareLayout
     */
     public void layoutContainer(Container parent)
     {
-        assert(parent.getComponentCount() == 1);
+        assert parent.getComponentCount() == 1;
         Dimension size = parent.getSize();
         Insets insets = parent.getInsets();
         size.width -= insets.left + insets.right;
@@ -53,7 +53,7 @@ public class SquareLayout
     */
     public Dimension minimumLayoutSize(Container parent)
     {
-        assert(parent.getComponentCount() == 1);
+        assert parent.getComponentCount() == 1;
         return parent.getComponent(0).getMinimumSize();
     }
     
@@ -64,7 +64,7 @@ public class SquareLayout
     */
     public Dimension preferredLayoutSize(Container parent)
     {
-        assert(parent.getComponentCount() == 1);
+        assert parent.getComponentCount() == 1;
         return parent.getComponent(0).getPreferredSize();
     }
     

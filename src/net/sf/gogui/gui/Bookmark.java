@@ -109,7 +109,7 @@ public final class Bookmark
 
     private void init(String name, File file, int move, String variation)
     {
-        assert(move >= 0);
+        assert move >= 0;
         m_file = file;
         m_move = move;
         m_variation = variation.trim();

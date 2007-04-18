@@ -576,7 +576,7 @@ class MenuChecked
         {
             System.err.println("Warning: duplicate mnemonic item "
                                + item.getText());
-            assert(false);
+            assert false;
         }
         m_mnemonics.add(integer);
     }

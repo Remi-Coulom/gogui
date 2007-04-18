@@ -54,7 +54,7 @@ public final class Komi
     */
     public static Komi parseKomi(String s) throws InvalidKomi
     {
-        assert(s != null);
+        assert s != null;
         if (s.trim().equals(""))
             return null;
         try

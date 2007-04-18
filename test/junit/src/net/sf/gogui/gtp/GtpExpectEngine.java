@@ -43,13 +43,13 @@ public final class GtpExpectEngine
 
     public boolean isExpectQueueEmpty()
     {
-        assert(m_commands.size() == m_responses.size());
+        assert m_commands.size() == m_responses.size();
         return m_commands.size() == 0;
     }
 
     public void handleCommand(GtpCommand cmd) throws GtpError
     {
-        assert(m_commands.size() == m_responses.size());
+        assert m_commands.size() == m_responses.size();
         String line = cmd.getLine();
         if (m_commands.size() == 0)
             throw new GtpError("unexpected command: " + line);

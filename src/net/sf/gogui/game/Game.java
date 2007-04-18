@@ -120,8 +120,8 @@ public class Game
 
     public void gotoNode(ConstNode node)
     {
-        assert(node != null);
-        assert(NodeUtil.getRoot(node) == getRoot());
+        assert node != null;
+        assert NodeUtil.getRoot(node) == getRoot();
         m_current = (Node)node;
         updateBoard();
     }
@@ -192,7 +192,7 @@ public class Game
         Node node = new Node(move);
         if (m_clock.isInitialized())
         {
-            assert(! m_clock.isRunning());
+            assert ! m_clock.isRunning();
             GoColor color = move.getColor();
             // Round time to seconds
             long timeLeft = m_clock.getTimeLeft(color) / 1000L;
@@ -249,14 +249,14 @@ public class Game
 
     public void setComment(String comment, ConstNode node)
     {
-        assert(NodeUtil.getRoot(node) == getRoot());
+        assert NodeUtil.getRoot(node) == getRoot();
         m_modified = ! ObjectUtil.equals(comment, node.getComment());
         ((Node)node).setComment(comment);
     }
 
     public void setGameInformation(ConstGameInformation info, ConstNode node)
     {
-        assert(NodeUtil.getRoot(node) == getRoot());
+        assert NodeUtil.getRoot(node) == getRoot();
         ((Node)node).createGameInformation();
         if (! ((Node)node).getGameInformation().equals(info))
         {
@@ -299,8 +299,8 @@ public class Game
 
     public void setToMove(GoColor color)
     {
-        assert(color != null);
-        assert(! color.equals(GoColor.EMPTY));
+        assert color != null;
+        assert ! color.equals(GoColor.EMPTY);
         m_modified = (! ObjectUtil.equals(color, m_current.getPlayer())
                       || color.equals(m_board.getToMove()));
         m_current.setPlayer(color);
@@ -309,7 +309,7 @@ public class Game
 
     public void setup(GoPoint p, GoColor c)
     {
-        assert(p != null);
+        assert p != null;
         m_modified = true;
         m_current.removeSetup(p);
         Node father = m_current.getFather();
@@ -339,7 +339,7 @@ public class Game
     public void truncate()
     {
         Node father = m_current.getFather();
-        assert(father != null);
+        assert father != null;
         Node oldCurrentNode = m_current;
         m_current = father;
         m_current.removeChild(oldCurrentNode);

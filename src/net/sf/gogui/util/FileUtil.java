@@ -38,9 +38,9 @@ public final class FileUtil
     */
     public static String getRelativeURI(File fromFile, File toFile)
     {
-        assert(! fromFile.exists() || ! fromFile.isDirectory());
+        assert ! fromFile.exists() || ! fromFile.isDirectory();
         fromFile = fromFile.getAbsoluteFile().getParentFile();
-        assert(fromFile != null);
+        assert fromFile != null;
         ArrayList fromList = splitFile(fromFile);
         ArrayList toList = splitFile(toFile);
         int fromSize = fromList.size();
@@ -95,7 +95,7 @@ public final class FileUtil
         if (hasExtension(file, oldExtension))
         {
             int index = name.lastIndexOf('.');
-            assert(index >= 0);
+            assert index >= 0;
             return name.substring(0, index);
         }
         return name;
@@ -113,7 +113,7 @@ public final class FileUtil
         if (hasExtension(file, oldExtension))
         {
             int index = name.lastIndexOf('.');
-            assert(index >= 0);
+            assert index >= 0;
             return name.substring(0, index) + "." + newExtension;
         }
         return name + "." + newExtension;

@@ -45,7 +45,7 @@ public class SgfWriter
         catch (UnsupportedEncodingException e)
         {
             // UTF-8 should be supported by every Java implementation
-            assert(false);
+            assert false;
         }
         print("(");
         m_size = tree.getBoardSize();

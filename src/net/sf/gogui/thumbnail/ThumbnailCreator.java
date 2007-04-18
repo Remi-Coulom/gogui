@@ -104,7 +104,7 @@ public final class ThumbnailCreator
     public void create(File input, File output, int thumbnailSize,
                        boolean scale) throws Error
     {
-        assert(thumbnailSize > 0);
+        assert thumbnailSize > 0;
         m_lastThumbnail = null;
         try
         {
@@ -317,7 +317,7 @@ public final class ThumbnailCreator
         }
         catch (IIOInvalidTreeException e)
         {
-            assert(false);
+            assert false;
             return;
         }
         // Renaming a temporary file as required bu the standard does

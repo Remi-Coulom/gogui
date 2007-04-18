@@ -108,8 +108,8 @@ public class GtpSynchronizer
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
         ConstBoard targetState = computeTargetState(board);
-        assert(findNumberCommonMoves(targetState)
-               == targetState.getNumberMoves());
+        assert findNumberCommonMoves(targetState)
+            == targetState.getNumberMoves();
         if (m_fillPasses && m_engineState.getNumberMoves() > 0)
         {
             Move lastMove = m_engineState.getLastMove();
@@ -129,18 +129,18 @@ public class GtpSynchronizer
     public void updateAfterGenmove(ConstBoard board)
     {
         Move move = board.getLastMove();
-        assert(move != null);
+        assert move != null;
         m_engineState.play(move);
         try
         {
             ConstBoard targetState = computeTargetState(board);
-            assert(findNumberCommonMoves(targetState)
-                   == targetState.getNumberMoves());
+            assert findNumberCommonMoves(targetState)
+                == targetState.getNumberMoves();
         }
         catch (GtpError e)
         {
             // computeTargetState should not throw (no new setup
-            assert(false);
+            assert false;
         }
     }
 
@@ -401,7 +401,7 @@ public class GtpSynchronizer
         }
         else
         {
-            assert(m_isSupportedUndo);
+            assert m_isSupportedUndo;
             for (int i = 0; i < n; ++i)
             {
                 m_gtp.send("undo");

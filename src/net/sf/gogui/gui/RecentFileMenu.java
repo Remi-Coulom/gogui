@@ -21,7 +21,7 @@ public class RecentFileMenu
 
     public RecentFileMenu(String label, String path, Listener listener)
     {
-        assert(listener != null);
+        assert listener != null;
         m_listener = listener;
         RecentMenu.Listener recentListener = new RecentMenu.Listener()
         {

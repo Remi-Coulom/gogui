@@ -16,7 +16,7 @@ public final class ObjectUtil
             return false;
         if (object1 != null && object2 == null)
             return false;
-        assert(object1 != null && object2 != null);
+        assert object1 != null && object2 != null;
         return object1.equals(object2);
     }
 

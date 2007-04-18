@@ -113,8 +113,8 @@ public class GuiGtpClient
     {
         synchronized (m_mutex)
         {
-            assert(SwingUtilities.isEventDispatchThread());
-            assert(m_commandInProgress);
+            assert SwingUtilities.isEventDispatchThread();
+            assert m_commandInProgress;
             m_commandInProgress = false;
             return m_exception;
         }
@@ -122,25 +122,25 @@ public class GuiGtpClient
 
     public String getProgramLabel()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getLabel();
     }
     
     public String getProgramName()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getName();
     }
     
     public String getProgramCommand()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getProgramCommand();
     }
 
     public int getProtocolVersion()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getProtocolVersion();
     }
 
@@ -151,15 +151,15 @@ public class GuiGtpClient
     {
         synchronized (m_mutex)
         {
-            assert(SwingUtilities.isEventDispatchThread());
-            assert(! m_commandInProgress);
+            assert SwingUtilities.isEventDispatchThread();
+            assert ! m_commandInProgress;
             return m_response;
         }
     }
     
     public ArrayList getSupportedCommands()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getSupportedCommands();
     }
 
@@ -186,8 +186,8 @@ public class GuiGtpClient
     public void initSynchronize(ConstBoard board, Komi komi,
                                 TimeSettings timeSettings) throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         m_gtpSynchronizer.init(board, komi, timeSettings);
     }
 
@@ -203,8 +203,8 @@ public class GuiGtpClient
 
     public boolean isSupported(String command)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         return m_gtp.isSupported(command);
     }
 
@@ -220,7 +220,7 @@ public class GuiGtpClient
 
     public boolean isProgramDead()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.isProgramDead();
     }
 
@@ -231,30 +231,30 @@ public class GuiGtpClient
 
     public void queryName() throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         TimeoutCallback timeoutCallback = new TimeoutCallback("name");
         m_gtp.queryName(TIMEOUT, timeoutCallback);
     }
 
     public void queryProtocolVersion()
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         m_gtp.queryProtocolVersion();
     }
 
     public void querySupportedCommands() throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         m_gtp.querySupportedCommands();
     }
 
     public String queryVersion() throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         return m_gtp.queryVersion();
     }
 
@@ -293,8 +293,8 @@ public class GuiGtpClient
     /** Send asynchronous command. */
     public void send(String command, Runnable callback)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         synchronized (m_mutex)
         {
             m_command = command;
@@ -307,8 +307,8 @@ public class GuiGtpClient
     /** Send command in event dispatch thread. */
     public String send(String command) throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         TimeoutCallback timeoutCallback = new TimeoutCallback(command);
         return m_gtp.send(command, TIMEOUT, timeoutCallback);
     }
@@ -325,8 +325,8 @@ public class GuiGtpClient
 
     public void sendPlay(Move move) throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         TimeoutCallback timeoutCallback = new TimeoutCallback("play");
         m_gtp.sendPlay(move, TIMEOUT, timeoutCallback);
     }
@@ -334,22 +334,22 @@ public class GuiGtpClient
     public void synchronize(ConstBoard board, Komi komi,
                             TimeSettings timeSettings) throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         m_gtpSynchronizer.synchronize(board, komi, timeSettings);
     }
 
     public void updateAfterGenmove(ConstBoard board)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         m_gtpSynchronizer.updateAfterGenmove(board);
     }
 
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
+        assert SwingUtilities.isEventDispatchThread();
+        assert ! m_commandInProgress;
         m_gtpSynchronizer.updateHumanMove(board, move);
     }
 

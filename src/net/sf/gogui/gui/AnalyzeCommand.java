@@ -197,7 +197,7 @@ public class AnalyzeCommand
                 buffer.append(" Black");
             else
             {
-                assert(m_colorArg == GoColor.WHITE);
+                assert m_colorArg == GoColor.WHITE;
                 buffer.append(" White");
             }
         }
@@ -400,12 +400,12 @@ public class AnalyzeCommand
         }
         if (needsStringArg())
         {
-            assert(m_stringArg != null);
+            assert m_stringArg != null;
             result = result.replaceAll("%s", m_stringArg);
         }
         if (needsOptStringArg())
         {
-            assert(m_optStringArg != null);
+            assert m_optStringArg != null;
             result = result.replaceAll("%o", m_optStringArg);
         }
         if (needsColorArg())
@@ -422,25 +422,25 @@ public class AnalyzeCommand
 
     public void setColorArg(GoColor color)
     {
-        assert(needsColorArg());
+        assert needsColorArg();
         m_colorArg = color;
     }
 
     public void setFileArg(File file)
     {
-        assert(needsFileArg());
+        assert needsFileArg();
         m_fileArg = file;
     }
 
     public void setFileOpenArg(File file)
     {
-        assert(needsFileOpenArg());
+        assert needsFileOpenArg();
         m_fileOpenArg = file;
     }
 
     public void setFileSaveArg(File file)
     {
-        assert(needsFileSaveArg());
+        assert needsFileSaveArg();
         m_fileSaveArg = file;
     }
 
@@ -456,13 +456,13 @@ public class AnalyzeCommand
 
     public void setStringArg(String value)
     {
-        assert(needsStringArg());
+        assert needsStringArg();
         m_stringArg = value;
     }
 
     public void setOptStringArg(String value)
     {
-        assert(needsOptStringArg());
+        assert needsOptStringArg();
         m_optStringArg = value;
     }
 

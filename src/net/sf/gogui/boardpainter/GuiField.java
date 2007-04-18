@@ -218,7 +218,7 @@ public class GuiField
 
     public void setTerritory(GoColor color)
     {
-        assert(color != null);
+        assert color != null;
         m_territory = color;
     }
 
@@ -517,7 +517,7 @@ public class GuiField
             m_graphics.setColor(Color.darkGray);
         else
         {
-            assert(m_territory == GoColor.WHITE);
+            assert m_territory == GoColor.WHITE;
             m_graphics.setColor(Color.lightGray);
         }
         m_graphics.fillRect(0, 0, m_size, m_size);
@@ -530,7 +530,7 @@ public class GuiField
             m_graphics2D.setColor(Color.darkGray);
         else
         {
-            assert(m_territory == GoColor.WHITE);
+            assert m_territory == GoColor.WHITE;
             m_graphics2D.setColor(Color.white);
         }
         m_graphics2D.fillRect(0, 0, m_size, m_size);
@@ -550,7 +550,7 @@ public class GuiField
         }
         else
         {
-            assert(color == GoColor.WHITE);
+            assert color == GoColor.WHITE;
             paint = m_paintWhite;
             paintSize = m_paintSizeWhite;
         }

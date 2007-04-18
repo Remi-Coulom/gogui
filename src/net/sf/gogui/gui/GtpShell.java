@@ -295,7 +295,7 @@ public class GtpShell
 
         public void run()
         {
-            assert(SwingUtilities.isEventDispatchThread());
+            assert SwingUtilities.isEventDispatchThread();
             m_gtpShell.appendLog(m_text);
         }
 
@@ -393,20 +393,20 @@ public class GtpShell
 
     private void appendInvalidResponse(String response)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         m_gtpShellText.appendInvalidResponse(response);
     }
     
     private void appendLog(String line)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         m_gtpShellText.appendLog(line);
         setFinalSize();
     }
     
     private void appendResponse(boolean error, String response)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         if (error)
             m_gtpShellText.appendError(response);
         else
@@ -416,7 +416,7 @@ public class GtpShell
     
     private void appendSentCommand(String command)
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         m_commands.append(command);
         m_commands.append('\n');
         ++m_numberCommands;
@@ -425,7 +425,7 @@ public class GtpShell
             int truncateLines = m_numberCommands - m_historyMin;
             String s = m_commands.toString();
             int index = GtpShellText.findTruncateIndex(s, truncateLines);
-            assert(index != -1);
+            assert index != -1;
             m_commands.delete(0, index);
             m_linesTruncated += truncateLines;
             m_numberCommands = 0;
@@ -445,7 +445,7 @@ public class GtpShell
 
     private void commandEntered()
     {
-        assert(SwingUtilities.isEventDispatchThread());
+        assert SwingUtilities.isEventDispatchThread();
         String command = m_textField.getText().trim();
         if (command.trim().equals(""))
             return;

@@ -44,7 +44,7 @@ public class CountScore
     public PointList changeStatus(GoPoint p)
     {
         GoColor c = m_board.getColor(p);
-        assert(c.isBlackWhite());
+        assert c.isBlackWhite();
         PointList stones = new PointList();
         Marker marker = new Marker(m_board.getSize());
         boolean allSurroundingAlive = findRegion(p, c, marker, stones);
@@ -245,7 +245,7 @@ public class CountScore
 
     private void setScore(GoPoint p, GoColor c)
     {
-        assert(c != null);
+        assert c != null;
         m_score[p.getX()][p.getY()] = c;
     }
 

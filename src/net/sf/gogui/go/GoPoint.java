@@ -78,12 +78,12 @@ public final class GoPoint
     */
     public static GoPoint get(int x, int y)
     {
-        assert(x >= 0);
-        assert(y >= 0);
-        assert(x < MAXSIZE);
-        assert(y < MAXSIZE);
+        assert x >= 0;
+        assert y >= 0;
+        assert x < MAXSIZE;
+        assert y < MAXSIZE;
         GoPoint point = s_points[x][y];
-        assert(point != null);
+        assert point != null;
         return point;
     }
 
@@ -127,8 +127,8 @@ public final class GoPoint
 
     public boolean isOnBoard(int size)
     {
-        assert(size > 0);
-        assert(size <= MAXSIZE);
+        assert size > 0;
+        assert size <= MAXSIZE;
         return (m_x < size && m_y < size);
     }
 
