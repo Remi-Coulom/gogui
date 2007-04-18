@@ -236,15 +236,8 @@ public final class GoPoint
 
     private final String m_string;
 
-    private static String s_xString[] =
-    {
-        "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O",
-        "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-    };
-
     static
     {
-        assert(s_xString.length == MAXSIZE);
         s_points = new GoPoint[MAXSIZE][MAXSIZE];
         for (int x = 0; x < MAXSIZE; ++x)
             for (int y = 0; y < MAXSIZE; ++y)
@@ -255,7 +248,10 @@ public final class GoPoint
     {
         m_x = x;
         m_y = y;
-        m_string = s_xString[m_x] + Integer.toString(m_y + 1);
+        char xChar = (char)('A' + x);
+        if (xChar >= 'I')
+            ++xChar;
+        m_string = xChar + Integer.toString(m_y + 1);
     }
 }
 
