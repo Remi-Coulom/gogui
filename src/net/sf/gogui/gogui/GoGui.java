@@ -2815,7 +2815,7 @@ public class GoGui
                     if (! e.getMessage().trim().equals(""))
                     {
                         optionalMessage = optionalMessage +
-                            "The response was \"" + e.getMessage() + "\"";
+                            "The response was: \"" + e.getMessage() + "\"";
                         if (! e.getMessage().endsWith("."))
                             optionalMessage = optionalMessage + ".";
                         optionalMessage = optionalMessage + "\n";
@@ -3869,7 +3869,7 @@ public class GoGui
                 nameNotCapitalized + " failed.";
             if (! e.getMessage().trim().equals(""))
             {
-                optionalMessage = optionalMessage + " The response was \""
+                optionalMessage = optionalMessage + " The response was: \""
                     + e.getMessage() + "\"";
                 if (! e.getMessage().endsWith("."))
                     optionalMessage = optionalMessage + ".";
