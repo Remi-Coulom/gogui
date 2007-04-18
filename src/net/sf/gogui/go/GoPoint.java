@@ -46,17 +46,23 @@ public final class GoPoint
     */
     public int compareTo(Object object)
     {
-        GoPoint point = (GoPoint)object;
-        if (m_y < point.m_y)
+        GoPoint p = (GoPoint)object;
+        if (m_index < p.m_index)
             return -1;
-        if (m_y > point.m_y)
+        else if (m_index > p.m_index)
             return 1;
-        assert(m_y == point.m_y);
-        if (m_x < point.m_x)
-            return -1;
-        if (m_x > point.m_x)
-            return 1;
-        return 0;
+        else
+            return 0;
+    }
+
+    /** Indicate if this object is equal to another object.
+        Since point instances are unique, this function does the same as
+        Object.equals and is only added explicitely to avoid warnings about
+        classes with a compareTo, but no equals-function.
+    */
+    public boolean equals(Object obj)
+    {
+        return (this == obj);
     }
 
     /** Compare, including the case that the points can be null. */
@@ -79,6 +85,21 @@ public final class GoPoint
         GoPoint point = s_points[x][y];
         assert(point != null);
         return point;
+    }
+
+    /** Integer for using points as indices in an array.
+        The index of A1 is zero and the indices count upwards from left
+        to right and bottom to top over a board with the maximum size
+        GoPoint.MAXSIZE.
+    */
+    public int getIndex()
+    {
+        return m_index;
+    }
+
+    public int hashCode()
+    {
+        return m_index;
     }
 
     /** Return point below.
@@ -234,6 +255,8 @@ public final class GoPoint
 
     private final int m_y;
 
+    private final int m_index;
+
     private final String m_string;
 
     static
@@ -252,6 +275,7 @@ public final class GoPoint
         if (xChar >= 'I')
             ++xChar;
         m_string = xChar + Integer.toString(m_y + 1);
+        m_index = y * GoPoint.MAXSIZE + x;
     }
 }
 
