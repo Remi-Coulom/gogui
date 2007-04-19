@@ -350,7 +350,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gmptogtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gmptogtp.jar">
+<jar destfile="lib/gmptogtp.jar" compress="true">
 <manifest>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
@@ -419,7 +419,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gogui.jar" depends="compile,extract-looks,extract-quaqua">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui.jar">
+<jar destfile="lib/gogui.jar" compress="false">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -455,7 +455,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpadapter.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpadapter.jar">
+<jar destfile="lib/gtpadapter.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpadapter.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -475,7 +475,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpdisplay.jar" depends="compile,extract-looks,extract-quaqua">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpdisplay.jar">
+<jar destfile="lib/gtpdisplay.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -511,7 +511,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpdummy.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpdummy.jar">
+<jar destfile="lib/gtpdummy.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpdummy.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -530,7 +530,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpregress.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpregress.jar">
+<jar destfile="lib/gtpregress.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpregress.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -550,7 +550,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpserver.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpserver.jar">
+<jar destfile="lib/gtpserver.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpserver.GtpServer"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -570,7 +570,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpstatistics.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpstatistics.jar">
+<jar destfile="lib/gtpstatistics.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpstatistics.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -591,7 +591,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gtpterminal.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpterminal.jar">
+<jar destfile="lib/gtpterminal.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpterminal.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -682,7 +682,7 @@ ${quaqua.nestedzipfile}
 
 <target name="netgtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/netgtp.jar">
+<jar destfile="lib/netgtp.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.netgtp.NetGtp"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -767,7 +767,7 @@ ${quaqua.nestedzipfile}
 
 <target name="sgftotex.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/sgftotex.jar">
+<jar destfile="lib/sgftotex.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.sgftotex.SgfToTex"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -787,7 +787,7 @@ ${quaqua.nestedzipfile}
 
 <target name="sgfthumbnail.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/sgfthumbnail.jar">
+<jar destfile="lib/sgfthumbnail.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.sgfthumbnail.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -826,7 +826,7 @@ ${quaqua.nestedzipfile}
 
 <target name="twogtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/twogtp.jar">
+<jar destfile="lib/twogtp.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.twogtp.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
