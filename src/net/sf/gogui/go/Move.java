@@ -4,11 +4,10 @@
 
 package net.sf.gogui.go;
 
-/** Move.
-    Contains a point (null for pass move) and a color.
-    The color is black or white
-    (empty can still be used for removing a stone on the board, but this will
-    be deprecated in the future)
+/** Move containing a point and a color.
+    The point can be <code>null</code> (for pass move).
+    The color is black or white (EMPTY can still be used for removing a stone
+    on the board, but this will be deprecated in the future).
     This class is immutable, references are unique.
 */
 public final class Move
