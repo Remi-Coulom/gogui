@@ -7,9 +7,16 @@ package net.sf.gogui.go;
 /** Static utility functions related to class Board. */
 public final class BoardUtil
 {
-    /** Number of rotation modes for #rotate(). */
+    /** Number of rotation modes for <code>BoardUtil.rotate()</code>.
+        @see #rotate
+    */
     public static final int NUMBER_ROTATIONS = 8;
 
+    /** Copy the state of one board to another.
+        Initializes the target board with the size and the setup stones of the
+        source board and executes all moves of the source board on the target
+        board.
+    */
     public static void copy(Board target, ConstBoard source)
     {
         target.init(source.getSize());
@@ -27,6 +34,11 @@ public final class BoardUtil
             target.play(source.getMove(i));
     }
 
+    /** Get board position as text diagram (without additional game
+        information).
+        Calls <code>toString()</code> with <code>withGameInfo == false</code>.
+        @see #toString(ConstBoard, boolean)
+    */
     public static String toString(ConstBoard board)
     {
         return toString(board, true);
@@ -34,7 +46,8 @@ public final class BoardUtil
 
     /** Get board position as text diagram.
         @param board The board to print.
-        @param withGameInfo Print game information (prisoners)
+        @param withGameInfo Print additional game information on the right
+        side of the board (at present only number of prisoners)
         @return Board position as text diagram.
     */
     public static String toString(ConstBoard board, boolean withGameInfo)
