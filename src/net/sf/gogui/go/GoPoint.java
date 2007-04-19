@@ -10,7 +10,9 @@ import net.sf.gogui.util.StringUtil;
 /** Intersection on the Go board.
     This class is immutable and references to the same point are unique.
     Instances can be created with GoPoint.get().
-    Point coordinates start with 0, the point (0,0) corresponds to "A1".
+    Point coordinates start with 0, the point (0,0) corresponds to "A1"
+    and is on the lower left corner of the board, if the board is drawn on
+    the screen.
 */
 public final class GoPoint
     implements Comparable
