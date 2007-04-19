@@ -74,21 +74,36 @@ public final class BoardConstants
         return result;
     }
 
+    /** Get list containing all points on the board. */
     public ConstPointList getPoints()
     {
         return m_allPoints;
     }
 
+    /** Get board size. */
     public int getSize()
     {
         return m_size;
     }
 
+    /** Check if line is on the edge of the board.
+        @param i The value of the constant coordinate shared by all points
+        on the line.
+        @return <code>true</code>, if the constant coordinate has the smallest
+        or largest possible value (<code>0</code> or
+        <code>getSize() - 1</code>).
+    */
     public boolean isEdgeLine(int i)
     {
         return (i == 0 || i == m_size - 1);
     }
 
+    /** Check if line is a line containing handicap points.
+        @param i The value of the constant coordinate shared by all points
+        on the line.
+        @return <code>true</code>, if the line contains handicap points.
+        @see #getHandicapStones
+    */        
     public boolean isHandicapLine(int i)
     {
         return (i == m_handicapLine1 || i == m_handicapLine2
@@ -98,6 +113,7 @@ public final class BoardConstants
     /** Check if point is a potential location of a handicap stone.
         @param p The point to check.
         @return true, if point is a potential location of a handicap stone.
+        @see #getHandicapStones
     */
     public boolean isHandicap(GoPoint p)
     {
