@@ -14,7 +14,7 @@ public final class BoardConstants
         reference to the existing one is returned.
         The creation is done in a thread-safe way.
         @param boardSize The new board size (number of points per
-        row / column) in the range from one to GoPoint.MAXSIZE
+        row / column) in the range from one to GoPoint.MAX_SIZE
         @return The board constants.
     */
     public static BoardConstants get(int boardSize)
@@ -123,7 +123,7 @@ public final class BoardConstants
     }
 
     private static BoardConstants[] s_boardConstants
-        = new BoardConstants[GoPoint.MAXSIZE + 1];
+        = new BoardConstants[GoPoint.MAX_SIZE + 1];
 
     private final int m_size;
 

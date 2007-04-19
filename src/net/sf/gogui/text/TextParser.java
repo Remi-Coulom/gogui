@@ -180,7 +180,7 @@ public class TextParser
                 break;
         }
         // Don't try to parse boards smaller than 3x3
-        if (size < 3 || size > GoPoint.MAXSIZE)
+        if (size < 3 || size > GoPoint.MAX_SIZE)
             return false;
         if (initSize)
             m_width = size;

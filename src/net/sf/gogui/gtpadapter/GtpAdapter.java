@@ -101,7 +101,7 @@ public class GtpAdapter
     public void cmdBoardsize(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        int size = cmd.getIntArg(0, 1, GoPoint.MAXSIZE);
+        int size = cmd.getIntArg(0, 1, GoPoint.MAX_SIZE);
         m_board.init(size);
         synchronize();
     }

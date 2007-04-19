@@ -364,7 +364,7 @@ public class GoGui
             return;
         int size = BoardSizeDialog.show(this, getBoardSize(),
                                         m_messageDialogs);
-        if (size < 1 || size > GoPoint.MAXSIZE)
+        if (size < 1 || size > GoPoint.MAX_SIZE)
             return;
         actionBoardSize(size);
     }

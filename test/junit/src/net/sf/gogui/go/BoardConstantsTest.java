@@ -83,7 +83,7 @@ public final class BoardConstantsTest
 
     private static GoPoint parsePoint(String s)
     {
-        int boardSize = GoPoint.MAXSIZE;
+        int boardSize = GoPoint.MAX_SIZE;
         try
         {
             return GoPoint.parsePoint(s, boardSize);

@@ -38,7 +38,7 @@ public final class Main
                 return;
             }
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
-                                      GoPoint.MAXSIZE);
+                                      GoPoint.MAX_SIZE);
             boolean verbose = opt.contains("verbose");
             ArrayList arguments = opt.getArguments();
             if (arguments.size() != 1)

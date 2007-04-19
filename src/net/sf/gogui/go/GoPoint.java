@@ -38,7 +38,7 @@ public final class GoPoint
         Set such that all points can be converted to strings with one letter
         and a number, i.e. the largest point is Z25.
     */
-    public static final int MAXSIZE = 25;
+    public static final int MAX_SIZE = 25;
 
     /** Default board size. */
     public static final int DEFAULT_SIZE = 19;
@@ -74,16 +74,16 @@ public final class GoPoint
     }
 
     /** Factory method for creating a point.
-        @param x x-coordinate [0...GoPoint.MAXSIZE - 1]
-        @param y y-coordinate [0...GoPoint.MAXSIZE - 1]
+        @param x x-coordinate <code>[0...GoPoint.MAX_SIZE - 1]</code>
+        @param y y-coordinate <code>[0...GoPoint.MAX_SIZE - 1]</code>
         @return Unique reference to a point with these coordinates.
     */
     public static GoPoint get(int x, int y)
     {
         assert x >= 0;
         assert y >= 0;
-        assert x < MAXSIZE;
-        assert y < MAXSIZE;
+        assert x < MAX_SIZE;
+        assert y < MAX_SIZE;
         GoPoint point = s_points[x][y];
         assert point != null;
         return point;
@@ -92,7 +92,7 @@ public final class GoPoint
     /** Integer for using points as indices in an array.
         The index of A1 is zero and the indices count upwards from left
         to right and bottom to top over a board with the maximum size
-        GoPoint.MAXSIZE.
+        GoPoint.MAX_SIZE.
     */
     public int getIndex()
     {
@@ -130,7 +130,7 @@ public final class GoPoint
     public boolean isOnBoard(int size)
     {
         assert size > 0;
-        assert size <= MAXSIZE;
+        assert size <= MAX_SIZE;
         return (m_x < size && m_y < size);
     }
 
@@ -263,9 +263,9 @@ public final class GoPoint
 
     static
     {
-        s_points = new GoPoint[MAXSIZE][MAXSIZE];
-        for (int x = 0; x < MAXSIZE; ++x)
-            for (int y = 0; y < MAXSIZE; ++y)
+        s_points = new GoPoint[MAX_SIZE][MAX_SIZE];
+        for (int x = 0; x < MAX_SIZE; ++x)
+            for (int y = 0; y < MAX_SIZE; ++y)
                 s_points[x][y] = new GoPoint(x, y);
     }
 
@@ -277,7 +277,7 @@ public final class GoPoint
         if (xChar >= 'I')
             ++xChar;
         m_string = xChar + Integer.toString(m_y + 1);
-        m_index = y * GoPoint.MAXSIZE + x;
+        m_index = y * GoPoint.MAX_SIZE + x;
     }
 }
 

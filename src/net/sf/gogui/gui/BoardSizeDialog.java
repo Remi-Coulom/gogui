@@ -26,7 +26,7 @@ public final class BoardSizeDialog
         try
         {
             size = Integer.parseInt((String)value);
-            if (size < 1 || size > GoPoint.MAXSIZE)
+            if (size < 1 || size > GoPoint.MAX_SIZE)
                 size = -1;
         }
         catch (NumberFormatException e)
@@ -37,7 +37,7 @@ public final class BoardSizeDialog
             String mainMessage = "Invalid size";
             String optionalMessage =
                 "Valid board sizes are numbers between 1 and "
-                + GoPoint.MAXSIZE + ".";
+                + GoPoint.MAX_SIZE + ".";
             messageDialogs.showError(parent, mainMessage, optionalMessage,
                                      false);
         }

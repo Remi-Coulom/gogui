@@ -412,7 +412,7 @@ public final class SgfReader
                 try
                 {
                     int size = parseInt((String)values.get(0));
-                    if (size <= 0 || size > GoPoint.MAXSIZE)
+                    if (size <= 0 || size > GoPoint.MAX_SIZE)
                         setWarning("Invalid board size value");
                     assert m_boardSize == -1;
                     m_boardSize = size;
@@ -783,7 +783,7 @@ public final class SgfReader
             // Try human-readable encoding as used by SmartGo
             try
             {
-                return GoPoint.parsePoint(s, GoPoint.MAXSIZE);
+                return GoPoint.parsePoint(s, GoPoint.MAX_SIZE);
             }
             catch (GoPoint.InvalidPoint e)
             {

@@ -174,7 +174,7 @@ public final class GoGuiSettings
     private void validate() throws ErrorMessage
     {
         int size = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
-        if (size < 1 || size > GoPoint.MAXSIZE)
+        if (size < 1 || size > GoPoint.MAX_SIZE)
             throw new ErrorMessage("Invalid board size: " + size);
     }
 }

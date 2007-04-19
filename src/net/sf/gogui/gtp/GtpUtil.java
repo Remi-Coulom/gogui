@@ -139,7 +139,7 @@ public final class GtpUtil
     /** Find all points contained in string. */
     public static PointList parsePointString(String text)
     {
-        return parsePointString(text, GoPoint.MAXSIZE);
+        return parsePointString(text, GoPoint.MAX_SIZE);
     }
 
     /** Find all points contained in string. */

@@ -229,7 +229,7 @@ public class GtpDisplay
     private void cmdBoardsize(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        int size = cmd.getIntArg(0, 1, GoPoint.MAXSIZE);
+        int size = cmd.getIntArg(0, 1, GoPoint.MAX_SIZE);
         if (m_gtp != null)
         {
             String command = m_gtp.getCommandBoardsize(size);

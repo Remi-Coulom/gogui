@@ -52,7 +52,7 @@ public class TwoGtp
     {
         super(null);
         assert size > 0;
-        assert size <= GoPoint.MAXSIZE;
+        assert size <= GoPoint.MAX_SIZE;
         if (black.equals(""))
             throw new ErrorMessage("No black program set");
         if (white.equals(""))
@@ -419,7 +419,7 @@ public class TwoGtp
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        int size = cmd.getIntArg(0, 1, GoPoint.MAXSIZE);
+        int size = cmd.getIntArg(0, 1, GoPoint.MAX_SIZE);
         if (size != m_size)
             throw new GtpError("Size must be " + m_size);
     }

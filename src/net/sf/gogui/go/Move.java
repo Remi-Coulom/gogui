@@ -15,8 +15,8 @@ public final class Move
 {
     /** Factory method for constructing a move.
         @param color The color of the move (empty for stone removal)
-        @param x Column in [0..GoPoint.MAXSIZE - 1]
-        @param y Row in [0..GoPoint.MAXSIZE - 1]
+        @param x Column in <code>[0..GoPoint.MAX_SIZE - 1]</code>
+        @param y Row in <code>[0..GoPoint.MAX_SIZE - 1]</code>
         @return Reference to this move
     */
     public static Move get(GoColor color, int x, int y)
@@ -111,9 +111,9 @@ public final class Move
 
     private static Move[][] init(GoColor color)
     {
-        Move[][] result = new Move[GoPoint.MAXSIZE][GoPoint.MAXSIZE];
-        for (int x = 0; x < GoPoint.MAXSIZE; ++x)
-            for (int y = 0; y < GoPoint.MAXSIZE; ++y)
+        Move[][] result = new Move[GoPoint.MAX_SIZE][GoPoint.MAX_SIZE];
+        for (int x = 0; x < GoPoint.MAX_SIZE; ++x)
+            for (int y = 0; y < GoPoint.MAX_SIZE; ++y)
                 result[x][y] = new Move(color, GoPoint.get(x, y));
         return result;
     }

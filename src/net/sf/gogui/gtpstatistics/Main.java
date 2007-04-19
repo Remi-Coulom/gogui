@@ -71,7 +71,7 @@ public final class Main
             int max = opt.getInteger("max", Integer.MAX_VALUE, 0);
             int precision = opt.getInteger("precision", 3, 0);
             int boardSize = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
-                                           GoPoint.MAXSIZE);
+                                           GoPoint.MAX_SIZE);
             ArrayList commands = parseCommands(opt, "commands");
             ArrayList finalCommands = parseCommands(opt, "final");
             ArrayList beginCommands = parseCommands(opt, "begin");

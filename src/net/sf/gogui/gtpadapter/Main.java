@@ -61,7 +61,7 @@ public final class Main
             boolean resign = opt.contains("resign");
             int resignScore = opt.getInteger("resign");            
             ArrayList arguments = opt.getArguments();
-            int size = opt.getInteger("size", 19, 1, GoPoint.MAXSIZE);
+            int size = opt.getInteger("size", 19, 1, GoPoint.MAX_SIZE);
             if (arguments.size() != 1)
             {
                 printUsage(System.err);

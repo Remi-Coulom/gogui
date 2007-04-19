@@ -12,7 +12,7 @@ public final class Board
 {
     /** Constructor.
         @param boardSize The board size (number of points per row / column)
-        in the range from one to GoPoint.MAXSIZE
+        in the range from one to GoPoint.MAX_SIZE
     */
     public Board(int boardSize)
     {
@@ -207,7 +207,7 @@ public final class Board
         For changing the board size.
         Also calls clear().
         @param size The new board size (number of points per
-        row / column) in the range from one to GoPoint.MAXSIZE
+        row / column) in the range from one to GoPoint.MAX_SIZE
     */
     public void init(int size)
     {
