@@ -11,7 +11,7 @@ package net.sf.gogui.go;
 */
 public class Score
 {
-    /** Constant for area scoring method (CHINESE). */
+    /** Constant for area scoring method (Chinese). */
     public static final int AREA = 0;
 
     /** Constant for territory scoring method (Japanese). */
