@@ -117,6 +117,16 @@ public class GameInformation
         return m_timeSettings;
     }
 
+    /** Hash code dummy function (don't use).
+        This class is not desgined to be used in a HashMap/HashTable. The
+        function will trigger an assertion if assertions are enabled.
+    */
+    public int hashCode()
+    {
+        assert false : "hashCode not designed";
+        return 0;
+    }
+
     /** Try to parse rules.
         @return Score.TERRITORY if rules string (to lowercase) is
         "japanese", Score.AREA otherwise.

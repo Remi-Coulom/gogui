@@ -90,6 +90,16 @@ public final class TimeSettings
         return (m_byoyomiMoves > 0);
     }
 
+    /** Hash code dummy function (don't use).
+        This class is not desgined to be used in a HashMap/HashTable. The
+        function will trigger an assertion if assertions are enabled.
+    */
+    public int hashCode()
+    {
+        assert false : "hashCode not designed";
+        return 0;
+    }
+
     /** Parse time settings from a string.
         The string is expected to be in the format: basetime[+byoyomi/moves]
         with base and overtime in minutes.
