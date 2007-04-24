@@ -40,6 +40,7 @@ import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.text.Style;
@@ -229,20 +230,25 @@ public class GuiUtil
                 UIManager.put("OptionPane.warningIcon", icon);
             }
         }
-        catch (Exception e)
+        catch (ClassNotFoundException e)
         {
-            if (showError)
-            {
-                MessageDialogs messageDialogs = new MessageDialogs("GoGui");
-                messageDialogs.showWarning(null,
-                                           "Look and Feel not found",
-                                           "The look and feel\n\""
-                                           + lookAndFeel + "\"\n"
-                                           + "was not found.\n" +
-                                           "Using default Look and Feel "
-                                           + "instead\n",
-                                           false);
-            }
+            handleLookAndFeelError(showError, lookAndFeel);
+
+        }
+        catch (InstantiationException e)
+        {
+            handleLookAndFeelError(showError, lookAndFeel);
+
+        }
+        catch (IllegalAccessException e)
+        {
+            handleLookAndFeelError(showError, lookAndFeel);
+
+        }
+        catch (UnsupportedLookAndFeelException e)
+        {
+            handleLookAndFeelError(showError, lookAndFeel);
+
         }
     }
 
@@ -526,5 +532,20 @@ public class GuiUtil
         new Dimension(SMALL_PAD, SMALL_PAD);
 
     private static URL s_iconURL;
+
+    private static void handleLookAndFeelError(boolean showError,
+                                               String lookAndFeel)
+    {
+        if (! showError)
+            return;
+        MessageDialogs messageDialogs = new MessageDialogs("GoGui");
+        messageDialogs.showWarning(null,
+                                   "Look and Feel not found",
+                                   "The look and feel\n\""
+                                   + lookAndFeel + "\"\n"
+                                   + "was not found.\n" +
+                                   "Using default Look and Feel instead\n",
+                                   false);
+    }
 }
 
