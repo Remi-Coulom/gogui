@@ -26,12 +26,17 @@ public final class MarkType
     public static final MarkType TERRITORY_WHITE =
         new MarkType("territory-w");
     
-    public int compareTo(Object object)
+    public int compareTo(Object obj)
     {
-        int index = ((MarkType)object).m_index;
+        int index = ((MarkType)obj).m_index;
         if (m_index == index)
             return 0;
         return m_index < index ? -1 : 1;
+    }
+
+    public boolean equals(Object obj)
+    {
+        return (this == obj);
     }
 
     public static int getNumberTypes()
@@ -42,6 +47,11 @@ public final class MarkType
     public static MarkType getType(int i)
     {
         return (MarkType)s_types.get(i);
+    }
+
+    public int hashCode()
+    {
+        return m_index;
     }
 
     public String toString()
