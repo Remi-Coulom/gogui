@@ -21,9 +21,10 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
@@ -815,7 +816,7 @@ public class TwoGtp
             m_game.setKomi(komi);
             sendIfSupported("komi", "komi " + komi);
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             throw new GtpError("invalid komi: " + arg);
         }

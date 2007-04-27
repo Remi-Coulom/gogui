@@ -18,6 +18,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
@@ -191,7 +192,7 @@ public class GtpAdapter
         {
             m_komi = Komi.parseKomi(cmd.getArg());
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             throw new GtpError("invalid komi");
         }

@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.TimeSettings;
@@ -226,7 +227,7 @@ public final class GameInfoDialog
         {
             komi = Komi.parseKomi(komiText);
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             assert false; // already validated
         }
@@ -289,7 +290,7 @@ public final class GameInfoDialog
         {
             Komi.parseKomi(text);
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             messageDialogs.showError(parent, "Invalid komi",
                                     "The komi has to be a number.", false);

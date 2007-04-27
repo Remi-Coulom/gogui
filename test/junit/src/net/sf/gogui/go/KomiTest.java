@@ -17,7 +17,7 @@ public final class KomiTest
         return new junit.framework.TestSuite(KomiTest.class);
     }
 
-    public void testEquals() throws Komi.InvalidKomi
+    public void testEquals() throws InvalidKomiException
     {
         assertTrue((new Komi(0)).equals(new Komi(0)));
         assertTrue((new Komi(6.5)).equals(new Komi(6.5)));
@@ -27,7 +27,7 @@ public final class KomiTest
         assertFalse((new Komi(6.5)).equals(null));
     }
 
-    public void testHashCode() throws Komi.InvalidKomi
+    public void testHashCode() throws InvalidKomiException
     {
         assertEquals((new Komi(6.5)).hashCode(), (new Komi(6.5)).hashCode());
         assertEquals((new Komi(1)).hashCode(), (new Komi(1)).hashCode());
@@ -35,7 +35,7 @@ public final class KomiTest
         assertFalse((new Komi(6.5)).hashCode() == (new Komi(6)).hashCode());
     }
 
-    public void testParseKomi() throws Komi.InvalidKomi
+    public void testParseKomi() throws InvalidKomiException
     {
         assertEquals(new Komi(5.5), Komi.parseKomi("5.5"));
         assertEquals(new Komi(0), Komi.parseKomi("0"));
@@ -48,7 +48,7 @@ public final class KomiTest
         {
             Komi.parseKomi("foo");
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             return;
         }
@@ -61,14 +61,14 @@ public final class KomiTest
         {
             Komi.parseKomi("5.5 6.5");
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             return;
         }
         fail();
     }
 
-    public void testToDouble() throws Komi.InvalidKomi
+    public void testToDouble() throws InvalidKomiException
     {
         double delta = 1e-10;
         assertEquals(-0.5, (new Komi(-0.5)).toDouble(), delta);
@@ -88,7 +88,7 @@ public final class KomiTest
         assertEquals(-1, (new Komi(-1.2)).toDouble(), delta);
     }
 
-    public void testToString() throws Komi.InvalidKomi
+    public void testToString() throws InvalidKomiException
     {
         assertEquals("0", (new Komi(0)).toString());
         assertEquals("5", (new Komi(5)).toString());

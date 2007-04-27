@@ -11,20 +11,6 @@ import net.sf.gogui.util.ErrorMessage;
 */
 public final class Komi
 {
-    public static class InvalidKomi
-        extends ErrorMessage
-    {
-        public InvalidKomi(String s)
-        {
-            super("Invalid komi: " + s);
-        }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
-    }
-
     /** Constructor.
         @param komi The value for the komi. Will be rounded to a multiple of
         0.5
@@ -52,7 +38,7 @@ public final class Komi
         komi.
         @return The komi or null if unknown komi.
     */
-    public static Komi parseKomi(String s) throws InvalidKomi
+    public static Komi parseKomi(String s) throws InvalidKomiException
     {
         assert s != null;
         if (s.trim().equals(""))
@@ -64,7 +50,7 @@ public final class Komi
         }
         catch (NumberFormatException e)
         {
-            throw new InvalidKomi(s);
+            throw new InvalidKomiException(s);
         }
     }
 

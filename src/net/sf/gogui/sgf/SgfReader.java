@@ -29,6 +29,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
@@ -652,7 +653,7 @@ public final class SgfReader
         {
             createGameInformation(node).setKomi(Komi.parseKomi(value));
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             setWarning("Invalid value for komi");
         }

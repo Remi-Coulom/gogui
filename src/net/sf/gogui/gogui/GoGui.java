@@ -55,6 +55,7 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
@@ -2988,7 +2989,7 @@ public class GoGui
             String s = m_prefs.get("komi", "6.5");
             return Komi.parseKomi(s);
         }
-        catch (Komi.InvalidKomi e)
+        catch (InvalidKomiException e)
         {
             return null;
         }
