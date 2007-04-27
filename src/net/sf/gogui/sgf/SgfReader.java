@@ -28,9 +28,10 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ProgressShow;
@@ -785,7 +786,7 @@ public final class SgfReader
             {
                 return GoPoint.parsePoint(s, GoPoint.MAX_SIZE);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
                 throwInvalidCoordinates(s);
             }

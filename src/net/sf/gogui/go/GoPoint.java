@@ -17,23 +17,6 @@ import net.sf.gogui.util.StringUtil;
 public final class GoPoint
     implements Comparable
 {
-    /** Thrown if parsing a string representation of a GoPoint fails. */
-    public static class InvalidPoint extends Exception
-    {
-        /** Constructor.
-            @param text The text that could not be parsed as a point.
-        */
-        public InvalidPoint(String text)
-        {
-            super("Invalid point \"" + text + "\"");
-        }
-        
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
-    }
-
     /** Maximum board size.
         Set such that all points can be converted to strings with one letter
         and a number, i.e. the largest point is Z25.
@@ -147,17 +130,17 @@ public final class GoPoint
 
     /** Parse point or null (PASS).
         Parsing is case-insensitive, leading and trailing whitespace is
-        ignored. "PASS" returns null, invalid strings throw a InvalidPoint
-        exception.
+        ignored. "PASS" returns null, invalid strings throw an
+        InvalidPointException.
     */
     public static GoPoint parsePoint(String string, int boardSize)
-        throws InvalidPoint
+        throws InvalidPointException
     {
         string = string.trim().toUpperCase(Locale.ENGLISH);
         if (string.equals("PASS"))
             return null;
         if (string.length() < 2)
-            throw new InvalidPoint(string);
+            throw new InvalidPointException(string);
         char xChar = string.charAt(0);
         if (xChar >= 'J')
             --xChar;
@@ -169,15 +152,15 @@ public final class GoPoint
         }
         catch (NumberFormatException e)
         {
-            throw new InvalidPoint(string);
+            throw new InvalidPointException(string);
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw new InvalidPoint(string);
+            throw new InvalidPointException(string);
         return GoPoint.get(x, y);
     }
 
     public static PointList parsePointList(String s, int boardSize)
-        throws InvalidPoint
+        throws InvalidPointException
     {
         PointList list = new PointList();
         String p[] = StringUtil.splitArguments(s);

@@ -58,7 +58,7 @@ public final class GoPointTest
         assertEquals(GoPoint.toString(v), "A1 D5 A19");
     }
 
-    public void testParse() throws GoPoint.InvalidPoint
+    public void testParse() throws InvalidPointException
     {
         checkPoint(GoPoint.parsePoint("A1", 19), 0, 0);
         checkPoint(GoPoint.parsePoint(" T19 ", 19), 18, 18);
@@ -95,7 +95,7 @@ public final class GoPointTest
             GoPoint.parsePoint(string, boardSize);
             fail();
         }
-        catch (GoPoint.InvalidPoint e)
+        catch (InvalidPointException e)
         {
         }
     }

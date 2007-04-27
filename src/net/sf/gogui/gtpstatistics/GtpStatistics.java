@@ -17,6 +17,7 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
@@ -287,7 +288,7 @@ public class GtpStatistics
                 GoPoint point = GoPoint.parsePoint(response, m_size); 
                 return Move.get(toMove, point) == move ? "1" : "0";
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
                 throw new GtpError("Program sent invalid move: " + response);
             }

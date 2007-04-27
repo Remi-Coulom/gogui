@@ -88,7 +88,7 @@ public final class BoardConstantsTest
         {
             return GoPoint.parsePoint(s, boardSize);
         }
-        catch (GoPoint.InvalidPoint e)
+        catch (InvalidPointException e)
         {
             fail("Invalid point " + s);
             return null;

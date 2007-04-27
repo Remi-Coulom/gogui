@@ -21,6 +21,7 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.version.Version;
 
@@ -244,7 +245,7 @@ public final class SgfReaderTest
     }
 
     private void checkLabel(ConstNode node, String pointString, String label)
-        throws GoPoint.InvalidPoint
+        throws InvalidPointException
     {
         GoPoint point = GoPoint.parsePoint(pointString, 19);
         assertEquals(node.getLabel(point), label);
@@ -252,13 +253,13 @@ public final class SgfReaderTest
 
     private void checkSgfProperty(ConstNode node, String property,
                                   String value)
-        throws GoPoint.InvalidPoint
+        throws InvalidPointException
     {
         assertEquals(value, node.getSgfPropertiesConst().get(property));
     }
 
     private void checkSetup(ConstNode node, int black, int white, int empty)
-        throws GoPoint.InvalidPoint
+        throws InvalidPointException
     {
         assertEquals(node.getAddStones(GoColor.BLACK).size(), black);
         assertEquals(node.getAddStones(GoColor.WHITE).size(), white);

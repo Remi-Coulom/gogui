@@ -14,6 +14,7 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpResponseFormatError;
@@ -166,7 +167,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setMarkCircle(point, true);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -187,7 +188,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setFieldBackground(point, color);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -208,7 +209,7 @@ public final class AnalyzeShow
                 double value = Double.parseDouble(arg[i + 1]);
                 guiBoard.setInfluence(point, value);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
             catch (NumberFormatException e)
@@ -231,7 +232,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setLabel(point, arg[i + 1]);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -288,7 +289,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setMark(point, true);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -306,7 +307,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setMarkSquare(point, true);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -324,7 +325,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setMarkTriangle(point, true);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -343,7 +344,7 @@ public final class AnalyzeShow
                     continue;
                 guiBoard.setTerritory(point, color);
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }
@@ -374,7 +375,7 @@ public final class AnalyzeShow
                     guiBoard.setLabel(point, Integer.toString(n));
                 }
             }
-            catch (GoPoint.InvalidPoint e)
+            catch (InvalidPointException e)
             {
             }
         }

@@ -7,6 +7,7 @@ package net.sf.gogui.gtp;
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;
 
@@ -261,7 +262,7 @@ public class GtpCommand
         {
             return GoPoint.parsePoint(getArg(i), boardSize);
         }
-        catch (GoPoint.InvalidPoint e)
+        catch (InvalidPointException e)
         {
             throw new GtpError("argument " + (i + 1) + " is not a point");
         }

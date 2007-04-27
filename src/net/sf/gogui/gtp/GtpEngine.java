@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.TreeMap;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;
 
@@ -174,7 +175,7 @@ public class GtpEngine
         {
             return GoPoint.parsePoint(cmdArray[1], boardSize);
         }
-        catch (GoPoint.InvalidPoint e)
+        catch (InvalidPointException e)
         {
             throw new GtpError(e.getMessage());
         }
@@ -201,7 +202,7 @@ public class GtpEngine
             }
             return pointList;
         }
-        catch (GoPoint.InvalidPoint e)
+        catch (InvalidPointException e)
         {
             throw new GtpError(e.getMessage());
         }
