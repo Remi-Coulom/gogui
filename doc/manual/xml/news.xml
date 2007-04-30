@@ -24,6 +24,12 @@ Update to Looks 2.1.4, Quaqua 3.7.7
 Make startup scripts work with Cygwin
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Automatically clear markup on the board at the start of a Live Graphics
+command.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
