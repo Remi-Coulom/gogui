@@ -44,7 +44,7 @@ public class Game
     public void addMarked(GoPoint point, MarkType type)
     {
         m_current.addMarked(point, type);
-        m_modified = true;
+        setModified();
     }
 
     /** Clear modified flag.
@@ -65,7 +65,7 @@ public class Game
         Node node = new Node();
         m_current.append(node);
         m_current = node;
-        m_modified = true;
+        setModified();
     }
 
     public ConstBoard getBoard()
@@ -166,7 +166,7 @@ public class Game
     public void keepOnlyMainVariation()
     {
         m_tree.keepOnlyMainVariation();
-        m_modified = true;
+        setModified();
     }
 
     public void keepOnlyPosition()
@@ -176,14 +176,14 @@ public class Game
         m_board.init(m_board.getSize());
         m_current = m_tree.getRoot();
         updateBoard();
-        m_modified = true;
+        setModified();
     }
 
     /** Make current node the main variation. */
     public void makeMainVariation()
     {
         NodeUtil.makeMainVariation(m_current);
-        m_modified = true;
+        setModified();
     }
 
     public void play(Move move)
@@ -203,7 +203,7 @@ public class Game
         m_current.append(node);
         m_current = node;
         updateBoard();
-        m_modified = true;
+        setModified();
         m_clock.startMove(getToMove());
     }
 
@@ -211,7 +211,7 @@ public class Game
     public void removeMarked(GoPoint point, MarkType type)
     {
         m_current.removeMarked(point, type);
-        m_modified = true;
+        setModified();
     }
 
     public void resetClock()
@@ -250,7 +250,8 @@ public class Game
     public void setComment(String comment, ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();
-        m_modified = ! ObjectUtil.equals(comment, node.getComment());
+        if (! ObjectUtil.equals(comment, node.getComment()))
+            setModified();
         ((Node)node).setComment(comment);
     }
 
@@ -262,7 +263,7 @@ public class Game
         {
             ((Node)node).getGameInformation().copyFrom(info);
             updateClock();
-            m_modified = true;
+            setModified();
         }        
     }
 
@@ -277,7 +278,8 @@ public class Game
     /** Set label in current node. */
     public void setLabel(GoPoint point, String value)
     {
-        m_modified = ! ObjectUtil.equals(value, m_current.getLabel(point));
+        if (! ObjectUtil.equals(value, m_current.getLabel(point)))
+            setModified();
         m_current.setLabel(point, value);
     }
 
@@ -301,8 +303,9 @@ public class Game
     {
         assert color != null;
         assert ! color.equals(GoColor.EMPTY);
-        m_modified = (! ObjectUtil.equals(color, m_current.getPlayer())
-                      || color.equals(m_board.getToMove()));
+        if (! ObjectUtil.equals(color, m_current.getPlayer())
+            || color.equals(m_board.getToMove()))
+            setModified();
         m_current.setPlayer(color);
         updateBoard();
     }
@@ -310,7 +313,6 @@ public class Game
     public void setup(GoPoint p, GoColor c)
     {
         assert p != null;
-        m_modified = true;
         m_current.removeSetup(p);
         Node father = m_current.getFather();
         if (father != null)
@@ -325,6 +327,7 @@ public class Game
         }
         if (c != GoColor.EMPTY || father != null)
             m_current.addStone(c, p);
+        setModified();
         updateBoard();
     }
 
@@ -343,14 +346,14 @@ public class Game
         Node oldCurrentNode = m_current;
         m_current = father;
         m_current.removeChild(oldCurrentNode);
-        m_modified = true;
+        setModified();
     }
 
     /** Remove children of currentNode. */
     public void truncateChildren()
     {
         NodeUtil.truncateChildren(m_current);
-        m_modified = true;
+        setModified();
     }
 
     /** See #isModified() */
@@ -365,6 +368,11 @@ public class Game
     private Node m_current;
 
     private final Clock m_clock;
+
+    private void setModified()
+    {
+        m_modified = true;
+    }
 
     private void updateBoard()
     {

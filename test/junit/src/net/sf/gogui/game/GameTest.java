@@ -21,6 +21,41 @@ public final class GameTest
         return new junit.framework.TestSuite(GameTest.class);
     }
 
+    public static void testSetComment()
+    {
+        Game game = new Game(19);
+        String comment = "foo";
+        game.setComment(comment);
+        assertTrue(game.isModified());
+        assertEquals(comment, game.getCurrentNode().getComment());
+        // Check for bug that cleared the modified flag after setting the same
+        // comment again
+        game.setComment(comment);
+        assertTrue(game.isModified());
+    }
+
+    public static void testSetLabel()
+    {
+        Game game = new Game(19);
+        GoPoint p = GoPoint.get(0, 0);
+        String label = "foo";
+        game.setLabel(p, label);
+        assertTrue(game.isModified());
+        assertEquals(label, game.getCurrentNode().getLabel(p));
+        // Check for bug that cleared the modified flag after setting the same
+        // label again
+        game.setLabel(p, label);
+        assertTrue(game.isModified());
+    }
+
+    public static void testSetToMove()
+    {
+        Game game = new Game(19);
+        game.setToMove(GoColor.WHITE);
+        assertTrue(game.isModified());
+        assertEquals(GoColor.WHITE, game.getCurrentNode().getPlayer());
+    }
+
     /** Test removing a stone in the root node.
         It should just remove the addStoen property, but not add an addEmpty
         property.

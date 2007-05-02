@@ -30,6 +30,11 @@ GoGui: automatically clear markup on the board at the start of a Live Graphics
 command. GtpDisplay: support Live Graphics.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Minor fixes and enhancements.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
