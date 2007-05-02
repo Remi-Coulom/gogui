@@ -42,6 +42,10 @@ Go Text Protocol adapter showing the current board in a window.
 If no program argument is given, the adapter generates answers to
 genmove commands by waiting for input on the graphical board.
 </para>
+<para>
+GtpDisplay also tracks the standard error stream of the Go program
+for GoGui Live Graphics commands (see GoGui documentation).
+</para>
 </refsection>
 
 <refsection>

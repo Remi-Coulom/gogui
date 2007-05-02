@@ -490,18 +490,10 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/gui/*.png
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpdisplay/*.class
- net/sf/gogui/images/gogui*.png
- net/sf/gogui/images/wood.png
- net/sf/gogui/sgf/SgfFilter.class
- net/sf/gogui/tex/TexFilter.class
- net/sf/gogui/util/ErrorMessage.class
- net/sf/gogui/util/MessageQueue.class
- net/sf/gogui/util/Platform.class
- net/sf/gogui/util/ProgressShow.class
- net/sf/gogui/util/Options.class
- net/sf/gogui/util/RadialGradient*.class
- net/sf/gogui/util/SquareLayout.class
- net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/images/*.png
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>

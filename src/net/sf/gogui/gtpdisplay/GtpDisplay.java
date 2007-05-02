@@ -28,6 +28,7 @@ import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiUtil;
+import net.sf.gogui.gui.LiveGfx;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.util.StringUtil;
@@ -40,15 +41,6 @@ public class GtpDisplay
         throws Exception
     {
         super(null);
-        if (! StringUtil.isEmpty(program))
-        {
-            m_gtp = new GtpClient(program, null, verbose, null);
-            m_gtp.queryProtocolVersion();
-            m_gtp.querySupportedCommands();
-        }
-        else
-            m_gtp = null;
-        registerCommands();
         m_size = GoPoint.DEFAULT_SIZE;
         m_board = new Board(m_size);
         m_frame = new JFrame();
@@ -61,22 +53,8 @@ public class GtpDisplay
                 }
             };
         m_frame.addWindowListener(windowAdapter);
-        if (m_gtp == null)
-        {
-            m_name = null;
-            m_frame.setTitle("GtpDisplay");
-        }
-        else
-        {
-            m_gtp.queryName();
-            m_name = m_gtp.getLabel();
-            String title = "GtpDisplay: " + m_name;
-            m_frame.setTitle(title);
-        }
         Container contentPane = m_frame.getContentPane();
         m_guiBoard = new GuiBoard(m_size);
-        if (m_gtp != null)
-            m_guiBoard.setShowCursor(false);
         m_guiBoard.setListener(new GuiBoard.Listener()
             {
                 public void contextMenu(GoPoint point, Component invoker,
@@ -93,6 +71,41 @@ public class GtpDisplay
         contentPane.add(m_guiBoard);
         m_statusBar = new StatusBar();
         contentPane.add(m_statusBar, BorderLayout.SOUTH);
+        if (! StringUtil.isEmpty(program))
+        {
+            GtpClient.IOCallback ioCallback = new GtpClient.IOCallback() {
+                    public void receivedInvalidResponse(String s) {
+                    }
+
+                    public void receivedResponse(boolean error, String s) {
+                    }
+
+                    public void receivedStdErr(String s) {
+                        m_liveGfx.receivedStdErr(s);
+                    }
+
+                    public void sentCommand(String s) {
+                    }
+
+                    private LiveGfx m_liveGfx =
+                        new LiveGfx(m_board, m_guiBoard, m_statusBar);
+                };
+            m_gtp = new GtpClient(program, null, verbose, ioCallback);
+            m_gtp.queryProtocolVersion();
+            m_gtp.querySupportedCommands();
+            m_guiBoard.setShowCursor(false);
+            m_gtp.queryName();
+            m_name = m_gtp.getLabel();
+            String title = "GtpDisplay - " + m_name;
+            m_frame.setTitle(title);
+        }
+        else
+        {
+            m_gtp = null;
+            m_name = null;
+            m_frame.setTitle("GtpDisplay");
+        }
+        registerCommands();
         GuiUtil.setGoIcon(m_frame);
         m_frame.pack();
         m_frame.setVisible(true);
@@ -504,7 +517,9 @@ public class GtpDisplay
 
     private void updateFromGoBoard()
     {
+        m_guiBoard.clearAll();
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true);
+        m_statusBar.clear();
         m_statusBar.setToPlay(m_board.getToMove());
     }
 }

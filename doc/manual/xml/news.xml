@@ -26,8 +26,8 @@ Make startup scripts work with Cygwin
 </listitem>
 <listitem>
 <simpara>
-Automatically clear markup on the board at the start of a Live Graphics
-command.
+GoGui: automatically clear markup on the board at the start of a Live Graphics
+command. GtpDisplay: support Live Graphics.
 </simpara>
 </listitem>
 </itemizedlist>
