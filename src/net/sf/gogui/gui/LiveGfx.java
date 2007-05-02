@@ -7,7 +7,9 @@ package net.sf.gogui.gui;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.go.ConstBoard;
 
-/** Parse standard error for GoGui live graphics commands. */
+/** Parse standard error of a GTP engine for GoGui live graphics commands.
+    See chapter "Live Graphics" in the GoGui documentation.
+*/
 public class LiveGfx
 {
     public LiveGfx(ConstBoard board, GuiBoard guiBoard, StatusBar statusBar)
@@ -18,6 +20,10 @@ public class LiveGfx
         m_duringMultiLineResponse = false;
     }
 
+    /** Parse the next sequence of characters.
+        This function can be called from a different thread than the Swing
+        event disapatch thread.
+    */
     public void receivedStdErr(String s)
     {
         for (int i = 0; i < s.length(); ++i)
@@ -95,7 +101,8 @@ public class LiveGfx
         try
         {
             // Use invokeAndWait to ensure that each gogui-gfx command is
-            // really shown (and no commands are merged by the repaint manager)
+            // really shown (and no commands are merged by the repaint
+            // manager)
             SwingUtilities.invokeAndWait(runnable);
             // Throttle thread a bit to avoid long delays of other repaint
             // events in the event queue
