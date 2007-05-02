@@ -94,7 +94,6 @@ public class StatusBar
         return m_text.getText();
     }
 
-
     public void immediatelyPaintMoveText(String text)
     {
         assert SwingUtilities.isEventDispatchThread();
@@ -151,6 +150,15 @@ public class StatusBar
             m_toPlayLabel.setIcon(ICON_WHITE);
             m_toPlayLabel.setToolTipText("White to play");
         }
+    }
+
+    /** Hide or show the text field for move information.
+        @see #setMoveText
+    */
+    public void showMoveText(boolean show)
+    {
+        m_moveText.setVisible(show);
+        m_moveTextSeparator.setVisible(show);
     }
 
     /** Serial version to suppress compiler warning.
