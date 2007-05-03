@@ -12,9 +12,10 @@ for preserving the correct order of the received output in the GTP shell and
 for detecting timeouts.
 This synchronizationcan becomes slow if there are other CPU intensive
 background processes running on the computer.
-The problem can be avoided if the Go engine implements the gg-undo
-and play_sequence commands (see <xref linkend="compatibility"/>),
-then a single command can replace up to several hundred play or undo commands.
+The problem can be avoided if the Go engine implements the
+<command>gg-undo</command> and <command>gogui-play_sequence</command> commands
+(see <xref linkend="compatibility"/>), then a single command can replace up to
+several hundred <command>play</command> or <command>undo</command> commands.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -28,6 +29,19 @@ This is probably a bug in the Java libraries.
 With Java 1.4.2 for Linux, this problem seems to have disappeared after
 introducing a workaround, which resets the window size after each text update.
 With other Java versions, or on other systems, the problem can still exist.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Standard error and output of the GTP engine are displayed in wrong order</title>
+<para>
+Due to deficiencies in the Java library, it cannot be guaranteed that the
+standard error and standard output of the GTP engine are always displayed in
+the correct order in the GTP shell. In cases where the order is critical for
+debugging purposes, it is better to invoke GoGui from a terminal with the
+<option>-verbose</option> option and watch the logging of the GTP streams
+in the terminal.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
