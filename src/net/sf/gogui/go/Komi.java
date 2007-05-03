@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import net.sf.gogui.util.ErrorMessage;
-
 /** Value of komi.
     This class is immutable.
 */
