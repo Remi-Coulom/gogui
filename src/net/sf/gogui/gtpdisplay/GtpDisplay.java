@@ -518,7 +518,7 @@ public class GtpDisplay
 
     private void updateFromGoBoard()
     {
-        m_guiBoard.clearAll();
+        m_guiBoard.clearAll(); // Live Gfx markup
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true);
         m_statusBar.clear();
         m_statusBar.setToPlay(m_board.getToMove());
