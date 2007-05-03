@@ -12,8 +12,10 @@ version in the branch was 123. The crash dialog in gogui/Main.java assumes
 that unreleased versions contain the string SVN.
 Comment out the exec svnversion for releases.
 -->
+<!--
 <exec executable="svnversion" outputproperty="svnversion"/>
-<property name="version" value="1.0pre1.SVN${svnversion}"/>
+-->
+<property name="version" value="1.0pre2"/>
 
 <tstamp/>
 
