@@ -74,7 +74,7 @@ public final class GuiBoard
         initSize(size);
     }
 
-    /** Clear every kind of markup but stones. */
+    /** Clear every kind of markup. */
     public void clearAll()
     {
         for (int x = 0; x < m_size; ++x)
