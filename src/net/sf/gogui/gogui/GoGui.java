@@ -2954,6 +2954,7 @@ public class GoGui
                     computerMoved();
                 }
             };
+        m_game.startClock();
         runLengthyCommand(command, callback);
     }
 
