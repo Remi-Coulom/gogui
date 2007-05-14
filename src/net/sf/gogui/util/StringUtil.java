@@ -72,18 +72,28 @@ public final class StringUtil
         return buffer.toString();
     }
 
+    /** Return the current time and date as a string using a long format.
+        The time and date is formatted using DateFormat.LONG and
+        Locale.ENGLISH.
+    */
     public static String getDate()
     {
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                                                           DateFormat.LONG);
+                                                           DateFormat.LONG,
+                                                           Locale.ENGLISH);
         Date date = Calendar.getInstance().getTime();
         return format.format(date);
     }
 
+    /** Return the current time and date as a string using a short format.
+        The time and date is formatted using DateFormat.SHORT and
+        Locale.ENGLISH.
+    */
     public static String getDateShort()
     {
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-                                                           DateFormat.SHORT);
+                                                           DateFormat.SHORT,
+                                                           Locale.ENGLISH);
         Date date = Calendar.getInstance().getTime();
         return format.format(date);
     }
