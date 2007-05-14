@@ -21,6 +21,7 @@ import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Histogram;
+import net.sf.gogui.util.HtmlUtil;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.util.TableUtil;
@@ -262,11 +263,7 @@ public class Analyze
 
     private void finishHtml(PrintStream out)
     {
-        out.print("<hr>\n" +
-                  "<address><small>Generated on " + StringUtil.getDateShort()
-                  + " by GtpStatistics "
-                  + Version.get() + " (<a href=\"http://gogui.sf.net\">"
-                  + "http://gogui.sf.net</a>)</small></address>\n" +
+        out.print(HtmlUtil.getFooter("GtpStatistics") +
                   "</body>\n" +
                   "</html>\n");
     }
@@ -498,8 +495,7 @@ public class Analyze
                   "<title>" + title + "</title>\n" +
                   "<meta http-equiv=\"Content-Type\""
                   + " content=\"text/html; charset=" + charset + "\">\n" +
-                  "<meta name=\"generator\" content=\"GtpStatistics "
-                  + Version.get() + "\">\n" +
+                  HtmlUtil.getMeta("GtpStatistics") + 
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "a:link { color:#0000ee }\n" +

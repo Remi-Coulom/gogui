@@ -21,6 +21,7 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.HtmlUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
@@ -280,7 +281,9 @@ public class GtpRegress
         if (m_currentStyle != null)
             m_out.print("</span>");
         m_out.print("</pre>\n" +
-                    "</body>\n");
+                    HtmlUtil.getFooter("GtpRegress") +
+                    "</body>\n" +
+                    "</html>\n");
         m_out.close();
     }
 
@@ -557,8 +560,7 @@ public class GtpRegress
         m_out.print("<html>\n" +
                     "<head>\n" +
                     "<title>Output: " + m_testFile + "</title>\n" +
-                    "<meta name=\"generator\" content=\"GtpRegress "
-                    + Version.get() + "\">\n" +
+                    HtmlUtil.getMeta("GtpRegress") +
                     "<style type=\"text/css\">\n" +
                     "<!--\n" +
                     "body { margin:0; }\n" +
@@ -850,8 +852,7 @@ public class GtpRegress
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Regression Test Summary</title>\n" +
-                  "<meta name=\"generator\" content=\"GtpRegress "
-                  + Version.get() + "\">\n" +
+                  HtmlUtil.getMeta("GtpRegress") +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "body { margin:0; }\n" +
@@ -903,6 +904,7 @@ public class GtpRegress
         }
         writeSummaryRow(out, getTotalSummary(), true, true);
         out.print("</table>\n" +
+                  HtmlUtil.getFooter("GtpRegress") +
                   "</body>\n" +
                   "</html>\n");
         out.close();
@@ -974,8 +976,7 @@ public class GtpRegress
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Summary: " + m_testFile + "</title>\n" +
-                  "<meta name=\"generator\" content=\"GtpRegress "
-                  + Version.get() + " (http://gogui.sf.net)\">\n" +
+                  HtmlUtil.getMeta("GtpRegress") +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "body { margin:0; }\n" +
@@ -1084,6 +1085,7 @@ public class GtpRegress
                       "</tr>\n");
         }
         out.print("</table>\n" +
+                  HtmlUtil.getFooter("GtpRegress") +
                   "</body>\n" +
                   "</html>\n");
         out.close();

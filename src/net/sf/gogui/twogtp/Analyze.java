@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Histogram;
+import net.sf.gogui.util.HtmlUtil;
 import net.sf.gogui.util.Statistics;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
@@ -194,21 +195,17 @@ public class Analyze
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format = StringUtil.getNumberFormat(1);
-        String charset = StringUtil.getDefaultEncoding();
         String black = m_table.getProperty("Black", "");
         String white = m_table.getProperty("White", "");
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + black + " - " + white + "</title>\n" +
-                  "<meta http-equiv=\"Content-Type\""
-                  + " content=\"text/html; charset=" + charset + "\">\n" +
-                  "<meta name=\"generator\" content=\"TwoGtp "
-                  + Version.get() + " (http://gogui.sf.net)\">\n" +
-                    "<style type=\"text/css\">\n" +
-                    "<!--\n" +
-                    "body { margin:0; }\n" +
-                    "-->\n" +
-                    "</style>\n" +
+                  HtmlUtil.getMeta("TwoGtp") +
+                  "<style type=\"text/css\">\n" +
+                  "<!--\n" +
+                  "body { margin:0; }\n" +
+                  "-->\n" +
+                  "</style>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                   " vlink=\"#551a8b\">\n" +
@@ -294,6 +291,7 @@ public class Analyze
                       "</tr>\n");
         }
         out.print("</table>\n" +
+                  HtmlUtil.getFooter("TwoGtp") +
                   "</body>\n" +
                   "</html>\n");
         out.close();
