@@ -118,30 +118,39 @@ public class Analyze
         {
             if (! s.equals("?"))
             {
-                if (s.indexOf("B+") >= 0)
+                if (s.startsWith("B+"))
                 {
                     hasResult = true;
                     win = true;
-                    score = Double.parseDouble(s.substring(2));
-                    hasScore = true;
+                    String scoreString = s.substring(2);
+                    if (! scoreString.equals("") && ! scoreString.equals("R"))
+                    {
+                        score = Double.parseDouble(scoreString);
+                        hasScore = true;
+                    }
                 }
-                else if (s.indexOf("W+") >= 0)
+                else if (s.startsWith("W+"))
                 {
                     hasResult = true;
                     win = false;
-                    score = -Double.parseDouble(s.substring(2));
-                    hasScore = true;
+                    String scoreString = s.substring(2);
+                    if (! scoreString.equals("") && ! scoreString.equals("R"))
+                    {
+                        score = -Double.parseDouble(scoreString);
+                        hasScore = true;
+                    }
                 }
                 else if (! s.equals(""))
-                    System.err.println("Ignored invalid score: " + result);
+                    System.err.println("Ignored invalid result: " + result);
             }
         }
         catch (NumberFormatException e)
         {
             System.err.println("Ignored invalid score: " + result);
         }
-        if (score < statistics.m_histo.getHistoMin()
-            || score > statistics.m_histo.getHistoMax())
+        if (hasScore &&
+            (score < statistics.m_histo.getHistoMin()
+             || score > statistics.m_histo.getHistoMax()))
         {
             System.err.println("Ignored invalid score: " + result);
             hasScore = false;
