@@ -5,6 +5,7 @@
 package net.sf.gogui.game;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -21,6 +22,23 @@ public final class NodeUtilTest
     public static junit.framework.Test suite()
     {
         return new junit.framework.TestSuite(NodeUtilTest.class);
+    }
+
+    public void testBackward()
+    {
+        assertTrue(NodeUtil.backward(m_node10, 2) == m_node1);
+        assertTrue(NodeUtil.backward(m_node3, 10) == m_node0);
+    }
+
+    public void testCommentContains()
+    {
+        Node node = new Node();
+        Pattern pattern = Pattern.compile("foo.*bar");
+        assertFalse(NodeUtil.commentContains(node, pattern));
+        node.setComment("fooxbar");
+        assertTrue(NodeUtil.commentContains(node, pattern));
+        node.setComment("bar\nfooxbar");
+        assertTrue(NodeUtil.commentContains(node, pattern));
     }
 
     public void testFindByMoveNumber()
@@ -266,11 +284,11 @@ public final class NodeUtilTest
 
     /** Create a small test tree.
         <pre>
-        n0 - n1 - n2(Bc3) - n3(Wf4) - n4 - n5(Bg4) - n6
-                \ n7 - n8(Ba1)
-                     \ n9(Ba1)
-                     \ n10(Ba2)
-                     \ n11(Bpass)
+        n0 - n1 - n2(B C3) - n3(W F4) - n4 - n5(B G4) - n6
+                \ n7 - n8(B A1)
+                     \ n9(B A1)
+                     \ n10(B A2)
+                     \ n11(B PASS)
         </pre>
     */
     protected void setUp() throws Exception

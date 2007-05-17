@@ -20,6 +20,13 @@ import net.sf.gogui.util.StringUtil;
 /** Utility functions operating on a tree of nodes. */
 public final class NodeUtil
 {
+    /** Get node reached by going a number of nodes backward.
+        @param node The start node.
+        @param n The number of moves to go backward.
+        @return The node reached by going n moves backward or the root node
+        of the tree, if there are less than n nodes in the sequence before
+        the start node.
+    */
     public static ConstNode backward(ConstNode node, int n)
     {
         assert n >= 0;
@@ -28,6 +35,12 @@ public final class NodeUtil
         return node;
     }
 
+    /** Check if the comment of the current node contains a pattern.
+        @param node The node to check.
+        @param pattern The pattern.
+        @return <tt>true</tt>, if the current node has a comment and a match
+        for the pattern is found in the comment.
+    */
     public static boolean commentContains(ConstNode node, Pattern pattern)
     {
         String comment = node.getComment();
@@ -102,6 +115,13 @@ public final class NodeUtil
         return node;
     }
 
+    /** Find next node containing a pattern in the iteration through complete
+        tree.
+        @param node The current node in the iteration.
+        @param pattern The pattern.
+        @return The next node in the iteration through the complete tree
+        after the current node that contains a match of the pattern.
+    */
     public static ConstNode findInComments(ConstNode node, Pattern pattern)
     {
         node = nextNode(node);
@@ -114,6 +134,13 @@ public final class NodeUtil
         return null;
     }
 
+    /** Get node reached by going a number of nodes forward.
+        @param node The start node.
+        @param n The number of moves to go forward.
+        @return The node reached by going n moves forward following the main
+        variaton (always the first child) or the last node in this variation,
+        if it has less than n nodes.
+    */
     public static ConstNode forward(ConstNode node, int n)
     {
         assert n >= 0;
@@ -249,7 +276,8 @@ public final class NodeUtil
         @return Start of comment, with ellipses appended if trunceted;
         null, if node has no comment.
     */
-    public static String getCommentStart(ConstNode node, boolean firstLineOnly,
+    public static String getCommentStart(ConstNode node,
+                                         boolean firstLineOnly,
                                          int maxChar)
     {
         String comment = node.getComment();
@@ -288,6 +316,12 @@ public final class NodeUtil
         return comment;
     }
 
+    /** Get depth of a node.
+        @param node The node.
+        @return The number of nodes in the sequence from the root node
+        to the given node, excluding the given node (which means that the
+        root node has depth 0).
+    */
     public static int getDepth(ConstNode node)
     {
         int depth = 0;
@@ -307,6 +341,11 @@ public final class NodeUtil
         return node;
     }
 
+    /** Get the move number of a node.
+        @param node The node.
+        @return The total number of moves in the sequence of nodes from
+        the root node to the given node, including the given node.
+    */
     public static int getMoveNumber(ConstNode node)
     {
         int moveNumber = 0;
@@ -409,6 +448,10 @@ public final class NodeUtil
         return node;
     }
 
+    /** Get the root node.
+        @param node The node.
+        @return The root node of the tree that the given node belongs to.
+    */
     public static ConstNode getRoot(ConstNode node)
     {
         while (node.getFatherConst() != null)
@@ -478,6 +521,12 @@ public final class NodeUtil
         return false;
     }
 
+    /** Check if a node is in the main variation of the tree.
+        @param node The node.
+        @return <tt>true</tt>, if the given node is in the main variation,
+        which is the sequence of nodes starting from the root of the tree
+        and always following the first child.
+    */
     public static boolean isInMainVariation(ConstNode node)
     {
         while (node.getFatherConst() != null)
@@ -489,11 +538,23 @@ public final class NodeUtil
         return true;
     }
 
+    /** Check if node is root node and has no children.
+        @param node The node to check.
+        @return <tt>true</tt>, if the node has no father node and no children.
+    */
     public static boolean isRootWithoutChildren(ConstNode node)
     {
         return (! node.hasFather() && ! node.hasChildren());
     }
 
+    /** Make the variation of the current node to be the main variation
+        of the tree.
+        Changes the children order of all nodes in the sequence from the root
+        node to the current node (exclusive the current node), such that all
+        nodes in the sequence (inclusive the current node) are the first
+        child of their parents.
+        @param node The current node.
+    */
     public static void makeMainVariation(Node node)
     {
         while (node.getFatherConst() != null)
@@ -523,7 +584,7 @@ public final class NodeUtil
         return tree;
     }
 
-    /** Get next node for iteration in complete tree. */
+    /** Get next node for iteration through complete tree. */
     public static ConstNode nextNode(ConstNode node)
     {
         ConstNode child = node.getChildConst();
@@ -532,7 +593,7 @@ public final class NodeUtil
         return getNextEarlierVariation(node);
     }
 
-    /** Get next node for iteration in subtree. */
+    /** Get next node for iteration through subtree. */
     public static ConstNode nextNode(ConstNode node, int depth)
     {
         node = nextNode(node);
@@ -541,6 +602,11 @@ public final class NodeUtil
         return node;
     }
 
+    /** Return a string containing information about a node.
+        The string contains a listing of the data stored in the node
+        (like moves or setup stones) and properties of the node in the
+        tree (like depth or variation).
+    */
     public static String nodeInfo(ConstNode node)
     {
         StringBuffer buffer = new StringBuffer(128);
@@ -649,6 +715,12 @@ public final class NodeUtil
         return buffer.toString();
     }
 
+    /** Restore the clock to the state corresponding to a node.
+        Updates the clock from the time left information stored in the nodes
+        of the sequence from the root node to the current node.
+        @param node The current node.
+        @param clock The clock to update.
+    */
     public static void restoreClock(ConstNode node, Clock clock)
     {
         clock.reset();
@@ -662,6 +734,9 @@ public final class NodeUtil
         }
     }
 
+    /** Check if the number of nodes in the subtree of a node is greater
+        than a given limit.
+    */
     public static boolean subtreeGreaterThan(ConstNode node, int size)
     {
         int n = 0;
@@ -691,6 +766,9 @@ public final class NodeUtil
         return n;
     }
 
+    /** Return a string containing information and statistics of the subtree
+        of a node.
+    */
     public static String treeInfo(ConstNode node)
     {
         int numberNodes = 0;
