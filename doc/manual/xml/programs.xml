@@ -41,8 +41,9 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
 <para>
 <note>
 <para>
-Aya also works on Unix in the <ulink url="http://www.winehq.com">Wine</ulink>
-Windows emulator using the command:
+Aya also works on GNU/Linux in the
+<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
+command:
 </para>
 <para>
 <userinput>wine Aya.exe --mode gtp</userinput>
@@ -95,7 +96,7 @@ Command: <userinput>CrazyStone-0006-9x9.exe</userinput>
 <para>
 <note>
 <para>
-Crazy Stone also works on Unix in the
+Crazy Stone also works on GNU/Linux in the
 <ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
 command:
 </para>
@@ -143,7 +144,7 @@ Command: <userinput>Go169.exe</userinput>
 <para>
 <note>
 <para>
-Go169 also works on Unix in the
+Go169 also works on GNU/Linux in the
 <ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
 command:
 </para>
@@ -169,6 +170,24 @@ Operating systems: GNU/Linux
 </para>
 <para>
 Command: <userinput>Indigo2006.19x19 -gtp</userinput>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+  
+<section>
+<title>Mango</title>
+<indexterm>
+<primary>Mango</primary>
+</indexterm>
+<para>
+<ulink url="http://www.cs.unimaas.nl/go4go/mango/index.htm">
+http://www.cs.unimaas.nl/go4go/mango/index.htm</ulink>
+</para>
+<para>
+Operating systems: Windows
+</para>
+<para>
+Command: <userinput>Mango-9x9-0.16.exe</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
