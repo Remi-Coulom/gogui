@@ -4,13 +4,16 @@
 
 package net.sf.gogui.go;
 
-/** State of a point on the board (black, white, empty). */
+/** Player color / state of a point on the board (black, white, empty). */
 public final class GoColor
 {
+    /** Black stone or black player. */
     public static final GoColor BLACK;
 
+    /** White stone or white player. */
     public static final GoColor WHITE;
 
+    /** Empty intersection. */
     public static final GoColor EMPTY;
 
     public boolean equals(Object object)
