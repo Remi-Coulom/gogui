@@ -165,7 +165,7 @@ public final class BoardUtil
 
     private static void printToMove(ConstBoard board, StringBuffer buffer)
     {
-        buffer.append(board.getToMove() == GoColor.BLACK ? "Black" : "White");
+        buffer.append(board.getToMove().getCapitalizedName());
         buffer.append(" to play");
     }
 

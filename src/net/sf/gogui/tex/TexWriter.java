@@ -37,9 +37,8 @@ public class TexWriter
                       markSquare, markSelect);
         printEndPSGo();
         m_out.println("\\\\");
-        String toMove =
-            (board.getToMove() == GoColor.BLACK ? "Black" : "White");
-        m_out.println(toMove + " to play");
+        m_out.print(board.getToMove().getCapitalizedName());
+        m_out.println(" to play");
         printEndDocument();
         m_out.close();
     }
