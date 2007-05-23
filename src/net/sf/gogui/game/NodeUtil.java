@@ -757,8 +757,9 @@ public final class NodeUtil
         return false;
     }
 
-    /** Number of nodes in subtree.
-        Does not include this node.
+    /** Count number of nodes in subtree.
+        @param node The root node of the subtree.
+        @return The number of nodes in the subtree (including the root node).
     */
     public static int subtreeSize(ConstNode node)
     {

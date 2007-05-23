@@ -273,6 +273,11 @@ public final class NodeUtilTest
         assertEquals(NodeUtil.getMovesLeft(m_node7), 1);
     }
 
+    public void testSubtreeSize()
+    {
+        assertEquals(12, NodeUtil.subtreeSize(m_node0));
+    }
+
     public void testTruncateChildren()
     {
         Node node = new Node();
