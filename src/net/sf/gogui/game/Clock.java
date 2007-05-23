@@ -85,7 +85,7 @@ public final class Clock
 
     public String getTimeString(GoColor color)
     {
-        assert color == GoColor.BLACK || color == GoColor.WHITE;
+        assert color.isBlackWhite();
         TimeRecord record = getRecord(color);
         long time = record.m_time;
         if (color.equals(m_toMove))
@@ -247,7 +247,7 @@ public final class Clock
     */
     public void startMove(GoColor color)
     {
-        assert color == GoColor.BLACK || color == GoColor.WHITE;
+        assert color.isBlackWhite();
         m_toMove = color;
         m_startMoveTime = currentTimeMillis();
         startTimer();

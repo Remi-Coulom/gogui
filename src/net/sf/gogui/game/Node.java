@@ -650,7 +650,7 @@ public final class Node
     */
     public void setPlayer(GoColor color)
     {
-        assert color == GoColor.BLACK || color == GoColor.WHITE;
+        assert color.isBlackWhite();
         createSetupInfo().m_player = color;
     }
 
