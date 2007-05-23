@@ -44,13 +44,14 @@ public final class Clock
 
     public Clock()
     {
-        m_timeSource = new SystemTimeSource();
-        reset();
+        this(new SystemTimeSource());
     }
 
     public Clock(TimeSource timeSource)
     {
         m_timeSource = timeSource;
+        m_timeRecord[0] = new TimeRecord();
+        m_timeRecord[1] = new TimeRecord();
         reset();
     }
 
@@ -317,9 +318,7 @@ public final class Clock
 
     private GoColor m_toMove;
 
-    private final TimeRecord m_timeRecordBlack = new TimeRecord();
-
-    private final TimeRecord m_timeRecordWhite = new TimeRecord();
+    private final TimeRecord[] m_timeRecord = new TimeRecord[2];
 
     private TimeSettings m_timeSettings;
 
@@ -336,13 +335,7 @@ public final class Clock
 
     private TimeRecord getRecord(GoColor c)
     {
-        if (c == GoColor.BLACK)
-            return m_timeRecordBlack;
-        else
-        {
-            assert c == GoColor.WHITE;
-            return m_timeRecordWhite;
-        }
+        return m_timeRecord[c.toInteger()];
     }
 
     private long getByoyomi()
