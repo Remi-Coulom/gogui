@@ -7,6 +7,7 @@ package net.sf.gogui.twogtp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileFilter;
+import java.io.IOException;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.sgf.SgfReader;
@@ -25,7 +26,7 @@ class Filter
 /** Access opening SGF files from directory. */
 public class Openings
 {
-    public Openings(File directory) throws Exception
+    public Openings(File directory) throws ErrorMessage
     {
         if (! directory.isDirectory())
             throw new ErrorMessage(directory + " is not a directory");
@@ -73,7 +74,7 @@ public class Openings
     }
 
     /** Load opening file number i. */
-    public void loadFile(int i) throws Exception
+    public void loadFile(int i) throws IOException, SgfReader.SgfError
     {
         File file = m_files[i];
         FileInputStream fileStream = new FileInputStream(file);
