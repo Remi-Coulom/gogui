@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.util.FileUtil;
@@ -99,7 +100,7 @@ public final class SgfToTex
 
     private static void convert(InputStream in, String name, OutputStream out,
                                 String title, boolean usePass)
-        throws SgfReader.SgfError
+        throws SgfError
     {
         SgfReader reader = new SgfReader(in, new File(name), null, 0);
         new TexWriter(title, out, reader.getTree(), usePass);

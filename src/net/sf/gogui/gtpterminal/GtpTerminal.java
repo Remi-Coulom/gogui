@@ -27,6 +27,7 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
+import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.util.StringUtil;
@@ -283,7 +284,7 @@ public class GtpTerminal
         {
             System.out.println("File not found: " + file);
         }
-        catch (SgfReader.SgfError e)
+        catch (SgfError e)
         {
             System.out.println("Could not read file " + file
                                + ": " + e.getMessage());

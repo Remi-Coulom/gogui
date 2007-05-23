@@ -55,7 +55,7 @@ public final class SgfUtil
         {
             throw new ErrorMessage(e.getMessage());
         }
-        catch (SgfReader.SgfError e)
+        catch (SgfError e)
         {
             throw new ErrorMessage(e.getMessage());
         }

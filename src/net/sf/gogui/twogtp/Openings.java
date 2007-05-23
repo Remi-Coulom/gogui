@@ -10,6 +10,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
@@ -74,7 +75,7 @@ public class Openings
     }
 
     /** Load opening file number i. */
-    public void loadFile(int i) throws IOException, SgfReader.SgfError
+    public void loadFile(int i) throws IOException, SgfError
     {
         File file = m_files[i];
         FileInputStream fileStream = new FileInputStream(file);

@@ -34,6 +34,7 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
@@ -155,7 +156,7 @@ public final class ThumbnailCreator
         {
             throw new Error(e.getMessage());
         }
-        catch (SgfReader.SgfError e)
+        catch (SgfError e)
         {
             throw new Error(e.getMessage());
         }
@@ -198,7 +199,7 @@ public final class ThumbnailCreator
     }
 
     private ConstBoard readFile(File file)
-        throws FileNotFoundException, SgfReader.SgfError
+        throws FileNotFoundException, SgfError
     {
         FileInputStream in = new FileInputStream(file);
         SgfReader reader;

@@ -97,6 +97,7 @@ import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.StatusBar;
+import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
@@ -3325,7 +3326,7 @@ public class GoGui
             showError("File not found", e);
             return false;
         }
-        catch (SgfReader.SgfError e)
+        catch (SgfError e)
         {
             showError("Could not read file", e);
             return false;

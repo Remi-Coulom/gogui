@@ -149,7 +149,7 @@ public final class SgfReaderTest
     }
 
     private SgfReader getReader(String name)
-        throws SgfReader.SgfError, Exception
+        throws SgfError, Exception
     {
         InputStream in = getClass().getResourceAsStream(name);
         if (in == null)
@@ -291,7 +291,7 @@ public final class SgfReaderTest
             if (! expectWarnings && reader.getWarnings() != null)
                 fail("Reading " + name + " should result in no warnings");
         }
-        catch (SgfReader.SgfError error)
+        catch (SgfError error)
         {
             if (! expectFailure)
                 fail(error.getMessage());

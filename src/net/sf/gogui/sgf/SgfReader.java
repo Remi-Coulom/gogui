@@ -34,7 +34,6 @@ import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
-import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ProgressShow;
 
 class ByteCountInputStream
@@ -87,24 +86,6 @@ class ByteCountInputStream
 */
 public final class SgfReader
 {
-    /** SGF read error. */
-    public static class SgfError
-        extends ErrorMessage
-    {
-        /** Constructor.
-            @param message Error message.
-        */
-        public SgfError(String message)
-        {
-            super(message);
-        }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
-    }    
-
     /** Read SGF file from stream.
         Default charset is ISO-8859-1 according to the SGF version 4 standard.
         The charset property is only respected if the stream is a
@@ -115,7 +96,7 @@ public final class SgfReader
         reopening the stream after a charset change
         @param progressShow Callback to show progress, can be null
         @param size Size of stream if progressShow != null
-        @throws SgfReader.SgfError If reading fails.
+        @throws SgfError If reading fails.
     */
     public SgfReader(InputStream in, File file, ProgressShow progressShow,
                      long size)

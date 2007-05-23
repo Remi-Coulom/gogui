@@ -22,6 +22,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
@@ -341,7 +342,7 @@ public class GtpStatistics
 
     private void handleFile(String name)
         throws ErrorMessage, FileNotFoundException, GtpError,
-               SgfReader.SgfError
+               SgfError
     {
         File file = new File(name);
         InputStream in = new FileInputStream(file);
