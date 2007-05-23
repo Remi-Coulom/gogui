@@ -48,8 +48,11 @@ public final class NodeUtil
     }
 
     /** Find first node with a certain move number in main variation
-        containing a given node.
-        @return null if no such node exists.
+        of a given node.
+        @param node The given node.
+        @param moveNumber The move number of the wanted node.
+        @return The node with the given move number or <code>null</code> if
+        no such node exists.
     */
     public static ConstNode findByMoveNumber(ConstNode node, int moveNumber)
     {
@@ -72,13 +75,16 @@ public final class NodeUtil
         return node;
     }
 
-    /** Return first node of a given variation.
-        Returns the root node node if variation string is empty,
-        otherwise it returns the node that can be reached from the root node
-        by taking the children defined by the integers in the variation string
-        for nodes with more than one child.
-        Returns null, if the variation string is invalid or does not specify
-        a node in the given tree.
+    /** Get first node of a given variation.
+        Searches the node that can be reached from the root node by taking the
+        children defined by the integers in the variation string for nodes
+        with more than one child.
+        @param root The root node of the tree.
+        @param variation The variation string (e.g. "1.1.3.1.5").
+        @return The first node of the given variation, or the root node,
+        if the variation string is empty, or <code>null</code>, if the
+        variation string is invalid or does not specify a node in the
+        given tree.
     */
     public static ConstNode findByVariation(ConstNode root, String variation)
     {

@@ -61,6 +61,9 @@ public final class NodeUtilTest
         assertNull(NodeUtil.findByVariation(m_node0, "3"));
         assertTrue(NodeUtil.findByVariation(m_node0, "2.1") == m_node8);
         assertTrue(NodeUtil.findByVariation(m_node0, "2.2") == m_node9);
+        assertNull(NodeUtil.findByVariation(m_node0, "foobar"));
+        assertNull(NodeUtil.findByVariation(m_node0, "123.4"));
+        assertNull(NodeUtil.findByVariation(m_node0, "0"));
     }
 
     public void testGetAllAsMovesMoveOnly()
