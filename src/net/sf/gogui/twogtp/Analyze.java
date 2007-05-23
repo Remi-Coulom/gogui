@@ -16,7 +16,6 @@ import net.sf.gogui.util.HtmlUtil;
 import net.sf.gogui.util.Statistics;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
-import net.sf.gogui.version.Version;
 
 /** Analyze the game results and produce a HTML formatted report. */
 public class Analyze
