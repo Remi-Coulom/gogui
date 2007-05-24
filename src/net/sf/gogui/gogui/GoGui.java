@@ -174,9 +174,9 @@ public class GoGui
                 public void mouseWheelMoved(MouseWheelEvent e) {
                     int n = e.getWheelRotation();
                     if (n > 0)
-                        actionBackward(n);
+                        actionForward(n);
                     else
-                        actionForward(-n);
+                        actionBackward(-n);
                 }
             });
         m_statusBar = new StatusBar();
