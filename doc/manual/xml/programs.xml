@@ -12,8 +12,8 @@ The following Go programs can be used with GoGui:
 <primary>AmigoGtp</primary>
 </indexterm>
 <para>
-<ulink url="http://www.cs.ualberta.ca/~emarkus/amigogtp/">
-http://www.cs.ualberta.ca/~emarkus/amigogtp/</ulink>
+<ulink url="http://www.cs.ualberta.ca/~games/go/software/gtpengine/">
+http://www.cs.ualberta.ca/~games/go/software/gtpengine/</ulink>
 </para>
 <para>
 Operating systems: Unix, Windows
