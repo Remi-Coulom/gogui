@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GoGui: allow going forward/backward with the mouse wheel
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Minor fixes and enhancements.
 </simpara>
 </listitem>

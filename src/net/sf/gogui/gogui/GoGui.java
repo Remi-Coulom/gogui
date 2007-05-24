@@ -12,6 +12,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -168,6 +170,15 @@ public class GoGui
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
         m_guiBoard = new GuiBoard(boardSize);
         m_guiBoard.setListener(this);
+        m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                    int n = e.getWheelRotation();
+                    if (n > 0)
+                        actionBackward(n);
+                    else
+                        actionForward(-n);
+                }
+            });
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
         Comment.Listener commentListener = new Comment.Listener()
