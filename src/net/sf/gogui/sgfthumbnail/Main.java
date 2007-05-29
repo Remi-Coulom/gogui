@@ -22,9 +22,9 @@ public final class Main
         try
         {
             String options[] = {
-                "check-expire:",
+                //"check-expire:", // experimental; needs more testing
                 "config:",
-                "expire:",
+                //"expire:", // experimental; needs more testing
                 "help",
                 "size:",
                 "verbose",
@@ -41,6 +41,7 @@ public final class Main
                 System.out.println("SgfThumbnail " + Version.get());
                 return;
             }
+            /*
             if (opt.contains("expire"))
             {
                 int seconds = opt.getInteger("expire", 0, 0);
@@ -53,6 +54,7 @@ public final class Main
                 ThumbnailUtil.expire(seconds, true);
                 return;
             }
+            */
             boolean verbose = opt.contains("verbose");
             ArrayList arguments = opt.getArguments();
             if (arguments.isEmpty() || arguments.size() > 2)
@@ -94,9 +96,10 @@ public final class Main
             "Usage: java -jar sgfthumbnail.jar [options] input [output]\n" +
             "Options:\n" +
             "-config    config file\n" +
-            "-help         Print help and exit\n" +
-            "-verbose      Print logging messages to stderr\n" +
-            "-version      Print version and exit\n";
+            "-help      Print help and exit\n" +
+            "-size      Thumbnail size in pixels (for 19x19)\n" +
+            "-verbose   Print logging messages to stderr\n" +
+            "-version   Print version and exit\n";
         out.print(helpText);
     }
 }
