@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
-import net.sf.gogui.thumbnail.ThumbnailUtil;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
