@@ -16,7 +16,7 @@ public final class GtpEngineClient
     {
         m_engine = engine;
     }
-    
+
     public void close()
     {
     }
@@ -45,4 +45,3 @@ public final class GtpEngineClient
 
     private GtpEngine m_engine;
 }
-

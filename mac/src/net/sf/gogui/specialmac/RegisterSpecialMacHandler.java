@@ -48,4 +48,3 @@ public class RegisterSpecialMacHandler
         application.addApplicationListener(new Listener(handler));
     }
 }
-

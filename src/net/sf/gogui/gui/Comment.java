@@ -61,7 +61,7 @@ public class Comment
         setMonoFont(false);
     }
 
-    public void changedUpdate(DocumentEvent e) 
+    public void changedUpdate(DocumentEvent e)
     {
         fireChangedEvent();
     }
@@ -87,7 +87,7 @@ public class Comment
     }
 
     public void markAll(Pattern pattern)
-    {        
+    {
         Document doc = m_textPane.getDocument();
         try
         {
@@ -156,7 +156,7 @@ public class Comment
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sf.net
     */
-    private static final long serialVersionUID = 0L; // SUID    
+    private static final long serialVersionUID = 0L; // SUID
 
     private final JTextPane m_textPane;
 
@@ -178,4 +178,3 @@ public class Comment
         textPane.setFocusTraversalKeys(id, keystrokes);
     }
 }
-

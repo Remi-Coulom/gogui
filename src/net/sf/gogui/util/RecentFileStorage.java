@@ -151,7 +151,7 @@ public final class RecentFileStorage
     }
 
     private static void updateFromFile()
-    {        
+    {
         if (! wasChanged())
             return;
         if (s_builder == null)
@@ -206,13 +206,12 @@ public final class RecentFileStorage
         catch (TransformerConfigurationException e)
         {
             System.err.println(e.getMessage());
-            e.printStackTrace();            
+            e.printStackTrace();
         }
         catch (TransformerException e)
         {
             System.err.println(e.getMessage());
-            e.printStackTrace();            
+            e.printStackTrace();
         }
     }
 }
-

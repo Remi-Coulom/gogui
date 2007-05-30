@@ -69,4 +69,3 @@ public class Score
             m_result = m_resultArea;
     }
 }
-

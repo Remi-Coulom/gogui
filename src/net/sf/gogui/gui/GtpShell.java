@@ -76,7 +76,7 @@ public class GtpShell
         GuiUtil.setMinimumSize(this, new Dimension(160, 112));
         pack();
     }
-    
+
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
@@ -102,7 +102,7 @@ public class GtpShell
         Runnable r = new UpdateInvalidResponse(this, response);
         invokeAndWait(r);
     }
-    
+
     public void receivedResponse(boolean error, String response)
     {
         if (SwingUtilities.isEventDispatchThread())
@@ -113,7 +113,7 @@ public class GtpShell
         Runnable r = new UpdateResponse(this, error, response);
         invokeAndWait(r);
     }
-    
+
     public void receivedStdErr(String s)
     {
         if (SwingUtilities.isEventDispatchThread())
@@ -173,7 +173,7 @@ public class GtpShell
         Runnable r = new UpdateCommand(this, command);
         invokeAndWait(r);
     }
-    
+
     /** Modify dialog size after first write.
         This is a workaround for problems with a JTextPane in a JScrollable
         in Sun JDK 1.4 and Mac JDK 1.4.
@@ -227,7 +227,7 @@ public class GtpShell
         m_programVersion = version;
     }
 
-        
+
     private static class UpdateCommand implements Runnable
     {
         public UpdateCommand(GtpShell gtpShell, String text)
@@ -396,14 +396,14 @@ public class GtpShell
         assert SwingUtilities.isEventDispatchThread();
         m_gtpShellText.appendInvalidResponse(response);
     }
-    
+
     private void appendLog(String line)
     {
         assert SwingUtilities.isEventDispatchThread();
         m_gtpShellText.appendLog(line);
         setFinalSize();
     }
-    
+
     private void appendResponse(boolean error, String response)
     {
         assert SwingUtilities.isEventDispatchThread();
@@ -413,7 +413,7 @@ public class GtpShell
             m_gtpShellText.appendInput(response);
         setFinalSize();
     }
-    
+
     private void appendSentCommand(String command)
     {
         assert SwingUtilities.isEventDispatchThread();
@@ -433,7 +433,7 @@ public class GtpShell
         m_gtpShellText.appendOutput(command + "\n");
         setFinalSize();
     }
-    
+
     private void appendToHistory(String command)
     {
         command = command.trim();
@@ -498,9 +498,9 @@ public class GtpShell
         m_textField.setFocusTraversalKeysEnabled(false);
         KeyAdapter keyAdapter = new KeyAdapter()
             {
-                public void keyReleased(KeyEvent e) 
+                public void keyReleased(KeyEvent e)
                 {
-                    int c = e.getKeyCode();        
+                    int c = e.getKeyCode();
                     int mod = e.getModifiers();
                     if (c == KeyEvent.VK_ESCAPE)
                         return;
@@ -588,7 +588,7 @@ public class GtpShell
                 }
                 bestCompletion = completion.substring(0, j);
             }
-        }       
+        }
         if (bestCompletion != null)
             m_textField.setText(bestCompletion);
     }

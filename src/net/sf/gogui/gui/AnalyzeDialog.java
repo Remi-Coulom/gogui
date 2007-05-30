@@ -58,7 +58,7 @@ public final class AnalyzeDialog
     public interface Listener
     {
         void actionClearAnalyzeCommand();
-        
+
         void actionSetAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                      boolean clearBoard, boolean oneRunOnly);
     }
@@ -336,7 +336,7 @@ public final class AnalyzeDialog
             comboBoxChanged();
         }
         catch (Exception e)
-        {            
+        {
             showError("Loading analyze configuration file failed",
                       e.getMessage());
         }
@@ -452,7 +452,7 @@ public final class AnalyzeDialog
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         if (command.needsColorArg())
             command.setColorArg(getSelectedColor());
-        String label = command.getResultTitle();        
+        String label = command.getResultTitle();
         if (command.needsStringArg())
         {
             String stringArg =
@@ -605,6 +605,6 @@ public final class AnalyzeDialog
             if (getComboBoxItem(i).equals(label))
                 m_comboBoxHistory.removeItemAt(i);
         m_comboBoxHistory.setSelectedIndex(0);
-        m_firstIsTemp = false;        
+        m_firstIsTemp = false;
     }
 }

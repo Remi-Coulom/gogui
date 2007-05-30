@@ -160,5 +160,4 @@ class SocketOutputCopy
     }
 
     private final Socket m_socket;
-};
-
+}

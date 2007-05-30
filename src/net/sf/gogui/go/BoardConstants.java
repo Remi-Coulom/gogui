@@ -103,7 +103,7 @@ public final class BoardConstants
         on the line.
         @return <code>true</code>, if the line contains handicap points.
         @see #getHandicapStones
-    */        
+    */
     public boolean isHandicapLine(int i)
     {
         return (i == m_handicapLine1 || i == m_handicapLine2
@@ -168,4 +168,3 @@ public final class BoardConstants
                 m_allPoints.add(GoPoint.get(x, y));
     }
 }
-

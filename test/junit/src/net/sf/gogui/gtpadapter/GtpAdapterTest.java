@@ -178,4 +178,3 @@ public final class GtpAdapterTest
         return m_gtp.send(command);
     }
 }
-

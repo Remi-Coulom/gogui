@@ -60,14 +60,14 @@ public final class MessageDialogs
 
     public void showInfo(Component frame, String mainMessage,
                          String optionalMessage, boolean isCritical)
-    {        
+    {
         showInfo(null, frame, mainMessage, optionalMessage, isCritical);
     }
 
     public void showInfo(String disableKey, Component frame,
                          String mainMessage, String optionalMessage,
                          boolean isCritical)
-    {        
+    {
         if (disableKey != null && m_disabled.contains(disableKey))
             return;
         int type;

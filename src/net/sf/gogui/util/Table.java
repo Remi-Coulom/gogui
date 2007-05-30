@@ -26,7 +26,7 @@ public class Table
         public InvalidLocation(String message)
         {
             super(message);
-        }        
+        }
 
         /** Serial version to suppress compiler warning.
             Contains a marker comment for serialver.sf.net
@@ -41,7 +41,7 @@ public class Table
         public InvalidFormat(String message)
         {
             super(message);
-        }        
+        }
 
         /** Serial version to suppress compiler warning.
             Contains a marker comment for serialver.sf.net
@@ -56,7 +56,7 @@ public class Table
         public InvalidElement(String message)
         {
             super(message);
-        }        
+        }
 
         /** Serial version to suppress compiler warning.
             Contains a marker comment for serialver.sf.net
@@ -71,7 +71,7 @@ public class Table
     }
 
     public Table(ArrayList columnTitles)
-    {        
+    {
         m_columnTitles = columnTitles;
         m_numberColumns = columnTitles.size();
     }
@@ -297,7 +297,7 @@ public class Table
         m_rows.add(row);
         m_lastRow = row;
     }
-    
+
     private boolean m_propertiesRead;
 
     private int m_lineNumber;
@@ -367,4 +367,3 @@ public class Table
             set(i, array[i]);
     }
 }
-

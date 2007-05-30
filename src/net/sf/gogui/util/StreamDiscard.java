@@ -43,5 +43,4 @@ public class StreamDiscard
     }
 
     private final InputStream m_src;
-};
-
+}

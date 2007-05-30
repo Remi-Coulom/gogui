@@ -118,4 +118,3 @@ public final class SgfToTex
                   "-version print version and exit\n");
     }
 }
-

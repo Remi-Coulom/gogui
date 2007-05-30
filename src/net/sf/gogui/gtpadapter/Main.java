@@ -59,7 +59,7 @@ public final class Main
             String name = opt.get("name", null);
             String gtpFile = opt.get("gtpfile", null);
             boolean resign = opt.contains("resign");
-            int resignScore = opt.getInteger("resign");            
+            int resignScore = opt.getInteger("resign");
             ArrayList arguments = opt.getArguments();
             int size = opt.getInteger("size", 19, 1, GoPoint.MAX_SIZE);
             if (arguments.size() != 1)
@@ -118,4 +118,3 @@ public final class Main
         out.print(helpText);
     }
 }
-

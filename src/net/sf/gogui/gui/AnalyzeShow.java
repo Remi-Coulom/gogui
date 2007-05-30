@@ -93,7 +93,7 @@ public final class AnalyzeShow
             }
             break;
         case AnalyzeCommand.VAR:
-            {                    
+            {
                 showVariation(guiBoard, response, board.getToMove());
             }
             break;
@@ -237,7 +237,7 @@ public final class AnalyzeShow
             }
         }
     }
-    
+
     /** Parse gfx analyze command response line and display it on the board. */
     public static void showGfxLine(String line, GuiBoard guiBoard,
                                    StatusBar statusBar)
@@ -412,4 +412,3 @@ public final class AnalyzeShow
         GuiBoardUtil.showVariation(guiBoard, moves);
     }
 }
-

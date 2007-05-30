@@ -16,7 +16,7 @@ public final class MoveNumberDialog
     public static ConstNode show(Component parent, ConstNode node,
                                  MessageDialogs messageDialogs)
     {
-        int number = NodeUtil.getMoveNumber(node);        
+        int number = NodeUtil.getMoveNumber(node);
         Object value =
             JOptionPane.showInputDialog(parent, "Move Number", "Input",
                                         JOptionPane.PLAIN_MESSAGE, null, null,
@@ -50,4 +50,3 @@ public final class MoveNumberDialog
     {
     }
 }
-

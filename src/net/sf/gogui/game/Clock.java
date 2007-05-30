@@ -292,7 +292,7 @@ public final class Clock
         m_toMove = null;
         updateListener();
         stopTimer();
-    }    
+    }
 
     private class UpdateListenerTask
         extends TimerTask
@@ -385,4 +385,3 @@ public final class Clock
             m_listener.clockChanged(this);
     }
 }
-

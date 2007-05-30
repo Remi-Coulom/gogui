@@ -110,4 +110,3 @@ public class RecentFileMenu
         return getFile(i).getName();
     }
 }
-

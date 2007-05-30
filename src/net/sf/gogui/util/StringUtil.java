@@ -111,7 +111,7 @@ public final class StringUtil
         Returns the error message is for instances of ErrorMessage or
         for other exceptions the class name with the exception message
         appended, if not empty.
-    */    
+    */
     public static String getErrorMessage(Throwable e)
     {
         String message = e.getMessage();
@@ -161,7 +161,7 @@ public final class StringUtil
         String result = getErrorMessage(exception);
         System.err.println(result);
         boolean isSevere = (exception instanceof RuntimeException
-                            || exception instanceof Error);     
+                            || exception instanceof Error);
         if (isSevere)
             exception.printStackTrace();
         return result;
@@ -236,4 +236,3 @@ public final class StringUtil
     {
     }
 }
-

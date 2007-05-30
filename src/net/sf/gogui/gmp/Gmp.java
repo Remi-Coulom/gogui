@@ -4,11 +4,11 @@
 
   Go Modem Protocol Specification
   http://www.britgo.org/tech/gmp.html
-  
+
   Simple version of the protocol:
   Appendix A in Call For Participation to the FJK Computer Go Tournament 2000
-  http://sig-gi.c.u-tokyo.ac.jp/fjk2k-go/cfp-english.txt  
-  
+  http://sig-gi.c.u-tokyo.ac.jp/fjk2k-go/cfp-english.txt
+
   $Id$
   $Source$
 */
@@ -503,7 +503,7 @@ class MainThread
             String result = m_talkBuffer.toString();
             m_talkBuffer.setLength(0);
             return result;
-        }        
+        }
     }
 
     public void interruptCommand()
@@ -971,11 +971,11 @@ class MainThread
         val = val & 0x000003FF;
         return (byte)(0x0080 | (cmd << 4) | (val >> 7));
     }
-    
+
     private byte makeCmdByte2(int val)
     {
         return (byte)(0x0080 | (val & 0x0000007F));
-    }   
+    }
 
     private boolean sendCmd(int cmd, int val)
     {
@@ -1029,9 +1029,9 @@ public final class Gmp
     public static class Move
     {
         public boolean m_isBlack;
-        
+
         public int m_x;
-        
+
         public int m_y;
     }
 
@@ -1180,4 +1180,3 @@ public final class Gmp
 
     private final MainThread m_mainThread;
 }
-

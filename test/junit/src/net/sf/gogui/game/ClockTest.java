@@ -63,6 +63,5 @@ public final class ClockTest
     private void setTime(long millis)
     {
         m_timeSource.setTime(millis);
-    }    
+    }
 }
-

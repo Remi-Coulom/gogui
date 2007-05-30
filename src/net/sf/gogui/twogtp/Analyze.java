@@ -169,7 +169,7 @@ public class Analyze
         try
         {
             for (int i = 0; i < m_table.getNumberRows(); ++i)
-            {            
+            {
                 int gameIndex = m_table.getInt("GAME", i);
                 String resultBlack = m_table.get("RES_B", i);
                 String resultWhite = m_table.get("RES_W", i);
@@ -184,7 +184,7 @@ public class Analyze
                 m_entries.add(new Entry(gameIndex, resultBlack, resultWhite,
                                         resultReferee, alternated, duplicate,
                                         length, cpuBlack, cpuWhite, error,
-                                        errorMessage));   
+                                        errorMessage));
             }
         }
         catch (NumberFormatException e)
@@ -468,4 +468,3 @@ final class Entry
             m_errorMessage = "";
     }
 }
-

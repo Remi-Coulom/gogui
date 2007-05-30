@@ -45,7 +45,7 @@ public final class TimeSettings
     public boolean equals(Object object)
     {
         if (object == null || object.getClass() != getClass())
-            return false;        
+            return false;
         TimeSettings settings = (TimeSettings)object;
         return (settings.m_preByoyomi == m_preByoyomi
                 && settings.m_byoyomi == m_byoyomi
@@ -191,7 +191,6 @@ public final class TimeSettings
             buffer.append(millisec / MSEC_PER_SEC);
             buffer.append(" sec");
         }
-        return buffer.toString();        
+        return buffer.toString();
     }
 }
-

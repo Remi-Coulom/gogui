@@ -18,7 +18,7 @@ public final class HtmlUtil
     {
         StringBuffer buffer = new StringBuffer(512);
         buffer.append("<hr style=\"margin-bottom:0\" size=\"1\">\n" +
-                      "<p style=\"margin-top:1; margin-right:5\"" 
+                      "<p style=\"margin-top:1; margin-right:5\""
                       + " align=\"right\"><i>" +
                       "<small>Generated on ");
         buffer.append(StringUtil.getDateShort());
@@ -53,4 +53,3 @@ public final class HtmlUtil
     {
     }
 }
-

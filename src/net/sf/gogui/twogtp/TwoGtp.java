@@ -96,7 +96,7 @@ public class TwoGtp
         m_nameBlack = getName(m_black, "Black");
         m_nameWhite = getName(m_white, "White");
         m_blackVersion = getVersion(m_black);
-        m_whiteVersion = getVersion(m_white);        
+        m_whiteVersion = getVersion(m_white);
         m_black.querySupportedCommands();
         m_white.querySupportedCommands();
         m_black.queryInterruptSupport();
@@ -109,8 +109,8 @@ public class TwoGtp
         else
         {
             m_referee.queryProtocolVersion();
-            m_nameReferee = getName(m_referee, "Referee");        
-            m_refereeVersion = getVersion(m_referee);        
+            m_nameReferee = getName(m_referee, "Referee");
+            m_refereeVersion = getVersion(m_referee);
             m_referee.querySupportedCommands();
             m_referee.queryInterruptSupport();
         }
@@ -119,7 +119,7 @@ public class TwoGtp
             m_observer.queryProtocolVersion();
             m_observer.querySupportedCommands();
             m_observer.queryInterruptSupport();
-        }        
+        }
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
@@ -399,7 +399,7 @@ public class TwoGtp
         close(m_white);
         close(m_referee);
         close(m_observer);
-    }    
+    }
 
     private void close(GtpClient gtp)
     {
@@ -486,7 +486,7 @@ public class TwoGtp
     {
         File file = getResultFile();
         if (file.exists())
-        {            
+        {
             m_table = new Table();
             try
             {
@@ -496,7 +496,7 @@ public class TwoGtp
                     Integer.parseInt(m_table.get("GAME", lastRowIndex)) + 1;
                 if (m_gameIndex < 0)
                     throw new ErrorMessage("Invalid file format: " + file);
-            }                        
+            }
             catch (NumberFormatException e)
             {
                 throw new ErrorMessage("Invalid file format: " + file);
@@ -597,7 +597,7 @@ public class TwoGtp
                 return name;
         }
         catch (GtpError e)
-        {            
+        {
         }
         return defaultName;
     }
@@ -975,7 +975,7 @@ public class TwoGtp
                 throw new GtpError("next opening move is " + move);
             m_game.gotoNode(child);
             synchronize();
-            response.append(GoPoint.toString(move.getPoint()));            
+            response.append(GoPoint.toString(move.getPoint()));
             return;
         }
         GtpClient gtp;
@@ -1023,7 +1023,7 @@ public class TwoGtp
             m_game.play(move);
             synchronizer.updateAfterGenmove(board);
             synchronize();
-            response.append(GoPoint.toString(move.getPoint()));            
+            response.append(GoPoint.toString(move.getPoint()));
         }
         if (gameOver() && ! m_gameSaved)
         {
@@ -1126,4 +1126,3 @@ public class TwoGtp
         twogtpColor(m_referee, cmd);
     }
 }
-

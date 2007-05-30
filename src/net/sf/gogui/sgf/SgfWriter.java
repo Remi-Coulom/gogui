@@ -37,7 +37,7 @@ public class SgfWriter
     */
     public SgfWriter(OutputStream out, ConstGameTree tree, String application,
                      String version)
-    {        
+    {
         try
         {
             m_out = new PrintStream(out, false, ENCODING);
@@ -66,7 +66,7 @@ public class SgfWriter
     */
     public SgfWriter(OutputStream out, ConstBoard board, String application,
                      String version)
-    {        
+    {
         m_size = board.getSize();
         m_out = new PrintStream(out);
         print("(");
@@ -436,4 +436,3 @@ public class SgfWriter
             print("PL[W]");
     }
 }
-

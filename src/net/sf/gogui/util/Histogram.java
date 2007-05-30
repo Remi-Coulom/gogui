@@ -102,4 +102,3 @@ public class Histogram
 
     private int[] m_array;
 }
-

@@ -47,4 +47,3 @@ public final class FileUtilTest
         assertFalse(FileUtil.hasExtension(new File("bar.foo"), "bar"));
     }
 }
-

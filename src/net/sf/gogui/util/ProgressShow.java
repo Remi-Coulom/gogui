@@ -9,4 +9,3 @@ public interface ProgressShow
 {
     void showProgress(int percent);
 }
-

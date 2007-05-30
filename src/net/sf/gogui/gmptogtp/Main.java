@@ -107,7 +107,7 @@ public final class Main
                 System.exit(-1);
             }
             String title = "Go Modem ";
-            String flow = opt.get("flow", "rtscts");                
+            String flow = opt.get("flow", "rtscts");
             if (device.equals(""))
             {
                 Runtime runtime = Runtime.getRuntime();
@@ -213,4 +213,3 @@ public final class Main
         return port;
     }
 }
-

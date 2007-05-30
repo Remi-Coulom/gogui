@@ -78,4 +78,3 @@ public final class Main
         out.print(helpText);
     }
 }
-

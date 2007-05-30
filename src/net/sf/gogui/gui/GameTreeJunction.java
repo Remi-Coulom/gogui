@@ -51,4 +51,3 @@ class GameTreeJunction
 
     private static final Color COLOR_GRID = new Color(148, 148, 148);
 }
-

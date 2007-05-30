@@ -119,4 +119,3 @@ public class Statistics
 
     private double m_sumSq;
 }
-

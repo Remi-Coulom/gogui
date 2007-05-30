@@ -32,4 +32,3 @@ public final class StreamCopyTest
         assertEquals(input, dest.toString());
     }
 }
-

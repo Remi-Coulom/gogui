@@ -235,7 +235,7 @@ public final class Node
     /** Get index of child node.
         @param child The child.
         @return Index of child or -1, if node is not a child of this node.
-    */  
+    */
     public int getChildIndex(ConstNode child)
     {
         for (int i = 0; i < getNumberChildren(); ++i)
@@ -783,4 +783,3 @@ public final class Node
         return m_extraInfo.m_moreExtraInfo.m_timeInfo;
     }
 }
-

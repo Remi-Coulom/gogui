@@ -81,16 +81,16 @@ public class GtpTerminal
             System.out.println();
         }
     }
-    
+
     public void receivedInvalidResponse(String s)
     {
         System.out.print(s);
     }
-    
+
     public void receivedResponse(boolean error, String s)
     {
     }
-    
+
     public void receivedStdErr(String s)
     {
         // If m_verbose, logging is already done by Gtp
@@ -354,7 +354,7 @@ public class GtpTerminal
             OutputStream out = new FileOutputStream(file);
             new SgfWriter(out, m_tree, "GtpTerminal", Version.get());
         }
-        catch (FileNotFoundException e) 
+        catch (FileNotFoundException e)
         {
             System.out.println("Write error");
             return;
@@ -400,4 +400,3 @@ public class GtpTerminal
         printBoard();
     }
 }
-

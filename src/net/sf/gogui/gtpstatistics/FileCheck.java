@@ -86,4 +86,3 @@ public class FileCheck
         throw new ErrorMessage(m_file + ": " + reason);
     }
 }
-

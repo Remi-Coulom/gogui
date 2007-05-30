@@ -23,4 +23,3 @@ public final class ScoreTest
         assertEquals(Score.formatResult(-5.5), "W+5.5");
     }
 }
-

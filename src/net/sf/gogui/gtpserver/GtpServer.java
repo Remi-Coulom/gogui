@@ -193,4 +193,3 @@ public final class GtpServer
                   "-version print version and exit\n");
     }
 }
-

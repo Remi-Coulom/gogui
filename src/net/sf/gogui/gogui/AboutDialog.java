@@ -99,7 +99,7 @@ public final class AboutDialog
     {
         JPanel panel = new JPanel(new GridLayout(1, 1));
         JEditorPane editorPane = new JEditorPane();
-        editorPane.setBorder(GuiUtil.createEmptyBorder());        
+        editorPane.setBorder(GuiUtil.createEmptyBorder());
         editorPane.setEditable(false);
         if (Platform.isMac())
         {
@@ -219,4 +219,3 @@ public final class AboutDialog
         return (size / 1000000) + " MB";
     }
 }
-

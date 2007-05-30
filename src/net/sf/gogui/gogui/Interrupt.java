@@ -36,7 +36,7 @@ public final class Interrupt
             if (n == 0)
                 gtp.destroyGtp();
             return false;
-        }        
+        }
         String disableKey = "net.sf.gogui.gogui.Interrupt.interrupt";
         String name = gtp.getProgramName();
         if (name == null)
@@ -61,4 +61,3 @@ public final class Interrupt
         return true;
     }
 }
-

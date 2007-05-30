@@ -217,7 +217,7 @@ public class Help
     }
 
     private void historyChanged()
-    {        
+    {
         boolean backPossible = (m_historyIndex > 0);
         boolean forwardPossible = (m_historyIndex < m_history.size() - 1);
         m_buttonBack.setEnabled(backPossible);
@@ -252,7 +252,6 @@ public class Help
     {
         if (! Platform.openInExternalBrowser(url))
             loadURL(url);
-        appendHistory(url);        
+        appendHistory(url);
     }
 }
-

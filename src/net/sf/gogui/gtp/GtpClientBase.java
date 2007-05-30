@@ -122,7 +122,7 @@ public abstract class GtpClientBase
         {
             throw new GtpError("Invalid response to cputime command");
         }
-    }    
+    }
 
     /** Get program name or "Unknown Program" if unknown.
         If queryName() was not called or the name command failed, the
@@ -213,7 +213,7 @@ public abstract class GtpClientBase
         }
         catch (GtpError e)
         {
-        }        
+        }
     }
 
     /** Query the protocol version.
@@ -225,7 +225,7 @@ public abstract class GtpClientBase
     {
         m_protocolVersion = 2;
         try
-        {            
+        {
             String response = send("protocol_version");
             int v = Integer.parseInt(response);
             if (v == 1 || v == 2)
@@ -331,4 +331,3 @@ public abstract class GtpClientBase
 
     private String[] m_supportedCommands;
 }
-

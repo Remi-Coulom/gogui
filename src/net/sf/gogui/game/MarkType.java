@@ -11,21 +11,21 @@ public final class MarkType
     implements Comparable
 {
     public static final MarkType MARK = new MarkType("mark");
-    
+
     public static final MarkType CIRCLE = new MarkType("circle");
-    
+
     public static final MarkType SQUARE = new MarkType("square");
-    
+
     public static final MarkType TRIANGLE = new MarkType("triangle");
-    
+
     public static final MarkType SELECT = new MarkType("select");
-    
+
     public static final MarkType TERRITORY_BLACK =
         new MarkType("territory-b");
-    
+
     public static final MarkType TERRITORY_WHITE =
         new MarkType("territory-w");
-    
+
     public int compareTo(Object obj)
     {
         int index = ((MarkType)obj).m_index;
@@ -63,7 +63,7 @@ public final class MarkType
 
     /** Index if mark types are stored in a map. */
     private final int m_index;
-    
+
     private final String m_string;
 
     private MarkType(String string)
@@ -75,4 +75,3 @@ public final class MarkType
         s_types.add(this);
     }
 }
-

@@ -130,4 +130,3 @@ public final class NodeTest
         assertEquals(0, node.getAddStones(GoColor.WHITE).size());
     }
 }
-

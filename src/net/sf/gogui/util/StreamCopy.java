@@ -73,5 +73,4 @@ public class StreamCopy
     private final InputStream m_src;
 
     private final OutputStream m_dest;
-};
-
+}

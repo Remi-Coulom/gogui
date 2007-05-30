@@ -124,7 +124,7 @@ public final class GoGuiSettings
         m_gtpFile = opt.get("gtpfile", "");
         m_gtpCommand = opt.get("command", "");
         if (opt.contains("komi"))
-            m_prefs.putDouble("komi", opt.getDouble("komi"));        
+            m_prefs.putDouble("komi", opt.getDouble("komi"));
         m_lookAndFeel = opt.get("laf", null);
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
@@ -169,7 +169,7 @@ public final class GoGuiSettings
             "-verbose          Print debugging messages\n" +
             "-version          Print version and exit\n";
         System.out.print(helpText);
-    }   
+    }
 
     private void validate() throws ErrorMessage
     {
@@ -178,5 +178,3 @@ public final class GoGuiSettings
             throw new ErrorMessage("Invalid board size: " + size);
     }
 }
-
-

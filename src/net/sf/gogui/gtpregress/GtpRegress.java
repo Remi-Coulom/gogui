@@ -272,7 +272,7 @@ public class GtpRegress
             m_lastSgf = matcher.group(1);
             m_lastSgfMove = -1;
         }
-        
+
     }
 
     private void finishOutFile()
@@ -630,10 +630,10 @@ public class GtpRegress
             m_currentStyle = style;
         }
         if (id >= 0)
-            m_out.print("<a name=\"" + id + "\">");            
+            m_out.print("<a name=\"" + id + "\">");
         m_out.print(line);
         if (id >= 0)
-            m_out.print("</a>");            
+            m_out.print("</a>");
     }
 
     private synchronized void printOutLine(String style, String line, int id)
@@ -1090,4 +1090,3 @@ public class GtpRegress
         out.close();
     }
 }
-

@@ -600,4 +600,3 @@ public class GuiField
         graphics.setFont(s_cachedFont);
     }
 }
-

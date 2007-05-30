@@ -20,7 +20,7 @@ public final class CommandStatistics
     public final int m_maxMove;
 
     public final DecimalFormat m_format;
-    
+
     public final PositionStatistics m_statisticsAll;
 
     public final PositionStatistics m_statisticsFinal;
@@ -141,4 +141,3 @@ public final class CommandStatistics
         return format;
     }
 }
-

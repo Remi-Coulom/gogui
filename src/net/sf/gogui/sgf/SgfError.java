@@ -17,7 +17,7 @@ public class SgfError
     {
         super(message);
     }
-    
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sf.net
     */

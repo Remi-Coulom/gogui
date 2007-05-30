@@ -40,7 +40,7 @@ public class GtpDummy
     }
 
     public void cmdBWBoard(GtpCommand cmd)
-    {        
+    {
         cmd.getResponse().append('\n');
         for (int x = 0; x < m_size; ++x)
         {
@@ -51,7 +51,7 @@ public class GtpDummy
                     cmd.getResponse().append(' ');
             }
             cmd.getResponse().append('\n');
-        }                    
+        }
     }
 
     public void cmdBoardsize(GtpCommand cmd) throws GtpError
@@ -62,7 +62,7 @@ public class GtpDummy
     }
 
     public void cmdCrash(GtpCommand cmd)
-    {        
+    {
         System.err.println("Aborting GtpDummy");
         System.exit(-1);
     }
@@ -90,7 +90,7 @@ public class GtpDummy
         else
             cmd.getResponse().append(m_delay);
     }
-    
+
     public void cmdFileOpen(GtpCommand cmd) throws GtpError
     {
         try
@@ -207,14 +207,14 @@ public class GtpDummy
     }
 
     public void cmdInvalid(GtpCommand cmd) throws GtpError
-    {        
+    {
         cmd.checkArgNone();
         printInvalidResponse("This is an invalid GTP response.\n" +
                              "It does not start with a status character.\n");
     }
 
     public void cmdInvalidEmpty(GtpCommand cmd) throws GtpError
-    {        
+    {
         cmd.checkArgNone();
         printInvalidResponse("\n");
     }
@@ -251,7 +251,7 @@ public class GtpDummy
     }
 
     public void cmdLongResponse(GtpCommand cmd) throws GtpError
-    {        
+    {
         cmd.checkNuArg(1);
         int n = cmd.getIntArg(0, 1, Integer.MAX_VALUE);
         for (int i = 1; i <= n; ++i)
@@ -282,7 +282,7 @@ public class GtpDummy
 
     public void cmdSleep(GtpCommand cmd) throws GtpError
     {
-        cmd.checkNuArgLessEqual(1);        
+        cmd.checkNuArgLessEqual(1);
         long millis = 20000;
         if (cmd.getNuArg() == 1)
             millis = (long)(cmd.getDoubleArg(0) * 1000.0);
@@ -437,4 +437,3 @@ public class GtpDummy
         }
     }
 }
-

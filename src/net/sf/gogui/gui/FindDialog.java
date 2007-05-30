@@ -139,7 +139,7 @@ public class FindDialog
             {
                 public void keyPressed(KeyEvent e)
                 {
-                    int c = e.getKeyCode();        
+                    int c = e.getKeyCode();
                     if (c == KeyEvent.VK_ESCAPE
                         && ! m_comboBox.isPopupVisible())
                         dispose();
@@ -177,4 +177,3 @@ public class FindDialog
         return result;
     }
 }
-

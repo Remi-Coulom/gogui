@@ -164,4 +164,3 @@ public final class Main
                   "-version      Display this help and exit\n");
     }
 }
-

@@ -195,4 +195,3 @@ public final class BoardUtil
             s.append(' ');
     }
 }
-

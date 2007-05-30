@@ -43,11 +43,11 @@ public class RadialGradientContext
         m_blueDiff = color2.getBlue() - m_blue1;
         m_alphaDiff = color2.getAlpha() - m_alpha1;
     }
-    
+
     public void dispose()
     {
     }
-    
+
     public ColorModel getColorModel()
     {
         return ColorModel.getRGBdefault();
@@ -139,4 +139,3 @@ public class RadialGradientContext
         return (p1.getX() * p2.getX() + p1.getY() * p2.getY());
     }
 }
-

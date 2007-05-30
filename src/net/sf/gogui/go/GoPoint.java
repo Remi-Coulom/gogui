@@ -190,7 +190,7 @@ public final class GoPoint
     {
         return m_string;
     }
-    
+
     /** Convert a point or null point (pass) to a string.
         @param point Point or null for pass moves
         @return point.toString() or "PASS" if point is null
@@ -201,7 +201,7 @@ public final class GoPoint
             return "PASS";
         return point.toString();
     }
-    
+
     /** Convert a list of points to a string.
         Points are separated by a single space.
         If pointList is null, "(null)" is returned.
@@ -220,7 +220,7 @@ public final class GoPoint
         }
         return buffer.toString();
     }
-    
+
     /** Return point above.
         @param max Current board size.
         @return The point above this point (x, y + 1) or this point if no such
@@ -263,4 +263,3 @@ public final class GoPoint
         m_index = y * GoPoint.MAX_SIZE + x;
     }
 }
-

@@ -168,7 +168,7 @@ public final class Main
         optionalMessageArea.setFont(UIManager.getFont("Label.font"));
         String optionalMessage;
         if (Version.get().indexOf("SVN") >= 0)
-            optionalMessage = 
+            optionalMessage =
                 "You are running an unreleased version of GoGui. Please don't report this bug to\n" +
                 "the GoGui bug tracker, but email the author of GoGui directly instead.\n";
         else
@@ -181,7 +181,7 @@ public final class Main
         JTextArea textArea = new JTextArea();
         textArea.setForeground(Color.black);
         textArea.setBackground(Color.white);
-        textArea.setBorder(GuiUtil.createEmptyBorder());        
+        textArea.setBorder(GuiUtil.createEmptyBorder());
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -247,4 +247,3 @@ public final class Main
         messageDialogs.showError(null, mainMessage, optionalMessage);
     }
 }
-

@@ -60,4 +60,3 @@ public final class GtpCommandTest
         assertEquals(cmd.getIntArg(0), 9);
     }
 }
-

@@ -67,4 +67,3 @@ public final class GtpExpectEngine
 
     private ArrayList m_responses = new ArrayList();
 }
-

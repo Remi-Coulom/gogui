@@ -21,7 +21,7 @@ public final class Komi
     public boolean equals(Object object)
     {
         if (object == null || object.getClass() != getClass())
-            return false;        
+            return false;
         Komi komi = (Komi)object;
         return (komi.m_value == m_value);
     }

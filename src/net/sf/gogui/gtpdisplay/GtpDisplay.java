@@ -145,7 +145,7 @@ public class GtpDisplay
     {
         if (m_gtp == null)
             cmd.setResponse("GtpDisplay");
-        else            
+        else
             cmd.setResponse(m_name);
     }
 
@@ -289,7 +289,7 @@ public class GtpDisplay
     private void cmdGenmove(GtpCommand cmd) throws GtpError
     {
         GoColor color = cmd.getColorArg();
-        GoPoint point;        
+        GoPoint point;
         if (m_gtp == null)
         {
             if (m_frame == null)
@@ -332,7 +332,7 @@ public class GtpDisplay
         invokeAndWait(new Runnable()
             {
                 public void run()
-                {                    
+                {
                     m_board.play(m_move);
                     updateFromGoBoard();
                     if (m_gtp == null)

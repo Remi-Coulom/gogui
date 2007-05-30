@@ -107,7 +107,7 @@ public class GameTree
     }
 
     public boolean hasVariations()
-    {        
+    {
         ConstNode node = m_root;
         while (node != null)
         {
@@ -145,4 +145,3 @@ public class GameTree
                      + format.format(day));
     }
 }
-

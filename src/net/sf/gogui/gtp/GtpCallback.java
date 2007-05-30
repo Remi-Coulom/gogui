@@ -12,4 +12,3 @@ public interface GtpCallback
 {
     void run(GtpCommand cmd) throws GtpError;
 }
-

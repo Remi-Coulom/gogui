@@ -70,31 +70,31 @@ public class ContextMenu
                         ContextMenu.this.setVisible(false);
                     }
                     else if (actionCommand.equals("mark"))
-                    {                        
+                    {
                         boolean mark
                             = ContextMenu.this.m_mark.isSelected();
                         listener.actionMark(m_point, MarkType.MARK, mark);
                     }
                     else if (actionCommand.equals("mark-circle"))
-                    {                        
+                    {
                         boolean mark
                             = ContextMenu.this.m_markCircle.isSelected();
                         listener.actionMark(m_point, MarkType.CIRCLE, mark);
                     }
                     else if (actionCommand.equals("mark-square"))
-                    {                        
+                    {
                         boolean mark
                             = ContextMenu.this.m_markSquare.isSelected();
                         listener.actionMark(m_point, MarkType.SQUARE, mark);
                     }
                     else if (actionCommand.equals("mark-triangle"))
-                    {                        
+                    {
                         boolean mark
                             = ContextMenu.this.m_markTriangle.isSelected();
                         listener.actionMark(m_point, MarkType.TRIANGLE, mark);
                     }
                     else if (actionCommand.equals("edit-label"))
-                    {                        
+                    {
                         listener.actionEditLabel(m_point);
                     }
                     else
@@ -131,7 +131,7 @@ public class ContextMenu
             m_analyzeMenu = new JMenu(analyzeMenuLabel);
             // For com.jgoodies.looks
             m_analyzeMenu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
-            add(m_analyzeMenu);            
+            add(m_analyzeMenu);
             for (int i = 0; i < commands.size(); ++i)
             {
                 String line = (String)commands.get(i);
@@ -209,7 +209,7 @@ public class ContextMenu
     }
 
     private void addCommand(AnalyzeCommand command)
-    {        
+    {
         JMenuItem item = createItem(command, command.getLabel());
         m_analyzeMenu.add(item);
     }
@@ -243,4 +243,3 @@ public class ContextMenu
         return (AnalyzeCommand)m_commands.get(index);
     }
 }
-

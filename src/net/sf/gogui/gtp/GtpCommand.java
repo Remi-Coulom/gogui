@@ -94,7 +94,7 @@ public class GtpCommand
     */
     public boolean hasId()
     {
-        return m_hasId; 
+        return m_hasId;
     }
 
     public String getArg() throws GtpError
@@ -131,7 +131,7 @@ public class GtpCommand
         corresponding uppercase strings.
         @return The color.
         @throws GtpError If command has not exactly one argument or argument
-        is not a color.        
+        is not a color.
     */
     public GoColor getColorArg() throws GtpError
     {
@@ -341,9 +341,9 @@ public class GtpCommand
     }
 
     private boolean m_hasId;
-    
+
     private int m_id;
-    
+
     private String m_line;
 
     private final String m_command;
@@ -385,4 +385,3 @@ public class GtpCommand
         return buffer;
     }
 }
-

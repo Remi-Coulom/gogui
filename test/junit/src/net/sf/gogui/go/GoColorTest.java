@@ -72,4 +72,3 @@ public final class GoColorTest
         assertEquals(GoColor.EMPTY.toString(), "empty");
     }
 }
-

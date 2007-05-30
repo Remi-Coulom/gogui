@@ -53,4 +53,3 @@ public interface ConstBoard
 
     boolean isSuicide(GoColor c, GoPoint p);
 }
-

@@ -71,7 +71,7 @@ public class BoardPainter
     }
 
     public Point getCenter(int x, int y)
-    {            
+    {
         Point point = getLocation(x, y);
         point.x += m_fieldSize / 2;
         point.y += m_fieldSize / 2;
@@ -84,7 +84,7 @@ public class BoardPainter
     }
 
     public Point getLocation(int x, int y)
-    {            
+    {
         Point point = new Point();
         point.x = m_fieldOffset + x * m_fieldSize;
         point.y = m_fieldOffset + (m_size - y - 1) * m_fieldSize;
@@ -237,7 +237,7 @@ public class BoardPainter
         setFont(graphics, m_fieldSize);
         int offset = (m_fieldSize + m_fieldOffset) / 2;
         Point point;
-        char c = 'A';        
+        char c = 'A';
         for (int x = 0; x < m_size; ++x)
         {
             String string = Character.toString(c);
@@ -335,4 +335,3 @@ public class BoardPainter
         graphics.setFont(s_cachedFont);
     }
 }
-

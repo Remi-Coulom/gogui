@@ -217,7 +217,7 @@ public class Analyze
 
     private ArrayList m_gameGlobalCommands;
 
-    private ArrayList m_gameInfo;    
+    private ArrayList m_gameInfo;
 
     private void endInfo(PrintStream out)
     {
@@ -494,7 +494,7 @@ public class Analyze
                   "<title>" + title + "</title>\n" +
                   "<meta http-equiv=\"Content-Type\""
                   + " content=\"text/html; charset=" + charset + "\">\n" +
-                  HtmlUtil.getMeta("GtpStatistics") + 
+                  HtmlUtil.getMeta("GtpStatistics") +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "a:link { color:#0000ee }\n" +
@@ -550,7 +550,7 @@ public class Analyze
                   + "<small>All</small><br>"
                   + "<img src=\"" + getHistoFile(commandIndex).getName()
                   + "\"></td>\n");
-        
+
         if (commandStatistics.m_statisticsFinal.getCount() > 0)
             out.print("<td>"
                       + "<small>Final</small><br>"
@@ -816,7 +816,7 @@ public class Analyze
         if (! info.equals(""))
             out.print(" width=\"90%\"");
         out.print(" align=\"center\">\n" +
-                  title + "\n" + 
+                  title + "\n" +
                   "</td>");
         if (! info.equals(""))
             out.print("<td align=\"right\">\n" + info + "\n</td>");
@@ -896,4 +896,3 @@ public class Analyze
         writeHtmlRow(out, key, m_table.getProperty(key, "?"));
     }
 }
-

@@ -351,4 +351,3 @@ public final class NodeUtilTest
 
     private Node m_node11;
 }
-

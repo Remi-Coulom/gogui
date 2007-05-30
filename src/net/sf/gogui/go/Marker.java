@@ -50,7 +50,7 @@ public class Marker
                 if (m_mark[x][y])
                     return false;
         return true;
-    }    
+    }
 
     /** Mark a point.
         @param p The point to mark.
@@ -84,4 +84,3 @@ public class Marker
 
     private boolean m_mark[][];
 }
-

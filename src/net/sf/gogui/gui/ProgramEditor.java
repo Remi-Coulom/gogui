@@ -57,7 +57,7 @@ public class ProgramEditor
         Box box = null;
         if (editOnlyCommand || editOnlyLabel)
         {
-            box = Box.createVerticalBox();        
+            box = Box.createVerticalBox();
             panel.add(box, BorderLayout.NORTH);
             String mainMessage;
             String optionalMessage;
@@ -79,7 +79,7 @@ public class ProgramEditor
                 optionalMessage =
                     "The label will be used to create a menu item for " +
                     "the Go program.";
-                
+
             }
             JLabel label =
                 new JLabel("<html><b>" + mainMessage + "</b></html>");
@@ -219,7 +219,7 @@ public class ProgramEditor
                                    boolean editable)
     {
         JComponent label = createEntryLabel(labelText);
-        m_panelLeft.add(label);        
+        m_panelLeft.add(label);
         Box box = Box.createVerticalBox();
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         box.add(Box.createVerticalGlue());
@@ -278,7 +278,7 @@ public class ProgramEditor
                             return;
                         String text = file.toString();
                         if (isCommand && text.indexOf(' ') >= 0)
-                            text = "\"" + text + "\"";        
+                            text = "\"" + text + "\"";
                         field.setText(text);
                         field.setCaretPosition(text.length());
                         field.requestFocusInWindow();

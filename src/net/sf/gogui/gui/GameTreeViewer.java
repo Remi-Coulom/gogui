@@ -50,9 +50,9 @@ public class GameTreeViewer
         GuiUtil.removeKeyBinding(m_scrollPane, "control END");
         KeyAdapter keyAdapter = new KeyAdapter()
             {
-                public void keyReleased(KeyEvent e) 
+                public void keyReleased(KeyEvent e)
                 {
-                    int c = e.getKeyCode();        
+                    int c = e.getKeyCode();
                     int mod = e.getModifiers();
                     if ((mod & m_shortcut) == 0)
                     {
@@ -138,5 +138,3 @@ public class GameTreeViewer
 
     private final JScrollPane m_scrollPane;
 }
-
-

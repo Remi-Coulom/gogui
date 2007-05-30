@@ -43,7 +43,7 @@ public class GameInformation
     public boolean equals(Object object)
     {
         if (object == null || object.getClass() != getClass())
-            return false;        
+            return false;
         GameInformation info = (GameInformation)object;
         return (m_handicap == info.getHandicap()
                 && ObjectUtil.equals(m_komi, info.getKomi())
@@ -112,7 +112,7 @@ public class GameInformation
     }
 
     /** Get a copy of the time settings. */
-    public TimeSettings getTimeSettings()        
+    public TimeSettings getTimeSettings()
     {
         return m_timeSettings;
     }
@@ -238,4 +238,3 @@ public class GameInformation
 
     private TimeSettings m_timeSettings;
 }
-

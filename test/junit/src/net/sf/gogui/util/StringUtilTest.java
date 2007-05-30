@@ -74,4 +74,3 @@ public final class StringUtilTest
         assertEquals("two \\\"three four\\\"", s[1]);
     }
 }
-

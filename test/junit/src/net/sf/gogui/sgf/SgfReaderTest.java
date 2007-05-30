@@ -155,7 +155,7 @@ public final class SgfReaderTest
         if (in == null)
             throw new Exception("Resource " + name + " not found");
         return new SgfReader(in, null, null, 0);
-    }    
+    }
 
     public void checkFF4Example(SgfReader reader) throws Exception
     {
@@ -301,4 +301,3 @@ public final class SgfReaderTest
             fail("Reading " + name + " should result in a failure");
     }
 }
-

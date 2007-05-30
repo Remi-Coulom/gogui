@@ -59,7 +59,7 @@ public class ScoreDialog
         box.add(labels);
         box.add(GuiUtil.createSmallFiller());
         JPanel values = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
-        box.add(values);        
+        box.add(values);
 
         String toolTipArea =
             "Points owned by %c (surrounded points and border stones)";
@@ -289,4 +289,3 @@ public class ScoreDialog
         m_result.setText(m_score.formatResult());
     }
 }
-

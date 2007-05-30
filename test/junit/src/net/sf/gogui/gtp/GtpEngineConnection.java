@@ -60,4 +60,3 @@ public final class GtpEngineConnection
 
     private GtpEngine m_engine;
 }
-

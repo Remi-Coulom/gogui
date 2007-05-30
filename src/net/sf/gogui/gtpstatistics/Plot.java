@@ -639,4 +639,3 @@ public class Plot
             m_yTicsMin = getTicsMin(m_yTics, m_minY);
     }
 }
-

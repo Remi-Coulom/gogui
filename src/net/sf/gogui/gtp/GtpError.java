@@ -35,4 +35,3 @@ public class GtpError
 
     private String m_command;
 }
-

@@ -25,7 +25,7 @@ public final class GmpTest
 
     public void testBasics() throws IOException
     {
-        createGmp();            
+        createGmp();
         receiveNewGame(false, true);
         sendMove(true, true, true, 4, 4);
         sendUndo(true, false);
@@ -266,4 +266,3 @@ public final class GmpTest
         }
     }
 }
-

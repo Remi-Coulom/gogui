@@ -173,4 +173,3 @@ public final class Program
         m_workingDirectory = workingDirectory.trim();
     }
 }
-

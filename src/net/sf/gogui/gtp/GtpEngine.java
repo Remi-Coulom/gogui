@@ -345,7 +345,7 @@ class ReadThread
     public void run()
     {
         try
-        {            
+        {
             while (true)
             {
                 String line = m_in.readLine();
@@ -403,4 +403,3 @@ class ReadThread
 
     private final GtpEngine m_gtpServer;
 }
-

@@ -171,7 +171,7 @@ public class CountScore
                 ++s.m_territoryBlack;
                 ++territoryDiff;
             }
-        }        
+        }
         s.m_resultArea = areaDiff;
         s.m_resultTerritory =
             s.m_capturedWhite - s.m_capturedBlack + territoryDiff;
@@ -255,4 +255,3 @@ public class CountScore
             setScore(points.get(i), c);
     }
 }
-

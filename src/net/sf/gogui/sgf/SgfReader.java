@@ -828,7 +828,7 @@ public final class SgfReader
             }
         }
     }
-    
+
     /** FF4 TM property */
     private void parseTime(String value)
     {
@@ -1070,4 +1070,3 @@ public final class SgfReader
         throw getError("Invalid coordinates \"" + s + "\"");
     }
 }
-

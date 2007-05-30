@@ -135,7 +135,7 @@ public class ParameterDialog
 
         private final String m_value;
     }
-    
+
     private static class BoolParameter
         extends Parameter
     {
@@ -259,7 +259,7 @@ public class ParameterDialog
                 type = string;
                 int pos = line.indexOf(']');
                 if (pos >= 0)
-                    line = line.substring(pos + 1).trim();                
+                    line = line.substring(pos + 1).trim();
             }
             int pos = line.indexOf(' ');
             String key;
@@ -282,4 +282,3 @@ public class ParameterDialog
         return parameters;
     }
 }
-

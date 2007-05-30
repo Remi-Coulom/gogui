@@ -234,4 +234,3 @@ public final class BoardTest
         assertEquals(GoColor.BLACK, board.getToMove());
     }
 }
-

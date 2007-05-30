@@ -287,7 +287,7 @@ public final class GuiBoard
                     if (getShowCursor())
                         setCursor(m_cursor, true);
                 }
-            
+
                 public void focusLost(FocusEvent event) {
                     if (getShowCursor())
                         setCursor(m_cursor, false);
@@ -323,7 +323,7 @@ public final class GuiBoard
                     if (count == 2)
                         fieldClicked(point, true);
                     else
-                    {            
+                    {
                         int modifiers = e.getModifiers();
                         int mask = (ActionEvent.CTRL_MASK
                                     | ActionEvent.ALT_MASK
@@ -439,7 +439,7 @@ public final class GuiBoard
             point = null;
         if (! GoPoint.equals(m_cursor, point))
         {
-            setCursor(m_cursor, false);            
+            setCursor(m_cursor, false);
             if (getShowCursor())
                 setCursor(point, true);
             m_cursor = point;
@@ -852,7 +852,7 @@ public final class GuiBoard
             if (getShowCursor() && m_cursor != null)
                 fieldClicked(m_cursor, modifiedSelect);
             return;
-        }        
+        }
         if ((modifiers & ActionEvent.CTRL_MASK) != 0
             || ! getShowCursor() || m_cursor == null)
             return;
@@ -918,4 +918,3 @@ public final class GuiBoard
         m_minimumFieldSize = new Dimension(size, size);
     }
 }
-

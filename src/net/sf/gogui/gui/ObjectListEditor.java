@@ -230,4 +230,3 @@ public class ObjectListEditor
         m_list.ensureIndexIsVisible(selectedIndex);
     }
 }
-

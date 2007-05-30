@@ -13,7 +13,7 @@ public final class PrefUtil
 {
     /** Get node path, create if not already existing.
         @param path The absolute path name of the node.
-        @return The node 
+        @return The node
     */
     public static Preferences createNode(String path)
     {
@@ -89,4 +89,3 @@ public final class PrefUtil
     {
     }
 }
-

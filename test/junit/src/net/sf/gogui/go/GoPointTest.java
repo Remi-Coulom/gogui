@@ -118,4 +118,3 @@ public final class GoPointTest
         assertEquals(point.getY(), y);
     }
 }
-

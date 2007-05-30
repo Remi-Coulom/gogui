@@ -242,7 +242,7 @@ public class GtpAdapter
         PointList points = new PointList();
         for (int i = 0; i < stones.size(); ++i)
         {
-            GoPoint p = stones.get(i);            
+            GoPoint p = stones.get(i);
             points.add(p);
             if (response.length() > 0)
                 response.append(' ');
@@ -553,7 +553,7 @@ public class GtpAdapter
     }
 
     private void sendGtpFile(String filename)
-    {        
+    {
         java.io.Reader reader;
         try
         {

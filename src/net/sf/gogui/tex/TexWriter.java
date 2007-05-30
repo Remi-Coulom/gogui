@@ -26,7 +26,7 @@ public class TexWriter
                      boolean usePass, String[][] markLabel, boolean[][] mark,
                      boolean[][] markTriangle, boolean[][] markCircle,
                      boolean[][] markSquare, boolean[][] markSelect)
-    {        
+    {
         m_out = new PrintStream(out);
         m_usePass = usePass;
         printBeginDocument();
@@ -45,7 +45,7 @@ public class TexWriter
 
     public TexWriter(String title, OutputStream out, ConstGameTree tree,
                      boolean usePass)
-    {        
+    {
         m_out = new PrintStream(out);
         m_usePass = usePass;
         printBeginDocument();
@@ -230,7 +230,7 @@ public class TexWriter
         }
         return comment.toString();
     }
-    
+
     private void printPosition(ConstBoard board, String[][] markLabel,
                                boolean[][] mark, boolean[][] markTriangle,
                                boolean[][] markCircle, boolean[][] markSquare,
@@ -287,4 +287,3 @@ public class TexWriter
         m_out.print("\n");
     }
 }
-

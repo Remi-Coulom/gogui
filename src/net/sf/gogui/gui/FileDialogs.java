@@ -54,7 +54,7 @@ public final class FileDialogs
         what the file name is used for and if the file already exists.
     */
     public static final int FILE_SELECT = 2;
-    
+
     public static File showOpen(Component parent, String title)
     {
         return showFileChooser(parent, FILE_OPEN, null, false, title);
@@ -277,7 +277,7 @@ public final class FileDialogs
 class SgfPreview
     extends JPanel
     implements PropertyChangeListener
-{    
+{
     public SgfPreview()
     {
         setLayout(new BorderLayout());
@@ -313,7 +313,7 @@ class SgfPreview
         m_preview.setEnabled(false);
         buttonPanel.add(m_preview);
     }
-    
+
     public void propertyChange(PropertyChangeEvent event)
     {
         String propertyName = event.getPropertyName();
@@ -394,7 +394,7 @@ class SgfPreview
         = new ThumbnailCreator(false);
 
     private final Preferences m_prefs =
-        Preferences.userNodeForPackage(getClass());        
+        Preferences.userNodeForPackage(getClass());
 
     private static final Image MISSING_IMAGE =
         GuiUtil.getIcon("image-missing", "No preview").getImage();
@@ -467,4 +467,3 @@ class SgfPreview
         return image;
     }
 }
-

@@ -71,7 +71,7 @@ public class AnalyzeCommand
     public AnalyzeCommand(String line)
     {
         String array[] = line.split("/");
-        String typeStr = array[0];        
+        String typeStr = array[0];
         if (typeStr.equals("bwboard"))
             m_type = AnalyzeCommand.BWBOARD;
         else if (typeStr.equals("cboard"))
@@ -152,7 +152,7 @@ public class AnalyzeCommand
                             programAnalyzeCommands);
         }
         catch (Exception e)
-        {            
+        {
             messageDialogs.showError(owner,
                                      "Reading analyze configuration failed",
                                      e);
@@ -520,7 +520,7 @@ public class AnalyzeCommand
                         continue;
                     labels.add(label);
                     commands.add(line);
-                }                
+                }
             }
         }
         catch (IOException e)
@@ -540,4 +540,3 @@ public class AnalyzeCommand
         }
     }
 }
-

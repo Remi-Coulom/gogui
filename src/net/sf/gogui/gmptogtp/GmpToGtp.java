@@ -107,7 +107,7 @@ public class GmpToGtp
         if (point != null)
         {
             x = point.getX();
-            y = point.getY();            
+            y = point.getY();
         }
         StringBuffer message = new StringBuffer();
         if (! m_gmp.play(color == GoColor.BLACK, x, y, message))
@@ -195,4 +195,3 @@ public class GmpToGtp
                     cmdUndo(cmd); } });
     }
 }
-

@@ -167,4 +167,3 @@ public class BookmarkEditor
         return true;
     }
 }
-

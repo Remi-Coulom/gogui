@@ -76,7 +76,7 @@ public final class ThumbnailCreator
         if (file.exists())
         {
             URI uri = getURI(input);
-            long lastModified = getLastModified(input);        
+            long lastModified = getLastModified(input);
             try
             {
                 ThumbnailReader.MetaData data = ThumbnailReader.read(file);
@@ -84,7 +84,7 @@ public final class ThumbnailCreator
                     && data.m_lastModified == lastModified)
                 {
                     m_lastThumbnail = file;
-                    m_description = data.m_description; 
+                    m_description = data.m_description;
                     return;
                 }
             }
@@ -132,7 +132,7 @@ public final class ThumbnailCreator
             if (imageSize < 256)
             {
                 // Create large image and scale down, looks better than
-                // creating small image            
+                // creating small image
                 image = getImage(field, 2 * imageSize, 2 * imageSize);
                 BufferedImage newImage = createImage(imageSize, imageSize);
                 Graphics2D graphics = newImage.createGraphics();
@@ -335,4 +335,3 @@ public final class ThumbnailCreator
         m_lastThumbnail = file;
     }
 }
-

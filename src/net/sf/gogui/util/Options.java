@@ -317,7 +317,7 @@ public class Options
     private void parseArgs(String args[]) throws ErrorMessage
     {
         boolean stopParse = false;
-        int n = 0;        
+        int n = 0;
         while (n < args.length)
         {
             String s = args[n];
@@ -341,11 +341,10 @@ public class Options
                 }
                 else
                     m_map.put(spec, "1");
-                
+
             }
             else
                 m_args.add(s);
         }
     }
 }
-

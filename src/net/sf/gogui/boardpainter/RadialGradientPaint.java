@@ -44,7 +44,7 @@ public class RadialGradientPaint
         else
             m_transparency = TRANSLUCENT;
     }
-    
+
     public PaintContext createContext(ColorModel colorModel,
                                       Rectangle deviceBounds,
                                       Rectangle2D userBounds,
@@ -82,7 +82,7 @@ public class RadialGradientPaint
 
     private Point2D m_transformedRadius2;
 
-    private RadialGradientContext m_cachedContext;    
+    private RadialGradientContext m_cachedContext;
 
     private final double m_focus;
 
@@ -96,4 +96,3 @@ public class RadialGradientPaint
 
     private final Color m_color2;
 }
-

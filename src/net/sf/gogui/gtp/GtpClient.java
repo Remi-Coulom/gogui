@@ -50,12 +50,12 @@ public final class GtpClient
         {
             super(message);
             m_program = program;
-        }        
+        }
 
         public ExecFailed(String program, IOException e)
         {
             this(program, e.getMessage());
-        }        
+        }
 
         /** Serial version to suppress compiler warning.
             Contains a marker comment for serialver.sf.net
@@ -95,7 +95,7 @@ public final class GtpClient
         void receivedStdErr(String s);
 
         void sentCommand(String s);
-    }    
+    }
 
     /** Constructor.
         @param program Command line for program.
@@ -164,7 +164,7 @@ public final class GtpClient
         init(m_process.getInputStream(), m_process.getOutputStream(),
              m_process.getErrorStream());
     }
-    
+
     /** Constructor for given input and output streams. */
     public GtpClient(InputStream in, OutputStream out, boolean log,
                      IOCallback callback)
@@ -418,7 +418,7 @@ public final class GtpClient
         catch (InterruptedException e)
         {
             System.err.println("GtpClient: InterruptedException");
-        }        
+        }
     }
 
     /** More sophisticated version of waitFor with timeout. */
@@ -445,7 +445,7 @@ public final class GtpClient
         catch (InterruptedException e)
         {
             System.err.println("GtpClient: InterruptedException");
-        }        
+        }
     }
 
     /** Was program forcefully terminated by calling destroyProcess() */
@@ -473,7 +473,7 @@ public final class GtpClient
 
         public String m_text;
     }
-    
+
     private class InputThread
         extends Thread
     {
@@ -612,7 +612,7 @@ public final class GtpClient
             int size = 1024;
             char[] buffer = new char[size];
             while (true)
-            {                
+            {
                 int n;
                 try
                 {
@@ -695,7 +695,7 @@ public final class GtpClient
     private void init(InputStream in, OutputStream out, InputStream err)
     {
         m_out = new PrintWriter(out);
-        m_isProgramDead = false;        
+        m_isProgramDead = false;
         m_queue = new MessageQueue();
         m_inputThread = new InputThread(in, m_queue);
         if (err != null)
@@ -758,7 +758,7 @@ public final class GtpClient
     private String readResponse(long timeout) throws GtpError
     {
         while (true)
-        {            
+        {
             Message message = waitForMessage(timeout);
             if (message.m_type == Message.ERROR)
                 mergeErrorMessages(message);
@@ -841,4 +841,3 @@ public final class GtpClient
         return message;
     }
 }
-

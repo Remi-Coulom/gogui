@@ -89,7 +89,7 @@ public final class Main
                 String filename = opt.get("analyze");
                 new Analyze(filename, force);
                 return;
-            }                
+            }
             boolean alternate = opt.contains("alternate");
             boolean auto = opt.contains("auto");
             boolean verbose = opt.contains("verbose");
@@ -98,7 +98,7 @@ public final class Main
             String referee = opt.get("referee", "");
             String observer = opt.get("observer", "");
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
-                                      GoPoint.MAX_SIZE);            
+                                      GoPoint.MAX_SIZE);
             Komi komi = new Komi(6.5);
             if (opt.contains("komi"))
                 komi = Komi.parseKomi(opt.get("komi"));
@@ -140,4 +140,3 @@ public final class Main
     {
     }
 }
-

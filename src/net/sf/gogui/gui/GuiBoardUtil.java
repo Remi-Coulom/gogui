@@ -204,7 +204,7 @@ public final class GuiBoardUtil
                 guiBoard.setLabel(point, Character.toString(label));
             if (numberMarked < 26)
                 ++label;
-            ++numberMarked;            
+            ++numberMarked;
         }
     }
 
@@ -311,7 +311,7 @@ public final class GuiBoardUtil
     */
     public static void showVariation(GuiBoard guiBoard, Move[] variation)
     {
-        guiBoard.clearAllLabels();        
+        guiBoard.clearAllLabels();
         if (variation.length > 10)
             for (int i = 0; i < variation.length; ++i)
             {
@@ -378,4 +378,3 @@ public final class GuiBoardUtil
         }
     }
 }
-

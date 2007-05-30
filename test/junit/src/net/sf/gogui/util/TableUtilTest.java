@@ -23,7 +23,7 @@ public final class TableUtilTest
     {
         ArrayList columnTitles = new ArrayList();
         columnTitles.add("column1");
-        columnTitles.add("column2");        
+        columnTitles.add("column2");
         Table table = new Table(columnTitles);
         table.startRow();
         table.set("column2", "value");
@@ -37,7 +37,7 @@ public final class TableUtilTest
     {
         ArrayList columnTitles = new ArrayList();
         columnTitles.add("column1");
-        columnTitles.add("column2");        
+        columnTitles.add("column2");
         Table from = new Table(columnTitles);
         from.startRow();
         from.set("column1", "11");
@@ -66,4 +66,3 @@ public final class TableUtilTest
         assertEquals(table.getNumberRows(), 1);
     }
 }
-

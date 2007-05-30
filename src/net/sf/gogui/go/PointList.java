@@ -67,7 +67,7 @@ public final class PointList
     public boolean equals(Object object)
     {
         if (object == null || object.getClass() != getClass())
-            return false;        
+            return false;
         PointList list = (PointList)object;
         return list.m_list.equals(m_list);
     }

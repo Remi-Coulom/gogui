@@ -62,4 +62,3 @@ public final class OptionsTest
         assertEquals(arguments.get(0), "-arg1");
     }
 }
-

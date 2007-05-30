@@ -29,4 +29,3 @@ public class SgfFilter
         return "Go Games (*.sgf,*.SGF)";
     }
 }
-

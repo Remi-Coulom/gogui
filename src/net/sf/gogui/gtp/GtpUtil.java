@@ -123,7 +123,7 @@ public final class GtpUtil
                                           + boardSize + ")");
         }
     }
-    
+
     public static PointList parsePointList(String s, int boardSize)
         throws GtpResponseFormatError
     {
@@ -277,4 +277,3 @@ public final class GtpUtil
     {
     }
 }
-

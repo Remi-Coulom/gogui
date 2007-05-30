@@ -159,14 +159,14 @@ public class GtpSynchronizer
     private boolean m_isSupportedUndo;
 
     private boolean m_isSupportedSetup;
-    
+
     private Komi m_komi;
 
     private TimeSettings m_timeSettings;
 
     private final Listener m_listener;
 
-    private GtpClientBase m_gtp;    
+    private GtpClientBase m_gtp;
 
     private Board m_engineState;
 

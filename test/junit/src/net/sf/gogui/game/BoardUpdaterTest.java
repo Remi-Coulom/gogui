@@ -27,7 +27,7 @@ public final class BoardUpdaterTest
     }
 
     public void testSetup()
-    {        
+    {
         GameTree tree = new GameTree();
         Node root = tree.getRoot();
         root.addStone(GoColor.BLACK, GoPoint.get(1, 1));
@@ -60,4 +60,3 @@ public final class BoardUpdaterTest
 
     private BoardUpdater m_updater;
 }
-

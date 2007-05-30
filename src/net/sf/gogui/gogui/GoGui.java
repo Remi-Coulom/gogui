@@ -158,7 +158,7 @@ public class GoGui
         m_showInfoPanel = true;
         m_showToolbar = false;
 
-        Container contentPane = getContentPane();        
+        Container contentPane = getContentPane();
         m_innerPanel = new JPanel(new BorderLayout());
         contentPane.add(m_innerPanel, BorderLayout.CENTER);
         m_toolBar = new GoGuiToolBar(this);
@@ -246,7 +246,7 @@ public class GoGui
         m_commandCompletion =
             ! m_prefs.getBoolean("gtpshell-disable-completions", false);
         m_timeStamp = m_prefs.getBoolean("gtpshell-timestamp", false);
-        m_showLastMove = m_prefs.getBoolean("show-last-move", true);        
+        m_showLastMove = m_prefs.getBoolean("show-last-move", true);
         m_showVariations = m_prefs.getBoolean("show-variations", false);
         boolean showCursor = m_prefs.getBoolean("show-cursor", false);
         boolean showGrid = m_prefs.getBoolean("show-grid", true);
@@ -265,7 +265,7 @@ public class GoGui
                     initialize();
                 } });
     }
-    
+
     public void actionAbout()
     {
         String command = null;
@@ -381,7 +381,7 @@ public class GoGui
             return;
         actionBoardSize(size);
     }
-    
+
     public void actionClearAnalyzeCommand()
     {
         if (! checkCommandInProgress())
@@ -406,7 +406,7 @@ public class GoGui
     }
 
     public void actionClockRestore()
-    {        
+    {
         if (! getClock().isInitialized())
             return;
         m_game.restoreClock();
@@ -448,7 +448,7 @@ public class GoGui
     }
 
     public void actionDetachProgram()
-    {        
+    {
         if (m_gtp == null)
             return;
         if (isCommandInProgress()
@@ -475,7 +475,7 @@ public class GoGui
     }
 
     public void actionDisposeAnalyzeDialog()
-    {        
+    {
         if (m_analyzeDialog != null)
         {
             clearAnalyzeCommand();
@@ -483,7 +483,7 @@ public class GoGui
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
-    }    
+    }
 
     public void actionDisposeTree()
     {
@@ -807,7 +807,7 @@ public class GoGui
         if (protectGui)
             protectGui();
         SwingUtilities.invokeLater(new Runnable() {
-                public void run() {        
+                public void run() {
                     gotoNode(node);
                     boardChangedBegin(false, false);
                     if (protectGui)
@@ -929,7 +929,7 @@ public class GoGui
         else if (type == MarkType.SQUARE)
             m_guiBoard.setMarkSquare(point, mark);
         else if (type == MarkType.TRIANGLE)
-            m_guiBoard.setMarkTriangle(point, mark);        
+            m_guiBoard.setMarkTriangle(point, mark);
         updateGuiBoard();
     }
 
@@ -1059,7 +1059,7 @@ public class GoGui
         if (protectGui)
             protectGui();
         SwingUtilities.invokeLater(new Runnable() {
-                public void run() {        
+                public void run() {
                     loadFile(file, -1);
                     boardChangedBegin(false, true);
                     if (protectGui)
@@ -1278,7 +1278,7 @@ public class GoGui
             return;
         }
         analyzeBegin(false);
-    }    
+    }
 
     public void actionSetup(GoColor color)
     {
@@ -1381,7 +1381,7 @@ public class GoGui
     }
 
     public void actionShowAnalyzeDialog()
-    {        
+    {
         if (m_gtp == null)
             return;
         if (m_analyzeDialog == null)
@@ -1893,7 +1893,7 @@ public class GoGui
         {
             analyzeContinue(m_checkComputerMove);
         }
-        
+
         private final boolean m_checkComputerMove;
     }
 
@@ -1925,7 +1925,7 @@ public class GoGui
                     (name == null ? "the Go program" : name) +
                     ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
-                                             mainMessage, optionalMessage, 
+                                             mainMessage, optionalMessage,
                                              true);
             }
             else
@@ -1941,11 +1941,11 @@ public class GoGui
                     (name == null ? "the Go program" : name) +
                     ".";
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
-                                             mainMessage, optionalMessage, 
+                                             mainMessage, optionalMessage,
                                              true);
             }
         }
-        
+
         private final String m_line;
     }
 
@@ -1955,7 +1955,7 @@ public class GoGui
         LoadFileRunnable(FileInputStream in, File file)
         {
             m_in = in;
-            m_file = file;            
+            m_file = file;
         }
 
         public SgfReader getReader()
@@ -2046,7 +2046,7 @@ public class GoGui
     /** File corresponding to the current game. */
     private File m_file;
 
-    private final GameInfo m_gameInfo;    
+    private final GameInfo m_gameInfo;
 
     private GtpShell m_shell;
 
@@ -2096,7 +2096,7 @@ public class GoGui
 
     private String m_version = "";
 
-    private AnalyzeDialog m_analyzeDialog;    
+    private AnalyzeDialog m_analyzeDialog;
 
     private final Preferences m_prefs =
         Preferences.userNodeForPackage(getClass());
@@ -2193,7 +2193,7 @@ public class GoGui
                 checkComputerMove();
         }
         catch (GtpResponseFormatError e)
-        {                
+        {
             showStatus(title);
             showError(e);
         }
@@ -2334,7 +2334,7 @@ public class GoGui
             }
             catch (GtpError e)
             {
-            }        
+            }
             if (m_program != null
                 && m_program.updateInfo(getProgramName(), m_version))
             {
@@ -2370,7 +2370,7 @@ public class GoGui
         }
         currentNodeChanged();
         return true;
-    }    
+    }
 
     private void beginLengthyCommand()
     {
@@ -2439,7 +2439,7 @@ public class GoGui
                 showGameFinished();
                 return;
             }
-            generateMove(false);            
+            generateMove(false);
         }
         else
         {
@@ -2565,7 +2565,7 @@ public class GoGui
             return true;
         }
     }
-    
+
     /** Check if command is in progress or setup or score mode. */
     private boolean checkStateChangePossible()
     {
@@ -2844,7 +2844,7 @@ public class GoGui
 
     private void detachProgram()
     {
-        if (m_gtp != null)            
+        if (m_gtp != null)
             showStatusImmediately("Detaching program...");
         if (isCommandInProgress())
         {
@@ -3063,7 +3063,7 @@ public class GoGui
         else
         {
             m_game.haltClock();
-            m_game.gotoNode(node);            
+            m_game.gotoNode(node);
         }
         checkLostOnTime(move.getColor());
         m_resigned = false;
@@ -3099,7 +3099,7 @@ public class GoGui
     }
 
     private void initGame(int size)
-    {        
+    {
         int oldSize = getBoardSize();
         if (size != oldSize)
         {
@@ -3114,7 +3114,7 @@ public class GoGui
             {
                 // Loading a file with program attached can take long
                 GuiUtil.paintImmediately(layeredPane);
-            }            
+            }
         }
         ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
         if (handicap == null)
@@ -3311,7 +3311,7 @@ public class GoGui
             if (move > 0)
             {
                 ConstNode node =
-                    NodeUtil.findByMoveNumber(getCurrentNode(), move); 
+                    NodeUtil.findByMoveNumber(getCurrentNode(), move);
                 if (node != null)
                     m_game.gotoNode(node);
             }
@@ -3387,7 +3387,7 @@ public class GoGui
     }
 
     private void registerSpecialMacHandler()
-    {        
+    {
         if (! Platform.isMac())
             return;
         Platform.SpecialMacHandler handler = new Platform.SpecialMacHandler()
@@ -3398,7 +3398,7 @@ public class GoGui
                     actionAbout();
                     return true;
                 }
-                
+
                 public boolean handleOpenFile(String filename)
                 {
                     assert SwingUtilities.isEventDispatchThread();
@@ -3408,7 +3408,7 @@ public class GoGui
                     boardChangedBegin(false, true);
                     return true;
                 }
-                
+
                 public boolean handleQuit()
                 {
                     assert SwingUtilities.isEventDispatchThread();
@@ -3427,7 +3427,7 @@ public class GoGui
         updateFromGoBoard();
         updateGuiBoard();
     }
-    
+
     private void restoreLocation(JDialog dialog, String name)
     {
         m_session.restoreLocation(dialog, this, name + "-" + getBoardSize());
@@ -3521,7 +3521,7 @@ public class GoGui
     }
 
     private void saveSession()
-    {        
+    {
         if (m_shell != null)
             m_shell.saveHistory();
         if (m_analyzeDialog != null)
@@ -3538,7 +3538,7 @@ public class GoGui
         }
         m_session.saveLocation(this, "main-" + getBoardSize());
         if (GuiUtil.isNormalSizeMode(this))
-        {            
+        {
             String name = "windows/main/size-" + getBoardSize() + "/fieldsize";
             int fieldSize = m_guiBoard.getFieldSize().width;
             if (fieldSize == 0) // BoardPainter was never invoked
@@ -3584,7 +3584,7 @@ public class GoGui
         }
         initScore(isDeadStone);
         updateViews(false);
-    }    
+    }
 
     private void scoreDone(Score score)
     {
@@ -3662,7 +3662,7 @@ public class GoGui
     }
 
     private void sendGtpString(String commands)
-    {        
+    {
         commands = commands.replaceAll("\\\\n", "\n");
         sendGtp(new StringReader(commands));
     }
@@ -3737,7 +3737,7 @@ public class GoGui
             setTitle(m_titleFromProgram);
             return;
         }
-        String appName = "GoGui";        
+        String appName = "GoGui";
         if (m_gtp != null)
             appName = getProgramLabel();
         String filename = null;
@@ -3759,7 +3759,7 @@ public class GoGui
         else if (filename != null)
             gameName = filename;
         if (gameName == null)
-            setTitle(appName);        
+            setTitle(appName);
         else
         {
             String name = getProgramLabel();
@@ -3802,19 +3802,19 @@ public class GoGui
     {
         showError(message, e, true);
     }
-    
+
     private void showError(String message, Exception e, boolean isCritical)
     {
         m_messageDialogs.showError(this, message, e, isCritical);
     }
 
     private void showError(GtpError error)
-    {        
+    {
         showError(error, true);
     }
 
     private void showError(GtpResponseFormatError e)
-    {        
+    {
         String mainMessage = "Invalid response";
         String name = getProgramName();
         if (name == null)
@@ -3826,7 +3826,7 @@ public class GoGui
     }
 
     private void showError(GtpError e, boolean isCritical)
-    {        
+    {
         String nameCapitalized = getProgramName();
         String nameNotCapitalized = getProgramName();
         if (nameCapitalized == null)

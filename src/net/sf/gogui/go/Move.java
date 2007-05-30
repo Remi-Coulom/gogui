@@ -48,7 +48,7 @@ public final class Move
         else
             return s_movesEmpty[x][y];
     }
-    
+
     /** Factory method for constructing a pass move.
         @param c The color of the move.
         @return Reference to this move
@@ -124,4 +124,3 @@ public final class Move
         m_string = m_color.toString() + " " + GoPoint.toString(m_point);
     }
 }
-

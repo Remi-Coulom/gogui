@@ -56,7 +56,7 @@ public class GuiGtpClient
     {
         m_gtp.destroyProcess();
     }
-    
+
     public void setAutoNumber(boolean enable)
     {
         m_gtp.setAutoNumber(enable);
@@ -125,13 +125,13 @@ public class GuiGtpClient
         assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getLabel();
     }
-    
+
     public String getProgramName()
     {
         assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getName();
     }
-    
+
     public String getProgramCommand()
     {
         assert SwingUtilities.isEventDispatchThread();
@@ -156,7 +156,7 @@ public class GuiGtpClient
             return m_response;
         }
     }
-    
+
     public ArrayList getSupportedCommands()
     {
         assert SwingUtilities.isEventDispatchThread();
@@ -303,7 +303,7 @@ public class GuiGtpClient
             m_mutex.notifyAll();
         }
     }
-    
+
     /** Send command in event dispatch thread. */
     public String send(String command) throws GtpError
     {
@@ -400,7 +400,7 @@ public class GuiGtpClient
 
     private final GtpClient m_gtp;
 
-    private GtpError m_exception;    
+    private GtpError m_exception;
 
     private final GtpSynchronizer m_gtpSynchronizer;
 

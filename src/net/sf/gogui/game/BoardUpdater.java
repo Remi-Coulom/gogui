@@ -84,4 +84,3 @@ public class BoardUpdater
     */
     private final ArrayList m_nodes;
 }
-

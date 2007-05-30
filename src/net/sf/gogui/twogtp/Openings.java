@@ -35,7 +35,7 @@ public class Openings
         m_files = directory.listFiles(new Filter());
         if (m_files.length == 0)
             throw new ErrorMessage("No SGF files found in " + directory);
-        sortFiles();        
+        sortFiles();
         m_currentFile = -1;
     }
 
@@ -104,4 +104,3 @@ public class Openings
                 }
     }
 }
-

@@ -35,4 +35,3 @@ public final class MoveTest
         assertEquals("white PASS", Move.getPass(GoColor.WHITE).toString());
     }
 }
-

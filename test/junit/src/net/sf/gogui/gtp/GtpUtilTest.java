@@ -60,4 +60,3 @@ public final class GtpUtilTest
                      "time_settings 0 1 0");
     }
 }
-

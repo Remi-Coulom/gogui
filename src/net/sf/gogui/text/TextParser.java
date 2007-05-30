@@ -26,7 +26,7 @@ import net.sf.gogui.go.PointList;
 public class TextParser
 {
     public TextParser()
-    {   
+    {
     }
 
     /** Get board with parsed position.

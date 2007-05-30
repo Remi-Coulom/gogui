@@ -220,7 +220,7 @@ public class Game
     }
 
     public void restoreClock()
-    {        
+    {
         if (! getClock().isInitialized())
             return;
         NodeUtil.restoreClock(getCurrentNode(), m_clock);
@@ -264,7 +264,7 @@ public class Game
             ((Node)node).getGameInformation().copyFrom(info);
             updateClock();
             setModified();
-        }        
+        }
     }
 
     public void setKomi(Komi komi)

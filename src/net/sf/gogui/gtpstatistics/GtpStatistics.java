@@ -286,7 +286,7 @@ public class GtpStatistics
                 return "";
             try
             {
-                GoPoint point = GoPoint.parsePoint(response, m_size); 
+                GoPoint point = GoPoint.parsePoint(response, m_size);
                 return Move.get(toMove, point) == move ? "1" : "0";
             }
             catch (InvalidPointException e)
@@ -516,4 +516,3 @@ public class GtpStatistics
         return toMove;
     }
 }
-

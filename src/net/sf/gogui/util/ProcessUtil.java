@@ -66,7 +66,7 @@ public class ProcessUtil
         {
             super(new StreamCopy(false, process.getErrorStream(), System.err,
                                  false));
-        }        
+        }
     }
 
     /** Run a process and return its standard output as a string. */
@@ -141,4 +141,3 @@ public class ProcessUtil
         }
     }
 }
-

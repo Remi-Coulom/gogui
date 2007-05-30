@@ -25,4 +25,3 @@ public final class GtpEngineTest
         assertEquals("false", gtp.send("known_command foobar"));
     }
 }
-

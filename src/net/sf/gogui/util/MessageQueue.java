@@ -110,4 +110,3 @@ public class MessageQueue
 
     private final Object m_mutex = new Object();
 }
-

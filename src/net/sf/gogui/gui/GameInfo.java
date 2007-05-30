@@ -31,7 +31,7 @@ public class GameInfo
     extends JPanel
 {
     public GameInfo(Game game)
-    {        
+    {
         setBorder(GuiUtil.createEmptyBorder());
         JPanel panel =
             new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));

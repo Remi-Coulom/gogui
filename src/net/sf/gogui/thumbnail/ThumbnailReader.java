@@ -143,4 +143,3 @@ public final class ThumbnailReader
         System.err.println(file + ": " + message);
     }
 }
-

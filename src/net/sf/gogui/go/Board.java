@@ -157,7 +157,7 @@ public final class Board
     /** Get player of initial setup position.
         @return Player of initial setup position as used in the call to
         <code>setup</code>; <code>null</code> means unknown player color.
-        @see #setup        
+        @see #setup
     */
     public GoColor getSetupPlayer()
     {
@@ -296,7 +296,7 @@ public final class Board
     {
         for (int i = 0; i < getPoints().size(); ++i)
             setColor(getPoints().get(i), GoColor.EMPTY);
-        m_stack.clear();        
+        m_stack.clear();
         for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
         {
             int index = c.toInteger();
@@ -458,7 +458,7 @@ public final class Board
                 board.m_captured[otherColor.toInteger()] += m_killed.size();
             }
             m_oldToMove = board.m_toMove;
-            board.m_toMove = otherColor;        
+            board.m_toMove = otherColor;
         }
 
         protected void undo(Board board)

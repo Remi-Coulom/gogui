@@ -145,4 +145,3 @@ public final class PositionStatistics
         return m_statistics.getSum();
     }
 }
-

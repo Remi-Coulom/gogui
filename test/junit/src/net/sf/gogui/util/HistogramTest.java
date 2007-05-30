@@ -54,4 +54,3 @@ public final class HistogramTest
         assertEquals(0.0, h.getValue(0), epsilon);
     }
 }
-

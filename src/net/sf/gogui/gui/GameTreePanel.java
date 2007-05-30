@@ -116,17 +116,17 @@ public class GameTreePanel
     {
         return m_labelMode;
     }
-    
+
     public int getNodeFullSize()
     {
         return m_nodeFullSize;
     }
-    
+
     public int getNodeSize()
     {
         return m_nodeSize;
     }
-    
+
     public Dimension getPreferredScrollableViewportSize()
     {
         return new Dimension(m_nodeFullSize * 10, m_nodeFullSize * 3);
@@ -148,7 +148,7 @@ public class GameTreePanel
     {
         return false;
     }
-    
+
     public boolean getScrollableTracksViewportWidth()
     {
         return false;
@@ -169,7 +169,7 @@ public class GameTreePanel
     {
         return m_sizeMode;
     }
-    
+
     public void gotoNode(ConstNode node)
     {
         if (m_listener != null)
@@ -287,7 +287,7 @@ public class GameTreePanel
         if (m_currentNode == null)
             return;
         scrollToCurrent();
-        GameTreeNode gameNode = getGameTreeNode(m_currentNode);        
+        GameTreeNode gameNode = getGameTreeNode(m_currentNode);
         if (gameNode == null)
             return;
         showPopup(gameNode.getWidth() / 2, gameNode.getHeight() / 2,
@@ -324,7 +324,7 @@ public class GameTreePanel
             m_isExpanded.clear();
             removeAll();
             m_messageDialogs.showError(m_owner,
-                                       "Could not show game tree", 
+                                       "Could not show game tree",
                                        "Out of memory");
             update(tree, currentNode, minWidth, minHeight);
         }
@@ -726,7 +726,7 @@ public class GameTreePanel
         if (NodeUtil.subtreeGreaterThan(root, 10000))
         {
             String mainMessage = "Expand large subtree?";
-            String optionalMessage = 
+            String optionalMessage =
                 "The user interface can become unresponsive, if large " +
                 "trees are shown. Showing the tree will fail completely " +
                 "if not enough memory is available.";
@@ -777,4 +777,3 @@ public class GameTreePanel
         textViewer.setVisible(true);
     }
 }
-

@@ -137,9 +137,9 @@ public class TextViewer
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         KeyListener keyListener = new KeyAdapter()
             {
-                public void keyReleased(KeyEvent e) 
+                public void keyReleased(KeyEvent e)
                 {
-                    int c = e.getKeyCode();        
+                    int c = e.getKeyCode();
                     if (c == KeyEvent.VK_ESCAPE)
                         dispose();
                 }
@@ -168,7 +168,7 @@ public class TextViewer
                     catch (BadLocationException e)
                     {
                         assert false;
-                    }   
+                    }
                 }
             };
         m_textPane.addCaretListener(caretListener);
@@ -198,4 +198,3 @@ public class TextViewer
         setSize(size);
     }
 }
-

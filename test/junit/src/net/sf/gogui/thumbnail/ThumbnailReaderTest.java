@@ -38,5 +38,5 @@ public final class ThumbnailReaderTest
     {
         File file = new File(getClass().getResource(fileName).getPath());
         return ThumbnailReader.read(file);
-    }    
+    }
 }

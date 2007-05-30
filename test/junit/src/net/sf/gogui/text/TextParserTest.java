@@ -117,7 +117,7 @@ public final class TextParserTest
         checkColor(0, 4, GoColor.BLACK);
         checkColor(0, 5, GoColor.EMPTY);
     }
- 
+
     /** Test parsing if long lines were wrapped. */
     public void testParseGnuGoLineWrap()
     {
@@ -152,7 +152,7 @@ public final class TextParserTest
         checkColor(0, 4, GoColor.BLACK);
         checkColor(0, 5, GoColor.EMPTY);
     }
- 
+
     /** Test that parsing succeeds if non-breaking spaces are used.
         The clipboard can contain non-breaking spaces if the text is copied
         from other programs.
@@ -198,4 +198,3 @@ public final class TextParserTest
         }
     }
 }
-

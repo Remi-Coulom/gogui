@@ -25,7 +25,7 @@ public class SquareLayout
     public void addLayoutComponent(String name, Component comp)
     {
     }
-    
+
     /** Layout container.
         Contains an assertion that the container has exactly one child.
         This child is layout in the center of the container with  the maximum
@@ -45,7 +45,7 @@ public class SquareLayout
         parent.getComponent(0).setBounds(x + insets.left, y + insets.top,
                                          len, len);
     }
-    
+
     /** Return minimum layout size.
         Contains an assertion that the container has exactly one child.
         @param parent The container to layout.
@@ -56,7 +56,7 @@ public class SquareLayout
         assert parent.getComponentCount() == 1;
         return parent.getComponent(0).getMinimumSize();
     }
-    
+
     /** Return preferred layout size.
         Contains an assertion that the container has exactly one child.
         @param parent The container to layout.
@@ -67,7 +67,7 @@ public class SquareLayout
         assert parent.getComponentCount() == 1;
         return parent.getComponent(0).getPreferredSize();
     }
-    
+
     /** Unused.
         Does nothing, because this class will automatically layout the single
         child component of a container.
@@ -77,4 +77,3 @@ public class SquareLayout
     {
     }
 }
-

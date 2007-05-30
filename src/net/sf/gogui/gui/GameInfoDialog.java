@@ -50,7 +50,7 @@ public final class GameInfoDialog
         public Box m_box;
 
         public JTextField m_name;
-        
+
         public JTextField m_rank;
     }
 
@@ -236,7 +236,7 @@ public final class GameInfoDialog
             && isEmpty(m_byoyomiMoves))
             info.setTimeSettings(null);
         else
-        {            
+        {
             long preByoyomi = m_preByoyomi.getTime();
             long byoyomi = -1;
             int byoyomiMoves = -1;
@@ -333,7 +333,7 @@ class TimeField
     extends Box
 {
     public TimeField(int cols, String toolTipText)
-    {        
+    {
         super(BoxLayout.Y_AXIS);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         add(Box.createVerticalGlue());

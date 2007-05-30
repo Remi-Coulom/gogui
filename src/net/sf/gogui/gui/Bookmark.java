@@ -34,7 +34,7 @@ public final class Bookmark
     public Bookmark(File file, int move, String variation)
     {
         String name = "";
-        if (file != null)            
+        if (file != null)
         {
             File fileNoExt = new File(FileUtil.removeExtension(file, "sgf"));
             name = fileNoExt.getName();
@@ -116,4 +116,3 @@ public final class Bookmark
         m_name = name;
     }
 }
-

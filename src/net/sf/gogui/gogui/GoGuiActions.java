@@ -44,7 +44,7 @@ public class GoGuiActions
         {
             this(listener, name, desc, null, 0, null);
         }
-    
+
         public GoGuiAction(ActionListener listener, String name, String desc,
                            String icon)
         {
@@ -933,7 +933,7 @@ public class GoGuiActions
     {
         return KeyStroke.getKeyStroke(keyCode, modifier);
     }
-    
+
     private static int getShortcut()
     {
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
