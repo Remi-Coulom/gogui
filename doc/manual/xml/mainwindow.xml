@@ -1,5 +1,5 @@
 <chapter id="menubar">
-  
+
 <title>Main Window</title>
 
 <section>
@@ -118,7 +118,7 @@ board size at the top left position.
 <term><guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position from Clipboard</guimenuitem></term>
 <listitem>
 <para>
-Import a text position from the clipboard. Same as 
+Import a text position from the clipboard. Same as
 <guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position</guimenuitem>,
 but parses the text selection copied to the clipboard.
 </para>

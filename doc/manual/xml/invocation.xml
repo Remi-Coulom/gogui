@@ -1,5 +1,5 @@
 <chapter id="invocation">
-  
+
 <title>Invocation</title>
 
 <indexterm>
@@ -10,7 +10,7 @@
 <para>
 <application>GoGui</application> can be invoked with the command:
 <programlisting>
-<userinput>java -jar gogui.jar [options] [file]</userinput></programlisting>  
+<userinput>java -jar gogui.jar [options] [file]</userinput></programlisting>
 The command line for executing the actual Go program can be given
 with the <option>-program</option> option, otherwise GoGui will start with
 the Go program attached in the previous run, or without Go program if there

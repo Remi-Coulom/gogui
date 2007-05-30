@@ -1,11 +1,11 @@
-<chapter id="programs">  
+<chapter id="programs">
 <title>Programs</title>
-  
+
 <para>
 The following Go programs can be used with GoGui:
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-  
+
 <section>
 <title>AmigoGtp</title>
 <indexterm>
@@ -23,7 +23,7 @@ Command: <userinput>amigogtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>Aya</title>
 <indexterm>
@@ -52,7 +52,7 @@ command:
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>BadukiPlus</title>
 <indexterm>
@@ -77,7 +77,7 @@ BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>Crazy Stone</title>
 <indexterm>
@@ -107,7 +107,7 @@ command:
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>GNU Go</title>
 <indexterm>
@@ -125,7 +125,7 @@ Command: <userinput>gnugo --mode gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>Go169</title>
 <indexterm>
@@ -173,7 +173,7 @@ Command: <userinput>Indigo2006.19x19 -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>Mango</title>
 <indexterm>
@@ -191,7 +191,7 @@ Command: <userinput>Mango-9x9-0.16.exe</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>WallyPlus</title>
 <indexterm>
@@ -216,5 +216,5 @@ WallyPlus 0.1.2 has several bugs in its GTP implementation.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 </chapter>

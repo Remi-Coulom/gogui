@@ -1,7 +1,7 @@
 <chapter id="compatibility">
-  
+
 <title>Compatibility</title>
-  
+
 <indexterm>
 <primary><acronym>Go Text Protocol</acronym></primary>
 </indexterm>
@@ -12,14 +12,14 @@ of version 1 or 2 of the
 <ulink url="http://www.lysator.liu.se/~gunnar/gtp/">Go Text Protocol</ulink>.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-  
+
 <section>
 <title>Required Commands</title>
 
 <para>
 It is required that the Go program can handle the following commands:
 </para>
-    
+
 <itemizedlist>
 <listitem>
 <simpara>
@@ -40,12 +40,12 @@ It is required that the Go program can handle the following commands:
 </simpara>
 </listitem>
 </itemizedlist>
-    
+
 <para>
 The commands in parentheses are used if the program supports
 the <command>protocol_version</command> command and responds with 1.
 </para>
-    
+
 <para>
 If the Go engine does not support generating moves, because it provides
 only other functionality, it is recommended that it implements
@@ -57,17 +57,17 @@ Since the user can still issue play commands, it is recommended that the
 engine responds to a <command>genmove</command> command with a meaningful
 failure response.
 </para>
-    
+
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>Optional Commands</title>
-    
+
 <para>
 The following other commands are used by GoGui:
 </para>
-    
+
 <itemizedlist>
 <listitem>
 <simpara>
@@ -126,7 +126,7 @@ The following other commands are used by GoGui:
 </simpara>
 </listitem>
 </itemizedlist>
-    
+
 <para>
 If the Go program does not understand them, you will still be able to play
 games, but you cannot use all of the functionality of GoGui.
@@ -137,7 +137,7 @@ If <command>set_free_handicap</command> is not supported, GoGui
 will transmit handicap stones with <command>play</command> commands.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-    
+
 <para>
 The command <command>gg-undo</command> is en extension command used by GNU Go,
 which differs from undo in an optional integer argument to undo multiple
@@ -228,5 +228,5 @@ See <xref linkend="setup"/>.
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 </chapter>

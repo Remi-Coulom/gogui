@@ -42,7 +42,7 @@ and formats the output as HTML.
 The regression tests are GTP files, using the special comment
 <userinput>#?</userinput>, as used for the
 <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">GNU Go</ulink>
-regression tests (see section 
+regression tests (see section
 <ulink url="http://www.gnu.org/software/gnugo/gnugo_20.html#SEC205">
 Regression testing</ulink> of the GNU Go documentation).
 The regular expression syntax for the expected responses is

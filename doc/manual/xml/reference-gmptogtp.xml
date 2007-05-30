@@ -139,7 +139,7 @@ Serial device name.
 <para>
 Flow control for serial device.
 Possible values are hardware control (RTS/CTS), software control (XON/XOFF),
-or no control. 
+or no control.
 Default: RTS/CTS.
 </para>
 </listitem>

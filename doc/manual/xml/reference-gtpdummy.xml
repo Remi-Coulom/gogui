@@ -89,7 +89,7 @@ Resign at the n'th genmove command after the game started.
 <term><option>-srand</option> <replaceable>seed</replaceable></term>
 <listitem>
 <para>
-Set random seed for random move generation. 
+Set random seed for random move generation.
 </para>
 </listitem>
 </varlistentry>
@@ -150,7 +150,7 @@ If no argument is given, the current delay value is returned.
 <para>
 Command according to the eplist analyze command type in GoGui.
 The arguments can be a point list, which is remembered.
-If the argument is "show", the current point list is shown. 
+If the argument is "show", the current point list is shown.
 </para>
 </listitem>
 </varlistentry>
@@ -222,7 +222,7 @@ Command for testing live graphics in GoGui.
 
 <varlistentry>
 <term>
-<command>gtpdummy-long_response <replaceable>n</replaceable></command> 
+<command>gtpdummy-long_response <replaceable>n</replaceable></command>
 </term>
 <listitem>
 <para>

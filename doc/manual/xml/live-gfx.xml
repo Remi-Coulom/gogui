@@ -11,7 +11,7 @@
 <para>
 GoGui can display graphical data on the Go board while a command
 is in progress.
-Live graphics commands are considered temporary information 
+Live graphics commands are considered temporary information
 about what the program is currently thinking. For displaying
 permanent information, use the <userinput>gfx</userinput> analyze command type.
 </para>

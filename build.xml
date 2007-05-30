@@ -186,7 +186,7 @@ Comment out the exec svnversion for releases.
  mac/packaging/PkgInfo
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.class
- mac/src/net/sf/gogui/specialmac/Listener.class  
+ mac/src/net/sf/gogui/specialmac/Listener.class
  sgf/openings/9x9/README
  sgf/openings/9x9/*.sgf
  sgf/openings/19x19/README

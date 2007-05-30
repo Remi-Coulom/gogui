@@ -1,6 +1,6 @@
 <article id="readme">
 <title>README</title>
-  
+
 <section>
 <title>Description</title>
 <para>
@@ -17,7 +17,7 @@ to facilitate debugging and reproducing errors.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
-  
+
 <section>
 <title>License</title>
 

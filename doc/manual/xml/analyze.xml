@@ -1,13 +1,13 @@
 <chapter id="analyze">
 <title>Analyze Commands</title>
-  
+
 <para>
 GoGui allows to define analyze commands.
 An analyze command corresponds to a GTP command and describes its parameters
 and response type in a way that they can be invoked from the user interface
 and the response be displayed graphically on the board.
 </para>
-  
+
 <para>
 Analyze commands can be run from the analyze dialog or (if they have a
 single point and an optional color argument) from the context menu of a field
@@ -33,13 +33,13 @@ An example configuration is the default configuration file
 package.
 The format consists of one line per command:
 </para>
-  
+
 <programlisting>
 <userinput>
 type/label/command
 </userinput>
 </programlisting>
-  
+
 <section>
 <title>Types</title>
 <para>
