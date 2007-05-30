@@ -104,8 +104,6 @@ public final class Main
             "Usage: java -jar gtpadapter.jar program\n" +
             "\n" +
             "-config       config file\n" +
-            "-emuhandicap  emulate free handicap commands\n" +
-            "-emuloadsgf   emulate loadsgf commands\n" +
             "-fillpasses   fill non-alternating moves with pass moves\n" +
             "-gtpfile      file with GTP commands to send at startup\n" +
             "-help         print help and exit\n" +

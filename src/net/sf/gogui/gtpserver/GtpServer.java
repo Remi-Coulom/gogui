@@ -187,6 +187,7 @@ public final class GtpServer
                   "-loop    restart after connection finished\n" +
                   "-port    port of network connection\n" +
                   "-remote  connect to remote host\n" +
+                  "-timeout timeout seconds for closing idle connections\n" +
                   "-user    login information for remote host\n" +
                   "-verbose print debugging messages\n" +
                   "-version print version and exit\n");

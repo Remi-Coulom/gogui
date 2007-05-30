@@ -21,6 +21,7 @@ SGF to LaTeX converter.
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-pass</option></arg>
 <arg><option>-force</option></arg>
+<arg><option>-title</option> <replaceable>s</replaceable></arg>
 <arg><replaceable>file.sgf</replaceable>
 <arg><replaceable>file.tex</replaceable></arg></arg>
 
@@ -39,6 +40,11 @@ Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
 <ulink url="http://www.latex-project.org/">LaTeX</ulink>, using
 <ulink url="http://www.ctan.org/tex-archive/graphics/pstricks/contrib/psgo/">
 PSGO</ulink> style.
+</para>
+<para>
+If no output file is specified, the output file will be in the same directory
+as the source file and the name be derived from the source file by replacing
+the extension sgf by tex.
 </para>
 </refsection>
 
@@ -84,6 +90,17 @@ Use <userinput>\pass</userinput> command for pass moves
 Otherwise pass moves are printed as a combination of
 <userinput>\refstepcounter</userinput> and
 <userinput>\toggleblackmove</userinput> commands.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-title</option> <replaceable>s</replaceable>
+</term>
+<listitem>
+<para>
+Specify section title to be used in the LaTex document before the Go diagram.
 </para>
 </listitem>
 </varlistentry>

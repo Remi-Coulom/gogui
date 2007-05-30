@@ -19,7 +19,6 @@ Go Text Protocol adapter for logging or protocol translations.
 <cmdsynopsis>
 <command>gtpadapter</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-emuhandicap</option></arg>
 <arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>

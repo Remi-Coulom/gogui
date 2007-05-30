@@ -146,8 +146,8 @@ public final class Main
                   + " [options] file.sgf|dir [...]\n" +
                   "\n" +
                   "-analyze      Create HTML file from result file\n" +
-                  "-begin        GTP commands to run on begin positions\n" +
                   "-backward     Iterate backward from end position\n" +
+                  "-begin        GTP commands to run on begin positions\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
                   "-config       Config file\n" +
                   "-final        GTP commands to run on final positions\n" +
@@ -157,6 +157,7 @@ public final class Main
                   "-min          Only positions with minimum move number\n" +
                   "-output       Filename prefix for output files\n" +
                   "-precision    Floating point precision for -analyze\n" +
+                  "-quiet        Don't write logging messages\n" +
                   "-setup        Allow setup stones in root position\n" +
                   "-size         Board size of games\n" +
                   "-verbose      Log GTP stream to stderr\n" +
