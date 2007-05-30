@@ -19,6 +19,7 @@ import java.util.ArrayList;
 /** Table of string elements. */
 public class Table
 {
+    /** Error thrown on invalid table location argument. */
     public static class InvalidLocation
         extends ErrorMessage
     {
@@ -33,6 +34,7 @@ public class Table
         private static final long serialVersionUID = 0L; // SUID
     }
 
+    /** Error thrown on invalid file format when reading a table. */
     public static class InvalidFormat
         extends ErrorMessage
     {
@@ -47,6 +49,7 @@ public class Table
         private static final long serialVersionUID = 0L; // SUID
     }
 
+    /** Error thrown if table element has not the expected type. */
     public static class InvalidElement
         extends ErrorMessage
     {

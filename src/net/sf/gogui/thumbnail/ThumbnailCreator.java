@@ -45,6 +45,7 @@ import net.sf.gogui.version.Version;
 */
 public final class ThumbnailCreator
 {
+    /** Error thrown if thumbnail creation fails. */
     public static class Error
         extends ErrorMessage
     {

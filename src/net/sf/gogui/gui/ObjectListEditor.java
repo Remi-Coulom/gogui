@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 /** Dialog for displaying and editing a list of objects. */
 public class ObjectListEditor
 {
+    /** Edit properties of object. */
     public interface ItemEditor
     {
         Object editItem(Component parent, Object object,
