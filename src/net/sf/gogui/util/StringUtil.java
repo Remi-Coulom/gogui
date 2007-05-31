@@ -45,7 +45,7 @@ public final class StringUtil
         if (hours > 0)
         {
             if (hours > 9999)
-                // Extremely large numbers are like a problem in
+                // Extremely large numbers are likely a problem in
                 // Date.getTime(), as it can happen when running in the
                 // netbeans profiler, and we don't want extremly long time
                 // strings to change the layout of the time label
