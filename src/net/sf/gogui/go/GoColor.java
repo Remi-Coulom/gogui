@@ -70,13 +70,18 @@ public final class GoColor
         return super.hashCode();
     }
 
+    /** Check if color is black or white.
+        @return <code>true</code>, if color is <code>BLACK</code> or
+        <code>WHITE</code>.
+    */
     public boolean isBlackWhite()
     {
         return (this == BLACK || this == WHITE);
     }
 
     /** Return other color.
-        @return BLACK for WHITE, WHITE for BLACK, EMPTY for EMPTY.
+        @return <code>BLACK</code> for <code>WHITE</code>, <code>WHITE</code>
+        for <code>BLACK</code>, <code>EMPTY</code> for <code>EMPTY</code>.
     */
     public GoColor otherColor()
     {
@@ -84,7 +89,7 @@ public final class GoColor
     }
 
     /** Convert color to an integer that can be used as an array index.
-        Black is 0; White 1; Empty 2
+        @return 0 for GoColor.BLACK; 1 for GoColor.WHITE; 2 for GoColor.EMPTY
     */
     public int toInteger()
     {
