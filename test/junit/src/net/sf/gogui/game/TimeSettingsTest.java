@@ -27,8 +27,52 @@ public final class TimeSettingsTest
         assertEquals(30 * 60 * 1000, s.getPreByoyomi());
         assertFalse(s.getUseByoyomi());
 
+        s = parse("30 min");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30min");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30m");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30 m");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30 sec");
+        assertEquals(30 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30sec");
+        assertEquals(30 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30s");
+        assertEquals(30 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30 s");
+        assertEquals(30 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
         s = parse("30+20/10");
         assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertTrue(s.getUseByoyomi());
+        assertEquals(20 * 60 * 1000, s.getByoyomi());
+        assertEquals(10, s.getByoyomiMoves());
+
+        s = parse("30min+20sec/10");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertTrue(s.getUseByoyomi());
+        assertEquals(20 * 1000, s.getByoyomi());
+        assertEquals(10, s.getByoyomiMoves());
+
+        s = parse("30 s+20m/10");
+        assertEquals(30 * 1000, s.getPreByoyomi());
         assertTrue(s.getUseByoyomi());
         assertEquals(20 * 60 * 1000, s.getByoyomi());
         assertEquals(10, s.getByoyomiMoves());
@@ -42,7 +86,7 @@ public final class TimeSettingsTest
         }
         catch (ErrorMessage e)
         {
-            fail();
+            fail(e.getMessage());
             return null;
         }
     }

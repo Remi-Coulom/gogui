@@ -319,7 +319,9 @@ Set board size.
 </term>
 <listitem>
 <para>
-Set time limits (min[+min/moves]).
+Set time limits (basetime[+overtime/moves]).
+The base time and overtime (byoyomi) can have an optional unit specifier
+(m or min for minutes; s or sec for seconds; default is minutes).
 </para>
 </listitem>
 </varlistentry>

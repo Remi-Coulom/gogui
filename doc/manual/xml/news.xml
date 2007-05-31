@@ -16,7 +16,12 @@ GoGui: allow going forward/backward with the mouse wheel
 </listitem>
 <listitem>
 <simpara>
-Minor fixes and enhancements.
+GoGui, TwoGtp: support time specs using seconds in option -time
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and enhancements
 </simpara>
 </listitem>
 </itemizedlist>

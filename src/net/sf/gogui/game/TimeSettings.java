@@ -101,9 +101,11 @@ public final class TimeSettings
     }
 
     /** Parse time settings from a string.
-        The string is expected to be in the format: basetime[+byoyomi/moves]
-        with base and overtime in minutes.
-        @todo Should also parse units (min or sec)
+        The string is expected to be in the format:
+        basetime[+overtime/moves] <br>
+        The base time and overtime (byoyomi) can have an optional unit
+        specifier (m or min for minutes; s or sec for seconds; default is
+        minutes).
         @param s The string.
         @return TimeSettings The time settings corresponding to this string.
         @throws ErrorMessage On syntax error or invalid values.
@@ -114,30 +116,26 @@ public final class TimeSettings
         long preByoyomi = 0;
         long byoyomi = 0;
         int byoyomiMoves = 0;
-        try
+        int idx = s.indexOf('+');
+        if (idx < 0)
+            preByoyomi = parseTime(s);
+        else
         {
-            int idx = s.indexOf('+');
-            if (idx < 0)
+            useByoyomi = true;
+            preByoyomi = parseTime(s.substring(0, idx));
+            int idx2 = s.indexOf('/');
+            if (idx2 <= idx)
+                throw new ErrorMessage("Invalid time specification");
+            byoyomi = parseTime(s.substring(idx + 1, idx2));
+            try
             {
-                preByoyomi = Long.parseLong(s) * MSEC_PER_MIN;
-            }
-            else
-            {
-                useByoyomi = true;
-                preByoyomi
-                    = Long.parseLong(s.substring(0, idx)) * MSEC_PER_MIN;
-                int idx2 = s.indexOf('/');
-                if (idx2 <= idx)
-                    throw new ErrorMessage("Invalid time specification");
-                byoyomi
-                    = Long.parseLong(s.substring(idx + 1, idx2))
-                    * MSEC_PER_MIN;
                 byoyomiMoves = Integer.parseInt(s.substring(idx2 + 1));
             }
-        }
-        catch (NumberFormatException e)
-        {
-            throw new ErrorMessage("Invalid time specification");
+            catch (NumberFormatException e)
+            {
+                throw new ErrorMessage("Invalid specification for byoyomi"
+                                       + " moves");
+            }
         }
         if (preByoyomi <= 0)
             throw new ErrorMessage("Pre-byoyomi time must be positive");
@@ -177,6 +175,34 @@ public final class TimeSettings
     private final long m_byoyomi;
 
     private final int m_byoyomiMoves;
+
+    private static long parseTime(String s) throws ErrorMessage
+    {
+        long factor = MSEC_PER_MIN;;
+        s = s.trim();
+        if (s.endsWith("m"))
+            s = s.substring(0, s.length() - "m".length());
+        else if (s.endsWith("min"))
+            s = s.substring(0, s.length() - "min".length());
+        else if (s.endsWith("s"))
+        {
+            s = s.substring(0, s.length() - "s".length());
+            factor = MSEC_PER_SEC;
+        }
+        else if (s.endsWith("sec"))
+        {
+            s = s.substring(0, s.length() - "sec".length());
+            factor = MSEC_PER_SEC;
+        }
+        try
+        {
+            return (Long.parseLong(s.trim()) * factor);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new ErrorMessage("Invalid time specification: '" + s + "'");
+        }
+    }
 
     private static String toString(long millisec)
     {
