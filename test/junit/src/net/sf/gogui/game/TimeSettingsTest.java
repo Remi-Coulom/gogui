@@ -21,9 +21,17 @@ public final class TimeSettingsTest
 
     public void testParse()
     {
-        TimeSettings settings = parse("30");
-        assertEquals(settings.getPreByoyomi(), 30 * 60 * 1000);
-        assertFalse(settings.getUseByoyomi());
+        TimeSettings s;
+
+        s = parse("30");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertFalse(s.getUseByoyomi());
+
+        s = parse("30+20/10");
+        assertEquals(30 * 60 * 1000, s.getPreByoyomi());
+        assertTrue(s.getUseByoyomi());
+        assertEquals(20 * 60 * 1000, s.getByoyomi());
+        assertEquals(10, s.getByoyomiMoves());
     }
 
     private TimeSettings parse(String s)
