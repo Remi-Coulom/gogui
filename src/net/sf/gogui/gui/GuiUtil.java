@@ -173,51 +173,53 @@ public class GuiUtil
         Otherwise use parameter as class name or shortcut as decoumented
         in the GoGui reference, and show message on failure.
     */
-    public static void initLookAndFeel(String lookAndFeel)
+    public static void initLookAndFeel(String laf)
     {
         // Disables renaming mode in Sun Java 1.5, which makes using the
         // JFileChooser a pain and is also enabled for open dialogs
         // for no good reason. Unfortunately that sacrifices the new directory
         // button, which is useful for save dialogs
         UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-        if ("".equals(lookAndFeel))
+        if ("".equals(laf))
             return;
         boolean showError = true;
-        if (lookAndFeel == null)
+        if (laf == null)
         {
             showError = false;
             if (Platform.isWindows())
-                lookAndFeel = "system";
+                laf = "system";
             else if (Platform.isMac())
-                lookAndFeel = "quaqua";
+                laf = "quaqua";
             else if (Platform.isUnix())
-                lookAndFeel = "plasticxp";
+                laf = "plasticxp";
             else
                 return;
         }
-        UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
-        UIManager.put("ScrollBar.maxBumpsWidth", new Integer(22));
-        if ("cross".equals(lookAndFeel))
-            lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-        else if ("gtk".equals(lookAndFeel))
-            lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        else if ("motif".equals(lookAndFeel))
-            lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-        else if ("jwindows".equals(lookAndFeel))
-            lookAndFeel = "com.jgoodies.looks.windows.WindowsLookAndFeel";
-        else if ("plasticxp".equals(lookAndFeel))
-            lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
-        else if ("quaqua".equals(lookAndFeel))
-            lookAndFeel = "ch.randelshofer.quaqua.QuaquaLookAndFeel";
-        else if ("system".equals(lookAndFeel))
-            lookAndFeel = UIManager.getSystemLookAndFeelClassName();
-        else if ("windows".equals(lookAndFeel))
-            lookAndFeel =
-                "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+        if ("cross".equals(laf))
+            laf = UIManager.getCrossPlatformLookAndFeelClassName();
+        else if ("gtk".equals(laf))
+            laf = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+        else if ("motif".equals(laf))
+            laf = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+        else if ("jwindows".equals(laf))
+            laf = "com.jgoodies.looks.windows.WindowsLookAndFeel";
+        else if ("plasticxp".equals(laf))
+            laf = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+        else if ("quaqua".equals(laf))
+            laf = "ch.randelshofer.quaqua.QuaquaLookAndFeel";
+        else if ("system".equals(laf))
+            laf = UIManager.getSystemLookAndFeelClassName();
+        else if ("windows".equals(laf))
+            laf = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+        if (laf.equals("com.jgoodies.looks.plastic.PlasticXPLookAndFeel"))
+        {
+            UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
+            UIManager.put("ScrollBar.maxBumpsWidth", new Integer(19));
+        }
         try
         {
-            UIManager.setLookAndFeel(lookAndFeel);
-            if (lookAndFeel.equals("ch.randelshofer.quaqua.QuaquaLookAndFeel"))
+            UIManager.setLookAndFeel(laf);
+            if (laf.equals("ch.randelshofer.quaqua.QuaquaLookAndFeel"))
             {
                 // Auto-generation of badged icons does not work in Quaqua
                 // 3.7.2 (the GoGui app icon shows filled white), and Apple
@@ -233,22 +235,22 @@ public class GuiUtil
         }
         catch (ClassNotFoundException e)
         {
-            handleLookAndFeelError(showError, lookAndFeel);
+            handleLookAndFeelError(showError, laf);
 
         }
         catch (InstantiationException e)
         {
-            handleLookAndFeelError(showError, lookAndFeel);
+            handleLookAndFeelError(showError, laf);
 
         }
         catch (IllegalAccessException e)
         {
-            handleLookAndFeelError(showError, lookAndFeel);
+            handleLookAndFeelError(showError, laf);
 
         }
         catch (UnsupportedLookAndFeelException e)
         {
-            handleLookAndFeelError(showError, lookAndFeel);
+            handleLookAndFeelError(showError, laf);
 
         }
     }
@@ -542,8 +544,7 @@ public class GuiUtil
 
     private static URL s_iconURL;
 
-    private static void handleLookAndFeelError(boolean showError,
-                                               String lookAndFeel)
+    private static void handleLookAndFeelError(boolean showError, String laf)
     {
         if (! showError)
             return;
@@ -551,7 +552,7 @@ public class GuiUtil
         messageDialogs.showWarning(null,
                                    "Look and Feel not found",
                                    "The look and feel\n\""
-                                   + lookAndFeel + "\"\n"
+                                   + laf + "\"\n"
                                    + "was not found.\n" +
                                    "Using default Look and Feel instead\n",
                                    false);
