@@ -86,9 +86,7 @@ public class Platform
     /** Check if the platform is Mac OS X. */
     public static boolean isMac()
     {
-        // See http://developer.apple.com/technotes/tn2002/tn2110.html
-        String name = System.getProperty("os.name");
-        return name.toLowerCase(Locale.getDefault()).startsWith("mac os x");
+        return m_isMac;
     }
 
     /** Check if the platform is Unix. */
@@ -185,6 +183,14 @@ public class Platform
         {
             StringUtil.printException(e);
         }
+    }
+
+    private static boolean m_isMac;
+
+    {
+        // See http://developer.apple.com/technotes/tn2002/tn2110.html
+        String name = System.getProperty("os.name");
+        m_isMac = name.toLowerCase(Locale.getDefault()).startsWith("mac os x");
     }
 
     private static boolean checkKDERunning()
