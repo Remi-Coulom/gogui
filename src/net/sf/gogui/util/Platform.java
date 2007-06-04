@@ -187,6 +187,7 @@ public class Platform
 
     private static boolean m_isMac;
 
+    static
     {
         // See http://developer.apple.com/technotes/tn2002/tn2110.html
         String name = System.getProperty("os.name");
