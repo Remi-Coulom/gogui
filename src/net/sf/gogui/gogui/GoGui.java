@@ -2186,8 +2186,8 @@ public class GoGui
                     GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
                                                     pointArg, title, response);
             }
-            if ("".equals(m_statusBar.getText()) &&
-                type != AnalyzeCommand.PARAM && type != AnalyzeCommand.NONE)
+            if ("".equals(m_statusBar.getText())
+                && type != AnalyzeCommand.PARAM)
                 showStatus(title);
             if (checkComputerMove)
                 checkComputerMove();
