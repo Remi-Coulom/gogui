@@ -256,6 +256,16 @@ Let next command succeed with <replaceable>response</replaceable>.
 </varlistentry>
 
 <varlistentry>
+<term><command>gtpdummy-sboard</command></term>
+<listitem>
+<para>
+Command for testing GoGui's analyze command type 'sboard'.
+Returns a board of strings.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <command>gtpdummy-sleep <replaceable>seconds</replaceable>
 </command>

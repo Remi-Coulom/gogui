@@ -164,6 +164,7 @@ public class GtpDummy
             "string/Long Response/gtpdummy-long_response %s\n" +
             "none/Next Failure/gtpdummy-next_failure %s\n" +
             "none/Next Success/gtpdummy-next_success %s\n" +
+            "sboard/SBoard/gtpdummy-sboard\n" +
             "none/Sleep/gtpdummy-sleep %s\n" +
             "none/Sleep 20s/gtpdummy-sleep\n";
         cmd.setResponse(response);
@@ -280,6 +281,30 @@ public class GtpDummy
             m_alreadyPlayed[point.getX()][point.getY()] = true;
     }
 
+    public void cmdSBoard(GtpCommand cmd)
+    {
+        cmd.getResponse().append('\n');
+        for (int x = 0; x < m_size; ++x)
+        {
+            for (int y = 0; y < m_size; ++y)
+            {
+                if (x == 1 && y == 1)
+                    cmd.getResponse().append("\"a b\"");
+                else if (x == 1 && y == 2)
+                    cmd.getResponse().append("ab   ");
+                else if (x == 1 && y == 3)
+                    cmd.getResponse().append("abc  ");
+                else if (x == 2 && y == 1)
+                    cmd.getResponse().append("abcde");
+                else
+                    cmd.getResponse().append("\"\"   ");
+                if (y < m_size - 1)
+                    cmd.getResponse().append(' ');
+            }
+            cmd.getResponse().append('\n');
+        }
+    }
+
     public void cmdSleep(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArgLessEqual(1);
@@ -367,6 +392,9 @@ public class GtpDummy
         register("gtpdummy-bwboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdBWBoard(cmd); } });
+        register("gtpdummy-crash", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdCrash(cmd); } });
         register("gtpdummy-delay", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdDelay(cmd); } });
@@ -394,15 +422,15 @@ public class GtpDummy
         register("gtpdummy-long_response", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLongResponse(cmd); } });
-        register("gtpdummy-crash", new GtpCallback() {
-                public void run(GtpCommand cmd) throws GtpError {
-                    cmdCrash(cmd); } });
         register("gtpdummy-next_failure", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdNextFailure(cmd); } });
         register("gtpdummy-next_success", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdNextSuccess(cmd); } });
+        register("gtpdummy-sboard", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdSBoard(cmd); } });
         register("gtpdummy-sleep", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdSleep(cmd); } });
