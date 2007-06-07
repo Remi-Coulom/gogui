@@ -214,7 +214,7 @@ the selected text are marked on the board.
 <simpara>
 The response of the command is a board of strings.
 A string should not be longer than 3-4 characters, to fit on a point on the
-board, and may not contain white spaces.
+board. Strings containing whiespaces have to be put in quotation marks.
 The special string "" is used for no string on a point.
 </simpara>
 </listitem>
