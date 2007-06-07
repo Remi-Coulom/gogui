@@ -198,8 +198,8 @@ The strings are displayed as labels on the points.
 <term><userinput>pstring</userinput></term>
 <listitem>
 <simpara>
-The response of the command is a text containing points.
-All valid points contained in the text will be marked on the board.
+The response of the command is a text, which also contains points.
+Valid points contained in the text will be marked on the board.
 If the text has only a single line, it will be displayed in the status line.
 If it has multiple lines, a window will pop up.
 If text in the window is selected, only the valid points contained in
