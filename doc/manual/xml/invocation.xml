@@ -14,7 +14,7 @@
 <programlisting>
 <userinput>java -jar gogui.jar [options] [file]</userinput></programlisting>
 using the file <filename>gogui.jar</filename> in the
-<filename class="Directory">lib</filename> subdirectory.
+<filename>lib</filename> subdirectory.
 </para>
 <para>
 The command line for executing the actual Go program can be given
@@ -100,7 +100,7 @@ or drag a link to this file to the desktop.
 <secondary>Mac OS X</secondary>
 </indexterm>
 On the Mac, GoGui can be invoked using the UNIX launcher scripts in
-the <filename class="Directory">bin</filename> directory.
+the <filename>bin</filename> directory.
 It is also possible to create an application bundle for Mac OS X by typing
 <programlisting>
 <userinput>ant gogui.app</userinput></programlisting>
