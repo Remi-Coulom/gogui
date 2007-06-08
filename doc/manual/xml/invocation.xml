@@ -7,29 +7,34 @@
 <secondary>GoGui</secondary>
 </indexterm>
 
+<section>
+<title>General</title>
 <para>
 <application>GoGui</application> can be invoked with the command:
 <programlisting>
 <userinput>java -jar gogui.jar [options] [file]</userinput></programlisting>
+using the file <filename>gogui.jar</filename> in the
+<filename class="Directory">lib</filename> subdirectory.
+</para>
+<para>
 The command line for executing the actual Go program can be given
 with the <option>-program</option> option, otherwise GoGui will start with
-the Go program attached in the previous run, or without Go program if there
-was none attached.
+the Go program attached in the previous run, or without Go program if none
+was attached.
 You can attach and detach a Go program at any time by using the
-<guimenuitem>Attach Program</guimenuitem> and
-<guimenuitem>Detach Program</guimenuitem> menu item from the
-<guimenu>File</guimenu> menu.
+<guimenuitem>Attach</guimenuitem>, <guimenuitem>New Program</guimenuitem> and
+<guimenuitem>Detach</guimenuitem> menu items from the
+<guimenu>Program</guimenu> menu.
 </para>
-
 <para>
 See <xref linkend="reference-gogui"/> for a complete listing of the possible
 options to <userinput>gogui</userinput>.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
 
-<para>
-<note>
+<section>
 <title><application>GoGui</application> on Unix</title>
-
 <para>
 <indexterm>
 <primary>invocation</primary>
@@ -63,7 +68,47 @@ files, you can configure a new file association for type
 <secondary>register GoGui as a handler</secondary>
 </indexterm>
 </para>
-</note>
+<para>
+For Linux systems, there is a shell script <filename>install.sh</filename> in
+the main directory, which will install GoGui on the system, including the
+creation of desktop menu entries, entries in the help system, and the
+registration as a handler for SGF files. This script needs to be run as root.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title><application>GoGui</application> on Windows</title>
+<para>
+<indexterm>
+<primary>invocation</primary>
+<secondary>Windows</secondary>
+</indexterm>
+On Windows, the Java installation registers Java as a
+handler for jar-files and it is possible to launch GoGui by
+double-clicking on <filename>gogui.jar</filename> from a file browser
+or drag a link to this file to the desktop.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title><application>GoGui</application> on Mac OS X</title>
+<para>
+<indexterm>
+<primary>invocation</primary>
+<secondary>Mac OS X</secondary>
+</indexterm>
+On the Mac, GoGui can be invoked using the UNIX launcher scripts in
+the <filename class="Directory">bin</filename> directory.
+It is also possible to create an application bundle for Mac OS X by typing
+<programlisting>
+<userinput>ant gogui.app</userinput></programlisting>
+in the main directory. The resulting application bundle will be in
+<filename>build/GoGui.app</filename>. This requires, that
+<ulink url="http://ant.apache.org">Ant</ulink> is installed on the system.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
 
 </chapter>
