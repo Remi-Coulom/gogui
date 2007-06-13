@@ -49,7 +49,7 @@ public final class Main
             if (size < 2)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(2);
             }
             String program = (String)arguments.get(0);
             ArrayList tests = new ArrayList(arguments);
