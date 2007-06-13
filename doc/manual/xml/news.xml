@@ -21,7 +21,8 @@ GoGui, TwoGtp: support time specs using seconds in option -time
 </listitem>
 <listitem>
 <simpara>
-GtpRegress: new option -gtpfile
+GtpRegress: new option -gtpfile; support for test suites (files containing
+lists of test files)
 </simpara>
 </listitem>
 <listitem>

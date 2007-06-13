@@ -40,6 +40,7 @@ public class GtpRegress
                       boolean longOutput, boolean verbose, File gtpFile)
         throws Exception
     {
+        tests = GtpRegressUtil.expandTestSuites(tests);
         m_result = true;
         m_program = program;
         m_longOutput = longOutput;

@@ -53,6 +53,13 @@ see the documentation for
 for a complete description.
 </para>
 <para>
+Test names that start with a '@' are interpreted as files containing a test
+suite. The file with the corresponding name (excluding the '@') is read
+and every non-empty line that does not start with the comment character '#'
+is added to the list of test names. The files are allowed to contain names
+of other test suites.
+</para>
+<para>
 The main output file is <filename>index.html</filename>.
 For each test file
 <filename><replaceable>test</replaceable>.tst</filename>,
@@ -63,8 +70,6 @@ are generated.
 Also creates a text file
 <filename>summary.dat</filename>,
 with a table row containing the most important summary statistics.
-</para>
-<para>
 GtpRegress will start a new instance of the Go program for each test and
 use the directory of the test file as the working directory for the Go
 program.
