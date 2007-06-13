@@ -21,6 +21,11 @@ GoGui, TwoGtp: support time specs using seconds in option -time
 </listitem>
 <listitem>
 <simpara>
+GtpRegress: new option -gtpfile
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Minor fixes and enhancements
 </simpara>
 </listitem>

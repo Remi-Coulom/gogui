@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Reader;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Set;
@@ -19,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.HtmlUtil;
@@ -29,14 +32,19 @@ import net.sf.gogui.util.StringUtil;
 public class GtpRegress
     implements GtpClient.IOCallback
 {
+    /** Constructor.
+        @param gtpFile File with GTP commands to send at startup or
+        <code>null</code> for no file.
+    */
     public GtpRegress(String program, String[] tests, String output,
-                      boolean longOutput, boolean verbose)
+                      boolean longOutput, boolean verbose, File gtpFile)
         throws Exception
     {
         m_result = true;
         m_program = program;
         m_longOutput = longOutput;
         m_verbose = verbose;
+        m_gtpFile = gtpFile;
         if (output.equals(""))
             m_prefix = "";
         else
@@ -201,6 +209,8 @@ public class GtpRegress
         the standard error of Go program.
     */
     private File m_outFile;
+
+    private File m_gtpFile;
 
     private String m_currentStyle;
 
@@ -650,7 +660,7 @@ public class GtpRegress
         if (m_currentStyle != null)
             m_out.print("</span>");
         m_out.println("</pre>\n" +
-                      "<hr style=\"margin:1em\">\n" +
+                      "<hr style=\"margin:1em\" size=\"1\">\n" +
                       "<pre style=\"margin:1em\">");
     }
 
@@ -756,6 +766,8 @@ public class GtpRegress
         try
         {
             m_gtp = new GtpClient(m_program, testFileDir, m_verbose, this);
+            if (m_gtpFile != null)
+                sendGtpFile();
             m_lastSgf = null;
             queryNameAndVersion();
             double cpuTime = getCpuTime();
@@ -796,6 +808,58 @@ public class GtpRegress
         }
     }
 
+    private void sendGtpFile() throws ErrorMessage
+    {
+        Reader reader;
+        try
+        {
+            reader = new FileReader(m_gtpFile);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new ErrorMessage("GTP file not found: " + m_gtpFile);
+        }
+        java.io.BufferedReader in;
+        in = new BufferedReader(reader);
+        try
+        {
+            while (true)
+            {
+                try
+                {
+                    String line = in.readLine();
+                    if (line == null)
+                        break;
+                    if (! GtpUtil.isCommand(line))
+                        continue;
+                    send(line);
+                }
+                catch (IOException e)
+                {
+                    throw new ErrorMessage("Error reading GTP file: "
+                                           + e.getMessage());
+                }
+                catch (GtpError e)
+                {
+                    throw new ErrorMessage("GTP command '" + e.getCommand()
+                                           + "' from file " + m_gtpFile
+                                           + " failed: " + e.getMessage());
+                }
+            }
+            printOutSeparator();
+        }
+        finally
+        {
+            try
+            {
+                in.close();
+            }
+            catch (IOException e)
+            {
+            }
+        }
+    }
+
     private String truncate(String string)
     {
         int maxLength = 25;
@@ -820,6 +884,9 @@ public class GtpRegress
                   "<tr><th align=\"left\" valign=\"top\">Command:</th>\n" +
                   "<td valign=\"top\"><tt>" + m_program
                   + "</tt></td></tr>\n");
+        if (m_gtpFile != null)
+            out.print("<tr><th align=\"left\">GtpFile:</th><td>" + m_gtpFile
+                      + "</td></tr>\n");
     }
 
     /** Write text based data file with summary information. */

@@ -18,6 +18,7 @@ Runs GTP regression tests.
 <cmdsynopsis>
 <command>gtpregress</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-long</option></arg>
 <arg><option>-output</option> <replaceable>directory</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -86,6 +87,19 @@ least one enexpected fail, and 2 if the Go program crashed.
 <listitem>
 <para>
 Read command line options and arguments from file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-gtpfile</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+File with GTP commands to execute before each test. This file can be used
+to configure engine parameters. If a command from the file fails, GtpRegress
+will exit with an error message.
 </para>
 </listitem>
 </varlistentry>

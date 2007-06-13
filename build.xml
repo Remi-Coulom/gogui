@@ -529,9 +529,7 @@ ${quaqua.nestedzipfile}
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/go/GoColor.class
- net/sf/gogui/go/Move.class
- net/sf/gogui/go/GoPoint*.class
+ net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpregress/*.class
  net/sf/gogui/util/*.class
