@@ -36,7 +36,7 @@ public class GtpRegress
         @param gtpFile File with GTP commands to send at startup or
         <code>null</code> for no file.
     */
-    public GtpRegress(String program, String[] tests, String output,
+    public GtpRegress(String program, ArrayList tests, String output,
                       boolean longOutput, boolean verbose, File gtpFile)
         throws Exception
     {
@@ -55,13 +55,14 @@ public class GtpRegress
             m_prefix = output + File.separator;
         }
         initOutNames(tests);
-        for (int i = 0; i < tests.length; ++i)
+        for (int i = 0; i < tests.size(); ++i)
         {
-            if (tests.length > 1)
-                m_outPrefix = tests[i] + " ";
+            String test = (String)tests.get(i);
+            if (tests.size() > 1)
+                m_outPrefix = test + " ";
             else
                 m_outPrefix = "";
-            runTest(tests[i]);
+            runTest(test);
         }
         writeSummary();
         writeData();
@@ -534,12 +535,13 @@ public class GtpRegress
         Appends a number, if tests with same name in different directories
         exist.
     */
-    private void initOutNames(String[] tests)
+    private void initOutNames(ArrayList tests)
     {
         m_outNames = new TreeMap();
-        for (int i = 0; i < tests.length; ++i)
+        for (int i = 0; i < tests.size(); ++i)
         {
-            File testFile = new File(tests[i]);
+            String test = (String)tests.get(i);
+            File testFile = new File(test);
             String name =
                 FileUtil.removeExtension(new File(testFile.getName()), "tst");
             if (m_outNames.containsValue(name))
@@ -552,7 +554,7 @@ public class GtpRegress
                         break;
                     }
                 }
-            m_outNames.put(tests[i], name);
+            m_outNames.put(test, name);
         }
     }
 

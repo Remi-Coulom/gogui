@@ -52,9 +52,8 @@ public final class Main
                 System.exit(-1);
             }
             String program = (String)arguments.get(0);
-            String tests[] = new String[size - 1];
-            for (int i = 0; i <  size - 1; ++i)
-                tests[i] = (String)arguments.get(i + 1);
+            ArrayList tests = new ArrayList(arguments);
+            tests.remove(0);
             GtpRegress gtpRegress =
                 new GtpRegress(program, tests, output, longOutput, verbose,
                                gtpFile);
