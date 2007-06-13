@@ -41,6 +41,7 @@ public class GtpRegress
         throws Exception
     {
         tests = GtpRegressUtil.expandTestSuites(tests);
+        GtpRegressUtil.checkFiles(tests);
         m_result = true;
         m_program = program;
         m_longOutput = longOutput;
