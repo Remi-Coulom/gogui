@@ -286,7 +286,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionDeleteSideVariations(); } },
-             "Delete Side variations",
+             "Delete Side Variations",
              "Delete all variations but the main variation");
 
     public final GoGuiAction m_actionDetachProgram =
