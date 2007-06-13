@@ -4,7 +4,9 @@
 
 package net.sf.gogui.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -83,6 +85,29 @@ public final class FileUtil
         if (ext == null)
             return false;
         return ext.equalsIgnoreCase(extension);
+    }
+
+    /** Read a list of strings from a file.
+        The file is expected to contain one string per line; leading and
+        trailing whitespaces are removed. Empty lines or lines beginning
+        with the comment character '#' are ignored.
+    */
+    public static ArrayList readStringListFromFile(File file)
+        throws IOException
+    {
+        ArrayList result = new ArrayList();
+        FileReader reader = new FileReader(file);
+        BufferedReader in = new BufferedReader(reader);
+        while (true)
+        {
+            String line = in.readLine();
+            if (line == null)
+                break;
+            line = line.trim();
+            if (! line.equals("") && ! line.startsWith("#"))
+                result.add(line);
+        }
+        return result;
     }
 
     /** Remove extension in file name.
