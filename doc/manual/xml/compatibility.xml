@@ -217,14 +217,6 @@ See <xref linkend="setup"/>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry>
-<term><command>gogui-undo_setup</command></term>
-<listitem>
-<para>
-See <xref linkend="setup"/>.
-</para>
-</listitem>
-</varlistentry>
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
