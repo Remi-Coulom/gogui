@@ -2432,6 +2432,7 @@ public class GoGui
                 if (m_auto)
                 {
                     newGame(getBoardSize());
+                    //XXX updateViews(true);
                     checkComputerMove();
                     return;
                 }

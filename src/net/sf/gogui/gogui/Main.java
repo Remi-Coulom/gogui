@@ -89,6 +89,13 @@ public final class Main
         }
     }
 
+    /** Flag if crash dialog is currently shown.
+        Avoids that more than one crash dialog pops up, because events in the
+        event dispatch thread can still be handled and cause more exceptions
+        while the first crash dialog is shown.
+    */
+    private static boolean m_duringShowCrashDialog;
+
     /** Make constructor unavailable; class is for namespace only. */
     private Main()
     {
@@ -108,6 +115,8 @@ public final class Main
         // Create thread group to catch errors from Swing event thread
         ThreadGroup group = new ThreadGroup("catch-runtime-exceptions") {
                 public void uncaughtException(Thread t, Throwable e) {
+                    if (m_duringShowCrashDialog)
+                        return;
                     StringUtil.printException(e);
                     if (e instanceof RuntimeException
                         || e instanceof AssertionError)
@@ -143,6 +152,7 @@ public final class Main
 
     private static void showCrashDialog(Throwable e)
     {
+        m_duringShowCrashDialog = true;
         if ("GNU libgcj".equals(System.getProperty("java.vm.name")))
         {
             System.err.print("--------------------------------------------\n" +
