@@ -169,16 +169,7 @@ public class GoGui
         m_gameInfo.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
         m_guiBoard = new GuiBoard(boardSize);
-        m_guiBoard.setListener(this);
-        m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
-                public void mouseWheelMoved(MouseWheelEvent e) {
-                    int n = e.getWheelRotation();
-                    if (n > 0)
-                        actionForward(n);
-                    else
-                        actionBackward(-n);
-                }
-            });
+
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
         Comment.Listener commentListener = new Comment.Listener()
@@ -209,7 +200,6 @@ public class GoGui
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_guiBoard, m_infoPanel);
-        GuiUtil.removeKeyBinding(m_splitPane, "F8");
         m_splitPane.setResizeWeight(1);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
         addWindowListener(new WindowAdapter() {
@@ -3173,6 +3163,18 @@ public class GoGui
 
     private void initialize()
     {
+        m_guiBoard.setListener(this);
+        m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                    int n = e.getWheelRotation();
+                    if (n > 0)
+                        actionForward(n);
+                    else
+                        actionBackward(-n);
+                }
+            });
+
+        GuiUtil.removeKeyBinding(m_splitPane, "F8");
         m_actions.registerAll(getLayeredPane());
 
         m_bookmarks = Bookmark.load();
