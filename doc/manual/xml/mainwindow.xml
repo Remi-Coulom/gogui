@@ -332,6 +332,15 @@ If the Go program does not support this command, or you don't agree with it,
 you can change the status of stones by clicking on them.
 If the Ok button is pressed, the score will be added to the game information.
 </para>
+<note>
+<simpara>
+In the current version of GoGui, all points surrounded by only one color are
+considered to be territory, all points surrounded by both colors are dame
+points.
+It is not possible to mark dame points that are surrounded by stones of
+only one color, which can occur in the Japanese rule set.
+</simpara>
+</note>
 </listitem>
 </varlistentry>
 
