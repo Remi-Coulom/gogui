@@ -58,7 +58,7 @@ the extension sgf by tex.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>

@@ -39,7 +39,7 @@ Simple text based interface to Go programs supporting the
 Go Text Protocol.
 It keeps track of the board and prints it after each change on the board.
 If a move (coordinate on the board or pass) is entered, it is played
-on the board for the color which is to move, followed by a
+on the board for the color to move, followed by a
 <command>genmove</command> command sent to the program.
 Other supported commands are:
 </para>
@@ -48,8 +48,7 @@ Other supported commands are:
 <term><command>genmove</command></term>
 <listitem>
 <simpara>
-Send a <command>genmove</command> command for the color that is
-to move to the program.
+Send a <command>genmove</command> command for the color to move to the program.
 </simpara>
 </listitem>
 </varlistentry>
@@ -73,7 +72,7 @@ Send a <command>list_commands</command> command to the program.
 <term><command>load</command></term>
 <listitem>
 <simpara>
-Load game from SGF file.
+Load game from a SGF file.
 Moves are translated into <command>play</command> commands
 for the program.
 </simpara>
@@ -128,7 +127,7 @@ Other GTP commands are forwarded to the program.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>

@@ -15,9 +15,9 @@ clicking on a field has a special meaning (see
  <xref linkend="score"/>, and <xref linkend="analyze"/>).
 </para>
 <para>
-If <guimenuitem>Show Cursor</guimenuitem> is enabled in the
-<guimenu>Settings</guimenu> menu, then fields can be selected with
-the keyboard by moving the cursor (the red square corners) with the cursor
+If <guimenuitem>Cursor</guimenuitem> is enabled in the
+<guimenu>View</guimenu> menu, then fields can be selected with
+the keyboard by moving the cursor (the gray square corners) with the cursor
 keys to the target field and pressing <keycap>Enter</keycap>.
 Holding <keycap>Shift</keycap> while pressing a cursor key moves the
 cursor to the next handicap line in this direction or to the edge
@@ -33,13 +33,67 @@ of the board.
 </indexterm>
 <para>
 The panel on the right side of the board shows information about the
-current position, for example the last move and the variation number.
+current position, like the number of prisoner stones and the clock.
 A text field exists for displaying and editing comment text for the current
 position.
 If you select text in the comment field, it will automatically parsed for
 valid points, which will be marked on the board while the text is selected.
 Selected text in the comment is also used as a default text for
 <guimenuitem>Find in Comments</guimenuitem>.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Tool Bar</title>
+<indexterm>
+<primary>tool bar</primary>
+</indexterm>
+<para>
+The tool bar contains buttons for frequently used commands from the main menu.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Status Bar</title>
+<indexterm>
+<primary>status bar</primary>
+</indexterm>
+<para>
+The status bar can show a text line, depending on the current state.
+A small stone in the left lower corner indicates the current player to move.
+On the right side, the last move and current variation is shown.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Accelerator Keys</title>
+<indexterm>
+<primary>accelerator keys</primary>
+</indexterm>
+<para>
+In addition to the accelerator keys shown in the menu, the following
+accelerator keys are defined:
+<variablelist>
+<varlistentry>
+<term><keycap>F5</keycap></term>
+<listitem>
+<simpara>
+Make the computer play for the color currently to move.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><keycap>F6</keycap></term>
+<listitem>
+<simpara>
+Focus the main window (if one of the utility windows currently has the focus).
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -84,13 +138,7 @@ If the game has no filename, this menu item acts like
 <term><guimenuitem>Save As</guimenuitem></term>
 <listitem>
 <para>
-Save the current game to a file.
-If the file name ending is <filename>sgf</filename>, the game is saved
-in SGF format.
-If the file name ending is <filename>tex</filename>, the game is exported
-to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using
-<ulink url="http://www.ctan.org/tex-archive/graphics/pstricks/contrib/psgo/">
-PSGO</ulink> style.
+Save the current game to a file in SGF format.
 </para>
 </listitem>
 </varlistentry>
@@ -100,16 +148,16 @@ PSGO</ulink> style.
 <listitem>
 <para>
 Import a text position from a file.
-Can handle a variety of formats.
+The import algorithm can handle a variety of formats.
 However, only full board positions are supported.
+Non-square positions will be read into the smallest containing square
+board size at the top left position.
 Black stones can be represented by 'X', 'x', '@' or '#'; white stones by
 'O' or 'o' (however one representation must be used consistently); '.' and
 '+' are interpreted as empty points.
 Space characters are allowed between the points; leading numbers (or '|'
 and '$' characters) are ignored, as well as single inserted invalid lines
 (to support appended text after the row that was wrapped).
-Non-rectangular positions will be read into the smallest containing square
-board size at the top left position.
 </para>
 </listitem>
 </varlistentry>
@@ -237,10 +285,6 @@ Set the number of handicap stones.
 <listitem>
 <para>
 Edit the game information.
-Changes to the komi and rules are transmitted to the Go program.
-The only supported rules are "Chinese" and "Japanese".
-The program is informed about the komi and the rules
-with GTP commands, if supported (see <xref linkend="compatibility"/>).
 </para>
 </listitem>
 </varlistentry>
@@ -250,6 +294,15 @@ with GTP commands, if supported (see <xref linkend="compatibility"/>).
 <listitem>
 <para>
 Choose what side the Go program plays.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Pass</guimenuitem></term>
+<listitem>
+<para>
+Make a pass move.
 </para>
 </listitem>
 </varlistentry>
@@ -266,15 +319,6 @@ item.
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guimenuitem>Pass</guimenuitem></term>
-<listitem>
-<para>
-Make a pass move.
-</para>
-</listitem>
-</varlistentry>
-
 <varlistentry id="score">
 <term><guimenuitem>Score</guimenuitem></term>
 <listitem>
@@ -286,7 +330,7 @@ First the Go program will be asked what stones are dead with the
 Dead stones are marked with a cross-hair.
 If the Go program does not support this command, or you don't agree with it,
 you can change the status of stones by clicking on them.
-You leave score mode by closing the score window.
+If the Ok button is pressed, the score will be added to the game information.
 </para>
 </listitem>
 </varlistentry>
@@ -304,8 +348,10 @@ You leave score mode by closing the score window.
 <term><guimenuitem>Attach</guimenuitem></term>
 <listitem>
 <para>
-Attach a program from the list of Go programs to the current game at the
-current position.
+Start a program from the list of Go programs and synchronize it to the current
+game at the current position.
+If a Go program was already attached, it will be terminated, before the new
+program is started.
 </para>
 </listitem>
 </varlistentry>
@@ -314,7 +360,7 @@ current position.
 <term><guimenuitem>Detach</guimenuitem></term>
 <listitem>
 <para>
-Detach current Go program from game and terminate the Go program.
+Terminate the currently attached Go program.
 </para>
 </listitem>
 </varlistentry>
@@ -323,28 +369,8 @@ Detach current Go program from game and terminate the Go program.
 <term><guimenuitem>Reattach</guimenuitem></term>
 <listitem>
 <para>
-Restart Go program and attach it to the currrent game and current position.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>New Program</guimenuitem></term>
-<listitem>
-<para>
-Add a new Go program to the list of available Go programs.
-The name field should contain a label for the
-<guimenuitem>Attach</guimenuitem> menu.
-The command file should contain the command to run the Go program.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Edit Programs</guimenuitem></term>
-<listitem>
-<para>
-Edit the list of available Go programs.
+Restart the current Go program and synchronize it to the currrent game at
+the current position again.
 </para>
 </listitem>
 </varlistentry>
@@ -370,6 +396,27 @@ generation) is running and if the Go program supports interrupting
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>New Program</guimenuitem></term>
+<listitem>
+<para>
+Add a new Go program to the list of available Go programs.
+The name field should contain a label for the
+<guimenuitem>Attach</guimenuitem> menu.
+The command fieldy should contain the command to run the Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Edit Programs</guimenuitem></term>
+<listitem>
+<para>
+Edit the list of available Go programs.
+</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -383,7 +430,7 @@ generation) is running and if the Go program supports interrupting
 <term><guimenuitem>Beginning</guimenuitem></term>
 <listitem>
 <para>
-Go to beginning of game.
+Go to the start position of the current game.
 </para>
 </listitem>
 </varlistentry>
@@ -392,7 +439,7 @@ Go to beginning of game.
 <term><guimenuitem>Backward 10</guimenuitem></term>
 <listitem>
 <para>
-Go backward 10 moves.
+Go backward ten moves.
 </para>
 </listitem>
 </varlistentry>
@@ -419,7 +466,7 @@ Go forward one move.
 <term><guimenuitem>Forward 10</guimenuitem></term>
 <listitem>
 <para>
-Go forward 10 moves.
+Go forward ten moves.
 </para>
 </listitem>
 </varlistentry>
@@ -491,7 +538,7 @@ Go back to the main variation.
 <term><guimenuitem>Go to Variation</guimenuitem></term>
 <listitem>
 <para>
-Go to the start node of a certain variation.
+Go to the first node of a certain variation.
 </para>
 </listitem>
 </varlistentry>
@@ -509,9 +556,9 @@ Go to the start node of a certain variation.
 <term><guimenuitem>Find in Comments</guimenuitem></term>
 <listitem>
 <para>
-Find next game node containing a search pattern.
+Find the next game node containing a search pattern.
 The search is case insensitive.
-The pattern is a regular expression as used by the Java
+The pattern is a regular expression as used by the
 <ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
 class, similar to Perl syntax.
 </para>
@@ -522,7 +569,7 @@ class, similar to Perl syntax.
 <term><guimenuitem>Find Next</guimenuitem></term>
 <listitem>
 <para>
-Find next game node containing the last entered search pattern.
+Find the next game node containing the last entered search pattern.
 </para>
 </listitem>
 </varlistentry>
@@ -537,10 +584,11 @@ Make the current variation to the main variation.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Delete Side Variation</guimenuitem></term>
+<term><guimenuitem>Delete Side Variations</guimenuitem></term>
 <listitem>
 <para>
 Delete all variations except for the main variation.
+This item is only enabled if the current node is in the main variation.
 </para>
 </listitem>
 </varlistentry>
@@ -550,7 +598,7 @@ Delete all variations except for the main variation.
 <listitem>
 <para>
 Delete all variations and create a new game tree with the current
-position as setup stones.
+position as setup stones in the root node.
 </para>
 </listitem>
 </varlistentry>
@@ -560,6 +608,8 @@ position as setup stones.
 <listitem>
 <para>
 Truncate the current variation beginning at and including the current node.
+The current position will change to the father node of the current node
+in the game tree.
 </para>
 </listitem>
 </varlistentry>
@@ -568,7 +618,7 @@ Truncate the current variation beginning at and including the current node.
 <term><guimenuitem>Truncate Children</guimenuitem></term>
 <listitem>
 <para>
-Truncate all children variations of the current node.
+Truncate all child variations of the current node.
 </para>
 </listitem>
 </varlistentry>
@@ -577,11 +627,11 @@ Truncate all children variations of the current node.
 <term><guimenuitem>Setup Black</guimenuitem></term>
 <listitem>
 <para>
-Enter setup mode and set current color to Black or leave setup mode if already
-in setup mode and current color is Black.
-In setup mode you can place or remove stones of the current color.
-It is also possible to place stones of the other than current color
-without switching the color, by pressing a modifier key while placing a stone
+Enter setup mode and set the current color to Black or leave setup mode if
+the current mode is already setup mode and the current color is Black.
+In setup mode, you can place or remove stones of the current color.
+It is also possible to place stones of the opposite color (without switching
+the current color) by pressing a modifier key while placing a stone
 (Ctrl, Alt or Meta) or using the right mouse button.
 See also: <xref linkend="setupwhite"/>
 </para>
@@ -592,8 +642,8 @@ See also: <xref linkend="setupwhite"/>
 <term><guimenuitem>Setup White</guimenuitem></term>
 <listitem>
 <para>
-Enter setup mode and set current color to White or leave setup mode if already
-in setup mode and current color is White.
+Enter setup mode and set the current color to White or leave setup mode
+the current mode is already setup mode and the current color is White.
 See also: <xref linkend="setupblack"/>
 </para>
 </listitem>
@@ -612,7 +662,7 @@ See also: <xref linkend="setupblack"/>
 <term><guimenuitem>Toolbar</guimenuitem></term>
 <listitem>
 <para>
-Show or hide toolbar.
+Show or hide the toolbar.
 </para>
 </listitem>
 </varlistentry>
@@ -621,7 +671,7 @@ Show or hide toolbar.
 <term><guimenuitem>Info Panel</guimenuitem></term>
 <listitem>
 <para>
-Show or hide panel on the right side of the board containing game information.
+Show or hide the game information panel at the right side of the board.
 </para>
 </listitem>
 </varlistentry>
@@ -630,8 +680,7 @@ Show or hide panel on the right side of the board containing game information.
 <term><guimenuitem>Cursor</guimenuitem></term>
 <listitem>
 <para>
-Show cursor on board for keyboard navigation.
-Fields can be selected on with the <keycap>Enter</keycap> key.
+Show the cursor on the board for keyboard navigation.
 </para>
 </listitem>
 </varlistentry>
@@ -649,7 +698,7 @@ Show grid labels for board columns and rows.
 <term><guimenuitem>Last Move</guimenuitem></term>
 <listitem>
 <para>
-Mark the last move with a grey dot.
+Mark the last move with a gray dot.
 </para>
 </listitem>
 </varlistentry>
@@ -658,7 +707,7 @@ Mark the last move with a grey dot.
 <term><guimenuitem>Variation Labels</guimenuitem></term>
 <listitem>
 <para>
-Mark the moves of all variations from this position with letters
+Mark the first moves of all variations from this position with letters
 starting with 'A' ('*' will be used after 'Z').
 If multiple variations start with the same move, a '>' is appended.
 </para>
@@ -670,7 +719,7 @@ If multiple variations start with the same move, a '>' is appended.
 <listitem>
 <para>
 Beep after each computer move.
-With most versions of Java the PC speaker is used for the beep.
+With most versions of Java, the PC speaker is used for the beep.
 </para>
 </listitem>
 </varlistentry>
@@ -679,7 +728,7 @@ With most versions of Java the PC speaker is used for the beep.
 <term><guimenuitem>Monospace Comment Font</guimenuitem></term>
 <listitem>
 <para>
-Use fixed-width font for comment.
+Use fixed-width font in the comment field.
 </para>
 </listitem>
 </varlistentry>
@@ -717,7 +766,7 @@ if large trees are edited.
 <term><guisubmenu>Shell</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
 <listitem>
 <para>
-Popup a window with command completions while entering a command.
+Popup a window with command completions when entering a command.
 </para>
 </listitem>
 </varlistentry>
@@ -733,8 +782,8 @@ Popup a window with command completions while entering a command.
 <primary>Unknown command</primary>
 </indexterm>
 Automatically number GTP commands.
-Note that some Go programs don't comply to the GTP standard by not supporting
-GTP commands with a numerical ID.
+Note that some Go programs don't comply to the GTP standard and do not support
+commands with a numerical ID.
 They will usually answer with "Unknown command", because they try to parse
 the ID as a command.
 </para>
@@ -745,7 +794,8 @@ the ID as a command.
 <term><guisubmenu>Shell</guisubmenu> / <guimenuitem>Timestamp</guimenuitem></term>
 <listitem>
 <para>
-Prepend each sent or received line with a time stamp.
+Prepend each sent command and received response in the GTP shell window with a
+time stamp.
 </para>
 </listitem>
 </varlistentry>
@@ -772,7 +822,7 @@ Add a new bookmark.
 <term><guimenuitem>Edit Bookmarks</guimenuitem></term>
 <listitem>
 <para>
-Edit bookmarks.
+Edit the list of bookmarks.
 </para>
 </listitem>
 </varlistentry>
@@ -808,8 +858,6 @@ Show a window to select analyze commands (see <xref linkend="analyze"/>).
 <listitem>
 <para>
 Show the GTP shell window.
-The keyboard shortcut <keycap>F6</keycap> switches the keyboard focus back to
-the main window.
 </para>
 </listitem>
 </varlistentry>
@@ -837,7 +885,7 @@ Save the sent GTP commands to a file.
 <listitem>
 <para>
 Send GTP commands from a file to the engine.
-This can be used to send a file containing GTp commands that configure
+This can be used to send a file containing GTP commands that configure
 parameters of the engine.
 The file is not allowed to contain any GTP command that change the
 board state.
@@ -878,56 +926,13 @@ Open a window for browsing the GoGui documentation.
 <term><guimenuitem>About</guimenuitem></term>
 <listitem>
 <para>
-Show the version of GoGui and the Go program (if there is a program attached).
+Show the version and other information for GoGui, the Java platform and the
+currently attached Go program.
 </para>
 </listitem>
 </varlistentry>
 
 </variablelist>
-</section>
-
-<section>
-<title>Tool Bar</title>
-<indexterm>
-<primary>tool bar</primary>
-</indexterm>
-<para>
-The tool bar contains buttons for frequently used commands from the main menu.
-The forward and backward buttons correspond to the Forward and Backward menu
-item if clicked once, but send repeatedly Forward 10 and Backward 10 commands
-if they are pressed and held down for a longer time.
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Accelerator Keys</title>
-<indexterm>
-<primary>accelerator keys</primary>
-</indexterm>
-<para>
-In addition to the accelerator keys shown in the menu, the following
-accelerator keys are defined:
-<variablelist>
-<varlistentry>
-<term><keycap>F5</keycap></term>
-<listitem>
-<simpara>
-Make the computer play for the color currently to move.
-</simpara>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><keycap>F6</keycap></term>
-<listitem>
-<simpara>
-Focus the main window (if one of the utility windows currently has the focus).
-</simpara>
-</listitem>
-</varlistentry>
-</variablelist>
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 </chapter>

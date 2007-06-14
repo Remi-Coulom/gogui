@@ -23,10 +23,9 @@ commands yet.
 <section>
 <title>Saving the History</title>
 <para>
-From the menu of the GTP shell window, it is possible to save
-the GTP commands and responses, or only the commands to a file.
-Note that the history of the GTP streams will be truncated if it becomes
-too long.
+From the <guimenu>Tools</guimenu> menu, it is possible to save the GTP
+commands and responses, or only the commands to a file.
+The history of the GTP streams will be truncated if it becomes too long.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

@@ -93,7 +93,7 @@ with the special comment line
 </term>
 <listitem>
 <para>
-Speed of serial device (default 2400).
+The speed of the serial device (default 2400).
 </para>
 </listitem>
 </varlistentry>
@@ -104,7 +104,7 @@ Speed of serial device (default 2400).
 </term>
 <listitem>
 <para>
-Color of the modem player.
+The color of the modem player.
 </para>
 </listitem>
 </varlistentry>
@@ -115,7 +115,7 @@ Color of the modem player.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -173,7 +173,7 @@ List all serial devices and exit.
 </term>
 <listitem>
 <para>
-Use simple version of the Go Modem Protocol, as defined in the
+Use a simplified version of the Go Modem Protocol, as defined in the
 <ulink url="http://www.tanaka.ecc.u-tokyo.ac.jp/sig-gi/fjk2k-go/cfp-english.txt">
 Appendix A in Call For Participation to the FJK Computer Go
 Tournament 2000</ulink>.
@@ -336,7 +336,7 @@ negotiated. Other options to gmptogtp that might be necessary are -flow and
 GNUGO="gnugo --mode gtp"
 GMPTOGTP="gmptogtp -color white -device /dev/ttyS0 -baud 2400 -verbose"
 TWOGTP="twogtp -black \"$GNUGO\" -white \"$GMPTOGTP\" -verbose"
-gogui -auto -verbose -program "$TWOGTP"
+gogui -computer-both -verbose -program "$TWOGTP"
 </userinput>
 </programlisting>
 </para>

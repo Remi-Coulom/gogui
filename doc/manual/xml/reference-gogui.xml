@@ -53,7 +53,9 @@
 <title>Description</title>
 <para>
 GoGui is a graphical interface to programs that play the game of Go
-and use GTP (Go Text Protocol).
+and use GTP (Go Text Protocol). This reference describes only the command
+line arguments for invoking GoGui. A complete HTML documentation is included
+in the GoGui package.
 </para>
 </refsection>
 
@@ -67,7 +69,7 @@ and use GTP (Go Text Protocol).
 </term>
 <listitem>
 <para>
-Initialize analyze command and automatically run it after
+Initialize the analyze command and automatically run it after
 changes on the board.
 Works only for commands not containing wildcards.
 </para>
@@ -80,7 +82,7 @@ Works only for commands not containing wildcards.
 </term>
 <listitem>
 <para>
-Use file to read analyze command configuration.
+Use the given file to read analyze command configuration.
 </para>
 </listitem>
 </varlistentry>
@@ -159,7 +161,7 @@ Computer plays White.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -203,7 +205,7 @@ Set the komi value.
 </term>
 <listitem>
 <para>
-Set Swing look and feel.
+Set the Swing look and feel.
 If this option is not used, GoGui tries to use "plasticxp" on Linux, "system"
 on Windows and "quaqua" on Mac OS/X, but shows no error if the look and feel
 is not found.
@@ -286,7 +288,7 @@ com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 </term>
 <listitem>
 <para>
-Load SGF file until move number.
+Load SGF file given as the main argument until the given move number.
 </para>
 </listitem>
 </varlistentry>
@@ -297,7 +299,8 @@ Load SGF file until move number.
 </term>
 <listitem>
 <para>
-Go program to attach.
+Go program to attach. The argument is the command line to start the
+program.
 </para>
 </listitem>
 </varlistentry>
@@ -308,7 +311,7 @@ Go program to attach.
 </term>
 <listitem>
 <para>
-Set board size.
+Set the board size.
 </para>
 </listitem>
 </varlistentry>
@@ -332,7 +335,11 @@ The base time and overtime (byoyomi) can have an optional unit specifier
 </term>
 <listitem>
 <para>
-Print debugging messages.
+Print debugging messages. This includes the complete stream of GTP commands.
+Compared to the GTP shell, this has the additional advantage, that the
+commands and responses are written immediately when they are received
+and the order of the standard output and standard error stream of the
+Go engine will more likely be in the correct order.
 </para>
 </listitem>
 </varlistentry>

@@ -86,8 +86,8 @@ registration as a handler for SGF files. This script needs to be run as root.
 </indexterm>
 On Windows, the Java installation registers Java as a
 handler for jar-files and it is possible to launch GoGui by
-double-clicking on <filename>gogui.jar</filename> from a file browser
-or drag a link to this file to the desktop.
+double-clicking on <filename>gogui.jar</filename> from a file browser.
+You can also drag a link to this file to the desktop.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -105,8 +105,9 @@ It is also possible to create an application bundle for Mac OS X by typing
 <programlisting>
 <userinput>ant gogui.app</userinput></programlisting>
 in the main directory. The resulting application bundle will be in
-<filename>build/GoGui.app</filename>. This requires, that
-<ulink url="http://ant.apache.org">Ant</ulink> is installed on the system.
+<filename>build/GoGui.app</filename>. This requires, that the
+<ulink url="http://ant.apache.org">Ant</ulink> build system is installed on
+ythe system.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

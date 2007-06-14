@@ -24,7 +24,7 @@ by GoGui as a draw command using the same syntax as in the
 If no draw command follows immediately after
 <userinput>gogui-gfx:</userinput>, all following lines until the next empty
 line will be interpreted as draw commands.
-See the <userinput>dummy_live_gfx</userinput> command in
+See the <userinput>gtpdummy-live_gfx</userinput> command in
 <xref linkend="reference-gtpdummy"/> for an example.
 </para>
 <para>

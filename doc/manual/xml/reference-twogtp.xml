@@ -175,8 +175,7 @@ with a table row containing the most important summary statistics.
 Automatically play games.
 Use this option if you want to run <application>TwoGtp</application> as a
 standalone program, without a program like <application>GoGui</application>
-which controls the move generation with <command>genmove_black</command>
-and <command>genmove_white</command> commands.
+which controls the move generation with <command>genmove</command> commands.
 If a result file already exists (as specified with <option>-sgffile</option>),
 and contains less games than specified with <option>-games</option>,
 the remaining games will be played.
@@ -189,7 +188,7 @@ Use <option>-force</option> to overwrite existing result files.
 <term><option>-black</option> <replaceable>command</replaceable></term>
 <listitem>
 <para>
-Command for black program.
+Command for the black program.
 </para>
 </listitem>
 </varlistentry>
@@ -210,7 +209,7 @@ Works only with SGF files with alternating moves and without setup stones.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -267,7 +266,7 @@ terminate otherwise. Default is 1000. -1 means no limit.
 <term><option>-observer</option> <replaceable>command</replaceable></term>
 <listitem>
 <para>
-Command for observer program.
+Command for the observer program.
 </para>
 </listitem>
 </varlistentry>
@@ -288,7 +287,7 @@ with colors exchanged.
 <term><option>-referee</option> <replaceable>command</replaceable></term>
 <listitem>
 <para>
-Command for referee program.
+Command for the referee program.
 </para>
 </listitem>
 </varlistentry>
@@ -354,7 +353,7 @@ Print version and exit.
 <term><option>-white</option> <replaceable>command</replaceable></term>
 <listitem>
 <para>
-Command for white program.
+Command for the white program.
 </para>
 </listitem>
 </varlistentry>
@@ -397,7 +396,7 @@ Return a title for the current game, consisting of the game number (if option
 </term>
 <listitem>
 <para>
-Send command to black player.
+Send command to the black player.
 </para>
 </listitem>
 </varlistentry>
@@ -408,7 +407,7 @@ Send command to black player.
 </term>
 <listitem>
 <para>
-Send command to observer program.
+Send command to the observer program.
 </para>
 </listitem>
 </varlistentry>
@@ -419,7 +418,7 @@ Send command to observer program.
 </term>
 <listitem>
 <para>
-Send command to referee program.
+Send command to the referee program.
 </para>
 </listitem>
 </varlistentry>
@@ -430,7 +429,7 @@ Send command to referee program.
 </term>
 <listitem>
 <para>
-Send command to white player.
+Send command to the white player.
 </para>
 </listitem>
 </varlistentry>

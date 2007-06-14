@@ -21,10 +21,11 @@ result.
 <para>
 It is recommended that the Go program implements the extension command
 <command>gogui-analyze_commands</command>, which allows GoGui to query
-what analyze commands are supported from the program when a new program is
-attached.
-Otherwise a default configuration is used that knows some standard GTP
-and GNU Go extension commands.
+what analyze commands are supported when a new program is attached.
+Otherwise a default configuration is used, which knows some standard GTP
+and GNU Go extension commands. It is also possible to provide
+a configuration file by using the <option>-analyze-commands</option> command
+line option when invoking GoGui.
 </para>
 
 <para>
@@ -97,7 +98,8 @@ Editable point list command.
 The command is used to set a list of points.
 It needs the following syntax:
 the current point list is set, if the argument is a point list (or empty);
-the current point list is shown, if the argument is "show".
+the current point list is returned, if the argument is
+<userinput>show</userinput>.
 GoGui always queries the current point list first, selects the points on the
 board and allows the user to edit them, then it sends the command with the
 selected points as the argument.
@@ -109,17 +111,17 @@ selected points as the argument.
 <term><userinput>gfx</userinput></term>
 <listitem>
 <simpara>
-General graphical display commands.
-The reponse contains one command and its arguments per line.
-Commands are: BLACK, CIRCLE, COLOR, INFLUENCE, LABEL, MARK, SQUARE, TEXT,
-TRIANGLE, VAR, WHITE.
+General graphical display command.
+The reponse contains one graphics command per line.
+Graphics commands are: BLACK, CIRCLE, COLOR, INFLUENCE, LABEL, MARK, SQUARE,
+TEXT, TRIANGLE, VAR, WHITE.
 TEXT is followed by a text displayed on the status bar;
 LABEL arguments are point text pairs;
 INFLUENCE arguments are point double pairs;
 COLOR arguments are a color (like in cboard) and a point list;
-VAR arguments are moves (b/w point/PASS);
+VAR arguments are moves (b|w point|PASS);
 all other commands take a point list.
-See the <userinput>dummy_gfx</userinput> command in GtpDummy for an example.
+See the <userinput>gtpdummy-gfx</userinput> command in GtpDummy for an example.
 </simpara>
 </listitem>
 </varlistentry>
@@ -133,7 +135,6 @@ It will be displayed in a window using syntax highlighting.
 Lines beginning with a word followed by a colon are displayed in bold,
 points and moves in blue, the strings "black" and "white" in purple,
 numbers in green, and words that are completely uppercase in red.
-Syntax highlighting is disabled, if GoGui is started with option -fast.
 </simpara>
 </listitem>
 </varlistentry>
@@ -213,8 +214,8 @@ the selected text are marked on the board.
 <listitem>
 <simpara>
 The response of the command is a board of strings.
-A string should not be longer than 3-4 characters, to fit on a point on the
-board. Strings containing whiespaces have to be put in quotation marks.
+The strings will be displayed as labels for the points on the board.
+Strings containing whiespaces have to be put in quotation marks.
 The special string "" is used for no string on a point.
 </simpara>
 </listitem>
@@ -237,9 +238,11 @@ If it has multiple lines, a window will pop up.
 <simpara>
 The response of the command is a variation of moves
 containing points or passes.
+The moves do not include the player color and are expected to be of alternating
+color.
 Text not containing points is ignored.
-They will be displayed as numbered stones on the board;
-the current color to move is assumed to move first.
+They will be displayed as numbered semi-transparent stones on the board.
+The current color to move is assumed to move first.
 Additionally the response is displayed as a string.
 </simpara>
 </listitem>
@@ -249,7 +252,7 @@ Additionally the response is displayed as a string.
 <term><userinput>varb</userinput></term>
 <listitem>
 <simpara>
-Like <userinput>var</userinput>, but black is assumed to move first.
+Like <userinput>var</userinput>, but Black is assumed to move first.
 </simpara>
 </listitem>
 </varlistentry>
@@ -288,7 +291,7 @@ and the other color than the color at that point is assumed to move first.
 <term><userinput>varw</userinput></term>
 <listitem>
 <simpara>
-Like <userinput>var</userinput>, but white is assumed to move first.
+Like <userinput>var</userinput>, but White is assumed to move first.
 </simpara>
 </listitem>
 </varlistentry>
@@ -317,7 +320,7 @@ It can contain one of the following wildcards:
 <listitem>
 <simpara>
 Will be replaced by a color, which can be selected in the analyze window;
-default is the color which is to play.
+the default is the color to play.
 </simpara>
 </listitem>
 </varlistentry>

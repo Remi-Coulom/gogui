@@ -72,7 +72,7 @@ and translated into a sequence of play commands.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -94,7 +94,7 @@ can only handle move sequences with alternating color).
 <listitem>
 <para>
 Send GTP commands from file to program at startup. The file may not contain
-state changing commands.
+commands that change the board state.
 </para>
 </listitem>
 </varlistentry>

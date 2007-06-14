@@ -4,8 +4,8 @@
 
 <para>
 GoGui includes some tools.
-Some of the tools provide a GTP interface; they
-can be used as the Go program command given to GoGui:
+Some of the tools are GTP engines; they can be attached to GoGui as Go
+programs:
 </para>
 
 <variablelist>

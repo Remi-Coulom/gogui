@@ -11,11 +11,11 @@ of nodes.
 <para>
 Nodes are displayed as black or white stones.
 A symbol containing four small stones is used for nodes
-containing setup stones and a blue diamond for other nodes.
+containing setup stones and a gray diamond for other nodes.
 Nodes containing a comment have a small blue line below the node.
-The current node is marked with a red cursor.
+The current node is marked with a blue background square.
 You can change the size of the nodes and their labels from the
-<guimenu>Settings</guimenu> menu of the menu bar
+<guimenu>View</guimenu>/<guisubmenu>Tree</guisubmenu> menu of the menu bar
 </para>
 <para>
 When a node is clicked on, the shortest path from the current node to the

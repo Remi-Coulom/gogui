@@ -11,7 +11,7 @@
 <refnamediv>
 <refname>netgtp</refname>
 <refpurpose>
-Connects to a remote Go program supporting Go Text Protocol.
+Connects to a remote Go program supporting the Go Text Protocol.
 </refpurpose>
 </refnamediv>
 
@@ -47,7 +47,7 @@ and input stream to standard input and output.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>

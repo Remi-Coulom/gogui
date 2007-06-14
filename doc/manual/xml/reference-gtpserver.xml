@@ -59,7 +59,7 @@ host is made, instead of waiting for incoming connections.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -82,7 +82,7 @@ Display help and exit.
 <listitem>
 <para>
 After connection is finished, restart the program and wait for next
-connection, .
+connection.
 </para>
 </listitem>
 </varlistentry>
@@ -93,7 +93,7 @@ connection, .
 </term>
 <listitem>
 <para>
-Port number to user for the socket.
+Port number to use for the socket.
 </para>
 </listitem>
 </varlistentry>

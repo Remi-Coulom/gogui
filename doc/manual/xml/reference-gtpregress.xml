@@ -38,9 +38,9 @@ Runs GTP regression tests.
 <refsection>
 <title>Description</title>
 <para>
-Runs a regression test for a Go program supporting the Go Text Protocol,
-and formats the output as HTML.
-The regression tests are GTP files, using the special comment
+Runs a list of regression tests for a Go program supporting the Go Text
+Protocol, and formats the output as HTML.
+The regression tests are GTP files, which use the special comment
 <userinput>#?</userinput>, as used for the
 <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">GNU Go</ulink>
 regression tests (see section
@@ -67,8 +67,7 @@ additional files with name
 <filename><replaceable>test</replaceable>.html</filename> and
 <filename><replaceable>test</replaceable>.out.html</filename>
 are generated.
-Also creates a text file
-<filename>summary.dat</filename>,
+Additionally, a text file <filename>summary.dat</filename> is generated,
 with a table row containing the most important summary statistics.
 GtpRegress will start a new instance of the Go program for each test and
 use the directory of the test file as the working directory for the Go
@@ -92,7 +91,7 @@ error occured.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -136,8 +135,7 @@ Print longer output to standard output, one line per test.
 </term>
 <listitem>
 <para>
-Write output files to
-<filename><replaceable>directory</replaceable></filename>.
+Write output files to the given directory.
 </para>
 </listitem>
 </varlistentry>

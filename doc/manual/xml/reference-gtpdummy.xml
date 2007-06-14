@@ -53,7 +53,7 @@ Illegal moves sent to the program are not checked; they are always accepted.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from file.
+Read command line options and arguments from the given file.
 </para>
 </listitem>
 </varlistentry>
@@ -80,7 +80,8 @@ Log GTP stream to file.
 <term><option>-resign</option> <replaceable>n</replaceable></term>
 <listitem>
 <para>
-Resign at the n'th genmove command after the game started.
+Resign at the n<superscript>th</superscript> genmove command after the game
+started.
 </para>
 </listitem>
 </varlistentry>
@@ -89,7 +90,7 @@ Resign at the n'th genmove command after the game started.
 <term><option>-srand</option> <replaceable>seed</replaceable></term>
 <listitem>
 <para>
-Set random seed for random move generation.
+Set the random seed for random move generation.
 </para>
 </listitem>
 </varlistentry>
@@ -124,7 +125,7 @@ Output a board randomly filled with "B" and "W".
 <term><command>gtpdummy-crash</command></term>
 <listitem>
 <para>
-Exit program with return code -1.
+Exit the program with return code -1.
 </para>
 </listitem>
 </varlistentry>
@@ -226,7 +227,7 @@ Command for testing live graphics in GoGui.
 </term>
 <listitem>
 <para>
-Print a GTP response with <replaceable>n</replaceable> lines.
+Print a GTP response with n lines.
 </para>
 </listitem>
 </varlistentry>
@@ -238,7 +239,7 @@ Print a GTP response with <replaceable>n</replaceable> lines.
 </term>
 <listitem>
 <para>
-Let next command fail with <replaceable>response</replaceable>.
+Let the next command fail with the given response.
 </para>
 </listitem>
 </varlistentry>
@@ -250,7 +251,7 @@ Let next command fail with <replaceable>response</replaceable>.
 </term>
 <listitem>
 <para>
-Let next command succeed with <replaceable>response</replaceable>.
+Let the next command succeed with the given response.
 </para>
 </listitem>
 </varlistentry>
@@ -282,7 +283,7 @@ This command can be interrupted.
 <term><command>echo</command></term>
 <listitem>
 <para>
-Print argument as response.
+Print the argument as response.
 </para>
 </listitem>
 </varlistentry>
@@ -291,7 +292,7 @@ Print argument as response.
 <term><command>echo_err</command></term>
 <listitem>
 <para>
-Print argument to standard error.
+Print the argument to standard error.
 </para>
 </listitem>
 </varlistentry>
