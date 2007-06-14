@@ -2432,7 +2432,7 @@ public class GoGui
                 if (m_auto)
                 {
                     newGame(getBoardSize());
-                    updateViews(true, true);
+                    updateViews(true);
                     checkComputerMove();
                     return;
                 }
@@ -4048,18 +4048,13 @@ public class GoGui
         setCursor(getGlassPane(), Cursor.DEFAULT_CURSOR);
     }
 
-    private void updateViews(boolean gameTreeChanged)
-    {
-        updateViews(gameTreeChanged, false);
-    }
-
     /** Update all views.
         @param gameTreeChanged If nodes were added to or removed from the game
         tree, which will trigger a full and potentially slow game tree update
         @param sync Update game tree within the event handler if the gameTree
         has changed.
     */
-    private void updateViews(boolean gameTreeChanged, boolean sync)
+    private void updateViews(boolean gameTreeChanged)
     {
         ConstGame game = getGame();
         m_actions.update();
@@ -4081,28 +4076,8 @@ public class GoGui
         {
             if (gameTreeChanged)
             {
-                if (sync)
-                    m_gameTreeViewer.update(getTree(), getCurrentNode());
-                else
-                {
-                    protectGui();
-                    showStatus("Updating game tree window...");
-                    Runnable runnable = new Runnable() {
-                            public void run() {
-                                try
-                                {
-                                    m_gameTreeViewer.update(getTree(),
-                                                            getCurrentNode());
-                                }
-                                finally
-                                {
-                                    unprotectGui();
-                                    clearStatus();
-                                }
-                            }
-                        };
-                    SwingUtilities.invokeLater(runnable);
-                }
+                showStatusImmediately("Updating game tree window...");
+                m_gameTreeViewer.update(getTree(), getCurrentNode());
             }
             else
                 m_gameTreeViewer.update(getCurrentNode());

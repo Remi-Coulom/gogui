@@ -348,7 +348,17 @@ public class GameTreePanel
         GameTreeNode gameNode = getGameTreeNode(m_currentNode);
         if (gameNode == null)
         {
-            assert false;
+            // The following warning was previously an assert false.
+            // But it can can happen, because GoGui does sometimes defer a full
+            // update of the tree with SwingUtilities::invokeLater to be
+            // able to show a busy cursor and it can happen that a lightweight
+            // update (which assumes that the tree structure has not changed)
+            // is called before the full update event is dispatched.
+            // In the future, it would be easier to do all full updates in
+            // the event dispatch tree, even if they take long, but then we
+            // need another method to show the busy cursor while the UI is
+            // non-responsive
+            System.err.println("GameTreePanel: current node not found");
             return;
         }
         gameNode.repaint();
