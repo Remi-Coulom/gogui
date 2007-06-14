@@ -3173,6 +3173,8 @@ public class GoGui
 
     private void initialize()
     {
+        m_actions.registerAll(getLayeredPane());
+
         m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);
         m_programs = Program.load();
