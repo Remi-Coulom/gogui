@@ -95,7 +95,6 @@ Focus the main window (if one of the utility windows currently has the focus).
 </varlistentry>
 </variablelist>
 </para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -942,6 +941,7 @@ currently attached Go program.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 </chapter>

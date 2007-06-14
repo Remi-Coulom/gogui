@@ -147,8 +147,6 @@ See <xref linkend="reference-sgftotex"/> for a complete reference.
 </varlistentry>
 </variablelist>
 
-<para>
-<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
-</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 </chapter>

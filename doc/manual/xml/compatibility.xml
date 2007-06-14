@@ -136,7 +136,6 @@ game from the beginning.
 If <command>set_free_handicap</command> is not supported, GoGui
 will transmit handicap stones with <command>play</command> commands.
 </para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 <para>
 The command <command>gg-undo</command> is en extension command used by GNU Go,

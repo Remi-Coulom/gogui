@@ -32,6 +32,8 @@ Before each set of draw commands, existing markup on the graphical board
 will be automatically cleared, but not the text in the status bar.
 </para>
 
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+
 <note>
 <simpara>
 Since the parsing of the standard error stream stops when the command response
