@@ -64,6 +64,7 @@ Scroll to current node.
 <listitem>
 <simpara>
 Open popup menu on current node.
+On Mac OS X, the Apple key is used instead of <keycap>Ctrl</keycap>.
 </simpara>
 </listitem>
 </varlistentry>

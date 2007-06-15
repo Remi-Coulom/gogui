@@ -94,6 +94,7 @@ Focus the main window (if one of the utility windows currently has the focus).
 </listitem>
 </varlistentry>
 </variablelist>
+On Mac OS X, the accelerators are defined in combination with the Apple key.
 </para>
 </section>
 
