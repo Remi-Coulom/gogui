@@ -69,9 +69,9 @@ in the GoGui package.
 </term>
 <listitem>
 <para>
-Initialize the analyze command and automatically run it after
-changes on the board.
-Works only for commands not containing wildcards.
+Run the analyze command (given by its label) and run it on the initial
+position.
+This works only for commands not containing wildcards.
 </para>
 </listitem>
 </varlistentry>
