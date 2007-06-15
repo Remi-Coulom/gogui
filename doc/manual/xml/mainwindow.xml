@@ -23,6 +23,10 @@ Holding <keycap>Shift</keycap> while pressing a cursor key moves the
 cursor to the next handicap line in this direction or to the edge
 of the board.
 </para>
+<para>
+The mouse wheel can be used to go forward and backward in the game,
+if the mouse pointer is located within the Go board.
+</para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
