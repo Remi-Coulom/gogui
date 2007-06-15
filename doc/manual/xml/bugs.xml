@@ -40,9 +40,8 @@ Due to deficiencies in the Java library, it cannot be guaranteed that the
 standard error and standard output of the GTP engine are always displayed in
 the correct order in the GTP shell. Also, the GTP shell is not updated
 immediately during command sequences that the engine is supposed to
-perform quickly, like <command>play</command> commands, which will not
-preserve the order of the engine's responses and any logging text that the
-engine writes to standard error. In cases where the order is critical for
+perform quickly, like <command>play</command> commands, or while the engine
+is waiting for the next command. In cases where the order is critical for
 debugging purposes, it is better to invoke GoGui from a terminal with the
 <option>-verbose</option> option and watch the logging of the GTP streams
 in the terminal.
