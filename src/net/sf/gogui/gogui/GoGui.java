@@ -1206,8 +1206,8 @@ public class GoGui
                                       "Please mark dead groups manually",
                                       name + " does not support scoring.",
                                       true);
-            initScore(null);
             updateViews(false);
+            initScore(null);
         }
     }
 
@@ -3587,8 +3587,8 @@ public class GoGui
                 showError(e);
             }
         }
-        initScore(isDeadStone);
         updateViews(false);
+        initScore(isDeadStone);
     }
 
     private void scoreDone(Score score)
