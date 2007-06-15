@@ -1181,8 +1181,8 @@ public class GoGui
             m_messageDialogs.showInfo(disableKey, this,
                                       "Please mark dead groups manually",
                                       "No program is attached.", true);
-            initScore(null);
             updateViews(false);
+            initScore(null);
             return;
         }
         if (m_gtp.isSupported("final_status_list"))
