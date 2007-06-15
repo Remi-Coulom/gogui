@@ -656,6 +656,7 @@ public class GameTreePanel
     {
         ConstNode node = gameNode.getNode();
         m_popupNode = node;
+        final JPopupMenu popup = new JPopupMenu();
         ActionListener listener = new ActionListener()
             {
                 public void actionPerformed(ActionEvent event)
@@ -677,11 +678,12 @@ public class GameTreePanel
                         scrollTo(m_currentNode);
                     else if (command.equals("tree-info"))
                         treeInfo(m_popupLocation, m_popupNode);
+                    else if (command.equals("cancel"))
+                        popup.setVisible(false);
                     else
                         assert false;
                 }
             };
-        JPopupMenu popup = new JPopupMenu();
         JMenuItem item;
         if (node != m_currentNode)
         {
@@ -723,6 +725,11 @@ public class GameTreePanel
         popup.add(item);
         item = new JMenuItem("Subtree Statistics");
         item.setActionCommand("tree-info");
+        item.addActionListener(listener);
+        popup.add(item);
+        popup.addSeparator();
+        item = new JMenuItem("Cancel");
+        item.setActionCommand("cancel");
         item.addActionListener(listener);
         popup.add(item);
         // For com.jgoodies.looks
