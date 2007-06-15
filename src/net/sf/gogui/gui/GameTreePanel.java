@@ -454,6 +454,18 @@ public class GameTreePanel
 
     private final MessageDialogs m_messageDialogs;
 
+    private JPopupMenu m_popup;
+
+    private JMenuItem m_itemGoto;
+
+    private JMenuItem m_itemScrollToCurrent;
+
+    private JMenuItem m_itemHideSubtree;
+
+    private JMenuItem m_itemShowSubtree;
+
+    private JMenuItem m_itemShowChildren;
+
     private void initSize(int sizeMode)
     {
         switch (sizeMode)
@@ -562,6 +574,85 @@ public class GameTreePanel
         return dy;
     }
 
+    private void createPopup()
+    {
+        m_popup = new JPopupMenu();
+        ActionListener listener = new ActionListener()
+            {
+                public void actionPerformed(ActionEvent event)
+                {
+                    String command = event.getActionCommand();
+                    if (command.equals("goto"))
+                        gotoNode(m_popupNode);
+                    else if (command.equals("show-variations"))
+                        showChildren(m_popupNode);
+                    else if (command.equals("show-subtree"))
+                        showSubtree(m_popupNode);
+                    else if (command.equals("hide-others"))
+                        hideOthers(m_popupNode);
+                    else if (command.equals("hide-subtree"))
+                        hideSubtree(m_popupNode);
+                    else if (command.equals("node-info"))
+                        nodeInfo(m_popupLocation, m_popupNode);
+                    else if (command.equals("scroll-to-current"))
+                        scrollTo(m_currentNode);
+                    else if (command.equals("tree-info"))
+                        treeInfo(m_popupLocation, m_popupNode);
+                    else if (command.equals("cancel"))
+                        m_popup.setVisible(false);
+                    else
+                        assert false;
+                }
+            };
+        JMenuItem item;
+        item = new JMenuItem("Go To");
+        item.setActionCommand("goto");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        m_itemGoto = item;
+        item = new JMenuItem("Scroll to Current");
+        item.setActionCommand("scroll-to-current");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        m_itemScrollToCurrent = item;
+        m_popup.addSeparator();
+        item = new JMenuItem("Hide Subtree");
+        m_itemHideSubtree = item;
+        item.setActionCommand("hide-subtree");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        item = new JMenuItem("Hide Others");
+        item.setActionCommand("hide-others");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        item = new JMenuItem("Show Children");
+        m_itemShowChildren = item;
+        item.setActionCommand("show-variations");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        item = new JMenuItem("Show Subtree");
+        m_itemShowSubtree = item;
+        item.setActionCommand("show-subtree");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        m_popup.addSeparator();
+        item = new JMenuItem("Node Info");
+        item.setActionCommand("node-info");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        item = new JMenuItem("Subtree Statistics");
+        item.setActionCommand("tree-info");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        m_popup.addSeparator();
+        item = new JMenuItem("Cancel");
+        item.setActionCommand("cancel");
+        item.addActionListener(listener);
+        m_popup.add(item);
+        // For com.jgoodies.looks
+        m_popup.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
+    }
+
     private GameTreeNode getGameTreeNode(ConstNode node)
     {
         return (GameTreeNode)m_map.get(node);
@@ -656,86 +747,16 @@ public class GameTreePanel
     {
         ConstNode node = gameNode.getNode();
         m_popupNode = node;
-        final JPopupMenu popup = new JPopupMenu();
-        ActionListener listener = new ActionListener()
-            {
-                public void actionPerformed(ActionEvent event)
-                {
-                    String command = event.getActionCommand();
-                    if (command.equals("goto"))
-                        gotoNode(m_popupNode);
-                    else if (command.equals("show-variations"))
-                        showChildren(m_popupNode);
-                    else if (command.equals("show-subtree"))
-                        showSubtree(m_popupNode);
-                    else if (command.equals("hide-others"))
-                        hideOthers(m_popupNode);
-                    else if (command.equals("hide-subtree"))
-                        hideSubtree(m_popupNode);
-                    else if (command.equals("node-info"))
-                        nodeInfo(m_popupLocation, m_popupNode);
-                    else if (command.equals("scroll-to-current"))
-                        scrollTo(m_currentNode);
-                    else if (command.equals("tree-info"))
-                        treeInfo(m_popupLocation, m_popupNode);
-                    else if (command.equals("cancel"))
-                        popup.setVisible(false);
-                    else
-                        assert false;
-                }
-            };
-        JMenuItem item;
-        if (node != m_currentNode)
-        {
-            item = new JMenuItem("Go To");
-            item.setActionCommand("goto");
-            item.addActionListener(listener);
-            popup.add(item);
-            item = new JMenuItem("Scroll to Current");
-            item.setActionCommand("scroll-to-current");
-            item.addActionListener(listener);
-            popup.add(item);
-            popup.addSeparator();
-        }
-        item = new JMenuItem("Hide Subtree");
-        if (! node.hasChildren())
-            item.setEnabled(false);
-        item.setActionCommand("hide-subtree");
-        item.addActionListener(listener);
-        popup.add(item);
-        item = new JMenuItem("Hide Others");
-        item.setActionCommand("hide-others");
-        item.addActionListener(listener);
-        popup.add(item);
-        item = new JMenuItem("Show Children");
-        item.setEnabled(node.hasChildren());
-        item.setActionCommand("show-variations");
-        item.addActionListener(listener);
-        popup.add(item);
-        item = new JMenuItem("Show Subtree");
-        if (! node.hasChildren())
-            item.setEnabled(false);
-        item.setActionCommand("show-subtree");
-        item.addActionListener(listener);
-        popup.add(item);
-        popup.addSeparator();
-        item = new JMenuItem("Node Info");
-        item.setActionCommand("node-info");
-        item.addActionListener(listener);
-        popup.add(item);
-        item = new JMenuItem("Subtree Statistics");
-        item.setActionCommand("tree-info");
-        item.addActionListener(listener);
-        popup.add(item);
-        popup.addSeparator();
-        item = new JMenuItem("Cancel");
-        item.setActionCommand("cancel");
-        item.addActionListener(listener);
-        popup.add(item);
-        // For com.jgoodies.looks
-        popup.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
-        popup.show(gameNode, x, y);
-        m_popupLocation = popup.getLocationOnScreen();
+        if (m_popup == null)
+            createPopup();
+        m_itemGoto.setEnabled(node != m_currentNode);
+        m_itemScrollToCurrent.setEnabled(node != m_currentNode);
+        boolean hasChildren = node.hasChildren();
+        m_itemHideSubtree.setEnabled(hasChildren);
+        m_itemShowSubtree.setEnabled(hasChildren);
+        m_itemShowChildren.setEnabled(hasChildren);
+        m_popup.show(gameNode, x, y);
+        m_popupLocation = m_popup.getLocationOnScreen();
     }
 
     private void showSubtree(ConstNode root)
