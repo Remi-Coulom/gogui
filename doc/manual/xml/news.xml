@@ -16,6 +16,11 @@ GoGui: allow going forward/backward with the mouse wheel
 </listitem>
 <listitem>
 <simpara>
+GoGui: make options -gtpfile and -command work again
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui, TwoGtp: support time specs using seconds in option -time
 </simpara>
 </listitem>

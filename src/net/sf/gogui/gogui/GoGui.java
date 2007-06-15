@@ -2337,16 +2337,16 @@ public class GoGui
             ArrayList supportedCommands =
                 m_gtp.getSupportedCommands();
             m_shell.setInitialCompletions(supportedCommands);
-            if (! m_gtpFile.equals(""))
-                sendGtpFile(new File(m_gtpFile));
-            if (! m_gtpCommand.equals(""))
-                sendGtpString(m_gtpCommand);
             if (! m_gtp.isGenmoveSupported())
             {
                 m_computerBlack = false;
                 m_computerWhite = false;
             }
             initGtp();
+            if (! m_gtpFile.equals(""))
+                sendGtpFile(new File(m_gtpFile));
+            if (! m_gtpCommand.equals(""))
+                sendGtpString(m_gtpCommand);
             setTitle();
         }
         catch (GtpError e)
