@@ -38,7 +38,7 @@ public class GtpRegressUtil
         FileUtil.readStringListFromFile.
         The expansion is done recursively.
         @param list List of test names (as strings)
-        @returns List of test names (as strings) with all test suites
+        @return List of test names (as strings) with all test suites
         expanded.
     */
     public static ArrayList expandTestSuites(ArrayList list) throws IOException
