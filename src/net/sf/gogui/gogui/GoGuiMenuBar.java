@@ -29,6 +29,7 @@ import net.sf.gogui.util.Platform;
 public class GoGuiMenuBar
     extends JMenuBar
 {
+    /** Listener to events that are not handled by GoGuiActions. */
     public interface Listener
     {
         void actionGotoBookmark(int i);
