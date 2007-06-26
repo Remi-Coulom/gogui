@@ -44,7 +44,7 @@ Create SGF thumbnails according to the
 <ulink url="http://jens.triq.net/thumbnail-spec/index.html">
 Thumbnail Managing Standard</ulink> from <ulink url="http://freedesktop.org">
 freedesktop.org</ulink>.
-This allows previewing the SGF files in filemanagers that support this
+This allows previewing the SGF files in file managers that support this
 standard, like <ulink url="http://www.gnome.org/projects/nautilus/">
 Nautilus</ulink>.
 The installation script <filename>install.sh</filename> in the GoGui package

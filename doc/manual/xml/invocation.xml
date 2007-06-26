@@ -60,7 +60,7 @@ The invocation is then simply:
 To register <application>GoGui</application> as a handler
 for <ulink url="http://www.red-bean.com/sgf/"><acronym>SGF</acronym></ulink>
 files, you can configure a new file association for type
-<userinput>application/x-go-sgf</userinput> and filename pattern
+<userinput>application/x-go-sgf</userinput> and file name pattern
 <userinput>*.sgf</userinput> to execute
 <userinput>gogui</userinput>.
 <indexterm>
@@ -107,7 +107,7 @@ It is also possible to create an application bundle for Mac OS X by typing
 in the main directory. The resulting application bundle will be in
 <filename>build/GoGui.app</filename>. This requires, that the
 <ulink url="http://ant.apache.org">Ant</ulink> build system is installed on
-ythe system.
+the system.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

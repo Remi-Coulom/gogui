@@ -131,8 +131,8 @@ Open a game from a list of recently used files.
 <term><guimenuitem>Save</guimenuitem></term>
 <listitem>
 <para>
-Save the current game to the associated filename.
-If the game has no filename, this menu item acts like
+Save the current game to the associated file name.
+If the game has no file name, this menu item acts like
 <guimenuitem>Save As</guimenuitem>.
 </para>
 </listitem>
@@ -382,7 +382,7 @@ Terminate the currently attached Go program.
 <term><guimenuitem>Reattach</guimenuitem></term>
 <listitem>
 <para>
-Restart the current Go program and synchronize it to the currrent game at
+Restart the current Go program and synchronize it to the current game at
 the current position again.
 </para>
 </listitem>
@@ -416,7 +416,7 @@ generation) is running and if the Go program supports interrupting
 Add a new Go program to the list of available Go programs.
 The name field should contain a label for the
 <guimenuitem>Attach</guimenuitem> menu.
-The command fieldy should contain the command to run the Go program.
+The command field should contain the command to run the Go program.
 </para>
 </listitem>
 </varlistentry>

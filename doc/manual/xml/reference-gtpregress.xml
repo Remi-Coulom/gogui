@@ -77,7 +77,7 @@ program.
 The return value of <command>gtpregress</command> is 0, if all tests
 completed successfully with no unexpected fails, 1 if there was at
 least one unexpected fail, and 2 if the Go program crashed or some other
-error occured.
+error occurred.
 </para>
 </refsection>
 

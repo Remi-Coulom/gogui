@@ -112,7 +112,7 @@ selected points as the argument.
 <listitem>
 <simpara>
 General graphical display command.
-The reponse contains one graphics command per line.
+The response contains one graphics command per line.
 Graphics commands are: BLACK, CIRCLE, COLOR, INFLUENCE, LABEL, MARK, SQUARE,
 TEXT, TRIANGLE, VAR, WHITE.
 TEXT is followed by a text displayed on the status bar;
@@ -130,7 +130,7 @@ See the <userinput>gtpdummy-gfx</userinput> command in GtpDummy for an example.
 <term><userinput>hstring</userinput></term>
 <listitem>
 <simpara>
-The response is a multi-line text.
+The response is a multiline text.
 It will be displayed in a window using syntax highlighting.
 Lines beginning with a word followed by a colon are displayed in bold,
 points and moves in blue, the strings "black" and "white" in purple,
@@ -215,7 +215,7 @@ the selected text are marked on the board.
 <simpara>
 The response of the command is a board of strings.
 The strings will be displayed as labels for the points on the board.
-Strings containing whiespaces have to be put in quotation marks.
+Strings containing whitespaces have to be put in quotation marks.
 The special string "" is used for no string on a point.
 </simpara>
 </listitem>
@@ -329,7 +329,7 @@ the default is the color to play.
 <term><userinput>%f</userinput></term>
 <listitem>
 <para>
-Will be replaced by a filename entered by the user.
+Will be replaced by a file name entered by the user.
 <note>
 <simpara>
 This wildcard is deprecated and might not be supported in the future.

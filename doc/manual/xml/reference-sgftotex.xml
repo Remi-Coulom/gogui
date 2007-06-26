@@ -100,7 +100,7 @@ Otherwise pass moves are printed as a combination of
 </term>
 <listitem>
 <para>
-Specify section title to be used in the LaTex document before the Go diagram.
+Specify section title to be used in the LaTeX document before the Go diagram.
 </para>
 </listitem>
 </varlistentry>

@@ -10,7 +10,7 @@ Since Java offers no stream selectors for file streams, GoGui needs to use
 thread synchronization to read the output and error stream of the Go program
 for preserving the correct order of the received output in the GTP shell and
 for detecting timeouts.
-This synchronizationcan becomes slow if there are other CPU intensive
+This synchronization can becomes slow if there are other CPU intensive
 background processes running on the computer.
 The problem can be avoided if the Go engine implements the
 <command>gg-undo</command> and <command>gogui-play_sequence</command> commands

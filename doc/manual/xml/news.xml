@@ -202,7 +202,7 @@ Use Quaqua look and feel on Mac OS/X
 </listitem>
 <listitem>
 <simpara>
-LaTex position export now exports all markup types
+LaTeX position export now exports all markup types
 </simpara>
 </listitem>
 <listitem>
@@ -503,7 +503,7 @@ GoGui: re-organize menu bar. New menu Bookmarks.
 </listitem>
 <listitem>
 <simpara>
-GoGui: use gg-undo, if avaliable
+GoGui: use gg-undo, if available
 </simpara>
 </listitem>
 <listitem>
@@ -1300,7 +1300,7 @@ After setting up a position set last setup color as color to move
 </listitem>
 <listitem>
 <simpara>
-Show filename in title bar if game is loaded and not modified
+Show file name in title bar if game is loaded and not modified
 </simpara>
 </listitem>
 <listitem>
@@ -1396,7 +1396,7 @@ Other small fixes.
 <itemizedlist>
 <listitem>
 <simpara>
-Board uses background image and antialiasing
+Board uses background image and anti-aliasing
 </simpara>
 </listitem>
 <listitem>
