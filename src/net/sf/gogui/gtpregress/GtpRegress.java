@@ -799,7 +799,10 @@ public class GtpRegress
                 m_lastFullResponse = null;
             }
             if (! m_gtp.isProgramDead())
+            {
                 send("quit");
+                m_gtp.close();
+            }
             m_gtp.waitForExit();
             finishOutFile();
             TestSummary testSummary = getTestSummary(timeMillis, cpuTime);
