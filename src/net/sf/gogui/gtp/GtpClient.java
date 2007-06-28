@@ -177,7 +177,13 @@ public final class GtpClient
         init(in, out, null);
     }
 
-    /** Close the output stream to the program. */
+    /** Close the output stream to the program.
+        Some engines don't handle closing the command stream without an
+        explicit quit command well, so the preferred way to terminate a
+        connection is to send a quit command. Closing the output stream after
+        a quit is not strictly necessary, but may improve compatibility with
+        engines that read the input stream in a different thread
+    */
     public void close()
     {
         m_out.close();
