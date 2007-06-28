@@ -94,6 +94,8 @@ public class GtpStatistics
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
         m_gtp.send("quit");
+        m_gtp.close();
+        m_gtp.waitForExit();
         m_table.setProperty("Games", Integer.toString(m_numberGames));
         m_table.setProperty("Backward", backward ? "yes" : "no");
     }
