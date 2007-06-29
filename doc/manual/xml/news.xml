@@ -11,6 +11,20 @@
 <itemizedlist>
 <listitem>
 <simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0pre3</revnumber>
+<date>29 Jun 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
 GoGui: allow going forward/backward with the mouse wheel
 </simpara>
 </listitem>
