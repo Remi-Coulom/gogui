@@ -5,7 +5,7 @@ Copyright (C) 2001-2007 Markus Enzenberger (enz@users.sourceforge.net)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
+the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
@@ -23,4 +23,3 @@ of GoGui, and does *not* fall under the heading of "derived work".
 The files in the directory "external" are from third parties. They are not
 part of GoGui and have different licenses and copyright holders. They are
 included in the GoGui distribution only for convenience.
-
