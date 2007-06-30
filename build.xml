@@ -43,7 +43,6 @@ Comment out the exec svnversion for releases.
  gtpregress
  gtpstatistics
  gtpterminal
- gmptogtp
  gtpadapter
  gtpdummy
  gtpserver
@@ -55,9 +54,6 @@ Comment out the exec svnversion for releases.
 
 <available property="docbook.available"
  file="${docbook.path}/html/chunk.xsl"/>
-
-<available property="comm-available"
- file="external/javacomm/commapi/comm.jar"/>
 
 <available property="looks.available"
  file="external/jgoodies/${looks.dir}/${looks.jarfile}"/>
@@ -72,7 +68,6 @@ Comment out the exec svnversion for releases.
 <target name="all"
  description="Compile all programs (default target)"
  depends="
-  gmptogtp.jar,
   gogui.jar,
   gtpadapter.jar,
   gtpdisplay.jar,
@@ -92,8 +87,6 @@ Comment out the exec svnversion for releases.
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="lib"
  includes="
-   comm.jar,
-   gmptogtp.jar,
    gogui.jar,
    gtpadapter.jar,
    gtpdisplay.jar,
@@ -127,11 +120,10 @@ Comment out the exec svnversion for releases.
 <target name="check" depends="docvalidate,junit,regress"
  description="Run all tests"/>
 
-<target name="compile" depends="extract-comm.jar,depend,version,doc">
+<target name="compile" depends="depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
- deprecation="true" debug="true" listfiles="yes"
- classpath="external/javacomm/commapi/comm.jar"/>
+ deprecation="true" debug="true" listfiles="yes"/>
 <copy todir="build">
 <fileset dir="src"
  includes="
@@ -175,8 +167,6 @@ Comment out the exec svnversion for releases.
  doc/doxygen/footer.html
  doc/doxygen/README
  ${docbook.path}.zip
- external/javacomm/javacomm20-win32.zip
- external/javacomm/README
  ${looks.zipfile}
  ${quaqua.nestedzipfile}
  lib/*.jar
@@ -208,7 +198,6 @@ Comment out the exec svnversion for releases.
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
- bin/gmptogtp,
  bin/gogui,
  bin/gtpadapter,
  bin/gtpdisplay,
@@ -285,14 +274,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <exec executable="doxygen" dir="doc/doxygen"/>
 </target>
 
-<target name="extract-comm.jar" unless="comm-available">
-<unzip src="external/javacomm/javacomm20-win32.zip" dest="external/javacomm">
-<patternset>
-<include name="commapi/comm.jar"/>
-</patternset>
-</unzip>
-</target>
-
 <target name="extract-docbook" unless="docbook.available">
 <unzip src="${docbook.path}.zip" dest="external/docbook">
 <patternset>
@@ -344,30 +325,7 @@ ${quaqua.nestedzipfile}
 <arg line="-project test/findbugs/gogui.fb"/>
 <arg line="-low"/>
 <arg line="-xml"/>
-<arg line="-auxclasspath external/javacomm/commapi/comm.jar"/>
 </exec>
-</target>
-
-<target name="gmptogtp.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gmptogtp.jar" compress="true">
-<manifest>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Main-Class" value="net.sf.gogui.gmptogtp.Main"/>
-<attribute name="Class-Path" value="comm.jar"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/gmp/*.class
- net/sf/gogui/gmptogtp/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
-"/>
-</jar>
-<copy file="external/javacomm/commapi/comm.jar" todir="lib"/>
 </target>
 
 <target name="gogui.app" depends="specialmac,all"
@@ -610,12 +568,9 @@ ${quaqua.nestedzipfile}
 <javadoc sourcepath="src" destdir="doc/javadoc" source="1.4"
  windowtitle="GoGui Source Documentation"
  overview="src/net/sf/gogui/overview.html"
- classpath="external/javacomm/commapi/comm.jar"
  packagenames="
   net/sf/gogui/boardpainter.*,
   net/sf/gogui/game.*,
-  net/sf/gogui/gmp.*,
-  net/sf/gogui/gmptogtp.*,
   net/sf/gogui/go.*,
   net/sf/gogui/gogui.*,
   net/sf/gogui/gtp.*,
@@ -701,17 +656,9 @@ ${quaqua.nestedzipfile}
 </target>
 
 <target name="regress"
- depends="gmptogtp.jar,gtpdummy.jar,gtpregress.jar,gtpserver.jar,netgtp.jar,twogtp.jar"
+ depends="gtpdummy.jar,gtpregress.jar,gtpserver.jar,netgtp.jar,twogtp.jar"
  description="Run GTP regression tests (requires GNU Go 3.6)">
 <mkdir dir="test/regress/html"/>
-<echo>gmptogtp</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true"
- dir="test/regress">
-<assertions><enable/></assertions>
-<arg value="-output"/><arg value="html/gmptogtp"/>
-<arg value="java -ea -cp ../../lib/gmptogtp.jar:../../external/javacomm/commapi/comm.jar net.sf.gogui.gmptogtp.Main -color black &quot;gnugo --mode gmp&quot;"/>
-<arg value="gmptogtp.tst"/>
-</java>
 <echo>gtpadapter</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true"
  dir="test/regress">

@@ -11,6 +11,10 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Remove the GmpToGtp adapter, because the Go Modem Protocol and usage of
+serial ports have become quite obsolete. Should there still be use cases, then
+a version of GmpToGtp from previous GoGui releases can still be used in
+combination with a newer version of the GoGui interface.
 </simpara>
 </listitem>
 </itemizedlist>

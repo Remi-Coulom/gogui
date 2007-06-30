@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
 <!ENTITY reference-gtpadapter SYSTEM "reference-gtpadapter.xml">
 <!ENTITY reference-gtpdisplay SYSTEM "reference-gtpdisplay.xml">
@@ -22,7 +21,6 @@
 
 <reference>
 &reference-gogui;
-&reference-gmptogtp;
 &reference-gtpadapter;
 &reference-gtpdisplay;
 &reference-gtpdummy;
