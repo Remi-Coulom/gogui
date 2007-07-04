@@ -21,7 +21,7 @@ public final class PointList
     */
     public PointList(int initialCapacity)
     {
-        m_list = new ArrayList(initialCapacity);
+        m_list = new ArrayList<GoPoint>(initialCapacity);
     }
 
     /** Construct point list with a single element.
@@ -38,7 +38,7 @@ public final class PointList
     */
     public PointList(ConstPointList list)
     {
-        m_list = new ArrayList(((PointList)list).m_list);
+        m_list = new ArrayList<GoPoint>(((PointList)list).m_list);
     }
 
     /** Add point at the end of the list. */
@@ -75,7 +75,7 @@ public final class PointList
     /** Get the point at the specified position. */
     public GoPoint get(int index)
     {
-        return (GoPoint)m_list.get(index);
+        return m_list.get(index);
     }
 
     /** Get an empty constant point list.
@@ -138,5 +138,5 @@ public final class PointList
 
     private static final ConstPointList EMPTY_LIST = new PointList();
 
-    private ArrayList m_list;
+    private ArrayList<GoPoint> m_list;
 }
