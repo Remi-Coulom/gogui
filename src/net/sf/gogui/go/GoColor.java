@@ -5,153 +5,203 @@
 package net.sf.gogui.go;
 
 /** Player color / state of a point on the board (black, white, empty). */
-public final class GoColor
+public enum GoColor
 {
     /** Black stone or black player. */
-    public static final GoColor BLACK;
+    BLACK
+    {
+        public String getCapitalizedName()
+        {
+            return "Black";
+        }
+
+        public GoColor getNextBlackWhite()
+        {
+            return WHITE;
+        }
+
+        public GoColor getNextBlackWhiteEmpty()
+        {
+            return WHITE;
+        }
+
+        public GoColor getPreviousBlackWhiteEmpty()
+        {
+            return null;
+        }
+
+        public String getUppercaseLetter()
+        {
+            return "B";
+        }
+
+        public boolean isBlackWhite()
+        {
+            return true;
+        }
+
+        public GoColor otherColor()
+        {
+            return WHITE;
+        }
+
+        public int toInteger()
+        {
+            return 0;
+        }
+
+        public String toString()
+        {
+            return "black";
+        }
+    },
 
     /** White stone or white player. */
-    public static final GoColor WHITE;
+    WHITE
+    {
+        public String getCapitalizedName()
+        {
+            return "White";
+        }
+
+        public GoColor getNextBlackWhite()
+        {
+            return null;
+        }
+
+        public GoColor getNextBlackWhiteEmpty()
+        {
+            return EMPTY;
+        }
+
+        public GoColor getPreviousBlackWhiteEmpty()
+        {
+            return BLACK;
+        }
+
+        public String getUppercaseLetter()
+        {
+            return "W";
+        }
+
+        public boolean isBlackWhite()
+        {
+            return true;
+        }
+
+        public GoColor otherColor()
+        {
+            return BLACK;
+        }
+
+        public int toInteger()
+        {
+            return 1;
+        }
+
+        public String toString()
+        {
+            return "white";
+        }
+    },
 
     /** Empty intersection. */
-    public static final GoColor EMPTY;
-
-    public boolean equals(Object object)
+    EMPTY
     {
-        return super.equals(object);
-    }
+        public String getCapitalizedName()
+        {
+            return "Empty";
+        }
+
+        public GoColor getNextBlackWhite()
+        {
+            assert false;
+            return null;
+        }
+
+        public GoColor getNextBlackWhiteEmpty()
+        {
+            return null;
+        }
+
+        public GoColor getPreviousBlackWhiteEmpty()
+        {
+            return WHITE;
+        }
+
+        public String getUppercaseLetter()
+        {
+            return "E";
+        }
+
+        public boolean isBlackWhite()
+        {
+            return false;
+        }
+
+        public GoColor otherColor()
+        {
+            return EMPTY;
+        }
+
+        public int toInteger()
+        {
+            return 2;
+        }
+
+        public String toString()
+        {
+            return "empty";
+        }
+    };
 
     /** Get next color in an iteration from Black to White.
         @return Next color or null, if end of iteration.
     */
-    public GoColor getNextBlackWhite()
-    {
-        assert this != EMPTY;
-        return m_nextBlackWhite;
-    }
+    public abstract GoColor getNextBlackWhite();
 
     /** Get next color in an iteration from Black to White to Empty.
         @return Next color or null, if end of iteration.
     */
-    public GoColor getNextBlackWhiteEmpty()
-    {
-        return m_nextBlackWhiteEmpty;
-    }
+    public abstract GoColor getNextBlackWhiteEmpty();
 
     /** Get previous color in an iteration from Black to White to Empty.
         @return Previous color or null, if end of iteration.
     */
-    public GoColor getPreviousBlackWhiteEmpty()
-    {
-        return m_previousBlackWhiteEmpty;
-    }
+    public abstract GoColor getPreviousBlackWhiteEmpty();
 
     /** Return color name if used for specifying player.
         Returns the capitalized color name (e.g. "Black" for GoColor.BLACK).
         This name will also potentially be internationalized in the future.
     */
-    public String getCapitalizedName()
-    {
-        return m_capitalizedName;
-    }
+    public abstract String getCapitalizedName();
 
     /** Return uppercase letter identifying the color.
         Returns "B", "W", or "E". This letter is not internationalized,
         such that it can be used for instance in standard language independent
         game results (e.g. "W+3").
     */
-    public String getUppercaseLetter()
-    {
-        return m_uppercaseLetter;
-    }
-
-    public int hashCode()
-    {
-        return super.hashCode();
-    }
+    public abstract String getUppercaseLetter();
 
     /** Check if color is black or white.
         @return <code>true</code>, if color is <code>BLACK</code> or
         <code>WHITE</code>.
     */
-    public boolean isBlackWhite()
-    {
-        return (this == BLACK || this == WHITE);
-    }
+    public abstract boolean isBlackWhite();
 
     /** Return other color.
         @return <code>BLACK</code> for <code>WHITE</code>, <code>WHITE</code>
         for <code>BLACK</code>, <code>EMPTY</code> for <code>EMPTY</code>.
     */
-    public GoColor otherColor()
-    {
-        return m_otherColor;
-    }
+    public abstract GoColor otherColor();
 
     /** Convert color to an integer that can be used as an array index.
         @return 0 for GoColor.BLACK; 1 for GoColor.WHITE; 2 for GoColor.EMPTY
     */
-    public int toInteger()
-    {
-        return m_index;
-    }
+    public abstract int toInteger();
 
     /** Return string representation.
         @return "black", "white" or "empty"
     */
-    public String toString()
-    {
-        return m_string;
-    }
-
-    private final int m_index;
-
-    private GoColor m_otherColor;
-
-    private GoColor m_nextBlackWhite;
-
-    private GoColor m_nextBlackWhiteEmpty;
-
-    private GoColor m_previousBlackWhiteEmpty;
-
-    private final String m_string;
-
-    private final String m_capitalizedName;
-
-    private final String m_uppercaseLetter;
-
-    static
-    {
-        BLACK = new GoColor("black", 0, "Black", "B");
-        WHITE = new GoColor("white", 1, "White", "W");
-        EMPTY = new GoColor("empty", 2, "Empty", "E");
-        BLACK.setOtherColor(WHITE);
-        WHITE.setOtherColor(BLACK);
-        EMPTY.setOtherColor(EMPTY);
-        BLACK.setNext(WHITE, WHITE, null);
-        WHITE.setNext(null, EMPTY, BLACK);
-        EMPTY.setNext(null, null, WHITE);
-    }
-
-    private GoColor(String string, int index, String capitalizedName,
-                    String uppercaseLetter)
-    {
-        m_index = index;
-        m_string = string;
-        m_capitalizedName = capitalizedName;
-        m_uppercaseLetter = uppercaseLetter;
-    }
-
-    private void setNext(GoColor nextBlackWhite, GoColor nextBlackWhiteEmpty,
-                         GoColor previousBlackWhiteEmpty)
-    {
-        m_nextBlackWhite = nextBlackWhite;
-        m_nextBlackWhiteEmpty = nextBlackWhiteEmpty;
-        m_previousBlackWhiteEmpty = previousBlackWhiteEmpty;
-    }
-
-    private void setOtherColor(GoColor color)
-    {
-        m_otherColor = color;
-    }
+    public abstract String toString();
 }
