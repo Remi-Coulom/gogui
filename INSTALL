@@ -1,7 +1,7 @@
 Basics
 ======
 
-GoGui requires at least Java version 1.4.
+GoGui requires at least Java version 5.
 GCJ with GNU Classpath (last tested with GCC 4.1) does not work yet.
 
 GoGui comes with precompiled Java jar files for GoGui and the GTP tools
@@ -19,7 +19,7 @@ Installation on Linux
 For Linux, there is an installation script install.sh, which installs
 GoGui into the system directories and integrates it into the desktop
 environment. This script needs to be run as root and requires the option -j
-with the location of a Java 1.4 compatible virtual machine.
+with the location of a Java 5 compatible virtual machine.
 
 Installation on Mac OS
 ======================

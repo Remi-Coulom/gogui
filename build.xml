@@ -122,7 +122,7 @@ Comment out the exec svnversion for releases.
 
 <target name="compile" depends="depend,version,doc">
 <mkdir dir="build"/>
-<javac srcdir="src" destdir="build" source="1.4" target="1.4"
+<javac srcdir="src" destdir="build" source="1.5" target="1.5"
  deprecation="true" debug="true" listfiles="yes"/>
 <copy todir="build">
 <fileset dir="src"
@@ -565,7 +565,7 @@ ${quaqua.nestedzipfile}
 
 <target name="javadoc"
  description="Create Javadoc documentation for public parts of packages">
-<javadoc sourcepath="src" destdir="doc/javadoc" source="1.4"
+<javadoc sourcepath="src" destdir="doc/javadoc" source="1.5"
  windowtitle="GoGui Source Documentation"
  overview="src/net/sf/gogui/overview.html"
  packagenames="
@@ -617,7 +617,7 @@ ${quaqua.nestedzipfile}
 <target name="junit-compile" depends="compile,test-depend"
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
-<javac srcdir="test/junit/src" destdir="build/test" source="1.4" target="1.4"
+<javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
  deprecation="true" debug="true" listfiles="yes" classpath="build"/>
 <copy todir="build/test">
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
@@ -745,7 +745,7 @@ ${quaqua.nestedzipfile}
 
 <target name="specialmac" depends="compile"
  description="Compile special MAC classes depending on com.apple">
-<javac srcdir="mac/src" source="1.4" deprecation="true" classpath="build"
+<javac srcdir="mac/src" source="1.5" deprecation="true" classpath="build"
  listfiles="yes"
  includes="net/sf/gogui/specialmac/RegisterSpecialMacHandler.java"/>
 </target>
