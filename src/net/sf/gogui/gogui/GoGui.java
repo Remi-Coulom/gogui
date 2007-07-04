@@ -309,7 +309,7 @@ public class GoGui
     public void actionAttachProgram(int index)
     {
         m_prefs.putInt("program", index);
-        actionAttachProgram((Program)m_programs.get(index));
+        actionAttachProgram(m_programs.get(index));
     }
 
     public void actionAttachProgram(final Program program)
@@ -761,7 +761,7 @@ public class GoGui
             return;
         if (i < 0 || i >= m_bookmarks.size())
             return;
-        Bookmark bookmark = (Bookmark)m_bookmarks.get(i);
+        Bookmark bookmark = m_bookmarks.get(i);
         File file = bookmark.m_file;
         if (m_file == null || ! file.equals(m_file))
             if (! loadFile(file, -1))
@@ -2117,9 +2117,9 @@ public class GoGui
 
     private final GoGuiToolBar m_toolBar;
 
-    private ArrayList m_bookmarks;
+    private ArrayList<Bookmark> m_bookmarks;
 
-    private ArrayList m_programs;
+    private ArrayList<Program> m_programs;
 
     private void analyzeBegin(boolean checkComputerMove)
     {
@@ -3189,7 +3189,7 @@ public class GoGui
             int index = m_prefs.getInt("program", -1);
             if (index >= 0 && index < m_programs.size())
             {
-                m_program = (Program)m_programs.get(index);
+                m_program = m_programs.get(index);
                 m_programCommand = m_program.m_command;
             }
         }

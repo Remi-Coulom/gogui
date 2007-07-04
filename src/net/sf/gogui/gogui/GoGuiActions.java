@@ -124,7 +124,8 @@ public class GoGuiActions
         private final ActionListener m_listener;
     }
 
-    public final ArrayList m_allActions = new ArrayList();
+    public final ArrayList<GoGuiAction> m_allActions
+        = new ArrayList<GoGuiAction>();
 
     public final GoGuiAction m_actionAbout =
         new GoGuiAction(new ActionListener() {
@@ -787,7 +788,7 @@ public class GoGuiActions
     public void registerAll(JComponent component)
     {
         for (int i = 0; i < m_allActions.size(); ++i)
-            register(component, (GoGuiAction)m_allActions.get(i));
+            register(component, m_allActions.get(i));
     }
 
     public void update()

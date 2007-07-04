@@ -40,9 +40,9 @@ public final class Program
              program.m_command, program.m_workingDirectory);
     }
 
-    public static ArrayList load()
+    public static ArrayList<Program> load()
     {
-        ArrayList programs = new ArrayList();
+        ArrayList<Program> programs = new ArrayList<Program>();
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/program");
         if (prefs == null)
             return programs;
@@ -65,7 +65,7 @@ public final class Program
         return programs;
     }
 
-    public static void save(ArrayList programs)
+    public static void save(ArrayList<Program> programs)
     {
         Preferences prefs = PrefUtil.createNode("net/sf/gogui/gui/program");
         if (prefs == null)
@@ -76,7 +76,7 @@ public final class Program
             prefs = PrefUtil.createNode("net/sf/gogui/gui/program/" + i);
             if (prefs == null)
                 break;
-            Program p = (Program)programs.get(i);
+            Program p = programs.get(i);
             prefs.put("label", p.m_label);
             prefs.put("name", p.m_name);
             prefs.put("version", p.m_version);
@@ -88,7 +88,7 @@ public final class Program
     /** Suggest and set a label derived from program name and version without
         collision with an existing array of programs.
     */
-    public void setUniqueLabel(ArrayList programs)
+    public void setUniqueLabel(ArrayList<Program> programs)
     {
         String label = m_name;
         if (StringUtil.isEmpty(label))
@@ -96,7 +96,7 @@ public final class Program
         String tryLabel = label;
         boolean alreadyExists = false;
         for (int i = 0; i < programs.size(); ++i)
-            if (tryLabel.equals(((Program)programs.get(i)).m_label))
+            if (tryLabel.equals((programs.get(i)).m_label))
             {
                 alreadyExists = true;
                 break;
@@ -111,7 +111,7 @@ public final class Program
             tryLabel = label + " " + m_version.trim();
             alreadyExists = false;
             for (int i = 0; i < programs.size(); ++i)
-                if (tryLabel.equals(((Program)programs.get(i)).m_label))
+                if (tryLabel.equals((programs.get(i)).m_label))
                 {
                     alreadyExists = true;
                     break;
@@ -127,7 +127,7 @@ public final class Program
             tryLabel = label + " (" + i + ")";
             alreadyExists = false;
             for (int j = 0; j < programs.size(); ++j)
-                if (tryLabel.equals(((Program)programs.get(j)).m_label))
+                if (tryLabel.equals((programs.get(j)).m_label))
                 {
                     alreadyExists = true;
                     break;

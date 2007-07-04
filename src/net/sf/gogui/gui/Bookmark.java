@@ -63,9 +63,9 @@ public final class Bookmark
              bookmark.m_variation);
     }
 
-    public static ArrayList load()
+    public static ArrayList<Bookmark> load()
     {
-        ArrayList bookmarks = new ArrayList();
+        ArrayList<Bookmark> bookmarks = new ArrayList();
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/bookmark");
         if (prefs == null)
             return bookmarks;
@@ -88,7 +88,7 @@ public final class Bookmark
         return bookmarks;
     }
 
-    public static void save(ArrayList bookmarks)
+    public static void save(ArrayList<Bookmark> bookmarks)
     {
         Preferences prefs = PrefUtil.createNode("net/sf/gogui/gui/bookmark");
         if (prefs == null)
@@ -99,7 +99,7 @@ public final class Bookmark
             prefs = PrefUtil.createNode("net/sf/gogui/gui/bookmark/" + i);
             if (prefs == null)
                 break;
-            Bookmark b = (Bookmark)bookmarks.get(i);
+            Bookmark b = bookmarks.get(i);
             prefs.put("name", b.m_name);
             prefs.put("file", b.m_file.toString());
             prefs.put("move", Integer.toString(b.m_move));

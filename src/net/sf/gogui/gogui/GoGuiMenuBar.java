@@ -84,10 +84,10 @@ public class GoGuiMenuBar
         m_recentGtp.add(file);
     }
 
-    public void setBookmarks(ArrayList bookmarks)
+    public void setBookmarks(ArrayList<Bookmark> bookmarks)
     {
         for (int i = 0; i < m_bookmarkItems.size(); ++i)
-            m_menuBookmarks.remove((JMenuItem)m_bookmarkItems.get(i));
+            m_menuBookmarks.remove(m_bookmarkItems.get(i));
         if (m_bookmarksSeparator != null)
         {
             m_menuBookmarks.remove(m_bookmarksSeparator);
@@ -99,7 +99,7 @@ public class GoGuiMenuBar
         m_menuBookmarks.add(m_bookmarksSeparator);
         for (int i = 0; i < bookmarks.size(); ++i)
         {
-            Bookmark bookmark = (Bookmark)bookmarks.get(i);
+            Bookmark bookmark = bookmarks.get(i);
             JMenuItem item = new JMenuItem(bookmark.m_name);
             final int bookmarkIndex = i;
             item.addActionListener(new ActionListener() {
@@ -130,16 +130,16 @@ public class GoGuiMenuBar
         }
     }
 
-    public void setPrograms(ArrayList programs)
+    public void setPrograms(ArrayList<Program> programs)
     {
         m_menuAttach.setEnabled(! programs.isEmpty());
         for (int i = 0; i < m_programItems.size(); ++i)
-            m_menuAttach.remove((JMenuItem)m_programItems.get(i));
+            m_menuAttach.remove(m_programItems.get(i));
         if (programs.isEmpty())
             return;
         for (int i = 0; i < programs.size(); ++i)
         {
-            Program program = (Program)programs.get(i);
+            Program program = programs.get(i);
             JMenuItem item = new JMenuItem(program.m_label);
             final int index = i;
             item.addActionListener(new ActionListener() {
@@ -209,9 +209,11 @@ public class GoGuiMenuBar
 
     private RecentFileMenu m_recentGtp;
 
-    private final ArrayList m_bookmarkItems = new ArrayList();
+    private final ArrayList<JMenuItem> m_bookmarkItems
+        = new ArrayList<JMenuItem>();
 
-    private final ArrayList m_programItems = new ArrayList();
+    private final ArrayList<JMenuItem> m_programItems
+        = new ArrayList<JMenuItem>();
 
     private JMenu m_computerColor;
 
@@ -567,19 +569,18 @@ class MenuChecked
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final ArrayList m_mnemonics = new ArrayList();
+    private final ArrayList<Integer> m_mnemonics = new ArrayList<Integer>();
 
     private void setMnemonic(JMenuItem item, int mnemonic)
     {
         item.setMnemonic(mnemonic);
-        Integer integer = new Integer(mnemonic);
-        if (m_mnemonics.contains(integer))
+        if (m_mnemonics.contains(mnemonic))
         {
             System.err.println("Warning: duplicate mnemonic item "
                                + item.getText());
             assert false;
         }
-        m_mnemonics.add(integer);
+        m_mnemonics.add(mnemonic);
     }
 }
 
