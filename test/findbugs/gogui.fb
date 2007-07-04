@@ -4,6 +4,5 @@
 ../../src
 ../junit/src
 [Aux classpath entries]
-../../external/javacomm/commapi/comm.jar
 [Options]
 relative_paths=true
