@@ -10,6 +10,7 @@ import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
@@ -75,7 +76,7 @@ public final class GoGuiUtil
         {
             GoColor c = move.getColor();
             GoPoint p = move.getPoint();
-            moveText.append(c == GoColor.BLACK ? "B " : "W ");
+            moveText.append(c == BLACK ? "B " : "W ");
             moveText.append(GoPoint.toString(p));
             moveText.append(' ');
         }
@@ -99,7 +100,7 @@ public final class GoGuiUtil
             GoPoint p = move.getPoint();
             toolTip.append("Last move ");
             toolTip.append(moveNumber);
-            toolTip.append(c == GoColor.BLACK ? " B " : " W ");
+            toolTip.append(c == BLACK ? " B " : " W ");
             toolTip.append(GoPoint.toString(p));
             toolTip.append(' ');
         }

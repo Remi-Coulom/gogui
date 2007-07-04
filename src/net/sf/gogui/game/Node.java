@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
@@ -183,7 +184,7 @@ public final class Node
     }
 
     /** Get setup stones.
-        @param c Color of the stones; GoColor.EMPTY for removed stones.
+        @param c Color of the stones; EMPTY for removed stones.
         @return The added or removed stones.
     */
     public ConstPointList getAddStones(GoColor c)
@@ -479,7 +480,7 @@ public final class Node
     */
     public boolean hasSetup()
     {
-        for (GoColor c = GoColor.BLACK; c != null;
+        for (GoColor c = BLACK; c != null;
              c = c.getNextBlackWhiteEmpty())
             if (getAddStones(c).size() > 0)
                 return true;
@@ -552,7 +553,7 @@ public final class Node
         SetupInfo setupInfo = getSetupInfo();
         if (setupInfo == null)
             return;
-        for (GoColor c = GoColor.BLACK; c != null;
+        for (GoColor c = BLACK; c != null;
              c = c.getNextBlackWhiteEmpty())
             while (setupInfo.m_stones[c.toInteger()].remove(p));
     }

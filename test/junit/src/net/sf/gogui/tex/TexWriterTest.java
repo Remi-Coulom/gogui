@@ -7,6 +7,8 @@ package net.sf.gogui.tex;
 import java.io.ByteArrayOutputStream;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 
 public final class TexWriterTest
@@ -28,7 +30,7 @@ public final class TexWriterTest
         Board board = new Board(size);
         String[][] markLabel = new String[size][size];
         boolean[][] mark = new boolean[size][size];
-        board.play(GoColor.BLACK, GoPoint.get(0, 0));
+        board.play(BLACK, GoPoint.get(0, 0));
         mark[0][0] = true;
         mark[0][1] = true;
         ByteArrayOutputStream out = new ByteArrayOutputStream();

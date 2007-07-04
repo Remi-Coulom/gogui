@@ -21,6 +21,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpClient;
@@ -264,7 +265,7 @@ public class GtpTerminal
             ConstNode node = tree.getRoot();
             while (node != null)
             {
-                for (GoColor c = GoColor.BLACK; c != null;
+                for (GoColor c = BLACK; c != null;
                      c = c.getNextBlackWhite())
                 {
                     ConstPointList stones = node.getAddStones(c);

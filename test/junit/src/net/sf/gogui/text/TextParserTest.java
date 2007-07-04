@@ -8,6 +8,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 
 public final class TextParserTest
@@ -35,19 +38,19 @@ public final class TextParserTest
               " #  O  O  #  #  #  #  +  + \n" +
               " +  O  O  O  #  #  #  +  + \n");
         checkSize(9);
-        checkColor(0, 0, GoColor.EMPTY);
-        checkColor(0, 1, GoColor.BLACK);
-        checkColor(0, 2, GoColor.EMPTY);
-        checkColor(1, 0, GoColor.WHITE);
-        checkColor(1, 1, GoColor.WHITE);
-        checkColor(1, 2, GoColor.WHITE);
-        checkColor(2, 0, GoColor.WHITE);
-        checkColor(2, 1, GoColor.WHITE);
-        checkColor(2, 2, GoColor.WHITE);
-        checkColor(3, 0, GoColor.WHITE);
-        checkColor(3, 1, GoColor.BLACK);
-        checkColor(3, 2, GoColor.WHITE);
-        checkColor(3, 3, GoColor.BLACK);
+        checkColor(0, 0, EMPTY);
+        checkColor(0, 1, BLACK);
+        checkColor(0, 2, EMPTY);
+        checkColor(1, 0, WHITE);
+        checkColor(1, 1, WHITE);
+        checkColor(1, 2, WHITE);
+        checkColor(2, 0, WHITE);
+        checkColor(2, 1, WHITE);
+        checkColor(2, 2, WHITE);
+        checkColor(3, 0, WHITE);
+        checkColor(3, 1, BLACK);
+        checkColor(3, 2, WHITE);
+        checkColor(3, 3, BLACK);
     }
 
     public void testHeightGreaterWidth()
@@ -59,8 +62,8 @@ public final class TextParserTest
               ". . . .\n" +
               ". . . .\n");
         checkSize(6);
-        checkColor(0, 4, GoColor.WHITE);
-        checkColor(1, 5, GoColor.BLACK);
+        checkColor(0, 4, WHITE);
+        checkColor(1, 5, BLACK);
     }
 
     public void testWidthGreaterHeight()
@@ -68,8 +71,8 @@ public final class TextParserTest
         parse(". X . . . .\n" +
               "O . . . . .\n");
         checkSize(6);
-        checkColor(0, 4, GoColor.WHITE);
-        checkColor(1, 5, GoColor.BLACK);
+        checkColor(0, 4, WHITE);
+        checkColor(1, 5, BLACK);
     }
 
     /** Test example from GNU Go documentation width row width increasing. */
@@ -82,8 +85,8 @@ public final class TextParserTest
               "@@OO@@\n" +
               "@@@@@\n");
         checkSize(6);
-        checkColor(0, 5, GoColor.BLACK);
-        checkColor(5, 5, GoColor.EMPTY);
+        checkColor(0, 5, BLACK);
+        checkColor(5, 5, EMPTY);
     }
 
     public void testParseGnuGo()
@@ -110,12 +113,12 @@ public final class TextParserTest
               " 1 . . . . . . . . . . . . . . . . . . . 1\n" +
               "   A B C D E F G H J K L M N O P Q R S T\n");
         checkSize(19);
-        checkColor(0, 0, GoColor.EMPTY);
-        checkColor(0, 1, GoColor.EMPTY);
-        checkColor(0, 2, GoColor.WHITE);
-        checkColor(0, 3, GoColor.WHITE);
-        checkColor(0, 4, GoColor.BLACK);
-        checkColor(0, 5, GoColor.EMPTY);
+        checkColor(0, 0, EMPTY);
+        checkColor(0, 1, EMPTY);
+        checkColor(0, 2, WHITE);
+        checkColor(0, 3, WHITE);
+        checkColor(0, 4, BLACK);
+        checkColor(0, 5, EMPTY);
     }
 
     /** Test parsing if long lines were wrapped. */
@@ -145,12 +148,12 @@ public final class TextParserTest
               " 1 . . . . . . . . . . . . . . . . . . . 1\n" +
               "   A B C D E F G H J K L M N O P Q R S T\n");
         checkSize(19);
-        checkColor(0, 0, GoColor.EMPTY);
-        checkColor(0, 1, GoColor.EMPTY);
-        checkColor(0, 2, GoColor.WHITE);
-        checkColor(0, 3, GoColor.WHITE);
-        checkColor(0, 4, GoColor.BLACK);
-        checkColor(0, 5, GoColor.EMPTY);
+        checkColor(0, 0, EMPTY);
+        checkColor(0, 1, EMPTY);
+        checkColor(0, 2, WHITE);
+        checkColor(0, 3, WHITE);
+        checkColor(0, 4, BLACK);
+        checkColor(0, 5, EMPTY);
     }
 
     /** Test that parsing succeeds if non-breaking spaces are used.

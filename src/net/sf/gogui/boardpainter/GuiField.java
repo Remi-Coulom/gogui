@@ -17,6 +17,9 @@ import java.awt.Stroke;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Point2D;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** State of a field on the board. */
 public class GuiField
@@ -44,15 +47,15 @@ public class GuiField
         m_size = size;
         if (m_fieldColor != null)
             drawFieldColor();
-        if (m_territory != GoColor.EMPTY && m_graphics2D == null)
+        if (m_territory != EMPTY && m_graphics2D == null)
             drawTerritoryGraphics();
-        if (m_color != GoColor.EMPTY)
+        if (m_color != EMPTY)
             drawStone(m_color, false);
         if (m_shadowStone != null)
             drawStone(m_shadowStone, true);
         if (m_label != null && ! m_label.equals(""))
             drawLabel(x, y, graphics, boardImage, boardWidth);
-        if (m_territory != GoColor.EMPTY && m_graphics2D != null)
+        if (m_territory != EMPTY && m_graphics2D != null)
             drawTerritoryGraphics2D();
         if (m_influenceSet)
             drawInfluence();
@@ -283,7 +286,7 @@ public class GuiField
 
     private Color m_fieldColor;
 
-    private GoColor m_territory = GoColor.EMPTY;
+    private GoColor m_territory = EMPTY;
 
     private static final Color COLOR_INFLUENCE_BLACK = Color.gray;
 
@@ -306,7 +309,7 @@ public class GuiField
 
     private static Font s_cachedFont;
 
-    private GoColor m_color = GoColor.EMPTY;
+    private GoColor m_color = EMPTY;
 
     private GoColor m_shadowStone;
 
@@ -401,14 +404,14 @@ public class GuiField
         int y = (ascent + m_size) / 2;
         if (m_shadowStone == null)
         {
-            if (m_color == GoColor.BLACK)
+            if (m_color == BLACK)
                 m_graphics.setColor(Color.white);
             else
                 m_graphics.setColor(Color.black);
         }
         else
         {
-            if (m_shadowStone == GoColor.BLACK)
+            if (m_shadowStone == BLACK)
                 m_graphics.setColor(Color.white);
             else
                 m_graphics.setColor(Color.black);
@@ -416,7 +419,7 @@ public class GuiField
         Rectangle clip = m_graphics.getClipBounds();
         width = Math.min(width, (int)(0.95 * m_size));
         m_graphics.setClip(x, y - ascent, width, height);
-        if (m_color == GoColor.EMPTY && m_shadowStone == null)
+        if (m_color == EMPTY && m_shadowStone == null)
         {
             Rectangle boardClip = boardGraphics.getClipBounds();
             boardGraphics.setClip(fieldX + x, fieldY + y - ascent,
@@ -483,10 +486,10 @@ public class GuiField
 
     private void drawStone(GoColor color, boolean isShadowStone)
     {
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             drawStone(color, COLOR_STONE_BLACK, COLOR_STONE_BLACK_BRIGHT,
                       isShadowStone);
-        else if (color == GoColor.WHITE)
+        else if (color == WHITE)
             drawStone(color, COLOR_STONE_WHITE, COLOR_STONE_WHITE_BRIGHT,
                       isShadowStone);
     }
@@ -513,11 +516,11 @@ public class GuiField
 
     private void drawTerritoryGraphics()
     {
-        if (m_territory == GoColor.BLACK)
+        if (m_territory == BLACK)
             m_graphics.setColor(Color.darkGray);
         else
         {
-            assert m_territory == GoColor.WHITE;
+            assert m_territory == WHITE;
             m_graphics.setColor(Color.lightGray);
         }
         m_graphics.fillRect(0, 0, m_size, m_size);
@@ -526,11 +529,11 @@ public class GuiField
     private void drawTerritoryGraphics2D()
     {
         setComposite(COMPOSITE_4);
-        if (m_territory == GoColor.BLACK)
+        if (m_territory == BLACK)
             m_graphics2D.setColor(Color.darkGray);
         else
         {
-            assert m_territory == GoColor.WHITE;
+            assert m_territory == WHITE;
             m_graphics2D.setColor(Color.white);
         }
         m_graphics2D.fillRect(0, 0, m_size, m_size);
@@ -543,14 +546,14 @@ public class GuiField
     {
         RadialGradientPaint paint;
         int paintSize;
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
         {
             paint = m_paintBlack;
             paintSize = m_paintSizeBlack;
         }
         else
         {
-            assert color == GoColor.WHITE;
+            assert color == WHITE;
             paint = m_paintWhite;
             paintSize = m_paintSizeWhite;
         }
@@ -562,7 +565,7 @@ public class GuiField
         double focus = -0.4;
         paint = new RadialGradientPaint(center, radius1, radius2, focus,
                                         colorBright, colorNormal);
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
         {
             m_paintBlack = paint;
             m_paintSizeBlack = size;

@@ -15,6 +15,9 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
@@ -155,7 +158,7 @@ public final class GuiBoardUtil
                                     ConstBoard board, GoPoint p)
     {
         GoColor c = board.getColor(p);
-        if (c == GoColor.EMPTY)
+        if (c == EMPTY)
             return;
         PointList stones = countScore.changeStatus(p);
         for (int i = 0; i < stones.size(); ++i)
@@ -174,11 +177,11 @@ public final class GuiBoardUtil
                 GoPoint point = GoPoint.get(x, y);
                 String s = board[x][y].toLowerCase(Locale.ENGLISH);
                 if (s.equals("b") || s.equals("black"))
-                    guiBoard.setTerritory(point, GoColor.BLACK);
+                    guiBoard.setTerritory(point, BLACK);
                 else if (s.equals("w") || s.equals("white"))
-                    guiBoard.setTerritory(point, GoColor.WHITE);
+                    guiBoard.setTerritory(point, WHITE);
                 else
-                    guiBoard.setTerritory(point, GoColor.EMPTY);
+                    guiBoard.setTerritory(point, EMPTY);
             }
     }
 
@@ -260,11 +263,11 @@ public final class GuiBoardUtil
         mark = node.getMarkedConst(MarkType.TERRITORY_BLACK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setTerritory(mark.get(i), GoColor.BLACK);
+                guiBoard.setTerritory(mark.get(i), BLACK);
         mark = node.getMarkedConst(MarkType.TERRITORY_WHITE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setTerritory(mark.get(i), GoColor.WHITE);
+                guiBoard.setTerritory(mark.get(i), WHITE);
         Map labels = node.getLabelsConst();
         if (labels != null)
         {

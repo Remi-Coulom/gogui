@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
@@ -78,7 +79,7 @@ class GameTreeNode
         }
         else
         {
-            if (move.getColor() == GoColor.BLACK)
+            if (move.getColor() == BLACK)
                 graphics.drawImage(m_imageBlack, 0, 0, null);
             else
                 graphics.drawImage(m_imageWhite, 0, 0, null);
@@ -102,14 +103,14 @@ class GameTreeNode
         {
             toolTip.append(m_moveNumber);
             toolTip.append(' ');
-            toolTip.append(move.getColor() == GoColor.BLACK ? "B " : "W ");
+            toolTip.append(move.getColor() == BLACK ? "B " : "W ");
             toolTip.append(GoPoint.toString(move.getPoint()));
         }
         else if (m_node.hasSetup() || player != null)
         {
             toolTip.append("Setup (");
             boolean anyStones = false;
-            for (GoColor c = GoColor.BLACK; c != null;
+            for (GoColor c = BLACK; c != null;
                  c = c.getNextBlackWhiteEmpty())
             {
                 int n = m_node.getAddStones(c).size();
@@ -198,7 +199,7 @@ class GameTreeNode
         int ascent = (int)lineMetrics.getAscent();
         int xText = (size - textWidth) / 2;
         int yText = (ascent + size) / 2;
-        if (move.getColor() == GoColor.BLACK)
+        if (move.getColor() == BLACK)
             graphics.setColor(Color.white);
         else
             graphics.setColor(Color.black);

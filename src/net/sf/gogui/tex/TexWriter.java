@@ -15,6 +15,9 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
@@ -86,7 +89,7 @@ public class TexWriter
     private String getStoneInTextString(int moveNumber, GoColor color)
     {
         return ("\\stone[" + moveNumber + "]{"
-                + (color == GoColor.BLACK ? "black" : "white") + "}");
+                + (color == BLACK ? "black" : "white") + "}");
     }
 
     private void printBeginDocument()
@@ -109,11 +112,11 @@ public class TexWriter
 
     private void printColor(GoColor color)
     {
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             m_out.print("{black}");
         else
         {
-            assert color == GoColor.WHITE;
+            assert color == WHITE;
             m_out.print("{white}");
         }
     }
@@ -148,7 +151,7 @@ public class TexWriter
         ConstNode node = tree.getRootConst();
         while (node != null)
         {
-            for (GoColor c = GoColor.BLACK; c != null;
+            for (GoColor c = BLACK; c != null;
                  c = c.getNextBlackWhite())
             {
                 ConstPointList stones = node.getAddStones(c);
@@ -165,8 +168,8 @@ public class TexWriter
             GoColor color = move.getColor();
             int moveNumber = NodeUtil.getMoveNumber(node);
             boolean isColorUnexpected =
-                (blackToMove && color != GoColor.BLACK)
-                || (! blackToMove && color != GoColor.WHITE);
+                (blackToMove && color != BLACK)
+                || (! blackToMove && color != WHITE);
             boolean isPass = (point == null);
             if (isPass
                 || firstMoveAtPoint[point.getX()][point.getY()] != null)
@@ -263,7 +266,7 @@ public class TexWriter
             String markup = null;
             if (buffer.length() > 0)
                 markup = buffer.toString();
-            if (color == GoColor.EMPTY)
+            if (color == EMPTY)
             {
                 if (markup != null)
                 {

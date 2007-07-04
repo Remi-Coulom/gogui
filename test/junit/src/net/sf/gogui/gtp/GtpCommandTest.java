@@ -5,6 +5,8 @@
 package net.sf.gogui.gtp;
 
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 
 public final class GtpCommandTest
@@ -29,7 +31,7 @@ public final class GtpCommandTest
         assertEquals(cmd.getCommand(), "play");
         assertEquals(cmd.getNuArg(), 2);
         assertEquals(cmd.getArg(0), "w");
-        assertTrue(cmd.getColorArg(0) == GoColor.WHITE);
+        assertTrue(cmd.getColorArg(0) == WHITE);
         assertEquals(cmd.getArg(1), "C1");
         assertTrue(cmd.getPointArg(1, 19) == GoPoint.get(2, 0));
     }

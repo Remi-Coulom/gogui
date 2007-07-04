@@ -20,6 +20,9 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
@@ -57,17 +60,17 @@ public final class SgfReaderTest
         Node node = tree.getRoot();
         assertNull(node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(GoColor.BLACK, 16, 15), node.getMove());
+        assertEquals(Move.get(BLACK, 16, 15), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(GoColor.WHITE, 3, 3), node.getMove());
+        assertEquals(Move.get(WHITE, 3, 3), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(GoColor.BLACK, 2, 15), node.getMove());
+        assertEquals(Move.get(BLACK, 2, 15), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(GoColor.WHITE, 15, 3), node.getMove());
+        assertEquals(Move.get(WHITE, 15, 3), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(GoColor.BLACK, 16, 5), node.getMove());
+        assertEquals(Move.get(BLACK, 16, 5), node.getMove());
         node = node.getChild();
-        assertEquals(Move.get(GoColor.WHITE, null), node.getMove());
+        assertEquals(Move.get(WHITE, null), node.getMove());
         node = node.getChild();
         assertNull(node);
     }
@@ -176,7 +179,7 @@ public final class SgfReaderTest
         checkSetup(node, 1, 1, 0);
         node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 0);
-        assertEquals(node.getPlayer(), GoColor.WHITE);
+        assertEquals(node.getPlayer(), WHITE);
         node = root.getChildConst(2);
         assertEquals(node.getNumberChildren(), 1);
         checkSetup(node, 35, 37, 0);
@@ -261,9 +264,9 @@ public final class SgfReaderTest
     private void checkSetup(ConstNode node, int black, int white, int empty)
         throws InvalidPointException
     {
-        assertEquals(node.getAddStones(GoColor.BLACK).size(), black);
-        assertEquals(node.getAddStones(GoColor.WHITE).size(), white);
-        assertEquals(node.getAddStones(GoColor.EMPTY).size(), empty);
+        assertEquals(node.getAddStones(BLACK).size(), black);
+        assertEquals(node.getAddStones(WHITE).size(), white);
+        assertEquals(node.getAddStones(EMPTY).size(), empty);
         assertNull(node.getMove());
     }
 

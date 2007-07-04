@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.Reader;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 
@@ -127,9 +129,9 @@ public class TextParser
             GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             p = p.up(newSize);
-            if (c == GoColor.BLACK)
+            if (c == BLACK)
                 black.add(p);
-            else if (c == GoColor.WHITE)
+            else if (c == WHITE)
                 white.add(p);
         }
         newBoard.setup(black, white, m_board.getToMove());
@@ -200,9 +202,9 @@ public class TextParser
                 if (x >= m_board.getSize())
                     increaseBoardSize();
                 PointList black =
-                    new PointList(m_board.getSetup(GoColor.BLACK));
+                    new PointList(m_board.getSetup(BLACK));
                 PointList white =
-                    new PointList(m_board.getSetup(GoColor.WHITE));
+                    new PointList(m_board.getSetup(WHITE));
                 black.add(GoPoint.get(x, y));
                 m_board.setup(black, white, m_board.getToMove());
                 ++x;
@@ -212,9 +214,9 @@ public class TextParser
                 if (x >= m_board.getSize())
                     increaseBoardSize();
                 PointList black =
-                    new PointList(m_board.getSetup(GoColor.BLACK));
+                    new PointList(m_board.getSetup(BLACK));
                 PointList white =
-                    new PointList(m_board.getSetup(GoColor.WHITE));
+                    new PointList(m_board.getSetup(WHITE));
                 white.add(GoPoint.get(x, y));
                 m_board.setup(black, white, m_board.getToMove());
                 ++x;

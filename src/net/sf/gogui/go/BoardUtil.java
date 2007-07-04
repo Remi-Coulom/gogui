@@ -4,6 +4,9 @@
 
 package net.sf.gogui.go;
 
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+
 /** Static utility functions related to class Board. */
 public final class BoardUtil
 {
@@ -20,8 +23,8 @@ public final class BoardUtil
     public static void copy(Board target, ConstBoard source)
     {
         target.init(source.getSize());
-        ConstPointList setupBlack = source.getSetup(GoColor.BLACK);
-        ConstPointList setupWhite = source.getSetup(GoColor.WHITE);
+        ConstPointList setupBlack = source.getSetup(BLACK);
+        ConstPointList setupWhite = source.getSetup(WHITE);
         GoColor setupPlayer = source.getSetupPlayer();
         if (setupBlack.size() > 0 || setupWhite.size() > 0)
         {
@@ -65,9 +68,9 @@ public final class BoardUtil
             {
                 GoPoint point = GoPoint.get(x, y);
                 GoColor color = board.getColor(point);
-                if (color == GoColor.BLACK)
+                if (color == BLACK)
                     s.append("X ");
-                else if (color == GoColor.WHITE)
+                else if (color == WHITE)
                     s.append("O ");
                 else
                 {
@@ -157,9 +160,9 @@ public final class BoardUtil
         else if (yIndex == size - 2)
         {
             s.append("  Prisoners: B ");
-            s.append(board.getCaptured(GoColor.BLACK));
+            s.append(board.getCaptured(BLACK));
             s.append("  W ");
-            s.append(board.getCaptured(GoColor.WHITE));
+            s.append(board.getCaptured(WHITE));
         }
     }
 

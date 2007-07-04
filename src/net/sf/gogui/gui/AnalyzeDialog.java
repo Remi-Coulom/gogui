@@ -41,6 +41,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpError;
@@ -78,7 +81,7 @@ public final class AnalyzeDialog
         JPanel commandPanel = createCommandPanel(analyzeCommands);
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
-        setSelectedColor(GoColor.BLACK);
+        setSelectedColor(BLACK);
         int minWidth = commandPanel.getPreferredSize().width;
         GuiUtil.setMinimumSize(this, new Dimension(minWidth, 192));
         pack();
@@ -113,9 +116,9 @@ public final class AnalyzeDialog
     public GoColor getSelectedColor()
     {
         if (m_black.isSelected())
-            return GoColor.BLACK;
+            return BLACK;
         else
-            return GoColor.WHITE;
+            return WHITE;
     }
 
     public void saveRecent()
@@ -198,7 +201,7 @@ public final class AnalyzeDialog
 
     private ArrayList m_fullRecentList;
 
-    private GoColor m_selectedColor = GoColor.EMPTY;
+    private GoColor m_selectedColor = EMPTY;
 
     private final MessageDialogs m_messageDialogs;
 
@@ -560,9 +563,9 @@ public final class AnalyzeDialog
 
     private void selectColor()
     {
-        if (m_selectedColor == GoColor.BLACK)
+        if (m_selectedColor == BLACK)
             m_black.setSelected(true);
-        else if (m_selectedColor == GoColor.WHITE)
+        else if (m_selectedColor == WHITE)
             m_white.setSelected(true);
     }
 

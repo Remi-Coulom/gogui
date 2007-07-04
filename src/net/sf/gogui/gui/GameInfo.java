@@ -24,6 +24,7 @@ import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.util.StringUtil;
 
 /** Panel displaying information about the current position. */
@@ -37,13 +38,13 @@ public class GameInfo
             new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));
         add(panel, BorderLayout.CENTER);
         m_game = game;
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
         {
             int index = c.toInteger();
             Box box = Box.createVerticalBox();
             panel.add(box);
             ImageIcon icon;
-            if (c == GoColor.BLACK)
+            if (c == BLACK)
                 icon = GuiUtil.getIcon("gogui-black-32x32", "Black");
             else
                 icon = GuiUtil.getIcon("gogui-white-32x32", "White");
@@ -74,7 +75,7 @@ public class GameInfo
         ConstNode node = game.getCurrentNode();
         ConstGameTree tree = game.getTree();
         ConstGameInformation info = tree.getGameInformationConst(node);
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
         {
             int index = c.toInteger();
             updatePlayerToolTip(m_icon[index], info.getPlayer(c),
@@ -91,7 +92,7 @@ public class GameInfo
 
     public void updateTimeFromClock(ConstClock clock)
     {
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
             updateTimeFromClock(clock, c);
     }
 
@@ -151,7 +152,7 @@ public class GameInfo
 
     private void updateTimeFromNode(ConstNode node)
     {
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
         {
             double timeLeft = node.getTimeLeft(c);
             int movesLeft = node.getMovesLeft(c);
@@ -183,7 +184,7 @@ class GuiClock
     {
         super.setText(text);
         String toolTip;
-        if (m_color == GoColor.BLACK)
+        if (m_color == BLACK)
             toolTip = "Time for Black";
         else
             toolTip = "Time for White";
@@ -209,7 +210,7 @@ class Prisoners
     {
         m_color = color;
         Icon icon;
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             icon = GuiUtil.getIcon("gogui-black-16x16", "Black");
         else
             icon = GuiUtil.getIcon("gogui-white-16x16", "White");
@@ -225,7 +226,7 @@ class Prisoners
         m_text.setText(Integer.toString(n));
         StringBuffer buffer = new StringBuffer(64);
         buffer.append(n);
-        if (m_color == GoColor.BLACK)
+        if (m_color == BLACK)
             buffer.append(" black");
         else
             buffer.append(" white");

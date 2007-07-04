@@ -21,6 +21,8 @@ import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GuiUtil;
@@ -594,7 +596,7 @@ public class GoGuiActions
     public final GoGuiAction m_actionSetupBlack =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSetup(GoColor.BLACK); } },
+                    m_goGui.actionSetup(BLACK); } },
              "Setup Black",
              "Add black stones and set Black to play",
              "gogui-setup-black");
@@ -602,7 +604,7 @@ public class GoGuiActions
     public final GoGuiAction m_actionSetupWhite =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSetup(GoColor.WHITE); } },
+                    m_goGui.actionSetup(WHITE); } },
              "Setup White",
              "Add white stones and set White to play",
              "gogui-setup-white");
@@ -813,8 +815,8 @@ public class GoGuiActions
         boolean isCommandInProgress = m_goGui.isCommandInProgress();
         boolean isProgramAttached = m_goGui.isProgramAttached();
         boolean isInterruptSupported = m_goGui.isInterruptSupported();
-        boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
-        boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
+        boolean computerBlack = m_goGui.isComputerColor(BLACK);
+        boolean computerWhite = m_goGui.isComputerColor(WHITE);
         boolean hasPattern = (m_goGui.getPattern() != null);
         int numberPrograms = m_goGui.getNumberPrograms();
         ConstClock clock = game.getClock();
@@ -876,9 +878,9 @@ public class GoGuiActions
         updateActionReattachProgram(isProgramAttached, name);
         updateActionSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
-                                       && setupColor == GoColor.BLACK);
+                                       && setupColor == BLACK);
         m_actionSetupWhite.setSelected(setupMode
-                                       && setupColor == GoColor.WHITE);
+                                       && setupColor == WHITE);
         m_actionShellSave.setEnabled(isProgramAttached);
         m_actionShellSaveCommands.setEnabled(isProgramAttached);
         m_actionShellSendFile.setEnabled(isProgramAttached);
@@ -951,9 +953,9 @@ public class GoGuiActions
             NodeUtil.restoreClock(node, tempClock);
             StringBuffer buffer = new StringBuffer();
             buffer.append("Restore saved time (B ");
-            buffer.append(tempClock.getTimeString(GoColor.BLACK));
+            buffer.append(tempClock.getTimeString(BLACK));
             buffer.append(", W ");
-            buffer.append(tempClock.getTimeString(GoColor.WHITE));
+            buffer.append(tempClock.getTimeString(WHITE));
             buffer.append(')');
             desc = buffer.toString();
         }
@@ -970,9 +972,9 @@ public class GoGuiActions
             enabled = true;
             StringBuffer buffer = new StringBuffer();
             buffer.append("Resume clock (B ");
-            buffer.append(clock.getTimeString(GoColor.BLACK));
+            buffer.append(clock.getTimeString(BLACK));
             buffer.append(", W ");
-            buffer.append(clock.getTimeString(GoColor.WHITE));
+            buffer.append(clock.getTimeString(WHITE));
             buffer.append(')');
             desc = buffer.toString();
         }
@@ -989,9 +991,9 @@ public class GoGuiActions
             enabled = true;
             StringBuffer buffer = new StringBuffer();
             buffer.append("Start clock (B ");
-            buffer.append(clock.getTimeString(GoColor.BLACK));
+            buffer.append(clock.getTimeString(BLACK));
             buffer.append(", W ");
-            buffer.append(clock.getTimeString(GoColor.WHITE));
+            buffer.append(clock.getTimeString(WHITE));
             buffer.append(')');
             desc = buffer.toString();
         }
@@ -1036,7 +1038,7 @@ public class GoGuiActions
     private void updateActionPass(GoColor toMove)
     {
         assert toMove.isBlackWhite();
-        if (toMove == GoColor.BLACK)
+        if (toMove == BLACK)
             m_actionPass.setDescription("Play a pass for Black");
         else
             m_actionPass.setDescription("Play a pass for White");
@@ -1049,7 +1051,7 @@ public class GoGuiActions
         String desc;
         if (name == null)
             name = "computer";
-        if (toMove == GoColor.BLACK)
+        if (toMove == BLACK)
             desc = "Make " + name + " play Black";
         else
             desc = "Make " + name + " play White";

@@ -17,6 +17,9 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
@@ -96,7 +99,7 @@ public class GtpAdapter
     public void cmdBlack(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        play(GoColor.BLACK, getPointArg(cmd, 0));
+        play(BLACK, getPointArg(cmd, 0));
     }
 
     public void cmdBoardsize(GtpCommand cmd) throws GtpError
@@ -126,12 +129,12 @@ public class GtpAdapter
 
     public void cmdGenmoveBlack(GtpCommand cmd) throws GtpError
     {
-        cmdGenmove(GoColor.BLACK, cmd);
+        cmdGenmove(BLACK, cmd);
     }
 
     public void cmdGenmoveWhite(GtpCommand cmd) throws GtpError
     {
-        cmdGenmove(GoColor.WHITE, cmd);
+        cmdGenmove(WHITE, cmd);
     }
 
     public void cmdGenmove(GoColor color, GtpCommand cmd) throws GtpError
@@ -258,7 +261,7 @@ public class GtpAdapter
         cmd.checkNuArg(2);
         GoColor color = cmd.getColorArg(0);
         GoPoint point = getPointArg(cmd, 1);
-        if (point != null && m_board.getColor(point) != GoColor.EMPTY)
+        if (point != null && m_board.getColor(point) != EMPTY)
             throw new GtpError("point is occupied");
         play(color, point);
     }
@@ -309,7 +312,7 @@ public class GtpAdapter
     public void cmdWhite(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        play(GoColor.WHITE, getPointArg(cmd, 0));
+        play(WHITE, getPointArg(cmd, 0));
     }
 
     public void interruptCommand()
@@ -419,7 +422,7 @@ public class GtpAdapter
         }
         if (isValid)
         {
-            boolean isBlack = (color == GoColor.BLACK);
+            boolean isBlack = (color == BLACK);
             if ((isBlack && score < - m_resignScore)
                 || (! isBlack && score > m_resignScore))
             {

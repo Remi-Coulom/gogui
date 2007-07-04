@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
@@ -53,7 +55,7 @@ public class FileCheck
         if (tree.getBoardSize() != m_size)
             throwError("size is not " + m_size);
         ConstNode root = tree.getRoot();
-        GoColor toMove = GoColor.BLACK;
+        GoColor toMove = BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
             if (node.hasSetup())
@@ -61,7 +63,7 @@ public class FileCheck
                 if (m_allowSetup)
                 {
                     if (node == root)
-                        toMove = GoColor.EMPTY;
+                        toMove = EMPTY;
                     else
                         throw new ErrorMessage("setup stones"
                                                + " in non-root position");
@@ -72,7 +74,7 @@ public class FileCheck
             Move move = node.getMove();
             if (move != null)
             {
-                if (toMove == GoColor.EMPTY)
+                if (toMove == EMPTY)
                     toMove = move.getColor();
                 if (move.getColor() != toMove)
                     throwError("non-alternating moves");

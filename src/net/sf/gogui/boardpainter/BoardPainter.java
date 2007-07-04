@@ -18,7 +18,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.net.URL;
-import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
 
@@ -278,7 +278,7 @@ public class BoardPainter
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                if (field[x][y].getColor() == GoColor.EMPTY)
+                if (field[x][y].getColor() == EMPTY)
                     continue;
                 Point location = getCenter(x, y);
                 graphics.setColor(Color.black);

@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
-import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.sgf.SgfReader;
@@ -663,10 +664,10 @@ public class Analyze
             SgfReader reader = new SgfReader(in, new File(game), null, 0);
             GameTree tree = reader.getTree();
             GameInformation info = tree.getGameInformation(tree.getRoot());
-            String playerBlack = info.getPlayer(GoColor.BLACK);
+            String playerBlack = info.getPlayer(BLACK);
             if (playerBlack == null)
                 playerBlack = "?";
-            String playerWhite = info.getPlayer(GoColor.WHITE);
+            String playerWhite = info.getPlayer(WHITE);
             if (playerWhite == null)
                 playerWhite = "?";
             String result = info.getResult();

@@ -13,6 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
@@ -241,12 +243,12 @@ public final class GtpUtil
             String t = token[i].toLowerCase(Locale.ENGLISH);
             if (t.equals("b") || t.equals("black"))
             {
-                toMove = GoColor.BLACK;
+                toMove = BLACK;
                 isColorSet = true;
             }
             else if (t.equals("w") || t.equals("white"))
             {
-                toMove = GoColor.WHITE;
+                toMove = WHITE;
                 isColorSet = true;
             }
             else

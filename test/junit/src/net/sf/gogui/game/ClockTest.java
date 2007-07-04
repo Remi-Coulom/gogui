@@ -5,6 +5,8 @@
 package net.sf.gogui.game;
 
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 
 public final class ClockTest
     extends junit.framework.TestCase
@@ -34,10 +36,10 @@ public final class ClockTest
     public void testStartMoveIfRunning()
     {
         m_clock.setTimeSettings(new TimeSettings(10000));
-        m_clock.startMove(GoColor.BLACK);
+        m_clock.startMove(BLACK);
         setTime(1000);
-        m_clock.startMove(GoColor.BLACK);
-        assertEquals(10000, m_clock.getTimeLeft(GoColor.BLACK));
+        m_clock.startMove(BLACK);
+        assertEquals(10000, m_clock.getTimeLeft(BLACK));
     }
 
     private static final class TestTimeSource

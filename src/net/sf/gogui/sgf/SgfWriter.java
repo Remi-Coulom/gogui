@@ -17,6 +17,8 @@ import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
@@ -211,10 +213,10 @@ public class SgfWriter
     private void printGameInformation(ConstGameInformation info)
     {
         String result = info.getResult();
-        String playerBlack = info.getPlayer(GoColor.BLACK);
-        String playerWhite = info.getPlayer(GoColor.WHITE);
-        String rankBlack = info.getRank(GoColor.BLACK);
-        String rankWhite = info.getRank(GoColor.WHITE);
+        String playerBlack = info.getPlayer(BLACK);
+        String playerWhite = info.getPlayer(WHITE);
+        String rankBlack = info.getRank(BLACK);
+        String rankWhite = info.getRank(WHITE);
         String date = info.getDate();
         String rules = info.getRules();
         int handicap = info.getHandicap();
@@ -309,21 +311,21 @@ public class SgfWriter
         if (move != null)
         {
             String point = getPointValue(move.getPoint());
-            if (move.getColor() == GoColor.BLACK)
+            if (move.getColor() == BLACK)
                 print("B" + point);
             else
                 print("W" + point);
         }
-        for (GoColor c = GoColor.BLACK; c != null;
+        for (GoColor c = BLACK; c != null;
              c = c.getNextBlackWhiteEmpty())
         {
             ConstPointList points = node.getAddStones(c);
             if (points.size() == 0)
                 continue;
             StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
-            if (c == GoColor.BLACK)
+            if (c == BLACK)
                 buffer.append("AB");
-            else if (c == GoColor.WHITE)
+            else if (c == WHITE)
                 buffer.append("AW");
             else
                 buffer.append("AE");
@@ -336,21 +338,21 @@ public class SgfWriter
         {
             print("C[" + getEscaped(comment) + "]");
         }
-        if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
+        if (! Double.isNaN(node.getTimeLeft(BLACK)))
         {
-            print("BL[" + node.getTimeLeft(GoColor.BLACK) + "]");
+            print("BL[" + node.getTimeLeft(BLACK) + "]");
         }
-        if (node.getMovesLeft(GoColor.BLACK) >= 0)
+        if (node.getMovesLeft(BLACK) >= 0)
         {
-            print("OB[" + node.getMovesLeft(GoColor.BLACK) + "]");
+            print("OB[" + node.getMovesLeft(BLACK) + "]");
         }
-        if (! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
+        if (! Double.isNaN(node.getTimeLeft(WHITE)))
         {
-            print("WL[" + node.getTimeLeft(GoColor.WHITE) + "]");
+            print("WL[" + node.getTimeLeft(WHITE) + "]");
         }
-        if (node.getMovesLeft(GoColor.WHITE) >= 0)
+        if (node.getMovesLeft(WHITE) >= 0)
         {
-            print("OW[" + node.getMovesLeft(GoColor.WHITE) + "]");
+            print("OW[" + node.getMovesLeft(WHITE) + "]");
         }
         if (node.getPlayer() != null)
             printToPlay(node.getPlayer());
@@ -406,9 +408,9 @@ public class SgfWriter
         {
             GoPoint p = board.getPoints().get(i);
             GoColor c = board.getColor(p);
-            if (c == GoColor.BLACK)
+            if (c == BLACK)
                 black.add(p);
-            else if (c == GoColor.WHITE)
+            else if (c == WHITE)
                 white.add(p);
         }
         printSetup(black, white);
@@ -430,7 +432,7 @@ public class SgfWriter
 
     private void printToPlay(GoColor color)
     {
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             print("PL[B]");
         else
             print("PL[W]");

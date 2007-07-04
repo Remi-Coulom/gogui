@@ -5,6 +5,9 @@
 package net.sf.gogui.game;
 
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 
 public final class NodeTest
@@ -100,33 +103,33 @@ public final class NodeTest
     public void testSetup()
     {
         Node node = new Node();
-        assertEquals(0, node.getAddStones(GoColor.BLACK).size());
-        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
-        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
+        assertEquals(0, node.getAddStones(BLACK).size());
+        assertEquals(0, node.getAddStones(EMPTY).size());
+        assertEquals(0, node.getAddStones(WHITE).size());
         GoPoint point = GoPoint.get(0, 0);
-        node.addStone(GoColor.BLACK, point);
-        assertEquals(1, node.getAddStones(GoColor.BLACK).size());
-        assertEquals(point, node.getAddStones(GoColor.BLACK).get(0));
-        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
-        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
+        node.addStone(BLACK, point);
+        assertEquals(1, node.getAddStones(BLACK).size());
+        assertEquals(point, node.getAddStones(BLACK).get(0));
+        assertEquals(0, node.getAddStones(EMPTY).size());
+        assertEquals(0, node.getAddStones(WHITE).size());
         node = new Node();
-        node.addStone(GoColor.WHITE, point);
-        assertEquals(1, node.getAddStones(GoColor.WHITE).size());
-        assertEquals(point, node.getAddStones(GoColor.WHITE).get(0));
-        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
-        assertEquals(0, node.getAddStones(GoColor.BLACK).size());
+        node.addStone(WHITE, point);
+        assertEquals(1, node.getAddStones(WHITE).size());
+        assertEquals(point, node.getAddStones(WHITE).get(0));
+        assertEquals(0, node.getAddStones(EMPTY).size());
+        assertEquals(0, node.getAddStones(BLACK).size());
         node = new Node();
-        node.addStone(GoColor.EMPTY, point);
-        assertEquals(1, node.getAddStones(GoColor.EMPTY).size());
-        assertEquals(point, node.getAddStones(GoColor.EMPTY).get(0));
-        assertEquals(0, node.getAddStones(GoColor.BLACK).size());
-        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
+        node.addStone(EMPTY, point);
+        assertEquals(1, node.getAddStones(EMPTY).size());
+        assertEquals(point, node.getAddStones(EMPTY).get(0));
+        assertEquals(0, node.getAddStones(BLACK).size());
+        assertEquals(0, node.getAddStones(WHITE).size());
         GoPoint point2 = GoPoint.get(1, 0);
-        node.addStone(GoColor.EMPTY, point2);
-        assertEquals(2, node.getAddStones(GoColor.EMPTY).size());
-        assertEquals(point, node.getAddStones(GoColor.EMPTY).get(0));
-        assertEquals(point2, node.getAddStones(GoColor.EMPTY).get(1));
-        assertEquals(0, node.getAddStones(GoColor.BLACK).size());
-        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
+        node.addStone(EMPTY, point2);
+        assertEquals(2, node.getAddStones(EMPTY).size());
+        assertEquals(point, node.getAddStones(EMPTY).get(0));
+        assertEquals(point2, node.getAddStones(EMPTY).get(1));
+        assertEquals(0, node.getAddStones(BLACK).size());
+        assertEquals(0, node.getAddStones(WHITE).size());
     }
 }

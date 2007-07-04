@@ -8,6 +8,8 @@ import java.io.IOException;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 
@@ -41,13 +43,13 @@ public final class GtpSynchronizerTest
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoColor.BLACK, 3, 4);
+        play(BLACK, 3, 4);
         expect("play b D5", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoColor.BLACK, 4, 4);
-        play(GoColor.WHITE, 5, 5);
-        play(GoColor.BLACK, null);
+        play(BLACK, 4, 4);
+        play(WHITE, 5, 5);
+        play(BLACK, null);
         expect("play b E5", "");
         expect("play w F6", "");
         expect("play b PASS", "");
@@ -58,8 +60,8 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
         undo(2);
-        play(GoColor.WHITE, 5, 5);
-        play(GoColor.BLACK, 4, 4);
+        play(WHITE, 5, 5);
+        play(BLACK, 4, 4);
         expect("undo", "");
         expect("undo", "");
         expect("play w F6", "");
@@ -78,13 +80,13 @@ public final class GtpSynchronizerTest
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoColor.BLACK, 3, 4);
+        play(BLACK, 3, 4);
         expect("play b D5", "");
         synchronize();
         assertExpectQueueEmpty();
-        play(GoColor.BLACK, 4, 4);
-        play(GoColor.WHITE, 5, 5);
-        play(GoColor.BLACK, null);
+        play(BLACK, 4, 4);
+        play(WHITE, 5, 5);
+        play(BLACK, null);
         expect("play w PASS", "");
         expect("play b E5", "");
         expect("play w F6", "");
@@ -96,8 +98,8 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
         undo(2);
-        play(GoColor.WHITE, 5, 5);
-        play(GoColor.BLACK, 4, 4);
+        play(WHITE, 5, 5);
+        play(BLACK, 4, 4);
         expect("undo", "");
         expect("undo", "");
         expect("undo", "");
@@ -135,7 +137,7 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
 
         // Playing a move should not trigger a re-transmission
-        play(GoColor.WHITE, 5, 5);
+        play(WHITE, 5, 5);
         expect("play w F6", "");
         synchronize();
         assertExpectQueueEmpty();
@@ -168,7 +170,7 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
 
         // Playing a move should not trigger a re-transmission
-        play(GoColor.WHITE, 5, 5);
+        play(WHITE, 5, 5);
         expect("play w F6", "");
         synchronize();
         assertExpectQueueEmpty();
@@ -202,7 +204,7 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
 
         // Playing a move should not trigger a re-transmission
-        play(GoColor.WHITE, 5, 5);
+        play(WHITE, 5, 5);
         expect("play w F6", "");
         synchronize();
         assertExpectQueueEmpty();
@@ -225,7 +227,7 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(4, 4));
         PointList white = new PointList();
         white.add(GoPoint.get(5, 5));
-        setup(black, white, GoColor.BLACK);
+        setup(black, white, BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("gogui-setup b D5 b E5 w F6", "");
@@ -244,14 +246,14 @@ public final class GtpSynchronizerTest
         PointList black = new PointList();
         black.add(GoPoint.get(3, 4));
         black.add(GoPoint.get(4, 4));
-        setup(black, null, GoColor.BLACK);
+        setup(black, null, BLACK);
         expect("play b D5", "");
         expect("play b E5", "");
         synchronize();
         assertExpectQueueEmpty();
         black = new PointList();
         black.add(GoPoint.get(4, 4));
-        setup(black, null, GoColor.BLACK);
+        setup(black, null, BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("play b E5", "");
@@ -271,7 +273,7 @@ public final class GtpSynchronizerTest
         expect("clear_board", "");
         synchronize();
         assertExpectQueueEmpty();
-        setup(new PointList(GoPoint.get(1, 1)), null, GoColor.WHITE);
+        setup(new PointList(GoPoint.get(1, 1)), null, WHITE);
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("gogui-setup b B2", "");

@@ -7,6 +7,8 @@ package net.sf.gogui.game;
 import java.util.TimerTask;
 import java.util.Timer;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.util.StringUtil;
 
 /** Time control for a Go game.
@@ -169,8 +171,8 @@ public final class Clock
 
     public void reset()
     {
-        reset(GoColor.BLACK);
-        reset(GoColor.WHITE);
+        reset(BLACK);
+        reset(WHITE);
         m_toMove = null;
         updateListener();
     }

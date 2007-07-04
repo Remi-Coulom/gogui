@@ -16,6 +16,8 @@ import javax.swing.WindowConstants;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpCallback;
@@ -208,7 +210,7 @@ public class GtpDisplay
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {
         assert SwingUtilities.isEventDispatchThread();
-        if (m_board.getColor(point) != GoColor.EMPTY)
+        if (m_board.getColor(point) != EMPTY)
             return;
         synchronized (m_mutex)
         {
@@ -358,7 +360,7 @@ public class GtpDisplay
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint point = stones.get(i);
-            play(GoColor.BLACK, point);
+            play(BLACK, point);
             if (pointList.length() > 0)
                 pointList.append(' ');
             pointList.append(point);
@@ -377,7 +379,7 @@ public class GtpDisplay
     private void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
     {
         for (int i = 0; i < cmd.getNuArg(); ++i)
-            play(GoColor.BLACK, cmd.getPointArg(i, m_size));
+            play(BLACK, cmd.getPointArg(i, m_size));
     }
 
     private void cmdUndo(GtpCommand cmd) throws GtpError

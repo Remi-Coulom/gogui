@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
@@ -202,29 +205,29 @@ public final class NodeUtil
         Move move = node.getMove();
         if (node.hasSetup())
         {
-            ConstPointList addBlack = node.getAddStones(GoColor.BLACK);
-            ConstPointList addWhite = node.getAddStones(GoColor.WHITE);
-            ConstPointList addEmpty = node.getAddStones(GoColor.EMPTY);
+            ConstPointList addBlack = node.getAddStones(BLACK);
+            ConstPointList addWhite = node.getAddStones(WHITE);
+            ConstPointList addEmpty = node.getAddStones(EMPTY);
             boolean switchSetup = (move == null
-                                   && node.getPlayer() == GoColor.WHITE
+                                   && node.getPlayer() == WHITE
                                    && addBlack.size() > 0
                                    && addWhite.size() > 0);
             if (switchSetup)
             {
                 for (int i = 0; i < addWhite.size(); ++i)
-                    moves.add(Move.get(GoColor.WHITE, addWhite.get(i)));
+                    moves.add(Move.get(WHITE, addWhite.get(i)));
                 for (int i = 0; i < addBlack.size(); ++i)
-                    moves.add(Move.get(GoColor.BLACK, addBlack.get(i)));
+                    moves.add(Move.get(BLACK, addBlack.get(i)));
             }
             else
             {
                 for (int i = 0; i < addBlack.size(); ++i)
-                    moves.add(Move.get(GoColor.BLACK, addBlack.get(i)));
+                    moves.add(Move.get(BLACK, addBlack.get(i)));
                 for (int i = 0; i < addWhite.size(); ++i)
-                    moves.add(Move.get(GoColor.WHITE, addWhite.get(i)));
+                    moves.add(Move.get(WHITE, addWhite.get(i)));
             }
             for (int i = 0; i < addEmpty.size(); ++i)
-                moves.add(Move.get(GoColor.EMPTY, addEmpty.get(i)));
+                moves.add(Move.get(EMPTY, addEmpty.get(i)));
         }
         if (move != null)
             moves.add(move);
@@ -234,7 +237,7 @@ public final class NodeUtil
             Move lastMove = (Move)moves.get(moves.size() - 1);
             GoColor otherColor = lastMove.getColor().otherColor();
             if (toMove != null && toMove != otherColor
-                && otherColor != GoColor.EMPTY)
+                && otherColor != EMPTY)
                 moves.add(Move.getPass(otherColor));
         }
     }
@@ -625,29 +628,29 @@ public final class NodeUtil
             appendInfo(buffer, "MoveNumber", getMoveNumber(node));
         }
         appendInfo(buffer, "Variation", getVariationString(node));
-        ConstPointList addBlack = node.getAddStones(GoColor.BLACK);
+        ConstPointList addBlack = node.getAddStones(BLACK);
         if (addBlack.size() > 0)
             appendInfo(buffer, "AddBlack", addBlack);
-        ConstPointList addWhite = node.getAddStones(GoColor.WHITE);
+        ConstPointList addWhite = node.getAddStones(WHITE);
         if (addWhite.size() > 0)
             appendInfo(buffer, "AddWhite", addWhite);
-        ConstPointList addEmpty = node.getAddStones(GoColor.EMPTY);
+        ConstPointList addEmpty = node.getAddStones(EMPTY);
         if (addEmpty.size() > 0)
             appendInfo(buffer, "AddEmpty", addEmpty);
         if (node.getPlayer() != null)
             appendInfo(buffer, "Player", node.getPlayer().toString());
-        if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
+        if (! Double.isNaN(node.getTimeLeft(BLACK)))
             appendInfo(buffer, "TimeLeftBlack",
-                       node.getTimeLeft(GoColor.BLACK));
-        if (node.getMovesLeft(GoColor.BLACK) >= 0)
+                       node.getTimeLeft(BLACK));
+        if (node.getMovesLeft(BLACK) >= 0)
             appendInfo(buffer, "MovesLeftBlack",
-                       node.getMovesLeft(GoColor.BLACK));
-        if (! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
+                       node.getMovesLeft(BLACK));
+        if (! Double.isNaN(node.getTimeLeft(WHITE)))
             appendInfo(buffer, "TimeLeftWhite",
-                       node.getTimeLeft(GoColor.WHITE));
-        if (node.getMovesLeft(GoColor.WHITE) >= 0)
+                       node.getTimeLeft(WHITE));
+        if (node.getMovesLeft(WHITE) >= 0)
             appendInfo(buffer, "MovesLeftWhite",
-                       node.getMovesLeft(GoColor.WHITE));
+                       node.getMovesLeft(WHITE));
         appendInfoComment(buffer, node);
         for (int i = 0; i < MarkType.getNumberTypes(); ++i)
         {
@@ -687,16 +690,16 @@ public final class NodeUtil
                 appendInfo(buffer, "Handicap", info.getHandicap());
             if (info.getKomi() != null)
                 appendInfo(buffer, "Komi", info.getKomi().toString());
-            if (info.getPlayer(GoColor.BLACK) != null)
+            if (info.getPlayer(BLACK) != null)
                 appendInfo(buffer, "PlayerBlack",
-                           info.getPlayer(GoColor.BLACK));
-            if (info.getPlayer(GoColor.WHITE) != null)
+                           info.getPlayer(BLACK));
+            if (info.getPlayer(WHITE) != null)
                 appendInfo(buffer, "PlayerWhite",
-                           info.getPlayer(GoColor.WHITE));
-            if (info.getRank(GoColor.BLACK) != null)
-                appendInfo(buffer, "RankBlack", info.getRank(GoColor.BLACK));
-            if (info.getRank(GoColor.WHITE) != null)
-                appendInfo(buffer, "RankWhite", info.getRank(GoColor.WHITE));
+                           info.getPlayer(WHITE));
+            if (info.getRank(BLACK) != null)
+                appendInfo(buffer, "RankBlack", info.getRank(BLACK));
+            if (info.getRank(WHITE) != null)
+                appendInfo(buffer, "RankWhite", info.getRank(WHITE));
             if (info.getResult() != null)
                 appendInfo(buffer, "Result", info.getResult());
             if (info.getRules() != null)
@@ -735,8 +738,8 @@ public final class NodeUtil
         for (int i = path.size() - 1; i >= 0; --i)
         {
             ConstNode pathNode = (ConstNode)path.get(i);
-            restoreTimeLeft(pathNode, clock, GoColor.BLACK);
-            restoreTimeLeft(pathNode, clock, GoColor.WHITE);
+            restoreTimeLeft(pathNode, clock, BLACK);
+            restoreTimeLeft(pathNode, clock, WHITE);
         }
     }
 

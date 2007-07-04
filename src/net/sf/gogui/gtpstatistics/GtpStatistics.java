@@ -16,6 +16,8 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
@@ -218,7 +220,7 @@ public class GtpStatistics
         if (size != m_size)
             throw new ErrorMessage(name + " has not size " + m_size);
         ConstNode root = tree.getRoot();
-        GoColor toMove = GoColor.BLACK;
+        GoColor toMove = BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
             if (node.hasSetup())
@@ -226,7 +228,7 @@ public class GtpStatistics
                 if (m_allowSetup)
                 {
                     if (node == root)
-                        toMove = GoColor.EMPTY;
+                        toMove = EMPTY;
                     else
                         throw new ErrorMessage(name + " contains setup stones"
                                                + " in non-root position");
@@ -237,7 +239,7 @@ public class GtpStatistics
             Move move = node.getMove();
             if (move != null)
             {
-                if (toMove == GoColor.EMPTY)
+                if (toMove == EMPTY)
                     toMove = move.getColor();
                 if (move.getColor() != toMove)
                     throw new ErrorMessage(name
@@ -414,7 +416,7 @@ public class GtpStatistics
     private void iteratePositions(ConstNode root, String name) throws GtpError
     {
         int number = 0;
-        GoColor toMove = GoColor.BLACK;
+        GoColor toMove = BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
             if (node.hasSetup())
@@ -447,7 +449,7 @@ public class GtpStatistics
         throws GtpError
     {
         ConstNode node = root;
-        GoColor toMove = GoColor.BLACK;
+        GoColor toMove = BLACK;
         while (true)
         {
             if (node.hasSetup())

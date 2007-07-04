@@ -8,6 +8,7 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
@@ -302,7 +303,7 @@ public class Game
     public void setToMove(GoColor color)
     {
         assert color != null;
-        assert ! color.equals(GoColor.EMPTY);
+        assert ! color.equals(EMPTY);
         if (! ObjectUtil.equals(color, m_current.getPlayer())
             || color.equals(m_board.getToMove()))
             setModified();
@@ -325,7 +326,7 @@ public class Game
                 return;
             }
         }
-        if (c != GoColor.EMPTY || father != null)
+        if (c != EMPTY || father != null)
             m_current.addStone(c, p);
         setModified();
         updateBoard();

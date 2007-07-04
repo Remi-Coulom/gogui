@@ -13,7 +13,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import net.sf.gogui.game.MarkType;
-import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
@@ -198,11 +199,11 @@ public class ContextMenu
         JMenu menu = new JMenu(label);
         // For com.jgoodies.looks
         menu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
-        command.setColorArg(GoColor.BLACK);
+        command.setColorArg(BLACK);
         JMenuItem item = createItem(command, "Black");
         menu.add(item);
         command = command.cloneCommand();
-        command.setColorArg(GoColor.WHITE);
+        command.setColorArg(WHITE);
         item = createItem(command, "White");
         menu.add(item);
         m_analyzeMenu.add(menu);

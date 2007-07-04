@@ -171,7 +171,7 @@ public enum GoColor
     public abstract GoColor getPreviousBlackWhiteEmpty();
 
     /** Return color name if used for specifying player.
-        Returns the capitalized color name (e.g. "Black" for GoColor.BLACK).
+        Returns the capitalized color name (e.g. "Black" for BLACK).
         This name will also potentially be internationalized in the future.
     */
     public abstract String getCapitalizedName();
@@ -196,7 +196,7 @@ public enum GoColor
     public abstract GoColor otherColor();
 
     /** Convert color to an integer that can be used as an array index.
-        @return 0 for GoColor.BLACK; 1 for GoColor.WHITE; 2 for GoColor.EMPTY
+        @return 0 for BLACK; 1 for WHITE; 2 for EMPTY
     */
     public abstract int toInteger();
 

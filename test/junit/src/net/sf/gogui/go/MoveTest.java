@@ -4,6 +4,9 @@
 
 package net.sf.gogui.go;
 
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+
 public final class MoveTest
     extends junit.framework.TestCase
 {
@@ -19,19 +22,19 @@ public final class MoveTest
 
     public void testPass()
     {
-        Move blackPass = Move.getPass(GoColor.BLACK);
+        Move blackPass = Move.getPass(BLACK);
         assertNull(blackPass.getPoint());
-        assertSame(blackPass.getColor(), GoColor.BLACK);
-        assertSame(Move.get(GoColor.BLACK, null), blackPass);
-        Move whitePass = Move.getPass(GoColor.WHITE);
+        assertSame(blackPass.getColor(), BLACK);
+        assertSame(Move.get(BLACK, null), blackPass);
+        Move whitePass = Move.getPass(WHITE);
         assertNull(whitePass.getPoint());
-        assertSame(whitePass.getColor(), GoColor.WHITE);
-        assertSame(Move.get(GoColor.WHITE, null), whitePass);
+        assertSame(whitePass.getColor(), WHITE);
+        assertSame(Move.get(WHITE, null), whitePass);
     }
 
     public void testToString()
     {
-        assertEquals("black A1", Move.get(GoColor.BLACK, 0, 0).toString());
-        assertEquals("white PASS", Move.getPass(GoColor.WHITE).toString());
+        assertEquals("black A1", Move.get(BLACK, 0, 0).toString());
+        assertEquals("white PASS", Move.getPass(WHITE).toString());
     }
 }

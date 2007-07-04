@@ -18,6 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
@@ -193,11 +195,11 @@ public class AnalyzeCommand
         StringBuffer buffer = new StringBuffer(m_label);
         if (needsColorArg() && m_colorArg != null)
         {
-            if (m_colorArg == GoColor.BLACK)
+            if (m_colorArg == BLACK)
                 buffer.append(" Black");
             else
             {
-                assert m_colorArg == GoColor.WHITE;
+                assert m_colorArg == WHITE;
                 buffer.append(" White");
             }
         }
@@ -411,9 +413,9 @@ public class AnalyzeCommand
         if (needsColorArg())
         {
             String colorString = "empty";
-            if (m_colorArg == GoColor.BLACK)
+            if (m_colorArg == BLACK)
                 colorString = "b";
-            else if (m_colorArg == GoColor.WHITE)
+            else if (m_colorArg == WHITE)
                 colorString = "w";
             result = result.replaceAll("%c", colorString);
         }

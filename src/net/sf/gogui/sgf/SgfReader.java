@@ -28,6 +28,9 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.InvalidPointException;
@@ -233,7 +236,7 @@ public final class SgfReader
         {
             if (info.getHandicap() > 0)
             {
-                root.setPlayer(GoColor.WHITE);
+                root.setPlayer(WHITE);
             }
             else
             {
@@ -244,15 +247,15 @@ public final class SgfReader
                     Move move = root.getChild(i).getMove();
                     if (move == null)
                         continue;
-                    if (move.getColor() == GoColor.BLACK)
+                    if (move.getColor() == BLACK)
                         hasBlackChildMoves = true;
-                    if (move.getColor() == GoColor.WHITE)
+                    if (move.getColor() == WHITE)
                         hasWhiteChildMoves = true;
                 }
                 if (hasBlackChildMoves && ! hasWhiteChildMoves)
-                    root.setPlayer(GoColor.BLACK);
+                    root.setPlayer(BLACK);
                 if (hasWhiteChildMoves && ! hasBlackChildMoves)
-                    root.setPlayer(GoColor.WHITE);
+                    root.setPlayer(WHITE);
             }
         }
     }
@@ -416,34 +419,34 @@ public final class SgfReader
             if (p == "AB")
             {
                 parsePointList(values);
-                node.addStones(GoColor.BLACK, m_pointList);
+                node.addStones(BLACK, m_pointList);
             }
             else if (p == "AE")
             {
                 parsePointList(values);
-                node.addStones(GoColor.EMPTY, m_pointList);
+                node.addStones(EMPTY, m_pointList);
             }
             else if (p == "AW")
             {
                 parsePointList(values);
-                node.addStones(GoColor.WHITE, m_pointList);
+                node.addStones(WHITE, m_pointList);
             }
             else if (p == "B")
             {
-                node.setMove(Move.get(GoColor.BLACK, parsePoint(v)));
+                node.setMove(Move.get(BLACK, parsePoint(v)));
             }
             else if (p == "BL")
             {
                 try
                 {
-                    node.setTimeLeft(GoColor.BLACK, Double.parseDouble(v));
+                    node.setTimeLeft(BLACK, Double.parseDouble(v));
                 }
                 catch (NumberFormatException e)
                 {
                 }
             }
             else if (p == "BR")
-                createGameInformation(node).setRank(GoColor.BLACK, v);
+                createGameInformation(node).setRank(BLACK, v);
             else if (p == "C")
             {
                 String comment;
@@ -528,7 +531,7 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setMovesLeft(GoColor.BLACK, Integer.parseInt(v));
+                    node.setMovesLeft(BLACK, Integer.parseInt(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -544,16 +547,16 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setMovesLeft(GoColor.WHITE, Integer.parseInt(v));
+                    node.setMovesLeft(WHITE, Integer.parseInt(v));
                 }
                 catch (NumberFormatException e)
                 {
                 }
             }
             else if (p == "PB")
-                createGameInformation(node).setPlayer(GoColor.BLACK, v);
+                createGameInformation(node).setPlayer(BLACK, v);
             else if (p == "PW")
-                createGameInformation(node).setPlayer(GoColor.WHITE, v);
+                createGameInformation(node).setPlayer(WHITE, v);
             else if (p == "PL")
                 node.setPlayer(parseColor(v));
             else if (p == "RE")
@@ -571,7 +574,7 @@ public final class SgfReader
             else if (p == "TR")
                 parseMarked(node, MarkType.TRIANGLE, values);
             else if (p == "W")
-                node.setMove(Move.get(GoColor.WHITE, parsePoint(v)));
+                node.setMove(Move.get(WHITE, parsePoint(v)));
             else if (p == "TW")
                 parseMarked(node, MarkType.TERRITORY_WHITE, values);
             else if (p == "V")
@@ -588,14 +591,14 @@ public final class SgfReader
             {
                 try
                 {
-                    node.setTimeLeft(GoColor.WHITE, Double.parseDouble(v));
+                    node.setTimeLeft(WHITE, Double.parseDouble(v));
                 }
                 catch (NumberFormatException e)
                 {
                 }
             }
             else if (p == "WR")
-                createGameInformation(node).setRank(GoColor.WHITE, v);
+                createGameInformation(node).setRank(WHITE, v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 addSgfProperty(node, p, values);
         }
@@ -606,9 +609,9 @@ public final class SgfReader
         GoColor color;
         s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals("b") || s.equals("1"))
-            color = GoColor.BLACK;
+            color = BLACK;
         else if (s.equals("w") || s.equals("2"))
-            color = GoColor.WHITE;
+            color = WHITE;
         else
             throw getError("Invalid color value");
         return color;

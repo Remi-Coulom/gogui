@@ -7,7 +7,8 @@ package net.sf.gogui.game;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 
@@ -39,8 +40,8 @@ public class GameTree
             info.setHandicap(handicap.size());
             if (handicap.size() > 0)
             {
-                m_root.addStones(GoColor.BLACK, handicap);
-                m_root.setPlayer(GoColor.WHITE);
+                m_root.addStones(BLACK, handicap);
+                m_root.setPlayer(WHITE);
             }
         }
     }

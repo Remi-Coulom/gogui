@@ -6,6 +6,8 @@ package net.sf.gogui.game;
 
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Score;
 import net.sf.gogui.util.ObjectUtil;
@@ -31,12 +33,12 @@ public class GameInformation
         m_handicap = info.getHandicap();
         m_komi = info.getKomi();
         m_date = info.getDate();
-        m_playerBlack = info.getPlayer(GoColor.BLACK);
-        m_playerWhite = info.getPlayer(GoColor.WHITE);
+        m_playerBlack = info.getPlayer(BLACK);
+        m_playerWhite = info.getPlayer(WHITE);
         m_result = info.getResult();
         m_rules = info.getRules();
-        m_rankBlack = info.getRank(GoColor.BLACK);
-        m_rankWhite = info.getRank(GoColor.WHITE);
+        m_rankBlack = info.getRank(BLACK);
+        m_rankWhite = info.getRank(WHITE);
         m_timeSettings = info.getTimeSettings();
     }
 
@@ -49,13 +51,13 @@ public class GameInformation
                 && ObjectUtil.equals(m_komi, info.getKomi())
                 && ObjectUtil.equals(m_date, info.getDate())
                 && ObjectUtil.equals(m_playerBlack,
-                                     info.getPlayer(GoColor.BLACK))
+                                     info.getPlayer(BLACK))
                 && ObjectUtil.equals(m_playerWhite,
-                                     info.getPlayer(GoColor.WHITE))
+                                     info.getPlayer(WHITE))
                 && ObjectUtil.equals(m_result, info.getResult())
                 && ObjectUtil.equals(m_rules, info.getRules())
-                && ObjectUtil.equals(m_rankBlack, info.getRank(GoColor.BLACK))
-                && ObjectUtil.equals(m_rankWhite, info.getRank(GoColor.WHITE))
+                && ObjectUtil.equals(m_rankBlack, info.getRank(BLACK))
+                && ObjectUtil.equals(m_rankWhite, info.getRank(WHITE))
                 && ObjectUtil.equals(m_timeSettings, info.getTimeSettings()));
     }
 
@@ -83,7 +85,7 @@ public class GameInformation
     public String getPlayer(GoColor c)
     {
         assert c.isBlackWhite();
-        if (c == GoColor.BLACK)
+        if (c == BLACK)
             return m_playerBlack;
         else
             return m_playerWhite;
@@ -95,7 +97,7 @@ public class GameInformation
     public String getRank(GoColor c)
     {
         assert c.isBlackWhite();
-        if (c == GoColor.BLACK)
+        if (c == BLACK)
             return m_rankBlack;
         else
             return m_rankWhite;
@@ -162,7 +164,7 @@ public class GameInformation
     public void setPlayer(GoColor c, String name)
     {
         assert c.isBlackWhite();
-        if (c == GoColor.BLACK)
+        if (c == BLACK)
             m_playerBlack = name;
         else
             m_playerWhite = name;
@@ -171,7 +173,7 @@ public class GameInformation
     public void setRank(GoColor c, String rank)
     {
         assert c.isBlackWhite();
-        if (c == GoColor.BLACK)
+        if (c == BLACK)
             m_rankBlack = rank;
         else
             m_rankWhite = rank;

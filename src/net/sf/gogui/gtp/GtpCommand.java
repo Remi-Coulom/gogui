@@ -6,6 +6,9 @@ package net.sf.gogui.gtp;
 
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.PointList;
@@ -151,9 +154,9 @@ public class GtpCommand
     {
         String arg = getArg(i).toLowerCase(Locale.ENGLISH);
         if (arg.equals("b") || arg.equals("black"))
-            return GoColor.BLACK;
+            return BLACK;
         if (arg.equals("w") || arg.equals("white"))
-            return GoColor.WHITE;
+            return WHITE;
         throw new GtpError("argument " + (i + 1) + " must be black or white");
     }
 

@@ -5,6 +5,9 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** Go board. */
 public final class Board
@@ -71,7 +74,7 @@ public final class Board
     }
 
     /** Get state of a point on the board.
-        @return GoColor.BLACK, GoColor.WHITE or GoColor.EMPTY
+        @return BLACK, WHITE or EMPTY
     */
     public GoColor getColor(GoPoint p)
     {
@@ -226,7 +229,7 @@ public final class Board
     */
     public boolean isCaptureOrSuicide(GoColor c, GoPoint p)
     {
-        if (getColor(p) != GoColor.EMPTY)
+        if (getColor(p) != EMPTY)
             return false;
         play(c, p);
         boolean result = (getKilled().size() > 0 || getSuicide().size() > 0);
@@ -258,9 +261,9 @@ public final class Board
     public boolean isModified()
     {
         return (! m_stack.isEmpty()
-                || m_setup[GoColor.BLACK.toInteger()].size() > 0
-                || m_setup[GoColor.WHITE.toInteger()].size() > 0
-                || m_toMove != GoColor.BLACK);
+                || m_setup[BLACK.toInteger()].size() > 0
+                || m_setup[WHITE.toInteger()].size() > 0
+                || m_toMove != BLACK);
     }
 
     /** Check if the initial setup position was a handicap.
@@ -281,7 +284,7 @@ public final class Board
     */
     public boolean isSuicide(GoColor c, GoPoint p)
     {
-        if (getColor(p) != GoColor.EMPTY)
+        if (getColor(p) != EMPTY)
             return false;
         play(c, p);
         boolean result = (getSuicide().size() > 0);
@@ -295,15 +298,15 @@ public final class Board
     public void clear()
     {
         for (int i = 0; i < getPoints().size(); ++i)
-            setColor(getPoints().get(i), GoColor.EMPTY);
+            setColor(getPoints().get(i), EMPTY);
         m_stack.clear();
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
         {
             int index = c.toInteger();
             m_setup[index].clear();
             m_captured[index] = 0;
         }
-        m_toMove = GoColor.BLACK;
+        m_toMove = BLACK;
         m_koPoint = null;
         m_isSetupHandicap = false;
         m_setupPlayer = null;
@@ -357,9 +360,9 @@ public final class Board
         m_setupPlayer = player;
         if (m_setupPlayer != null)
             m_toMove = player;
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
         {
-            ConstPointList stones = (c == GoColor.BLACK ? black : white);
+            ConstPointList stones = (c == BLACK ? black : white);
             int index = c.toInteger();
             if (stones == null)
                 m_setup[index] = new PointList();
@@ -380,7 +383,7 @@ public final class Board
     */
     public void setupHandicap(ConstPointList points)
     {
-        setup(points, null, GoColor.WHITE);
+        setup(points, null, WHITE);
         m_isSetupHandicap = true;
     }
 
@@ -441,7 +444,7 @@ public final class Board
             {
                 m_oldColor = board.getColor(p);
                 board.setColor(p, c);
-                assert c != GoColor.EMPTY;
+                assert c != EMPTY;
                 ConstPointList adj = board.getAdjacentPoints(p);
                 for (int i = 0; i < adj.size(); ++i)
                 {
@@ -523,7 +526,7 @@ public final class Board
         for (int i = 0; i < adj.size(); ++i)
         {
             GoColor adjColor = getColor(adj.get(i));
-            if (adjColor == GoColor.EMPTY)
+            if (adjColor == EMPTY)
             {
                 ++lib;
                 if (lib > 1)
@@ -543,7 +546,7 @@ public final class Board
         {
             killed.addAll(stones);
             for (int i = 0; i < stones.size(); ++i)
-                setColor(stones.get(i), GoColor.EMPTY);
+                setColor(stones.get(i), EMPTY);
         }
         m_mark.set(stones, false);
         assert m_mark.isCleared();
@@ -566,7 +569,7 @@ public final class Board
     private boolean isDead(GoPoint p, GoColor color, PointList stones)
     {
         GoColor c = getColor(p);
-        if (c == GoColor.EMPTY)
+        if (c == EMPTY)
             return false;
         if (! c.equals(color))
             return true;

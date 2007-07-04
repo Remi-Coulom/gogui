@@ -14,6 +14,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.MoveUtil;
 import net.sf.gogui.go.GoPoint;
@@ -135,7 +136,7 @@ public final class Compare
             moves.addAll(nodeMoves);
             node = node.getChildConst();
         }
-        moves = MoveUtil.fillPasses(moves, GoColor.BLACK);
+        moves = MoveUtil.fillPasses(moves, BLACK);
         return moves;
     }
 

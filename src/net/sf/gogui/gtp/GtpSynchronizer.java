@@ -10,6 +10,8 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
@@ -178,8 +180,8 @@ public class GtpSynchronizer
     {
         int size = board.getSize();
         Board targetState = new Board(size);
-        ConstPointList setupBlack = board.getSetup(GoColor.BLACK);
-        ConstPointList setupWhite = board.getSetup(GoColor.WHITE);
+        ConstPointList setupBlack = board.getSetup(BLACK);
+        ConstPointList setupWhite = board.getSetup(WHITE);
         GoColor setupPlayer = board.getSetupPlayer();
         if (setupBlack.size() > 0 || setupWhite.size() > 0)
         {
@@ -192,7 +194,7 @@ public class GtpSynchronizer
             else
             {
                 // Translate setup into moves
-                for (GoColor c = GoColor.BLACK; c != null;
+                for (GoColor c = BLACK; c != null;
                      c = c.getNextBlackWhite())
                 {
                     ConstPointList stones = board.getSetup(c);
@@ -257,7 +259,7 @@ public class GtpSynchronizer
         if (! ObjectUtil.equals(m_engineState.getSetupPlayer(),
                                 targetState.getSetupPlayer()))
             return true;
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
             if (! m_engineState.getSetup(c).equals(targetState.getSetup(c)))
                 return true;
         return false;
@@ -348,8 +350,8 @@ public class GtpSynchronizer
 
     private void setup(ConstBoard targetState) throws GtpError
     {
-        ConstPointList setupBlack = targetState.getSetup(GoColor.BLACK);
-        ConstPointList setupWhite = targetState.getSetup(GoColor.WHITE);
+        ConstPointList setupBlack = targetState.getSetup(BLACK);
+        ConstPointList setupWhite = targetState.getSetup(WHITE);
         GoColor setupPlayer = targetState.getSetupPlayer();
         if (setupBlack.size() == 0 && setupWhite.size() == 0)
             return;
@@ -369,13 +371,13 @@ public class GtpSynchronizer
         {
             StringBuffer command = new StringBuffer(128);
             command.append("gogui-setup");
-            for (GoColor c = GoColor.BLACK; c != null;
+            for (GoColor c = BLACK; c != null;
                  c = c.getNextBlackWhite())
             {
                 ConstPointList stones = targetState.getSetup(c);
                 for (int i = 0; i < stones.size(); ++i)
                 {
-                    if (c == GoColor.BLACK)
+                    if (c == BLACK)
                         command.append(" b ");
                     else
                         command.append(" w ");
@@ -386,7 +388,7 @@ public class GtpSynchronizer
             m_engineState.setup(setupBlack, setupWhite, setupPlayer);
             if (setupPlayer != null && m_isSupportedSetupPlayer)
                 m_gtp.send("gogui-setup_player "
-                           + (setupPlayer == GoColor.BLACK ? "b" : "w"));
+                           + (setupPlayer == BLACK ? "b" : "w"));
         }
     }
 

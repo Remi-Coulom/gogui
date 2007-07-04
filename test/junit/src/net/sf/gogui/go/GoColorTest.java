@@ -4,6 +4,10 @@
 
 package net.sf.gogui.go;
 
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
+
 public final class GoColorTest
     extends junit.framework.TestCase
 {
@@ -19,56 +23,56 @@ public final class GoColorTest
 
     public void testGetNextBlackWhite()
     {
-        assertSame(GoColor.WHITE, GoColor.BLACK.getNextBlackWhite());
-        assertNull(GoColor.WHITE.getNextBlackWhite());
+        assertSame(WHITE, BLACK.getNextBlackWhite());
+        assertNull(WHITE.getNextBlackWhite());
     }
 
     public void testGetNextBlackWhiteEmpty()
     {
-        assertSame(GoColor.WHITE, GoColor.BLACK.getNextBlackWhiteEmpty());
-        assertSame(GoColor.EMPTY, GoColor.WHITE.getNextBlackWhiteEmpty());
-        assertNull(GoColor.EMPTY.getNextBlackWhiteEmpty());
+        assertSame(WHITE, BLACK.getNextBlackWhiteEmpty());
+        assertSame(EMPTY, WHITE.getNextBlackWhiteEmpty());
+        assertNull(EMPTY.getNextBlackWhiteEmpty());
     }
 
 
     public void testGetPreviousBlackWhiteEmpty()
     {
-        assertSame(GoColor.WHITE, GoColor.EMPTY.getPreviousBlackWhiteEmpty());
-        assertSame(GoColor.BLACK, GoColor.WHITE.getPreviousBlackWhiteEmpty());
-        assertNull(GoColor.BLACK.getPreviousBlackWhiteEmpty());
+        assertSame(WHITE, EMPTY.getPreviousBlackWhiteEmpty());
+        assertSame(BLACK, WHITE.getPreviousBlackWhiteEmpty());
+        assertNull(BLACK.getPreviousBlackWhiteEmpty());
     }
 
     public void testGetUppercaseLetter()
     {
-        assertEquals("B", GoColor.BLACK.getUppercaseLetter());
-        assertEquals("W", GoColor.WHITE.getUppercaseLetter());
-        assertEquals("E", GoColor.EMPTY.getUppercaseLetter());
+        assertEquals("B", BLACK.getUppercaseLetter());
+        assertEquals("W", WHITE.getUppercaseLetter());
+        assertEquals("E", EMPTY.getUppercaseLetter());
     }
 
     public void testIsBlackWhite()
     {
-        assertTrue(GoColor.BLACK.isBlackWhite());
-        assertTrue(GoColor.WHITE.isBlackWhite());
-        assertFalse(GoColor.EMPTY.isBlackWhite());
+        assertTrue(BLACK.isBlackWhite());
+        assertTrue(WHITE.isBlackWhite());
+        assertFalse(EMPTY.isBlackWhite());
     }
 
     public void testOtherColor()
     {
-        assertSame(GoColor.BLACK.otherColor(), GoColor.WHITE);
-        assertSame(GoColor.WHITE.otherColor(), GoColor.BLACK);
-        assertSame(GoColor.EMPTY.otherColor(), GoColor.EMPTY);
+        assertSame(BLACK.otherColor(), WHITE);
+        assertSame(WHITE.otherColor(), BLACK);
+        assertSame(EMPTY.otherColor(), EMPTY);
     }
     public void testToInteger()
     {
-        assertEquals(0, GoColor.BLACK.toInteger());
-        assertEquals(1, GoColor.WHITE.toInteger());
-        assertEquals(2, GoColor.EMPTY.toInteger());
+        assertEquals(0, BLACK.toInteger());
+        assertEquals(1, WHITE.toInteger());
+        assertEquals(2, EMPTY.toInteger());
     }
 
     public void testToString()
     {
-        assertEquals(GoColor.BLACK.toString(), "black");
-        assertEquals(GoColor.WHITE.toString(), "white");
-        assertEquals(GoColor.EMPTY.toString(), "empty");
+        assertEquals(BLACK.toString(), "black");
+        assertEquals(WHITE.toString(), "white");
+        assertEquals(EMPTY.toString(), "empty");
     }
 }

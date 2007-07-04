@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
@@ -35,9 +38,9 @@ public class BoardUpdater
             GoColor player = node.getPlayer();
             if (node.hasSetup())
             {
-                ConstPointList addBlack = node.getAddStones(GoColor.BLACK);
-                ConstPointList addWhite = node.getAddStones(GoColor.WHITE);
-                ConstPointList addEmpty = node.getAddStones(GoColor.EMPTY);
+                ConstPointList addBlack = node.getAddStones(BLACK);
+                ConstPointList addWhite = node.getAddStones(WHITE);
+                ConstPointList addEmpty = node.getAddStones(EMPTY);
                 if (isFirstPlacement && addBlack.size() == handicap
                     && addWhite.size() == 0 && addEmpty.size() == 0)
                     board.setupHandicap(addBlack);
@@ -48,9 +51,9 @@ public class BoardUpdater
                     for (int j = 0; j < board.getPoints().size(); ++j)
                     {
                         GoPoint p = board.getPoints().get(j);
-                        if (board.getColor(p) == GoColor.BLACK)
+                        if (board.getColor(p) == BLACK)
                             black.add(p);
-                        else if (board.getColor(p) == GoColor.WHITE)
+                        else if (board.getColor(p) == WHITE)
                             white.add(p);
                     }
                     for (int j = 0; j < addBlack.size(); ++j)

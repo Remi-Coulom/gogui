@@ -5,6 +5,9 @@
 package net.sf.gogui.game;
 
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
@@ -51,9 +54,9 @@ public final class GameTest
     public static void testSetToMove()
     {
         Game game = new Game(19);
-        game.setToMove(GoColor.WHITE);
+        game.setToMove(WHITE);
         assertTrue(game.isModified());
-        assertEquals(GoColor.WHITE, game.getCurrentNode().getPlayer());
+        assertEquals(WHITE, game.getCurrentNode().getPlayer());
     }
 
     /** Test removing a stone in the root node.
@@ -65,14 +68,14 @@ public final class GameTest
         Game game = new Game(19);
         ConstNode node = game.getCurrentNode();
         GoPoint p = GoPoint.get(0, 0);
-        game.setup(p, GoColor.BLACK);
-        assertEquals(1, node.getAddStones(GoColor.BLACK).size());
-        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
-        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
-        game.setup(p, GoColor.EMPTY);
-        assertEquals(0, node.getAddStones(GoColor.BLACK).size());
-        assertEquals(0, node.getAddStones(GoColor.WHITE).size());
-        assertEquals(0, node.getAddStones(GoColor.EMPTY).size());
+        game.setup(p, BLACK);
+        assertEquals(1, node.getAddStones(BLACK).size());
+        assertEquals(0, node.getAddStones(WHITE).size());
+        assertEquals(0, node.getAddStones(EMPTY).size());
+        game.setup(p, EMPTY);
+        assertEquals(0, node.getAddStones(BLACK).size());
+        assertEquals(0, node.getAddStones(WHITE).size());
+        assertEquals(0, node.getAddStones(EMPTY).size());
     }
 
     /** Test that clock is initialized with time settings. */
@@ -89,7 +92,7 @@ public final class GameTest
         TimeSettings timeSettings = new TimeSettings(600000);
         Game game = new Game(19, null, null, null, timeSettings);
         ConstNode root = game.getRoot();
-        game.play(Move.get(GoColor.BLACK, null));
+        game.play(Move.get(BLACK, null));
         assertNotSame(root, game.getCurrentNode());
         ConstGameInformation oldInfo = game.getGameInformation(root);
         GameInformation newInfo = new GameInformation(oldInfo);

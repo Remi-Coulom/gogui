@@ -4,6 +4,10 @@
 
 package net.sf.gogui.go;
 
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
+
 /** Move containing a point and a color.
     The point can be <code>null</code> (for pass move).
     The color is black or white (EMPTY can still be used for removing a stone
@@ -34,16 +38,16 @@ public final class Move
     {
         if (point == null)
         {
-            if (color == GoColor.BLACK)
+            if (color == BLACK)
                 return s_passBlack;
-            assert color == GoColor.WHITE;
+            assert color == WHITE;
             return s_passWhite;
         }
         int x = point.getX();
         int y = point.getY();
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             return s_movesBlack[x][y];
-        else if (color == GoColor.WHITE)
+        else if (color == WHITE)
             return s_movesWhite[x][y];
         else
             return s_movesEmpty[x][y];
@@ -101,11 +105,11 @@ public final class Move
 
     static
     {
-        s_passBlack = new Move(GoColor.BLACK, null);
-        s_passWhite = new Move(GoColor.WHITE, null);
-        s_movesBlack = init(GoColor.BLACK);
-        s_movesWhite = init(GoColor.WHITE);
-        s_movesEmpty = init(GoColor.EMPTY);
+        s_passBlack = new Move(BLACK, null);
+        s_passWhite = new Move(WHITE, null);
+        s_movesBlack = init(BLACK);
+        s_movesWhite = init(WHITE);
+        s_movesEmpty = init(EMPTY);
     }
 
     private static Move[][] init(GoColor color)

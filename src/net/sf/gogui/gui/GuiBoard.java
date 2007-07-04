@@ -28,6 +28,7 @@ import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.GuiField;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ObjectUtil;
 
@@ -150,7 +151,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setTerritory(GoPoint.get(x, y), GoColor.EMPTY);
+                setTerritory(GoPoint.get(x, y), EMPTY);
     }
 
     /** Clear influence. */
@@ -417,7 +418,7 @@ public final class GuiBoard
 
     /** Set or remove stone.
         @param point The point.
-        @param color The stone color or GoColor.EMPTY to remove a stone,
+        @param color The stone color or EMPTY to remove a stone,
         if existing.
     */
     public void setColor(GoPoint point, GoColor color)
@@ -625,7 +626,7 @@ public final class GuiBoard
 
     /** Set territory.
         @param point The point.
-        @param color The territory color for this point; GoColor.EMPTY for
+        @param color The territory color for this point; EMPTY for
         no territory.
     */
     public void setTerritory(GoPoint point, GoColor color)

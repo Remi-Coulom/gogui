@@ -6,6 +6,8 @@ package net.sf.gogui.gtp;
 
 import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
@@ -23,9 +25,9 @@ public final class GtpClientUtil
         {
             Move move = (Move)moves.get(i);
             GoColor color = move.getColor();
-            if (color == GoColor.BLACK)
+            if (color == BLACK)
                 cmd.append(" b ");
-            else if (color == GoColor.WHITE)
+            else if (color == WHITE)
                 cmd.append(" w ");
             else
                 cmd.append(" empty ");

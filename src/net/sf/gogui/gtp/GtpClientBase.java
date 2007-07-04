@@ -7,6 +7,9 @@ package net.sf.gogui.gtp;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
@@ -61,12 +64,12 @@ public abstract class GtpClientBase
         assert color.isBlackWhite();
         if (m_protocolVersion == 1)
         {
-            if (color == GoColor.BLACK)
+            if (color == BLACK)
                 return "genmove_black";
             else
                 return "genmove_white";
         }
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             return "genmove b";
         else
             return "genmove w";
@@ -74,7 +77,7 @@ public abstract class GtpClientBase
 
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
-        @param move Any color, including GoColor.EMPTY, this is
+        @param move Any color, including EMPTY, this is
         non-standard GTP, but GoGui tries to transmit empty setup
         points this way, even if it is only to produce an error with the
         Go engine.
@@ -87,18 +90,18 @@ public abstract class GtpClientBase
         String command;
         if (m_protocolVersion == 1)
         {
-            if (color == GoColor.BLACK)
+            if (color == BLACK)
                command = "black " + point;
-            else if (color == GoColor.WHITE)
+            else if (color == WHITE)
                 command = "white " + point;
             else
                 command = "empty " + point;
         }
         else
         {
-            if (color == GoColor.BLACK)
+            if (color == BLACK)
                 command = "play b " + point;
-            else if (color == GoColor.WHITE)
+            else if (color == WHITE)
                 command = "play w " + point;
             else
                 command = "play empty " + point;

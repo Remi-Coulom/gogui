@@ -4,6 +4,10 @@
 
 package net.sf.gogui.go;
 
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
+
 /** Count the final score on a Go board.
     Allows to mark stones as dead and count the territory surrounded by
     alive stones of one color.
@@ -68,8 +72,8 @@ public class CountScore
         {
             GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
-            setScore(p, GoColor.EMPTY);
-            if (c != GoColor.EMPTY)
+            setScore(p, EMPTY);
+            if (c != EMPTY)
             {
                 allEmpty = false;
                 if (! m_dead.get(p))
@@ -85,13 +89,13 @@ public class CountScore
             if (! mark.get(p))
             {
                 territory.clear();
-                if (isTerritory(mark, p, territory, GoColor.BLACK))
-                    setScore(territory, GoColor.BLACK);
+                if (isTerritory(mark, p, territory, BLACK))
+                    setScore(territory, BLACK);
                 else
                 {
                     mark.set(territory, false);
-                    if (isTerritory(mark, p, territory, GoColor.WHITE))
-                        setScore(territory, GoColor.WHITE);
+                    if (isTerritory(mark, p, territory, WHITE))
+                        setScore(territory, WHITE);
                     else
                         mark.set(territory, false);
                 }
@@ -101,8 +105,8 @@ public class CountScore
 
     /** Get the owner of a point.
         @param p The point (empty or occupied)
-        @return GoColor.BLACK, if point belongs to Black; GoColor.WHITE, if
-        point belongs to White; GoColor.EMPTY, if point is neutral.
+        @return BLACK, if point belongs to Black; WHITE, if
+        point belongs to White; EMPTY, if point is neutral.
     */
     public GoColor getColor(GoPoint p)
     {
@@ -127,8 +131,8 @@ public class CountScore
         Score s = new Score();
         s.m_rules = rules;
         s.m_komi = komi;
-        s.m_capturedBlack = m_board.getCaptured(GoColor.BLACK);
-        s.m_capturedWhite = m_board.getCaptured(GoColor.WHITE);
+        s.m_capturedBlack = m_board.getCaptured(BLACK);
+        s.m_capturedWhite = m_board.getCaptured(WHITE);
         int areaDiff = 0;
         int territoryDiff = 0;
         for (int i = 0; i < m_board.getPoints().size(); ++i)
@@ -136,36 +140,36 @@ public class CountScore
             GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             GoColor sc = getColor(p);
-            if (sc == GoColor.BLACK)
+            if (sc == BLACK)
             {
                 ++s.m_areaBlack;
                 ++areaDiff;
             }
-            else if (sc == GoColor.WHITE)
+            else if (sc == WHITE)
             {
                 ++s.m_areaWhite;
                 --areaDiff;
             }
-            if (c == GoColor.EMPTY)
+            if (c == EMPTY)
             {
-                if (sc == GoColor.BLACK)
+                if (sc == BLACK)
                 {
                     ++s.m_territoryBlack;
                     ++territoryDiff;
                 }
-                else if (sc == GoColor.WHITE)
+                else if (sc == WHITE)
                 {
                     ++s.m_territoryWhite;
                     --territoryDiff;
                 }
             }
-            if (c == GoColor.BLACK && sc == GoColor.WHITE)
+            if (c == BLACK && sc == WHITE)
             {
                 ++s.m_capturedBlack;
                 ++s.m_territoryWhite;
                 --territoryDiff;
             }
-            if (c == GoColor.WHITE && sc == GoColor.BLACK)
+            if (c == WHITE && sc == BLACK)
             {
                 ++s.m_capturedWhite;
                 ++s.m_territoryBlack;

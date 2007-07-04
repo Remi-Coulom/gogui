@@ -20,6 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.util.Platform;
 
 /** Status bar. */
@@ -48,7 +50,7 @@ public class StatusBar
         m_toPlayLabel = new JLabel();
         m_toPlayLabel.setMaximumSize(new Dimension(Short.MAX_VALUE,
                                                    Short.MAX_VALUE));
-        setToPlay(GoColor.BLACK);
+        setToPlay(BLACK);
         m_iconBox.add(m_toPlayLabel);
         m_labelScore
             = new JLabel(GuiUtil.getIcon("gogui-score", "Score"));
@@ -139,14 +141,14 @@ public class StatusBar
 
     public final void setToPlay(GoColor color)
     {
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
         {
             m_toPlayLabel.setIcon(ICON_BLACK);
             m_toPlayLabel.setToolTipText("Black to play");
         }
         else
         {
-            assert color == GoColor.WHITE;
+            assert color == WHITE;
             m_toPlayLabel.setIcon(ICON_WHITE);
             m_toPlayLabel.setToolTipText("White to play");
         }

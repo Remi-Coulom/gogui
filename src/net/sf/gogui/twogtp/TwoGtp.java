@@ -1,4 +1,3 @@
-
 //----------------------------------------------------------------------------
 // $Id$
 //----------------------------------------------------------------------------
@@ -21,6 +20,8 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
@@ -686,7 +687,7 @@ public class TwoGtp
             String resultReferee;
             if (m_resigned)
             {
-                String result = (m_resignColor == GoColor.BLACK ? "W" : "B");
+                String result = (m_resignColor == BLACK ? "W" : "B");
                 result = result + "+R";
                 resultBlack = result;
                 resultWhite = result;
@@ -897,8 +898,8 @@ public class TwoGtp
             resultBlack = resultTmp;
             resultReferee = inverseResult(resultReferee);
         }
-        m_game.setPlayer(GoColor.BLACK, nameBlack);
-        m_game.setPlayer(GoColor.WHITE, nameWhite);
+        m_game.setPlayer(BLACK, nameBlack);
+        m_game.setPlayer(WHITE, nameWhite);
         if (m_referee != null)
             m_game.setResult(resultReferee);
         else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
@@ -983,8 +984,8 @@ public class TwoGtp
         String command;
         GtpSynchronizer synchronizer;
         boolean exchangeColors =
-            (color == GoColor.BLACK && isAlternated())
-            || (color == GoColor.WHITE && ! isAlternated());
+            (color == BLACK && isAlternated())
+            || (color == WHITE && ! isAlternated());
         if (exchangeColors)
         {
             gtp = m_white;

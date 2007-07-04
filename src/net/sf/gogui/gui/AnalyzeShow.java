@@ -13,6 +13,9 @@ import java.util.Locale;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
@@ -99,7 +102,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.VARB:
             {
-                showVariation(guiBoard, response, GoColor.BLACK);
+                showVariation(guiBoard, response, BLACK);
             }
             break;
         case AnalyzeCommand.VARC:
@@ -109,20 +112,20 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.VARW:
             {
-                showVariation(guiBoard, response, GoColor.WHITE);
+                showVariation(guiBoard, response, WHITE);
             }
             break;
         case AnalyzeCommand.VARP:
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
-                if (c != GoColor.EMPTY)
+                if (c != EMPTY)
                     showVariation(guiBoard, response, c);
             }
             break;
         case AnalyzeCommand.VARPO:
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
-                if (c != GoColor.EMPTY)
+                if (c != EMPTY)
                     showVariation(guiBoard, response, c.otherColor());
             }
             break;
@@ -247,7 +250,7 @@ public final class AnalyzeShow
             return;
         String cmd = args[0].toUpperCase(Locale.ENGLISH);
         if (cmd.equals("BLACK"))
-            showGfxTerritory(args, GoColor.BLACK, guiBoard);
+            showGfxTerritory(args, BLACK, guiBoard);
         else if (cmd.equals("CIRCLE"))
             showGfxCircle(args, guiBoard);
         else if (cmd.equals("CLEAR"))
@@ -274,7 +277,7 @@ public final class AnalyzeShow
         else if (cmd.equals("VAR"))
             showGfxVariation(args, guiBoard);
         else if (cmd.equals("WHITE"))
-            showGfxTerritory(args, GoColor.WHITE, guiBoard);
+            showGfxTerritory(args, WHITE, guiBoard);
     }
 
     public static void showGfxMark(String[] args, GuiBoard guiBoard)
@@ -360,9 +363,9 @@ public final class AnalyzeShow
             {
                 GoColor color;
                 if (args[i].equalsIgnoreCase("b"))
-                    color = GoColor.BLACK;
+                    color = BLACK;
                 else if (args[i].equalsIgnoreCase("w"))
-                    color = GoColor.WHITE;
+                    color = WHITE;
                 else
                     break;
                 if (i + 1 >= args.length)
@@ -389,16 +392,16 @@ public final class AnalyzeShow
     private static GoColor getColor(ConstBoard board, GoPoint pointArg,
                                     ConstPointList pointListArg)
     {
-        GoColor color = GoColor.EMPTY;
+        GoColor color = EMPTY;
         if (pointArg != null)
             color = board.getColor(pointArg);
-        if (color != GoColor.EMPTY)
+        if (color != EMPTY)
             return color;
         for (int i = 0; i < pointListArg.size(); ++i)
         {
             GoPoint point = pointListArg.get(i);
             color = board.getColor(point);
-            if (color != GoColor.EMPTY)
+            if (color != EMPTY)
                 break;
         }
         return color;

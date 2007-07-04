@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
@@ -80,12 +82,12 @@ public final class GameInfoDialog
     private GameInfoDialog(GameInformation info)
     {
         Box outerBox = Box.createVerticalBox();
-        m_black = createPlayerInfo(GoColor.BLACK, "gogui-black-16x16",
+        m_black = createPlayerInfo(BLACK, "gogui-black-16x16",
                                    "Black", info);
         m_black.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
         outerBox.add(m_black.m_box);
         outerBox.add(GuiUtil.createFiller());
-        m_white = createPlayerInfo(GoColor.WHITE, "gogui-white-16x16",
+        m_white = createPlayerInfo(WHITE, "gogui-white-16x16",
                                    "White", info);
         m_white.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
         outerBox.add(m_white.m_box);
@@ -214,10 +216,10 @@ public final class GameInfoDialog
 
     private void updateGameInfo(GameInformation info)
     {
-        info.setPlayer(GoColor.BLACK, getTextFieldContent(m_black.m_name));
-        info.setPlayer(GoColor.WHITE, getTextFieldContent(m_white.m_name));
-        info.setRank(GoColor.BLACK, getTextFieldContent(m_black.m_rank));
-        info.setRank(GoColor.WHITE, getTextFieldContent(m_white.m_rank));
+        info.setPlayer(BLACK, getTextFieldContent(m_black.m_name));
+        info.setPlayer(WHITE, getTextFieldContent(m_white.m_name));
+        info.setRank(BLACK, getTextFieldContent(m_black.m_rank));
+        info.setRank(WHITE, getTextFieldContent(m_white.m_rank));
         info.setRules(getTextFieldContent(m_rules));
         info.setResult(getTextFieldContent(m_result));
         info.setDate(getTextFieldContent(m_date));

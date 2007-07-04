@@ -56,6 +56,9 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
@@ -1080,7 +1083,7 @@ public class GoGui
         {
             m_computerBlack = false;
             m_computerWhite = false;
-            if (getToMove() == GoColor.BLACK)
+            if (getToMove() == BLACK)
                 m_computerBlack = true;
             else
                 m_computerWhite = true;
@@ -1324,7 +1327,7 @@ public class GoGui
         }
         if (m_setupMode)
         {
-            if (m_setupColor == GoColor.BLACK)
+            if (m_setupColor == BLACK)
                 showStatus("Setup black stones");
             else
                 showStatus("Setup white stones");
@@ -1661,9 +1664,9 @@ public class GoGui
     /** Check if computer plays a color (or both). */
     public boolean isComputerColor(GoColor color)
     {
-        if (color == GoColor.BLACK)
+        if (color == BLACK)
             return m_computerBlack;
-        assert color == GoColor.WHITE;
+        assert color == WHITE;
         return m_computerWhite;
     }
 
@@ -1712,7 +1715,7 @@ public class GoGui
             else
                 color = m_setupColor;
             if (getBoard().getColor(p) == color)
-                color = GoColor.EMPTY;
+                color = EMPTY;
             setup(p, color);
             updateViews(false);
         }
@@ -1757,7 +1760,7 @@ public class GoGui
             m_guiBoard.contextMenu(p);
         else
         {
-            if (getBoard().getColor(p) != GoColor.EMPTY)
+            if (getBoard().getColor(p) != EMPTY)
                 return;
             if (! checkCommandInProgress())
                 return;
@@ -2647,7 +2650,7 @@ public class GoGui
                 ConstBoard board = getBoard();
                 if (point != null)
                 {
-                    if (board.getColor(point) != GoColor.EMPTY)
+                    if (board.getColor(point) != EMPTY)
                     {
                         showWarning(nameCapitalized +
                                     " played on a non-empty point",
@@ -2706,7 +2709,7 @@ public class GoGui
 
     private boolean computerToMove()
     {
-        if (getToMove() == GoColor.BLACK)
+        if (getToMove() == BLACK)
             return m_computerBlack;
         else
             return m_computerWhite;
@@ -2938,9 +2941,9 @@ public class GoGui
             && m_gtp.isSupported("kgs-genmove_cleanup"))
         {
             command = "kgs-genmove_cleanup";
-            if (toMove == GoColor.BLACK)
+            if (toMove == BLACK)
                 command += " b";
-            else if (toMove == GoColor.WHITE)
+            else if (toMove == WHITE)
                 command += " w";
             else
                 assert false;
@@ -3769,8 +3772,8 @@ public class GoGui
         {
             String name = getProgramLabel();
             if (! appName.equals("GoGui")
-                && (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), name)
-                    || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), name)))
+                && (ObjectUtil.equals(info.getPlayer(BLACK), name)
+                    || ObjectUtil.equals(info.getPlayer(WHITE), name)))
                 setTitle(gameName);
             else
                 setTitle(gameName + " - " + appName);
