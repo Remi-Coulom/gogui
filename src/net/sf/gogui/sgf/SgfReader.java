@@ -215,13 +215,14 @@ public final class SgfReader
     /** Map containing the properties of the current node. */
     private final Map m_props = new TreeMap();
 
-    private void addSgfProperty(Node node, String property, ArrayList values)
+    private void addSgfProperty(Node node, String property,
+                                ArrayList<String> values)
     {
         m_buffer.setLength(0);
         for (int i = 0; i < values.size(); ++i)
         {
             m_buffer.append('[');
-            m_buffer.append((String)values.get(i));
+            m_buffer.append(values.get(i));
             m_buffer.append(']');
         }
         node.addSgfProperty(property, m_buffer.toString());
@@ -679,7 +680,7 @@ public final class SgfReader
                           true, 1000L))
             return;
         setWarning("overtime settings in unknown format");
-        ArrayList values = new ArrayList();
+        ArrayList<String> values = new ArrayList<String>();
         values.add(value);
         addSgfProperty(node, "OT", values);
     }

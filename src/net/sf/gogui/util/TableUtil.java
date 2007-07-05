@@ -70,7 +70,7 @@ public final class TableUtil
 
     public static Table fromHistogram(Histogram histogram, String name)
     {
-        ArrayList columnTitles = new ArrayList(2);
+        ArrayList<String> columnTitles = new ArrayList<String>(2);
         columnTitles.add(name);
         columnTitles.add("Count");
         Table result = new Table(columnTitles);
@@ -94,10 +94,11 @@ public final class TableUtil
     }
 
     /** Get elements of a column without null and whitespace-only elements. */
-    public static ArrayList getColumnNotEmpty(Table table, String column)
+    public static ArrayList<String> getColumnNotEmpty(Table table,
+                                                      String column)
         throws Table.InvalidLocation
     {
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
         int col = table.getColumnIndex(column);
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
@@ -108,10 +109,10 @@ public final class TableUtil
         return result;
     }
 
-    public static ArrayList getColumnUnique(Table table, String column)
+    public static ArrayList<String> getColumnUnique(Table table, String column)
         throws Table.InvalidLocation
     {
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
         int col = table.getColumnIndex(column);
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
@@ -219,7 +220,7 @@ public final class TableUtil
                                String compareValue, String selectColumn)
         throws Table.InvalidLocation
     {
-        ArrayList columnTitles = new ArrayList(1);
+        ArrayList<String> columnTitles = new ArrayList<String>(1);
         columnTitles.add(selectColumn);
         Table result = new Table(columnTitles);
         for (int row = 0; row < table.getNumberRows(); ++row)
@@ -238,7 +239,7 @@ public final class TableUtil
                                String selectColumn2)
         throws Table.InvalidLocation
     {
-        ArrayList columnTitles = new ArrayList(2);
+        ArrayList<String> columnTitles = new ArrayList<String>(2);
         columnTitles.add(selectColumn1);
         columnTitles.add(selectColumn2);
         Table result = new Table(columnTitles);

@@ -22,7 +22,7 @@ import net.sf.gogui.util.StringUtil;
 */
 final class ExtraInfo
 {
-    public Map m_marked;
+    public Map<MarkType,PointList> m_marked;
 
     /** Node value.
         Float instead of double for space efficiency.
@@ -41,9 +41,9 @@ final class MoreExtraInfo
 
     public TimeInfo m_timeInfo;
 
-    public TreeMap m_sgfProperties;
+    public TreeMap<String,String> m_sgfProperties;
 
-    public Map m_label;
+    public Map<GoPoint,String> m_label;
 
     public GameInformation m_gameInformation;
 }
@@ -103,13 +103,15 @@ public final class Node
         {
             if (m_children instanceof Node)
             {
-                ArrayList list = new ArrayList(2);
-                list.add(m_children);
+                ArrayList<Node> list = new ArrayList<Node>(2);
+                list.add((Node)m_children);
                 list.add(node);
                 m_children = list;
             }
             else
-                ((ArrayList)m_children).add(node);
+            {
+                ((ArrayList<Node>)m_children).add(node);
+            }
         }
         node.m_father = this;
     }
@@ -121,7 +123,7 @@ public final class Node
     public void addMarked(GoPoint point, MarkType type)
     {
         assert point != null;
-        Map marked = createMarked();
+        Map<MarkType,PointList> marked = createMarked();
         PointList pointList = (PointList)marked.get(type);
         if (pointList == null)
         {
@@ -306,22 +308,22 @@ public final class Node
     /** Get all labels on the board.
         @return Map containing (Point,String) pairs.
     */
-    public Map getLabels()
+    public Map<GoPoint,String> getLabels()
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
         return m_extraInfo.m_moreExtraInfo.m_label;
     }
 
-    /** Get all labels on the board (const).
+    /** Get all labels on the board (a copy).
         @return Map containing (Point,String) pairs.
     */
-    public Map getLabelsConst()
+    public Map<GoPoint,String> getLabelsConst()
     {
-        Map labels = getLabels();
+        Map<GoPoint,String> labels = getLabels();
         if (labels == null)
             return null;
-        return new TreeMap(labels);
+        return new TreeMap<GoPoint,String>(labels);
     }
 
     /** Get all markups of a type.
@@ -332,7 +334,7 @@ public final class Node
     {
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
             return null;
-        return (PointList)m_extraInfo.m_marked.get(type);
+        return m_extraInfo.m_marked.get(type);
     }
 
     /** Get all markups of a type (const).
@@ -395,24 +397,24 @@ public final class Node
         to String value
         @see #addSgfProperty
     */
-    public Map getSgfProperties()
+    public Map<String,String> getSgfProperties()
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
         return m_extraInfo.m_moreExtraInfo.m_sgfProperties;
     }
 
-    /** Get other unspecified SGF properties (const).
+    /** Get other unspecified SGF properties (copy).
         @return The map with other SGF properties mapping String label
         to String value
         @see #addSgfProperty
     */
-    public Map getSgfPropertiesConst()
+    public Map<String,String> getSgfPropertiesConst()
     {
-        Map sgfProperties = getSgfProperties();
+        Map<String,String> sgfProperties = getSgfProperties();
         if (sgfProperties == null)
             return null;
-        return new TreeMap(sgfProperties);
+        return new TreeMap<String,String>(sgfProperties);
     }
 
     /** Time left for color after move was made.
@@ -504,7 +506,7 @@ public final class Node
         assert child.isChildOf(this);
         if (getNumberChildren() <= 1)
             return;
-        ArrayList list = (ArrayList)m_children;
+        ArrayList<Node> list = (ArrayList<Node>)m_children;
         list.remove(child);
         list.add(0, child);
     }
@@ -537,7 +539,7 @@ public final class Node
     public void removeMarked(GoPoint point, MarkType type)
     {
         assert point != null;
-        Map marked = createMarked();
+        Map<MarkType,PointList> marked = createMarked();
         PointList pointList = (PointList)marked.get(type);
         if (pointList != null)
             pointList.remove(point);
@@ -608,14 +610,14 @@ public final class Node
     public void setLabel(GoPoint point, String label)
     {
         assert point != null;
-        Map tree = createLabel();
-        tree.remove(point);
+        Map<GoPoint,String> map = createLabel();
+        map.remove(point);
         if (label == null)
             return;
         label = label.trim();
         if (label.equals(""))
             return;
-        tree.put(point, label);
+        map.put(point, label);
     }
 
     /** Set move stored in this node.
@@ -730,19 +732,19 @@ public final class Node
         return m_extraInfo.m_moreExtraInfo;
     }
 
-    private Map createLabel()
+    private Map<GoPoint,String> createLabel()
     {
         MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
         if (moreExtraInfo.m_label == null)
-            moreExtraInfo.m_label = new TreeMap();
+            moreExtraInfo.m_label = new TreeMap<GoPoint,String>();
         return moreExtraInfo.m_label;
     }
 
-    private Map createMarked()
+    private Map<MarkType,PointList> createMarked()
     {
         createExtraInfo();
         if (m_extraInfo.m_marked == null)
-            m_extraInfo.m_marked = new TreeMap();
+            m_extraInfo.m_marked = new TreeMap<MarkType,PointList>();
         return m_extraInfo.m_marked;
     }
 
@@ -754,11 +756,11 @@ public final class Node
         return moreExtraInfo.m_setupInfo;
     }
 
-    private Map createSgfProperties()
+    private Map<String,String> createSgfProperties()
     {
         MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
         if (moreExtraInfo.m_sgfProperties == null)
-            moreExtraInfo.m_sgfProperties = new TreeMap();
+            moreExtraInfo.m_sgfProperties = new TreeMap<String,String>();
         return moreExtraInfo.m_sgfProperties;
     }
 

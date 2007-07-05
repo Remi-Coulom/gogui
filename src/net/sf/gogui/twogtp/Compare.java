@@ -42,8 +42,10 @@ public final class Compare
         game is found (<= 20% identical moves comparing moves by number),
         the game number is returned with a question mark appended.
     */
-    public static String checkDuplicate(ConstBoard board, ArrayList moves,
-                                        ArrayList games, boolean useAlternate,
+    public static String checkDuplicate(ConstBoard board,
+                                        ArrayList<Move> moves,
+                                        ArrayList<ArrayList<Move>> games,
+                                        boolean useAlternate,
                                         boolean isAlternated)
     {
         String result = "-";
@@ -51,7 +53,7 @@ public final class Compare
         {
             if (useAlternate && ((numberGame % 2 != 0) != isAlternated))
                 continue;
-            ArrayList gameMoves = (ArrayList)games.get(numberGame);
+            ArrayList<Move> gameMoves = games.get(numberGame);
             for (int rot = 0; rot < BoardUtil.NUMBER_ROTATIONS; ++rot)
             {
                 int numberDifferent = 0;
@@ -65,13 +67,13 @@ public final class Compare
                 for (int i = 0;
                      numberDifferent <= maxDifferent && i < moveNumber; ++i)
                 {
-                    Move move = (Move)moves.get(i);
+                    Move move = moves.get(i);
                     GoPoint point = move.getPoint();
                     GoColor color = move.getColor();
-                    Move gameMove = (Move)gameMoves.get(i);
+                    Move gameMove = gameMoves.get(i);
                     GoPoint gamePoint = BoardUtil.rotate(rot,
-                                                          gameMove.getPoint(),
-                                                          board.getSize());
+                                                         gameMove.getPoint(),
+                                                         board.getSize());
                     GoColor gameColor = gameMove.getColor();
                     if (! color.equals(gameColor)
                         || ! GoPoint.equals(point, gamePoint))
@@ -96,7 +98,7 @@ public final class Compare
     public static void compare(ArrayList filenames) throws Exception
     {
         Board board = null;
-        ArrayList games = new ArrayList();
+        ArrayList<ArrayList<Move>> games = new ArrayList<ArrayList<Move>>();
         for (int gameNumber = 0; gameNumber < filenames.size(); ++gameNumber)
         {
             String filename = (String)filenames.get(gameNumber);
@@ -110,7 +112,7 @@ public final class Compare
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
-            ArrayList moves = getAllAsMoves(tree.getRoot());
+            ArrayList<Move> moves = getAllAsMoves(tree.getRoot());
             String duplicate =
                 checkDuplicate(board, moves, games, false, false);
             System.out.println(Integer.toString(gameNumber) + " " +
@@ -123,13 +125,13 @@ public final class Compare
         All setup stones are translated to moves and passes are filled in
         to ensure that moves are alternating beginning with black.
         @param node The start node
-        @return List of moves (Move) corresponding to moves and setup stones
+        @return List of moves corresponding to moves and setup stones
         in main variation starting with the given node.
     */
-    public static ArrayList getAllAsMoves(ConstNode node)
+    public static ArrayList<Move> getAllAsMoves(ConstNode node)
     {
-        ArrayList moves = new ArrayList(128);
-        ArrayList nodeMoves = new ArrayList(128);
+        ArrayList<Move> moves = new ArrayList<Move>(128);
+        ArrayList<Move> nodeMoves = new ArrayList<Move>(128);
         while (node != null)
         {
             NodeUtil.getAllAsMoves(node, nodeMoves);

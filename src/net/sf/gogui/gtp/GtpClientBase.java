@@ -158,9 +158,9 @@ public abstract class GtpClientBase
         Note: call querySupportedCommands() first.
         @return A vector of strings with the supported commands.
     */
-    public ArrayList getSupportedCommands()
+    public ArrayList<String> getSupportedCommands()
     {
-        ArrayList result = new ArrayList(128);
+        ArrayList<String> result = new ArrayList<String>(128);
         if (m_supportedCommands != null)
             for (int i = 0; i < m_supportedCommands.length; ++i)
                 result.add(m_supportedCommands[i]);

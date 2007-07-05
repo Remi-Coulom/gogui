@@ -50,10 +50,11 @@ public class Analyze
             || ! m_table.getColumnTitle(0).equals("File")
             || ! m_table.getColumnTitle(1).equals("Move"))
             throw new ErrorMessage("Invalid table format");
-        m_commands = new ArrayList();
+        m_commands = new ArrayList<String>();
         for (int i = 2; i < m_table.getNumberColumns(); ++i)
             m_commands.add(m_table.getColumnTitle(i));
-        m_commandStatistics = new ArrayList(m_commands.size());
+        m_commandStatistics =
+            new ArrayList<CommandStatistics>(m_commands.size());
         File file = new File(m_output + ".html");
         initGameInfo();
         findGameGlobalCommands();
@@ -141,7 +142,7 @@ public class Analyze
     /** Command having at most one result per game. */
     private static class GameGlobalCommand
     {
-        public GameGlobalCommand(String name, ArrayList results)
+        public GameGlobalCommand(String name, ArrayList<String> results)
         {
             m_name = name;
             m_results = results;
@@ -160,7 +161,7 @@ public class Analyze
 
         public String getResult(int game)
         {
-            return (String)m_results.get(game);
+            return m_results.get(game);
         }
 
         private boolean m_allEmpty;
@@ -168,7 +169,7 @@ public class Analyze
         private final String m_name;
 
         /** Results per game. */
-        private final ArrayList m_results;
+        private final ArrayList<String> m_results;
 
         private void initAllEmpty()
         {
@@ -212,13 +213,13 @@ public class Analyze
 
     private Table m_tableFinal;
 
-    private final ArrayList m_commandStatistics;
+    private final ArrayList<CommandStatistics> m_commandStatistics;
 
-    private final ArrayList m_commands;
+    private final ArrayList<String> m_commands;
 
-    private ArrayList m_gameGlobalCommands;
+    private ArrayList<GameGlobalCommand> m_gameGlobalCommands;
 
-    private ArrayList m_gameInfo;
+    private ArrayList<GameInfo> m_gameInfo;
 
     private void endInfo(PrintStream out)
     {
@@ -229,18 +230,18 @@ public class Analyze
 
     private void findGameGlobalCommands() throws Table.InvalidLocation
     {
-        m_gameGlobalCommands = new ArrayList();
+        m_gameGlobalCommands = new ArrayList<GameGlobalCommand>();
         for (int i = 0; i < m_commands.size(); ++i)
         {
             String command = getCommand(i);
             boolean isGameGlobal = true;
-            ArrayList gameResult = new ArrayList();
+            ArrayList<String> gameResult = new ArrayList<String>();
             for (int j = 0; j < m_gameInfo.size(); ++j)
             {
-                GameInfo info = (GameInfo)(m_gameInfo.get(j));
+                GameInfo info = m_gameInfo.get(j);
                 Table table = TableUtil.select(m_table, "File", info.m_file,
                                                command);
-                ArrayList notEmpty
+                ArrayList<String> notEmpty
                     = TableUtil.getColumnNotEmpty(table, command);
                 if (notEmpty.size() > 1)
                 {
@@ -280,7 +281,7 @@ public class Analyze
 
     private String getCommand(int index)
     {
-        return (String)m_commands.get(index);
+        return m_commands.get(index);
     }
 
     private File getCommandFile(int commandIndex)
@@ -290,7 +291,7 @@ public class Analyze
 
     private CommandStatistics getCommandStatistics(int commandIndex)
     {
-        return (CommandStatistics)m_commandStatistics.get(commandIndex);
+        return m_commandStatistics.get(commandIndex);
     }
 
     private File getCountFile()
@@ -310,7 +311,7 @@ public class Analyze
 
     private GameGlobalCommand getGameGlobalCommand(int index)
     {
-        return (GameGlobalCommand)m_gameGlobalCommands.get(index);
+        return m_gameGlobalCommands.get(index);
     }
 
     private File getHistoFile(int commandIndex)
@@ -388,7 +389,7 @@ public class Analyze
     private String getGameLink(File fromFile, int gameNumber,
                                boolean shortName)
     {
-        GameInfo info = (GameInfo)(m_gameInfo.get(gameNumber));
+        GameInfo info = m_gameInfo.get(gameNumber);
         File gameFile = new File(info.m_file);
         if (! gameFile.exists())
             return (shortName ? gameFile.getName() : gameFile.toString());
@@ -404,7 +405,7 @@ public class Analyze
 
     private void initGameInfo() throws Table.InvalidLocation, IOException
     {
-        m_gameInfo = new ArrayList();
+        m_gameInfo = new ArrayList<GameInfo>();
         String last = null;
         GameInfo info = null;
         m_maxMove = 0;
@@ -446,7 +447,7 @@ public class Analyze
         m_tableFinal = new Table(m_table.getColumnTitles());
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
-            info = (GameInfo)(m_gameInfo.get(i));
+            info = m_gameInfo.get(i);
             String file = info.m_file;
             String finalPosition = Integer.toString(info.m_finalPosition);
             int row = TableUtil.findRow(m_table, "File", file, "Move",
@@ -758,7 +759,7 @@ public class Analyze
         out.print("</tr></thead>\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
-            GameInfo info = (GameInfo)(m_gameInfo.get(i));
+            GameInfo info = m_gameInfo.get(i);
             String file = getGameFile(i).getName();
             out.print("<tr><td style=\"background-color:" + COLOR_HEADER
                       + "\"><a href=\"" + file + "\">Game " + (i + 1)

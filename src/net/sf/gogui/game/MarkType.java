@@ -46,7 +46,7 @@ public final class MarkType
 
     public static MarkType getType(int i)
     {
-        return (MarkType)s_types.get(i);
+        return s_types.get(i);
     }
 
     public int hashCode()
@@ -59,7 +59,7 @@ public final class MarkType
         return m_string;
     }
 
-    private static ArrayList s_types;
+    private static ArrayList<MarkType> s_types;
 
     /** Index if mark types are stored in a map. */
     private final int m_index;
@@ -69,7 +69,7 @@ public final class MarkType
     private MarkType(String string)
     {
         if (s_types == null)
-            s_types = new ArrayList(7);
+            s_types = new ArrayList<MarkType>(7);
         m_string = string;
         m_index = s_types.size();
         s_types.add(this);

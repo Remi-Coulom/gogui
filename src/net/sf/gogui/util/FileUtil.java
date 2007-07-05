@@ -92,10 +92,10 @@ public final class FileUtil
         trailing whitespaces are removed. Empty lines or lines beginning
         with the comment character '#' are ignored.
     */
-    public static ArrayList readStringListFromFile(File file)
+    public static ArrayList<String> readStringListFromFile(File file)
         throws IOException
     {
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
         FileReader reader = new FileReader(file);
         BufferedReader in = new BufferedReader(reader);
         while (true)

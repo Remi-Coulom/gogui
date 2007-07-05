@@ -29,8 +29,8 @@ public final class Board
     {
         int n = getNumberMoves();
         return (n >= 2
-                && getStackEntry(n - 1).m_move.getPoint() == null
-                && getStackEntry(n - 2).m_move.getPoint() == null);
+                && m_stack.get(n - 1).m_move.getPoint() == null
+                && m_stack.get(n - 2).m_move.getPoint() == null);
     }
 
     /** Check if board contains a point.
@@ -104,7 +104,7 @@ public final class Board
     {
         int n = getNumberMoves();
         assert n > 0;
-        return getStackEntry(n - 1).m_killed;
+        return m_stack.get(n - 1).m_killed;
     }
 
     /** Return last move.
@@ -115,7 +115,7 @@ public final class Board
         int n = getNumberMoves();
         if (n == 0)
             return null;
-        return getStackEntry(n - 1).m_move;
+        return m_stack.get(n - 1).m_move;
     }
 
     /** Get the number of moves played so far.
@@ -134,7 +134,7 @@ public final class Board
     */
     public Move getMove(int i)
     {
-        return ((StackEntry)m_stack.get(i)).m_move;
+        return m_stack.get(i).m_move;
     }
 
     /** Get a all points on the board.
@@ -195,7 +195,7 @@ public final class Board
     {
         int n = getNumberMoves();
         assert n > 0;
-        return getStackEntry(n - 1).m_suicide;
+        return m_stack.get(n - 1).m_suicide;
     }
 
     /** Get color to move.
@@ -395,7 +395,7 @@ public final class Board
     {
         int index = getNumberMoves() - 1;
         assert index >= 0;
-        getStackEntry(index).undo(this);
+        m_stack.get(index).undo(this);
         m_stack.remove(index);
     }
 
@@ -496,7 +496,8 @@ public final class Board
 
     private int[] m_captured = { 0, 0 };
 
-    private final ArrayList m_stack = new ArrayList(361);
+    private final ArrayList<StackEntry> m_stack
+        = new ArrayList<StackEntry>(361);
 
     private GoColor[][] m_color;
 
@@ -511,11 +512,6 @@ public final class Board
     private PointList[] m_setup = { new PointList(), new PointList() };
 
     private boolean m_isSetupHandicap;
-
-    private StackEntry getStackEntry(int i)
-    {
-        return (StackEntry)m_stack.get(i);
-    }
 
     private boolean isSingleStoneSingleLib(GoPoint point, GoColor color)
     {

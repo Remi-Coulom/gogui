@@ -167,17 +167,17 @@ public final class NodeUtil
         Calls NodeUtil.getAllAsMoves(Node node) for all nodes in a
         sequence of subsequent nodes.
     */
-    public static ArrayList getAllAsMoves(ArrayList nodes)
+    public static ArrayList<Move> getAllAsMoves(ArrayList<Node> nodes)
     {
-        ArrayList moves = new ArrayList();
-        ArrayList nodeMoves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> nodeMoves = new ArrayList<Move>();
         for (int i = 0; i < nodes.size(); ++i)
         {
-            Node node = (Node)nodes.get(i);
+            Node node = nodes.get(i);
             nodeMoves.clear();
             getAllAsMoves(node, nodeMoves);
             moves.addAll(nodeMoves);
-            assert i == 0 || node.isChildOf((Node)nodes.get(i - 1));
+            assert i == 0 || node.isChildOf(nodes.get(i - 1));
         }
         return moves;
     }
@@ -199,7 +199,7 @@ public final class NodeUtil
         @param node the node
         @param moves the resulting moves
     */
-    public static void getAllAsMoves(ConstNode node, ArrayList moves)
+    public static void getAllAsMoves(ConstNode node, ArrayList<Move> moves)
     {
         moves.clear();
         Move move = node.getMove();
@@ -251,7 +251,7 @@ public final class NodeUtil
     }
 
     /** Get all children moves.
-        @return ArrayList contaning the move points, not including passes
+        @return Point list containing the move points, not including passes
         and independent of color.
     */
     public static PointList getChildrenMoves(ConstNode node)
@@ -418,7 +418,8 @@ public final class NodeUtil
     }
 
     /** Get nodes in path from a given node to the root node. */
-    public static void getPathToRoot(ConstNode node, ArrayList result)
+    public static void getPathToRoot(ConstNode node,
+                                     ArrayList<ConstNode> result)
     {
         result.clear();
         while (node != null)
@@ -476,7 +477,7 @@ public final class NodeUtil
     */
     public static String getVariationString(ConstNode node)
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (node != null)
         {
             ConstNode father = node.getFatherConst();
@@ -733,11 +734,11 @@ public final class NodeUtil
     public static void restoreClock(ConstNode node, Clock clock)
     {
         clock.reset();
-        ArrayList path = new ArrayList();
+        ArrayList<ConstNode> path = new ArrayList<ConstNode>();
         getPathToRoot(node, path);
         for (int i = path.size() - 1; i >= 0; --i)
         {
-            ConstNode pathNode = (ConstNode)path.get(i);
+            ConstNode pathNode = path.get(i);
             restoreTimeLeft(pathNode, clock, BLACK);
             restoreTimeLeft(pathNode, clock, WHITE);
         }

@@ -67,7 +67,7 @@ public class GtpSynchronizer
         m_gtp.sendClearBoard(size);
         ConstBoard targetState = computeTargetState(board);
         setup(targetState);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         for (int i = 0; i < targetState.getNumberMoves(); ++i)
             moves.add(targetState.getMove(i));
         play(moves);
@@ -89,7 +89,7 @@ public class GtpSynchronizer
             return;
         }
         m_isOutOfSync = true;
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         int numberUndo = computeToPlay(moves, targetState);
         if (numberUndo == 0 || m_isSupportedUndo || m_isSupportedGGUndo)
         {
@@ -227,7 +227,7 @@ public class GtpSynchronizer
     /** Compute number of moves to undo and moves to execute.
         @return Number of moves to undo.
     */
-    private int computeToPlay(ArrayList moves, ConstBoard targetState)
+    private int computeToPlay(ArrayList<Move> moves, ConstBoard targetState)
         throws GtpError
     {
         int numberCommonMoves = findNumberCommonMoves(targetState);

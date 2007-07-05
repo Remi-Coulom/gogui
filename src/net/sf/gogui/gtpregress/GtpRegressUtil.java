@@ -18,11 +18,11 @@ public class GtpRegressUtil
         @throws ErrorMessage If one of the files is not a normal file or
         not readable.
     */
-    public static void checkFiles(ArrayList list) throws ErrorMessage
+    public static void checkFiles(ArrayList<String> list) throws ErrorMessage
     {
         for (int i = 0; i < list.size(); ++i)
         {
-            File file = new File((String)list.get(i));
+            File file = new File(list.get(i));
             if (! file.exists())
                 throw new ErrorMessage("File not found: " + file);
             if (! file.isFile())
@@ -41,14 +41,15 @@ public class GtpRegressUtil
         @return List of test names (as strings) with all test suites
         expanded.
     */
-    public static ArrayList expandTestSuites(ArrayList list) throws IOException
+    public static ArrayList<String> expandTestSuites(ArrayList<String> list)
+        throws IOException
     {
         while (containsTestSuite(list))
         {
-            ArrayList newList = new ArrayList();
+            ArrayList<String> newList = new ArrayList<String>();
             for (int i = 0; i < list.size(); ++i)
             {
-                String name = (String)list.get(i);
+                String name = list.get(i);
                 if (name.startsWith("@"))
                 {
                     File file = new File(name.substring(1));
@@ -67,11 +68,11 @@ public class GtpRegressUtil
     {
     }
 
-    private static boolean containsTestSuite(ArrayList list)
+    private static boolean containsTestSuite(ArrayList<String> list)
     {
         for (int i = 0; i < list.size(); ++i)
         {
-            String name = (String)list.get(i);
+            String name = list.get(i);
             if (name.startsWith("@"))
                 return true;
         }

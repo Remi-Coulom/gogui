@@ -72,7 +72,7 @@ public class Options
     /** Get remaining arguments that are not options.
         @return The sequence of non-option arguments.
     */
-    public ArrayList getArguments()
+    public ArrayList<String> getArguments()
     {
         return m_args;
     }
@@ -277,9 +277,9 @@ public class Options
         return opt;
     }
 
-    private final ArrayList m_args = new ArrayList();
+    private final ArrayList<String> m_args = new ArrayList<String>();
 
-    private final Map m_map = new TreeMap();
+    private final Map<String,String> m_map = new TreeMap<String,String>();
 
     private String getSpec(String option) throws ErrorMessage
     {
@@ -294,8 +294,8 @@ public class Options
     {
         assert isValidOption(option);
         if (m_map.containsKey(option))
-            return (String)m_map.get(option);
-        return (String)m_map.get(option + ":");
+            return m_map.get(option);
+        return m_map.get(option + ":");
     }
 
     private boolean isOptionKey(String s)

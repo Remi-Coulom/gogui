@@ -14,14 +14,15 @@ public final class MoveUtil
         in the same order, but ensure it starts with a move of color toMove
         and have no subsequent moves of the same color.
     */
-    public static ArrayList fillPasses(ArrayList moves, GoColor toMove)
+    public static ArrayList<Move> fillPasses(ArrayList<Move> moves,
+                                             GoColor toMove)
     {
-        ArrayList result = new ArrayList(moves.size() * 2);
+        ArrayList<Move> result = new ArrayList<Move>(moves.size() * 2);
         if (moves.isEmpty())
             return result;
         for (int i = 0; i < moves.size(); ++i)
         {
-            Move move = (Move)moves.get(i);
+            Move move = moves.get(i);
             if (move.getColor() != toMove)
                 result.add(Move.getPass(toMove));
             result.add(move);

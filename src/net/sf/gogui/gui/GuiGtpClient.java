@@ -157,7 +157,7 @@ public class GuiGtpClient
         }
     }
 
-    public ArrayList getSupportedCommands()
+    public ArrayList<String> getSupportedCommands()
     {
         assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getSupportedCommands();

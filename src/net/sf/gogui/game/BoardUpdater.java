@@ -20,7 +20,7 @@ public class BoardUpdater
 {
     public BoardUpdater()
     {
-        m_nodes = new ArrayList(400);
+        m_nodes = new ArrayList<ConstNode>(400);
     }
 
     public void update(ConstGameTree tree, ConstNode currentNode, Board board)
@@ -85,5 +85,5 @@ public class BoardUpdater
     /** Local variable used in update.
         Member variable for avoiding frequent new memory allocations.
     */
-    private final ArrayList m_nodes;
+    private final ArrayList<ConstNode> m_nodes;
 }

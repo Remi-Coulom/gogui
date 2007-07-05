@@ -67,7 +67,8 @@ public final class AnalyzeDialog
     }
 
     public AnalyzeDialog(Frame owner, Listener listener,
-                         ArrayList supportedCommands, File analyzeCommands,
+                         ArrayList<String> supportedCommands,
+                         File analyzeCommands,
                          String programAnalyzeCommands, GuiGtpClient gtp,
                          MessageDialogs messageDialogs)
     {
@@ -124,7 +125,7 @@ public final class AnalyzeDialog
     public void saveRecent()
     {
         final int maxRecent = 100;
-        ArrayList recent = new ArrayList(maxRecent);
+        ArrayList<String> recent = new ArrayList<String>(maxRecent);
         int start = (m_firstIsTemp ? 1 : 0);
         for (int i = start; i < getComboBoxItemCount(); ++i)
         {
@@ -136,7 +137,7 @@ public final class AnalyzeDialog
         {
             if (recent.size() == maxRecent)
                 break;
-            String name = (String)m_fullRecentList.get(i);
+            String name = m_fullRecentList.get(i);
             if (recent.indexOf(name) < 0)
                 recent.add(name);
         }
@@ -199,7 +200,7 @@ public final class AnalyzeDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private ArrayList m_fullRecentList;
+    private ArrayList<String> m_fullRecentList;
 
     private GoColor m_selectedColor = EMPTY;
 
@@ -225,11 +226,11 @@ public final class AnalyzeDialog
 
     private JRadioButton m_white;
 
-    private final ArrayList m_commands = new ArrayList(128);
+    private final ArrayList<String> m_commands = new ArrayList<String>(128);
 
-    private final ArrayList m_supportedCommands;
+    private final ArrayList<String> m_supportedCommands;
 
-    private final ArrayList m_labels = new ArrayList(128);
+    private final ArrayList<String> m_labels = new ArrayList<String>(128);
 
     private final Listener m_listener;
 
@@ -418,7 +419,7 @@ public final class AnalyzeDialog
             PrefUtil.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
         for (int i = 0; i < m_fullRecentList.size(); ++i)
         {
-            String name = (String)m_fullRecentList.get(i);
+            String name = m_fullRecentList.get(i);
             if (m_labels.indexOf(name) >= 0)
                 m_comboBoxHistory.addItem(new WrapperObject(name));
             if (m_comboBoxHistory.getItemCount() > 20)
@@ -451,7 +452,7 @@ public final class AnalyzeDialog
             return;
         }
         updateRecent(index);
-        String analyzeCommand = (String)m_commands.get(index);
+        String analyzeCommand = m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         if (command.needsColorArg())
             command.setColorArg(getSelectedColor());
@@ -547,7 +548,7 @@ public final class AnalyzeDialog
 
     private void selectCommand(int index)
     {
-        String label = (String)m_labels.get(index);
+        String label = m_labels.get(index);
         updateOptions(label);
         m_comboBoxHistory.removeActionListener(this);
         if (m_firstIsTemp && getComboBoxItemCount() > 0)
@@ -590,7 +591,7 @@ public final class AnalyzeDialog
         if (index < 0)
             return;
         AnalyzeCommand command =
-            new AnalyzeCommand((String)m_commands.get(index));
+            new AnalyzeCommand(m_commands.get(index));
         boolean needsColorArg = command.needsColorArg();
         m_black.setEnabled(needsColorArg);
         m_white.setEnabled(needsColorArg);
@@ -602,7 +603,7 @@ public final class AnalyzeDialog
 
     private void updateRecent(int index)
     {
-        String label = (String)m_labels.get(index);
+        String label = m_labels.get(index);
         insertComboBoxItem(label, 0);
         for (int i = 1; i < getComboBoxItemCount(); ++i)
             if (getComboBoxItem(i).equals(label))

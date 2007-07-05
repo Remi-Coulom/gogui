@@ -142,7 +142,7 @@ public class GtpShell
         int max = m_history.size();
         if (max > maxHistory)
             max = maxHistory;
-        ArrayList list = new ArrayList(max);
+        ArrayList<String> list = new ArrayList<String>(max);
         for (int i = m_history.size() - max; i < m_history.size(); ++i)
             list.add(m_history.get(i));
         PrefUtil.putList("net/sf/gogui/gui/gtpshell/recentcommands", list);
@@ -361,7 +361,7 @@ public class GtpShell
 
     private final StringBuffer m_commands = new StringBuffer(4096);
 
-    private final ArrayList m_history = new ArrayList(128);
+    private final ArrayList<String> m_history = new ArrayList<String>(128);
 
     private String m_programCommand = "unknown";
 
@@ -613,7 +613,7 @@ public class GtpShell
     {
         String text = m_textField.getText();
         text = text.replaceAll("^ *", "");
-        ArrayList completions = new ArrayList(128);
+        ArrayList<String> completions = new ArrayList<String>(128);
         for (int i = 0; i < m_history.size(); ++i)
         {
             String c = (String)m_history.get(i);

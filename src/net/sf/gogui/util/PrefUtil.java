@@ -27,15 +27,15 @@ public final class PrefUtil
         @param path The absolute path name of the node.
         @return The list of strings.
     */
-    public static ArrayList getList(String path)
+    public static ArrayList<String> getList(String path)
     {
         Preferences prefs = getNode(path);
         if (prefs == null)
-            return new ArrayList();
+            return new ArrayList<String>();
         int size = prefs.getInt("size", 0);
         if (size <= 0)
-            return new ArrayList();
-        ArrayList result = new ArrayList(size);
+            return new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<String>(size);
         for (int i = 0; i < size; ++i)
         {
             String element = prefs.get("element_" + i, null);

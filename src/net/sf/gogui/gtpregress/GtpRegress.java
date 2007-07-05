@@ -36,7 +36,7 @@ public class GtpRegress
         @param gtpFile File with GTP commands to send at startup or
         <code>null</code> for no file.
     */
-    public GtpRegress(String program, ArrayList tests, String output,
+    public GtpRegress(String program, ArrayList<String> tests, String output,
                       boolean longOutput, boolean verbose, File gtpFile)
         throws Exception
     {
@@ -59,7 +59,7 @@ public class GtpRegress
         initOutNames(tests);
         for (int i = 0; i < tests.size(); ++i)
         {
-            String test = (String)tests.get(i);
+            String test = tests.get(i);
             if (tests.size() > 1)
                 m_outPrefix = test + " ";
             else
@@ -250,11 +250,12 @@ public class GtpRegress
     /** Name of m_outFile and the summary file of the test without directory
         and file extension for the all tests.
     */
-    private TreeMap m_outNames;
+    private TreeMap<String,String> m_outNames;
 
-    private final ArrayList m_tests = new ArrayList();
+    private final ArrayList<Test> m_tests = new ArrayList<Test>();
 
-    private final ArrayList m_testSummaries = new ArrayList();
+    private final ArrayList<TestSummary> m_testSummaries
+        = new ArrayList<TestSummary>();
 
     private GtpClient m_gtp;
 
@@ -325,7 +326,7 @@ public class GtpRegress
         summary.m_otherErrors = m_otherErrors;
         for (int i = 0; i < m_tests.size(); ++i)
         {
-            Test t = (Test)m_tests.get(i);
+            Test t = m_tests.get(i);
             ++summary.m_numberTests;
             if (t.m_fail && ! t.m_expectedFail)
                 ++summary.m_unexpectedFails;
@@ -537,12 +538,12 @@ public class GtpRegress
         Appends a number, if tests with same name in different directories
         exist.
     */
-    private void initOutNames(ArrayList tests)
+    private void initOutNames(ArrayList<String> tests)
     {
-        m_outNames = new TreeMap();
+        m_outNames = new TreeMap<String,String>();
         for (int i = 0; i < tests.size(); ++i)
         {
-            String test = (String)tests.get(i);
+            String test = tests.get(i);
             File testFile = new File(test);
             String name =
                 FileUtil.removeExtension(new File(testFile.getName()), "tst");
@@ -718,7 +719,7 @@ public class GtpRegress
         TestSummary total = new TestSummary();
         for (int i = 0; i < m_testSummaries.size(); ++i)
         {
-            TestSummary summary = (TestSummary)m_testSummaries.get(i);
+            TestSummary summary = m_testSummaries.get(i);
             total.m_numberTests += summary.m_numberTests;
             total.m_otherErrors += summary.m_otherErrors;
             total.m_unexpectedFails += summary.m_unexpectedFails;
@@ -759,7 +760,7 @@ public class GtpRegress
         m_dataFiles.clear();
         m_otherErrors = 0;
         m_testFile = new File(test);
-        m_outName = (String)m_outNames.get(test);
+        m_outName = m_outNames.get(test);
         initOutFile();
         File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
         m_relativePath = FileUtil.getRelativeURI(m_outFile, testFileDir);
@@ -972,7 +973,7 @@ public class GtpRegress
                   "</thead>\n");
         for (int i = 0; i < m_testSummaries.size(); ++i)
         {
-            TestSummary summary = (TestSummary)m_testSummaries.get(i);
+            TestSummary summary = m_testSummaries.get(i);
             writeSummaryRow(out, summary, true, false);
         }
         writeSummaryRow(out, getTotalSummary(), true, true);
@@ -1111,7 +1112,7 @@ public class GtpRegress
                   "</thead>\n");
         for (int i = 0; i < m_tests.size(); ++i)
         {
-            Test t = (Test)m_tests.get(i);
+            Test t = m_tests.get(i);
             String rowBackground = COLOR_BG_LIGHT;
             String statusColor = rowBackground;
             String status = null;
