@@ -21,21 +21,23 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 /** Dialog for displaying and editing a list of objects. */
-public class ObjectListEditor
+public class ObjectListEditor<OBJECT>
 {
     /** Edit properties of object. */
-    public interface ItemEditor
+    public interface ItemEditor<OBJECT>
     {
-        Object editItem(Component parent, Object object,
+        OBJECT editItem(Component parent, OBJECT object,
                         MessageDialogs messageDialogs);
 
-        String getItemLabel(Object object);
+        String getItemLabel(OBJECT object);
 
-        Object cloneItem(Object object);
+        OBJECT cloneItem(OBJECT object);
     }
 
-    public boolean edit(Component parent, String title, ArrayList objects,
-                        ItemEditor editor, MessageDialogs messageDialogs)
+    public boolean edit(Component parent, String title,
+                        ArrayList<OBJECT> objects,
+                        ItemEditor<OBJECT> editor,
+                        MessageDialogs messageDialogs)
     {
         m_messageDialogs = messageDialogs;
         m_editor = editor;
@@ -70,7 +72,7 @@ public class ObjectListEditor
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
                                                  JOptionPane.OK_CANCEL_OPTION);
-        m_objects = new ArrayList();
+        m_objects = new ArrayList<OBJECT>();
         copyObjects(objects, m_objects);
         updateList(m_objects.isEmpty() ? -1 : 0);
         m_dialog = optionPane.createDialog(parent, title);
@@ -105,9 +107,9 @@ public class ObjectListEditor
 
     private JDialog m_dialog;
 
-    private ArrayList m_objects;
+    private ArrayList<OBJECT> m_objects;
 
-    private ItemEditor m_editor;
+    private ItemEditor<OBJECT> m_editor;
 
     private MessageDialogs m_messageDialogs;
 
@@ -116,7 +118,7 @@ public class ObjectListEditor
         int index = m_list.getSelectedIndex();
         if (index < 0 || index >= m_objects.size() - 1)
             return;
-        Object temp = m_objects.get(index);
+        OBJECT temp = m_objects.get(index);
         m_objects.set(index, m_objects.get(index + 1));
         m_objects.set(index + 1, temp);
         updateList(index + 1);
@@ -127,7 +129,7 @@ public class ObjectListEditor
         int index = m_list.getSelectedIndex();
         if (index == -1)
             return;
-        Object object = m_editor.editItem(m_dialog, getObject(index),
+        OBJECT object = m_editor.editItem(m_dialog, getObject(index),
                                           m_messageDialogs);
         if (object == null)
             return;
@@ -140,7 +142,7 @@ public class ObjectListEditor
         int index = m_list.getSelectedIndex();
         if (index < 0 || index == 0)
             return;
-        Object temp = m_objects.get(index);
+        OBJECT temp = m_objects.get(index);
         m_objects.set(index, m_objects.get(index - 1));
         m_objects.set(index - 1, temp);
         updateList(index - 1);
@@ -151,7 +153,7 @@ public class ObjectListEditor
         int index = m_list.getSelectedIndex();
         if (index == -1)
             return;
-        Object object = getObject(index);
+        OBJECT object = getObject(index);
         String name = m_editor.getItemLabel(object);
         String disableKey = "net.sf.gogui.gui.ObjectListEditor.remove";
         String mainMessage = "Really remove " + name + "?";
@@ -166,7 +168,7 @@ public class ObjectListEditor
         updateList(index);
     }
 
-    private void copyObjects(ArrayList from, ArrayList to)
+    private void copyObjects(ArrayList<OBJECT> from, ArrayList<OBJECT> to)
     {
         to.clear();
         for (int i = 0; i < from.size(); ++i)
@@ -203,9 +205,9 @@ public class ObjectListEditor
         return panel;
     }
 
-    private Object getObject(int i)
+    private OBJECT getObject(int i)
     {
-        return (Object)m_objects.get(i);
+        return m_objects.get(i);
     }
 
     private void selectionChanged()
@@ -219,7 +221,7 @@ public class ObjectListEditor
 
     private void updateList(int selectedIndex)
     {
-        ArrayList data = new ArrayList();
+        ArrayList<String> data = new ArrayList<String>();
         for (int i = 0; i < m_objects.size(); ++i)
         {
             String name = m_editor.getItemLabel(getObject(i));

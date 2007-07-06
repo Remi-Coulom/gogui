@@ -141,13 +141,13 @@ public class AnalyzeCommand
     }
 
     public static AnalyzeCommand get(Frame owner, String label,
-                                     ArrayList supportedCommands,
+                                     ArrayList<String> supportedCommands,
                                      File analyzeCommands,
                                      String programAnalyzeCommands,
                                      MessageDialogs messageDialogs)
     {
-        ArrayList commands = new ArrayList(128);
-        ArrayList labels = new ArrayList(128);
+        ArrayList<String> commands = new ArrayList<String>(128);
+        ArrayList<String> labels = new ArrayList<String>(128);
         try
         {
             read(commands, labels, supportedCommands, analyzeCommands,
@@ -162,7 +162,7 @@ public class AnalyzeCommand
         int index = labels.indexOf(label);
         if (index < 0)
             return null;
-        return new AnalyzeCommand((String)commands.get(index));
+        return new AnalyzeCommand(commands.get(index));
     }
 
     public String getLabel()
@@ -315,8 +315,10 @@ public class AnalyzeCommand
         return (m_command.indexOf("%o") >= 0);
     }
 
-    public static void read(ArrayList commands, ArrayList labels,
-                            ArrayList supportedCommands, File analyzeCommands,
+    public static void read(ArrayList<String> commands,
+                            ArrayList<String> labels,
+                            ArrayList<String> supportedCommands,
+                            File analyzeCommands,
                             String programAnalyzeCommands)
         throws ErrorMessage
     {
@@ -491,8 +493,9 @@ public class AnalyzeCommand
     private PointList m_pointListArg = new PointList();
 
     private static void readConfig(BufferedReader reader, String name,
-                                   ArrayList commands, ArrayList labels,
-                                   ArrayList supportedCommands)
+                                   ArrayList<String> commands,
+                                   ArrayList<String> labels,
+                                   ArrayList<String> supportedCommands)
         throws ErrorMessage
     {
         try

@@ -172,7 +172,7 @@ public final class GtpUtil
     }
 
     public static void parsePointStringList(String s, PointList pointList,
-                                            ArrayList stringList,
+                                            ArrayList<String> stringList,
                                             int boardsize)
         throws GtpResponseFormatError
     {
@@ -235,7 +235,7 @@ public final class GtpUtil
     public static Move[] parseVariation(String s, GoColor toMove,
                                         int boardSize)
     {
-        ArrayList list = new ArrayList(32);
+        ArrayList<Move> list = new ArrayList<Move>(32);
         String token[] = StringUtil.splitArguments(s);
         boolean isColorSet = true;
         for (int i = 0; i < token.length; ++i)

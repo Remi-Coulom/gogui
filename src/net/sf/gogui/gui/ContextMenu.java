@@ -36,15 +36,15 @@ public class ContextMenu
     }
 
     public ContextMenu(GoPoint point, boolean noProgram,
-                       ArrayList supportedCommands, File analyzeCommands,
-                       String programAnalyzeCommands, boolean mark,
-                       boolean markCircle, boolean markSquare,
+                       ArrayList<String> supportedCommands,
+                       File analyzeCommands, String programAnalyzeCommands,
+                       boolean mark, boolean markCircle, boolean markSquare,
                        boolean markTriangle, Listener listener)
     {
         m_point = point;
         m_listener = listener;
-        ArrayList commands = new ArrayList();
-        ArrayList labels = new ArrayList();
+        ArrayList<String> commands = new ArrayList<String>();
+        ArrayList<String> labels = new ArrayList<String>();
         if (! noProgram)
         {
             try

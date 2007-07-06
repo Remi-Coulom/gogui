@@ -361,7 +361,8 @@ public class TwoGtp
 
     private final String m_whiteVersion;
 
-    private final ArrayList m_games = new ArrayList(100);
+    private final ArrayList<ArrayList<Move>> m_games
+        = new ArrayList<ArrayList<Move>>(100);
 
     private final GtpClient m_black;
 
@@ -512,7 +513,7 @@ public class TwoGtp
             }
             return;
         }
-        ArrayList columns = new ArrayList();
+        ArrayList<String> columns = new ArrayList<String>();
         columns.add("GAME");
         columns.add("RES_B");
         columns.add("RES_W");
@@ -713,7 +714,8 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            ArrayList moves = Compare.getAllAsMoves(getTree().getRootConst());
+            ArrayList<Move> moves
+                = Compare.getAllAsMoves(getTree().getRootConst());
             String duplicate =
                 Compare.checkDuplicate(getBoard(), moves, m_games,
                                        m_alternate, isAlternated());

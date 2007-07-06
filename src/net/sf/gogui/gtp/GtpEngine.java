@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
@@ -291,7 +292,8 @@ public class GtpEngine
     private String m_version;
 
     /** Mapping from command (String) to GtpCallback. */
-    private final TreeMap m_commands = new TreeMap();
+    private final Map<String,GtpCallback> m_commands
+        = new TreeMap<String,GtpCallback>();
 
     private InputStream m_in;
 

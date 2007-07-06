@@ -106,7 +106,7 @@ public class MessageQueue
         }
     }
 
-    private final ArrayList m_queue = new ArrayList();
+    private final ArrayList<Object> m_queue = new ArrayList<Object>();
 
     private final Object m_mutex = new Object();
 }

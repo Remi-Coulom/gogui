@@ -66,11 +66,11 @@ public class Table
 
     public Table()
     {
-        m_columnTitles = new ArrayList();
+        m_columnTitles = new ArrayList<String>();
         m_numberColumns = 0;
     }
 
-    public Table(ArrayList columnTitles)
+    public Table(ArrayList<String> columnTitles)
     {
         m_columnTitles = columnTitles;
         m_numberColumns = columnTitles.size();
@@ -148,9 +148,10 @@ public class Table
         return (String)m_columnTitles.get(index);
     }
 
-    public ArrayList getColumnTitles()
+    @SuppressWarnings("unchecked")
+    public ArrayList<String> getColumnTitles()
     {
-        return (ArrayList)m_columnTitles.clone();
+        return (ArrayList<String>)m_columnTitles.clone();
     }
 
     public int getNumberColumns()
@@ -237,7 +238,7 @@ public class Table
         }
         for (int i = 0; i < m_rows.size(); ++i)
         {
-            ArrayList row = (ArrayList)m_rows.get(i);
+            ArrayList<String> row = m_rows.get(i);
             for (int j = 0; j < m_numberColumns; ++j)
             {
                 String value = (String)row.get(j);
@@ -291,7 +292,7 @@ public class Table
 
     public void startRow()
     {
-        ArrayList row = new ArrayList(m_numberColumns);
+        ArrayList<String> row = new ArrayList<String>(m_numberColumns);
         for (int i = 0; i < m_numberColumns; ++i)
             row.add(null);
         m_rows.add(row);
@@ -306,11 +307,12 @@ public class Table
 
     private final Properties m_properties = new Properties();
 
-    private final ArrayList m_columnTitles;
+    private final ArrayList<String> m_columnTitles;
 
-    private ArrayList m_lastRow;
+    private ArrayList<String> m_lastRow;
 
-    private final ArrayList m_rows = new ArrayList();
+    private final ArrayList<ArrayList<String>> m_rows
+        = new ArrayList<ArrayList<String>>();
 
     private void addColumnTitle(String columnTitle)
     {
@@ -318,9 +320,9 @@ public class Table
         ++m_numberColumns;
     }
 
-    private ArrayList getRow(int index)
+    private ArrayList<String> getRow(int index)
     {
-        return (ArrayList)m_rows.get(index);
+        return m_rows.get(index);
     }
 
     private void handleComment(String comment)

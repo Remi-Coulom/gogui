@@ -510,7 +510,8 @@ public class GoGui
     public void actionEditBookmarks()
     {
         BookmarkEditor editor = new BookmarkEditor();
-        ObjectListEditor listEditor = new ObjectListEditor();
+        ObjectListEditor<Bookmark> listEditor =
+            new ObjectListEditor<Bookmark>();
         if (! listEditor.edit(this, "Edit Bookmarks", m_bookmarks, editor,
                               m_messageDialogs))
             return;
@@ -537,7 +538,7 @@ public class GoGui
     public void actionEditPrograms()
     {
         ProgramEditor editor = new ProgramEditor();
-        ObjectListEditor listEditor = new ObjectListEditor();
+        ObjectListEditor<Program> listEditor = new ObjectListEditor<Program>();
         if (! listEditor.edit(this, "Edit Programs", m_programs, editor,
                               m_messageDialogs))
             return;
@@ -2735,7 +2736,7 @@ public class GoGui
 
     private ContextMenu createContextMenu(GoPoint point)
     {
-        ArrayList supportedCommands = null;
+        ArrayList<String> supportedCommands = null;
         boolean noProgram = (m_gtp == null);
         if (! noProgram)
             supportedCommands = m_gtp.getSupportedCommands();

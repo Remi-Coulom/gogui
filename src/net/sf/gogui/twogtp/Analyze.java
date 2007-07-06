@@ -63,7 +63,7 @@ public class Analyze
 
     private static final String COLOR_INFO = "#e0e0e0";
 
-    private final ArrayList m_entries = new ArrayList(128);
+    private final ArrayList<Entry> m_entries = new ArrayList<Entry>(128);
 
     private final Statistics m_length = new Statistics();
 

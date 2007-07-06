@@ -7,6 +7,7 @@ package net.sf.gogui.gui;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.TreeSet;
+import java.util.Set;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JCheckBox;
@@ -264,7 +265,7 @@ public final class MessageDialogs
 
     private final String m_applicationName;
 
-    private final TreeSet m_disabled = new TreeSet();
+    private final Set<String> m_disabled = new TreeSet<String>();
 
     private static void addFiller(JComponent component)
     {

@@ -128,12 +128,12 @@ public final class Main
     private static ArrayList parseCommands(Options opt, String option)
         throws ErrorMessage
     {
-        ArrayList result = null;
+        ArrayList<String> result = null;
         if (opt.contains(option))
         {
             String string = opt.get(option);
             String[] array = StringUtil.split(string, ',');
-            result = new ArrayList(array.length);
+            result = new ArrayList<String>(array.length);
             for (int i = 0; i < array.length; ++i)
                 result.add(array[i].trim());
         }

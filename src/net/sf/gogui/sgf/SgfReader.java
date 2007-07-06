@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.game.GameInformation;
@@ -199,7 +200,7 @@ public final class SgfReader
     private final ProgressShow m_progressShow;
 
     /** Contains strings with warnings. */
-    private final TreeSet m_warnings = new TreeSet();
+    private final Set<String> m_warnings = new TreeSet<String>();
 
     private StreamTokenizer m_tokenizer;
 
@@ -213,7 +214,8 @@ public final class SgfReader
     private final PointList m_pointList = new PointList();
 
     /** Map containing the properties of the current node. */
-    private final Map m_props = new TreeMap();
+    private final Map<String,ArrayList<String>> m_props =
+        new TreeMap<String,ArrayList<String>>();
 
     private void addSgfProperty(Node node, String property,
                                 ArrayList<String> values)
@@ -390,7 +392,7 @@ public final class SgfReader
         // Handle SZ property first to be able to parse points
         if (m_props.containsKey("SZ"))
         {
-            ArrayList values = (ArrayList)m_props.get("SZ");
+            ArrayList<String> values = m_props.get("SZ");
             m_props.remove("SZ");
             if (! isRoot)
                 setWarning("Size property not in root node ignored");
@@ -398,7 +400,7 @@ public final class SgfReader
             {
                 try
                 {
-                    int size = parseInt((String)values.get(0));
+                    int size = parseInt(values.get(0));
                     if (size <= 0 || size > GoPoint.MAX_SIZE)
                         setWarning("Invalid board size value");
                     assert m_boardSize == -1;
@@ -410,13 +412,11 @@ public final class SgfReader
                 }
             }
         }
-        Iterator it = m_props.entrySet().iterator();
-        while (it.hasNext())
+        for (Map.Entry<String,ArrayList<String>> entry : m_props.entrySet())
         {
-            Map.Entry entry = (Map.Entry)it.next();
-            String p = (String)entry.getKey();
-            ArrayList values = (ArrayList)entry.getValue();
-            String v = (String)values.get(0);
+            String p = entry.getKey();
+            ArrayList<String> values = entry.getValue();
+            String v = values.get(0);
             if (p == "AB")
             {
                 parsePointList(values);
@@ -516,7 +516,7 @@ public final class SgfReader
             {
                 for (int i = 0; i < values.size(); ++i)
                 {
-                    String value = (String)values.get(i);
+                    String value = values.get(i);
                     int pos = value.indexOf(':');
                     if (pos > 0)
                     {
@@ -940,7 +940,7 @@ public final class SgfReader
         {
             // Use intern() to allow fast comparsion with ==
             String p = m_tokenizer.sval.toUpperCase(Locale.ENGLISH).intern();
-            ArrayList values = new ArrayList();
+            ArrayList<String> values = new ArrayList<String>();
             String s;
             while ((s = readValue()) != null)
                 values.add(s);

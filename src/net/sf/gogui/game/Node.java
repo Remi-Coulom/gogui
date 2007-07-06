@@ -92,6 +92,7 @@ public final class Node
     /** Append a node as a child to this node.
         @param node The node to append.
     */
+    @SuppressWarnings("unchecked")
     public void append(Node node)
     {
         assert node.m_father == null;
@@ -501,6 +502,7 @@ public final class Node
     /** Make child the first child of this node.
         @param child One of the child nodes of this node.
     */
+    @SuppressWarnings("unchecked")
     public void makeMainVariation(Node child)
     {
         assert child.isChildOf(this);

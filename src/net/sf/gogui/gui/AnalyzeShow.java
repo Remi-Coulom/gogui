@@ -82,9 +82,9 @@ public final class AnalyzeShow
         case AnalyzeCommand.PSPAIRS:
             {
                 PointList pointList = new PointList(32);
-                ArrayList stringList = new ArrayList(32);
+                ArrayList<String> stringList = new ArrayList<String>(32);
                 GtpUtil.parsePointStringList(response, pointList, stringList,
-                                              size);
+                                             size);
                 GuiBoardUtil.showPointStringList(guiBoard, pointList,
                                                   stringList);
             }

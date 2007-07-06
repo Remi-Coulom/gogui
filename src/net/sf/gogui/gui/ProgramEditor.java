@@ -27,9 +27,9 @@ import net.sf.gogui.util.StringUtil;
 
 /** Dialog for displaying and editing a program. */
 public class ProgramEditor
-    implements ObjectListEditor.ItemEditor
+    implements ObjectListEditor.ItemEditor<Program>
 {
-    public Object editItem(Component parent, Object object,
+    public Program editItem(Component parent, Program object,
                            MessageDialogs messageDialogs)
     {
         return editItem(parent, "Edit Program", (Program)object, false, false,
@@ -168,14 +168,14 @@ public class ProgramEditor
         return newProgram;
     }
 
-    public String getItemLabel(Object object)
+    public String getItemLabel(Program object)
     {
-        return ((Program)object).m_label;
+        return object.m_label;
     }
 
-    public Object cloneItem(Object object)
+    public Program cloneItem(Program object)
     {
-        return new Program((Program)object);
+        return new Program(object);
     }
 
     /** Serial version to suppress compiler warning.

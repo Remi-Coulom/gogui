@@ -20,10 +20,10 @@ import javax.swing.JTextField;
 
 /** Dialog for displaying and editing a bookmark. */
 public class BookmarkEditor
-    implements ObjectListEditor.ItemEditor
+    implements ObjectListEditor.ItemEditor<Bookmark>
 {
-    public Object editItem(Component parent, Object object,
-                           MessageDialogs messageDialogs)
+    public Bookmark editItem(Component parent, Bookmark object,
+                             MessageDialogs messageDialogs)
     {
         return editItem(parent, "Edit Bookmark", (Bookmark)object, false,
                         messageDialogs);
@@ -80,14 +80,14 @@ public class BookmarkEditor
         return newBookmark;
     }
 
-    public String getItemLabel(Object object)
+    public String getItemLabel(Bookmark object)
     {
-        return ((Bookmark)object).m_name;
+        return object.m_name;
     }
 
-    public Object cloneItem(Object object)
+    public Bookmark cloneItem(Bookmark object)
     {
-        return new Bookmark((Bookmark)object);
+        return new Bookmark(object);
     }
 
     /** Serial version to suppress compiler warning.

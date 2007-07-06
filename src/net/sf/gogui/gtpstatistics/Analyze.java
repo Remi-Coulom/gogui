@@ -454,7 +454,7 @@ public class Analyze
                                         finalPosition);
             TableUtil.appendRow(m_tableFinal, m_table, row);
         }
-        ArrayList columnTitles = new ArrayList();
+        ArrayList<String> columnTitles = new ArrayList<String>();
         columnTitles.add("Move");
         columnTitles.add("Count");
         Table table = new Table(columnTitles);

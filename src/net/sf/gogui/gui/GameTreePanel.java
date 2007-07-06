@@ -438,9 +438,11 @@ public class GameTreePanel
 
     private ConstNode m_popupNode;
 
-    private final HashMap m_map = new HashMap(500, 0.8f);
+    private final HashMap<ConstNode,GameTreeNode> m_map =
+        new HashMap<ConstNode,GameTreeNode>(500, 0.8f);
 
-    private final HashSet m_isExpanded = new HashSet(200);
+    private final HashSet<ConstNode> m_isExpanded
+        = new HashSet<ConstNode>(200);
 
     private final MouseListener m_mouseListener;
 
@@ -655,7 +657,7 @@ public class GameTreePanel
 
     private GameTreeNode getGameTreeNode(ConstNode node)
     {
-        return (GameTreeNode)m_map.get(node);
+        return m_map.get(node);
     }
 
     private boolean ensureVisible(ConstNode node)

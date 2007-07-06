@@ -173,7 +173,7 @@ public class Comment
     private static void setFocusTraversalKeys(JTextPane textPane)
     {
         int id = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
-        Set keystrokes = new TreeSet();
+        Set<AWTKeyStroke> keystrokes = new TreeSet<AWTKeyStroke>();
         keystrokes.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
         textPane.setFocusTraversalKeys(id, keystrokes);
     }

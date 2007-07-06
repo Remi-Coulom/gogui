@@ -139,7 +139,7 @@ public class Help
 
     private final JEditorPane m_editorPane;
 
-    private java.util.List m_history = new ArrayList();
+    private java.util.List<URL> m_history = new ArrayList<URL>();
 
     private final URL m_contents;
 
@@ -213,7 +213,7 @@ public class Help
 
     private URL getHistory(int index)
     {
-        return (URL)m_history.get(index);
+        return m_history.get(index);
     }
 
     private void historyChanged()

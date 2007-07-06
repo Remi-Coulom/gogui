@@ -44,15 +44,15 @@ public final class Main
             File gtpFile = null;
             if (opt.contains("gtpfile"))
                 gtpFile = new File(opt.get("gtpfile")).getAbsoluteFile();
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             int size = arguments.size();
             if (size < 2)
             {
                 printUsage(System.err);
                 System.exit(2);
             }
-            String program = (String)arguments.get(0);
-            ArrayList tests = new ArrayList(arguments);
+            String program = arguments.get(0);
+            ArrayList<String> tests = new ArrayList<String>(arguments);
             tests.remove(0);
             GtpRegress gtpRegress =
                 new GtpRegress(program, tests, output, longOutput, verbose,

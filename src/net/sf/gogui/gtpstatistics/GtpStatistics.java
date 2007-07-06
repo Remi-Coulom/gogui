@@ -76,7 +76,7 @@ public class GtpStatistics
         m_allowSetup = allowSetup;
         m_backward = backward;
         initCommands(commands, beginCommands, finalCommands);
-        ArrayList columnHeaders = new ArrayList();
+        ArrayList<String> columnHeaders = new ArrayList<String>();
         columnHeaders.add("File");
         columnHeaders.add("Move");
         for (int i = 0; i < m_commands.size(); ++i)
@@ -175,7 +175,7 @@ public class GtpStatistics
 
     private Table m_table;
 
-    private ArrayList m_commands;
+    private ArrayList<Command> m_commands;
 
     private void addCommand(String commandLine, boolean isBegin,
                             boolean isFinal) throws ErrorMessage
@@ -328,7 +328,7 @@ public class GtpStatistics
     private void initCommands(ArrayList commands, ArrayList beginCommands,
                               ArrayList finalCommands) throws ErrorMessage
     {
-        m_commands = new ArrayList();
+        m_commands = new ArrayList<Command>();
         if (beginCommands != null)
             addCommands(beginCommands, true, false);
         if (commands != null)
@@ -341,7 +341,7 @@ public class GtpStatistics
 
     private Command getCommand(int index)
     {
-        return (Command)m_commands.get(index);
+        return m_commands.get(index);
     }
 
     private void handleFile(String name)
@@ -507,7 +507,7 @@ public class GtpStatistics
      */
     private GoColor sendSetup(ConstNode node) throws GtpError
     {
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assert ! moves.isEmpty();
         GoColor toMove = null;
