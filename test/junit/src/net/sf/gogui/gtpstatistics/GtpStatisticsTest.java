@@ -27,10 +27,10 @@ public final class GtpStatisticsTest
         GtpExpectEngine expect = new GtpExpectEngine(null);
         GtpClientBase gtp = new GtpEngineClient(expect);
         String program = null;
-        ArrayList sgfFiles = new ArrayList();
+        ArrayList<String> sgfFiles = new ArrayList<String>();
         sgfFiles.add(getClass().getResource("game-1.sgf").getFile());
         int size = 9;
-        ArrayList commands = new ArrayList();
+        ArrayList<String> commands = new ArrayList<String>();
         commands.add("foo");
         boolean allowSetup = false;
         boolean backward = false;

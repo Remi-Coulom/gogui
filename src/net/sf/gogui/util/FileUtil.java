@@ -43,8 +43,8 @@ public final class FileUtil
         assert ! fromFile.exists() || ! fromFile.isDirectory();
         fromFile = fromFile.getAbsoluteFile().getParentFile();
         assert fromFile != null;
-        ArrayList fromList = splitFile(fromFile);
-        ArrayList toList = splitFile(toFile);
+        ArrayList<String> fromList = splitFile(fromFile);
+        ArrayList<String> toList = splitFile(toFile);
         int fromSize = fromList.size();
         int toSize = toList.size();
         int i = 0;
@@ -56,7 +56,7 @@ public final class FileUtil
             result.append("../");
         for (int j = i; j < toSize; ++j)
         {
-            result.append((String)(toList.get(j)));
+            result.append(toList.get(j));
             if (j < toSize - 1)
                 result.append('/');
         }
@@ -155,9 +155,9 @@ public final class FileUtil
     {
     }
 
-    private static ArrayList splitFile(File file)
+    private static ArrayList<String> splitFile(File file)
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         file = file.getAbsoluteFile();
         try
         {

@@ -620,7 +620,9 @@ ${quaqua.nestedzipfile}
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
 <javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
- deprecation="true" debug="true" listfiles="yes" classpath="build"/>
+ deprecation="true" debug="true" listfiles="yes" classpath="build">
+<compilerarg value="-Xlint:unchecked"/>
+</javac>
 <copy todir="build/test">
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.png"/>

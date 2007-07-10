@@ -69,10 +69,10 @@ public final class RecentFileStorage
         writeFile();
     }
 
-    public static ArrayList getAllMimeType(String mimeType)
+    public static ArrayList<String> getAllMimeType(String mimeType)
     {
         updateFromFile();
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
         NodeList nodeList = s_document.getElementsByTagName("RecentItem");
         for (int i = 0; i < nodeList.getLength(); ++i)
         {

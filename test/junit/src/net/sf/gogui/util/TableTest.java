@@ -40,7 +40,7 @@ public final class TableTest
 
     public void testGetDouble() throws ErrorMessage
     {
-        ArrayList columnTitles = new ArrayList();
+        ArrayList<String> columnTitles = new ArrayList<String>();
         columnTitles.add("Column 1");
         columnTitles.add("Column 2");
         Table table = new Table(columnTitles);
@@ -85,7 +85,7 @@ public final class TableTest
 
     public void testGetInt() throws ErrorMessage
     {
-        ArrayList columnTitles = new ArrayList();
+        ArrayList<String> columnTitles = new ArrayList<String>();
         columnTitles.add("Column 1");
         columnTitles.add("Column 2");
         Table table = new Table(columnTitles);

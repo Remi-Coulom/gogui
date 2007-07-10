@@ -215,9 +215,9 @@ public class ParameterDialog
         private final JPanel m_panel;
     }
 
-    private static ArrayList parseResponse(String response)
+    private static ArrayList<Parameter> parseResponse(String response)
     {
-        ArrayList parameters = new ArrayList();
+        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
         BufferedReader reader =
             new BufferedReader(new StringReader(response));
         while (true)

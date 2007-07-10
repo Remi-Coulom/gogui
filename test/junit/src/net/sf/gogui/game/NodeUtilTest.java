@@ -72,7 +72,7 @@ public final class NodeUtilTest
     {
         Move move = Move.get(BLACK, 1, 1);
         Node node = new Node(move);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(move, moves.get(0));
@@ -83,7 +83,7 @@ public final class NodeUtilTest
         Move move = Move.get(BLACK, 1, 1);
         Node node = new Node(move);
         node.setPlayer(BLACK);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(move, moves.get(0));
@@ -95,7 +95,7 @@ public final class NodeUtilTest
         Move move = Move.get(WHITE, 1, 1);
         Node node = new Node(move);
         node.setPlayer(WHITE);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(move, moves.get(0));
@@ -107,7 +107,7 @@ public final class NodeUtilTest
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
         node.addStone(BLACK, point);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(BLACK, point), moves.get(0));
@@ -119,7 +119,7 @@ public final class NodeUtilTest
         GoPoint point = GoPoint.get(1, 1);
         node.addStone(BLACK, point);
         node.setPlayer(WHITE);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(BLACK, point), moves.get(0));
@@ -133,7 +133,7 @@ public final class NodeUtilTest
         GoPoint point2 = GoPoint.get(2, 2);
         node.addStone(BLACK, point1);
         node.addStone(BLACK, point2);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
         assertSame(Move.get(BLACK, point1), moves.get(0));
@@ -148,7 +148,7 @@ public final class NodeUtilTest
         GoPoint point2 = GoPoint.get(2, 2);
         node.addStone(BLACK, point1);
         node.addStone(WHITE, point2);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(BLACK, point1), moves.get(0));
@@ -163,7 +163,7 @@ public final class NodeUtilTest
         GoPoint point2 = GoPoint.get(2, 2);
         node.addStone(BLACK, point1);
         node.addStone(WHITE, point2);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
         assertSame(Move.get(BLACK, point1), moves.get(0));
@@ -179,7 +179,7 @@ public final class NodeUtilTest
         node.addStone(BLACK, point1);
         node.addStone(WHITE, point2);
         node.setPlayer(WHITE);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(WHITE, point2), moves.get(0));
@@ -192,7 +192,7 @@ public final class NodeUtilTest
         GoPoint point = GoPoint.get(1, 1);
         node.addStone(WHITE, point);
         node.setPlayer(WHITE);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(WHITE, point), moves.get(0));
@@ -204,7 +204,7 @@ public final class NodeUtilTest
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
         node.addStone(WHITE, point);
-        ArrayList moves = new ArrayList();
+        ArrayList<Move> moves = new ArrayList<Move>();
         NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(WHITE, point), moves.get(0));

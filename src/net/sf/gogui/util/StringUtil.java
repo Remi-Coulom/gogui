@@ -194,7 +194,7 @@ public final class StringUtil
     public static String[] splitArguments(String string)
     {
         assert string != null;
-        ArrayList vector = new ArrayList();
+        ArrayList<String> vector = new ArrayList<String>();
         boolean escape = false;
         boolean inString = false;
         StringBuffer token = new StringBuffer();
@@ -227,7 +227,7 @@ public final class StringUtil
         int size = vector.size();
         String result[] = new String[size];
         for (int i = 0; i < size; ++i)
-            result[i] = (String)vector.get(i);
+            result[i] = vector.get(i);
         return result;
     }
 

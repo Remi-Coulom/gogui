@@ -21,7 +21,7 @@ public final class ProgramTest
 
     public void testSetUniqueLabel()
     {
-        ArrayList programs = new ArrayList();
+        ArrayList<Program> programs = new ArrayList<Program>();
         programs.add(new Program("Foo", "Foo", "", "", ""));
         Program p;
 

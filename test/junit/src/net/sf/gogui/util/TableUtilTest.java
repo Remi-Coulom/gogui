@@ -21,7 +21,7 @@ public final class TableUtilTest
 
     public void testAllEmpty() throws ErrorMessage
     {
-        ArrayList columnTitles = new ArrayList();
+        ArrayList<String> columnTitles = new ArrayList<String>();
         columnTitles.add("column1");
         columnTitles.add("column2");
         Table table = new Table(columnTitles);
@@ -35,7 +35,7 @@ public final class TableUtilTest
 
     public void testAppendRow() throws ErrorMessage
     {
-        ArrayList columnTitles = new ArrayList();
+        ArrayList<String> columnTitles = new ArrayList<String>();
         columnTitles.add("column1");
         columnTitles.add("column2");
         Table from = new Table(columnTitles);

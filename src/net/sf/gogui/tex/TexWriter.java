@@ -145,7 +145,7 @@ public class TexWriter
         StringBuffer comment = new StringBuffer();
         int size = tree.getBoardSize();
         ConstNode firstMoveAtPoint[][] = new ConstNode[size][size];
-        ArrayList needsComment = new ArrayList();
+        ArrayList<ConstNode> needsComment = new ArrayList<ConstNode>();
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
         ConstNode node = tree.getRootConst();
@@ -210,7 +210,7 @@ public class TexWriter
         }
         for (int i = 0; i < needsComment.size(); ++i)
         {
-            node = (Node)needsComment.get(i);
+            node = needsComment.get(i);
             Move move = node.getMove();
             GoPoint point = move.getPoint();
             GoColor color = move.getColor();
