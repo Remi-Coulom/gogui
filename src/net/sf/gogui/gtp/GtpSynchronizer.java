@@ -65,15 +65,15 @@ public class GtpSynchronizer
         m_gtp.sendBoardsize(size);
         m_engineState = new Board(size);
         m_gtp.sendClearBoard(size);
+        m_komi = null;
+        m_timeSettings = null;
+        sendGameInfo(komi, timeSettings);
         ConstBoard targetState = computeTargetState(board);
         setup(targetState);
         ArrayList<Move> moves = new ArrayList<Move>();
         for (int i = 0; i < targetState.getNumberMoves(); ++i)
             moves.add(targetState.getMove(i));
         play(moves);
-        m_komi = null;
-        m_timeSettings = null;
-        sendGameInfo(komi, timeSettings);
         m_isOutOfSync = false;
     }
 
