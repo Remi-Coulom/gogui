@@ -43,15 +43,13 @@ public final class MainWrapper
             System.err.println(e.getMessage());
             return;
         }
-        Class[] mainArgs = new Class[1];
-        mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
-        Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
-        Method mainMethod = mainClass.getMethod("main", mainArgs);
+        Class<?> mainClass = Class.forName("net.sf.gogui.gogui.Main");
+        Class<?> settingsClass =
+            Class.forName("net.sf.gogui.gogui.GoGuiSettings");
+        Method mainMethod = mainClass.getMethod("main", settingsClass);
         assert (mainMethod.getModifiers() & Modifier.STATIC) != 0;
         assert mainMethod.getReturnType() == void.class;
-        Object[] objArgs = new Object[1];
-        objArgs[0] = settings;
-        mainMethod.invoke(null, objArgs);
+        mainMethod.invoke(null, settings);
     }
 
     /** Make constructor unavailable; class is for namespace only. */
