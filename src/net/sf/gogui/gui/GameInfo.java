@@ -25,6 +25,7 @@ import net.sf.gogui.game.Game;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.util.StringUtil;
 
 /** Panel displaying information about the current position. */
@@ -38,7 +39,7 @@ public class GameInfo
             new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));
         add(panel, BorderLayout.CENTER);
         m_game = game;
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = WHITE; c != null; c = c.getPreviousBlackWhiteEmpty())
         {
             int index = c.toInteger();
             Box box = Box.createVerticalBox();
