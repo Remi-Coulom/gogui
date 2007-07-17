@@ -55,14 +55,6 @@ public class TextViewer
         initialize(text, highlight, listener);
     }
 
-    public Dimension getPreferredSize()
-    {
-        if (m_preferredSize == null)
-            return super.getPreferredSize();
-        else
-            return m_preferredSize;
-    }
-
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sf.net
     */
@@ -71,9 +63,6 @@ public class TextViewer
     private JTextPane m_textPane;
 
     private Listener m_listener;
-
-    /** setPreferredSize() not yet available in Java 1,4 */
-    private Dimension m_preferredSize;
 
     private void doSyntaxHighlight()
     {
@@ -194,7 +183,7 @@ public class TextViewer
         setMinimumSize(new Dimension(128, 96));
         size.height = Math.max(size.height, 96);
         size.width = Math.max(size.width, 128);
-        m_preferredSize = size;
+        setPreferredSize(size);
         setSize(size);
     }
 }
