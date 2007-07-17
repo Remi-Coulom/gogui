@@ -4,6 +4,10 @@
 
 package net.sf.gogui.go;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /** Player color / state of a point on the board (black, white, empty). */
 public enum GoColor
 {
@@ -109,24 +113,29 @@ public enum GoColor
         }
     };
 
-    public static final GoColor[] BLACK_WHITE;
+    public static final List<GoColor> BLACK_WHITE;
 
-    public static final GoColor[] WHITE_BLACK;
+    public static final List<GoColor> WHITE_BLACK;
 
-    public static final GoColor[] BLACK_WHITE_EMPTY;
+    public static final List<GoColor> BLACK_WHITE_EMPTY;
 
     static
     {
-        BLACK_WHITE = new GoColor[2];
-        BLACK_WHITE[0] = BLACK;
-        BLACK_WHITE[1] = WHITE;
-        WHITE_BLACK = new GoColor[2];
-        WHITE_BLACK[0] = WHITE;
-        WHITE_BLACK[1] = BLACK;
-        BLACK_WHITE_EMPTY = new GoColor[3];
-        BLACK_WHITE_EMPTY[0] = BLACK;
-        BLACK_WHITE_EMPTY[1] = WHITE;
-        BLACK_WHITE_EMPTY[1] = EMPTY;
+        List<GoColor> blackWhite = new ArrayList<GoColor>(2);
+        blackWhite.add(BLACK);
+        blackWhite.add(WHITE);
+        BLACK_WHITE = Collections.unmodifiableList(blackWhite);
+
+        List<GoColor> whiteBlack = new ArrayList<GoColor>(2);
+        whiteBlack.add(WHITE);
+        whiteBlack.add(BLACK);
+        WHITE_BLACK = Collections.unmodifiableList(whiteBlack);
+
+        List<GoColor> blackWhiteEmpty = new ArrayList<GoColor>(3);
+        blackWhiteEmpty.add(BLACK);
+        blackWhiteEmpty.add(WHITE);
+        blackWhiteEmpty.add(EMPTY);
+        BLACK_WHITE_EMPTY = Collections.unmodifiableList(blackWhiteEmpty);
     }
 
     /** Return color name if used for specifying player.
