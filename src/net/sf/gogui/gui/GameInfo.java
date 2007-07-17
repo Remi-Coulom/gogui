@@ -37,7 +37,8 @@ public class GameInfo
             new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));
         add(panel, BorderLayout.CENTER);
         m_game = game;
-        for (GoColor c = GoColor.BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c = GoColor.WHITE; c != null;
+             c = c.getPreviousBlackWhiteEmpty())
         {
             int index = c.toInteger();
             Box box = Box.createVerticalBox();
