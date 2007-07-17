@@ -82,7 +82,7 @@ public class GameTreeViewer
                     m_scrollPane.requestFocusInWindow();
                 }
             });
-        GuiUtil.setMinimumSize(this, new Dimension(128, 96));
+        setMinimumSize(new Dimension(128, 96));
         pack();
     }
 

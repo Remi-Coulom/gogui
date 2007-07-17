@@ -191,7 +191,7 @@ public class TextViewer
             size.width = Math.min(size.width, maxWidth);
             size.height = Math.min(size.height, maxHeight);
         }
-        GuiUtil.setMinimumSize(this, new Dimension(128, 96));
+        setMinimumSize(new Dimension(128, 96));
         size.height = Math.max(size.height, 96);
         size.width = Math.max(size.width, 128);
         m_preferredSize = size;

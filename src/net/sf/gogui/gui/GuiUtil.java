@@ -362,40 +362,6 @@ public class GuiUtil
         button.putClientProperty("Quaqua.Button.style", "bevel");
     }
 
-    /** Invoke Window.setMinimumSize, if available.
-        Window.setMinimumSize is not available in Java 1.4 (and seems to have
-        no effect in Java 1.5)
-    */
-    public static void setMinimumSize(Window window, Dimension size)
-    {
-        try
-        {
-            Class [] argsClasses = new Class[1];
-            argsClasses[0] = Class.forName("java.awt.Dimension");
-            Class windowClass = Class.forName("java.awt.Window");
-            Method method =
-                windowClass.getMethod("setMinimumSize", argsClasses);
-            Object[] argsObjects = new Object[1];
-            argsObjects[0] = size;
-            method.invoke(window, argsObjects);
-        }
-        catch (NoSuchMethodException e)
-        {
-        }
-        catch (ClassNotFoundException e)
-        {
-            assert false;
-        }
-        catch (IllegalAccessException e)
-        {
-            assert false;
-        }
-        catch (InvocationTargetException e)
-        {
-            assert false;
-        }
-    }
-
     public static void setMonospacedFont(JComponent component)
     {
         if (MONOSPACED_FONT != null)

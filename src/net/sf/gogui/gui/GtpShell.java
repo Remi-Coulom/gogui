@@ -73,7 +73,7 @@ public class GtpShell
         m_finalSize = new Dimension(fontSize * 40, fontSize * 30);
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
-        GuiUtil.setMinimumSize(this, new Dimension(160, 112));
+        setMinimumSize(new Dimension(160, 112));
         pack();
     }
 
