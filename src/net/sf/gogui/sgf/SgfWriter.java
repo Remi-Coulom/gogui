@@ -19,6 +19,7 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
@@ -316,8 +317,7 @@ public class SgfWriter
             else
                 print("W" + point);
         }
-        for (GoColor c = BLACK; c != null;
-             c = c.getNextBlackWhiteEmpty())
+        for (GoColor c : BLACK_WHITE_EMPTY)
         {
             ConstPointList points = node.getAddStones(c);
             if (points.size() == 0)

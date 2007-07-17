@@ -12,6 +12,7 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
@@ -194,8 +195,7 @@ public class GtpSynchronizer
             else
             {
                 // Translate setup into moves
-                for (GoColor c = BLACK; c != null;
-                     c = c.getNextBlackWhite())
+                for (GoColor c : BLACK_WHITE)
                 {
                     ConstPointList stones = board.getSetup(c);
                     for (int i = 0; i < stones.size(); ++i)
@@ -259,7 +259,7 @@ public class GtpSynchronizer
         if (! ObjectUtil.equals(m_engineState.getSetupPlayer(),
                                 targetState.getSetupPlayer()))
             return true;
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c : BLACK_WHITE)
             if (! m_engineState.getSetup(c).equals(targetState.getSetup(c)))
                 return true;
         return false;
@@ -371,8 +371,7 @@ public class GtpSynchronizer
         {
             StringBuffer command = new StringBuffer(128);
             command.append("gogui-setup");
-            for (GoColor c = BLACK; c != null;
-                 c = c.getNextBlackWhite())
+            for (GoColor c : BLACK_WHITE)
             {
                 ConstPointList stones = targetState.getSetup(c);
                 for (int i = 0; i < stones.size(); ++i)

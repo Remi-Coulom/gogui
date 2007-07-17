@@ -15,21 +15,6 @@ public enum GoColor
             return "Black";
         }
 
-        public GoColor getNextBlackWhite()
-        {
-            return WHITE;
-        }
-
-        public GoColor getNextBlackWhiteEmpty()
-        {
-            return WHITE;
-        }
-
-        public GoColor getPreviousBlackWhiteEmpty()
-        {
-            return null;
-        }
-
         public String getUppercaseLetter()
         {
             return "B";
@@ -62,21 +47,6 @@ public enum GoColor
         public String getCapitalizedName()
         {
             return "White";
-        }
-
-        public GoColor getNextBlackWhite()
-        {
-            return null;
-        }
-
-        public GoColor getNextBlackWhiteEmpty()
-        {
-            return EMPTY;
-        }
-
-        public GoColor getPreviousBlackWhiteEmpty()
-        {
-            return BLACK;
         }
 
         public String getUppercaseLetter()
@@ -113,22 +83,6 @@ public enum GoColor
             return "Empty";
         }
 
-        public GoColor getNextBlackWhite()
-        {
-            assert false;
-            return null;
-        }
-
-        public GoColor getNextBlackWhiteEmpty()
-        {
-            return null;
-        }
-
-        public GoColor getPreviousBlackWhiteEmpty()
-        {
-            return WHITE;
-        }
-
         public String getUppercaseLetter()
         {
             return "E";
@@ -155,20 +109,25 @@ public enum GoColor
         }
     };
 
-    /** Get next color in an iteration from Black to White.
-        @return Next color or null, if end of iteration.
-    */
-    public abstract GoColor getNextBlackWhite();
+    public static final GoColor[] BLACK_WHITE;
 
-    /** Get next color in an iteration from Black to White to Empty.
-        @return Next color or null, if end of iteration.
-    */
-    public abstract GoColor getNextBlackWhiteEmpty();
+    public static final GoColor[] WHITE_BLACK;
 
-    /** Get previous color in an iteration from Black to White to Empty.
-        @return Previous color or null, if end of iteration.
-    */
-    public abstract GoColor getPreviousBlackWhiteEmpty();
+    public static final GoColor[] BLACK_WHITE_EMPTY;
+
+    static
+    {
+        BLACK_WHITE = new GoColor[2];
+        BLACK_WHITE[0] = BLACK;
+        BLACK_WHITE[1] = WHITE;
+        WHITE_BLACK = new GoColor[2];
+        WHITE_BLACK[0] = WHITE;
+        WHITE_BLACK[1] = BLACK;
+        BLACK_WHITE_EMPTY = new GoColor[3];
+        BLACK_WHITE_EMPTY[0] = BLACK;
+        BLACK_WHITE_EMPTY[1] = WHITE;
+        BLACK_WHITE_EMPTY[1] = EMPTY;
+    }
 
     /** Return color name if used for specifying player.
         Returns the capitalized color name (e.g. "Black" for BLACK).

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 
 /** Go board. */
 public final class Board
@@ -300,7 +301,7 @@ public final class Board
         for (int i = 0; i < getPoints().size(); ++i)
             setColor(getPoints().get(i), EMPTY);
         m_stack.clear();
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c : BLACK_WHITE)
         {
             int index = c.toInteger();
             m_setup[index].clear();
@@ -360,7 +361,7 @@ public final class Board
         m_setupPlayer = player;
         if (m_setupPlayer != null)
             m_toMove = player;
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c : BLACK_WHITE)
         {
             ConstPointList stones = (c == BLACK ? black : white);
             int index = c.toInteger();

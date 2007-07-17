@@ -26,6 +26,8 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE;
+import static net.sf.gogui.go.GoColor.WHITE_BLACK;
 import net.sf.gogui.util.StringUtil;
 
 /** Panel displaying information about the current position. */
@@ -39,7 +41,7 @@ public class GameInfo
             new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));
         add(panel, BorderLayout.CENTER);
         m_game = game;
-        for (GoColor c = WHITE; c != null; c = c.getPreviousBlackWhiteEmpty())
+        for (GoColor c : WHITE_BLACK)
         {
             int index = c.toInteger();
             Box box = Box.createVerticalBox();
@@ -76,7 +78,7 @@ public class GameInfo
         ConstNode node = game.getCurrentNode();
         ConstGameTree tree = game.getTree();
         ConstGameInformation info = tree.getGameInformationConst(node);
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c : BLACK_WHITE)
         {
             int index = c.toInteger();
             updatePlayerToolTip(m_icon[index], info.getPlayer(c),
@@ -93,7 +95,7 @@ public class GameInfo
 
     public void updateTimeFromClock(ConstClock clock)
     {
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c : BLACK_WHITE)
             updateTimeFromClock(clock, c);
     }
 
@@ -153,7 +155,7 @@ public class GameInfo
 
     private void updateTimeFromNode(ConstNode node)
     {
-        for (GoColor c = BLACK; c != null; c = c.getNextBlackWhite())
+        for (GoColor c : BLACK_WHITE)
         {
             double timeLeft = node.getTimeLeft(c);
             int movesLeft = node.getMovesLeft(c);

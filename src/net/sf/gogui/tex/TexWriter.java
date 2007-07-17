@@ -18,6 +18,7 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
@@ -151,8 +152,7 @@ public class TexWriter
         ConstNode node = tree.getRootConst();
         while (node != null)
         {
-            for (GoColor c = BLACK; c != null;
-                 c = c.getNextBlackWhite())
+            for (GoColor c : BLACK_WHITE)
             {
                 ConstPointList stones = node.getAddStones(c);
                 for (int i = 0; i < stones.size(); ++i)

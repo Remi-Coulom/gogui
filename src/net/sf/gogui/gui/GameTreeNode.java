@@ -17,6 +17,7 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
@@ -110,8 +111,7 @@ class GameTreeNode
         {
             toolTip.append("Setup (");
             boolean anyStones = false;
-            for (GoColor c = BLACK; c != null;
-                 c = c.getNextBlackWhiteEmpty())
+            for (GoColor c : BLACK_WHITE_EMPTY)
             {
                 int n = m_node.getAddStones(c).size();
                 if (n == 0)
