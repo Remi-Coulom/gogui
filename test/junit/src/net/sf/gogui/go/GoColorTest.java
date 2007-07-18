@@ -21,27 +21,6 @@ public final class GoColorTest
         return new junit.framework.TestSuite(GoColorTest.class);
     }
 
-    public void testGetNextBlackWhite()
-    {
-        assertSame(WHITE, BLACK.getNextBlackWhite());
-        assertNull(WHITE.getNextBlackWhite());
-    }
-
-    public void testGetNextBlackWhiteEmpty()
-    {
-        assertSame(WHITE, BLACK.getNextBlackWhiteEmpty());
-        assertSame(EMPTY, WHITE.getNextBlackWhiteEmpty());
-        assertNull(EMPTY.getNextBlackWhiteEmpty());
-    }
-
-
-    public void testGetPreviousBlackWhiteEmpty()
-    {
-        assertSame(WHITE, EMPTY.getPreviousBlackWhiteEmpty());
-        assertSame(BLACK, WHITE.getPreviousBlackWhiteEmpty());
-        assertNull(BLACK.getPreviousBlackWhiteEmpty());
-    }
-
     public void testGetUppercaseLetter()
     {
         assertEquals("B", BLACK.getUppercaseLetter());
