@@ -31,7 +31,7 @@ public interface ConstNode
 
     String getLabel(GoPoint point);
 
-    Map getLabelsConst();
+    Map<GoPoint,String> getLabelsUnmodifiable();
 
     ConstPointList getMarkedConst(MarkType type);
 
@@ -43,7 +43,7 @@ public interface ConstNode
 
     GoColor getPlayer();
 
-    Map getSgfPropertiesConst();
+    Map<String,String> getSgfPropertiesUnmodifiable();
 
     double getTimeLeft(GoColor color);
 

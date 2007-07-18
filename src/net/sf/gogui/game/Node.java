@@ -6,6 +6,7 @@ package net.sf.gogui.game;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 import net.sf.gogui.go.ConstPointList;
@@ -317,15 +318,13 @@ public final class Node
         return m_extraInfo.m_moreExtraInfo.m_label;
     }
 
-    /** Get all labels on the board (a copy).
-        @return Map containing (Point,String) pairs.
-    */
-    public Map<GoPoint,String> getLabelsConst()
+    /** Get all labels on the board (unmodifiable). */
+    public Map<GoPoint,String> getLabelsUnmodifiable()
     {
         Map<GoPoint,String> labels = getLabels();
         if (labels == null)
             return null;
-        return new TreeMap<GoPoint,String>(labels);
+        return Collections.unmodifiableMap(labels);
     }
 
     /** Get all markups of a type.
@@ -406,17 +405,17 @@ public final class Node
         return m_extraInfo.m_moreExtraInfo.m_sgfProperties;
     }
 
-    /** Get other unspecified SGF properties (copy).
+    /** Get other unspecified SGF properties (unmodifiable).
         @return The map with other SGF properties mapping String label
         to String value
         @see #addSgfProperty
     */
-    public Map<String,String> getSgfPropertiesConst()
+    public Map<String,String> getSgfPropertiesUnmodifiable()
     {
         Map<String,String> sgfProperties = getSgfProperties();
         if (sgfProperties == null)
             return null;
-        return new TreeMap<String,String>(sgfProperties);
+        return Collections.unmodifiableMap(sgfProperties);
     }
 
     /** Time left for color after move was made.

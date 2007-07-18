@@ -271,15 +271,13 @@ public final class GuiBoardUtil
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setTerritory(mark.get(i), WHITE);
-        Map labels = node.getLabelsConst();
+        Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels != null)
         {
-            Iterator i = labels.entrySet().iterator();
-            while (i.hasNext())
+            for (Map.Entry<GoPoint,String> entry : labels.entrySet())
             {
-                Map.Entry entry = (Map.Entry)i.next();
-                GoPoint point = (GoPoint)entry.getKey();
-                String value = (String)entry.getValue();
+                GoPoint point = entry.getKey();
+                String value = entry.getValue();
                 guiBoard.setLabel(point, value);
             }
         }

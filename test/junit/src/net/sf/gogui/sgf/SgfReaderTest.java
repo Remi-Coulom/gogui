@@ -104,7 +104,7 @@ public final class SgfReaderTest
         assertNotNull(settings);
         assertFalse(settings.getUseByoyomi());
         assertEquals(1800000L, settings.getPreByoyomi());
-        Map sgf = root.getSgfPropertiesConst();
+        Map<String,String> sgf = root.getSgfPropertiesUnmodifiable();
         assertNotNull(sgf);
         assertEquals("[8 xyz 16]", sgf.get("OT"));
     }
@@ -131,7 +131,7 @@ public final class SgfReaderTest
         assertEquals(1800000L, settings.getPreByoyomi());
         assertEquals(30000L, settings.getByoyomi());
         assertEquals(5, settings.getByoyomiMoves());
-        Map sgf = root.getSgfPropertiesConst();
+        Map<String,String> sgf = root.getSgfPropertiesUnmodifiable();
         if (sgf != null)
             assertEquals(null, sgf.get("OT"));
     }
@@ -194,7 +194,7 @@ public final class SgfReaderTest
         assertEquals(node.getMarkedConst(MarkType.TERRITORY_WHITE).size(), 19);
         node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 1);
-        assertEquals(node.getLabelsConst().size(), 22);
+        assertEquals(node.getLabelsUnmodifiable().size(), 22);
         checkLabel(node, "D17", "1");
         checkLabel(node, "F17", "2");
         checkLabel(node, "O17", "3");
@@ -258,7 +258,7 @@ public final class SgfReaderTest
                                   String value)
         throws InvalidPointException
     {
-        assertEquals(value, node.getSgfPropertiesConst().get(property));
+        assertEquals(value, node.getSgfPropertiesUnmodifiable().get(property));
     }
 
     private void checkSetup(ConstNode node, int black, int white, int empty)

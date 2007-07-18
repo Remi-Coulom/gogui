@@ -661,7 +661,7 @@ public final class NodeUtil
                 appendInfo(buffer, "Marked " +
                            StringUtil.capitalize(type.toString()), marked);
         }
-        Map labels = node.getLabelsConst();
+        Map labels = node.getLabelsUnmodifiable();
         if (labels != null && ! labels.isEmpty())
         {
             StringBuffer labelsBuffer = new StringBuffer();
@@ -709,7 +709,7 @@ public final class NodeUtil
                 appendInfo(buffer, "TimeSettings",
                            info.getTimeSettings().toString());
         }
-        Map sgfProperties = node.getSgfPropertiesConst();
+        Map sgfProperties = node.getSgfPropertiesUnmodifiable();
         if (sgfProperties != null)
         {
             buffer.append("SgfProperties:\n");

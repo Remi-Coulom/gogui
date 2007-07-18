@@ -266,7 +266,7 @@ public class SgfWriter
 
     private void printLabels(ConstNode node)
     {
-        Map labels = node.getLabelsConst();
+        Map labels = node.getLabelsUnmodifiable();
         if (labels == null)
             return;
         StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
@@ -368,7 +368,7 @@ public class SgfWriter
         {
             print("V[" + node.getValue() + "]");
         }
-        Map sgfProperties = node.getSgfPropertiesConst();
+        Map sgfProperties = node.getSgfPropertiesUnmodifiable();
         if (sgfProperties != null)
         {
             Iterator it = sgfProperties.entrySet().iterator();
