@@ -239,6 +239,9 @@ public final class GuiBoardUtil
             }
     }
 
+    /** Shows markup on board.
+        Existing markup is not cleared (but may be overwritten.
+    */
     public static void showMarkup(GuiBoard guiBoard, ConstNode node)
     {
         ConstPointList mark;
