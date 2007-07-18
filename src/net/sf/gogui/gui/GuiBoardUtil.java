@@ -185,7 +185,6 @@ public final class GuiBoardUtil
     public static void showChildrenMoves(GuiBoard guiBoard,
                                          ConstPointList childrenMoves)
     {
-        guiBoard.clearAllLabels();
         int numberMarked = 0;
         char label = 'A';
         for (int i = 0; i < childrenMoves.size(); ++i)
