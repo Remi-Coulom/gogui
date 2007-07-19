@@ -6,6 +6,7 @@ package net.sf.gogui.game;
 
 import java.util.TimerTask;
 import java.util.Timer;
+import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -52,8 +53,6 @@ public final class Clock
     public Clock(TimeSource timeSource)
     {
         m_timeSource = timeSource;
-        m_timeRecord[0] = new TimeRecord();
-        m_timeRecord[1] = new TimeRecord();
         reset();
     }
 
@@ -320,7 +319,8 @@ public final class Clock
 
     private GoColor m_toMove;
 
-    private final TimeRecord[] m_timeRecord = new TimeRecord[2];
+    private final BlackWhiteSet<TimeRecord> m_timeRecord
+        = new BlackWhiteSet<TimeRecord>(new TimeRecord(), new TimeRecord());
 
     private TimeSettings m_timeSettings;
 
@@ -337,7 +337,7 @@ public final class Clock
 
     private TimeRecord getRecord(GoColor c)
     {
-        return m_timeRecord[c.toInteger()];
+        return m_timeRecord.get(c);
     }
 
     private long getByoyomi()

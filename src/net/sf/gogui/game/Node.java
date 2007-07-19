@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
+import net.sf.gogui.go.BlackWhiteSet;
+import net.sf.gogui.go.BlackWhiteEmptySet;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -57,17 +59,18 @@ final class SetupInfo
     /** Stones added or removed.
         The array is indexed by Black, White, Empty.
     */
-    public PointList[] m_stones = {
-        new PointList(),
-        new PointList(),
-        new PointList() };
+    public BlackWhiteEmptySet<PointList> m_stones
+        = new BlackWhiteEmptySet<PointList>(new PointList(), new PointList(),
+                                            new PointList());
 }
 
 final class TimeInfo
 {
-    public int[] m_movesLeft = { -1, -1 };
+    public BlackWhiteSet<Integer> m_movesLeft
+        = new BlackWhiteSet<Integer>(-1, -1);
 
-    public double[] m_timeLeft = { Double.NaN, Double.NaN };
+    public BlackWhiteSet<Double> m_timeLeft
+        = new BlackWhiteSet<Double>(Double.NaN, Double.NaN);
 }
 
 /** Node in a game tree.
@@ -164,7 +167,7 @@ public final class Node
     public void addStone(GoColor c, GoPoint p)
     {
         assert p != null;
-        createSetupInfo().m_stones[c.toInteger()].add(p);
+        createSetupInfo().m_stones.get(c).add(p);
     }
 
     /** Add or remove a list of setup stones.
@@ -176,7 +179,7 @@ public final class Node
     public void addStones(GoColor c, ConstPointList list)
     {
         assert list != null;
-        createSetupInfo().m_stones[c.toInteger()].addAll(list);
+        createSetupInfo().m_stones.get(c).addAll(list);
     }
 
     /** Create game information or return it if already existing. */
@@ -197,7 +200,7 @@ public final class Node
         SetupInfo setupInfo = getSetupInfo();
         if (setupInfo == null)
             return PointList.getEmptyList();
-        return setupInfo.m_stones[c.toInteger()];
+        return setupInfo.m_stones.get(c);
     }
 
     /** Child of main variation or null if no child.
@@ -357,7 +360,7 @@ public final class Node
 
     /** Moves left in byoyomi.
         @param c The color.
-        @return Moves left in byoyomi for that color or -1 if not in byyomi or
+        @return Moves left in byoyomi for that color or -1 if not in byoyomi or
         unknown.
     */
     public int getMovesLeft(GoColor c)
@@ -366,7 +369,7 @@ public final class Node
         TimeInfo timeInfo = getTimeInfo();
         if (timeInfo == null)
             return -1;
-        return timeInfo.m_movesLeft[c.toInteger()];
+        return timeInfo.m_movesLeft.get(c);
     }
 
     /** Get number of children.
@@ -428,7 +431,7 @@ public final class Node
         TimeInfo timeInfo = getTimeInfo();
         if (timeInfo == null)
             return Double.NaN;
-        return timeInfo.m_timeLeft[c.toInteger()];
+        return timeInfo.m_timeLeft.get(c);
     }
 
     /** Get color to move.
@@ -557,7 +560,7 @@ public final class Node
         if (setupInfo == null)
             return;
         for (GoColor c : BLACK_WHITE_EMPTY)
-            while (setupInfo.m_stones[c.toInteger()].remove(p));
+            while (setupInfo.m_stones.get(c).remove(p));
     }
 
     /** Remove all children but the first. */
@@ -635,7 +638,7 @@ public final class Node
     public void setMovesLeft(GoColor c, int n)
     {
         assert c.isBlackWhite();
-        createTimeInfo().m_movesLeft[c.toInteger()] = n;
+        createTimeInfo().m_movesLeft.set(c, n);
     }
 
     /** Set byoyomi time left.
@@ -645,7 +648,7 @@ public final class Node
     public void setTimeLeft(GoColor c, double seconds)
     {
         assert c.isBlackWhite();
-        createTimeInfo().m_timeLeft[c.toInteger()] = seconds;
+        createTimeInfo().m_timeLeft.set(c, seconds);
     }
 
     /** Explicitely set color to play.

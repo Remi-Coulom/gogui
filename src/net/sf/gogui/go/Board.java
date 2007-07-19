@@ -70,8 +70,7 @@ public final class Board
     */
     public int getCaptured(GoColor c)
     {
-        assert c.isBlackWhite();
-        return m_captured[c.toInteger()];
+        return m_captured.get(c);
     }
 
     /** Get state of a point on the board.
@@ -155,7 +154,7 @@ public final class Board
     */
     public ConstPointList getSetup(GoColor c)
     {
-        return m_setup[c.toInteger()];
+        return m_setup.get(c);
     }
 
     /** Get player of initial setup position.
@@ -262,8 +261,8 @@ public final class Board
     public boolean isModified()
     {
         return (! m_stack.isEmpty()
-                || m_setup[BLACK.toInteger()].size() > 0
-                || m_setup[WHITE.toInteger()].size() > 0
+                || m_setup.get(BLACK).size() > 0
+                || m_setup.get(WHITE).size() > 0
                 || m_toMove != BLACK);
     }
 
@@ -303,9 +302,8 @@ public final class Board
         m_stack.clear();
         for (GoColor c : BLACK_WHITE)
         {
-            int index = c.toInteger();
-            m_setup[index].clear();
-            m_captured[index] = 0;
+            m_setup.get(c).clear();
+            m_captured.set(c, 0);
         }
         m_toMove = BLACK;
         m_koPoint = null;
@@ -364,14 +362,13 @@ public final class Board
         for (GoColor c : BLACK_WHITE)
         {
             ConstPointList stones = (c == BLACK ? black : white);
-            int index = c.toInteger();
             if (stones == null)
-                m_setup[index] = new PointList();
+                m_setup.set(c, new PointList());
             else
             {
                 for (int i = 0; i < stones.size(); ++i)
                     setColor(stones.get(i), c);
-                m_setup[index] = new PointList(stones);
+                m_setup.set(c, new PointList(stones));
             }
         }
     }
@@ -458,8 +455,12 @@ public final class Board
                 if (board.m_koPoint != null
                     && ! board.isSingleStoneSingleLib(p, c))
                     board.m_koPoint = null;
-                board.m_captured[c.toInteger()] += m_suicide.size();
-                board.m_captured[otherColor.toInteger()] += m_killed.size();
+                board.m_captured.set(c,
+                                     board.m_captured.get(c)
+                                     + m_suicide.size());
+                board.m_captured.set(otherColor,
+                                     board.m_captured.get(otherColor)
+                                     + m_killed.size());
             }
             m_oldToMove = board.m_toMove;
             board.m_toMove = otherColor;
@@ -483,8 +484,12 @@ public final class Board
                     GoPoint stone = m_killed.get(i);
                     board.setColor(stone, otherColor);
                 }
-                board.m_captured[c.toInteger()] -= m_suicide.size();
-                board.m_captured[otherColor.toInteger()] -= m_killed.size();
+                board.m_captured.set(c,
+                                     board.m_captured.get(c)
+                                     - m_suicide.size());
+                board.m_captured.set(otherColor,
+                                     board.m_captured.get(otherColor)
+                                     - m_killed.size());
             }
             board.m_toMove = m_oldToMove;
             board.m_koPoint = m_oldKoPoint;
@@ -495,7 +500,8 @@ public final class Board
 
     private int m_size;
 
-    private int[] m_captured = { 0, 0 };
+    private BlackWhiteSet<Integer> m_captured
+        = new BlackWhiteSet<Integer>(0, 0);
 
     private final ArrayList<StackEntry> m_stack
         = new ArrayList<StackEntry>(361);
@@ -510,7 +516,8 @@ public final class Board
 
     private GoPoint m_koPoint;
 
-    private PointList[] m_setup = { new PointList(), new PointList() };
+    private BlackWhiteSet<PointList> m_setup
+        = new BlackWhiteSet<PointList>(new PointList(), new PointList());
 
     private boolean m_isSetupHandicap;
 

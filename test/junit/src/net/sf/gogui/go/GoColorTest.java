@@ -41,17 +41,4 @@ public final class GoColorTest
         assertSame(WHITE.otherColor(), BLACK);
         assertSame(EMPTY.otherColor(), EMPTY);
     }
-    public void testToInteger()
-    {
-        assertEquals(0, BLACK.toInteger());
-        assertEquals(1, WHITE.toInteger());
-        assertEquals(2, EMPTY.toInteger());
-    }
-
-    public void testToString()
-    {
-        assertEquals(BLACK.toString(), "black");
-        assertEquals(WHITE.toString(), "white");
-        assertEquals(EMPTY.toString(), "empty");
-    }
 }

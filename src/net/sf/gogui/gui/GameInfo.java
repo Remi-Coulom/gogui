@@ -22,6 +22,7 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
+import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -43,7 +44,6 @@ public class GameInfo
         m_game = game;
         for (GoColor c : WHITE_BLACK)
         {
-            int index = c.toInteger();
             Box box = Box.createVerticalBox();
             panel.add(box);
             ImageIcon icon;
@@ -51,17 +51,16 @@ public class GameInfo
                 icon = GuiUtil.getIcon("gogui-black-32x32", "Black");
             else
                 icon = GuiUtil.getIcon("gogui-white-32x32", "White");
-            m_icon[index] = new JLabel(icon);
-            m_icon[index].setAlignmentX(Component.CENTER_ALIGNMENT);
-            box.add(m_icon[index]);
+            m_icon.set(c, new JLabel(icon));
+            m_icon.get(c).setAlignmentX(Component.CENTER_ALIGNMENT);
+            box.add(m_icon.get(c));
             box.add(GuiUtil.createFiller());
-            m_clock[index] = new GuiClock(c);
-            m_clock[index].setAlignmentX(Component.CENTER_ALIGNMENT);
-            box.add(m_clock[index]);
+            m_clock.set(c, new GuiClock(c));
+            m_clock.get(c).setAlignmentX(Component.CENTER_ALIGNMENT);
+            box.add(m_clock.get(c));
             GoColor otherColor = c.otherColor();
-            int otherColorIndex = otherColor.toInteger();
-            m_prisoners[otherColorIndex] = new Prisoners(otherColor);
-            box.add(m_prisoners[otherColorIndex]);
+            m_prisoners.set(otherColor, new Prisoners(otherColor));
+            box.add(m_prisoners.get(otherColor));
         }
         Clock.Listener listener = new Clock.Listener() {
                 public void clockChanged(ConstClock clock)
@@ -80,10 +79,9 @@ public class GameInfo
         ConstGameInformation info = tree.getGameInformationConst(node);
         for (GoColor c : BLACK_WHITE)
         {
-            int index = c.toInteger();
-            updatePlayerToolTip(m_icon[index], info.getPlayer(c),
+            updatePlayerToolTip(m_icon.get(c), info.getPlayer(c),
                                 info.getRank(c), c.getCapitalizedName());
-            m_prisoners[index].setCount(board.getCaptured(c));
+            m_prisoners.get(c).setCount(board.getCaptured(c));
         }
         // Usually time left information is stored in a node only for the
         // player who moved, so we check the father node too
@@ -113,11 +111,14 @@ public class GameInfo
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final GuiClock[] m_clock = new GuiClock[2];
+    private final BlackWhiteSet<GuiClock> m_clock
+        = new BlackWhiteSet<GuiClock>();
 
-    private final JLabel[] m_icon = new JLabel[2];
+    private final BlackWhiteSet<JLabel> m_icon
+        = new BlackWhiteSet<JLabel>();
 
-    private final Prisoners[] m_prisoners = new Prisoners[2];
+    private final BlackWhiteSet<Prisoners> m_prisoners
+        = new BlackWhiteSet<Prisoners>();
 
     private final Game m_game;
 
@@ -150,7 +151,7 @@ public class GameInfo
         String text = clock.getTimeString(c);
         if (text == null)
             text = " ";
-        m_clock[c.toInteger()].setText(text);
+        m_clock.get(c).setText(text);
     }
 
     private void updateTimeFromNode(ConstNode node)
@@ -162,7 +163,7 @@ public class GameInfo
             if (! Double.isNaN(timeLeft))
             {
                 String text = Clock.getTimeString(timeLeft, movesLeft);
-                m_clock[c.toInteger()].setText(text);
+                m_clock.get(c).setText(text);
             }
         }
     }

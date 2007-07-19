@@ -33,16 +33,6 @@ public enum GoColor
         {
             return WHITE;
         }
-
-        public int toInteger()
-        {
-            return 0;
-        }
-
-        public String toString()
-        {
-            return "black";
-        }
     },
 
     /** White stone or white player. */
@@ -67,16 +57,6 @@ public enum GoColor
         {
             return BLACK;
         }
-
-        public int toInteger()
-        {
-            return 1;
-        }
-
-        public String toString()
-        {
-            return "white";
-        }
     },
 
     /** Empty intersection. */
@@ -100,16 +80,6 @@ public enum GoColor
         public GoColor otherColor()
         {
             return EMPTY;
-        }
-
-        public int toInteger()
-        {
-            return 2;
-        }
-
-        public String toString()
-        {
-            return "empty";
         }
     };
 
@@ -162,14 +132,4 @@ public enum GoColor
         for <code>BLACK</code>, <code>EMPTY</code> for <code>EMPTY</code>.
     */
     public abstract GoColor otherColor();
-
-    /** Convert color to an integer that can be used as an array index.
-        @return 0 for BLACK; 1 for WHITE; 2 for EMPTY
-    */
-    public abstract int toInteger();
-
-    /** Return string representation.
-        @return "black", "white" or "empty"
-    */
-    public abstract String toString();
 }
