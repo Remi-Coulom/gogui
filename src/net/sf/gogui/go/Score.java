@@ -11,11 +11,14 @@ package net.sf.gogui.go;
 */
 public class Score
 {
-    /** Constant for area scoring method (Chinese). */
-    public static final int AREA = 0;
+    public enum ScoringMethod
+    {
+        /** Constant for area scoring method (Chinese). */
+        AREA,
 
-    /** Constant for territory scoring method (Japanese). */
-    public static final int TERRITORY = 1;
+        /** Constant for territory scoring method (Japanese). */
+        TERRITORY;
+    }
 
     public int m_areaBlack;
 
@@ -33,7 +36,7 @@ public class Score
 
     public double m_resultTerritory;
 
-    public int m_rules;
+    public ScoringMethod m_rules;
 
     public int m_territoryBlack;
 
@@ -60,12 +63,15 @@ public class Score
             return "0";
     }
 
-    public void updateRules(int rules)
+    public void updateRules(ScoringMethod rules)
     {
         m_rules = rules;
-        if (rules == Score.TERRITORY)
+        if (rules == ScoringMethod.TERRITORY)
             m_result = m_resultTerritory;
         else
+        {
+            assert rules == ScoringMethod.AREA;
             m_result = m_resultArea;
+        }
     }
 }

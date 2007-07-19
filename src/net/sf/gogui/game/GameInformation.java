@@ -10,6 +10,9 @@ import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Score;
+import net.sf.gogui.go.Score.ScoringMethod;
+import static net.sf.gogui.go.Score.ScoringMethod.AREA;
+import static net.sf.gogui.go.Score.ScoringMethod.TERRITORY;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
@@ -130,18 +133,18 @@ public class GameInformation
     }
 
     /** Try to parse rules.
-        @return Score.TERRITORY if rules string (to lowercase) is
-        "japanese", Score.AREA otherwise.
+        @return Score.ScoringMethod.TERRITORY if rules string (to lowercase)
+        is "japanese", Score.ScoringMethod.AREA otherwise.
     */
-    public int parseRules()
+    public ScoringMethod parseRules()
     {
-        int result = Score.AREA;
+        ScoringMethod result = AREA;
         String rules = m_rules;
         if (rules != null)
         {
             rules = rules.trim().toLowerCase(Locale.ENGLISH);
             if (rules.equals("japanese"))
-                result = Score.TERRITORY;
+                result = TERRITORY;
         }
         return result;
     }

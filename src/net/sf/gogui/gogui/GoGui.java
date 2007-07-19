@@ -65,6 +65,7 @@ import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.Score;
+import net.sf.gogui.go.Score.ScoringMethod;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
@@ -3262,7 +3263,7 @@ public class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
         {
-            int scoringMethod = getGameInformation().parseRules();
+            ScoringMethod scoringMethod = getGameInformation().parseRules();
             m_scoreDialog = new ScoreDialog(this, this, scoringMethod);
         }
         restoreLocation(m_scoreDialog, "score");

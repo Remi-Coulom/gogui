@@ -6,6 +6,7 @@ package net.sf.gogui.game;
 
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
+import net.sf.gogui.go.Score.ScoringMethod;
 
 /** Const functions of game.GameInformation.
     @see GameInformation
@@ -28,7 +29,7 @@ public interface ConstGameInformation
 
     TimeSettings getTimeSettings();
 
-    int parseRules();
+    ScoringMethod parseRules();
 
     String suggestGameName();
 }

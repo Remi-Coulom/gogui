@@ -7,6 +7,9 @@ package net.sf.gogui.go;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
+import net.sf.gogui.go.Score.ScoringMethod;
+import static net.sf.gogui.go.Score.ScoringMethod.AREA;
+import static net.sf.gogui.go.Score.ScoringMethod.TERRITORY;
 
 /** Count the final score on a Go board.
     Allows to mark stones as dead and count the territory surrounded by
@@ -124,9 +127,9 @@ public class CountScore
 
     /** Get the score.
         @param komi The komi.
-        @param rules The rules (Score.AREA or Score.TERRITORY)
+        @param rules The scoring method
     */
-    public Score getScore(Komi komi, int rules)
+    public Score getScore(Komi komi, ScoringMethod rules)
     {
         Score s = new Score();
         s.m_rules = rules;
@@ -184,10 +187,13 @@ public class CountScore
             s.m_resultArea -= komi.toDouble();
             s.m_resultTerritory -= komi.toDouble();
         }
-        if (rules == Score.TERRITORY)
+        if (rules == TERRITORY)
             s.m_result = s.m_resultTerritory;
         else
+        {
+            assert rules == AREA;
             s.m_result = s.m_resultArea;
+        }
         return s;
     }
 

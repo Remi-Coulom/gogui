@@ -26,6 +26,9 @@ import javax.swing.JTextField;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Score;
+import net.sf.gogui.go.Score.ScoringMethod;
+import static net.sf.gogui.go.Score.ScoringMethod.AREA;
+import static net.sf.gogui.go.Score.ScoringMethod.TERRITORY;
 
 /** Dialog for displaying the game score and result. */
 public class ScoreDialog
@@ -37,7 +40,8 @@ public class ScoreDialog
         void actionScoreDone(Score score);
     }
 
-    public ScoreDialog(Frame owner, final Listener listener, int initialRules)
+    public ScoreDialog(Frame owner, final Listener listener,
+                       ScoringMethod initialRules)
     {
         super(owner, "Score");
         m_initialRules = initialRules;
@@ -104,7 +108,7 @@ public class ScoreDialog
 
     public void showScore(CountScore countScore, Komi komi)
     {
-        int rules = m_initialRules;
+        ScoringMethod rules = m_initialRules;
         if (m_score != null)
             rules = m_score.m_rules;
         m_score = countScore.getScore(komi, rules);
@@ -118,7 +122,7 @@ public class ScoreDialog
         public JTextField m_white;
     }
 
-    private final int m_initialRules;
+    private final ScoringMethod m_initialRules;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sf.net
@@ -236,7 +240,7 @@ public class ScoreDialog
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
                     {
-                        m_score.updateRules(Score.AREA);
+                        m_score.updateRules(AREA);
                         showScore();
                     }
                 }
@@ -250,7 +254,7 @@ public class ScoreDialog
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
                     {
-                        m_score.updateRules(Score.TERRITORY);
+                        m_score.updateRules(TERRITORY);
                         showScore();
                     }
                 }
@@ -282,10 +286,13 @@ public class ScoreDialog
         m_resultArea.setText(Score.formatResult(resultArea));
         double resultTerritory = m_score.m_resultTerritory;
         m_resultTerritory.setText(Score.formatResult(resultTerritory));
-        if (m_score.m_rules == Score.TERRITORY)
+        if (m_score.m_rules == TERRITORY)
             m_useTerritory.setSelected(true);
         else
+        {
+            assert m_score.m_rules == AREA;
             m_useArea.setSelected(true);
+        }
         m_result.setText(m_score.formatResult());
     }
 }
