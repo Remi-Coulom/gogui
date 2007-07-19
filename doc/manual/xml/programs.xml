@@ -79,36 +79,6 @@ BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 </section>
 
 <section>
-<title>Crazy Stone</title>
-<indexterm>
-<primary>Crazy Stone</primary>
-</indexterm>
-<para>
-<ulink url="http://remi.coulom.free.fr/CrazyStone/">
-http://remi.coulom.free.fr/CrazyStone/</ulink>
-</para>
-<para>
-Operating systems: Windows
-</para>
-<para>
-Command: <userinput>CrazyStone-0006-9x9.exe</userinput>
-</para>
-<para>
-<note>
-<para>
-Crazy Stone also works on GNU/Linux in the
-<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
-command:
-</para>
-<para>
-<userinput>wine CrazyStone-0006-9x9.exe</userinput>
-</para>
-</note>
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
 <title>GNU Go</title>
 <indexterm>
 <primary>GNU Go</primary>
