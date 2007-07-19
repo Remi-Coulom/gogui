@@ -6,6 +6,7 @@ package net.sf.gogui.game;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -653,13 +654,11 @@ public final class NodeUtil
             appendInfo(buffer, "MovesLeftWhite",
                        node.getMovesLeft(WHITE));
         appendInfoComment(buffer, node);
-        for (int i = 0; i < MarkType.getNumberTypes(); ++i)
+        for (MarkType type : EnumSet.allOf(MarkType.class))
         {
-            MarkType type = MarkType.getType(i);
             ConstPointList marked = node.getMarkedConst(type);
             if (marked != null && marked.size() > 0)
-                appendInfo(buffer, "Marked " +
-                           StringUtil.capitalize(type.toString()), marked);
+                appendInfo(buffer, "Marked " + type, marked);
         }
         Map labels = node.getLabelsUnmodifiable();
         if (labels != null && ! labels.isEmpty())
