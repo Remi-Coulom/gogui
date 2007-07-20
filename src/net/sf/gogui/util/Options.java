@@ -30,9 +30,8 @@ public class Options
     */
     public Options(String[] args, String[] specs) throws ErrorMessage
     {
-        for (int i = 0; i < specs.length; ++i)
+        for (String spec : specs)
         {
-            String spec = specs[i];
             if (spec.length() > 0)
                 m_map.put(spec, null);
         }

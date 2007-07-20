@@ -163,10 +163,9 @@ public final class GoPoint
         throws InvalidPointException
     {
         PointList list = new PointList();
-        String p[] = StringUtil.splitArguments(s);
-        for (int i = 0; i < p.length; ++i)
-            if (! p[i].equals(""))
-                list.add(parsePoint(p[i], boardSize));
+        for (String p : StringUtil.splitArguments(s))
+            if (! p.equals(""))
+                list.add(parsePoint(p, boardSize));
         return list;
     }
 

@@ -82,9 +82,8 @@ public class Analyze
 
     private void calcStatistics()
     {
-        for (int i = 0; i < m_entries.size(); ++i)
+        for (Entry e : m_entries)
         {
-            Entry e = (Entry)m_entries.get(i);
             ++m_games;
             if (e.m_error)
             {
@@ -278,9 +277,8 @@ public class Analyze
                   "<th>Error Message</th>\n" +
                   "</tr>\n" +
                   "</thead>\n");
-        for (int i = 0; i < m_entries.size(); ++i)
+        for (Entry e : m_entries)
         {
-            Entry e = (Entry)m_entries.get(i);
             String name = gamePrefix + "-" + e.m_gameIndex + ".sgf";
             out.print("<tr align=\"center\" bgcolor=\"" + COLOR_INFO
                       + "\"><td><a href=\"" + name + "\">" + name

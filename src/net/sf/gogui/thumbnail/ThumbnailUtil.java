@@ -22,12 +22,11 @@ public final class ThumbnailUtil
             return;
         }
         File dir = ThumbnailPlatform.getNormalDir();
-        File[] files = dir.listFiles();
         long currentTimeSeconds = System.currentTimeMillis() / 1000L;
         System.err.println("Expiring thumbnails. Time: "
                            + currentTimeSeconds);
-        for (int i = 0; i < files.length; ++i)
-            expire(files[i], currentTimeSeconds, seconds, checkOnly);
+        for (File file : dir.listFiles())
+            expire(file, currentTimeSeconds, seconds, checkOnly);
     }
 
     /** Expire thumbnails if older than a certain age.

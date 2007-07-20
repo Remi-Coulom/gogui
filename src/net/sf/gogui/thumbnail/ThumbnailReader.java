@@ -36,10 +36,10 @@ public final class ThumbnailReader
 
     public static void main(String argv[]) throws IOException
     {
-        for (int i = 0; i < argv.length; ++i)
+        for (String arg : argv)
         {
-            System.out.println(argv[i]);
-            MetaData metaData = read(new File(argv[i]));
+            System.out.println(arg);
+            MetaData metaData = read(new File(arg));
             System.out.println("URI: " + metaData.m_uri);
             System.out.println("MTime: " + metaData.m_lastModified);
             System.out.println("MimeType: " + metaData.m_mimeType);

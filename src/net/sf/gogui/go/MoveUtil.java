@@ -20,9 +20,8 @@ public final class MoveUtil
         ArrayList<Move> result = new ArrayList<Move>(moves.size() * 2);
         if (moves.isEmpty())
             return result;
-        for (int i = 0; i < moves.size(); ++i)
+        for (Move move : moves)
         {
-            Move move = moves.get(i);
             if (move.getColor() != toMove)
                 result.add(Move.getPass(toMove));
             result.add(move);
