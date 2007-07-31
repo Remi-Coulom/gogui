@@ -95,8 +95,10 @@ public class GtpSynchronizer
         if (numberUndo == 0 || m_isSupportedUndo || m_isSupportedGGUndo)
         {
             undo(numberUndo);
-            play(moves);
+            // Send komi/time_settings before play commands, some engines
+            // cannot handle them otherwise
             sendGameInfo(komi, timeSettings);
+            play(moves);
             m_isOutOfSync = false;
         }
         else
