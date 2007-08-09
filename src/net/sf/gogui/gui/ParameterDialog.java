@@ -32,7 +32,7 @@ public class ParameterDialog
                                       GuiGtpClient gtp,
                                       MessageDialogs messageDialogs)
     {
-        ArrayList parameters = parseResponse(response);
+        ArrayList<Parameter> parameters = parseResponse(response);
         int numberParameters = parameters.size();
         Box outerBox = Box.createHorizontalBox();
         int i = 0;
@@ -55,7 +55,7 @@ public class ParameterDialog
                 }
                 box = Box.createVerticalBox();
             }
-            box.add(((Parameter)parameters.get(i)).getComponent());
+            box.add((parameters.get(i)).getComponent());
             ++i;
         }
         if (box != null)
@@ -78,7 +78,7 @@ public class ParameterDialog
             return;
         for (i = 0; i < parameters.size(); ++i)
         {
-            Parameter parameter = (Parameter)parameters.get(i);
+            Parameter parameter = parameters.get(i);
             if (! parameter.isChanged())
                 continue;
             String key = parameter.getKey();
