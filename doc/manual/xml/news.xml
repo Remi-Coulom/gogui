@@ -22,12 +22,6 @@ a version of GmpToGtp from previous GoGui releases can still be used in
 combination with a newer version of the GoGui interface.
 </simpara>
 </listitem>
-<listitem>
-<simpara>
-Keep parameter dialog open (for an analyze command of type param), if
-setting a new parameter value fails.
-</simpara>
-</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
