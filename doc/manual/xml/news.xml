@@ -20,6 +20,11 @@ Keep parameter dialog open (for an analyze command of type param), if
 setting a new parameter value fails.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Mac: update to Quaqua Look and Feel 3.7.8
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
