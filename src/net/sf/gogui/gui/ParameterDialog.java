@@ -64,27 +64,19 @@ public class ParameterDialog
                                 Parameter parameter = parameters.get(i);
                                 if (! parameter.isChanged())
                                     continue;
-                                String key = parameter.getKey();
-                                String newValue = parameter.getNewValue();
-                                String command =
-                                    paramCommand + " " + key + " " + newValue;
                                 try
                                 {
+                                    String command =
+                                        getNewValueCommand(paramCommand,
+                                                           parameter);
                                     gtp.send(command);
                                 }
                                 catch (GtpError e)
                                 {
-                                    Component component =
-                                        parameter.getComponent();
-                                    String mainMessage =
-                                        "Could not change parameter " + key;
-                                    String optionalMessage =
-                                        StringUtil.capitalize(e.getMessage());
-                                    messageDialogs.showError(dialog,
-                                                             mainMessage,
-                                                             optionalMessage);
+                                    showError(dialog, messageDialogs,
+                                              parameter, e);
                                     optionPane.setValue(UNINITIALIZED_VALUE);
-                                    component.requestFocus();
+                                    parameter.getComponent().requestFocus();
                                     return;
                                 }
                             }
@@ -320,5 +312,22 @@ public class ParameterDialog
             outerBox.add(box);
         }
         return outerBox;
+    }
+
+    private static String getNewValueCommand(String paramCommand,
+                                             Parameter parameter)
+    {
+        String key = parameter.getKey();
+        String newValue = parameter.getNewValue();
+        return paramCommand + " " + key + " " + newValue;
+    }
+
+    private static void showError(JDialog owner, MessageDialogs messageDialogs,
+                                  Parameter parameter, GtpError e)
+    {
+        String mainMessage =
+            "Could not change parameter \"" + parameter.getLabel() + "\"";
+        String optionalMessage = StringUtil.capitalize(e.getMessage());
+        messageDialogs.showError(owner, mainMessage, optionalMessage);
     }
 }
