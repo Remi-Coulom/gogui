@@ -14,6 +14,12 @@
 GoGui: send time settings and komi before setup stones and moves
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Keep parameter dialog open (for an analyze command of type param), if
+setting a new parameter value fails.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
