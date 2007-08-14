@@ -339,10 +339,15 @@ public final class MessageDialogs
             // Dialogs don't have titles on the Mac
             title = null;
         JDialog dialog = optionPane.createDialog(parent, title);
+
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK
         // 1.5.0_04-b05 or Mac 1.4.2_12)
         box.invalidate();
         dialog.pack();
+
+        // not automatically double-buffered on Linux Java 1.5 (?)
+        optionPane.setDoubleBuffered(true);
+
         dialog.setVisible(true);
         dialog.dispose();
         if (disableKey != null && disableCheckBox.isSelected())

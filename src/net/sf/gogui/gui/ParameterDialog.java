@@ -48,6 +48,10 @@ public class ParameterDialog
                             null, options, options[0]);
         final JDialog dialog = new JDialog(owner, title, true);
         dialog.setContentPane(optionPane);
+
+        // not automatically double-buffered on Linux Java 1.5 (?)
+        optionPane.setDoubleBuffered(true);
+
         optionPane.addPropertyChangeListener(new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent event) {
                     String prop = event.getPropertyName();
