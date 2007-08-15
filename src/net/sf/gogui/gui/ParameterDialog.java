@@ -12,10 +12,14 @@ import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import static java.lang.Math.max;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.NoSuchElementException;
 import javax.swing.Box;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
@@ -27,6 +31,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.gtp.GtpError;
+import static net.sf.gogui.gui.GuiUtil.SMALL_PAD;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
@@ -94,6 +99,9 @@ public class ParameterDialog
         dialog.setVisible(true);
     }
 
+    /** Length of a textfield for editing string parameters. */
+    private static final int TEXTFIELD_LEN = 13;
+
     private abstract static class Parameter
     {
         public Parameter(String key, String value)
@@ -145,8 +153,8 @@ public class ParameterDialog
             {
                 m_bool = false;
             }
-            m_panel = new JPanel(new FlowLayout(FlowLayout.LEFT,
-                                                GuiUtil.SMALL_PAD, 0));
+            m_panel =
+                new JPanel(new FlowLayout(FlowLayout.LEFT, SMALL_PAD, 0));
             m_checkBox = new JCheckBox(getLabel(), m_bool);
             m_panel.add(m_checkBox);
         }
@@ -175,6 +183,68 @@ public class ParameterDialog
         private final JPanel m_panel;
     }
 
+    private static class ListParameter
+        extends Parameter
+    {
+        public ListParameter(String type, String key, String value)
+        {
+            super(key, value);
+            String[] args = type.split("/");
+            assert args[0].equals("list");
+            m_items = new String[args.length - 1];
+            String[] labels = new String[args.length - 1];
+            m_initialIndex = 0;
+            int maxLength = 0;
+            for (int i = 1; i < args.length; ++i)
+            {
+                String item = args[i];
+                if (item.equals(value))
+                    m_initialIndex = i - 1;
+                maxLength = max(item.length(), maxLength);
+                m_items[i - 1] = item;
+                labels[i - 1] = StringUtil.capitalize(item.replace('_', ' '));
+            }
+            m_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,
+                                                SMALL_PAD, SMALL_PAD));
+            m_panel.add(new JLabel(getLabel() + ":"));
+            m_comboBox = new JComboBox(labels);
+            if (maxLength < TEXTFIELD_LEN)
+            {
+                String protoType = "X";
+                while (protoType.length() < TEXTFIELD_LEN)
+                    protoType = protoType + "X";
+                m_comboBox.setPrototypeDisplayValue(protoType);
+            }
+            m_comboBox.setSelectedIndex(m_initialIndex);
+            m_panel.add(m_comboBox);
+
+
+        }
+
+        public String getNewValue()
+        {
+            return m_items[m_comboBox.getSelectedIndex()];
+        }
+
+        public boolean isChanged()
+        {
+            return (m_comboBox.getSelectedIndex() != m_initialIndex);
+        }
+
+        public Component getComponent()
+        {
+            return m_panel;
+        }
+
+        private int m_initialIndex;
+
+        private String[] m_items;
+
+        private JPanel m_panel;
+
+        private JComboBox m_comboBox;
+    }
+
     private static class StringParameter
         extends Parameter
     {
@@ -182,10 +252,9 @@ public class ParameterDialog
         {
             super(key, value);
             m_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,
-                                                GuiUtil.SMALL_PAD,
-                                                GuiUtil.SMALL_PAD));
+                                                SMALL_PAD, SMALL_PAD));
             m_panel.add(new JLabel(getLabel() + ":"));
-            m_textField = new JTextField(13);
+            m_textField = new JTextField(TEXTFIELD_LEN);
             m_textField.setText(value);
             m_panel.add(m_textField);
         }
@@ -228,33 +297,25 @@ public class ParameterDialog
             if (line == null)
                 break;
             line = line.trim();
-            final int string = 0;
-            final int bool = 1;
-            int type = string;
             if (line.startsWith("[") && line.endsWith("]"))
             {
                 // Might be used as label for grouping parameters on tabbing
                 // panes in a later version of GoGui, so we silently accept it
                 continue;
             }
-            if (line.startsWith("[bool]"))
+            Scanner scanner = new Scanner(line);
+            String type;
+            try
             {
-                type = bool;
-                line = line.replaceFirst("\\[bool\\]", "").trim();
+                type = scanner.next("^\\[[^\\]]*\\]");
+                line = line.substring(type.length()).trim();
+                type = type.substring(1, type.length() - 1);
             }
-            else if (line.startsWith("[string]"))
-            {
-                type = string;
-                line = line.replaceFirst("\\[string\\]", "").trim();
-            }
-            else if (line.startsWith("["))
+            catch (NoSuchElementException e)
             {
                 // Treat unknown types as string for compatibiliy with future
                 // types
-                type = string;
-                int pos = line.indexOf(']');
-                if (pos >= 0)
-                    line = line.substring(pos + 1).trim();
+                type = "string";
             }
             int pos = line.indexOf(' ');
             String key;
@@ -269,9 +330,13 @@ public class ParameterDialog
                 key = line.substring(0, pos).trim();
                 value = line.substring(pos + 1).trim();
             }
-            if (type == bool)
+            if (type.equals("bool"))
                 parameters.add(new BoolParameter(key, value));
+            else if (type.startsWith("list/"))
+                parameters.add(new ListParameter(type, key, value));
             else
+                // Treat unknown types as string for compatibiliy with future
+                // types
                 parameters.add(new StringParameter(key, value));
         }
         return parameters;

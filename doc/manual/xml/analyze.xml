@@ -160,18 +160,49 @@ The response is not displayed.
 <varlistentry>
 <term><userinput>param</userinput></term>
 <listitem>
-<simpara>
+<para>
 The response to the command is a list of program parameters.
 An dialog will be shown to edit the parameters.
 Each line of the response must contain a key and value.
 It must be possible to change a value using the same command, with the
 key and new value as arguments.
+No whitespaces are allowed in the keys, but underscores will be
+replaced by spaces in the labels of the dialog and lowercase keys
+will be capitalized.
 Optionally, a line can have a type identifier for the value before the key.
-Currently, the types "[string]" and "[bool]" (boolean parameter using "1" for
-true and "0" for false) are supported.
-No whitespaces are allowed in the parameter keys, but underscores will be
-replaced by spaces in the labels of the dialog.
+Currently, the following types are supported:
+<variablelist>
+<varlistentry>
+<term><userinput>[string]</userinput></term>
+<listitem>
+<simpara>
+The value is displayed by an editable text field.
 </simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>[bool]</userinput></term>
+<listitem>
+<simpara>
+The value is a boolean parameter (using "1" for
+true and "0" for false) and displayed by a checkbox.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>[list/item1/item2/...]</userinput></term>
+<listitem>
+<simpara>
+The value is selected from a list of valid items and displayed by
+a combobox. No whitespaces are allowed in the items, but underscores will be
+replaced by spaces in the labels of the combobox and lowercase items
+will be capitalized.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+If no type or an unknown type is given, "string" is assumed by default.
+</para>
 </listitem>
 </varlistentry>
 

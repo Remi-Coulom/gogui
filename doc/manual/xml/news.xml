@@ -22,6 +22,11 @@ a version of GmpToGtp from previous GoGui releases can still be used in
 combination with a newer version of the GoGui interface.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+New parameter type "list" for analyze commands of type "param".
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
