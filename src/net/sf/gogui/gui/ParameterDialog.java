@@ -377,7 +377,7 @@ public class ParameterDialog
         int gridy = 0;
         while (i < numberParameters)
         {
-            if (i % 10 == 0)
+            if (i % 30 == 0)
             {
                 if (panel != null)
                 {
