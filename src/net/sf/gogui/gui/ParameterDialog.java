@@ -231,7 +231,8 @@ public class ParameterDialog
             constraints.gridx = 0;
             constraints.gridy = gridy;
             constraints.weightx = 1.0;
-            constraints.insets = new Insets(SMALL_PAD, 0, SMALL_PAD, 0);
+            constraints.ipadx = SMALL_PAD;
+            constraints.insets = new Insets(SMALL_PAD, 0, 0, 0);
             constraints.anchor = GridBagConstraints.EAST;
             gridbag.setConstraints(label, constraints);
             panel.add(label);
@@ -283,7 +284,8 @@ public class ParameterDialog
             constraints.gridx = 0;
             constraints.gridy = gridy;
             constraints.weightx = 1.0;
-            constraints.insets = new Insets(SMALL_PAD, 0, SMALL_PAD, 0);
+            constraints.ipadx = SMALL_PAD;
+            constraints.insets = new Insets(SMALL_PAD, 0, 0, 0);
             constraints.anchor = GridBagConstraints.EAST;
             gridbag.setConstraints(label, constraints);
             panel.add(label);
