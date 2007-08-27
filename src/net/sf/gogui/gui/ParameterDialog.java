@@ -5,7 +5,6 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
