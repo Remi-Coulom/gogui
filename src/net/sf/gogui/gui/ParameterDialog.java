@@ -7,15 +7,21 @@ package net.sf.gogui.gui;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.Box;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,10 +47,14 @@ public class ParameterDialog
         final Object options[] = { "Ok", "Cancel" };
         final JOptionPane optionPane =
             new JOptionPane(mainComponent, JOptionPane.PLAIN_MESSAGE,
-                            JOptionPane.OK_CANCEL_OPTION, null, options,
-                            options[0]);
+                            JOptionPane.OK_CANCEL_OPTION,
+                            null, options, options[0]);
         final JDialog dialog = new JDialog(owner, title, true);
         dialog.setContentPane(optionPane);
+
+        // not automatically double-buffered on Linux Java 1.5 (?)
+        optionPane.setDoubleBuffered(true);
+
         optionPane.addPropertyChangeListener(new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent event) {
                     String prop = event.getPropertyName();
@@ -75,7 +85,6 @@ public class ParameterDialog
                                     showError(dialog, messageDialogs,
                                               parameter, e);
                                     optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                                    parameter.getComponent().requestFocus();
                                     return;
                                 }
                             }
@@ -88,6 +97,9 @@ public class ParameterDialog
         dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
     }
+
+    /** Length of a textfield for editing string parameters. */
+    private static final int TEXTFIELD_LEN = 13;
 
     private abstract static class Parameter
     {
@@ -117,7 +129,8 @@ public class ParameterDialog
 
         public abstract boolean isChanged();
 
-        public abstract Component getComponent();
+        public abstract void createComponents(int gridy, JPanel panel,
+                                              GridBagLayout gridbag);
 
         private final String m_key;
 
@@ -134,16 +147,12 @@ public class ParameterDialog
             super(key, value);
             try
             {
-                m_bool = (Integer.parseInt(value) != 0);
+                m_initialValue = (Integer.parseInt(value) != 0);
             }
             catch (NumberFormatException e)
             {
-                m_bool = false;
+                m_initialValue = false;
             }
-            m_panel = new JPanel(new FlowLayout(FlowLayout.LEFT,
-                                                GuiUtil.SMALL_PAD, 0));
-            m_checkBox = new JCheckBox(getLabel(), m_bool);
-            m_panel.add(m_checkBox);
         }
 
         public String getNewValue()
@@ -155,19 +164,95 @@ public class ParameterDialog
 
         public boolean isChanged()
         {
-            return m_checkBox.isSelected() != m_bool;
+            return (m_checkBox.isSelected() != m_initialValue);
         }
 
-        public Component getComponent()
+        public void createComponents(int gridy, JPanel panel,
+                                     GridBagLayout gridbag)
         {
-            return m_panel;
+            m_checkBox = new JCheckBox(getLabel(), m_initialValue);
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = gridy;
+            constraints.gridwidth = GridBagConstraints.REMAINDER;
+            constraints.weightx = 1.0;
+            constraints.anchor = GridBagConstraints.WEST;
+            gridbag.setConstraints(m_checkBox, constraints);
+            panel.add(m_checkBox);
         }
 
-        private boolean m_bool;
+        private boolean m_initialValue;
 
-        private final JCheckBox m_checkBox;
+        private JCheckBox m_checkBox;
+    }
 
-        private final JPanel m_panel;
+    private static class ListParameter
+        extends Parameter
+    {
+        public ListParameter(String type, String key, String value)
+        {
+            super(key, value);
+            String[] args = type.split("/");
+            assert args[0].equals("list");
+            m_items = new String[args.length - 1];
+            m_labels = new String[args.length - 1];
+            m_initialIndex = 0;
+            int maxLength = 0;
+            for (int i = 1; i < args.length; ++i)
+            {
+                String item = args[i];
+                if (item.equals(value))
+                    m_initialIndex = i - 1;
+                maxLength = Math.max(item.length(), maxLength);
+                m_items[i - 1] = item;
+                m_labels[i - 1] =
+                    StringUtil.capitalize(item.replace('_', ' '));
+            }
+        }
+
+        public String getNewValue()
+        {
+            return m_items[m_comboBox.getSelectedIndex()];
+        }
+
+        public boolean isChanged()
+        {
+            return (m_comboBox.getSelectedIndex() != m_initialIndex);
+        }
+
+        public void createComponents(int gridy, JPanel panel,
+                                     GridBagLayout gridbag)
+        {
+            JLabel label = new JLabel(getLabel() + ":");
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = gridy;
+            constraints.weightx = 1.0;
+            constraints.ipadx = GuiUtil.SMALL_PAD;
+            constraints.insets = new Insets(GuiUtil.SMALL_PAD, 0, 0, 0);
+            constraints.anchor = GridBagConstraints.EAST;
+            gridbag.setConstraints(label, constraints);
+            panel.add(label);
+
+            m_comboBox = new JComboBox(m_labels);
+            m_comboBox.setSelectedIndex(m_initialIndex);
+            constraints = new GridBagConstraints();
+            constraints.gridx = 1;
+            constraints.gridy = gridy;
+            constraints.weightx = 1.0;
+            constraints.insets = new Insets(GuiUtil.SMALL_PAD, 0, 0, 0);
+            constraints.anchor = GridBagConstraints.WEST;
+            gridbag.setConstraints(m_comboBox, constraints);
+            panel.add(m_comboBox);
+        }
+
+        private int m_initialIndex;
+
+        private String[] m_items;
+
+        private String[] m_labels;
+
+        private JComboBox m_comboBox;
     }
 
     private static class StringParameter
@@ -176,13 +261,6 @@ public class ParameterDialog
         public StringParameter(String key, String value)
         {
             super(key, value);
-            m_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,
-                                                GuiUtil.SMALL_PAD,
-                                                GuiUtil.SMALL_PAD));
-            m_panel.add(new JLabel(getLabel() + ":"));
-            m_textField = new JTextField(13);
-            m_textField.setText(value);
-            m_panel.add(m_textField);
         }
 
         public String getNewValue()
@@ -195,14 +273,32 @@ public class ParameterDialog
             return ! getNewValue().equals(getValue());
         }
 
-        public Component getComponent()
+        public void createComponents(int gridy, JPanel panel,
+                                     GridBagLayout gridbag)
         {
-            return m_panel;
+            JLabel label = new JLabel(getLabel() + ":");
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = gridy;
+            constraints.weightx = 1.0;
+            constraints.ipadx = GuiUtil.SMALL_PAD;
+            constraints.insets = new Insets(GuiUtil.SMALL_PAD, 0, 0, 0);
+            constraints.anchor = GridBagConstraints.EAST;
+            gridbag.setConstraints(label, constraints);
+            panel.add(label);
+
+            m_textField = new JTextField(TEXTFIELD_LEN);
+            m_textField.setText(getValue());
+            constraints = new GridBagConstraints();
+            constraints.gridx = 1;
+            constraints.gridy = gridy;
+            constraints.weightx = 1.0;
+            constraints.insets = new Insets(GuiUtil.SMALL_PAD, 0, 0, 0);
+            gridbag.setConstraints(m_textField, constraints);
+            panel.add(m_textField);
         }
 
-        private final JTextField m_textField;
-
-        private final JPanel m_panel;
+        private JTextField m_textField;
     }
 
     private static ArrayList parseResponse(String response)
@@ -210,6 +306,7 @@ public class ParameterDialog
         ArrayList parameters = new ArrayList();
         BufferedReader reader =
             new BufferedReader(new StringReader(response));
+        Pattern pattern = Pattern.compile("^\\[[^\\]]*\\]");
         while (true)
         {
             String line = null;
@@ -223,33 +320,25 @@ public class ParameterDialog
             if (line == null)
                 break;
             line = line.trim();
-            final int string = 0;
-            final int bool = 1;
-            int type = string;
             if (line.startsWith("[") && line.endsWith("]"))
             {
                 // Might be used as label for grouping parameters on tabbing
                 // panes in a later version of GoGui, so we silently accept it
                 continue;
             }
-            if (line.startsWith("[bool]"))
+
+            String type;
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find())
             {
-                type = bool;
-                line = line.replaceFirst("\\[bool\\]", "").trim();
+                type = line.substring(1, matcher.end() - 1);
+                line = line.substring(matcher.end()).trim();
             }
-            else if (line.startsWith("[string]"))
-            {
-                type = string;
-                line = line.replaceFirst("\\[string\\]", "").trim();
-            }
-            else if (line.startsWith("["))
+            else
             {
                 // Treat unknown types as string for compatibiliy with future
                 // types
-                type = string;
-                int pos = line.indexOf(']');
-                if (pos >= 0)
-                    line = line.substring(pos + 1).trim();
+                type = "string";
             }
             int pos = line.indexOf(' ');
             String key;
@@ -264,9 +353,13 @@ public class ParameterDialog
                 key = line.substring(0, pos).trim();
                 value = line.substring(pos + 1).trim();
             }
-            if (type == bool)
+            if (type.equals("bool"))
                 parameters.add(new BoolParameter(key, value));
+            else if (type.startsWith("list/"))
+                parameters.add(new ListParameter(type, key, value));
             else
+                // Treat unknown types as string for compatibiliy with future
+                // types
                 parameters.add(new StringParameter(key, value));
         }
         return parameters;
@@ -278,12 +371,14 @@ public class ParameterDialog
         Box outerBox = Box.createHorizontalBox();
         int i = 0;
         int numberColumns = 0;
-        Box box = null;
+        JPanel panel = null;
+        GridBagLayout gridbag = null;
+        int gridy = 0;
         while (i < numberParameters)
         {
             if (i % 30 == 0)
             {
-                if (box != null)
+                if (panel != null)
                 {
                     if (numberColumns > 0)
                     {
@@ -291,15 +386,19 @@ public class ParameterDialog
                         outerBox.add(new JSeparator(SwingConstants.VERTICAL));
                         outerBox.add(GuiUtil.createFiller());
                     }
-                    outerBox.add(box);
+                    outerBox.add(panel);
                     ++numberColumns;
                 }
-                box = Box.createVerticalBox();
+                gridbag = new GridBagLayout();
+                panel = new JPanel(gridbag);
+                gridy = 0;
             }
-            box.add(((Parameter)parameters.get(i)).getComponent());
+            Parameter parameter = (Parameter)parameters.get(i);
+            parameter.createComponents(gridy, panel, gridbag);
+            ++gridy;
             ++i;
         }
-        if (box != null)
+        if (panel != null)
         {
             if (numberColumns > 0)
             {
@@ -307,7 +406,7 @@ public class ParameterDialog
                 outerBox.add(new JSeparator(SwingConstants.VERTICAL));
                 outerBox.add(GuiUtil.createFiller());
             }
-            outerBox.add(box);
+            outerBox.add(panel);
         }
         return outerBox;
     }
