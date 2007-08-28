@@ -6,6 +6,8 @@ package net.sf.gogui.gui;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.TreeSet;
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -326,7 +328,7 @@ public final class MessageDialogs
             // Don't show icons on Mac, problem with icon generation in
             // Quaqua 3.7.2
             messageType = JOptionPane.PLAIN_MESSAGE;
-        JOptionPane optionPane =
+        final JOptionPane optionPane =
             new JOptionPane(box, messageType, optionType, null, options,
                             defaultOption);
         if (destructiveIndex >= 0)
@@ -342,6 +344,12 @@ public final class MessageDialogs
         // 1.5.0_04-b05 or Mac 1.4.2_12)
         box.invalidate();
         dialog.pack();
+        dialog.addWindowListener(new WindowAdapter() {
+                public void  windowOpened(WindowEvent e) {
+                    // JDK 1.4 docs require to invoke selectInitialValue after
+                    // the window is made visible
+                    optionPane.selectInitialValue();
+                } });
         dialog.setVisible(true);
         dialog.dispose();
         if (disableKey != null && disableCheckBox.isSelected())
