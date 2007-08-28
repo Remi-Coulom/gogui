@@ -9,6 +9,8 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
@@ -94,6 +96,12 @@ public class ParameterDialog
             });
         dialog.pack();
         dialog.setLocationRelativeTo(owner);
+        dialog.addWindowListener(new WindowAdapter() {
+                public void  windowOpened(WindowEvent e) {
+                    // JDK 1.4 docs require to invoke selectInitialValue after
+                    // the window is made visible
+                    optionPane.selectInitialValue();
+                } });
         dialog.setVisible(true);
     }
 
