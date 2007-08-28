@@ -67,7 +67,7 @@ Do not edit Info.plist
 <key>ClassPath</key>
 <string>$JAVAROOT/gogui.jar:$JAVAROOT/quaqua.jar:/System/Library/Java</string>
 <key>JVMVersion</key>
-<string>1.4+</string>
+<string>1.5+</string>
 <key>MainClass</key>
 <string>net.sf.gogui.gogui.MainWrapper</string>
 </dict>
