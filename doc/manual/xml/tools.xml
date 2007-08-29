@@ -34,7 +34,7 @@ See <xref linkend="reference-gtpdisplay"/> for a complete reference.
 <term>GtpDummy</term>
 <listitem>
 <para>
-Dummy Go program for testing GTP controlling programs.
+Dummy Go program for testing GTP controllers.
 See <xref linkend="reference-gtpdummy"/> for a complete reference.
 </para>
 </listitem>

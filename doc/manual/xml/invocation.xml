@@ -18,9 +18,9 @@ using the file <filename>gogui.jar</filename> in the
 </para>
 <para>
 The command line for executing the actual Go program can be given
-with the <option>-program</option> option, otherwise GoGui will start with
-the Go program attached in the previous run, or without Go program if none
-was attached.
+with the <option>-program</option> option.
+Otherwise, GoGui will start with the Go program attached in the previous
+session, or without Go program if none was attached.
 You can attach and detach a Go program at any time by using the
 <guimenuitem>Attach</guimenuitem>, <guimenuitem>New Program</guimenuitem> and
 <guimenuitem>Detach</guimenuitem> menu items from the
@@ -28,7 +28,7 @@ You can attach and detach a Go program at any time by using the
 </para>
 <para>
 See <xref linkend="reference-gogui"/> for a complete listing of the possible
-options to <userinput>gogui</userinput>.
+command line options to <userinput>gogui</userinput>.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -59,8 +59,8 @@ The invocation is then simply:
 <userinput>gogui [options] [file]</userinput></programlisting>
 To register <application>GoGui</application> as a handler
 for <ulink url="http://www.red-bean.com/sgf/"><acronym>SGF</acronym></ulink>
-files, you can configure a new file association for type
-<userinput>application/x-go-sgf</userinput> and file name pattern
+files, you can configure a new file association for the type
+<userinput>application/x-go-sgf</userinput> and the file name pattern
 <userinput>*.sgf</userinput> to execute
 <userinput>gogui</userinput>.
 <indexterm>
@@ -99,7 +99,7 @@ You can also drag a link to this file to the desktop.
 <primary>invocation</primary>
 <secondary>Mac OS X</secondary>
 </indexterm>
-On the Mac, GoGui can be invoked using the UNIX launcher scripts in
+On Mac OS X, GoGui can be invoked using the UNIX launcher scripts in
 the <filename>bin</filename> directory.
 It is also possible to create an application bundle for Mac OS X by typing
 <programlisting>

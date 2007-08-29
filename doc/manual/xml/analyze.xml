@@ -55,8 +55,8 @@ It can be one of the following:
 <listitem>
 <simpara>
 The response of the command is a board of strings.
-Strings "b" or "black" will be displayed as black,
-"w" or "white" as white, all other strings are not displayed.
+Strings "b" or "black" will be displayed as black territory,
+"w" or "white" as white territory, all other strings are not displayed.
 </simpara>
 </listitem>
 </varlistentry>
