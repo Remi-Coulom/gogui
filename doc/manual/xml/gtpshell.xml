@@ -5,7 +5,7 @@
 The GTP shell is a window that allows to trace the
 stream of GTP commands and responses, which are sent to and
 received from the Go program.
-Also, it allows to enter any command and send it to the Go program.
+Also, it allows to enter commands and send it to the Go program.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 <warning>
@@ -18,6 +18,13 @@ for querying the state with commands that are not configured as analyze
 commands yet.
 </para>
 </warning>
+
+<para>
+If text is selected in the text area of the shell (e.g. text written by the
+program to standard error), it will automatically parsed for valid points,
+which will be marked on the board while the text is selected.
+</para>
+
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 <section>

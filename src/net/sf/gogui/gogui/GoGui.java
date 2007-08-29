@@ -191,11 +191,7 @@ public class GoGui
 
                 public void textSelected(String text)
                 {
-                    if (text == null)
-                        text = "";
-                    PointList points =
-                        GtpUtil.parsePointString(text, getBoardSize());
-                    GuiBoardUtil.showPointList(m_guiBoard, points);
+                    GoGui.this.textSelected(text);
                 }
             };
         m_comment = new Comment(commentListener);
@@ -1839,6 +1835,18 @@ public class GoGui
                                        boolean showError)
     {
         endLengthyCommand(isCritical, showError);
+    }
+
+    /** Callback for selected text.
+        This is a callback for text selection exents in different components.
+        It parses the text for valid points and marks them on the board.
+    */
+    public void textSelected(String text)
+    {
+        if (text == null)
+            text = "";
+        PointList points = GtpUtil.parsePointString(text, getBoardSize());
+        GuiBoardUtil.showPointList(m_guiBoard, points);
     }
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,

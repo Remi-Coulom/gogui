@@ -33,6 +33,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.Platform;
@@ -48,6 +50,9 @@ public class GtpShell
     {
         void actionSendCommand(String command, boolean isCritical,
                                boolean showError);
+
+        /** Callback if some text is selected. */
+        void textSelected(String text);
     }
 
     public GtpShell(Frame owner, Listener listener,
@@ -62,6 +67,16 @@ public class GtpShell
         JPanel panel = new JPanel(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax, false);
+        CaretListener caretListener = new CaretListener()
+            {
+                public void caretUpdate(CaretEvent event)
+                {
+                    if (m_listener == null)
+                        return;
+                    m_listener.textSelected(m_gtpShellText.getSelectedText());
+                }
+            };
+        m_gtpShellText.addCaretListener(caretListener);
         m_scrollPane =
             new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
