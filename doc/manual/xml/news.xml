@@ -27,6 +27,37 @@ combination with a newer version of the GoGui interface.
 </revision>
 
 <revision>
+<revnumber>1.0</revnumber>
+<date>29 Aug 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: send time settings and komi before setup stones and moves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New parameter type "list" for analyze commands of type "param".
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Keep parameter dialog open (for an analyze command of type param), if
+setting a new parameter value fails.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac: update to Quaqua Look and Feel 3.7.8
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.0pre3</revnumber>
 <date>29 Jun 2007</date>
 <authorinitials>enz</authorinitials>
