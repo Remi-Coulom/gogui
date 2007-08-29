@@ -20,8 +20,7 @@ If <guimenuitem>Cursor</guimenuitem> is enabled in the
 the keyboard by moving the cursor (the gray square corners) with the cursor
 keys to the target field and pressing <keycap>Enter</keycap>.
 Holding <keycap>Shift</keycap> while pressing a cursor key moves the
-cursor to the next handicap line in this direction or to the edge
-of the board.
+cursor to the next handicap line or to the edge of the board.
 </para>
 <para>
 The mouse wheel can be used to go forward and backward in the game,
@@ -306,7 +305,7 @@ Choose what side the Go program plays.
 <term><guimenuitem>Pass</guimenuitem></term>
 <listitem>
 <para>
-Make a pass move.
+Play a pass move.
 </para>
 </listitem>
 </varlistentry>
@@ -329,7 +328,7 @@ item.
 <para>
 Score the current game.
 A window will be opened containing score information.
-First the Go program will be asked what stones are dead with the
+First, the Go program will be asked what stones are dead with the
 <command>final_status_list dead</command> command.
 Dead stones are marked with a cross-hair.
 If the Go program does not support this command, or you don't agree with it,
@@ -569,7 +568,7 @@ Go to the first node of a certain variation.
 <term><guimenuitem>Find in Comments</guimenuitem></term>
 <listitem>
 <para>
-Find the next game node containing a search pattern.
+Find the next game node containing a search pattern in its comment text.
 The search is case insensitive.
 The pattern is a regular expression as used by the
 <ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
@@ -732,7 +731,8 @@ If multiple variations start with the same move, a '>' is appended.
 <listitem>
 <para>
 Beep after each computer move.
-With most versions of Java, the PC speaker is used for the beep.
+Some versions of Java use the PC speaker for the beep, and some generate the
+sound using the sound card.
 </para>
 </listitem>
 </varlistentry>
@@ -741,7 +741,7 @@ With most versions of Java, the PC speaker is used for the beep.
 <term><guimenuitem>Monospace Comment Font</guimenuitem></term>
 <listitem>
 <para>
-Use fixed-width font in the comment field.
+Use a fixed-width font in the comment field.
 </para>
 </listitem>
 </varlistentry>
@@ -939,7 +939,7 @@ Open a window for browsing the GoGui documentation.
 <term><guimenuitem>About</guimenuitem></term>
 <listitem>
 <para>
-Show the version and other information for GoGui, the Java platform and the
+Show the version and other information for GoGui, the Java platform, and the
 currently attached Go program.
 </para>
 </listitem>

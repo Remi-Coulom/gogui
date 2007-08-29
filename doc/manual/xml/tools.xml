@@ -11,22 +11,6 @@ programs:
 <variablelist>
 
 <varlistentry>
-<term>GmpToGtp</term>
-<listitem>
-<para>
-Adapter program for playing games using the
-Go Modem Protocol over a serial line.
-For using this tool, an implementation of the
-<ulink url="http://java.sun.com/products/javacomm/">
-Java Communications API</ulink> should be installed
-(<ulink url="http://www.rxtx.org/">rxtx</ulink>
-is a version supporting Unix).
-See <xref linkend="reference-gmptogtp"/> for a complete reference.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term>GtpAdapter</term>
 <listitem>
 <para>
@@ -50,7 +34,7 @@ See <xref linkend="reference-gtpdisplay"/> for a complete reference.
 <term>GtpDummy</term>
 <listitem>
 <para>
-Dummy Go program for testing GTP controlling programs.
+Dummy Go program for testing GTP controllers.
 See <xref linkend="reference-gtpdummy"/> for a complete reference.
 </para>
 </listitem>

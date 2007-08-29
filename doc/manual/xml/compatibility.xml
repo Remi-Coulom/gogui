@@ -139,8 +139,8 @@ will transmit handicap stones with <command>play</command> commands.
 
 <para>
 The command <command>gg-undo</command> is en extension command used by GNU Go,
-which differs from undo in an optional integer argument to undo multiple
-moves.
+which differs from <command>undo</command> by an optional integer argument
+to undo multiple moves.
 </para>
 
 <para>
@@ -201,7 +201,7 @@ board state if it cannot execute all of the moves in the sequence.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>gogui-setup_player</command></term>
+<term><command>gogui-setup</command></term>
 <listitem>
 <para>
 See <xref linkend="setup"/>.
@@ -209,7 +209,7 @@ See <xref linkend="setup"/>.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>gogui-setup</command></term>
+<term><command>gogui-setup_player</command></term>
 <listitem>
 <para>
 See <xref linkend="setup"/>.
