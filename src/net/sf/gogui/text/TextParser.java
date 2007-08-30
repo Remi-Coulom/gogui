@@ -144,7 +144,7 @@ public class TextParser
             return (c == m_charBlack.charValue());
         if (c == 'X' || c == '@' || c == '#' || c == 'x')
         {
-            m_charBlack = new Character(c);
+            m_charBlack = Character.valueOf(c);
             return true;
         }
         return false;
@@ -161,7 +161,7 @@ public class TextParser
             return (c == m_charWhite.charValue());
         if (c == 'o' || c == 'O')
         {
-            m_charWhite = new Character(c);
+            m_charWhite = Character.valueOf(c);
             return true;
         }
         return false;

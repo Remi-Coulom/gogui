@@ -214,7 +214,7 @@ public class GuiUtil
         if (laf.equals("com.jgoodies.looks.plastic.PlasticXPLookAndFeel"))
         {
             UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
-            UIManager.put("ScrollBar.maxBumpsWidth", new Integer(19));
+            UIManager.put("ScrollBar.maxBumpsWidth", Integer.valueOf(19));
         }
         try
         {

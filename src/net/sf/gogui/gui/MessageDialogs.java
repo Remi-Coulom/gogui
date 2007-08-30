@@ -333,7 +333,8 @@ public final class MessageDialogs
         if (destructiveIndex >= 0)
         {
             String key = "Quaqua.OptionPane.destructiveOption";
-            optionPane.putClientProperty(key, new Integer(destructiveIndex));
+            optionPane.putClientProperty(key,
+                                         Integer.valueOf(destructiveIndex));
         }
         if (isMac && parent.isVisible())
             // Dialogs don't have titles on the Mac

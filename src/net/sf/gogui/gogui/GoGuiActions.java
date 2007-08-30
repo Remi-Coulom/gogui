@@ -56,27 +56,26 @@ public class GoGuiActions
         public GoGuiAction(ActionListener listener, String name, String desc,
                            int accel, String icon)
         {
-            this(listener, name, desc, new Integer(accel), getShortcut(),
-                 icon);
+            this(listener, name, desc, accel, getShortcut(), icon);
         }
 
         public GoGuiAction(ActionListener listener, String name, String desc,
                            int accel)
         {
-            this(listener, name, desc, new Integer(accel), getShortcut(),
-                 null);
+            this(listener, name, desc, accel, getShortcut(), null);
         }
 
         public GoGuiAction(ActionListener listener, String name, String desc,
                            int accel, int modifier, String icon)
         {
-            this(listener, name, desc, new Integer(accel), modifier, icon);
+            this(listener, name, desc, Integer.valueOf(accel), modifier,
+                 icon);
         }
 
         public GoGuiAction(ActionListener listener, String name, String desc,
                            int accel, int modifier)
         {
-            this(listener, name, desc, new Integer(accel), modifier, null);
+            this(listener, name, desc, accel, modifier, null);
         }
 
         public GoGuiAction(ActionListener listener, String name, String desc,
