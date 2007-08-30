@@ -83,6 +83,8 @@ public class SgfWriter
 
     private static final int STRINGBUF_CAPACITY = 128;
 
+    private static final int MAX_CHARS_PER_LINE = 78;
+
     private final StringBuffer m_buffer = new StringBuffer(STRINGBUF_CAPACITY);
 
     private final int m_size;
@@ -172,8 +174,7 @@ public class SgfWriter
             printNewLine();
             return;
         }
-        final int maxCharPerLine = 78;
-        if (m_buffer.length() + text.length() > maxCharPerLine)
+        if (m_buffer.length() + text.length() > MAX_CHARS_PER_LINE)
             printNewLine();
         m_buffer.append(text);
     }
