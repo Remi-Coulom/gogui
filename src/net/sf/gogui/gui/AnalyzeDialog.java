@@ -124,8 +124,7 @@ public final class AnalyzeDialog
 
     public void saveRecent()
     {
-        final int maxRecent = 100;
-        ArrayList<String> recent = new ArrayList<String>(maxRecent);
+        ArrayList<String> recent = new ArrayList<String>(MAX_SAVE_RECENT);
         int start = (m_firstIsTemp ? 1 : 0);
         for (int i = start; i < getComboBoxItemCount(); ++i)
         {
@@ -135,7 +134,7 @@ public final class AnalyzeDialog
         }
         for (int i = 0; i < m_fullRecentList.size(); ++i)
         {
-            if (recent.size() == maxRecent)
+            if (recent.size() == MAX_SAVE_RECENT)
                 break;
             String name = m_fullRecentList.get(i);
             if (recent.indexOf(name) < 0)
@@ -186,6 +185,8 @@ public final class AnalyzeDialog
 
         private final String m_item;
     }
+
+    private static final int MAX_SAVE_RECENT = 100;
 
     /** Is the first item in the history combo box a temporary item?
         Avoids that the first item in the history combo box is treated
