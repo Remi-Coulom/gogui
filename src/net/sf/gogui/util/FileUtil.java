@@ -97,17 +97,24 @@ public final class FileUtil
     {
         ArrayList<String> result = new ArrayList<String>();
         FileReader reader = new FileReader(file);
-        BufferedReader in = new BufferedReader(reader);
-        while (true)
+            BufferedReader in = new BufferedReader(reader);
+        try
         {
-            String line = in.readLine();
-            if (line == null)
-                break;
-            line = line.trim();
-            if (! line.equals("") && ! line.startsWith("#"))
-                result.add(line);
+            while (true)
+            {
+                String line = in.readLine();
+                if (line == null)
+                    break;
+                line = line.trim();
+                if (! line.equals("") && ! line.startsWith("#"))
+                    result.add(line);
+            }
+            return result;
         }
-        return result;
+        finally
+        {
+            in.close();
+        }
     }
 
     /** Remove extension in file name.
