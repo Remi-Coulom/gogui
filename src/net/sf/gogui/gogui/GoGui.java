@@ -3762,10 +3762,10 @@ public class GoGui
         if (m_file != null)
         {
             filename = m_file.getName();
-            if (isModified())
+            if (isModified() && ! Platform.isMac())
                 filename = filename + " [modified]";
         }
-        else if (isModified())
+        else if (isModified() && ! Platform.isMac())
             filename = "[modified]";
         ConstGameInformation info = getGameInformation();
         String gameName = info.suggestGameName();
