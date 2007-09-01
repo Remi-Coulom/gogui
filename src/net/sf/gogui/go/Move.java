@@ -101,8 +101,8 @@ public final class Move
 
     static
     {
-        s_passBlack = new Move(BLACK, null);
-        s_passWhite = new Move(WHITE, null);
+        s_passBlack = new Move(BLACK, null, "B PASS");
+        s_passWhite = new Move(WHITE, null, "W PASS");
         s_movesBlack = init(BLACK);
         s_movesWhite = init(WHITE);
     }
@@ -110,17 +110,25 @@ public final class Move
     private static Move[][] init(GoColor color)
     {
         Move[][] result = new Move[GoPoint.MAX_SIZE][GoPoint.MAX_SIZE];
+        StringBuffer buffer = new StringBuffer(8);
+        String colorString = color.getUppercaseLetter();
         for (int x = 0; x < GoPoint.MAX_SIZE; ++x)
             for (int y = 0; y < GoPoint.MAX_SIZE; ++y)
-                result[x][y] = new Move(color, GoPoint.get(x, y));
+            {
+                GoPoint p = GoPoint.get(x, y);
+                buffer.setLength(0);
+                buffer.append(colorString);
+                buffer.append(' ');
+                buffer.append(p.toString());
+                result[x][y] = new Move(color, p, buffer.toString());
+            }
         return result;
     }
 
-    private Move(GoColor color, GoPoint point)
+    private Move(GoColor color, GoPoint point, String string)
     {
         m_point = point;
         m_color = color;
-        m_string =
-            m_color.getUppercaseLetter() + " " + GoPoint.toString(m_point);
+        m_string = string;
     }
 }
