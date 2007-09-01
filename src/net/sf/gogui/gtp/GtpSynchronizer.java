@@ -378,11 +378,8 @@ public class GtpSynchronizer
                 ConstPointList stones = targetState.getSetup(c);
                 for (int i = 0; i < stones.size(); ++i)
                 {
-                    if (c == BLACK)
-                        command.append(" B ");
-                    else
-                        command.append(" W ");
-                    command.append(stones.get(i));
+                    command.append(' ');
+                    command.append(Move.get(c, stones.get(i)).toString());
                 }
             }
             m_gtp.send(command.toString());
