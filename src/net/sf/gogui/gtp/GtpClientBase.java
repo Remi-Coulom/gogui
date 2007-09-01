@@ -91,24 +91,22 @@ public abstract class GtpClientBase
     */
     public String getCommandPlay(Move move)
     {
-        String point = GoPoint.toString(move.getPoint());
-        GoColor color = move.getColor();
         m_buffer.setLength(0);
         if (m_protocolVersion == 1)
         {
+            GoColor color = move.getColor();
+            String point = GoPoint.toString(move.getPoint());
             if (color == BLACK)
                m_buffer.append("black ");
             else if (color == WHITE)
                 m_buffer.append("white ");
+            m_buffer.append(point);
         }
         else
         {
-            if (color == BLACK)
-                m_buffer.append("play b ");
-            else if (color == WHITE)
-                m_buffer.append("play w ");
+            m_buffer.append("play ");
+            m_buffer.append(move.toString());
         }
-        m_buffer.append(point);
         if (m_lowerCase)
             return m_buffer.toString().toLowerCase(Locale.ENGLISH);
         return m_buffer.toString();

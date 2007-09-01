@@ -78,7 +78,10 @@ public final class Move
     }
 
     /** Get string representation of move.
-        @return String representation, e.g. B C3, W PASS
+        @return String representation using an uppercase letter for the color
+        and an uppercase string for the point (e.g. B C3, W PASS). This
+        representation is also guaranteed to be compatible with the formats
+        used in the Go Text Protocol.
     */
     public String toString()
     {

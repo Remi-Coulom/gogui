@@ -24,6 +24,15 @@ combination with a newer version of the GoGui interface.
 </listitem>
 <listitem>
 <simpara>
+Use uppercase letters for color arguments in GTP commands (like play or
+gogui-setup). This was changed for consistency with the convention in the user
+interface. It could break programs that do not treat colors case-insensitive
+(in violation of the GTP specification). Such programs can still be used
+by wrapping there invocation with GtpAdapter with the option -lowercase.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: mark points on board if text is selected in the GtpShell that
 contains points (like it is already done with text selection in comment
 or in text windows created by analyze commands)

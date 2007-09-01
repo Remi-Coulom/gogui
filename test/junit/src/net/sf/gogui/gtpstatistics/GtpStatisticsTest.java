@@ -40,11 +40,11 @@ public final class GtpStatisticsTest
         expect.expect("boardsize 9");
         expect.expect("clear_board");
         expect.expect("foo");
-        expect.expect("play b C3");
+        expect.expect("play B C3");
         expect.expect("foo");
-        expect.expect("play w G7");
+        expect.expect("play W G7");
         expect.expect("foo");
-        expect.expect("play b C7");
+        expect.expect("play B C7");
         expect.expect("foo");
         expect.expect("quit");
         GtpStatistics gtpStatistics = new GtpStatistics();

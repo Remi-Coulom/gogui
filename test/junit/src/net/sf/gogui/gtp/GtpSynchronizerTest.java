@@ -44,15 +44,15 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
         play(BLACK, 3, 4);
-        expect("play b D5", "");
+        expect("play B D5", "");
         synchronize();
         assertExpectQueueEmpty();
         play(BLACK, 4, 4);
         play(WHITE, 5, 5);
         play(BLACK, null);
-        expect("play b E5", "");
-        expect("play w F6", "");
-        expect("play b PASS", "");
+        expect("play B E5", "");
+        expect("play W F6", "");
+        expect("play B PASS", "");
         synchronize();
         assertExpectQueueEmpty();
         undo();
@@ -64,8 +64,8 @@ public final class GtpSynchronizerTest
         play(BLACK, 4, 4);
         expect("undo", "");
         expect("undo", "");
-        expect("play w F6", "");
-        expect("play b E5", "");
+        expect("play W F6", "");
+        expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -81,16 +81,16 @@ public final class GtpSynchronizerTest
         synchronize();
         assertExpectQueueEmpty();
         play(BLACK, 3, 4);
-        expect("play b D5", "");
+        expect("play B D5", "");
         synchronize();
         assertExpectQueueEmpty();
         play(BLACK, 4, 4);
         play(WHITE, 5, 5);
         play(BLACK, null);
-        expect("play w PASS", "");
-        expect("play b E5", "");
-        expect("play w F6", "");
-        expect("play b PASS", "");
+        expect("play W PASS", "");
+        expect("play B E5", "");
+        expect("play W F6", "");
+        expect("play B PASS", "");
         synchronize();
         assertExpectQueueEmpty();
         undo();
@@ -103,8 +103,8 @@ public final class GtpSynchronizerTest
         expect("undo", "");
         expect("undo", "");
         expect("undo", "");
-        expect("play w F6", "");
-        expect("play b E5", "");
+        expect("play W F6", "");
+        expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -138,7 +138,7 @@ public final class GtpSynchronizerTest
 
         // Playing a move should not trigger a re-transmission
         play(WHITE, 5, 5);
-        expect("play w F6", "");
+        expect("play W F6", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -164,14 +164,14 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(4, 4));
 
         setupHandicap(black);
-        expect("play b D5", "");
-        expect("play b E5", "");
+        expect("play B D5", "");
+        expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
 
         // Playing a move should not trigger a re-transmission
         play(WHITE, 5, 5);
-        expect("play w F6", "");
+        expect("play W F6", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -199,13 +199,13 @@ public final class GtpSynchronizerTest
         setupHandicap(black);
         expect("boardsize 19", "");
         expect("clear_board", "");
-        expect("gogui-setup b D5 b E5", "");
+        expect("gogui-setup B D5 B E5", "");
         synchronize();
         assertExpectQueueEmpty();
 
         // Playing a move should not trigger a re-transmission
         play(WHITE, 5, 5);
-        expect("play w F6", "");
+        expect("play W F6", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -230,7 +230,7 @@ public final class GtpSynchronizerTest
         setup(black, white, BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
-        expect("gogui-setup b D5 b E5 w F6", "");
+        expect("gogui-setup B D5 B E5 W F6", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -247,8 +247,8 @@ public final class GtpSynchronizerTest
         black.add(GoPoint.get(3, 4));
         black.add(GoPoint.get(4, 4));
         setup(black, null, BLACK);
-        expect("play b D5", "");
-        expect("play b E5", "");
+        expect("play B D5", "");
+        expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
         black = new PointList();
@@ -256,7 +256,7 @@ public final class GtpSynchronizerTest
         setup(black, null, BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
-        expect("play b E5", "");
+        expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
     }
@@ -276,8 +276,8 @@ public final class GtpSynchronizerTest
         setup(new PointList(GoPoint.get(1, 1)), null, WHITE);
         expect("boardsize 19", "");
         expect("clear_board", "");
-        expect("gogui-setup b B2", "");
-        expect("gogui-setup_player w", "");
+        expect("gogui-setup B B2", "");
+        expect("gogui-setup_player W", "");
         synchronize();
         assertExpectQueueEmpty();
     }

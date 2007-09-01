@@ -379,9 +379,9 @@ public class GtpSynchronizer
                 for (int i = 0; i < stones.size(); ++i)
                 {
                     if (c == BLACK)
-                        command.append(" b ");
+                        command.append(" B ");
                     else
-                        command.append(" w ");
+                        command.append(" W ");
                     command.append(stones.get(i));
                 }
             }
@@ -389,7 +389,7 @@ public class GtpSynchronizer
             m_engineState.setup(setupBlack, setupWhite, setupPlayer);
             if (setupPlayer != null && m_isSupportedSetupPlayer)
                 m_gtp.send("gogui-setup_player "
-                           + (setupPlayer == BLACK ? "b" : "w"));
+                           + setupPlayer.getUppercaseLetter());
         }
     }
 

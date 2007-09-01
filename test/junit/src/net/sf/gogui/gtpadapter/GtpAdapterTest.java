@@ -54,8 +54,8 @@ public final class GtpAdapterTest
     {
         initAdapter(false, "place_free_handicap");
         expect("place_free_handicap 2", "A1 A2");
-        expect("play b A1", "");
-        expect("play b A2", "");
+        expect("play B A1", "");
+        expect("play B A2", "");
         assertEquals("A1 A2", send("place_free_handicap 2"));
         assertExpectQueueEmpty();
     }
@@ -67,8 +67,8 @@ public final class GtpAdapterTest
         throws ErrorMessage, IOException, GtpError
     {
         initAdapter();
-        expect("play b D4", "");
-        expect("play b Q16", "");
+        expect("play B D4", "");
+        expect("play B Q16", "");
         assertEquals("D4 Q16", send("place_free_handicap 2"));
         assertExpectQueueEmpty();
     }
@@ -76,8 +76,8 @@ public final class GtpAdapterTest
     public void testLoadSgf() throws ErrorMessage, IOException, GtpError
     {
         initAdapter();
-        expect("play b D4", "");
-        expect("play w Q16", "");
+        expect("play B D4", "");
+        expect("play W Q16", "");
         send("loadsgf " + getTmpFile("test.sgf"));
         assertExpectQueueEmpty();
     }

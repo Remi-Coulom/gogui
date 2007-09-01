@@ -23,15 +23,8 @@ public final class GtpClientUtil
         cmd.append(getPlaySequenceCommand(gtp));
         for (int i = 0; i < moves.size(); ++i)
         {
-            Move move = moves.get(i);
-            GoColor color = move.getColor();
-            if (color == BLACK)
-                cmd.append(" b ");
-            else if (color == WHITE)
-                cmd.append(" w ");
-            else
-                cmd.append(" empty ");
-            cmd.append(GoPoint.toString(move.getPoint()));
+            cmd.append(' ');
+            cmd.append(moves.get(i).toString());
         }
         return cmd.toString();
     }
