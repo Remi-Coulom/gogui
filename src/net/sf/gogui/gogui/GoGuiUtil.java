@@ -74,10 +74,7 @@ public final class GoGuiUtil
 
         if (move != null)
         {
-            GoColor c = move.getColor();
-            GoPoint p = move.getPoint();
-            moveText.append(c == BLACK ? "B " : "W ");
-            moveText.append(GoPoint.toString(p));
+            moveText.append(move.toString());
             moveText.append(' ');
         }
         if (! "".equals(variation))
@@ -96,12 +93,10 @@ public final class GoGuiUtil
         }
         else
         {
-            GoColor c = move.getColor();
-            GoPoint p = move.getPoint();
             toolTip.append("Last move ");
             toolTip.append(moveNumber);
-            toolTip.append(c == BLACK ? " B " : " W ");
-            toolTip.append(GoPoint.toString(p));
+            toolTip.append(' ');
+            toolTip.append(move.toString());
             toolTip.append(' ');
         }
         if (movesLeft > 0)

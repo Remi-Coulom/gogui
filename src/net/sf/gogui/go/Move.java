@@ -78,7 +78,7 @@ public final class Move
     }
 
     /** Get string representation of move.
-        @return String representation, e.g. black C3, white PASS, empty A1
+        @return String representation, e.g. B C3, W PASS
     */
     public String toString()
     {
@@ -120,6 +120,7 @@ public final class Move
     {
         m_point = point;
         m_color = color;
-        m_string = m_color.toString() + " " + GoPoint.toString(m_point);
+        m_string =
+            m_color.getUppercaseLetter() + " " + GoPoint.toString(m_point);
     }
 }

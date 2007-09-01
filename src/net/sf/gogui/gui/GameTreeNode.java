@@ -104,8 +104,7 @@ class GameTreeNode
         {
             toolTip.append(m_moveNumber);
             toolTip.append(' ');
-            toolTip.append(move.getColor() == BLACK ? "B " : "W ");
-            toolTip.append(GoPoint.toString(move.getPoint()));
+            toolTip.append(move.toString());
         }
         else if (m_node.hasSetup() || player != null)
         {
