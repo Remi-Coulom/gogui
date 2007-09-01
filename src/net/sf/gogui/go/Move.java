@@ -10,14 +10,13 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** Move containing a point and a color.
     The point can be <code>null</code> (for pass move).
-    The color is black or white (EMPTY can still be used for removing a stone
-    on the board, but this will be deprecated in the future).
+    The color is black or white.
     This class is immutable, references are unique.
 */
 public final class Move
 {
     /** Factory method for constructing a move.
-        @param color The color of the move (empty for stone removal)
+        @param color The color of the move
         @param x Column in <code>[0..GoPoint.MAX_SIZE - 1]</code>
         @param y Row in <code>[0..GoPoint.MAX_SIZE - 1]</code>
         @return Reference to this move
@@ -36,21 +35,20 @@ public final class Move
     */
     public static Move get(GoColor color, GoPoint point)
     {
+        assert color.isBlackWhite();
         if (point == null)
         {
             if (color == BLACK)
                 return s_passBlack;
-            assert color == WHITE;
-            return s_passWhite;
+            else
+                return s_passWhite;
         }
         int x = point.getX();
         int y = point.getY();
         if (color == BLACK)
             return s_movesBlack[x][y];
-        else if (color == WHITE)
-            return s_movesWhite[x][y];
         else
-            return s_movesEmpty[x][y];
+            return s_movesWhite[x][y];
     }
 
     /** Factory method for constructing a pass move.
@@ -93,8 +91,6 @@ public final class Move
 
     private static Move[][] s_movesBlack;
 
-    private static Move[][] s_movesEmpty;
-
     private static Move[][] s_movesWhite;
 
     private final GoColor m_color;
@@ -109,7 +105,6 @@ public final class Move
         s_passWhite = new Move(WHITE, null);
         s_movesBlack = init(BLACK);
         s_movesWhite = init(WHITE);
-        s_movesEmpty = init(EMPTY);
     }
 
     private static Move[][] init(GoColor color)
