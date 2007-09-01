@@ -74,10 +74,6 @@ public abstract class GtpClientBase
 
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
-        @param move Any color, including GoColor.EMPTY, this is
-        non-standard GTP, but GoGui tries to transmit empty setup
-        points this way, even if it is only to produce an error with the
-        Go engine.
         @return The right command depending on the GTP version.
     */
     public String getCommandPlay(Move move)
@@ -89,19 +85,15 @@ public abstract class GtpClientBase
         {
             if (color == GoColor.BLACK)
                command = "black " + point;
-            else if (color == GoColor.WHITE)
-                command = "white " + point;
             else
-                command = "empty " + point;
+                command = "white " + point;
         }
         else
         {
             if (color == GoColor.BLACK)
                 command = "play b " + point;
-            else if (color == GoColor.WHITE)
-                command = "play w " + point;
             else
-                command = "play empty " + point;
+                command = "play w " + point;
         }
         if (m_lowerCase)
             command = command.toLowerCase(Locale.ENGLISH);

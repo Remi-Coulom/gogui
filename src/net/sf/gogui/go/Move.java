@@ -24,29 +24,26 @@ public final class Move
     }
 
     /** Factory method for constructing a move.
-        @param color The color of the move (empty can still be used for
-        removing a stone on the board, but this will be deprecated in the
-        future)
+        @param color The color of the move
         @param point Location of the move (null for pass move)
         @return Reference to this move
     */
     public static Move get(GoColor color, GoPoint point)
     {
+        assert color.isBlackWhite();
         if (point == null)
         {
             if (color == GoColor.BLACK)
                 return s_passBlack;
-            assert color == GoColor.WHITE;
-            return s_passWhite;
+            else
+                return s_passWhite;
         }
         int x = point.getX();
         int y = point.getY();
         if (color == GoColor.BLACK)
             return s_movesBlack[x][y];
-        else if (color == GoColor.WHITE)
-            return s_movesWhite[x][y];
         else
-            return s_movesEmpty[x][y];
+            return s_movesWhite[x][y];
     }
 
     /** Factory method for constructing a pass move.
@@ -89,8 +86,6 @@ public final class Move
 
     private static Move[][] s_movesBlack;
 
-    private static Move[][] s_movesEmpty;
-
     private static Move[][] s_movesWhite;
 
     private final GoColor m_color;
@@ -105,7 +100,6 @@ public final class Move
         s_passWhite = new Move(GoColor.WHITE, null);
         s_movesBlack = init(GoColor.BLACK);
         s_movesWhite = init(GoColor.WHITE);
-        s_movesEmpty = init(GoColor.EMPTY);
     }
 
     private static Move[][] init(GoColor color)
