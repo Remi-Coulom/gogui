@@ -36,7 +36,12 @@ public abstract class GtpClientBase
     public String getCommandBoardsize(int size)
     {
         if (m_protocolVersion == 2)
-            return ("boardsize " + size);
+        {
+            m_buffer.setLength(0);
+            m_buffer.append("boardsize ");
+            m_buffer.append(size);
+            return m_buffer.toString();
+        }
         else
             return null;
     }
@@ -49,7 +54,12 @@ public abstract class GtpClientBase
     public String getCommandClearBoard(int size)
     {
         if (m_protocolVersion == 1)
-            return "boardsize " + size;
+        {
+            m_buffer.setLength(0);
+            m_buffer.append("boardsize ");
+            m_buffer.append(size);
+            return m_buffer.toString();
+        }
         else
             return "clear_board";
     }
@@ -87,28 +97,29 @@ public abstract class GtpClientBase
     {
         String point = GoPoint.toString(move.getPoint());
         GoColor color = move.getColor();
-        String command;
+        m_buffer.setLength(0);
         if (m_protocolVersion == 1)
         {
             if (color == BLACK)
-               command = "black " + point;
+               m_buffer.append("black ");
             else if (color == WHITE)
-                command = "white " + point;
+                m_buffer.append("white ");
             else
-                command = "empty " + point;
+                m_buffer.append("empty ");
         }
         else
         {
             if (color == BLACK)
-                command = "play b " + point;
+                m_buffer.append("play b ");
             else if (color == WHITE)
-                command = "play w " + point;
+                m_buffer.append("play w ");
             else
-                command = "play empty " + point;
+                m_buffer.append("play empty ");
         }
+        m_buffer.append(point);
         if (m_lowerCase)
-            command = command.toLowerCase(Locale.ENGLISH);
-        return command;
+            return m_buffer.toString().toLowerCase(Locale.ENGLISH);
+        return m_buffer.toString();
     }
 
     /** Send cputime command and convert the result to double.
@@ -327,6 +338,9 @@ public abstract class GtpClientBase
     public abstract void waitForExit();
 
     protected String m_name;
+
+    /** Local variable in some functions, reused for efficiency. */
+    private StringBuffer m_buffer = new StringBuffer(128);
 
     private boolean m_lowerCase;
 
