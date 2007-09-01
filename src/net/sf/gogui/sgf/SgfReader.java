@@ -154,7 +154,7 @@ public final class SgfReader
     {
         if (m_warnings.isEmpty())
             return null;
-        StringBuffer result = new StringBuffer(m_warnings.size() * 80);
+        StringBuilder result = new StringBuilder(m_warnings.size() * 80);
         Iterator iter = m_warnings.iterator();
         while (iter.hasNext())
         {
@@ -209,7 +209,7 @@ public final class SgfReader
     private String m_newCharset;
 
     /** Pre-allocated temporary buffer for use within functions. */
-    private final StringBuffer m_buffer = new StringBuffer(512);
+    private final StringBuilder m_buffer = new StringBuilder(512);
 
     private final PointList m_pointList = new PointList();
 

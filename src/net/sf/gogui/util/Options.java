@@ -232,7 +232,7 @@ public class Options
         BufferedReader bufferedReader = new BufferedReader(reader);
         try
         {
-            StringBuffer buffer = new StringBuffer(256);
+            StringBuilder buffer = new StringBuilder(256);
             String line;
             while (true)
             {

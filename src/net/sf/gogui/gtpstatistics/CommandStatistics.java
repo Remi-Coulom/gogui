@@ -132,7 +132,7 @@ public final class CommandStatistics
             format.setGroupingUsed(false);
             return format;
         }
-        StringBuffer pattern = new StringBuffer();
+        StringBuilder pattern = new StringBuilder();
         pattern.append("0.");
         for (int i = 0; i < precision; ++i)
             pattern.append('#');

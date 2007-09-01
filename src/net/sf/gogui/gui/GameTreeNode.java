@@ -97,7 +97,7 @@ class GameTreeNode
 
     public final void updateToolTip()
     {
-        StringBuffer toolTip = new StringBuffer(128);
+        StringBuilder toolTip = new StringBuilder(128);
         Move move = m_node.getMove();
         GoColor player = m_node.getPlayer();
         if (move != null)

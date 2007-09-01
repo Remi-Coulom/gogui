@@ -621,7 +621,7 @@ public class GtpRegress
             if (matcher.find())
             {
                 String sgf = matcher.group();
-                StringBuffer stringBuffer = new StringBuffer();
+                StringBuilder stringBuffer = new StringBuilder();
                 stringBuffer.append(line.substring(0, matcher.start()));
                 stringBuffer.append("<a href=\"");
                 stringBuffer.append(m_relativePath);
@@ -706,7 +706,7 @@ public class GtpRegress
     private String getTimeString(double seconds)
     {
         NumberFormat format1 = StringUtil.getNumberFormat(1);
-        StringBuffer buffer = new StringBuffer(16);
+        StringBuilder buffer = new StringBuilder(16);
         buffer.append(format1.format(seconds));
         buffer.append("&nbsp;(");
         buffer.append(StringUtil.formatTime((long)seconds));

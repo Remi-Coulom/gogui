@@ -58,8 +58,8 @@ public final class GoGuiUtil
         int totalMoves = moveNumber + movesLeft;
         Move move = node.getMove();
         String variation = NodeUtil.getVariationString(node);
-        StringBuffer moveText = new StringBuffer(128);
-        StringBuffer toolTip = new StringBuffer(128);
+        StringBuilder moveText = new StringBuilder(128);
+        StringBuilder toolTip = new StringBuilder(128);
         if (moveNumber > 0)
         {
             moveText.append(moveNumber);

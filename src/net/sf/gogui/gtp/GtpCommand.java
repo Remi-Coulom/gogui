@@ -28,7 +28,7 @@ public class GtpCommand
     */
     public GtpCommand(String line)
     {
-        StringBuffer buffer = preprocessLine(line);
+        StringBuilder buffer = preprocessLine(line);
         assert ! line.trim().equals("");
         String[] array = StringUtil.splitArguments(buffer.toString());
         assert array.length > 0;
@@ -46,7 +46,7 @@ public class GtpCommand
             m_id = -1;
             m_line = buffer.toString();
         }
-        m_response = new StringBuffer();
+        m_response = new StringBuilder();
         if (commandIndex >= array.length)
         {
             m_command = "";
@@ -308,7 +308,7 @@ public class GtpCommand
         The response to the command can be constructed by appending to this
         string buffer.
     */
-    public StringBuffer getResponse()
+    public StringBuilder getResponse()
     {
         return m_response;
     }
@@ -353,16 +353,16 @@ public class GtpCommand
 
     private final String[] m_arg;
 
-    private final StringBuffer m_response;
+    private final StringBuilder m_response;
 
     /** Preprocess command line.
         Replaces control characters by spaces, removes redundant spaces
         and appended comment.
     */
-    private static StringBuffer preprocessLine(String line)
+    private static StringBuilder preprocessLine(String line)
     {
         int len = line.length();
-        StringBuffer buffer = new StringBuffer(len);
+        StringBuilder buffer = new StringBuilder(len);
         boolean wasLastSpace = false;
         for (int i = 0; i < len; ++i)
         {

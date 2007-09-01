@@ -113,7 +113,7 @@ public final class Move
     private static Move[][] init(GoColor color)
     {
         Move[][] result = new Move[GoPoint.MAX_SIZE][GoPoint.MAX_SIZE];
-        StringBuffer buffer = new StringBuffer(8);
+        StringBuilder buffer = new StringBuilder(8);
         String colorString = color.getUppercaseLetter();
         for (int x = 0; x < GoPoint.MAX_SIZE; ++x)
             for (int y = 0; y < GoPoint.MAX_SIZE; ++y)

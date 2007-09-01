@@ -505,7 +505,7 @@ public final class GtpClient
 
         private final MessageQueue m_queue;
 
-        private final StringBuffer m_buffer = new StringBuffer(1024);
+        private final StringBuilder m_buffer = new StringBuilder(1024);
 
         private void appendBuffer(String line)
         {
@@ -731,7 +731,7 @@ public final class GtpClient
     private void mergeErrorMessages(Message message)
     {
         assert message.m_type == Message.ERROR;
-        StringBuffer buffer = new StringBuffer(2048);
+        StringBuilder buffer = new StringBuilder(2048);
         while (message != null)
         {
             if (message.m_text != null)

@@ -143,7 +143,7 @@ public class TexWriter
 
     private String printTree(ConstGameTree tree)
     {
-        StringBuffer comment = new StringBuffer();
+        StringBuilder comment = new StringBuilder();
         int size = tree.getBoardSize();
         ConstNode firstMoveAtPoint[][] = new ConstNode[size][size];
         ArrayList<ConstNode> needsComment = new ArrayList<ConstNode>();
@@ -246,7 +246,7 @@ public class TexWriter
             GoColor color = board.getColor(point);
             int x = point.getX();
             int y = point.getY();
-            StringBuffer buffer = new StringBuffer(128);
+            StringBuilder buffer = new StringBuilder(128);
             if (mark != null && mark[x][y])
                 buffer.append("\\markma");
             if (markTriangle != null && markTriangle[x][y])

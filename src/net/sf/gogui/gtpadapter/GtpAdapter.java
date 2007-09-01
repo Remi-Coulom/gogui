@@ -241,7 +241,7 @@ public class GtpAdapter
             if  (stones == null)
                 throw new GtpError("Invalid number of handicap stones");
         }
-        StringBuffer response = new StringBuffer(128);
+        StringBuilder response = new StringBuilder(128);
         PointList points = new PointList();
         for (int i = 0; i < stones.size(); ++i)
         {
@@ -385,11 +385,11 @@ public class GtpAdapter
 
     private TimeSettings m_timeSettings;
 
-    private boolean checkResign(GoColor color, StringBuffer response)
+    private boolean checkResign(GoColor color, StringBuilder response)
     {
         if (! m_resign)
             return false;
-        StringBuffer programResponse = new StringBuffer();
+        StringBuilder programResponse = new StringBuilder();
         try
         {
             send("estimate_score", programResponse);
@@ -550,7 +550,7 @@ public class GtpAdapter
         return m_gtp.send(cmd);
     }
 
-    private void send(String cmd, StringBuffer response) throws GtpError
+    private void send(String cmd, StringBuilder response) throws GtpError
     {
         response.append(m_gtp.send(cmd));
     }

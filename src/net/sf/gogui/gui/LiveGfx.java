@@ -41,9 +41,9 @@ public class LiveGfx
 
     private boolean m_duringMultiLineResponse;
 
-    private final StringBuffer m_buffer = new StringBuffer(1024);
+    private final StringBuilder m_buffer = new StringBuilder(1024);
 
-    private final StringBuffer m_response = new StringBuffer(1024);
+    private final StringBuilder m_response = new StringBuilder(1024);
 
     private final ConstBoard m_board;
 

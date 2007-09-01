@@ -22,7 +22,7 @@ public final class StringUtil
         message = message.trim();
         if (message.equals(""))
             return message;
-        StringBuffer buffer = new StringBuffer(message);
+        StringBuilder buffer = new StringBuilder(message);
         char first = buffer.charAt(0);
         if (! Character.isUpperCase(first))
             buffer.setCharAt(0, Character.toUpperCase(first));
@@ -32,7 +32,7 @@ public final class StringUtil
     /** Format elapsed time as [[h+]:[mm]]:ss. */
     public static String formatTime(long seconds)
     {
-        StringBuffer buffer = new StringBuffer(8);
+        StringBuilder buffer = new StringBuilder(8);
         if (seconds < 0)
         {
             buffer.append('-');
@@ -197,7 +197,7 @@ public final class StringUtil
         ArrayList<String> vector = new ArrayList<String>();
         boolean escape = false;
         boolean inString = false;
-        StringBuffer token = new StringBuffer();
+        StringBuilder token = new StringBuilder();
         for (int i = 0; i < string.length(); ++i)
         {
             char c = string.charAt(i);
@@ -206,7 +206,7 @@ public final class StringUtil
                 if (inString)
                 {
                     vector.add(token.toString());
-                    token = new StringBuffer();
+                    token = new StringBuilder();
                 }
                 inString = ! inString;
             }
@@ -215,7 +215,7 @@ public final class StringUtil
                 if (token.length() > 0)
                 {
                     vector.add(token.toString());
-                    token = new StringBuffer();
+                    token = new StringBuilder();
                 }
             }
             else

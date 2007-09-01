@@ -210,7 +210,7 @@ public final class GoPoint
         if (pointList == null)
             return "(null)";
         int length = pointList.size();
-        StringBuffer buffer = new StringBuffer(length * 4);
+        StringBuilder buffer = new StringBuilder(length * 4);
         for (int i = 0; i < length; ++i)
         {
             buffer.append(pointList.get(i).toString());

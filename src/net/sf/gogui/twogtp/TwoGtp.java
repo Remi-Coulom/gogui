@@ -138,7 +138,7 @@ public class TwoGtp
         try
         {
             System.in.close();
-            StringBuffer response = new StringBuffer(256);
+            StringBuilder response = new StringBuilder(256);
             while (m_gameIndex < m_numberGames)
             {
                 try
@@ -647,7 +647,7 @@ public class TwoGtp
 
     private String getTitle()
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         String nameBlack = m_nameBlack;
         String nameWhite = m_nameWhite;
         if (nameBlack.equals(nameWhite))
@@ -963,7 +963,7 @@ public class TwoGtp
         }
     }
 
-    private void sendGenmove(GoColor color, StringBuffer response)
+    private void sendGenmove(GoColor color, StringBuilder response)
         throws GtpError, ErrorMessage
     {
         checkInconsistentState();

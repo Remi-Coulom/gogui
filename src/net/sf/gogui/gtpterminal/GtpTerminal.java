@@ -125,7 +125,7 @@ public class GtpTerminal
     private boolean cmdPlay(GoColor color, GoPoint point)
     {
         String command = m_gtp.getCommandPlay(Move.get(color, point));
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         if (! send(command, response))
         {
             System.out.println(response);
@@ -139,7 +139,7 @@ public class GtpTerminal
     {
         GoColor toMove = m_board.getToMove();
         String command = m_gtp.getCommandGenmove(toMove);
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         if (! send(command, response))
         {
             System.out.println(response);
@@ -197,7 +197,7 @@ public class GtpTerminal
             }
             catch (GtpResponseFormatError e)
             {
-                StringBuffer response = new StringBuffer();
+                StringBuilder response = new StringBuilder();
                 send(cmdLine, response);
                 System.out.println(response);
             }
@@ -295,7 +295,7 @@ public class GtpTerminal
     private boolean newGame(int size)
     {
         String command;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         command = m_gtp.getCommandBoardsize(size);
         if (command != null && ! send(command, response))
         {
@@ -364,12 +364,12 @@ public class GtpTerminal
 
     private String send(String cmd)
     {
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         send(cmd, response);
         return response.toString();
     }
 
-    private boolean send(String cmd, StringBuffer response)
+    private boolean send(String cmd, StringBuilder response)
     {
         try
         {
@@ -390,7 +390,7 @@ public class GtpTerminal
 
     private void undo()
     {
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         if (! send("undo", response))
         {
             System.out.println(response);

@@ -111,7 +111,7 @@ public final class Clock
     /** If not in byoyomi movesLeft &lt; 0. */
     public static String getTimeString(double timeLeft, int movesLeft)
     {
-        StringBuffer buffer = new StringBuffer(8);
+        StringBuilder buffer = new StringBuilder(8);
         buffer.append(StringUtil.formatTime((long)timeLeft));
         if (movesLeft >= 0)
         {

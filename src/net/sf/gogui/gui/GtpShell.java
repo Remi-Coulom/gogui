@@ -374,7 +374,7 @@ public class GtpShell
 
     private final GtpShellText m_gtpShellText;
 
-    private final StringBuffer m_commands = new StringBuffer(4096);
+    private final StringBuilder m_commands = new StringBuilder(4096);
 
     private final ArrayList<String> m_history = new ArrayList<String>(128);
 

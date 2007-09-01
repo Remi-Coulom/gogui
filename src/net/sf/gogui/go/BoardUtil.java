@@ -55,7 +55,7 @@ public final class BoardUtil
     */
     public static String toString(ConstBoard board, boolean withGameInfo)
     {
-        StringBuffer s = new StringBuffer(1024);
+        StringBuilder s = new StringBuilder(1024);
         int size = board.getSize();
         String separator = System.getProperty("line.separator");
         assert separator != null;
@@ -148,7 +148,7 @@ public final class BoardUtil
     {
     }
 
-    private static void printGameInfo(ConstBoard board, StringBuffer s,
+    private static void printGameInfo(ConstBoard board, StringBuilder s,
                                       int yIndex)
     {
         int size = board.getSize();
@@ -166,13 +166,13 @@ public final class BoardUtil
         }
     }
 
-    private static void printToMove(ConstBoard board, StringBuffer buffer)
+    private static void printToMove(ConstBoard board, StringBuilder buffer)
     {
         buffer.append(board.getToMove().getCapitalizedName());
         buffer.append(" to play");
     }
 
-    private static void printXCoords(int size, StringBuffer s,
+    private static void printXCoords(int size, StringBuilder s,
                                      String separator)
     {
         s.append("   ");
@@ -188,7 +188,7 @@ public final class BoardUtil
         s.append(separator);
     }
 
-    private static void printYCoord(int y, StringBuffer s, boolean alignRight)
+    private static void printYCoord(int y, StringBuilder s, boolean alignRight)
     {
         String string = Integer.toString(y + 1);
         if (alignRight && string.length() == 1)

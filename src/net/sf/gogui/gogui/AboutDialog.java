@@ -160,7 +160,7 @@ public final class AboutDialog
 
     private JPanel createPanelJava()
     {
-        StringBuffer buffer = new StringBuffer(256);
+        StringBuilder buffer = new StringBuilder(256);
         String name = System.getProperty("java.vm.name");
         buffer.append("<p align=\"center\"><img src=\""
                       + getImage("java.png") + "\"></p>");

@@ -192,7 +192,7 @@ public class AnalyzeCommand
 
     public String getResultTitle()
     {
-        StringBuffer buffer = new StringBuffer(m_label);
+        StringBuilder buffer = new StringBuilder(m_label);
         if (needsColorArg() && m_colorArg != null)
         {
             if (m_colorArg == BLACK)

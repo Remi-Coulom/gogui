@@ -127,7 +127,7 @@ public class GameInfo
     private void updatePlayerToolTip(JLabel label, String player, String rank,
                                      String color)
     {
-        StringBuffer buffer = new StringBuffer(128);
+        StringBuilder buffer = new StringBuilder(128);
         buffer.append(color);
         buffer.append(" player (");
         if (StringUtil.isEmpty(player))
@@ -228,7 +228,7 @@ class Prisoners
     public final void setCount(int n)
     {
         m_text.setText(Integer.toString(n));
-        StringBuffer buffer = new StringBuffer(64);
+        StringBuilder buffer = new StringBuilder(64);
         buffer.append(n);
         if (m_color == BLACK)
             buffer.append(" black");

@@ -109,7 +109,7 @@ public class GoGuiMenuBar
                 });
             if (bookmark.m_file != null)
             {
-                StringBuffer toolTip = new StringBuffer(256);
+                StringBuilder toolTip = new StringBuilder(256);
                 toolTip.append(bookmark.m_file.toString());
                 if (bookmark.m_move > 0)
                 {
@@ -147,7 +147,7 @@ public class GoGuiMenuBar
                         m_listener.actionAttachProgram(index);
                     }
                 });
-            StringBuffer toolTip = new StringBuffer(128);
+            StringBuilder toolTip = new StringBuilder(128);
             if (program.m_name != null)
                 toolTip.append(program.m_name);
             if (program.m_version != null && ! program.m_version.equals(""))

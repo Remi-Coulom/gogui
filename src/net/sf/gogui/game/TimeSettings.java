@@ -153,7 +153,7 @@ public final class TimeSettings
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer(64);
+        StringBuilder buffer = new StringBuilder(64);
         buffer.append(toString(m_preByoyomi));
         if (getUseByoyomi())
         {
@@ -206,7 +206,7 @@ public final class TimeSettings
 
     private static String toString(long millisec)
     {
-        StringBuffer buffer = new StringBuffer(64);
+        StringBuilder buffer = new StringBuilder(64);
         if (millisec % MSEC_PER_MIN == 0)
         {
             buffer.append(millisec / MSEC_PER_MIN);

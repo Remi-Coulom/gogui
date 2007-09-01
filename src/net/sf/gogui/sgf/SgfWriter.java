@@ -85,7 +85,8 @@ public class SgfWriter
 
     private static final int MAX_CHARS_PER_LINE = 78;
 
-    private final StringBuffer m_buffer = new StringBuffer(STRINGBUF_CAPACITY);
+    private final StringBuilder m_buffer
+        = new StringBuilder(STRINGBUF_CAPACITY);
 
     private final int m_size;
 
@@ -98,7 +99,7 @@ public class SgfWriter
 
     private String getEscaped(String text, boolean escapeColon)
     {
-        StringBuffer result = new StringBuffer(2 * text.length());
+        StringBuilder result = new StringBuilder(2 * text.length());
         for (int i = 0; i < text.length(); ++i)
         {
             char c = text.charAt(i);
@@ -150,7 +151,7 @@ public class SgfWriter
 
     private String getPointList(ConstPointList v)
     {
-        StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
+        StringBuilder buffer = new StringBuilder(STRINGBUF_CAPACITY);
         for (int i = 0; i < v.size(); ++i)
             buffer.append(getPointValue(v.get(i)));
         return buffer.toString();
@@ -190,7 +191,7 @@ public class SgfWriter
 
     private void printHeader(String application, String version)
     {
-        StringBuffer header = new StringBuffer(128);
+        StringBuilder header = new StringBuilder(128);
         header.append(";FF[4]CA[");
         header.append(getEscaped(ENCODING));
         header.append(']');
@@ -270,7 +271,7 @@ public class SgfWriter
         Map labels = node.getLabelsUnmodifiable();
         if (labels == null)
             return;
-        StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
+        StringBuilder buffer = new StringBuilder(STRINGBUF_CAPACITY);
         buffer.append("LB");
         Iterator i = labels.entrySet().iterator();
         while (i.hasNext())
@@ -323,7 +324,7 @@ public class SgfWriter
             ConstPointList points = node.getAddStones(c);
             if (points.size() == 0)
                 continue;
-            StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
+            StringBuilder buffer = new StringBuilder(STRINGBUF_CAPACITY);
             if (c == BLACK)
                 buffer.append("AB");
             else if (c == WHITE)

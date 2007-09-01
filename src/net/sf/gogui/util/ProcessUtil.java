@@ -80,7 +80,7 @@ public class ProcessUtil
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try
         {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null)
             {

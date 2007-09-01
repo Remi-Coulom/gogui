@@ -317,7 +317,7 @@ public class GtpDisplay
         else
         {
             String command = m_gtp.getCommandGenmove(color);
-            StringBuffer response = cmd.getResponse();
+            StringBuilder response = cmd.getResponse();
             send(command, response);
             if (response.toString().trim().equalsIgnoreCase("resign"))
                 return;
@@ -356,7 +356,7 @@ public class GtpDisplay
         ConstPointList stones = Board.getHandicapStones(m_size, n);
         if  (stones == null)
             throw new GtpError("Invalid number of handicap stones");
-        StringBuffer pointList = new StringBuffer(128);
+        StringBuilder pointList = new StringBuilder(128);
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint point = stones.get(i);
@@ -478,7 +478,7 @@ public class GtpDisplay
                     cmdVersion(cmd); } });
     }
 
-    private void send(String cmd, StringBuffer response) throws GtpError
+    private void send(String cmd, StringBuilder response) throws GtpError
     {
         response.append(m_gtp.send(cmd));
     }

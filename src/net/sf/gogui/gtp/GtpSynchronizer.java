@@ -359,7 +359,7 @@ public class GtpSynchronizer
             return;
         if (targetState.isSetupHandicap())
         {
-            StringBuffer command = new StringBuffer(128);
+            StringBuilder command = new StringBuilder(128);
             command.append("set_free_handicap");
             for (int i = 0; i < setupBlack.size(); ++i)
             {
@@ -371,7 +371,7 @@ public class GtpSynchronizer
         }
         else
         {
-            StringBuffer command = new StringBuffer(128);
+            StringBuilder command = new StringBuilder(128);
             command.append("gogui-setup");
             for (GoColor c : BLACK_WHITE)
             {

@@ -330,7 +330,7 @@ public abstract class GtpClientBase
     protected String m_name;
 
     /** Local variable in some functions, reused for efficiency. */
-    private StringBuffer m_buffer = new StringBuffer(128);
+    private StringBuilder m_buffer = new StringBuilder(128);
 
     private boolean m_lowerCase;
 

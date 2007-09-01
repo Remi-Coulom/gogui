@@ -489,7 +489,7 @@ public final class NodeUtil
             }
             node = father;
         }
-        StringBuffer result = new StringBuffer(list.size() * 3);
+        StringBuilder result = new StringBuilder(list.size() * 3);
         for (int i = 0; i < list.size(); ++i)
         {
             result.append((String)list.get(i));
@@ -620,7 +620,7 @@ public final class NodeUtil
     */
     public static String nodeInfo(ConstNode node)
     {
-        StringBuffer buffer = new StringBuffer(128);
+        StringBuilder buffer = new StringBuilder(128);
         buffer.append("NodeProperties:\n");
         appendInfo(buffer, "Depth", getDepth(node));
         appendInfo(buffer, "Children", node.getNumberChildren());
@@ -663,7 +663,7 @@ public final class NodeUtil
         Map labels = node.getLabelsUnmodifiable();
         if (labels != null && ! labels.isEmpty())
         {
-            StringBuffer labelsBuffer = new StringBuffer();
+            StringBuilder labelsBuffer = new StringBuilder();
             Iterator iter = labels.entrySet().iterator();
             while (iter.hasNext())
             {
@@ -816,7 +816,7 @@ public final class NodeUtil
         averageChildrenInner /= Math.max(numberInner, 1);
         NumberFormat format = StringUtil.getNumberFormat(3);
         format.setMinimumFractionDigits(3);
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         appendInfo(buffer, "Nodes", numberNodes);
         appendInfo(buffer, "Terminal", numberTerminal);
         appendInfo(buffer, "Inner", numberInner);
@@ -847,19 +847,19 @@ public final class NodeUtil
     {
     }
 
-    private static void appendInfo(StringBuffer buffer, String label,
+    private static void appendInfo(StringBuilder buffer, String label,
                                    int value)
     {
         appendInfo(buffer, label, Integer.toString(value));
     }
 
-    private static void appendInfo(StringBuffer buffer, String label,
+    private static void appendInfo(StringBuilder buffer, String label,
                                    double value)
     {
         appendInfo(buffer, label, Double.toString(value));
     }
 
-    private static void appendInfo(StringBuffer buffer, String label,
+    private static void appendInfo(StringBuilder buffer, String label,
                                    ConstPointList points)
     {
         appendInfoLabel(buffer, label);
@@ -876,7 +876,7 @@ public final class NodeUtil
         buffer.append('\n');
     }
 
-    private static void appendInfo(StringBuffer buffer, String label,
+    private static void appendInfo(StringBuilder buffer, String label,
                                    String value)
     {
         appendInfoLabel(buffer, label);
@@ -884,14 +884,14 @@ public final class NodeUtil
         buffer.append('\n');
     }
 
-    private static void appendInfoComment(StringBuffer buffer, ConstNode node)
+    private static void appendInfoComment(StringBuilder buffer, ConstNode node)
     {
         String comment = getCommentStart(node, true, 30);
         if (comment != null)
             appendInfo(buffer, "Comment", comment);
     }
 
-    private static void appendInfoLabel(StringBuffer buffer, String label)
+    private static void appendInfoLabel(StringBuilder buffer, String label)
     {
         buffer.append(label);
         int numberEmpty = Math.max(0, 20 - label.length());

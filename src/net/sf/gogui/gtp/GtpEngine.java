@@ -53,7 +53,7 @@ public class GtpEngine
     public void cmdListCommands(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        StringBuffer response = cmd.getResponse();
+        StringBuilder response = cmd.getResponse();
         Iterator it = m_commands.keySet().iterator();
         while (it.hasNext())
         {
@@ -233,7 +233,7 @@ public class GtpEngine
     public void respond(boolean status, boolean hasId, int id,
                         String response)
     {
-        StringBuffer fullResponse = new StringBuffer(256);
+        StringBuilder fullResponse = new StringBuilder(256);
         if (status)
             fullResponse.append('=');
         else

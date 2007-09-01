@@ -16,7 +16,7 @@ public final class HtmlUtil
     */
     public static String getFooter(String applicationName)
     {
-        StringBuffer buffer = new StringBuffer(512);
+        StringBuilder buffer = new StringBuilder(512);
         buffer.append("<hr style=\"margin-bottom:0\" size=\"1\">\n" +
                       "<p style=\"margin-top:1; margin-right:5\""
                       + " align=\"right\"><i>" +
@@ -35,7 +35,7 @@ public final class HtmlUtil
     public static String getMeta(String applicationName)
     {
         String charset = StringUtil.getDefaultEncoding();
-        StringBuffer buffer = new StringBuffer(512);
+        StringBuilder buffer = new StringBuilder(512);
         buffer.append("<meta http-equiv=\"Content-Type\""
                       + " content=\"text/html; charset=");
         buffer.append(charset);

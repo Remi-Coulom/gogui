@@ -51,7 +51,7 @@ public final class FileUtil
         while (i < fromSize && i < toSize
                && fromList.get(i).equals(toList.get(i)))
             ++i;
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int j = i; j < fromSize; ++j)
             result.append("../");
         for (int j = i; j < toSize; ++j)

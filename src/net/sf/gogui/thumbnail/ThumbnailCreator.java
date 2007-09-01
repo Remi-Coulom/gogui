@@ -257,7 +257,7 @@ public final class ThumbnailCreator
         {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             byte[] md5 = digest.digest(string.getBytes("US-ASCII"));
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             for (int i = 0; i < md5.length; ++i)
             {
                 buffer.append(Integer.toHexString((md5[i] >> 4) & 0x0F));

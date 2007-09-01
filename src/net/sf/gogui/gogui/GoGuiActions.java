@@ -951,7 +951,7 @@ public class GoGuiActions
             Clock tempClock = new Clock();
             tempClock.setTimeSettings(clock.getTimeSettings());
             NodeUtil.restoreClock(node, tempClock);
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append("Restore saved time (B ");
             buffer.append(tempClock.getTimeString(BLACK));
             buffer.append(", W ");
@@ -970,7 +970,7 @@ public class GoGuiActions
         if (! clock.isRunning() && clock.getToMove() != null)
         {
             enabled = true;
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append("Resume clock (B ");
             buffer.append(clock.getTimeString(BLACK));
             buffer.append(", W ");
@@ -989,7 +989,7 @@ public class GoGuiActions
         if (! clock.isRunning() && clock.getToMove() == null)
         {
             enabled = true;
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append("Start clock (B ");
             buffer.append(clock.getTimeString(BLACK));
             buffer.append(", W ");

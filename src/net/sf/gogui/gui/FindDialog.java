@@ -126,7 +126,7 @@ public class FindDialog
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
         m_comboBox = new JComboBox(getHistory().toArray());
-        StringBuffer prototype = new StringBuffer(70);
+        StringBuilder prototype = new StringBuilder(70);
         for (int i = 0; i < 40; ++i)
             prototype.append('-');
         m_comboBox.setPrototypeDisplayValue(prototype.toString());

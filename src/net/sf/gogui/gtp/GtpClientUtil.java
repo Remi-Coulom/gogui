@@ -19,7 +19,7 @@ public final class GtpClientUtil
                                                 ArrayList<Move> moves)
     {
         assert isPlaySequenceSupported(gtp);
-        StringBuffer cmd = new StringBuffer(2048);
+        StringBuilder cmd = new StringBuilder(2048);
         cmd.append(getPlaySequenceCommand(gtp));
         for (int i = 0; i < moves.size(); ++i)
         {
