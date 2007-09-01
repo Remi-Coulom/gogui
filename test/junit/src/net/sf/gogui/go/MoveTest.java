@@ -34,7 +34,7 @@ public final class MoveTest
 
     public void testToString()
     {
-        assertEquals("BLACK A1", Move.get(BLACK, 0, 0).toString());
-        assertEquals("WHITE PASS", Move.getPass(WHITE).toString());
+        assertEquals("B A1", Move.get(BLACK, 0, 0).toString());
+        assertEquals("W PASS", Move.getPass(WHITE).toString());
     }
 }
