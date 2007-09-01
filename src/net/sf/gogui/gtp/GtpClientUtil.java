@@ -16,14 +16,14 @@ public final class GtpClientUtil
 {
     /** Construct a gogui-play_sequence command from a list of moves. */
     public static String getPlaySequenceCommand(GtpClientBase gtp,
-                                                ArrayList moves)
+                                                ArrayList<Move> moves)
     {
         assert isPlaySequenceSupported(gtp);
         StringBuffer cmd = new StringBuffer(2048);
         cmd.append(getPlaySequenceCommand(gtp));
         for (int i = 0; i < moves.size(); ++i)
         {
-            Move move = (Move)moves.get(i);
+            Move move = moves.get(i);
             GoColor color = move.getColor();
             if (color == BLACK)
                 cmd.append(" b ");

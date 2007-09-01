@@ -289,7 +289,7 @@ public class GtpSynchronizer
         m_engineState.play(move);
     }
 
-    private void play(ArrayList moves) throws GtpError
+    private void play(ArrayList<Move> moves) throws GtpError
     {
         if (moves.isEmpty())
             return;
@@ -298,13 +298,13 @@ public class GtpSynchronizer
             String cmd = GtpClientUtil.getPlaySequenceCommand(m_gtp, moves);
             m_gtp.send(cmd);
             for (int i = 0; i < moves.size(); ++i)
-                m_engineState.play((Move)moves.get(i));
+                m_engineState.play(moves.get(i));
         }
         else
         {
             for (int i = 0; i < moves.size(); ++i)
             {
-                play((Move)moves.get(i));
+                play(moves.get(i));
                 updateListener();
             }
         }
