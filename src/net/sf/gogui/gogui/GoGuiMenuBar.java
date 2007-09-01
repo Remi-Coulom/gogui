@@ -110,7 +110,7 @@ public class GoGuiMenuBar
             if (bookmark.m_file != null)
             {
                 StringBuilder toolTip = new StringBuilder(256);
-                toolTip.append(bookmark.m_file.toString());
+                toolTip.append(bookmark.m_file);
                 if (bookmark.m_move > 0)
                 {
                     toolTip.append(" (move ");

@@ -104,7 +104,7 @@ class GameTreeNode
         {
             toolTip.append(m_moveNumber);
             toolTip.append(' ');
-            toolTip.append(move.toString());
+            toolTip.append(move);
         }
         else if (m_node.hasSetup() || player != null)
         {

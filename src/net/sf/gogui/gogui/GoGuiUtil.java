@@ -74,7 +74,7 @@ public final class GoGuiUtil
 
         if (move != null)
         {
-            moveText.append(move.toString());
+            moveText.append(move);
             moveText.append(' ');
         }
         if (! "".equals(variation))
@@ -96,7 +96,7 @@ public final class GoGuiUtil
             toolTip.append("Last move ");
             toolTip.append(moveNumber);
             toolTip.append(' ');
-            toolTip.append(move.toString());
+            toolTip.append(move);
             toolTip.append(' ');
         }
         if (movesLeft > 0)

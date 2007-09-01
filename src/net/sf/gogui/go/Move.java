@@ -122,7 +122,7 @@ public final class Move
                 buffer.setLength(0);
                 buffer.append(colorString);
                 buffer.append(' ');
-                buffer.append(p.toString());
+                buffer.append(p);
                 result[x][y] = new Move(color, p, buffer.toString());
             }
         return result;

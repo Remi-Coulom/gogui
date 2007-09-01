@@ -206,14 +206,14 @@ public class AnalyzeCommand
         if (needsPointArg() && m_pointArg != null)
         {
             buffer.append(' ');
-            buffer.append(m_pointArg.toString());
+            buffer.append(m_pointArg);
         }
         else if (needsPointListArg())
         {
             for (int i = 0; i < m_pointListArg.size(); ++i)
             {
                 buffer.append(' ');
-                buffer.append(m_pointListArg.get(i).toString());
+                buffer.append(m_pointListArg.get(i));
             }
         }
         if (needsStringArg() && m_stringArg != null)

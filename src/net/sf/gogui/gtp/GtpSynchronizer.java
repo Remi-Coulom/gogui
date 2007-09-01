@@ -379,7 +379,7 @@ public class GtpSynchronizer
                 for (int i = 0; i < stones.size(); ++i)
                 {
                     command.append(' ');
-                    command.append(Move.get(c, stones.get(i)).toString());
+                    command.append(Move.get(c, stones.get(i)));
                 }
             }
             m_gtp.send(command.toString());

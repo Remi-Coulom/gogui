@@ -24,7 +24,7 @@ public final class GtpClientUtil
         for (int i = 0; i < moves.size(); ++i)
         {
             cmd.append(' ');
-            cmd.append(moves.get(i).toString());
+            cmd.append(moves.get(i));
         }
         return cmd.toString();
     }

@@ -105,7 +105,7 @@ public abstract class GtpClientBase
         else
         {
             m_buffer.append("play ");
-            m_buffer.append(move.toString());
+            m_buffer.append(move);
         }
         if (m_lowerCase)
             return m_buffer.toString().toLowerCase(Locale.ENGLISH);

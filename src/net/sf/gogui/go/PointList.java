@@ -120,7 +120,7 @@ public final class PointList
         {
             if (i > 0)
                 buffer.append(' ');
-            buffer.append(get(i).toString());
+            buffer.append(get(i));
         }
         return buffer.toString();
     }

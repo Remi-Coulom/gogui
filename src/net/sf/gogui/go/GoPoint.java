@@ -213,7 +213,7 @@ public final class GoPoint
         StringBuilder buffer = new StringBuilder(length * 4);
         for (int i = 0; i < length; ++i)
         {
-            buffer.append(pointList.get(i).toString());
+            buffer.append(pointList.get(i));
             if (i < length - 1)
                 buffer.append(' ');
         }
