@@ -374,8 +374,6 @@ public final class Clock
     {
         if (m_timer != null)
         {
-            // purge not yet available in Java 1.4
-            //m_timer.purge();
             m_timer.cancel();
             m_timer = null;
         }
