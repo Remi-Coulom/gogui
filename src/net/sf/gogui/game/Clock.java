@@ -292,7 +292,6 @@ public final class Clock
         }
         m_toMove = null;
         updateListener();
-        stopTimer();
     }
 
     private class UpdateListenerTask
