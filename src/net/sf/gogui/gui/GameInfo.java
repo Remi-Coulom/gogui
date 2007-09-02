@@ -63,7 +63,7 @@ public class GameInfo
             box.add(m_prisoners.get(otherColor));
         }
         Clock.Listener listener = new Clock.Listener() {
-                public void clockChanged(ConstClock clock)
+                public void clockChanged()
                 {
                     SwingUtilities.invokeLater(m_updateTime);
                 }

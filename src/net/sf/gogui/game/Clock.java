@@ -42,7 +42,7 @@ public final class Clock
     */
     public interface Listener
     {
-        void clockChanged(ConstClock clock);
+        void clockChanged();
     }
 
     public Clock()
@@ -376,6 +376,6 @@ public final class Clock
     private void updateListener()
     {
         if (m_listener != null)
-            m_listener.clockChanged(this);
+            m_listener.clockChanged();
     }
 }
