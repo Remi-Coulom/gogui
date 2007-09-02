@@ -294,15 +294,6 @@ public final class Clock
         updateListener();
     }
 
-    private class UpdateListenerTask
-        extends TimerTask
-    {
-        public void run()
-        {
-            updateListener();
-        }
-    };
-
     private static class TimeRecord
     {
         public boolean m_isInByoyomi;
@@ -364,7 +355,11 @@ public final class Clock
         if (m_timer == null && m_listener != null)
         {
             m_timer = new Timer();
-            UpdateListenerTask task = new UpdateListenerTask();
+            TimerTask task = new TimerTask() {
+                    public void run() {
+                        updateListener();
+                    }
+                };
             m_timer.scheduleAtFixedRate(task, 1000, 1000);
         }
     }
