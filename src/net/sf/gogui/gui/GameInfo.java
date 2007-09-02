@@ -149,8 +149,6 @@ public class GameInfo
     {
         assert c.isBlackWhite();
         String text = clock.getTimeString(c);
-        if (text == null)
-            text = " ";
         m_clock.get(c).setText(text);
     }
 
@@ -159,9 +157,9 @@ public class GameInfo
         for (GoColor c : BLACK_WHITE)
         {
             double timeLeft = node.getTimeLeft(c);
-            int movesLeft = node.getMovesLeft(c);
             if (! Double.isNaN(timeLeft))
             {
+                int movesLeft = node.getMovesLeft(c);
                 String text = Clock.getTimeString(timeLeft, movesLeft);
                 m_clock.get(c).setText(text);
             }
