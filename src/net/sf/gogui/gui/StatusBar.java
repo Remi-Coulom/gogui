@@ -7,7 +7,6 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
@@ -206,12 +205,11 @@ class TextFieldWithToolTip
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        setToolTipText(null);
-        FontMetrics metrics = g.getFontMetrics();
         String text = getText();
-        if (text == null || metrics.stringWidth(text) < getWidth())
-            return;
-        setToolTipText(text);
+        if (text == null || g.getFontMetrics().stringWidth(text) < getWidth())
+            setToolTipText(null);
+        else
+            setToolTipText(text);
     }
 
     /** Serial version to suppress compiler warning.
