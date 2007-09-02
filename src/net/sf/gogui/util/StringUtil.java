@@ -39,21 +39,19 @@ public final class StringUtil
             seconds *= -1;
         }
         long hours = seconds / 3600;
-        seconds %= 3600;
-        long minutes = seconds / 60;
-        seconds %= 60;
         if (hours > 0)
         {
             if (hours > 9999)
                 // Extremely large numbers are likely a problem in
                 // Date.getTime(), as it can happen when running in the
-                // netbeans profiler, and we don't want extremly long time
-                // strings to change the layout of the time label
-                buffer.append(">9999");
-            else
-                buffer.append(hours);
+                // netbeans profiler
+                return "--:--";
+            buffer.append(hours);
             buffer.append(':');
         }
+        seconds %= 3600;
+        long minutes = seconds / 60;
+        seconds %= 60;
         if (minutes >= 10)
             buffer.append(minutes);
         else
