@@ -66,13 +66,6 @@ public class GoGuiActions
         }
 
         public GoGuiAction(GoGuiActions actions, String name, String desc,
-                           int accel, int modifier, String icon)
-        {
-            this(actions, name, desc, Integer.valueOf(accel),
-                 modifier, icon);
-        }
-
-        public GoGuiAction(GoGuiActions actions, String name, String desc,
                            int accel, int modifier)
         {
             this(actions, name, desc, accel, modifier, null);
