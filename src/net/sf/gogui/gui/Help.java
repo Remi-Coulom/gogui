@@ -58,14 +58,16 @@ public class Help
         Container contentPane;
         if (Platform.isMac())
         {
-            m_window = new JDialog((Frame)null, title);
-            contentPane = ((JDialog)m_window).getContentPane();
+            JDialog dialog = new JDialog((Frame)null, title);
+            contentPane = dialog.getContentPane();
+            m_window = dialog;
         }
         else
         {
-            m_window = new JFrame(title);
-            GuiUtil.setGoIcon((Frame)m_window);
-            contentPane = ((JFrame)m_window).getContentPane();
+            JFrame frame = new JFrame(title);
+            GuiUtil.setGoIcon(frame);
+            contentPane = frame.getContentPane();
+            m_window = frame;
         }
         JPanel panel = new JPanel(new BorderLayout());
         contentPane.add(panel);
