@@ -107,37 +107,37 @@ public class GtpShell
         return m_gtpShellText.isLastTextNonGTP();
     }
 
-    public void receivedInvalidResponse(String response)
+    public void receivedInvalidResponse(final String response)
     {
         if (SwingUtilities.isEventDispatchThread())
-        {
             appendInvalidResponse(response);
-            return;
-        }
-        Runnable r = new UpdateInvalidResponse(this, response);
-        invokeAndWait(r);
+        else
+            invokeAndWait(new Runnable() {
+                    public void run() {
+                        appendInvalidResponse(response);
+                    } });
     }
 
-    public void receivedResponse(boolean error, String response)
+    public void receivedResponse(final boolean error, final String response)
     {
         if (SwingUtilities.isEventDispatchThread())
-        {
             appendResponse(error, response);
-            return;
-        }
-        Runnable r = new UpdateResponse(this, error, response);
-        invokeAndWait(r);
+        else
+            invokeAndWait(new Runnable() {
+                    public void run() {
+                        appendResponse(error, response);
+                    } });
     }
 
-    public void receivedStdErr(String s)
+    public void receivedStdErr(final String s)
     {
         if (SwingUtilities.isEventDispatchThread())
-        {
             appendLog(s);
-            return;
-        }
-        Runnable r = new UpdateStdErr(this, s);
-        invokeAndWait(r);
+        else
+            invokeAndWait(new Runnable() {
+                    public void run() {
+                        appendLog(s);
+                    } });
     }
 
     public void saveLog(JFrame parent)
@@ -178,15 +178,15 @@ public class GtpShell
         m_gtpShellText.setTimeStamp(enable);
     }
 
-    public void sentCommand(String command)
+    public void sentCommand(final String command)
     {
         if (SwingUtilities.isEventDispatchThread())
-        {
             appendSentCommand(command);
-            return;
-        }
-        Runnable r = new UpdateCommand(this, command);
-        invokeAndWait(r);
+        else
+            invokeAndWait(new Runnable() {
+                    public void run() {
+                        appendSentCommand(command);
+                    } });
     }
 
     /** Modify dialog size after first write.
@@ -240,83 +240,6 @@ public class GtpShell
     public void setProgramVersion(String version)
     {
         m_programVersion = version;
-    }
-
-
-    private static class UpdateCommand implements Runnable
-    {
-        public UpdateCommand(GtpShell gtpShell, String text)
-        {
-            m_gtpShell = gtpShell;
-            m_text = text;
-        }
-
-        public void run()
-        {
-            m_gtpShell.appendSentCommand(m_text);
-        }
-
-        private final String m_text;
-
-        private final GtpShell m_gtpShell;
-    }
-
-    private static class UpdateInvalidResponse implements Runnable
-    {
-        public UpdateInvalidResponse(GtpShell gtpShell, String text)
-        {
-            m_gtpShell = gtpShell;
-            m_text = text;
-        }
-
-        public void run()
-        {
-            m_gtpShell.appendInvalidResponse(m_text);
-        }
-
-        private final String m_text;
-
-        private final GtpShell m_gtpShell;
-    }
-
-    private static class UpdateResponse implements Runnable
-    {
-        public UpdateResponse(GtpShell gtpShell, boolean error, String text)
-        {
-            m_gtpShell = gtpShell;
-            m_error = error;
-            m_text = text;
-        }
-
-        public void run()
-        {
-            m_gtpShell.appendResponse(m_error, m_text);
-        }
-
-        private final boolean m_error;
-
-        private final String m_text;
-
-        private final GtpShell m_gtpShell;
-    }
-
-    private static class UpdateStdErr implements Runnable
-    {
-        public UpdateStdErr(GtpShell gtpShell, String text)
-        {
-            m_gtpShell = gtpShell;
-            m_text = text;
-        }
-
-        public void run()
-        {
-            assert SwingUtilities.isEventDispatchThread();
-            m_gtpShell.appendLog(m_text);
-        }
-
-        private final String m_text;
-
-        private final GtpShell m_gtpShell;
     }
 
     /** Wrapper object for JComboBox items.
