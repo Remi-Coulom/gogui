@@ -96,10 +96,14 @@ public final class StringUtil
         return format.format(date);
     }
 
-    /** Get default encoding of OutputStreamWriter. */
+    /** Get default encoding. */
     public static String getDefaultEncoding()
     {
-        // Haven't found another way than constructing one (Java 1.4)
+        String encoding = System.getProperty("file.encoding");
+        // Java 1.5 docs for System.getProperties do not guarantee the
+        // existance of file.encoding
+        if (encoding != null)
+            return encoding;
         OutputStreamWriter out =
             new OutputStreamWriter(new ByteArrayOutputStream());
         return out.getEncoding();
