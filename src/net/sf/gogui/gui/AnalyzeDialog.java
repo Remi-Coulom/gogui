@@ -166,26 +166,6 @@ public final class AnalyzeDialog
             selectCommand(index);
     }
 
-    /** Wrapper object for JComboBox items.
-        JComboBox can have focus and keyboard navigation problems if
-        duplicate String objects are added.
-        See JDK 1.4 doc for JComboBox.addItem.
-    */
-    private static class WrapperObject
-    {
-        WrapperObject(String item)
-        {
-            m_item = item;
-        }
-
-        public String toString()
-        {
-            return m_item;
-        }
-
-        private final String m_item;
-    }
-
     private static final int MAX_SAVE_RECENT = 100;
 
     /** Is the first item in the history combo box a temporary item?
@@ -410,7 +390,8 @@ public final class AnalyzeDialog
 
     private void insertComboBoxItem(String label, int index)
     {
-        m_comboBoxHistory.insertItemAt(new WrapperObject(label), index);
+        m_comboBoxHistory.insertItemAt(GuiUtil.createComboBoxItem(label),
+                                       index);
     }
 
     private void loadRecent()
@@ -422,7 +403,7 @@ public final class AnalyzeDialog
         {
             String name = m_fullRecentList.get(i);
             if (m_labels.indexOf(name) >= 0)
-                m_comboBoxHistory.addItem(new WrapperObject(name));
+                m_comboBoxHistory.addItem(GuiUtil.createComboBoxItem(name));
             if (m_comboBoxHistory.getItemCount() > 20)
                 break;
         }

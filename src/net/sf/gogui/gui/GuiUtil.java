@@ -96,6 +96,17 @@ public class GuiUtil
         clipboard.setContents(selection, owner);
     }
 
+    /** Wrapper object for JComboBox items.
+        JComboBox can have focus and keyboard navigation problems if duplicate
+        String objects are added. See JDK 1.5 doc for JComboBox.addItem.
+    */
+    public static Object createComboBoxItem(final String item)
+    {
+        return new Object() {
+                public String toString() {
+                    return item; } };
+    }
+
     /** Create empty border with normal padding.
         @see #PAD
     */

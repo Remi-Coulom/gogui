@@ -242,26 +242,6 @@ public class GtpShell
         m_programVersion = version;
     }
 
-    /** Wrapper object for JComboBox items.
-        JComboBox can have focus and keyboard navigation problems if
-        duplicate String objects are added.
-        See JDK 1.4 doc for JComboBox.addItem.
-    */
-    private static class WrapperObject
-    {
-        WrapperObject(String item)
-        {
-            m_item = item;
-        }
-
-        public String toString()
-        {
-            return m_item;
-        }
-
-        private final String m_item;
-    }
-
     private boolean m_disableCompletions;
 
     private boolean m_isFinalSizeSet;
@@ -320,10 +300,7 @@ public class GtpShell
             m_comboBox.hidePopup();
         m_comboBox.removeAllItems();
         for (int i = completions.size() - 1; i >= 0; --i)
-        {
-            Object object = new WrapperObject(completions.get(i));
-            m_comboBox.addItem(object);
-        }
+            m_comboBox.addItem(GuiUtil.createComboBoxItem(completions.get(i)));
         m_comboBox.setSelectedIndex(-1);
         m_textField.setText(oldText);
         m_textField.setCaretPosition(oldCaretPosition);
