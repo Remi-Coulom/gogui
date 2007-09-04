@@ -85,7 +85,6 @@ public class GtpShell
             // Default Apple L&F uses no border, but Quaqua 3.7.4 does
             m_scrollPane.setBorder(null);
         int fontSize = m_gtpShellText.getFont().getSize();
-        m_finalSize = new Dimension(fontSize * 40, fontSize * 30);
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
         setMinimumSize(new Dimension(160, 112));
@@ -189,29 +188,6 @@ public class GtpShell
                     } });
     }
 
-    /** Modify dialog size after first write.
-        This is a workaround for problems with a JTextPane in a JScrollable
-        in Sun JDK 1.4 and Mac JDK 1.4.
-        Sometimes garbage text is left after inserting text
-        if the JTextPane was created empty and the size was set by
-        JScrollpane.setPreferredSize or letting the scrollable track the
-        viewport width.
-        The garbage text disappears after resizing the dialog,
-        so we use JDialog.setSize after the first text was inserted.
-        To use this workaround, you should call setFinalSize(int,int) instead
-        of setSize(int,int). The final size will be remembered, but only
-        applied after the next text is inserted.
-        This workaround should be removed when no longer needed (e.g. after
-        requiring newer Java versions that don't need this workaround).
-    */
-    public void setFinalSize(int width, int height)
-    {
-        if (m_isFinalSizeSet)
-            setSize(width, height);
-        else
-            m_finalSize = new Dimension(width, height);
-    }
-
     public void setInitialCompletions(ArrayList<String> completions)
     {
         for (int i = completions.size() - 1; i >= 0; --i)
@@ -244,8 +220,6 @@ public class GtpShell
 
     private boolean m_disableCompletions;
 
-    private boolean m_isFinalSizeSet;
-
     private boolean m_commandInProgress;
 
     private final int m_historyMax;
@@ -264,8 +238,6 @@ public class GtpShell
     private final Listener m_listener;
 
     private ComboBoxEditor m_editor;
-
-    private Dimension m_finalSize;
 
     private JButton m_runButton;
 
@@ -316,7 +288,6 @@ public class GtpShell
     {
         assert SwingUtilities.isEventDispatchThread();
         m_gtpShellText.appendLog(line);
-        setFinalSize();
     }
 
     private void appendResponse(boolean error, String response)
@@ -326,7 +297,6 @@ public class GtpShell
             m_gtpShellText.appendError(response);
         else
             m_gtpShellText.appendInput(response);
-        setFinalSize();
     }
 
     private void appendSentCommand(String command)
@@ -346,7 +316,6 @@ public class GtpShell
             m_numberCommands = 0;
         }
         m_gtpShellText.appendOutput(command + "\n");
-        setFinalSize();
     }
 
     private void appendToHistory(String command)
@@ -565,14 +534,6 @@ public class GtpShell
         {
             m_messageDialogs.showError(parent, "Could not save to file.", "");
         }
-    }
-
-    private void setFinalSize()
-    {
-        if (m_isFinalSizeSet)
-            return;
-        setSize(m_finalSize);
-        m_isFinalSizeSet = true;
     }
 
     private void showError(String mainMessage, String optionalMessage,

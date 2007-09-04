@@ -208,13 +208,7 @@ public final class Session
         Dimension screenSize = getScreenSize();
         width = Math.min(width, screenSize.width);
         height = Math.min(height, screenSize.height);
-        if (window instanceof GtpShell)
-            // Workaround, see GtpShell.setFinalSize()
-            ((GtpShell)window).setFinalSize(width, height);
-        else
-        {
-            window.setSize(width, height);
-            window.validate();
-        }
+        window.setSize(width, height);
+        window.validate();
     }
 }
