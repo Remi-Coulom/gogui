@@ -460,8 +460,8 @@ public class GtpShell
         panel.add(buttonPanel, BorderLayout.EAST);
         buttonPanel.add(GuiUtil.createSmallFiller());
         buttonPanel.add(m_runButton);
-        // Workaround for Java 1.4.1 on Mac OS X add some empty space
-        // so that combobox does not overlap the window resize widget
+        // add some empty space so that status bar does not overlap the
+        // window resize widget on Mac OS X
         if (Platform.isMac())
         {
             Dimension dimension = new Dimension(20, 1);

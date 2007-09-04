@@ -34,8 +34,8 @@ public class StatusBar
         add(outerPanel, BorderLayout.CENTER);
         if (Platform.isMac())
         {
-            // Workaround for Java 1.4.1 on Mac OS X: add some empty space
-            // so that status bar does not overlap the window resize widget
+            // add some empty space so that status bar does not overlap the
+            // window resize widget on Mac OS X
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
                 new Box.Filler(dimension, dimension, dimension);
