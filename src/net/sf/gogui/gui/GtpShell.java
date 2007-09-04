@@ -212,7 +212,7 @@ public class GtpShell
             m_finalSize = new Dimension(width, height);
     }
 
-    public void setInitialCompletions(ArrayList completions)
+    public void setInitialCompletions(ArrayList<String> completions)
     {
         for (int i = completions.size() - 1; i >= 0; --i)
         {
@@ -220,10 +220,10 @@ public class GtpShell
             if (! GtpUtil.isStateChangingCommand(command))
                 appendToHistory(command);
         }
-        ArrayList list =
+        ArrayList<String> list =
             PrefUtil.getList("net/sf/gogui/gui/gtpshell/recentcommands");
         for (int i = 0; i < list.size(); ++i)
-            appendToHistory((String)list.get(i));
+            appendToHistory(list.get(i));
         addAllCompletions(m_history);
     }
 
@@ -309,7 +309,7 @@ public class GtpShell
 
     private final MessageDialogs m_messageDialogs;
 
-    private void addAllCompletions(ArrayList completions)
+    private void addAllCompletions(ArrayList<String> completions)
     {
         // On Windows JDK 1.4 changing the popup automatically
         // selects all text in the text field, so we remember and
@@ -321,7 +321,7 @@ public class GtpShell
         m_comboBox.removeAllItems();
         for (int i = completions.size() - 1; i >= 0; --i)
         {
-            Object object = new WrapperObject((String)completions.get(i));
+            Object object = new WrapperObject(completions.get(i));
             m_comboBox.addItem(object);
         }
         m_comboBox.setSelectedIndex(-1);
@@ -503,7 +503,7 @@ public class GtpShell
         String bestCompletion = null;
         for (int i = 0; i < m_history.size(); ++i)
         {
-            String completion = (String)m_history.get(i);
+            String completion = m_history.get(i);
             if (completion.startsWith(text))
             {
                 if (bestCompletion == null)
@@ -554,7 +554,7 @@ public class GtpShell
         ArrayList<String> completions = new ArrayList<String>(128);
         for (int i = 0; i < m_history.size(); ++i)
         {
-            String c = (String)m_history.get(i);
+            String c = m_history.get(i);
             if (c.startsWith(text))
                 completions.add(c);
         }

@@ -2347,7 +2347,7 @@ public class GoGui
             m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
             restoreSize(m_shell, "shell");
             m_shell.setProgramName(getProgramLabel());
-            ArrayList supportedCommands =
+            ArrayList<String> supportedCommands =
                 m_gtp.getSupportedCommands();
             m_shell.setInitialCompletions(supportedCommands);
             if (! m_gtp.isGenmoveSupported())
