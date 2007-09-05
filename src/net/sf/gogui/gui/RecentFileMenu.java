@@ -55,7 +55,7 @@ public class RecentFileMenu
                 char c = file.toString().charAt(n);
                 for (int i = 0; i < m_sameName.size(); ++i)
                 {
-                    String sameName = (String)m_sameName.get(i);
+                    String sameName = m_sameName.get(i);
                     if (sameName.length() <= n || sameName.charAt(n) != c)
                     {
                         samePrefix = false;

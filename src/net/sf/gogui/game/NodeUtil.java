@@ -493,7 +493,7 @@ public final class NodeUtil
         StringBuilder result = new StringBuilder(list.size() * 3);
         for (int i = 0; i < list.size(); ++i)
         {
-            result.append((String)list.get(i));
+            result.append(list.get(i));
             if (i < list.size() - 1)
                 result.append('.');
         }
@@ -660,21 +660,21 @@ public final class NodeUtil
             if (marked != null && marked.size() > 0)
                 appendInfo(buffer, "Marked " + type, marked);
         }
-        Map labels = node.getLabelsUnmodifiable();
+        Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels != null && ! labels.isEmpty())
         {
             StringBuilder labelsBuffer = new StringBuilder();
-            Iterator iter = labels.entrySet().iterator();
-            while (iter.hasNext())
+            boolean isFirst = true;
+            for (Map.Entry<GoPoint,String> entry : labels.entrySet())
             {
-                Map.Entry entry = (Map.Entry)iter.next();
-                GoPoint point = (GoPoint)entry.getKey();
-                String value = (String)entry.getValue();
+                if (! isFirst)
+                    labelsBuffer.append(' ');
+                isFirst = false;
+                GoPoint point = entry.getKey();
+                String value = entry.getValue();
                 labelsBuffer.append(point);
                 labelsBuffer.append(':');
                 labelsBuffer.append(value);
-                if (iter.hasNext())
-                    labelsBuffer.append(' ');
             }
             appendInfo(buffer, "Labels", labelsBuffer.toString());
         }
@@ -708,16 +708,15 @@ public final class NodeUtil
                 appendInfo(buffer, "TimeSettings",
                            info.getTimeSettings().toString());
         }
-        Map sgfProperties = node.getSgfPropertiesUnmodifiable();
+        Map<String,String> sgfProperties
+            = node.getSgfPropertiesUnmodifiable();
         if (sgfProperties != null)
         {
             buffer.append("SgfProperties:\n");
-            Iterator it = sgfProperties.entrySet().iterator();
-            while (it.hasNext())
+            for (Map.Entry<String,String> entry : sgfProperties.entrySet())
             {
-                Map.Entry entry = (Map.Entry)it.next();
-                String label = (String)entry.getKey();
-                String value = (String)entry.getValue();
+                String label = entry.getKey();
+                String value = entry.getValue();
                 appendInfo(buffer, label, value);
             }
         }

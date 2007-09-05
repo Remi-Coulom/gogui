@@ -155,10 +155,8 @@ public final class SgfReader
         if (m_warnings.isEmpty())
             return null;
         StringBuilder result = new StringBuilder(m_warnings.size() * 80);
-        Iterator iter = m_warnings.iterator();
-        while (iter.hasNext())
+        for (String s : m_warnings)
         {
-            String s = (String)iter.next();
             result.append(s);
             result.append('\n');
         }
@@ -804,7 +802,7 @@ public final class SgfReader
         m_pointList.clear();
         for (int i = 0; i < values.size(); ++i)
         {
-            String value = (String)values.get(i);
+            String value = values.get(i);
             int pos = value.indexOf(':');
             if (pos < 0)
             {

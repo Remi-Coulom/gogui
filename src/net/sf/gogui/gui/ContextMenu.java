@@ -135,7 +135,7 @@ public class ContextMenu
             add(m_analyzeMenu);
             for (int i = 0; i < commands.size(); ++i)
             {
-                String line = (String)commands.get(i);
+                String line = commands.get(i);
                 AnalyzeCommand command = new AnalyzeCommand(line);
                 if (command.needsOnlyPointArg())
                     addCommand(command);

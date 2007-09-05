@@ -291,7 +291,7 @@ public class GtpEngine
     */
     private String m_version;
 
-    /** Mapping from command (String) to GtpCallback. */
+    /** Mapping from command to callback. */
     private final Map<String,GtpCallback> m_commands
         = new TreeMap<String,GtpCallback>();
 

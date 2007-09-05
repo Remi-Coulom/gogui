@@ -91,7 +91,7 @@ public final class Compare
         Prints the results to standard output, one line per game
         with the filename and the duplicate information as returned by
         Compare.checkDuplicate.
-        @param filenames List of filenames (String)
+        @param filenames List of filenames
         @throws Exception If reading one of the files fails.
     */
     public static void compare(ArrayList<String> filenames) throws Exception

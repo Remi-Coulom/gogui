@@ -78,7 +78,7 @@ public class Table
 
     public String get(int column, int row)
     {
-        return (String)getRow(row).get(column);
+        return getRow(row).get(column);
     }
 
     public String get(String columnTitle, int row) throws InvalidLocation
@@ -145,7 +145,7 @@ public class Table
 
     public String getColumnTitle(int index)
     {
-        return (String)m_columnTitles.get(index);
+        return m_columnTitles.get(index);
     }
 
     @SuppressWarnings("unchecked")
@@ -220,8 +220,8 @@ public class Table
     {
         if (withHeader)
         {
-            Enumeration propertyNames = m_properties.propertyNames();
-            for (Enumeration e = propertyNames; e.hasMoreElements(); )
+            for (Enumeration<?> e = m_properties.propertyNames();
+                 e.hasMoreElements(); )
             {
                 String key = (String)e.nextElement();
                 out.write("# " + key + ": " + m_properties.get(key) + "\n");
@@ -241,7 +241,7 @@ public class Table
             ArrayList<String> row = m_rows.get(i);
             for (int j = 0; j < m_numberColumns; ++j)
             {
-                String value = (String)row.get(j);
+                String value = row.get(j);
                 if (value != null)
                     out.write(value);
                 if (j < m_numberColumns - 1)

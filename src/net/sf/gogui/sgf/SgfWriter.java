@@ -268,17 +268,15 @@ public class SgfWriter
 
     private void printLabels(ConstNode node)
     {
-        Map labels = node.getLabelsUnmodifiable();
+        Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels == null)
             return;
         StringBuilder buffer = new StringBuilder(STRINGBUF_CAPACITY);
         buffer.append("LB");
-        Iterator i = labels.entrySet().iterator();
-        while (i.hasNext())
+        for (Map.Entry<GoPoint,String> entry : labels.entrySet())
         {
-            Map.Entry entry = (Map.Entry)i.next();
-            GoPoint point = (GoPoint)entry.getKey();
-            String value = (String)entry.getValue();
+            GoPoint point = entry.getKey();
+            String value = entry.getValue();
             buffer.append('[');
             buffer.append(getPoint(point));
             buffer.append(':');
@@ -370,17 +368,16 @@ public class SgfWriter
         {
             print("V[" + node.getValue() + "]");
         }
-        Map sgfProperties = node.getSgfPropertiesUnmodifiable();
+        Map<String,String> sgfProperties =
+            node.getSgfPropertiesUnmodifiable();
         if (sgfProperties != null)
         {
-            Iterator it = sgfProperties.entrySet().iterator();
-            while (it.hasNext())
+            for (Map.Entry<String,String> entry : sgfProperties.entrySet())
             {
-                Map.Entry entry = (Map.Entry)it.next();
-                String label = (String)entry.getKey();
+                String label = entry.getKey();
                 if (label.equals("OT") && hasByoyomiInformation(node))
                     continue;
-                String value = (String)entry.getValue();
+                String value = entry.getValue();
                 print(label + value);
             }
         }

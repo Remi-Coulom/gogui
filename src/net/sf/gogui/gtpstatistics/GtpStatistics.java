@@ -96,7 +96,7 @@ public class GtpStatistics
         m_table.setProperty("Host", host);
         m_table.setProperty("Date", StringUtil.getDate());
         for (int i = 0; i < sgfFiles.size(); ++i)
-            handleFile((String)sgfFiles.get(i));
+            handleFile(sgfFiles.get(i));
         m_gtp.send("quit");
         m_gtp.close();
         m_gtp.waitForExit();

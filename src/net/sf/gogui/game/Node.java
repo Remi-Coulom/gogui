@@ -305,10 +305,10 @@ public final class Node
     */
     public String getLabel(GoPoint point)
     {
-        Map map = getLabels();
+        Map<GoPoint,String> map = getLabels();
         if (map == null || ! map.containsKey(point))
             return null;
-        return (String)map.get(point);
+        return map.get(point);
     }
 
     /** Get all labels on the board.
