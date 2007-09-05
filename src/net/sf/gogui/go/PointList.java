@@ -11,7 +11,7 @@ import java.util.Iterator;
 public final class PointList
     implements ConstPointList
 {
-    public class ConstIterator
+    public class PointListIterator
         implements Iterator<GoPoint>
     {
         public boolean  hasNext()
@@ -121,7 +121,7 @@ public final class PointList
 
     public Iterator<GoPoint> iterator()
     {
-        return new ConstIterator();
+        return new PointListIterator();
     }
 
     /** Remove first occurence of a point from the list.
