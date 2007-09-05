@@ -192,7 +192,7 @@ public class GtpShell
     {
         for (int i = completions.size() - 1; i >= 0; --i)
         {
-            String command = completions.get(i).toString();
+            String command = completions.get(i);
             if (! GtpUtil.isStateChangingCommand(command))
                 appendToHistory(command);
         }
