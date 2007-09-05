@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
-import net.sf.gogui.util.MessageQueue;
 import net.sf.gogui.util.ProcessUtil;
 
 /** Interface to a Go program that uses GTP over the standard I/O streams.
@@ -376,6 +378,7 @@ public final class GtpClient
             }
             catch (InterruptedException e)
             {
+                printInterrupted();
             }
         }
         else
@@ -423,14 +426,13 @@ public final class GtpClient
         }
         catch (InterruptedException e)
         {
-            System.err.println("GtpClient: InterruptedException");
+            printInterrupted();
         }
     }
 
     /** More sophisticated version of waitFor with timeout. */
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
-        setExitInProgress(true);
         if (m_process == null)
             return;
         while (true)
@@ -450,7 +452,7 @@ public final class GtpClient
         }
         catch (InterruptedException e)
         {
-            System.err.println("GtpClient: InterruptedException");
+            printInterrupted();
         }
     }
 
@@ -483,7 +485,7 @@ public final class GtpClient
     private class InputThread
         extends Thread
     {
-        InputThread(InputStream in, MessageQueue queue)
+        InputThread(InputStream in, BlockingQueue<Message> queue)
         {
             m_in = new BufferedReader(new InputStreamReader(in));
             m_queue = queue;
@@ -503,7 +505,7 @@ public final class GtpClient
 
         private final BufferedReader m_in;
 
-        private final MessageQueue m_queue;
+        private final BlockingQueue<Message> m_queue;
 
         private final StringBuilder m_buffer = new StringBuilder(1024);
 
@@ -554,10 +556,6 @@ public final class GtpClient
                         break;
                     }
                 }
-                // Avoid programs flooding stderr or stdout after trying
-                // to exit (see unlimited MessageQueue capacity bug)
-                if (getExitInProgress())
-                    Thread.sleep(m_queue.getSize() / 10);
             }
         }
 
@@ -569,7 +567,14 @@ public final class GtpClient
 
         private void putMessage(int type, String text)
         {
-            m_queue.put(new Message(type, text));
+            try
+            {
+                m_queue.put(new Message(type, text));
+            }
+            catch (InterruptedException e)
+            {
+                printInterrupted();
+            }
         }
 
         private String readLine()
@@ -591,7 +596,7 @@ public final class GtpClient
     private class ErrorThread
         extends Thread
     {
-        public ErrorThread(InputStream in, MessageQueue queue)
+        public ErrorThread(InputStream in, BlockingQueue<Message> queue)
         {
             m_in = new InputStreamReader(in);
             m_queue = queue;
@@ -611,7 +616,7 @@ public final class GtpClient
 
         private final Reader m_in;
 
-        private final MessageQueue m_queue;
+        private final BlockingQueue<Message> m_queue;
 
         private void mainLoop() throws InterruptedException
         {
@@ -635,10 +640,6 @@ public final class GtpClient
                 if (text == null)
                     return;
                 logError(text);
-                // Avoid programs flooding stderr or stdout after trying
-                // to exit (see unlimited MessageQueue capacity bug)
-                if (getExitInProgress())
-                    Thread.sleep(m_queue.getSize() / 10);
             }
         }
     }
@@ -648,8 +649,6 @@ public final class GtpClient
     private boolean m_autoNumber;
 
     private boolean m_anyCommandsResponded;
-
-    private boolean m_exitInProgress;
 
     private boolean m_isInterruptCommentSupported;
 
@@ -677,18 +676,13 @@ public final class GtpClient
 
     private final String m_program;
 
-    private MessageQueue m_queue;
+    private BlockingQueue<Message> m_queue;
 
     private TimeoutCallback m_timeoutCallback;
 
     private InputThread m_inputThread;
 
     private ErrorThread m_errorThread;
-
-    private synchronized boolean getExitInProgress()
-    {
-        return m_exitInProgress;
-    }
 
     private void handleErrorStream(String text)
     {
@@ -702,7 +696,7 @@ public final class GtpClient
     {
         m_out = new PrintWriter(out);
         m_isProgramDead = false;
-        m_queue = new MessageQueue();
+        m_queue = new ArrayBlockingQueue<Message>(10);
         m_inputThread = new InputThread(in, m_queue);
         if (err != null)
         {
@@ -728,26 +722,14 @@ public final class GtpClient
             System.err.print(text);
     }
 
-    private void mergeErrorMessages(Message message)
+    /** Print information about occurence of InterruptedException.
+        An InterruptedException should never happen, because we don't call
+        Thread.interrupt
+    */
+    private void printInterrupted()
     {
-        assert message.m_type == Message.ERROR;
-        StringBuilder buffer = new StringBuilder(2048);
-        while (message != null)
-        {
-            if (message.m_text != null)
-                buffer.append(message.m_text);
-            synchronized (m_queue.getMutex())
-            {
-                message = (Message)m_queue.unsynchronizedPeek();
-                if (message != null && message.m_type != Message.ERROR)
-                    message = null;
-            }
-            if (message != null)
-            {
-                message = (Message)m_queue.getIfAvaliable();
-            }
-        }
-        handleErrorStream(buffer.toString());
+        System.err.println("GtpClient: InterruptedException");
+        Thread.dumpStack();
     }
 
     private void readRemainingErrorMessages()
@@ -755,7 +737,15 @@ public final class GtpClient
         Message message;
         while (! m_queue.isEmpty())
         {
-            message = (Message)m_queue.waitFor();
+            try
+            {
+                message = m_queue.take();
+            }
+            catch (InterruptedException e)
+            {
+                printInterrupted();
+                return;
+            }
             if (message.m_type == Message.ERROR && message.m_text != null)
                 handleErrorStream(message.m_text);
         }
@@ -767,7 +757,7 @@ public final class GtpClient
         {
             Message message = waitForMessage(timeout);
             if (message.m_type == Message.ERROR)
-                mergeErrorMessages(message);
+                handleErrorStream(message.m_text);
             else if (message.m_type == Message.INVALID)
             {
                 m_fullResponse = message.m_text;
@@ -805,11 +795,6 @@ public final class GtpClient
         }
     }
 
-    private synchronized void setExitInProgress(boolean exitInProgress)
-    {
-        m_exitInProgress = exitInProgress;
-    }
-
     private void throwProgramDied() throws GtpError
     {
         m_isProgramDead = true;
@@ -824,15 +809,33 @@ public final class GtpClient
 
     private Message waitForMessage(long timeout) throws GtpError
     {
-        Message message;
+        Message message = null;
         if (timeout < 0)
-            message = (Message)m_queue.waitFor();
+        {
+            try
+            {
+                message = m_queue.take();
+            }
+            catch (InterruptedException e)
+            {
+                printInterrupted();
+                destroyProcess();
+                throwProgramDied();
+            }
+        }
         else
         {
             message = null;
             while (message == null)
             {
-                message = (Message)m_queue.waitFor(timeout);
+                try
+                {
+                    message = m_queue.poll(timeout, TimeUnit.MILLISECONDS);
+                }
+                catch (InterruptedException e)
+                {
+                    printInterrupted();
+                }
                 if (message == null)
                 {
                     assert m_timeoutCallback != null;
