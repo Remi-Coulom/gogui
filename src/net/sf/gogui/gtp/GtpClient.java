@@ -550,8 +550,6 @@ public final class GtpClient
                     }
                     if (line.equals(""))
                     {
-                        // Give ErrorThread a chance to read first
-                        Thread.yield();
                         putMessage(Message.RESPONSE);
                         break;
                     }
