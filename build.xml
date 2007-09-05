@@ -117,7 +117,7 @@ Comment out the exec svnversion for releases.
 </delete>
 </target>
 
-<target name="check" depends="docvalidate,junit,regress"
+<target name="check" depends="docvalidate,junit"
  description="Run all tests"/>
 
 <target name="compile" depends="depend,version,doc">
@@ -196,7 +196,6 @@ Comment out the exec svnversion for releases.
  test/junit/src/net/sf/gogui/*/*.sgf
  test/junit/src/net/sf/gogui/*/*.png
  test/pmd/ruleset.xml
- test/regress/*.tst
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
@@ -657,49 +656,6 @@ ${quaqua.nestedzipfile}
 <arg line="emacs"/>
 <arg line="test/pmd/ruleset.xml"/>
 </exec>
-</target>
-
-<target name="regress"
- depends="gtpdummy.jar,gtpregress.jar,gtpserver.jar,netgtp.jar,twogtp.jar"
- description="Run GTP regression tests (requires GNU Go 3.6)">
-<mkdir dir="test/regress/html"/>
-<echo>gtpadapter</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true"
- dir="test/regress">
-<assertions><enable/></assertions>
-<arg value="-output"/><arg value="html/gtpadapter"/>
-<arg value="java -ea -jar ../../lib/gtpdummy.jar"/>
-<arg value="gtpadapter.tst"/>
-</java>
-<echo>gtpdummy</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true"
- dir="test/regress">
-<assertions><enable/></assertions>
-<arg value="-output"/><arg value="html/gtpdummy"/>
-<arg value="java -ea -jar ../../lib/gtpdummy.jar"/>
-<arg value="gtpdummy.tst"/>
-</java>
-<echo>netgtp</echo>
-<java jar="lib/gtpserver.jar" fork="true" spawn="true">
-<assertions><enable/></assertions>
-<arg value="-port"/><arg value="9696"/>
-<arg value="java -jar lib/gtpdummy.jar"/>
-</java>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true"
- dir="test/regress">
-<arg value="-output"/><arg value="html/netgtp"/>
-<arg value="java -ea -jar ../../lib/netgtp.jar localhost 9696"/>
-<arg value="netgtp.tst"/>
-</java>
-<echo>twogtp</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true"
- dir="test/regress">
-<assertions><enable/></assertions>
-<arg value="-output"/><arg value="html/twogtp"/>
-<arg value="java -ea -jar ../../lib/twogtp.jar -black &quot;java -ea -jar ../../lib/gtpdummy.jar&quot; -white &quot;gnugo --mode gtp&quot;"/>
-<arg value="twogtp.tst"/>
-</java>
-<echo>OK</echo>
 </target>
 
 <target name="run" depends="gogui.jar" description="Run GoGui">
