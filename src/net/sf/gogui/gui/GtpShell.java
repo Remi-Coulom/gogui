@@ -84,7 +84,6 @@ public class GtpShell
         if (Platform.isMac())
             // Default Apple L&F uses no border, but Quaqua 3.7.4 does
             m_scrollPane.setBorder(null);
-        int fontSize = m_gtpShellText.getFont().getSize();
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
         setMinimumSize(new Dimension(160, 112));
