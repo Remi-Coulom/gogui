@@ -224,7 +224,7 @@ public class CountScore
         marker.set(p);
         if (c == color)
             stones.add(p);
-        ConstPointList adjPoints = m_board.getAdjacentPoints(p);
+        ConstPointList adjPoints = m_board.getAdjacent(p);
         for (GoPoint adj : adjPoints)
             if (! findRegion(adj, color, marker, stones))
                 return false;
@@ -243,7 +243,7 @@ public class CountScore
             return true;
         mark.set(p, true);
         territory.add(p);
-        ConstPointList adjPoints = m_board.getAdjacentPoints(p);
+        ConstPointList adjPoints = m_board.getAdjacent(p);
         for (GoPoint adj : adjPoints)
             if (! isTerritory(mark, adj, territory, color))
                 return false;

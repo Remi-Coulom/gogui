@@ -70,21 +70,9 @@ public final class Board
         @param point The point.
         @return List of points adjacent.
     */
-    public ConstPointList getAdjacentPoints(GoPoint point)
+    public ConstPointList getAdjacent(GoPoint point)
     {
-        final int maxAdjacent = 4;
-        PointList result = new PointList(maxAdjacent);
-        int x = point.getX();
-        int y = point.getY();
-        if (x > 0)
-            result.add(GoPoint.get(x - 1, y));
-        if (x < m_size - 1)
-            result.add(GoPoint.get(x + 1, y));
-        if (y > 0)
-            result.add(GoPoint.get(x, y - 1));
-        if (y < m_size - 1)
-            result.add(GoPoint.get(x, y + 1));
-        return result;
+        return m_constants.getAdjacent(point);
     }
 
     /** Get number of captured stones.
@@ -462,7 +450,7 @@ public final class Board
                 m_oldColor = board.getColor(p);
                 board.setColor(p, c);
                 assert c != EMPTY;
-                ConstPointList adjPoints = board.getAdjacentPoints(p);
+                ConstPointList adjPoints = board.getAdjacent(p);
                 for (GoPoint adj : adjPoints)
                 {
                     int killedSize = m_killed.size();
@@ -539,7 +527,7 @@ public final class Board
         if (getColor(point) != color)
             return false;
         int lib = 0;
-        for (GoPoint adj : getAdjacentPoints(point))
+        for (GoPoint adj : getAdjacent(point))
         {
             GoColor adjColor = getColor(adj);
             if (adjColor == EMPTY)
@@ -577,7 +565,7 @@ public final class Board
             return;
         m_mark.set(p, true);
         stones.add(p);
-        for (GoPoint adj : getAdjacentPoints(p))
+        for (GoPoint adj : getAdjacent(p))
             findStones(adj, color, stones);
     }
 
@@ -592,7 +580,7 @@ public final class Board
             return true;
         m_mark.set(p, true);
         stones.add(p);
-        for (GoPoint adj : getAdjacentPoints(p))
+        for (GoPoint adj : getAdjacent(p))
             if (! isDead(adj, color, stones))
                 return false;
         return true;

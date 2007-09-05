@@ -27,6 +27,11 @@ public final class BoardConstants
         return s_boardConstants[boardSize];
     }
 
+    public ConstPointList getAdjacent(GoPoint p)
+    {
+        return m_adjacent[p.getX()][p.getY()];
+    }
+
     /** Get location of handicap stones.
         The handicap stone locations are defined as in the GTP version 2
         specification (section 4.1.1 Fixed Handicap Placement).
@@ -135,6 +140,8 @@ public final class BoardConstants
 
     private PointList m_allPoints;
 
+    private PointList[][] m_adjacent;
+
     private BoardConstants(int size)
     {
         m_size = size;
@@ -157,14 +164,22 @@ public final class BoardConstants
             m_handicapLine2 = size / 2;
         else
             m_handicapLine2 = -1;
-        initAllPoints();
-    }
-
-    private void initAllPoints()
-    {
         m_allPoints = new PointList();
+        m_adjacent = new PointList[m_size][m_size];
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
+            {
                 m_allPoints.add(GoPoint.get(x, y));
+                PointList adjacent = new PointList();
+                if (x > 0)
+                    adjacent.add(GoPoint.get(x - 1, y));
+                if (x < m_size - 1)
+                    adjacent.add(GoPoint.get(x + 1, y));
+                if (y > 0)
+                    adjacent.add(GoPoint.get(x, y - 1));
+                if (y < m_size - 1)
+                    adjacent.add(GoPoint.get(x, y + 1));
+                m_adjacent[x][y] = adjacent;
+            }
     }
 }
