@@ -331,8 +331,8 @@ public class SgfWriter
                 buffer.append("AW");
             else
                 buffer.append("AE");
-            for (int i = 0; i < points.size(); ++i)
-                buffer.append(getPointValue(points.get(i)));
+            for (GoPoint p : points)
+                buffer.append(getPointValue(p));
             print(buffer.toString());
         }
         String comment = node.getComment();

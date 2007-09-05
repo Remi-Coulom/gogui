@@ -199,6 +199,7 @@ public final class NodeUtil
         that avoids the pass move at the end.
         @param node the node
         @param moves the resulting moves
+        @bug Moves with color EMPTY are no longer supported
     */
     public static void getAllAsMoves(ConstNode node, ArrayList<Move> moves)
     {
@@ -215,27 +216,27 @@ public final class NodeUtil
                                    && addWhite.size() > 0);
             if (switchSetup)
             {
-                for (int i = 0; i < addWhite.size(); ++i)
-                    moves.add(Move.get(WHITE, addWhite.get(i)));
-                for (int i = 0; i < addBlack.size(); ++i)
-                    moves.add(Move.get(BLACK, addBlack.get(i)));
+                for (GoPoint p : addWhite)
+                    moves.add(Move.get(WHITE, p));
+                for (GoPoint p : addBlack)
+                    moves.add(Move.get(BLACK, p));
             }
             else
             {
-                for (int i = 0; i < addBlack.size(); ++i)
-                    moves.add(Move.get(BLACK, addBlack.get(i)));
-                for (int i = 0; i < addWhite.size(); ++i)
-                    moves.add(Move.get(WHITE, addWhite.get(i)));
+                for (GoPoint p : addBlack)
+                    moves.add(Move.get(BLACK, p));
+                for (GoPoint p : addWhite)
+                    moves.add(Move.get(WHITE, p));
             }
-            for (int i = 0; i < addEmpty.size(); ++i)
-                moves.add(Move.get(EMPTY, addEmpty.get(i)));
+            for (GoPoint p : addEmpty)
+                moves.add(Move.get(EMPTY, p));
         }
         if (move != null)
             moves.add(move);
         if (! moves.isEmpty())
         {
             GoColor toMove = node.getToMove();
-            Move lastMove = (Move)moves.get(moves.size() - 1);
+            Move lastMove = moves.get(moves.size() - 1);
             GoColor otherColor = lastMove.getColor().otherColor();
             if (toMove != null && toMove != otherColor
                 && otherColor != EMPTY)

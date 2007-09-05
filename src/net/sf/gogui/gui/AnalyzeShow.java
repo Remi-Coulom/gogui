@@ -397,9 +397,8 @@ public final class AnalyzeShow
             color = board.getColor(pointArg);
         if (color != EMPTY)
             return color;
-        for (int i = 0; i < pointListArg.size(); ++i)
+        for (GoPoint point : pointListArg)
         {
-            GoPoint point = pointListArg.get(i);
             color = board.getColor(point);
             if (color != EMPTY)
                 break;

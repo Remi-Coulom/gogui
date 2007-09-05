@@ -199,10 +199,8 @@ public class GtpSynchronizer
                 // Translate setup into moves
                 for (GoColor c : BLACK_WHITE)
                 {
-                    ConstPointList stones = board.getSetup(c);
-                    for (int i = 0; i < stones.size(); ++i)
+                    for (GoPoint p : board.getSetup(c))
                     {
-                        GoPoint p = stones.get(i);
                         if (targetState.isCaptureOrSuicide(c, p))
                         {
                             String message =
@@ -361,10 +359,10 @@ public class GtpSynchronizer
         {
             StringBuilder command = new StringBuilder(128);
             command.append("set_free_handicap");
-            for (int i = 0; i < setupBlack.size(); ++i)
+            for (GoPoint p : setupBlack)
             {
                 command.append(' ');
-                command.append(setupBlack.get(i));
+                command.append(p);
             }
             m_gtp.send(command.toString());
             m_engineState.setupHandicap(setupBlack);
@@ -375,11 +373,10 @@ public class GtpSynchronizer
             command.append("gogui-setup");
             for (GoColor c : BLACK_WHITE)
             {
-                ConstPointList stones = targetState.getSetup(c);
-                for (int i = 0; i < stones.size(); ++i)
+                for (GoPoint p : targetState.getSetup(c))
                 {
                     command.append(' ');
-                    command.append(Move.get(c, stones.get(i)));
+                    command.append(Move.get(c, p));
                 }
             }
             m_gtp.send(command.toString());

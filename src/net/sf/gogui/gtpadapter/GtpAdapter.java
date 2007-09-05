@@ -243,9 +243,8 @@ public class GtpAdapter
         }
         StringBuilder response = new StringBuilder(128);
         PointList points = new PointList();
-        for (int i = 0; i < stones.size(); ++i)
+        for (GoPoint p : stones)
         {
-            GoPoint p = stones.get(i);
             points.add(p);
             if (response.length() > 0)
                 response.append(' ');

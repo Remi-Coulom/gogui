@@ -648,8 +648,8 @@ public final class SgfReader
         throws SgfError
     {
         parsePointList(values);
-        for (int i = 0; i < m_pointList.size(); ++i)
-            node.addMarked(getPointList(i), type);
+        for (GoPoint p : m_pointList)
+            node.addMarked(p, type);
     }
 
     private void parseOverTime(Node node, String value)

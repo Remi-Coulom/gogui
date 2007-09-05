@@ -56,16 +56,16 @@ public class BoardUpdater
                         else if (board.getColor(p) == WHITE)
                             white.add(p);
                     }
-                    for (int j = 0; j < addBlack.size(); ++j)
-                        if (! black.contains(addBlack.get(j)))
-                            black.add(addBlack.get(j));
-                    for (int j = 0; j < addWhite.size(); ++j)
-                        if (! white.contains(addWhite.get(j)))
-                            white.add(addWhite.get(j));
-                    for (int j = 0; j < addEmpty.size(); ++j)
+                    for (GoPoint p : addBlack)
+                        if (! black.contains(p))
+                            black.add(p);
+                    for (GoPoint p : addWhite)
+                        if (! white.contains(p))
+                            white.add(p);
+                    for (GoPoint p : addEmpty)
                     {
-                        black.remove(addEmpty.get(j));
-                        white.remove(addEmpty.get(j));
+                        black.remove(p);
+                        white.remove(p);
                     }
                     board.setup(black, white, player);
                 }

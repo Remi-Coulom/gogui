@@ -357,13 +357,12 @@ public class GtpDisplay
         if  (stones == null)
             throw new GtpError("Invalid number of handicap stones");
         StringBuilder pointList = new StringBuilder(128);
-        for (int i = 0; i < stones.size(); ++i)
+        for (GoPoint p : stones)
         {
-            GoPoint point = stones.get(i);
-            play(BLACK, point);
+            play(BLACK, p);
             if (pointList.length() > 0)
                 pointList.append(' ');
-            pointList.append(point);
+            pointList.append(p);
         }
         cmd.setResponse(pointList.toString());
     }

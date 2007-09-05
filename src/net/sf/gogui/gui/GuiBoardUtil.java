@@ -140,8 +140,8 @@ public final class GuiBoardUtil
     {
         if (pointList == null)
             return;
-        for (int i = 0; i < pointList.size(); ++i)
-            guiBoard.setSelect(pointList.get(i), select);
+        for (GoPoint p : pointList)
+            guiBoard.setSelect(p, select);
     }
 
     public static void scoreBegin(GuiBoard guiBoard, CountScore countScore,
@@ -149,8 +149,8 @@ public final class GuiBoardUtil
     {
         countScore.begin(board, deadStones);
         if (deadStones != null)
-            for (int i = 0; i < deadStones.size(); ++i)
-                guiBoard.setCrossHair(deadStones.get(i), true);
+            for (GoPoint p : deadStones)
+                guiBoard.setCrossHair(p, true);
         computeScore(guiBoard, countScore, board);
     }
 
@@ -161,11 +161,8 @@ public final class GuiBoardUtil
         if (c == EMPTY)
             return;
         PointList stones = countScore.changeStatus(p);
-        for (int i = 0; i < stones.size(); ++i)
-        {
-            GoPoint stone = stones.get(i);
+        for (GoPoint stone : stones)
             guiBoard.setCrossHair(stone, countScore.isDead(stone));
-        }
         computeScore(guiBoard, countScore, board);
     }
 
@@ -190,9 +187,8 @@ public final class GuiBoardUtil
     {
         int numberMarked = 0;
         char label = 'A';
-        for (int i = 0; i < childrenMoves.size(); ++i)
+        for (GoPoint point : childrenMoves)
         {
-            GoPoint point = childrenMoves.get(i);
             String s = guiBoard.getLabel(point);
             if (! s.equals(""))
             {
@@ -243,33 +239,32 @@ public final class GuiBoardUtil
     */
     public static void showMarkup(GuiBoard guiBoard, ConstNode node)
     {
-        ConstPointList mark;
-        mark = node.getMarkedConst(MarkType.MARK);
+        ConstPointList mark = node.getMarkedConst(MarkType.MARK);
         if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMark(mark.get(i), true);
+            for (GoPoint p : mark)
+                guiBoard.setMark(p, true);
         mark = node.getMarkedConst(MarkType.CIRCLE);
         if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMarkCircle(mark.get(i), true);
+            for (GoPoint p : mark)
+                guiBoard.setMarkCircle(p, true);
         mark = node.getMarkedConst(MarkType.SQUARE);
         if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMarkSquare(mark.get(i), true);
+            for (GoPoint p : mark)
+                guiBoard.setMarkSquare(p, true);
         mark = node.getMarkedConst(MarkType.TRIANGLE);
         if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMarkTriangle(mark.get(i), true);
+            for (GoPoint p : mark)
+                guiBoard.setMarkTriangle(p, true);
         GuiBoardUtil.setSelect(guiBoard, node.getMarkedConst(MarkType.SELECT),
                                 true);
         mark = node.getMarkedConst(MarkType.TERRITORY_BLACK);
         if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setTerritory(mark.get(i), BLACK);
+            for (GoPoint p : mark)
+                guiBoard.setTerritory(p, BLACK);
         mark = node.getMarkedConst(MarkType.TERRITORY_WHITE);
         if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setTerritory(mark.get(i), WHITE);
+            for (GoPoint p : mark)
+                guiBoard.setTerritory(p, WHITE);
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels != null)
         {
@@ -285,12 +280,9 @@ public final class GuiBoardUtil
     public static void showPointList(GuiBoard guiBoard, ConstPointList points)
     {
         guiBoard.clearAllMarkup();
-        for (int i = 0; i < points.size(); ++i)
-        {
-            GoPoint p = points.get(i);
+        for (GoPoint p : points)
             if (p != null && p.isOnBoard(guiBoard.getBoardSize()))
                 guiBoard.setMarkSquare(p, true);
-        }
     }
 
     public static void showPointStringList(GuiBoard guiBoard,

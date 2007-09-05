@@ -210,10 +210,10 @@ public class AnalyzeCommand
         }
         else if (needsPointListArg())
         {
-            for (int i = 0; i < m_pointListArg.size(); ++i)
+            for (GoPoint p : m_pointListArg)
             {
                 buffer.append(' ');
-                buffer.append(m_pointListArg.get(i));
+                buffer.append(p);
             }
         }
         if (needsStringArg() && m_stringArg != null)

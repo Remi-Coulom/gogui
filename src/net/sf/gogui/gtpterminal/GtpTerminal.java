@@ -268,9 +268,8 @@ public class GtpTerminal
             {
                 for (GoColor c : BLACK_WHITE)
                 {
-                    ConstPointList stones = node.getAddStones(c);
-                    for (int i = 0; i < stones.size(); ++i)
-                        if (! cmdPlay(c, stones.get(i)))
+                    for (GoPoint stone : node.getAddStones(c))
+                        if (! cmdPlay(c, stone))
                             return;
                 }
                 Move move = node.getMove();

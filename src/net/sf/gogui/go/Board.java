@@ -297,8 +297,8 @@ public final class Board
     */
     public void clear()
     {
-        for (int i = 0; i < getPoints().size(); ++i)
-            setColor(getPoints().get(i), EMPTY);
+        for (GoPoint p : getPoints())
+            setColor(p, EMPTY);
         m_stack.clear();
         for (GoColor c : BLACK_WHITE)
         {
@@ -366,8 +366,8 @@ public final class Board
                 m_setup.set(c, new PointList());
             else
             {
-                for (int i = 0; i < stones.size(); ++i)
-                    setColor(stones.get(i), c);
+                for (GoPoint p : stones)
+                    setColor(p, c);
                 m_setup.set(c, new PointList(stones));
             }
         }
@@ -443,11 +443,11 @@ public final class Board
                 m_oldColor = board.getColor(p);
                 board.setColor(p, c);
                 assert c != EMPTY;
-                ConstPointList adj = board.getAdjacentPoints(p);
-                for (int i = 0; i < adj.size(); ++i)
+                ConstPointList adjPoints = board.getAdjacentPoints(p);
+                for (GoPoint adj : adjPoints)
                 {
                     int killedSize = m_killed.size();
-                    board.checkKill(adj.get(i), otherColor, m_killed);
+                    board.checkKill(adj, otherColor, m_killed);
                     if (m_killed.size() == killedSize + 1)
                         board.m_koPoint = m_killed.get(killedSize);
                 }
@@ -473,17 +473,11 @@ public final class Board
             {
                 GoColor c = m_move.getColor();
                 GoColor otherColor = c.otherColor();
-                for (int i = 0; i < m_suicide.size(); ++i)
-                {
-                    GoPoint stone = m_suicide.get(i);
+                for (GoPoint stone : m_suicide)
                     board.setColor(stone, c);
-                }
                 board.setColor(p, m_oldColor);
-                for (int i = 0; i < m_killed.size(); ++i)
-                {
-                    GoPoint stone = m_killed.get(i);
+                for (GoPoint stone : m_killed)
                     board.setColor(stone, otherColor);
-                }
                 board.m_captured.set(c,
                                      board.m_captured.get(c)
                                      - m_suicide.size());
@@ -525,11 +519,10 @@ public final class Board
     {
         if (getColor(point) != color)
             return false;
-        ConstPointList adj = getAdjacentPoints(point);
         int lib = 0;
-        for (int i = 0; i < adj.size(); ++i)
+        for (GoPoint adj : getAdjacentPoints(point))
         {
-            GoColor adjColor = getColor(adj.get(i));
+            GoColor adjColor = getColor(adj);
             if (adjColor == EMPTY)
             {
                 ++lib;
@@ -549,8 +542,8 @@ public final class Board
         if (isDead(p, color, stones))
         {
             killed.addAll(stones);
-            for (int i = 0; i < stones.size(); ++i)
-                setColor(stones.get(i), EMPTY);
+            for (GoPoint stone : stones)
+                setColor(stone, EMPTY);
         }
         m_mark.set(stones, false);
         assert m_mark.isCleared();
@@ -565,9 +558,8 @@ public final class Board
             return;
         m_mark.set(p, true);
         stones.add(p);
-        ConstPointList adj = getAdjacentPoints(p);
-        for (int i = 0; i < adj.size(); ++i)
-            findStones(adj.get(i), color, stones);
+        for (GoPoint adj : getAdjacentPoints(p))
+            findStones(adj, color, stones);
     }
 
     private boolean isDead(GoPoint p, GoColor color, PointList stones)
@@ -581,9 +573,8 @@ public final class Board
             return true;
         m_mark.set(p, true);
         stones.add(p);
-        ConstPointList adj = getAdjacentPoints(p);
-        for (int i = 0; i < adj.size(); ++i)
-            if (! isDead(adj.get(i), color, stones))
+        for (GoPoint adj : getAdjacentPoints(p))
+            if (! isDead(adj, color, stones))
                 return false;
         return true;
     }

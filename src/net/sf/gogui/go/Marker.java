@@ -71,15 +71,14 @@ public class Marker
     }
 
     /** Mark or clear a list of points.
-        @param points List of go.Point to mark or clear.
+        @param points List of points to mark or clear.
         @param value true, if points should be marked; false, if points should
         be cleared.
     */
     public void set(ConstPointList points, boolean value)
     {
-        int size = points.size();
-        for (int i = 0; i < size; ++i)
-            set(points.get(i), value);
+        for (GoPoint p : points)
+            set(p, value);
     }
 
     private boolean m_mark[][];

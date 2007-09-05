@@ -5,11 +5,33 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /** List containing a points. */
 public final class PointList
     implements ConstPointList
 {
+    public class ConstIterator
+        implements Iterator<GoPoint>
+    {
+        public boolean  hasNext()
+        {
+            return m_iterator.hasNext();
+        }
+
+        public GoPoint next()
+        {
+            return m_iterator.next();
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        private Iterator<GoPoint> m_iterator = m_list.iterator();
+    }
+
     /** Construct empty point list. */
     public PointList()
     {
@@ -95,6 +117,11 @@ public final class PointList
     public boolean isEmpty()
     {
         return m_list.isEmpty();
+    }
+
+    public Iterator<GoPoint> iterator()
+    {
+        return new ConstIterator();
     }
 
     /** Remove first occurence of a point from the list.

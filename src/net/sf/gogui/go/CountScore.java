@@ -35,8 +35,8 @@ public class CountScore
         for (int i = 0; i < m_board.getPoints().size(); ++i)
             m_dead.clear(m_board.getPoints().get(i));
         if (deadStones != null)
-            for (int i = 0; i < deadStones.size(); ++i)
-                m_dead.set(deadStones.get(i));
+            for (GoPoint p : deadStones)
+                m_dead.set(p);
         compute();
     }
 
@@ -61,8 +61,8 @@ public class CountScore
             m_board.getStones(p, c, stones);
         }
         boolean isDead = ! isDead(p);
-        for (int i = 0; i < stones.size(); ++i)
-            setDead(stones.get(i), isDead);
+        for (GoPoint stone : stones)
+            setDead(stone, isDead);
         return stones;
     }
 
@@ -227,9 +227,9 @@ public class CountScore
         marker.set(p);
         if (c == color)
             stones.add(p);
-        ConstPointList adj = m_board.getAdjacentPoints(p);
-        for (int i = 0; i < adj.size(); ++i)
-            if (! findRegion(adj.get(i), color, marker, stones))
+        ConstPointList adjPoints = m_board.getAdjacentPoints(p);
+        for (GoPoint adj : adjPoints)
+            if (! findRegion(adj, color, marker, stones))
                 return false;
         return true;
     }
@@ -246,9 +246,9 @@ public class CountScore
             return true;
         mark.set(p, true);
         territory.add(p);
-        ConstPointList adj = m_board.getAdjacentPoints(p);
-        for (int i = 0; i < adj.size(); ++i)
-            if (! isTerritory(mark, adj.get(i), territory, color))
+        ConstPointList adjPoints = m_board.getAdjacentPoints(p);
+        for (GoPoint adj : adjPoints)
+            if (! isTerritory(mark, adj, territory, color))
                 return false;
         return true;
     }
@@ -261,7 +261,7 @@ public class CountScore
 
     private void setScore(ConstPointList points, GoColor c)
     {
-        for (int i = 0; i < points.size(); ++i)
-            setScore(points.get(i), c);
+        for (GoPoint p : points)
+            setScore(p, c);
     }
 }
