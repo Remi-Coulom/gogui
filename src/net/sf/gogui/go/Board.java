@@ -507,6 +507,9 @@ public final class Board
     private final ArrayList<StackEntry> m_stack
         = new ArrayList<StackEntry>(361);
 
+    /** Temporary variable reused for efficiency. */
+    private final PointList m_checkKillStones = new PointList();
+
     private GoColor[][] m_color;
 
     private GoColor m_toMove;
@@ -545,21 +548,20 @@ public final class Board
     private void checkKill(GoPoint p, GoColor color, PointList killed)
     {
         assert m_mark.isCleared();
-        PointList stones = new PointList();
-        if (isDead(p, color, stones))
+        m_checkKillStones.clear();
+        if (isDead(p, color))
         {
-            killed.addAll(stones);
-            for (GoPoint stone : stones)
+            killed.addAll(m_checkKillStones);
+            for (GoPoint stone : m_checkKillStones)
                 setColor(stone, EMPTY);
         }
-        m_mark.set(stones, false);
+        m_mark.set(m_checkKillStones, false);
         assert m_mark.isCleared();
     }
 
     private void findStones(GoPoint p, GoColor color, PointList stones)
     {
-        GoColor c = getColor(p);
-        if (c != color)
+        if (getColor(p) != color)
             return;
         if (m_mark.get(p))
             return;
@@ -569,7 +571,7 @@ public final class Board
             findStones(adj, color, stones);
     }
 
-    private boolean isDead(GoPoint p, GoColor color, PointList stones)
+    private boolean isDead(GoPoint p, GoColor color)
     {
         GoColor c = getColor(p);
         if (c == EMPTY)
@@ -579,9 +581,9 @@ public final class Board
         if (m_mark.get(p))
             return true;
         m_mark.set(p, true);
-        stones.add(p);
+        m_checkKillStones.add(p);
         for (GoPoint adj : getAdjacent(p))
-            if (! isDead(adj, color, stones))
+            if (! isDead(adj, color))
                 return false;
         return true;
     }
