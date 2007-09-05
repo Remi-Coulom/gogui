@@ -48,9 +48,8 @@ public class BoardUpdater
                 {
                     PointList black = new PointList();
                     PointList white = new PointList();
-                    for (int j = 0; j < board.getPoints().size(); ++j)
+                    for (GoPoint p : board)
                     {
-                        GoPoint p = board.getPoints().get(j);
                         if (board.getColor(p) == BLACK)
                             black.add(p);
                         else if (board.getColor(p) == WHITE)

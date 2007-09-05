@@ -124,9 +124,8 @@ public class TextParser
         Board newBoard = new Board(newSize);
         PointList black = new PointList();
         PointList white = new PointList();
-        for (int i = 0; i < m_board.getPoints().size(); ++i)
+        for (GoPoint p : m_board)
         {
-            GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             p = p.up(newSize);
             if (c == BLACK)

@@ -236,13 +236,11 @@ public class TexWriter
                                boolean[][] markCircle, boolean[][] markSquare,
                                boolean[][] markSelect)
     {
-        int numberPoints = board.getPoints().size();
-        for (int i = 0; i < numberPoints; ++i)
+        for (GoPoint p : board)
         {
-            GoPoint point = board.getPoints().get(i);
-            GoColor color = board.getColor(point);
-            int x = point.getX();
-            int y = point.getY();
+            GoColor color = board.getColor(p);
+            int x = p.getX();
+            int y = p.getY();
             StringBuilder buffer = new StringBuilder(128);
             if (mark != null && mark[x][y])
                 buffer.append("\\markma");
@@ -268,12 +266,12 @@ public class TexWriter
                 if (markup != null)
                 {
                     m_out.print("\\markpos{" + markup + "}");
-                    printCoordinates(point);
+                    printCoordinates(p);
                     m_out.print("\n");
                 }
             }
             else
-                printStone(color, point, markup);
+                printStone(color, p, markup);
         }
     }
 

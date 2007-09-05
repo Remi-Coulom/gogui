@@ -334,11 +334,8 @@ public final class GuiBoardUtil
     public static void updateFromGoBoard(GuiBoard guiBoard, ConstBoard board,
                                          boolean markLastMove)
     {
-        for (int i = 0; i < board.getPoints().size(); ++i)
-        {
-            GoPoint point = board.getPoints().get(i);
-            guiBoard.setColor(point, board.getColor(point));
-        }
+        for (GoPoint p : board)
+            guiBoard.setColor(p, board.getColor(p));
         GoPoint point = null;
         if (board.getLastMove() != null)
             point = board.getLastMove().getPoint();
@@ -365,9 +362,8 @@ public final class GuiBoardUtil
                                      ConstBoard board)
     {
         countScore.compute();
-        for (int i = 0; i < board.getPoints().size(); ++i)
+        for (GoPoint p : board)
         {
-            GoPoint p = board.getPoints().get(i);
             GoColor c = countScore.getColor(p);
             guiBoard.setTerritory(p, c);
         }

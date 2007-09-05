@@ -4,10 +4,14 @@
 
 package net.sf.gogui.go;
 
+import java.lang.Iterable;
+import java.util.Iterator;
+
 /** Const functions of go.Board.
     @see Board
 */
 public interface ConstBoard
+    extends Iterable<GoPoint>
 {
     boolean bothPassed();
 
@@ -26,8 +30,6 @@ public interface ConstBoard
     Move getMove(int i);
 
     int getNumberMoves();
-
-    ConstPointList getPoints();
 
     ConstPointList getSetup(GoColor c);
 
@@ -52,4 +54,6 @@ public interface ConstBoard
     boolean isSetupHandicap();
 
     boolean isSuicide(GoColor c, GoPoint p);
+
+    Iterator<GoPoint> iterator();
 }

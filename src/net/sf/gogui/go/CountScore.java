@@ -32,8 +32,8 @@ public class CountScore
         int size = board.getSize();
         m_dead = new Marker(size);
         m_score = new GoColor[size][size];
-        for (int i = 0; i < m_board.getPoints().size(); ++i)
-            m_dead.clear(m_board.getPoints().get(i));
+        for (GoPoint p : m_board)
+            m_dead.clear(p);
         if (deadStones != null)
             for (GoPoint p : deadStones)
                 m_dead.set(p);
@@ -71,9 +71,8 @@ public class CountScore
     {
         Marker mark = new Marker(m_board.getSize());
         boolean allEmpty = true;
-        for (int i = 0; i < m_board.getPoints().size(); ++i)
+        for (GoPoint p : m_board)
         {
-            GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             setScore(p, EMPTY);
             if (c != EMPTY)
@@ -85,10 +84,9 @@ public class CountScore
         }
         if (allEmpty)
             return;
-        PointList territory = new PointList(m_board.getPoints().size());
-        for (int i = 0; i < m_board.getPoints().size(); ++i)
+        PointList territory = new PointList();
+        for (GoPoint p : m_board)
         {
-            GoPoint p = m_board.getPoints().get(i);
             if (! mark.get(p))
             {
                 territory.clear();
@@ -138,9 +136,8 @@ public class CountScore
         s.m_capturedWhite = m_board.getCaptured(WHITE);
         int areaDiff = 0;
         int territoryDiff = 0;
-        for (int i = 0; i < m_board.getPoints().size(); ++i)
+        for (GoPoint p : m_board)
         {
-            GoPoint p = m_board.getPoints().get(i);
             GoColor c = m_board.getColor(p);
             GoColor sc = getColor(p);
             if (sc == BLACK)

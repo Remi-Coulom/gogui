@@ -5,6 +5,8 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
+import java.lang.Iterable;
+import java.util.Iterator;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
@@ -14,6 +16,28 @@ import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 public final class Board
     implements ConstBoard
 {
+    public class BoardIterator
+        implements Iterator<GoPoint>
+    {
+        public boolean  hasNext()
+        {
+            return m_iterator.hasNext();
+        }
+
+        public GoPoint next()
+        {
+            return m_iterator.next();
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        private Iterator<GoPoint> m_iterator =
+            m_constants.getPoints().iterator();
+    }
+
     /** Constructor.
         @param boardSize The board size (number of points per row / column)
         in the range from one to GoPoint.MAX_SIZE
@@ -135,15 +159,6 @@ public final class Board
     public Move getMove(int i)
     {
         return m_stack.get(i).m_move;
-    }
-
-    /** Get a all points on the board.
-        @return List of all points.
-        @see BoardConstants#getPoints()
-    */
-    public ConstPointList getPoints()
-    {
-        return m_constants.getPoints();
     }
 
     /** Get initial setup stones of a color.
@@ -292,12 +307,17 @@ public final class Board
         return result;
     }
 
+    public Iterator<GoPoint> iterator()
+    {
+        return new BoardIterator();
+    }
+
     /** Clear board.
         Takes back the effects of any moves or setup stones on the board.
     */
     public void clear()
     {
-        for (GoPoint p : getPoints())
+        for (GoPoint p : this)
             setColor(p, EMPTY);
         m_stack.clear();
         for (GoColor c : BLACK_WHITE)

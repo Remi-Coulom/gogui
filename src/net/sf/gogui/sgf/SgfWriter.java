@@ -403,12 +403,10 @@ public class SgfWriter
 
     private void printPosition(ConstBoard board)
     {
-        int numberPoints = board.getPoints().size();
-        PointList black = new PointList(numberPoints);
-        PointList white = new PointList(numberPoints);
-        for (int i = 0; i < numberPoints; ++i)
+        PointList black = new PointList();
+        PointList white = new PointList();
+        for (GoPoint p : board)
         {
-            GoPoint p = board.getPoints().get(i);
             GoColor c = board.getColor(p);
             if (c == BLACK)
                 black.add(p);
