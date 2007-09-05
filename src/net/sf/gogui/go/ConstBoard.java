@@ -4,7 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.lang.Iterable;
 import java.util.Iterator;
 
 /** Const functions of go.Board.

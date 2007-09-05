@@ -5,7 +5,6 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
-import java.lang.Iterable;
 import java.util.Iterator;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
