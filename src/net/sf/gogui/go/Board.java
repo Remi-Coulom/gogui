@@ -18,7 +18,7 @@ public final class Board
     public class BoardIterator
         implements Iterator<GoPoint>
     {
-        public boolean  hasNext()
+        public boolean hasNext()
         {
             return m_iterator.hasNext();
         }
