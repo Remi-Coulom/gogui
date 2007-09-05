@@ -21,14 +21,14 @@ import net.sf.gogui.util.ErrorMessage;
 /** Check that SGF files meet the requirements for a GtpStatistics run. */
 public class FileCheck
 {
-    public FileCheck(ArrayList sgfFiles, int size, boolean allowSetup)
+    public FileCheck(ArrayList<String> sgfFiles, int size, boolean allowSetup)
         throws ErrorMessage
     {
         m_size = size;
         m_allowSetup = allowSetup;
         for (int i = 0; i < sgfFiles.size(); ++i)
         {
-            m_file = new File((String)sgfFiles.get(i));
+            m_file = new File(sgfFiles.get(i));
             checkFile();
         }
     }

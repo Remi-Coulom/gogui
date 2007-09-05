@@ -131,10 +131,10 @@ public final class GoGuiSettings
             m_prefs.putInt("boardsize", opt.getInteger("size"));
         m_time = opt.get("time", null);
         m_verbose = opt.contains("verbose");
-        ArrayList arguments = opt.getArguments();
+        ArrayList<String> arguments = opt.getArguments();
         m_file = null;
         if (arguments.size() == 1)
-            m_file = new File((String)arguments.get(0));
+            m_file = new File(arguments.get(0));
         else if (arguments.size() > 1)
             throw new ErrorMessage("Only one argument allowed");
         validate();

@@ -130,13 +130,13 @@ public final class GtpServer
                 System.err.println("Option -user only valid with -remote");
                 System.exit(-1);
             }
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
                 System.exit(-1);
             }
-            String program = (String)arguments.get(0);
+            String program = arguments.get(0);
             new GtpServer(verbose, loop, program, remoteHost, port, userFile,
                           timeout);
         }

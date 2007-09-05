@@ -38,7 +38,7 @@ public final class Main
             }
             boolean verbose = opt.contains("verbose");
             String lookAndFeel = opt.get("laf", null);
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             if (arguments.size() > 1)
             {
                 printUsage(System.err);
@@ -46,10 +46,9 @@ public final class Main
             }
             String program = null;
             if (arguments.size() == 1)
-                program = (String)arguments.get(0);
+                program = arguments.get(0);
             GuiUtil.initLookAndFeel(lookAndFeel);
-            GtpDisplay gtpDisplay
-                = new GtpDisplay(program, verbose);
+            GtpDisplay gtpDisplay = new GtpDisplay(program, verbose);
             gtpDisplay.mainLoop(System.in, System.out);
             gtpDisplay.close();
         }

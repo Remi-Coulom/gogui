@@ -233,9 +233,9 @@ public class GtpTerminal
             System.out.println(error.getMessage());
             return;
         }
-        ArrayList commands = m_gtp.getSupportedCommands();
+        ArrayList<String> commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
-            System.out.println((String)commands.get(i));
+            System.out.println(commands.get(i));
     }
 
     private void load(String[] cmdArray)

@@ -457,10 +457,10 @@ public class GtpAdapter
 
     private void registerCommands(boolean noScore, boolean version1)
     {
-        ArrayList commands = m_gtp.getSupportedCommands();
+        ArrayList<String> commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
         {
-            String command = (String)commands.get(i);
+            String command = commands.get(i);
             if (! GtpUtil.isStateChangingCommand(command))
                 register(command, m_callbackForward);
         }

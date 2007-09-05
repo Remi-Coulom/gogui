@@ -40,13 +40,13 @@ public final class Main
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
                                       GoPoint.MAX_SIZE);
             boolean verbose = opt.contains("verbose");
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
                 System.exit(-1);
             }
-            String program = (String)arguments.get(0);
+            String program = arguments.get(0);
             GtpTerminal gtpTerminal = new GtpTerminal(program, size, verbose);
             gtpTerminal.mainLoop();
             gtpTerminal.close();

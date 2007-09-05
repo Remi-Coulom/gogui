@@ -114,9 +114,9 @@ public final class RecentFileStorage
     */
     public static void main(String[] args)
     {
-        ArrayList uriList = getAllMimeType("application/x-go-sgf");
+        ArrayList<String> uriList = getAllMimeType("application/x-go-sgf");
         for (int i = 0; i < uriList.size(); ++i)
-            System.err.println(uriList.get(i).toString());
+            System.err.println(uriList.get(i));
         //add(FileUtil.getURI(new File("foobar")), "application/x-go-sgf");
     }
 

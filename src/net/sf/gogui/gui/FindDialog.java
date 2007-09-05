@@ -169,7 +169,7 @@ public class FindDialog
         PrefUtil.putList("net/sf/gogui/gui/finddialog", history);
     }
 
-    private ArrayList getHistory()
+    private ArrayList<String> getHistory()
     {
         ArrayList<String> result
             = PrefUtil.getList("net/sf/gogui/gui/finddialog");

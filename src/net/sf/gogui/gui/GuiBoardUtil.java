@@ -287,13 +287,13 @@ public final class GuiBoardUtil
 
     public static void showPointStringList(GuiBoard guiBoard,
                                            ConstPointList pointList,
-                                           ArrayList stringList)
+                                           ArrayList<String> stringList)
     {
         guiBoard.clearAllLabels();
         for (int i = 0; i < pointList.size(); ++i)
         {
             GoPoint point = pointList.get(i);
-            String string = (String)stringList.get(i);
+            String string = stringList.get(i);
             if (point != null)
                 guiBoard.setLabel(point, string);
         }

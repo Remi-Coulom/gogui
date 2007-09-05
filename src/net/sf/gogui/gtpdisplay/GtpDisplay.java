@@ -428,10 +428,9 @@ public class GtpDisplay
             GtpCallback forwardCallback = new GtpCallback() {
                     public void run(GtpCommand cmd) throws GtpError {
                         cmdForward(cmd); } };
-            ArrayList commands = m_gtp.getSupportedCommands();
-            for (int i = 0; i < commands.size(); ++i)
+            ArrayList<String> commands = m_gtp.getSupportedCommands();
+            for (String c : commands)
             {
-                String c = (String)commands.get(i);
                 if (GtpUtil.isStateChangingCommand(c)
                     || c.equals("help")
                     || c.equals("known_command")

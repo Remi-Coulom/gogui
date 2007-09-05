@@ -60,7 +60,7 @@ public final class Main
             String gtpFile = opt.get("gtpfile", null);
             boolean resign = opt.contains("resign");
             int resignScore = opt.getInteger("resign");
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             int size = opt.getInteger("size", 19, 1, GoPoint.MAX_SIZE);
             if (arguments.size() != 1)
             {
@@ -73,7 +73,7 @@ public final class Main
                 File file = new File(opt.get("log"));
                 log = new PrintStream(new FileOutputStream(file));
             }
-            String program = (String)arguments.get(0);
+            String program = arguments.get(0);
             GtpAdapter adapter
                 = new GtpAdapter(program, log, gtpFile, verbose, noScore,
                                  version1, fillPasses, lowerCase, size);

@@ -36,9 +36,10 @@ import net.sf.gogui.util.Table;
 */
 public class GtpStatistics
 {
-    public void run(String program, ArrayList sgfFiles, int size,
-                    ArrayList commands, ArrayList beginCommands,
-                    ArrayList finalCommands, boolean verbose,
+    public void run(String program, ArrayList<String> sgfFiles, int size,
+                    ArrayList<String> commands,
+                    ArrayList<String> beginCommands,
+                    ArrayList<String> finalCommands, boolean verbose,
                     boolean allowSetup, boolean backward)
         throws ErrorMessage, GtpError, IOException
     {
@@ -51,23 +52,24 @@ public class GtpStatistics
         @param gtp The GTP engine
         @param program Program command (null, if gtp is not an instance of
         GtpClient)
-        @param sgfFiles List of strings containing the SGF file names
+        @param sgfFiles List containing the SGF file names
         @param size The board size used in the games (all games must have the
         same board size)
-        @param commands List of strings containing the commands to run in
-        every position
-        @param beginCommands List of strings containing the commands to run in
-        the first position
-        @param finalCommands List of strings containing the commands to run in
-        the last position
+        @param commands List containing the commands to run in every position
+        @param beginCommands List containing the commands to run in the first
+        position
+        @param finalCommands List containing the commands to run in the last
+        position
         @param allowSetup true, if setup stones in the games are allowed and
         should not generate en error
         @param backward true, if games should be iterated backwards (counting
         the moves starting with one at the last move)
     */
-    public void run(GtpClientBase gtp, String program, ArrayList sgfFiles,
-                    int size, ArrayList commands, ArrayList beginCommands,
-                    ArrayList finalCommands, boolean allowSetup,
+    public void run(GtpClientBase gtp, String program,
+                    ArrayList<String> sgfFiles, int size,
+                    ArrayList<String> commands,
+                    ArrayList<String> beginCommands,
+                    ArrayList<String> finalCommands, boolean allowSetup,
                     boolean backward)
         throws ErrorMessage, IOException
     {
@@ -207,11 +209,11 @@ public class GtpStatistics
         m_commands.add(command);
     }
 
-    private void addCommands(ArrayList commands, boolean isBegin,
+    private void addCommands(ArrayList<String> commands, boolean isBegin,
                              boolean isFinal) throws ErrorMessage
     {
-        for (int i = 0; i < commands.size(); ++i)
-            addCommand((String)commands.get(i), isBegin, isFinal);
+        for (String c : commands)
+            addCommand(c, isBegin, isFinal);
     }
 
     private void checkGame(GameTree tree, String name) throws ErrorMessage
@@ -325,8 +327,10 @@ public class GtpStatistics
         }
     }
 
-    private void initCommands(ArrayList commands, ArrayList beginCommands,
-                              ArrayList finalCommands) throws ErrorMessage
+    private void initCommands(ArrayList<String> commands,
+                              ArrayList<String> beginCommands,
+                              ArrayList<String> finalCommands)
+        throws ErrorMessage
     {
         m_commands = new ArrayList<Command>();
         if (beginCommands != null)

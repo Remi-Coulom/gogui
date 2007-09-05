@@ -49,7 +49,7 @@ public final class SgfToTex
             boolean usePass = opt.contains("pass");
             boolean force = opt.contains("force");
             String title = opt.get("title", "");
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             InputStream in;
             OutputStream out;
             if (arguments.size() > 2)
@@ -65,7 +65,7 @@ public final class SgfToTex
             }
             else
             {
-                inFileName = (String)arguments.get(0);
+                inFileName = arguments.get(0);
                 File inFile = new File(inFileName);
                 in = new FileInputStream(inFile);
                 String outFileName;
@@ -73,7 +73,7 @@ public final class SgfToTex
                     outFileName =
                         FileUtil.replaceExtension(inFile, "sgf", "tex");
                 else
-                    outFileName = (String)arguments.get(1);
+                    outFileName = arguments.get(1);
                 File outFile = new File(outFileName);
                 if (outFile.exists() && ! force)
                     throw new Exception("File " + outFile

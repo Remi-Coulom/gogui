@@ -644,7 +644,8 @@ public final class SgfReader
         }
     }
 
-    private void parseMarked(Node node, MarkType type, ArrayList values)
+    private void parseMarked(Node node, MarkType type,
+                             ArrayList<String> values)
         throws SgfError
     {
         parsePointList(values);
@@ -798,7 +799,7 @@ public final class SgfReader
         return GoPoint.get(x, y);
     }
 
-    private void parsePointList(ArrayList values) throws SgfError
+    private void parsePointList(ArrayList<String> values) throws SgfError
     {
         m_pointList.clear();
         for (int i = 0; i < values.size(); ++i)

@@ -55,16 +55,16 @@ public final class Main
             }
             */
             boolean verbose = opt.contains("verbose");
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             if (arguments.isEmpty() || arguments.size() > 2)
             {
                 printUsage(System.err);
                 System.exit(-1);
             }
-            File input = new File((String)arguments.get(0));
+            File input = new File(arguments.get(0));
             File output = null;
             if (arguments.size() == 2)
-                output = new File((String)arguments.get(1));
+                output = new File(arguments.get(1));
             int size = opt.getInteger("size", 128, 1);
             ThumbnailCreator thumbnailCreator = new ThumbnailCreator(verbose);
             try

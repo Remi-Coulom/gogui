@@ -96,14 +96,14 @@ public final class NetGtp
                 System.exit(0);
             }
             int timeout = opt.getInteger("timeout", 10, 0);
-            ArrayList arguments = opt.getArguments();
+            ArrayList<String> arguments = opt.getArguments();
             if (arguments.size() != 2)
             {
                 printUsage(System.err);
                 System.exit(-1);
             }
-            String hostname = (String)arguments.get(0);
-            int port = Integer.parseInt((String)arguments.get(1));
+            String hostname = arguments.get(0);
+            int port = Integer.parseInt(arguments.get(1));
             new NetGtp(hostname, port, timeout);
         }
         catch (Throwable t)

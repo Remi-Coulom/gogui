@@ -74,14 +74,14 @@ public final class PrefUtil
         @param path The absolute path name of the node.
         @param list The list of strings.
     */
-    public static void putList(String path, ArrayList list)
+    public static void putList(String path, ArrayList<String> list)
     {
         Preferences prefs = createNode(path);
         if (prefs == null)
             return;
         prefs.putInt("size", list.size());
         for (int i = 0; i < list.size(); ++i)
-            prefs.put("element_" + i, (String)list.get(i));
+            prefs.put("element_" + i, list.get(i));
     }
 
     /** Make constructor unavailable; class is for namespace only. */

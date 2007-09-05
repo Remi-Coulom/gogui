@@ -46,7 +46,7 @@ public final class OptionsTest
         assertEquals(opt.getInteger("value1"), 42);
         assertEquals(opt.getInteger("value2", -98), -98);
         assertEquals(opt.getLong("value3"), -9223372036854775807L);
-        ArrayList arguments = opt.getArguments();
+        ArrayList<String> arguments = opt.getArguments();
         assertEquals(arguments.size(), 2);
         assertEquals(arguments.get(0), "arg1");
         assertEquals(arguments.get(1), "arg2");
@@ -57,7 +57,7 @@ public final class OptionsTest
         String specs[] = { "flag1", "value1:", "value2:", "flag2" };
         String args[] = { "-value1", "foo", "--", "-arg1" };
         Options opt = new Options(args, specs);
-        ArrayList arguments = opt.getArguments();
+        ArrayList<String> arguments = opt.getArguments();
         assertEquals(arguments.size(), 1);
         assertEquals(arguments.get(0), "-arg1");
     }
