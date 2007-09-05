@@ -379,7 +379,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gogui.jar" depends="compile,extract-looks,extract-quaqua">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui.jar" compress="false">
+<jar destfile="lib/gogui.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
