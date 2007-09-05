@@ -40,7 +40,8 @@ Since the parsing of the standard error stream stops when the command response
 is received, and Java does not allow to guarantee the correct order of
 standard error and response stream, there is a small chance that a live
 graphics command, which arrives shortly before the response, is handled during
-the next GTP command. You can avoid this situation by explicitly writing a
+the next GTP command. You can avoid this situation by pausing for short amount
+of time after writing live graphics commands or by explicitly writing a
 <userinput>gogui-gfx: CLEAR</userinput> command to standard error before the
 command ends.
 </simpara>
