@@ -602,7 +602,7 @@ public final class Board
             return;
         if (m_mark.get(p))
             return;
-        m_mark.set(p, true);
+        m_mark.set(p);
         stones.add(p);
         for (GoPoint adj : getAdjacent(p))
             findStones(adj, color, stones);

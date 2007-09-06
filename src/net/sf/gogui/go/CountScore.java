@@ -241,7 +241,7 @@ public class CountScore
             return (! m_dead.get(p));
         if (mark.get(p))
             return true;
-        mark.set(p, true);
+        mark.set(p);
         territory.add(p);
         ConstPointList adjPoints = m_board.getAdjacent(p);
         for (GoPoint adj : adjPoints)

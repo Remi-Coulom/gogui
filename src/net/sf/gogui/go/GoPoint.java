@@ -26,6 +26,11 @@ public final class GoPoint
     /** Default board size. */
     public static final int DEFAULT_SIZE = 19;
 
+    /** Upper limit (exclusive) for one-dimensional point index
+        @see #getIndex
+    */
+    public static final int NUMBER_INDEXES = MAX_SIZE * MAX_SIZE;
+
     /** Compare two points.
         The order of the points is: A1, B1, ..., A2, B2, ...
     */

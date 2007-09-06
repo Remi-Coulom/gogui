@@ -53,14 +53,14 @@ public final class MarkerTest
         list.add(p1);
         list.add(p2);
         list.add(p3);
-        marker.set(list, true);
+        marker.set(list);
         assertTrue(marker.get(p1));
         assertTrue(marker.get(p2));
         assertTrue(marker.get(p3));
         list.clear();
         list.add(p1);
         list.add(p2);
-        marker.set(list, false);
+        marker.clear(list);
         assertFalse(marker.get(p1));
         assertFalse(marker.get(p2));
         assertTrue(marker.get(p3));

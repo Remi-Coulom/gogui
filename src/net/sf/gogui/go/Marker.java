@@ -12,15 +12,16 @@ public class Marker
     */
     public Marker(int size)
     {
-        m_mark = new boolean[size][size];
+        m_size = size;
+        m_mark = new boolean[GoPoint.NUMBER_INDEXES];
     }
 
     /** Clear all marked points. */
     public void clear()
     {
-        for (int x = 0; x < m_mark.length; ++x)
-            for (int y = 0; y < m_mark[x].length; ++y)
-                m_mark[x][y] = false;
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                m_mark[GoPoint.get(x, y).getIndex()] = false;
     }
 
     /** Clear a marked point.
@@ -28,7 +29,18 @@ public class Marker
     */
     public void clear(GoPoint p)
     {
-        set(p, false);
+        m_mark[p.getIndex()] = false;
+    }
+
+    /** Clear all points from a list.
+        @param points List of points.
+    */
+    public void clear(ConstPointList points)
+    {
+        int nuPoints = points.size();
+        // Don't use an iterator for efficiency
+        for (int i = 0; i < nuPoints; ++i)
+            m_mark[points.get(i).getIndex()] = false;
     }
 
     /** Check if a point is marked.
@@ -37,7 +49,7 @@ public class Marker
     */
     public boolean get(GoPoint p)
     {
-        return m_mark[p.getX()][p.getY()];
+        return m_mark[p.getIndex()];
     }
 
     /** Check if no point is marked.
@@ -45,9 +57,9 @@ public class Marker
     */
     public boolean isCleared()
     {
-        for (int x = 0; x < m_mark.length; ++x)
-            for (int y = 0; y < m_mark[x].length; ++y)
-                if (m_mark[x][y])
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                if (m_mark[GoPoint.get(x, y).getIndex()])
                     return false;
         return true;
     }
@@ -57,7 +69,7 @@ public class Marker
     */
     public void set(GoPoint p)
     {
-        set(p, true);
+        m_mark[p.getIndex()] = true;
     }
 
     /** Mark or clear a point.
@@ -67,24 +79,21 @@ public class Marker
     */
     public void set(GoPoint p, boolean value)
     {
-        m_mark[p.getX()][p.getY()] = value;
+        m_mark[p.getIndex()] = value;
     }
 
-    /** Mark or clear a list of points.
-        @param points List of points to mark or clear.
-        @param value true, if points should be marked; false, if points should
-        be cleared.
+    /** Mark all points from a list.
+        @param points List of points.
     */
-    public void clear(ConstPointList points)
+    public void set(ConstPointList points)
     {
         int nuPoints = points.size();
         // Don't use an iterator for efficiency
         for (int i = 0; i < nuPoints; ++i)
-        {
-            GoPoint p = points.get(i);
-            m_mark[p.getX()][p.getY()] = false;
-        }
+            m_mark[points.get(i).getIndex()] = true;
     }
 
-    private boolean m_mark[][];
+    private int m_size;
+
+    private boolean m_mark[];
 }
