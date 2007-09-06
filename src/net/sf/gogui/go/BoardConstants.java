@@ -27,9 +27,9 @@ public final class BoardConstants
         return s_boardConstants[boardSize];
     }
 
-    public ConstPointList getAdjacent(GoPoint p)
+    public GoPoint[] getAdjacent(GoPoint p)
     {
-        return m_adjacent[p.getX()][p.getY()];
+        return m_adjacent[p.getIndex()];
     }
 
     /** Get location of handicap stones.
@@ -140,7 +140,7 @@ public final class BoardConstants
 
     private PointList m_allPoints;
 
-    private PointList[][] m_adjacent;
+    private GoPoint[][] m_adjacent;
 
     private BoardConstants(int size)
     {
@@ -165,21 +165,32 @@ public final class BoardConstants
         else
             m_handicapLine2 = -1;
         m_allPoints = new PointList();
-        m_adjacent = new PointList[m_size][m_size];
+        m_adjacent = new GoPoint[GoPoint.NUMBER_INDEXES][];
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                m_allPoints.add(GoPoint.get(x, y));
-                PointList adjacent = new PointList();
+                GoPoint p = GoPoint.get(x, y);
+                m_allPoints.add(p);
+                int nuAdjacent = 0;
                 if (x > 0)
-                    adjacent.add(GoPoint.get(x - 1, y));
+                    ++nuAdjacent;
                 if (x < m_size - 1)
-                    adjacent.add(GoPoint.get(x + 1, y));
+                    ++nuAdjacent;
                 if (y > 0)
-                    adjacent.add(GoPoint.get(x, y - 1));
+                    ++nuAdjacent;
                 if (y < m_size - 1)
-                    adjacent.add(GoPoint.get(x, y + 1));
-                m_adjacent[x][y] = adjacent;
+                    ++nuAdjacent;
+                GoPoint[] adjacent = new GoPoint[nuAdjacent];
+                int i = 0;
+                if (x > 0)
+                    adjacent[i++] = GoPoint.get(x - 1, y);
+                if (x < m_size - 1)
+                    adjacent[i++] = GoPoint.get(x + 1, y);
+                if (y > 0)
+                    adjacent[i++] = GoPoint.get(x, y - 1);
+                if (y < m_size - 1)
+                    adjacent[i++] = GoPoint.get(x, y + 1);
+                m_adjacent[p.getIndex()] = adjacent;
             }
     }
 }

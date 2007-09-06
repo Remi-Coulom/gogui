@@ -16,7 +16,7 @@ public interface ConstBoard
 
     boolean contains(GoPoint point);
 
-    ConstPointList getAdjacent(GoPoint point);
+    GoPoint[] getAdjacent(GoPoint point);
 
     int getCaptured(GoColor c);
 
