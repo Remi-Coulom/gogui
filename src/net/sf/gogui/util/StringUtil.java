@@ -44,7 +44,7 @@ public final class StringUtil
             if (hours > 9999)
                 // Extremely large numbers are likely a problem in
                 // Date.getTime(), as it can happen when running in the
-                // netbeans profiler
+                // netbeans profiler (version 5.5)
                 return "--:--";
             buffer.append(hours);
             buffer.append(':');
