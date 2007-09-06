@@ -89,7 +89,7 @@ public final class Board
     */
     public GoColor getColor(GoPoint p)
     {
-        return m_color[p.getX()][p.getY()];
+        return m_color[p.getIndex()];
     }
 
     /** Get location of handicap stones for a given board size.
@@ -217,7 +217,6 @@ public final class Board
     public void init(int size)
     {
         m_size = size;
-        m_color = new GoColor[m_size][m_size];
         m_mark = new Marker(m_size);
         m_constants = BoardConstants.get(size);
         clear();
@@ -514,7 +513,7 @@ public final class Board
     /** Temporary variable reused for efficiency. */
     private final PointList m_checkKillStack = new PointList();
 
-    private GoColor[][] m_color;
+    private GoColor[] m_color = new GoColor[GoPoint.NUMBER_INDEXES];
 
     private GoColor m_toMove;
 
@@ -611,6 +610,6 @@ public final class Board
     private void setColor(GoPoint p, GoColor c)
     {
         assert p != null;
-        m_color[p.getX()][p.getY()] = c;
+        m_color[p.getIndex()] = c;
     }
 }
