@@ -124,6 +124,22 @@ public final class PointList
         return new PointListIterator();
     }
 
+    /** Remove and return last element.
+        Requires that list is not empty.
+    */
+    public GoPoint pop()
+    {
+        int index = m_list.size() - 1;
+        if (index < 0)
+        {
+            assert false;
+            return null;
+        }
+        GoPoint p = m_list.get(index);
+        m_list.remove(index);
+        return p;
+    }
+
     /** Remove first occurence of a point from the list.
         Does not change the order of the remaining elements.
         Does nothing if point is not in the list.

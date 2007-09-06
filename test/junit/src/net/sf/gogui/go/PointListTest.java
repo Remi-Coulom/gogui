@@ -36,6 +36,22 @@ public final class PointListTest
         assertTrue(list1.hashCode() != list3.hashCode());
     }
 
+    public void testPop()
+    {
+        PointList list = new PointList();
+        GoPoint p1 = GoPoint.get(1, 1);
+        GoPoint p2 = GoPoint.get(2, 2);
+        list.add(p1);
+        list.add(p2);
+        GoPoint p;
+        p = list.pop();
+        assertEquals(p2, p);
+        assertEquals(1, list.size());
+        p = list.pop();
+        assertEquals(p1, p);
+        assertEquals(0, list.size());
+    }
+
     public void testRemove()
     {
         PointList list = new PointList();
