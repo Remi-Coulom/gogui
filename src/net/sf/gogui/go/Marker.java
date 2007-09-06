@@ -75,10 +75,15 @@ public class Marker
         @param value true, if points should be marked; false, if points should
         be cleared.
     */
-    public void set(ConstPointList points, boolean value)
+    public void clear(ConstPointList points)
     {
-        for (GoPoint p : points)
-            set(p, value);
+        int nuPoints = points.size();
+        // Don't use an iterator for efficiency
+        for (int i = 0; i < nuPoints; ++i)
+        {
+            GoPoint p = points.get(i);
+            m_mark[p.getX()][p.getY()] = false;
+        }
     }
 
     private boolean m_mark[][];

@@ -182,7 +182,7 @@ public final class Board
     {
         assert m_mark.isCleared();
         findStones(p, color, stones);
-        m_mark.set(stones, false);
+        m_mark.clear(stones);
         assert m_mark.isCleared();
     }
 
@@ -454,11 +454,12 @@ public final class Board
                 for (GoPoint adj : adjPoints)
                 {
                     int killedSize = m_killed.size();
-                    board.checkKill(adj, otherColor, m_killed);
+                    if (board.getColor(adj) == otherColor)
+                        board.checkKill(adj, m_killed);
                     if (m_killed.size() == killedSize + 1)
                         board.m_koPoint = m_killed.get(killedSize);
                 }
-                board.checkKill(p, c, m_suicide);
+                board.checkKill(p, m_suicide);
                 if (board.m_koPoint != null
                     && ! board.isSingleStoneSingleLib(p, c))
                     board.m_koPoint = null;
@@ -510,6 +511,9 @@ public final class Board
     /** Temporary variable reused for efficiency. */
     private final PointList m_checkKillStones = new PointList();
 
+    /** Temporary variable reused for efficiency. */
+    private final PointList m_checkKillStack = new PointList();
+
     private GoColor[][] m_color;
 
     private GoColor m_toMove;
@@ -545,17 +549,50 @@ public final class Board
         return true;
     }
 
-    private void checkKill(GoPoint p, GoColor color, PointList killed)
+    private void checkKill(GoPoint point, PointList killed)
     {
         assert m_mark.isCleared();
+        GoColor color = getColor(point);
+        assert color != EMPTY;
+        m_checkKillStack.clear();
+        m_checkKillStack.add(point);
+        m_mark.set(point);
         m_checkKillStones.clear();
-        if (isDead(p, color))
+        boolean isDead = true;
+        // Recursion is unrolled using a stack for efficiency
+        while (isDead && ! m_checkKillStack.isEmpty())
+        {
+            GoPoint p = m_checkKillStack.pop();
+            assert getColor(p) == color;
+            m_checkKillStones.add(p);
+            ConstPointList adjacent = getAdjacent(p);
+            int nuAdjacent = adjacent.size();
+            // Don't use an iterator for efficiency
+            for (int i = 0; i < nuAdjacent; ++i)
+            {
+                GoPoint adj = adjacent.get(i);
+                GoColor c = getColor(adj);
+                if (c == EMPTY)
+                {
+                    isDead = false;
+                    break;
+                }
+                if (m_mark.get(adj) || ! c.equals(color))
+                    continue;
+                m_checkKillStack.add(adj);
+                m_mark.set(adj);
+            }
+        }
+        if (isDead)
         {
             killed.addAll(m_checkKillStones);
-            for (GoPoint stone : m_checkKillStones)
-                setColor(stone, EMPTY);
+            int nuKillStones = m_checkKillStones.size();
+            // Don't use an iterator for efficiency
+            for (int i = 0; i < nuKillStones; ++i)
+                setColor(m_checkKillStones.get(i), EMPTY);
         }
-        m_mark.set(m_checkKillStones, false);
+        m_mark.clear(m_checkKillStack);
+        m_mark.clear(m_checkKillStones);
         assert m_mark.isCleared();
     }
 
@@ -569,23 +606,6 @@ public final class Board
         stones.add(p);
         for (GoPoint adj : getAdjacent(p))
             findStones(adj, color, stones);
-    }
-
-    private boolean isDead(GoPoint p, GoColor color)
-    {
-        GoColor c = getColor(p);
-        if (c == EMPTY)
-            return false;
-        if (! c.equals(color))
-            return true;
-        if (m_mark.get(p))
-            return true;
-        m_mark.set(p, true);
-        m_checkKillStones.add(p);
-        for (GoPoint adj : getAdjacent(p))
-            if (! isDead(adj, color))
-                return false;
-        return true;
     }
 
     private void setColor(GoPoint p, GoColor c)

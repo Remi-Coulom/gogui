@@ -94,11 +94,11 @@ public class CountScore
                     setScore(territory, BLACK);
                 else
                 {
-                    mark.set(territory, false);
+                    mark.clear(territory);
                     if (isTerritory(mark, p, territory, WHITE))
                         setScore(territory, WHITE);
                     else
-                        mark.set(territory, false);
+                        mark.clear(territory);
                 }
             }
         }
