@@ -183,7 +183,7 @@ public final class Board
         assert m_mark.isCleared();
         findStones(p, color, stones);
         m_mark.clear(stones);
-        assert m_mark.isCleared();
+        //assert m_mark.isCleared();
     }
 
     /** Player stones killed by suicide in last move.
@@ -591,7 +591,7 @@ public final class Board
         }
         m_mark.clear(m_checkKillStack);
         m_mark.clear(m_checkKillStones);
-        assert m_mark.isCleared();
+        //assert m_mark.isCleared();
     }
 
     private void findStones(GoPoint p, GoColor color, PointList stones)
