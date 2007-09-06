@@ -87,6 +87,12 @@ public final class GoPoint
         return m_index;
     }
 
+    /** See getIndex() */
+    public static final int getIndex(int x, int y)
+    {
+        return y * MAX_SIZE + x;
+    }
+
     public int hashCode()
     {
         return m_index;
@@ -264,6 +270,6 @@ public final class GoPoint
         if (xChar >= 'I')
             ++xChar;
         m_string = xChar + Integer.toString(m_y + 1);
-        m_index = y * GoPoint.MAX_SIZE + x;
+        m_index = getIndex(x, y);
     }
 }

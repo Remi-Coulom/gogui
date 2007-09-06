@@ -21,7 +21,7 @@ public class Marker
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                m_mark[GoPoint.get(x, y).getIndex()] = false;
+                m_mark[GoPoint.getIndex(x, y)] = false;
     }
 
     /** Clear a marked point.
@@ -59,7 +59,7 @@ public class Marker
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                if (m_mark[GoPoint.get(x, y).getIndex()])
+                if (m_mark[GoPoint.getIndex(x, y)])
                     return false;
         return true;
     }
