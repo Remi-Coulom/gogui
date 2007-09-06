@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
 /** Dialog for displaying and editing a program. */
@@ -81,8 +82,15 @@ public class ProgramEditor
                     "the Go program.";
 
             }
-            JLabel label =
-                new JLabel("<html><b>" + mainMessage + "</b></html>");
+            boolean isMac = Platform.isMac();
+            JLabel label;
+            if (isMac)
+            {
+                label = new JLabel(mainMessage);
+                GuiUtil.setMacDialogMainMessageFont(label);
+            }
+            else
+                label = new JLabel("<html><b>" + mainMessage + "</b></html>");
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
             addFiller(box);
             box.add(label);
@@ -93,7 +101,10 @@ public class ProgramEditor
             textArea.setFocusable(false);
             textArea.setForeground(UIManager.getColor("Label.foreground"));
             textArea.setBackground(UIManager.getColor("Label.background"));
-            textArea.setFont(UIManager.getFont("Label.font"));
+            if (isMac)
+                GuiUtil.setMacDialogInfoMessageFont(textArea);
+            else
+                textArea.setFont(UIManager.getFont("Label.font"));
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
             addFiller(box);

@@ -164,9 +164,16 @@ public final class Main
         JPanel panel = new JPanel(new BorderLayout());
         Box box = Box.createVerticalBox();
         panel.add(box, BorderLayout.NORTH);
-        String mainText =
-            "<html><b>The application GoGui has quit unexpectedly</b></html>";
-        JLabel label = new JLabel(mainText);
+        boolean isMac = Platform.isMac();
+        JLabel label;
+        if (isMac)
+        {
+            label = new JLabel("The application GoGui has quit unexpectedly");
+            GuiUtil.setMacDialogMainMessageFont(label);
+        }
+        else
+            label =
+                new JLabel("<html><b>The application GoGui has quit unexpectedly</b></html>");
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         box.add(label);
         addFiller(box);
@@ -175,7 +182,10 @@ public final class Main
         optionalMessageArea.setAlignmentX(Component.LEFT_ALIGNMENT);
         optionalMessageArea.setForeground(UIManager.getColor("Label.foreground"));
         optionalMessageArea.setBackground(UIManager.getColor("Label.background"));
-        optionalMessageArea.setFont(UIManager.getFont("Label.font"));
+        if (isMac)
+            GuiUtil.setMacDialogInfoMessageFont(optionalMessageArea);
+        else
+            optionalMessageArea.setFont(UIManager.getFont("Label.font"));
         String optionalMessage;
         if (Version.get().indexOf("SVN") >= 0)
             optionalMessage =

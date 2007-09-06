@@ -283,7 +283,15 @@ public final class MessageDialogs
             optionalMessage = "";
         boolean isMac = Platform.isMac();
         Box box = Box.createVerticalBox();
-        JLabel label = new JLabel("<html><b>" + mainMessage + "</b></html>");
+        JLabel label;
+        label = new JLabel("<html><b>" + mainMessage + "</b></html>");
+        if (isMac)
+        {
+            label = new JLabel(mainMessage);
+            GuiUtil.setMacDialogMainMessageFont(label);
+        }
+        else
+            label = new JLabel("<html><b>" + mainMessage + "</b></html>");
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         addFiller(box);
         box.add(label);
@@ -294,7 +302,10 @@ public final class MessageDialogs
         textArea.setFocusable(false);
         textArea.setForeground(UIManager.getColor("Label.foreground"));
         textArea.setBackground(UIManager.getColor("Label.background"));
-        textArea.setFont(UIManager.getFont("Label.font"));
+        if (isMac)
+            GuiUtil.setMacDialogInfoMessageFont(textArea);
+        else
+            textArea.setFont(UIManager.getFont("Label.font"));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         addFiller(box);
@@ -316,11 +327,7 @@ public final class MessageDialogs
                 "Disable this kind of messages for the current session";
             disableCheckBox.setToolTipText(toolTipText);
             disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-            if (isMac)
-            {
-                Font font = new Font("Lucida Grande", Font.PLAIN, 11);
-                disableCheckBox.setFont(font);
-            }
+            GuiUtil.setMacDialogInfoMessageFont(disableCheckBox);
             box.add(disableCheckBox);
         }
         if (isMac)

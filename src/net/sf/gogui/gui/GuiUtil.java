@@ -373,6 +373,18 @@ public class GuiUtil
         button.putClientProperty("Quaqua.Button.style", "bevel");
     }
 
+    public static void setMacDialogMainMessageFont(JComponent component)
+    {
+        if (Platform.isMac())
+            component.setFont(MAC_DIALOG_MAIN_MESSAGE_FONT);
+    }
+
+    public static void setMacDialogInfoMessageFont(JComponent component)
+    {
+        if (Platform.isMac())
+            component.setFont(MAC_DIALOG_INFO_MESSAGE_FONT);
+    }
+
     public static void setMonospacedFont(JComponent component)
     {
         if (MONOSPACED_FONT != null)
@@ -503,6 +515,12 @@ public class GuiUtil
 
         private Throwable m_throwable;
     }
+
+    private static final Font MAC_DIALOG_MAIN_MESSAGE_FONT =
+        new Font("Lucida Grande", Font.BOLD, 13);
+
+    private static final Font MAC_DIALOG_INFO_MESSAGE_FONT =
+        new Font("Lucida Grande", Font.PLAIN, 11);
 
     private static final Font MONOSPACED_FONT = Font.decode("Monospaced");
 
