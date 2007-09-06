@@ -604,7 +604,26 @@ public final class GtpClient
         {
             try
             {
-                mainLoop();
+                char[] buffer = new char[1024];
+                while (true)
+                {
+                    int n;
+                    try
+                    {
+                        n = m_in.read(buffer);
+                    }
+                    catch (IOException e)
+                    {
+                        n = -1;
+                    }
+                    String text = null;
+                    if (n > 0)
+                        text = new String(buffer, 0, n);
+                    m_queue.put(new Message(Message.ERROR, text));
+                    if (text == null)
+                        return;
+                    logError(text);
+                }
             }
             catch (Throwable t)
             {
@@ -615,31 +634,6 @@ public final class GtpClient
         private final Reader m_in;
 
         private final BlockingQueue<Message> m_queue;
-
-        private void mainLoop() throws InterruptedException
-        {
-            int size = 1024;
-            char[] buffer = new char[size];
-            while (true)
-            {
-                int n;
-                try
-                {
-                    n = m_in.read(buffer, 0, size);
-                }
-                catch (IOException e)
-                {
-                    n = -1;
-                }
-                String text = null;
-                if (n > 0)
-                    text = new String(buffer, 0, n);
-                m_queue.put(new Message(Message.ERROR, text));
-                if (text == null)
-                    return;
-                logError(text);
-            }
-        }
     }
 
     private InvalidResponseCallback m_invalidResponseCallback;
