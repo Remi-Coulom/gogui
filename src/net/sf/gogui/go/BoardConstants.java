@@ -27,7 +27,7 @@ public final class BoardConstants
         return s_boardConstants[boardSize];
     }
 
-    public GoPoint[] getAdjacent(GoPoint p)
+    public ConstPointList getAdjacent(GoPoint p)
     {
         return m_adjacent[p.getIndex()];
     }
@@ -140,7 +140,7 @@ public final class BoardConstants
 
     private PointList m_allPoints;
 
-    private GoPoint[][] m_adjacent;
+    private ConstPointList[] m_adjacent;
 
     private BoardConstants(int size)
     {
@@ -165,31 +165,22 @@ public final class BoardConstants
         else
             m_handicapLine2 = -1;
         m_allPoints = new PointList();
-        m_adjacent = new GoPoint[GoPoint.NUMBER_INDEXES][];
+        m_adjacent = new ConstPointList[GoPoint.NUMBER_INDEXES];
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
                 GoPoint p = GoPoint.get(x, y);
                 m_allPoints.add(p);
-                int nuAdjacent = 0;
-                if (x > 0)
-                    ++nuAdjacent;
-                if (x < m_size - 1)
-                    ++nuAdjacent;
-                if (y > 0)
-                    ++nuAdjacent;
-                if (y < m_size - 1)
-                    ++nuAdjacent;
-                GoPoint[] adjacent = new GoPoint[nuAdjacent];
+                PointList adjacent = new PointList();
                 int i = 0;
                 if (x > 0)
-                    adjacent[i++] = GoPoint.get(x - 1, y);
+                    adjacent.add(GoPoint.get(x - 1, y));
                 if (x < m_size - 1)
-                    adjacent[i++] = GoPoint.get(x + 1, y);
+                    adjacent.add(GoPoint.get(x + 1, y));
                 if (y > 0)
-                    adjacent[i++] = GoPoint.get(x, y - 1);
+                    adjacent.add(GoPoint.get(x, y - 1));
                 if (y < m_size - 1)
-                    adjacent[i++] = GoPoint.get(x, y + 1);
+                    adjacent.add(GoPoint.get(x, y + 1));
                 m_adjacent[p.getIndex()] = adjacent;
             }
     }

@@ -70,7 +70,7 @@ public final class Board
         @param point The point.
         @return List of points adjacent.
     */
-    public GoPoint[] getAdjacent(GoPoint point)
+    public ConstPointList getAdjacent(GoPoint point)
     {
         return m_constants.getAdjacent(point);
     }
@@ -563,12 +563,12 @@ public final class Board
             GoPoint p = m_checkKillStack.pop();
             assert getColor(p) == color;
             m_checkKillStones.add(p);
-            GoPoint[] adjacent = getAdjacent(p);
-            int nuAdjacent = adjacent.length;
+            ConstPointList adjacent = getAdjacent(p);
+            int nuAdjacent = adjacent.size();
             // Don't use an iterator for efficiency
             for (int i = 0; i < nuAdjacent; ++i)
             {
-                GoPoint adj = adjacent[i];
+                GoPoint adj = adjacent.get(i);
                 GoColor c = getColor(adj);
                 if (c == EMPTY)
                 {
