@@ -307,7 +307,8 @@ public final class GtpClient
         ++m_commandNumber;
         if (m_autoNumber)
             command = Integer.toString(m_commandNumber) + " " + command;
-        log(">> " + command);
+        if (m_log)
+            logOut(command);
         m_out.println(command);
         m_out.flush();
         try
@@ -341,7 +342,8 @@ public final class GtpClient
     public void sendComment(String comment)
     {
         assert comment.trim().startsWith("#");
-        log(">> " + comment);
+        if (m_log)
+            logOut(comment);
         if (m_callback != null)
             m_callback.sentCommand(comment);
         m_out.println(comment);
@@ -361,7 +363,8 @@ public final class GtpClient
         else if (m_pid != null)
         {
             String command = "kill -INT " + m_pid;
-            log(" " + command);
+            if (m_log)
+                log(command);
             Runtime runtime = Runtime.getRuntime();
             try
             {
@@ -580,8 +583,8 @@ public final class GtpClient
             try
             {
                 String line = m_in.readLine();
-                if (line != null)
-                    log("<< " + line);
+                if (m_log && line != null)
+                    logIn(line);
                 return line;
             }
             catch (IOException e)
@@ -622,7 +625,8 @@ public final class GtpClient
                     m_queue.put(new Message(Message.ERROR, text));
                     if (text == null)
                         return;
-                    logError(text);
+                    if (m_log)
+                        logError(text);
                 }
             }
             catch (Throwable t)
@@ -700,18 +704,31 @@ public final class GtpClient
 
     private synchronized void log(String msg)
     {
-        if (m_log)
-        {
-            if (m_logPrefix != null)
-                System.err.print(m_logPrefix);
-            System.err.println(msg);
-        }
+        if (m_logPrefix != null)
+            System.err.print(m_logPrefix);
+        System.err.print(" ");
+        System.err.println(msg);
     }
 
     private synchronized void logError(String text)
     {
-        if (m_log)
-            System.err.print(text);
+        System.err.print(text);
+    }
+
+    private synchronized void logIn(String msg)
+    {
+        if (m_logPrefix != null)
+            System.err.print(m_logPrefix);
+        System.err.print("<< ");
+        System.err.println(msg);
+    }
+
+    private synchronized void logOut(String msg)
+    {
+        if (m_logPrefix != null)
+            System.err.print(m_logPrefix);
+        System.err.print(">> ");
+        System.err.println(msg);
     }
 
     /** Print information about occurence of InterruptedException.
