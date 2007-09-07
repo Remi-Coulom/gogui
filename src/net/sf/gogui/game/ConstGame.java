@@ -22,6 +22,8 @@ public interface ConstGame
 
     int getMoveNumber();
 
+    ConstNode getRoot();
+
     int getSize();
 
     GoColor getToMove();
