@@ -58,7 +58,7 @@ public final class PositionStatistics
             {
                 throw new ErrorMessage("Invalid move in table");
             }
-            if (move <= 0)
+            if (move < 0)
                 throw new ErrorMessage("Invalid move in table");
             try
             {

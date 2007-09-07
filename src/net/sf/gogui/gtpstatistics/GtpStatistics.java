@@ -12,8 +12,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -24,6 +27,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
@@ -31,9 +35,7 @@ import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 
-/** Run commands of a GTP engine on all positions in a game collection.
-    @todo Use GtpSynchronizer
-*/
+/** Run commands of a GTP engine on all positions in a game collection. */
 public class GtpStatistics
 {
     public void run(String program, ArrayList<String> sgfFiles, int size,
@@ -86,6 +88,7 @@ public class GtpStatistics
         m_table = new Table(columnHeaders);
         m_table.setProperty("Size", Integer.toString(size));
         m_gtp = gtp;
+        m_synchronizer = new GtpSynchronizer(m_gtp);
         m_gtp.queryProtocolVersion();
         m_gtp.queryName();
         if (program != null)
@@ -179,6 +182,8 @@ public class GtpStatistics
 
     private ArrayList<Command> m_commands;
 
+    private GtpSynchronizer m_synchronizer;
+
     private void addCommand(String commandLine, boolean isBegin,
                             boolean isFinal) throws ErrorMessage
     {
@@ -216,12 +221,12 @@ public class GtpStatistics
             addCommand(c, isBegin, isFinal);
     }
 
-    private void checkGame(GameTree tree, String name) throws ErrorMessage
+    private void checkGame(ConstGameTree tree, String name) throws ErrorMessage
     {
         int size = tree.getBoardSize();
         if (size != m_size)
             throw new ErrorMessage(name + " has not size " + m_size);
-        ConstNode root = tree.getRoot();
+        ConstNode root = tree.getRootConst();
         GoColor toMove = BLACK;
         for (ConstNode node = root; node != null; node = node.getChildConst())
         {
@@ -356,16 +361,12 @@ public class GtpStatistics
         InputStream in = new FileInputStream(file);
         SgfReader reader = new SgfReader(in, file, null, 0);
         ++m_numberGames;
-        GameTree tree = reader.getTree();
-        checkGame(tree, name);
-        int size = tree.getBoardSize();
-        m_gtp.sendBoardsize(size);
-        m_gtp.sendClearBoard(size);
-        ConstNode root = tree.getRoot();
+        Game game = new Game(reader.getTree());
+        checkGame(game.getTree(), name);
         if (m_backward)
-            iteratePositionsBackward(root, name);
+            iteratePositionsBackward(game, name);
         else
-            iteratePositions(root, name);
+            iteratePositions(game, name);
     }
 
     private void handlePosition(String name, GoColor toMove, Move move,
@@ -417,82 +418,46 @@ public class GtpStatistics
         }
     }
 
-    private void iteratePositions(ConstNode root, String name) throws GtpError
+    private void iteratePositions(Game game, String name) throws GtpError
     {
         int number = 0;
-        GoColor toMove = BLACK;
-        for (ConstNode node = root; node != null; node = node.getChildConst())
+        for (ConstNode node = game.getRoot(); node != null;
+             node = node.getChildConst())
         {
-            if (node.hasSetup())
-            {
-                assert m_allowSetup && node != root; // checked in checkGame
-                toMove = sendSetup(node);
-            }
+            game.gotoNode(node);
+            synchronize(game);
             Move move = node.getMove();
-            if (move != null)
-            {
-                ++number;
-                boolean beginCommands = (number == 1);
-                boolean regularCommands =
-                    (number >= m_min && number <= m_max);
-                if (beginCommands || regularCommands)
-                    handlePosition(name, toMove, move, number, beginCommands,
-                                   regularCommands, false);
-                m_gtp.sendPlay(move);
-                toMove = toMove.otherColor();
-            }
+            boolean beginCommands = ! node.hasFather();
+            boolean regularCommands =
+                (move != null && number >= m_min && number <= m_max);
+            boolean finalCommands = ! node.hasChildren();
+            if (beginCommands || regularCommands || finalCommands)
+                handlePosition(name, node.getToMove(), move, number,
+                               beginCommands, regularCommands,
+                               finalCommands);
+            ++number;
         }
-        ++number;
-        boolean beginCommands = (number == 1);
-        boolean regularCommands = (number >= m_min && number <= m_max);
-        handlePosition(name, toMove, null, number, beginCommands,
-                       regularCommands, true);
     }
 
-    private void iteratePositionsBackward(ConstNode root, String name)
+    private void iteratePositionsBackward(Game game, String name)
         throws GtpError
     {
-        ConstNode node = root;
-        GoColor toMove = BLACK;
-        while (true)
+        int number = 0;
+        for (ConstNode node = NodeUtil.getLast(game.getRoot()); node != null;
+             node = node.getFatherConst())
         {
-            if (node.hasSetup())
-            {
-                assert m_allowSetup && node == root; // checked in checkGame
-                toMove = sendSetup(node);
-            }
+            game.gotoNode(node);
+            synchronize(game);
             Move move = node.getMove();
-            if (move != null)
-            {
-                m_gtp.sendPlay(move);
-                toMove = toMove.otherColor();
-            }
-            ConstNode child = node.getChildConst();
-            if (child == null)
-                break;
-            node = child;
-        }
-        int number = 1;
-        boolean finalCommands = (node == root);
-        boolean regularCommands = (number >= m_min && number <= m_max);
-        handlePosition(name, toMove, null, number, true, regularCommands,
-                       finalCommands);
-        for ( ; node != root; node = node.getFatherConst())
-        {
-            // checked in checkGame
-            assert ! node.hasSetup();
-            Move move = node.getMove();
-            if (move != null)
-            {
-                m_gtp.send("undo");
-                ++number;
-                finalCommands = (node.getFatherConst() == root);
-                regularCommands = (number >= m_min && number <= m_max);
-                if (finalCommands || regularCommands)
-                    handlePosition(name, toMove, move, number, false,
-                                   regularCommands, finalCommands);
-                toMove = toMove.otherColor();
-            }
+            boolean beginCommands = ! node.hasChildren();
+            boolean regularCommands =
+                (move != null && number >= m_min && number <= m_max);
+            boolean finalCommands = ! node.hasFather();
+            if (beginCommands || regularCommands || finalCommands)
+                handlePosition(name, node.getToMove(), move, number,
+                               beginCommands, regularCommands,
+                               finalCommands);
+            ++number;
         }
     }
 
@@ -506,21 +471,11 @@ public class GtpStatistics
         return convertResponse(command, response, toMove, move);
     }
 
-    /** Send setup stones as moves.
-        @return New color to move.
-     */
-    private GoColor sendSetup(ConstNode node) throws GtpError
+    private void synchronize(ConstGame game) throws GtpError
     {
-        ArrayList<Move> moves = new ArrayList<Move>();
-        NodeUtil.getAllAsMoves(node, moves);
-        assert ! moves.isEmpty();
-        GoColor toMove = null;
-        for (int i = 0; i < moves.size(); ++i)
-        {
-            Move move = (Move)moves.get(i);
-            m_gtp.sendPlay(move);
-            toMove = move.getColor().otherColor();
-        }
-        return toMove;
+        ConstNode node = game.getGameInformationNode();
+        ConstGameInformation info = game.getGameInformation(node);
+        m_synchronizer.synchronize(game.getBoard(), info.getKomi(),
+                                   info.getTimeSettings());
     }
 }
