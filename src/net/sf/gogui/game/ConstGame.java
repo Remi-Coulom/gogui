@@ -20,7 +20,11 @@ public interface ConstGame
 
     ConstGameInformation getGameInformation(ConstNode node);
 
+    ConstNode getGameInformationNode();
+
     int getMoveNumber();
+
+    ConstNode getRoot();
 
     int getSize();
 
