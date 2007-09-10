@@ -53,21 +53,6 @@ public final class NodeUtil
         return (comment != null && pattern.matcher(comment).find());
     }
 
-    /** Compare if nodes have the same move and/or setup information.
-        Note that the setup point lists need to have the same ordering
-        to be considered equal. Setup point lists can be sorted with
-        Node.sortSetup.
-    */
-    public static boolean compareMoveAndSetup(ConstNode node1, ConstNode node2)
-    {
-        if (! ObjectUtil.equals(node1.getMove(), node2.getMove()))
-            return false;
-        for (GoColor c : BLACK_WHITE_EMPTY)
-            if (! node1.getAddStones(c).equals(node2.getAddStones(c)))
-                return false;
-        return true;
-    }
-
     /** Find first node with a certain move number in main variation
         of a given node.
         @param node The given node.
