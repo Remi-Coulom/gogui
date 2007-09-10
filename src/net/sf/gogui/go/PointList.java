@@ -12,17 +12,17 @@ public final class PointList
     extends ArrayList<GoPoint>
     implements ConstPointList
 {
-    public class PointListIterator
+    public class ConstIterator
         implements Iterator<GoPoint>
     {
         public boolean hasNext()
         {
-            return m_iterator.hasNext();
+            return (m_index < size());
         }
 
         public GoPoint next()
         {
-            return m_iterator.next();
+            return get(m_index++);
         }
 
         public void remove()
@@ -30,7 +30,7 @@ public final class PointList
             throw new UnsupportedOperationException();
         }
 
-        private Iterator<GoPoint> m_iterator = PointList.this.iterator();
+        private int m_index;
     }
 
     /** Construct empty point list. */
@@ -79,9 +79,14 @@ public final class PointList
         return EMPTY_LIST;
     }
 
+    /** Returns an iterator over the points elements in this list.
+        An iterator of type PointList.ConstIterator is returned, which
+        does not support Iterator.remove(), to allow for-each-loops for
+        ConstPointList references.
+    */
     public Iterator<GoPoint> iterator()
     {
-        return new PointListIterator();
+        return new ConstIterator();
     }
 
     /** Remove and return last element.
