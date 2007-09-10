@@ -552,29 +552,25 @@ public final class NodeUtil
             appendInfo(buffer, "MoveNumber", getMoveNumber(node));
         }
         appendInfo(buffer, "Variation", getVariationString(node));
-        ConstPointList addBlack = node.getAddStones(BLACK);
-        if (addBlack.size() > 0)
-            appendInfo(buffer, "AddBlack", addBlack);
-        ConstPointList addWhite = node.getAddStones(WHITE);
-        if (addWhite.size() > 0)
-            appendInfo(buffer, "AddWhite", addWhite);
-        ConstPointList addEmpty = node.getAddStones(EMPTY);
-        if (addEmpty.size() > 0)
-            appendInfo(buffer, "AddEmpty", addEmpty);
+        ConstPointList black = node.getSetup(BLACK);
+        if (black.size() > 0)
+            appendInfo(buffer, "AddBlack", black);
+        ConstPointList white = node.getSetup(WHITE);
+        if (white.size() > 0)
+            appendInfo(buffer, "AddWhite", white);
+        ConstPointList empty = node.getSetup(EMPTY);
+        if (empty.size() > 0)
+            appendInfo(buffer, "AddEmpty", empty);
         if (node.getPlayer() != null)
             appendInfo(buffer, "Player", node.getPlayer().toString());
         if (! Double.isNaN(node.getTimeLeft(BLACK)))
-            appendInfo(buffer, "TimeLeftBlack",
-                       node.getTimeLeft(BLACK));
+            appendInfo(buffer, "TimeLeftBlack", node.getTimeLeft(BLACK));
         if (node.getMovesLeft(BLACK) >= 0)
-            appendInfo(buffer, "MovesLeftBlack",
-                       node.getMovesLeft(BLACK));
+            appendInfo(buffer, "MovesLeftBlack", node.getMovesLeft(BLACK));
         if (! Double.isNaN(node.getTimeLeft(WHITE)))
-            appendInfo(buffer, "TimeLeftWhite",
-                       node.getTimeLeft(WHITE));
+            appendInfo(buffer, "TimeLeftWhite", node.getTimeLeft(WHITE));
         if (node.getMovesLeft(WHITE) >= 0)
-            appendInfo(buffer, "MovesLeftWhite",
-                       node.getMovesLeft(WHITE));
+            appendInfo(buffer, "MovesLeftWhite", node.getMovesLeft(WHITE));
         appendInfoComment(buffer, node);
         for (MarkType type : EnumSet.allOf(MarkType.class))
         {

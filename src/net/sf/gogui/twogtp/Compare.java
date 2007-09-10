@@ -151,7 +151,7 @@ public final class Compare
         {
             for (GoColor c : BLACK_WHITE_EMPTY)
             {
-                PointList list = new PointList(node.getAddStones(c));
+                PointList list = new PointList(node.getSetup(c));
                 Collections.sort(list);
                 for (GoPoint p : list)
                     result.add(new Placement(true, c, p));

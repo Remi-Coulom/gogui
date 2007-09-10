@@ -264,9 +264,9 @@ public final class SgfReaderTest
     private void checkSetup(ConstNode node, int black, int white, int empty)
         throws InvalidPointException
     {
-        assertEquals(node.getAddStones(BLACK).size(), black);
-        assertEquals(node.getAddStones(WHITE).size(), white);
-        assertEquals(node.getAddStones(EMPTY).size(), empty);
+        assertEquals(node.getSetup(BLACK).size(), black);
+        assertEquals(node.getSetup(WHITE).size(), white);
+        assertEquals(node.getSetup(EMPTY).size(), empty);
         assertNull(node.getMove());
     }
 

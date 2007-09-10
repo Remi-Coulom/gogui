@@ -153,7 +153,7 @@ public class TexWriter
         while (node != null)
         {
             for (GoColor c : BLACK_WHITE)
-                for (GoPoint stone : node.getAddStones(c))
+                for (GoPoint stone : node.getSetup(c))
                     printStone(c, stone, null);
             Move move = node.getMove();
             if (move == null)

@@ -15,8 +15,6 @@ import net.sf.gogui.go.Move;
 */
 public interface ConstNode
 {
-    ConstPointList getAddStones(GoColor c);
-
     String getComment();
 
     ConstNode getFatherConst();
@@ -42,6 +40,8 @@ public interface ConstNode
     int getNumberChildren();
 
     GoColor getPlayer();
+
+    ConstPointList getSetup(GoColor c);
 
     Map<String,String> getSgfPropertiesUnmodifiable();
 

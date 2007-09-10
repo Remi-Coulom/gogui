@@ -104,34 +104,34 @@ public final class NodeTest
     public void testSetup()
     {
         Node node = new Node();
-        assertEquals(0, node.getAddStones(BLACK).size());
-        assertEquals(0, node.getAddStones(EMPTY).size());
-        assertEquals(0, node.getAddStones(WHITE).size());
+        assertEquals(0, node.getSetup(BLACK).size());
+        assertEquals(0, node.getSetup(EMPTY).size());
+        assertEquals(0, node.getSetup(WHITE).size());
         GoPoint point = GoPoint.get(0, 0);
         node.addStone(BLACK, point);
-        assertEquals(1, node.getAddStones(BLACK).size());
-        assertEquals(point, node.getAddStones(BLACK).get(0));
-        assertEquals(0, node.getAddStones(EMPTY).size());
-        assertEquals(0, node.getAddStones(WHITE).size());
+        assertEquals(1, node.getSetup(BLACK).size());
+        assertEquals(point, node.getSetup(BLACK).get(0));
+        assertEquals(0, node.getSetup(EMPTY).size());
+        assertEquals(0, node.getSetup(WHITE).size());
         node = new Node();
         node.addStone(WHITE, point);
-        assertEquals(1, node.getAddStones(WHITE).size());
-        assertEquals(point, node.getAddStones(WHITE).get(0));
-        assertEquals(0, node.getAddStones(EMPTY).size());
-        assertEquals(0, node.getAddStones(BLACK).size());
+        assertEquals(1, node.getSetup(WHITE).size());
+        assertEquals(point, node.getSetup(WHITE).get(0));
+        assertEquals(0, node.getSetup(EMPTY).size());
+        assertEquals(0, node.getSetup(BLACK).size());
         node = new Node();
         node.addStone(EMPTY, point);
-        assertEquals(1, node.getAddStones(EMPTY).size());
-        assertEquals(point, node.getAddStones(EMPTY).get(0));
-        assertEquals(0, node.getAddStones(BLACK).size());
-        assertEquals(0, node.getAddStones(WHITE).size());
+        assertEquals(1, node.getSetup(EMPTY).size());
+        assertEquals(point, node.getSetup(EMPTY).get(0));
+        assertEquals(0, node.getSetup(BLACK).size());
+        assertEquals(0, node.getSetup(WHITE).size());
         GoPoint point2 = GoPoint.get(1, 0);
         node.addStone(EMPTY, point2);
-        assertEquals(2, node.getAddStones(EMPTY).size());
-        assertEquals(point, node.getAddStones(EMPTY).get(0));
-        assertEquals(point2, node.getAddStones(EMPTY).get(1));
-        assertEquals(0, node.getAddStones(BLACK).size());
-        assertEquals(0, node.getAddStones(WHITE).size());
+        assertEquals(2, node.getSetup(EMPTY).size());
+        assertEquals(point, node.getSetup(EMPTY).get(0));
+        assertEquals(point2, node.getSetup(EMPTY).get(1));
+        assertEquals(0, node.getSetup(BLACK).size());
+        assertEquals(0, node.getSetup(WHITE).size());
     }
 
     public void testSortSetup()
@@ -157,15 +157,15 @@ public final class NodeTest
         node.addStone(EMPTY, p8);
         node.sortSetup();
         Iterator<GoPoint> it;
-        it = node.getAddStones(BLACK).iterator();
+        it = node.getSetup(BLACK).iterator();
         assertEquals(p1, it.next());
         assertEquals(p2, it.next());
         assertEquals(p3, it.next());
-        it = node.getAddStones(WHITE).iterator();
+        it = node.getSetup(WHITE).iterator();
         assertEquals(p4, it.next());
         assertEquals(p5, it.next());
         assertEquals(p6, it.next());
-        it = node.getAddStones(EMPTY).iterator();
+        it = node.getSetup(EMPTY).iterator();
         assertEquals(p7, it.next());
         assertEquals(p8, it.next());
         assertEquals(p9, it.next());

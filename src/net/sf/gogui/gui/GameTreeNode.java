@@ -112,7 +112,7 @@ class GameTreeNode
             boolean anyStones = false;
             for (GoColor c : BLACK_WHITE_EMPTY)
             {
-                int n = m_node.getAddStones(c).size();
+                int n = m_node.getSetup(c).size();
                 if (n == 0)
                     continue;
                 if (anyStones)

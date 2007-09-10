@@ -191,18 +191,6 @@ public final class Node
         return moreExtraInfo.m_gameInformation;
     }
 
-    /** Get setup stones.
-        @param c Color of the stones; EMPTY for removed stones.
-        @return The added or removed stones.
-    */
-    public ConstPointList getAddStones(GoColor c)
-    {
-        SetupInfo setupInfo = getSetupInfo();
-        if (setupInfo == null)
-            return PointList.getEmptyList();
-        return setupInfo.m_stones.get(c);
-    }
-
     /** Child of main variation or null if no child.
         @return Node with index 0 or null, if no children.
     */
@@ -396,6 +384,18 @@ public final class Node
         return setupInfo.m_player;
     }
 
+    /** Get setup stones.
+        @param c Color of the stones; EMPTY for removed stones.
+        @return The added or removed stones.
+    */
+    public ConstPointList getSetup(GoColor c)
+    {
+        SetupInfo setupInfo = getSetupInfo();
+        if (setupInfo == null)
+            return PointList.getEmptyList();
+        return setupInfo.m_stones.get(c);
+    }
+
     /** Get other unspecified SGF properties.
         @return The map with other SGF properties mapping String label
         to String value
@@ -487,7 +487,7 @@ public final class Node
     public boolean hasSetup()
     {
         for (GoColor c : BLACK_WHITE_EMPTY)
-            if (getAddStones(c).size() > 0)
+            if (getSetup(c).size() > 0)
                 return true;
         return false;
     }
@@ -677,7 +677,7 @@ public final class Node
     public void sortSetup()
     {
         for (GoColor c : BLACK_WHITE_EMPTY)
-            if (getAddStones(c).size() > 0)
+            if (getSetup(c).size() > 0)
                 Collections.sort(getSetupInfo().m_stones.get(c));
     }
 

@@ -69,13 +69,13 @@ public final class GameTest
         ConstNode node = game.getCurrentNode();
         GoPoint p = GoPoint.get(0, 0);
         game.setup(p, BLACK);
-        assertEquals(1, node.getAddStones(BLACK).size());
-        assertEquals(0, node.getAddStones(WHITE).size());
-        assertEquals(0, node.getAddStones(EMPTY).size());
+        assertEquals(1, node.getSetup(BLACK).size());
+        assertEquals(0, node.getSetup(WHITE).size());
+        assertEquals(0, node.getSetup(EMPTY).size());
         game.setup(p, EMPTY);
-        assertEquals(0, node.getAddStones(BLACK).size());
-        assertEquals(0, node.getAddStones(WHITE).size());
-        assertEquals(0, node.getAddStones(EMPTY).size());
+        assertEquals(0, node.getSetup(BLACK).size());
+        assertEquals(0, node.getSetup(WHITE).size());
+        assertEquals(0, node.getSetup(EMPTY).size());
     }
 
     /** Test that clock is initialized with time settings. */

@@ -319,7 +319,7 @@ public class SgfWriter
         }
         for (GoColor c : BLACK_WHITE_EMPTY)
         {
-            ConstPointList points = node.getAddStones(c);
+            ConstPointList points = node.getSetup(c);
             if (points.size() == 0)
                 continue;
             StringBuilder buffer = new StringBuilder(STRINGBUF_CAPACITY);

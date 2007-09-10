@@ -38,12 +38,12 @@ public class BoardUpdater
             GoColor player = node.getPlayer();
             if (node.hasSetup())
             {
-                ConstPointList addBlack = node.getAddStones(BLACK);
-                ConstPointList addWhite = node.getAddStones(WHITE);
-                ConstPointList addEmpty = node.getAddStones(EMPTY);
-                if (isFirstPlacement && addBlack.size() == handicap
-                    && addWhite.size() == 0 && addEmpty.size() == 0)
-                    board.setupHandicap(addBlack);
+                ConstPointList setupBlack = node.getSetup(BLACK);
+                ConstPointList setupWhite = node.getSetup(WHITE);
+                ConstPointList setupEmpty = node.getSetup(EMPTY);
+                if (isFirstPlacement && setupBlack.size() == handicap
+                    && setupWhite.size() == 0 && setupEmpty.size() == 0)
+                    board.setupHandicap(setupBlack);
                 else
                 {
                     PointList black = new PointList();
@@ -55,13 +55,13 @@ public class BoardUpdater
                         else if (board.getColor(p) == WHITE)
                             white.add(p);
                     }
-                    for (GoPoint p : addBlack)
+                    for (GoPoint p : setupBlack)
                         if (! black.contains(p))
                             black.add(p);
-                    for (GoPoint p : addWhite)
+                    for (GoPoint p : setupWhite)
                         if (! white.contains(p))
                             white.add(p);
-                    for (GoPoint p : addEmpty)
+                    for (GoPoint p : setupEmpty)
                     {
                         black.remove(p);
                         white.remove(p);

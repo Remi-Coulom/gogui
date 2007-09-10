@@ -268,7 +268,7 @@ public class GtpTerminal
             {
                 for (GoColor c : BLACK_WHITE)
                 {
-                    for (GoPoint stone : node.getAddStones(c))
+                    for (GoPoint stone : node.getSetup(c))
                         if (! cmdPlay(c, stone))
                             return;
                 }
