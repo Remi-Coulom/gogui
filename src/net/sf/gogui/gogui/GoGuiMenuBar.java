@@ -150,7 +150,8 @@ public class GoGuiMenuBar
             StringBuffer toolTip = new StringBuffer(128);
             if (program.m_name != null)
                 toolTip.append(program.m_name);
-            if (program.m_version != null && ! program.m_version.equals(""))
+            if (program.m_version != null && ! program.m_version.equals("")
+                && program.m_version.length() < 40)
             {
                 toolTip.append(' ');
                 toolTip.append(program.m_version);
