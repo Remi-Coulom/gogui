@@ -75,7 +75,7 @@ public final class AboutDialog
                 if (version.length() > 80)
                     version = version.substring(0, 80) + "...";
                 versionInfo = "<p align=\"center\" width=\"" + width
-                    + "\">Version " + version + "</p>";
+                    + "\">Version " + HtmlUtil.escape(version) + "</p>";
             }
             programPanel =
                 createPanel("<p align=\"center\"><img src=\""
