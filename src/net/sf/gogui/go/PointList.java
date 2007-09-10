@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 /** List containing a points. */
 public final class PointList
+    extends ArrayList<GoPoint>
     implements ConstPointList
 {
     public class PointListIterator
@@ -29,7 +30,7 @@ public final class PointList
             throw new UnsupportedOperationException();
         }
 
-        private Iterator<GoPoint> m_iterator = m_list.iterator();
+        private Iterator<GoPoint> m_iterator = PointList.this.iterator();
     }
 
     /** Construct empty point list. */
@@ -43,7 +44,7 @@ public final class PointList
     */
     public PointList(int initialCapacity)
     {
-        m_list = new ArrayList<GoPoint>(initialCapacity);
+        super(initialCapacity);
     }
 
     /** Construct point list with a single element.
@@ -60,44 +61,13 @@ public final class PointList
     */
     public PointList(ConstPointList list)
     {
-        m_list = new ArrayList<GoPoint>(((PointList)list).m_list);
-    }
-
-    /** Add point at the end of the list. */
-    public void add(GoPoint p)
-    {
-        m_list.add(p);
+        super((PointList)list);
     }
 
     /** Add points of another list  at the end of this list. */
-    public void addAll(ConstPointList list)
+    public void addAllFromConst(ConstPointList list)
     {
-        m_list.addAll(((PointList)list).m_list);
-    }
-
-    /** Remove all points from the list. */
-    public void clear()
-    {
-        m_list.clear();
-    }
-
-    public boolean contains(GoPoint p)
-    {
-        return m_list.contains(p);
-    }
-
-    public boolean equals(Object object)
-    {
-        if (object == null || object.getClass() != getClass())
-            return false;
-        PointList list = (PointList)object;
-        return list.m_list.equals(m_list);
-    }
-
-    /** Get the point at the specified position. */
-    public GoPoint get(int index)
-    {
-        return m_list.get(index);
+        addAll((PointList)list);
     }
 
     /** Get an empty constant point list.
@@ -107,16 +77,6 @@ public final class PointList
     public static ConstPointList getEmptyList()
     {
         return EMPTY_LIST;
-    }
-
-    public int hashCode()
-    {
-        return m_list.hashCode();
-    }
-
-    public boolean isEmpty()
-    {
-        return m_list.isEmpty();
     }
 
     public Iterator<GoPoint> iterator()
@@ -129,31 +89,15 @@ public final class PointList
     */
     public GoPoint pop()
     {
-        int index = m_list.size() - 1;
+        int index = size() - 1;
         if (index < 0)
         {
             assert false;
             return null;
         }
-        GoPoint p = m_list.get(index);
-        m_list.remove(index);
+        GoPoint p = get(index);
+        remove(index);
         return p;
-    }
-
-    /** Remove first occurence of a point from the list.
-        Does not change the order of the remaining elements.
-        Does nothing if point is not in the list.
-        @param p The point to remove.
-        @return <code>true</code>, if the point was found and removed.
-    */
-    public boolean remove(GoPoint p)
-    {
-        return m_list.remove(p);
-    }
-
-    public int size()
-    {
-        return m_list.size();
     }
 
     public String toString()
@@ -180,6 +124,4 @@ public final class PointList
     }
 
     private static final ConstPointList EMPTY_LIST = new PointList();
-
-    private ArrayList<GoPoint> m_list;
 }

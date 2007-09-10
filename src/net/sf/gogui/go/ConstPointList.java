@@ -12,7 +12,7 @@ import java.util.Iterator;
 public interface ConstPointList
     extends Iterable<GoPoint>
 {
-    boolean contains(GoPoint p);
+    boolean contains(Object elem);
 
     boolean equals(Object object);
 

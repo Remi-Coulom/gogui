@@ -179,7 +179,7 @@ public final class Node
     public void addStones(GoColor c, ConstPointList list)
     {
         assert list != null;
-        createSetupInfo().m_stones.get(c).addAll(list);
+        createSetupInfo().m_stones.get(c).addAllFromConst(list);
     }
 
     /** Create game information or return it if already existing. */
