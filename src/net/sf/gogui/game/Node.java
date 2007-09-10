@@ -670,6 +670,17 @@ public final class Node
         m_extraInfo.m_value = value;
     }
 
+    /** Sort the lists of setup stones (add stones and remove stones.
+        Sorted lists for setup stones make it easier to compare, if
+        two nodes have the same lists.
+    */
+    public void sortSetup()
+    {
+        for (GoColor c : BLACK_WHITE_EMPTY)
+            if (getAddStones(c).size() > 0)
+                Collections.sort(getSetupInfo().m_stones.get(c));
+    }
+
     /** Return next child after a given child.
         @param child The child
         @return The next child or null, if there is no next child

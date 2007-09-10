@@ -4,6 +4,7 @@
 
 package net.sf.gogui.game;
 
+import java.util.Iterator;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -131,5 +132,42 @@ public final class NodeTest
         assertEquals(point2, node.getAddStones(EMPTY).get(1));
         assertEquals(0, node.getAddStones(BLACK).size());
         assertEquals(0, node.getAddStones(WHITE).size());
+    }
+
+    public void testSortSetup()
+    {
+        Node node = new Node();
+        GoPoint p1 = GoPoint.get(1, 1);
+        GoPoint p2 = GoPoint.get(2, 2);
+        GoPoint p3 = GoPoint.get(3, 3);
+        GoPoint p4 = GoPoint.get(4, 4);
+        GoPoint p5 = GoPoint.get(5, 5);
+        GoPoint p6 = GoPoint.get(6, 6);
+        GoPoint p7 = GoPoint.get(7, 7);
+        GoPoint p8 = GoPoint.get(8, 8);
+        GoPoint p9 = GoPoint.get(9, 9);
+        node.addStone(BLACK, p2);
+        node.addStone(BLACK, p1);
+        node.addStone(BLACK, p3);
+        node.addStone(WHITE, p6);
+        node.addStone(WHITE, p5);
+        node.addStone(WHITE, p4);
+        node.addStone(EMPTY, p7);
+        node.addStone(EMPTY, p9);
+        node.addStone(EMPTY, p8);
+        node.sortSetup();
+        Iterator<GoPoint> it;
+        it = node.getAddStones(BLACK).iterator();
+        assertEquals(p1, it.next());
+        assertEquals(p2, it.next());
+        assertEquals(p3, it.next());
+        it = node.getAddStones(WHITE).iterator();
+        assertEquals(p4, it.next());
+        assertEquals(p5, it.next());
+        assertEquals(p6, it.next());
+        it = node.getAddStones(EMPTY).iterator();
+        assertEquals(p7, it.next());
+        assertEquals(p8, it.next());
+        assertEquals(p9, it.next());
     }
 }
