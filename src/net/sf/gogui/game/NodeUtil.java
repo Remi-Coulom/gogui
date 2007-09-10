@@ -16,9 +16,11 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
 /** Utility functions operating on a tree of nodes. */
@@ -49,6 +51,21 @@ public final class NodeUtil
     {
         String comment = node.getComment();
         return (comment != null && pattern.matcher(comment).find());
+    }
+
+    /** Compare if nodes have the same move and/or setup information.
+        Note that the setup point lists need to have the same ordering
+        to be considered equal. Setup point lists can be sorted with
+        Node.sortSetup.
+    */
+    public static boolean compareMoveAndSetup(ConstNode node1, ConstNode node2)
+    {
+        if (! ObjectUtil.equals(node1.getMove(), node2.getMove()))
+            return false;
+        for (GoColor c : BLACK_WHITE_EMPTY)
+            if (! node1.getAddStones(c).equals(node2.getAddStones(c)))
+                return false;
+        return true;
     }
 
     /** Find first node with a certain move number in main variation
