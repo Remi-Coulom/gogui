@@ -361,8 +361,8 @@ public class TwoGtp
 
     private final String m_whiteVersion;
 
-    private final ArrayList<ArrayList<Move>> m_games
-        = new ArrayList<ArrayList<Move>>(100);
+    private final ArrayList<ArrayList<Compare.Placement>> m_games
+        = new ArrayList<ArrayList<Compare.Placement>>(100);
 
     private final GtpClient m_black;
 
@@ -714,8 +714,8 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            ArrayList<Move> moves
-                = Compare.getAllAsMoves(getTree().getRootConst());
+            ArrayList<Compare.Placement> moves
+                = Compare.getPlacements(getTree().getRootConst());
             String duplicate =
                 Compare.checkDuplicate(getBoard(), moves, m_games,
                                        m_alternate, isAlternated());
@@ -856,7 +856,7 @@ public class TwoGtp
                 SgfReader reader =
                     new SgfReader(fileStream, file, null, 0);
                 ConstNode root = reader.getTree().getRoot();
-                m_games.add(Compare.getAllAsMoves(root));
+                m_games.add(Compare.getPlacements(root));
             }
             catch (SgfError e)
             {

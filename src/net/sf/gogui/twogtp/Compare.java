@@ -7,17 +7,21 @@ package net.sf.gogui.twogtp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.BoardUtil;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.MoveUtil;
-import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.sgf.SgfReader;
 
 /** Find duplicates in games.
@@ -25,6 +29,27 @@ import net.sf.gogui.sgf.SgfReader;
 */
 public final class Compare
 {
+    public final static class Placement
+    {
+        public boolean m_isSetup;
+
+        public GoColor m_color;
+
+        public GoPoint m_point;
+
+        public Placement(boolean isSetup, GoColor color, GoPoint point)
+        {
+            m_isSetup = isSetup;
+            m_color = color;
+            m_point = point;
+        }
+
+        public Placement(Move move)
+        {
+            this(false, move.getColor(), move.getPoint());
+        }
+    }
+
     /** Check if game already exists in game collection.
         All games must have the same board size.
         Also finds rotated duplicates.
@@ -42,17 +67,18 @@ public final class Compare
         the game number is returned with a question mark appended.
     */
     public static String checkDuplicate(ConstBoard board,
-                                        ArrayList<Move> moves,
-                                        ArrayList<ArrayList<Move>> games,
+                                        ArrayList<Placement> moves,
+                                        ArrayList<ArrayList<Placement>> games,
                                         boolean useAlternate,
                                         boolean isAlternated)
     {
         String result = "-";
+        int size = board.getSize();
         for (int numberGame = 0; numberGame < games.size(); ++numberGame)
         {
             if (useAlternate && ((numberGame % 2 != 0) != isAlternated))
                 continue;
-            ArrayList<Move> gameMoves = games.get(numberGame);
+            ArrayList<Placement> gameMoves = games.get(numberGame);
             for (int rot = 0; rot < BoardUtil.NUMBER_ROTATIONS; ++rot)
             {
                 int numberDifferent = 0;
@@ -66,16 +92,13 @@ public final class Compare
                 for (int i = 0;
                      numberDifferent <= maxDifferent && i < moveNumber; ++i)
                 {
-                    Move move = moves.get(i);
-                    GoPoint point = move.getPoint();
-                    GoColor color = move.getColor();
-                    Move gameMove = gameMoves.get(i);
-                    GoPoint gamePoint = BoardUtil.rotate(rot,
-                                                         gameMove.getPoint(),
-                                                         board.getSize());
-                    GoColor gameColor = gameMove.getColor();
-                    if (! color.equals(gameColor)
-                        || ! GoPoint.equals(point, gamePoint))
+                    Placement move = moves.get(i);
+                    Placement gameMove = gameMoves.get(i);
+                    GoPoint gameRotatedPoint =
+                        BoardUtil.rotate(rot, gameMove.m_point, size);
+                    if (move.m_isSetup != gameMove.m_isSetup
+                        || ! move.m_color.equals(gameMove.m_color)
+                        || ! GoPoint.equals(move.m_point, gameRotatedPoint))
                         ++numberDifferent;
                 }
                 if (numberDifferent == 0)
@@ -97,7 +120,8 @@ public final class Compare
     public static void compare(ArrayList<String> filenames) throws Exception
     {
         Board board = null;
-        ArrayList<ArrayList<Move>> games = new ArrayList<ArrayList<Move>>();
+        ArrayList<ArrayList<Placement>> games =
+            new ArrayList<ArrayList<Placement>>();
         for (int gameNumber = 0; gameNumber < filenames.size(); ++gameNumber)
         {
             String filename = filenames.get(gameNumber);
@@ -111,7 +135,7 @@ public final class Compare
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
-            ArrayList<Move> moves = getAllAsMoves(tree.getRoot());
+            ArrayList<Placement> moves = getPlacements(tree.getRoot());
             String duplicate =
                 checkDuplicate(board, moves, games, false, false);
             System.out.println(Integer.toString(gameNumber) + " " +
@@ -120,25 +144,24 @@ public final class Compare
         }
     }
 
-    /** Return moves in main variation from node.
-        All setup stones are translated to moves and passes are filled in
-        to ensure that moves are alternating beginning with black.
-        @param node The start node
-        @return List of moves corresponding to moves and setup stones
-        in main variation starting with the given node.
-    */
-    public static ArrayList<Move> getAllAsMoves(ConstNode node)
+    public static ArrayList<Placement> getPlacements(ConstNode node)
     {
-        ArrayList<Move> moves = new ArrayList<Move>(128);
-        ArrayList<Move> nodeMoves = new ArrayList<Move>(128);
+        ArrayList<Placement> result = new ArrayList<Placement>(512);
         while (node != null)
         {
-            NodeUtil.getAllAsMoves(node, nodeMoves);
-            moves.addAll(nodeMoves);
+            for (GoColor c : BLACK_WHITE_EMPTY)
+            {
+                PointList list = new PointList(node.getAddStones(c));
+                Collections.sort(list);
+                for (GoPoint p : list)
+                    result.add(new Placement(true, c, p));
+            }
+            Move move = node.getMove();
+            if (move != null)
+                result.add(new Placement(move));
             node = node.getChildConst();
         }
-        moves = MoveUtil.fillPasses(moves, BLACK);
-        return moves;
+        return result;
     }
 
     /** Make constructor unavailable; class is for namespace only. */
