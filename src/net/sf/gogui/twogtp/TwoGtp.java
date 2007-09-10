@@ -621,6 +621,8 @@ public class TwoGtp
             String version = gtp.send("version");
             if (! version.trim().equals(""))
                 return version;
+            if (version.length() > 40)
+                version = "";
         }
         catch (GtpError e)
         {
