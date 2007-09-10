@@ -15,7 +15,7 @@ import net.sf.gogui.util.StringUtil;
     the screen.
 */
 public final class GoPoint
-    implements Comparable
+    implements Comparable<GoPoint>
 {
     /** Maximum board size.
         Set such that all points can be converted to strings with one letter
@@ -34,9 +34,8 @@ public final class GoPoint
     /** Compare two points.
         The order of the points is: A1, B1, ..., A2, B2, ...
     */
-    public int compareTo(Object object)
+    public int compareTo(GoPoint p)
     {
-        GoPoint p = (GoPoint)object;
         if (m_index < p.m_index)
             return -1;
         else if (m_index > p.m_index)
