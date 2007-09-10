@@ -429,7 +429,8 @@ public class GtpStatistics
             Move move = node.getMove();
             boolean beginCommands = ! node.hasFather();
             boolean regularCommands =
-                (move != null && number >= m_min && number <= m_max);
+                ((move != null || node.hasSetup() || ! node.hasFather())
+                 && number >= m_min && number <= m_max);
             boolean finalCommands = ! node.hasChildren();
             if (beginCommands || regularCommands || finalCommands)
                 handlePosition(name, node.getToMove(), move, number,
@@ -451,7 +452,8 @@ public class GtpStatistics
             Move move = node.getMove();
             boolean beginCommands = ! node.hasChildren();
             boolean regularCommands =
-                (move != null && number >= m_min && number <= m_max);
+                ((move != null || node.hasSetup() || ! node.hasFather())
+                 && number >= m_min && number <= m_max);
             boolean finalCommands = ! node.hasFather();
             if (beginCommands || regularCommands || finalCommands)
                 handlePosition(name, node.getToMove(), move, number,
