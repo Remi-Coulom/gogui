@@ -67,11 +67,15 @@ public final class AboutDialog
         JPanel programPanel;
         if (isProgramAvailable)
         {
+            int width = GuiUtil.getDefaultMonoFontSize() * 25;
             String versionInfo = "";
             if (version != null && ! version.equals(""))
-                versionInfo = "<p align=\"center\">Version " + version
-                    + "</p>";
-            int width = GuiUtil.getDefaultMonoFontSize() * 25;
+            {
+                if (version.length() > 80)
+                    version = version.substring(0, 80) + "...";
+                versionInfo = "<p align=\"center\" width=\"" + width
+                    + "\">Version " + version + "</p>";
+            }
             programPanel =
                 createPanel("<p align=\"center\"><img src=\""
                             + getImage("gogui-program.png") + "\"></p>" +
