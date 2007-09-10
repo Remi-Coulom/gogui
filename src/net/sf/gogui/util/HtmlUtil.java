@@ -9,6 +9,15 @@ import  net.sf.gogui.version.Version;
 /** Static utility functions related to HTML writing. */
 public final class HtmlUtil
 {
+    /** Escape HTML special characters in text. */
+    public static String escape(String text)
+    {
+        text = text.replaceAll(">", "&gt;");
+        text = text.replaceAll("<", "&lt;");
+        text = text.replaceAll("&", "&amp;");
+        return text;
+    }
+
     /** Return a footer.
         Contains a horizontal line followed by an address element containing
         the generation (current) date, the generator (applicationName) and
