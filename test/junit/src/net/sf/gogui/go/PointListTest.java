@@ -4,6 +4,8 @@
 
 package net.sf.gogui.go;
 
+import java.util.Iterator;
+
 public final class PointListTest
     extends junit.framework.TestCase
 {
@@ -15,6 +17,29 @@ public final class PointListTest
     public static junit.framework.Test suite()
     {
         return new junit.framework.TestSuite(PointListTest.class);
+    }
+
+    public void testIterate()
+    {
+        PointList list = new PointList();
+        GoPoint p1 = GoPoint.get(1, 1);
+        GoPoint p2 = GoPoint.get(2, 2);
+        GoPoint p3 = GoPoint.get(2, 3);
+        list.add(p1);
+        list.add(p2);
+        list.add(p3);
+        Iterator<GoPoint> it = list.iterator();
+        GoPoint p;
+        assertTrue(it.hasNext());
+        p = it.next();
+        assertEquals(p1, p);
+        assertTrue(it.hasNext());
+        p = it.next();
+        assertEquals(p2, p);
+        assertTrue(it.hasNext());
+        p = it.next();
+        assertEquals(p3, p);
+        assertFalse(it.hasNext());
     }
 
     public void testPop()
