@@ -72,8 +72,8 @@ public final class AboutDialog
             String versionInfo = "";
             if (version != null && ! version.equals(""))
             {
-                if (version.length() > 80)
-                    version = version.substring(0, 80) + "...";
+                if (version.length() > 40)
+                    version = version.substring(0, 40) + "...";
                 versionInfo = "<p align=\"center\" width=\"" + width
                     + "\">Version " + HtmlUtil.escape(version) + "</p>";
             }
