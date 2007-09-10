@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Cut excessively long program version strings in about dialog.
+Ignore long version strings in TwoGtp.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Minor fixes and code cleanup.
 </simpara>
 </listitem>
