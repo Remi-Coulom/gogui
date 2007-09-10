@@ -434,8 +434,7 @@ public class GtpStatistics
             boolean finalCommands = ! node.hasChildren();
             if (beginCommands || regularCommands || finalCommands)
                 handlePosition(name, node.getToMove(), move, number,
-                               beginCommands, regularCommands,
-                               finalCommands);
+                               beginCommands, regularCommands, finalCommands);
             ++number;
         }
     }
@@ -457,8 +456,7 @@ public class GtpStatistics
             boolean finalCommands = ! node.hasFather();
             if (beginCommands || regularCommands || finalCommands)
                 handlePosition(name, node.getToMove(), move, number,
-                               beginCommands, regularCommands,
-                               finalCommands);
+                               beginCommands, regularCommands, finalCommands);
             ++number;
         }
     }
