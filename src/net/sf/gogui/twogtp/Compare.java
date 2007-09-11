@@ -24,9 +24,7 @@ import net.sf.gogui.go.MoveUtil;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.sgf.SgfReader;
 
-/** Find duplicates in games.
-    @todo Don't use NodeUtil.getAllAsMoves() anymore, compare placements
-*/
+/** Find duplicates in games. */
 public final class Compare
 {
     public final static class Placement
