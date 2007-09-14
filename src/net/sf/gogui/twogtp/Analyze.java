@@ -242,23 +242,23 @@ public class Analyze
         String referee = m_table.getProperty("Referee", null);
         if (referee.equals("-") || referee.equals(""))
             referee = null;
-        writePropertyHtmlRow(out, "Black");
-        writePropertyHtmlRow(out, "White");
-        writePropertyHtmlRow(out, "Size");
-        writePropertyHtmlRow(out, "Komi");
+        writePropertyHtmlRow(out, "Black", "Black");
+        writePropertyHtmlRow(out, "White", "White");
+        writePropertyHtmlRow(out, "Size", "Size");
+        writePropertyHtmlRow(out, "Komi", "Komi");
         if (m_table.hasProperty("Openings"))
-            writePropertyHtmlRow(out, "Openings");
-        writePropertyHtmlRow(out, "Date");
-        writePropertyHtmlRow(out, "Host");
-        writePropertyHtmlRow(out, "Referee");
-        writePropertyHtmlRow(out, "Black version");
-        writePropertyHtmlRow(out, "Black command");
-        writePropertyHtmlRow(out, "White version");
-        writePropertyHtmlRow(out, "White command");
+            writePropertyHtmlRow(out, "Openings", "Openings");
+        writePropertyHtmlRow(out, "Date", "Date");
+        writePropertyHtmlRow(out, "Host", "Host");
+        writePropertyHtmlRow(out, "Referee", "Referee");
+        writePropertyHtmlRow(out, "BlackVersion", "Black version");
+        writePropertyHtmlRow(out, "BlackCommand", "Black command");
+        writePropertyHtmlRow(out, "WhiteVersion", "White version");
+        writePropertyHtmlRow(out, "WhiteCommand", "White command");
         if (referee != null)
         {
-            writePropertyHtmlRow(out, "Referee version");
-            writePropertyHtmlRow(out, "Referee command");
+            writePropertyHtmlRow(out, "RefereeVersion", "Referee version");
+            writePropertyHtmlRow(out, "RefereeCommand", "Referee command");
         }
         writeHtmlRow(out, "Games", m_games);
         writeHtmlRow(out, "Errors", m_errors);
@@ -350,7 +350,8 @@ public class Analyze
         out.print("</div>\n");
     }
 
-    private void writePropertyHtmlRow(PrintStream out, String key)
+    private void writePropertyHtmlRow(PrintStream out, String key,
+                                      String keyLabel)
         throws Exception
     {
         String value = m_table.getProperty(key, "");
