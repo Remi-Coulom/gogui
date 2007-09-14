@@ -361,8 +361,8 @@ public class Analyze
     private void writeHtmlRow(PrintStream out, String label,
                               String value) throws Exception
     {
-        out.print("<tr><th align=\"left\" valign=\"top\">" + label + ":</th>"
-                  + "<td align=\"left\">" + value + "</td></tr>\n");
+        out.print("<tr><th align=\"left\" valign=\"top\" nowrap>" + label
+                  + ":</th><td align=\"left\">" + value + "</td></tr>\n");
     }
 
     private void writeHtmlRow(PrintStream out, String label,
