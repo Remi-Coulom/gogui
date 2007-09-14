@@ -202,8 +202,22 @@ public class Analyze
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format = StringUtil.getNumberFormat(1);
-        String black = m_table.getProperty("Black", "");
-        String white = m_table.getProperty("White", "");
+        String black;
+        if (m_table.hasProperty("BlackLabel"))
+            black = m_table.getProperty("BlackLabel");
+        else if (m_table.hasProperty("Black"))
+            // Older versions of TwoGtp do not have BlackLabel property
+            black = m_table.getProperty("Black");
+        else
+            black = "Black";
+        String white;
+        if (m_table.hasProperty("WhiteLabel"))
+            white = m_table.getProperty("WhiteLabel");
+        else if (m_table.hasProperty("White"))
+            // Older versions of TwoGtp do not have WhiteLabel property
+            white = m_table.getProperty("White");
+        else
+            white = "Black";
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + black + " - " + white + "</title>\n" +
@@ -237,10 +251,15 @@ public class Analyze
         writePropertyHtmlRow(out, "Date");
         writePropertyHtmlRow(out, "Host");
         writePropertyHtmlRow(out, "Referee");
+        writePropertyHtmlRow(out, "BlackVersion");
         writePropertyHtmlRow(out, "BlackCommand");
+        writePropertyHtmlRow(out, "WhiteVersion");
         writePropertyHtmlRow(out, "WhiteCommand");
         if (referee != null)
+        {
+            writePropertyHtmlRow(out, "RefereeVersion");
             writePropertyHtmlRow(out, "RefereeCommand");
+        }
         writeHtmlRow(out, "Games", m_games);
         writeHtmlRow(out, "Errors", m_errors);
         writeHtmlRow(out, "Duplicates", m_duplicates);
@@ -341,7 +360,7 @@ public class Analyze
     private void writeHtmlRow(PrintStream out, String label,
                               String value) throws Exception
     {
-        out.print("<tr><th align=\"left\">" + label + ":</th>"
+        out.print("<tr><th align=\"left\" valign=\"top\">" + label + ":</th>"
                   + "<td align=\"left\">" + value + "</td></tr>\n");
     }
 
