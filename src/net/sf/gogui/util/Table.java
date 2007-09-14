@@ -12,9 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Enumeration;
-import java.util.Properties;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 /** Table of string elements. */
 public class Table
@@ -170,12 +170,14 @@ public class Table
     */
     public String getProperty(String key, String def)
     {
-        return m_properties.getProperty(key, def);
+        if (! hasProperty(key))
+            return def;
+        return m_properties.get(key);
     }
 
     public boolean hasProperty(String key)
     {
-        return (m_properties.get(key) != null);
+        return m_properties.containsKey(key);
     }
 
     public void read(File file) throws FileNotFoundException, IOException,
@@ -220,11 +222,11 @@ public class Table
     {
         if (withHeader)
         {
-            for (Enumeration<?> e = m_properties.propertyNames();
-                 e.hasMoreElements(); )
+            for (Map.Entry<String,String> entry : m_properties.entrySet())
             {
-                String key = (String)e.nextElement();
-                out.write("# " + key + ": " + m_properties.get(key) + "\n");
+                String key = entry.getKey();
+                String value = entry.getValue();
+                out.write("# " + key + ": " + value + "\n");
             }
             out.write("#\n#");
             for (int i = 0; i < m_numberColumns; ++i)
@@ -287,7 +289,7 @@ public class Table
     */
     public Object setProperty(String key, String value)
     {
-        return m_properties.setProperty(key, value);
+        return m_properties.put(key, value);
     }
 
     public void startRow()
@@ -305,7 +307,8 @@ public class Table
 
     private int m_numberColumns;
 
-    private final Properties m_properties = new Properties();
+    private final Map<String,String> m_properties =
+        new TreeMap<String,String>();
 
     private final ArrayList<String> m_columnTitles;
 
