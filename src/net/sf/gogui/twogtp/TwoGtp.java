@@ -352,6 +352,11 @@ public class TwoGtp
             }
         }
 
+        public String getVersion()
+        {
+            return m_version;
+        }
+
         public void interruptProgram()
         {
             try
@@ -936,12 +941,16 @@ public class TwoGtp
         String nameWhite = m_white.getLabel();
         String blackCommand = m_black.getProgramCommand();
         String whiteCommand = m_white.getProgramCommand();
+        String blackVersion = m_black.getVersion();
+        String whiteVersion = m_white.getVersion();
         if (isAlternated())
         {
             nameBlack = m_white.getLabel();
             nameWhite = m_black.getLabel();
             blackCommand = m_white.getProgramCommand();
             whiteCommand = m_black.getProgramCommand();
+            blackVersion = m_white.getVersion();
+            whiteVersion = m_black.getVersion();
             String resultTmp = inverseResult(resultWhite);
             resultWhite = inverseResult(resultBlack);
             resultBlack = resultTmp;
@@ -954,23 +963,36 @@ public class TwoGtp
         else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
             m_game.setResult(resultBlack);
         String host = Platform.getHostInfo();
-        String gameComment =
-            "Black: " + blackCommand +
-            "\nWhite: " + whiteCommand;
+        StringBuilder comment = new StringBuilder();
+        comment.append("BlackCommand: ");
+        comment.append(blackCommand);
+        comment.append("\nWhiteCommand: ");
+        comment.append(whiteCommand);
+        comment.append("\nBlackVersion: ");
+        comment.append(blackVersion);
+        comment.append("\nWhiteVersion: ");
+        comment.append(whiteVersion);
         if (m_openings != null)
-            gameComment = gameComment +
-                "\nOpening: " + m_openingFile;
-        gameComment = gameComment +
-            "\nResult[Black]: " + resultBlack +
-            "\nResult[White]: " + resultWhite;
+        {
+            comment.append("\nOpening: ");
+            comment.append(m_openingFile);
+        }
+        comment.append("\nResult[Black]: ");
+        comment.append(resultBlack);
+        comment.append("\nResult[White]: ");
+        comment.append(resultWhite);
         if (m_referee != null)
-            gameComment = gameComment +
-                "\nReferee: " + m_referee.getProgramCommand() +
-                "\nResult[Referee]: " + resultReferee;
-        gameComment = gameComment +
-            "\nHost: " + host +
-            "\nDate: " + StringUtil.getDate();
-        m_game.setComment(gameComment, getTree().getRootConst());
+        {
+            comment.append("\nReferee: ");
+            comment.append(m_referee.getProgramCommand());
+            comment.append("\nResult[Referee]: ");
+            comment.append(resultReferee);
+        }
+        comment.append("\nHost: ");
+        comment.append(host);
+        comment.append("\nDate: ");
+        comment.append(StringUtil.getDate());
+        m_game.setComment(comment.toString(), getTree().getRootConst());
         File file = getFile(m_gameIndex);
         if (m_verbose)
             System.err.println("Saving " + file);
