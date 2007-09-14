@@ -964,13 +964,13 @@ public class TwoGtp
             m_game.setResult(resultBlack);
         String host = Platform.getHostInfo();
         StringBuilder comment = new StringBuilder();
-        comment.append("BlackCommand: ");
+        comment.append("Black command: ");
         comment.append(blackCommand);
-        comment.append("\nWhiteCommand: ");
+        comment.append("\nWhite command: ");
         comment.append(whiteCommand);
-        comment.append("\nBlackVersion: ");
+        comment.append("\nBlack version: ");
         comment.append(blackVersion);
-        comment.append("\nWhiteVersion: ");
+        comment.append("\nWhite version: ");
         comment.append(whiteVersion);
         if (m_openings != null)
         {

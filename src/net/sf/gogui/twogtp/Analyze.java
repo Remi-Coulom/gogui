@@ -251,14 +251,14 @@ public class Analyze
         writePropertyHtmlRow(out, "Date");
         writePropertyHtmlRow(out, "Host");
         writePropertyHtmlRow(out, "Referee");
-        writePropertyHtmlRow(out, "BlackVersion");
-        writePropertyHtmlRow(out, "BlackCommand");
-        writePropertyHtmlRow(out, "WhiteVersion");
-        writePropertyHtmlRow(out, "WhiteCommand");
+        writePropertyHtmlRow(out, "Black version");
+        writePropertyHtmlRow(out, "Black command");
+        writePropertyHtmlRow(out, "White version");
+        writePropertyHtmlRow(out, "White command");
         if (referee != null)
         {
-            writePropertyHtmlRow(out, "RefereeVersion");
-            writePropertyHtmlRow(out, "RefereeCommand");
+            writePropertyHtmlRow(out, "Referee version");
+            writePropertyHtmlRow(out, "Referee command");
         }
         writeHtmlRow(out, "Games", m_games);
         writeHtmlRow(out, "Errors", m_errors);
@@ -336,11 +336,11 @@ public class Analyze
         if (statistics.m_win.getCount() > 0)
             writeHtmlRowPercentData(out, "Black wins", statistics.m_win,
                                     format);
-        out.print("<tr><th align=\"left\">Unknown Result"
+        out.print("<tr><th align=\"left\">Unknown result"
                   + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownResult.getMean() * 100)
                   + "%" + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown Score"
+                  "<tr><th align=\"left\">Unknown score"
                   + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownScore.getMean() * 100)
                   + "%" + "</td></tr>\n" +
