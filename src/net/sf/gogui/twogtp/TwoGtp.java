@@ -415,7 +415,7 @@ public class TwoGtp
         {
             boolean isUnique = true;
             for (Program program : programs)
-                if (program.m_name.equals(m_name))
+                if (program != this && program.m_name.equals(m_name))
                 {
                     isUnique = false;
                     break;
@@ -426,7 +426,7 @@ public class TwoGtp
                      &&  m_version.length() <= 40)
                 m_label = m_name + ":" + m_version;
             else
-                m_label = m_name + ":[" + (programs.indexOf(this) + 1) + "]";
+                m_label = m_name + "[" + (programs.indexOf(this) + 1) + "]";
         }
 
         public void setTableProperties(Table table)
