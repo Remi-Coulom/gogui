@@ -265,8 +265,8 @@ public class Analyze
         writeHtmlRow(out, "Duplicates", m_duplicates);
         writeHtmlRow(out, "Games used", m_gamesUsed);
         writeHtmlRow(out, "Game length", m_length, format);
-        writeHtmlRow(out, "CpuTime Black", m_cpuBlack, format);
-        writeHtmlRow(out, "CpuTime White", m_cpuWhite, format);
+        writeHtmlRow(out, "CPU Time Black", m_cpuBlack, format);
+        writeHtmlRow(out, "CPU Time White", m_cpuWhite, format);
         out.print("</table>\n" +
                   "<hr>\n");
         if (referee != null)
@@ -290,8 +290,8 @@ public class Analyze
         out.print("<th>Colors Exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
-                  "<th>CpuTime " + black + "</th>\n" +
-                  "<th>CpuTime " + white + "</th>\n" +
+                  "<th>CPU Time " + black + "</th>\n" +
+                  "<th>CPU Time " + white + "</th>\n" +
                   "<th>Error</th>\n" +
                   "<th>Error Message</th>\n" +
                   "</tr>\n" +
