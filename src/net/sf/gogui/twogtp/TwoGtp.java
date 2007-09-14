@@ -433,6 +433,7 @@ public class TwoGtp
         {
             table.setProperty(m_defaultName, m_name);
             table.setProperty(m_defaultName + "Version", m_version);
+            table.setProperty(m_defaultName + "Label", m_label);
             table.setProperty(m_defaultName + "Command", getProgramCommand());
         }
 
