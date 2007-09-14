@@ -13,9 +13,10 @@ import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.Game;
+import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
@@ -63,64 +64,27 @@ public class TwoGtp
         m_sgfFile = sgfFile;
         if (force)
             getResultFile().delete();
-        m_black = new GtpClient(black, null, verbose, null);
-        m_black.setLogPrefix("B");
-        m_synchronizerBlack = new GtpSynchronizer(m_black);
-        m_white = new GtpClient(white, null, verbose, null);
-        m_white.setLogPrefix("W");
-        m_synchronizerWhite = new GtpSynchronizer(m_white);
-        m_refereeCommand = referee;
+        m_allPrograms = new ArrayList<Program>();
+        m_black = new Program(black, "Black", "B", verbose);
+        m_allPrograms.add(m_black);
+        m_white = new Program(white, "White", "W", verbose);
+        m_allPrograms.add(m_white);
         if (referee.equals(""))
-        {
             m_referee = null;
-            m_synchronizerReferee = null;
-        }
         else
         {
-            m_referee = new GtpClient(referee, null, verbose, null);
-            m_referee.setLogPrefix("R");
-            m_synchronizerReferee = new GtpSynchronizer(m_referee);
+            m_referee = new Program(referee, "Referee", "R", verbose);
+            m_allPrograms.add(m_referee);
         }
         if (observer.equals(""))
-        {
             m_observer = null;
-            m_synchronizerObserver = null;
-        }
         else
         {
-            m_observer = new GtpClient(observer, null, verbose, null);
-            m_observer.setLogPrefix("O");
-            m_synchronizerObserver = new GtpSynchronizer(m_observer);
+            m_observer = new Program(observer, "Observer", "O", verbose);
+            m_allPrograms.add(m_observer);
         }
-        m_black.queryProtocolVersion();
-        m_white.queryProtocolVersion();
-        m_nameBlack = getName(m_black, "Black");
-        m_nameWhite = getName(m_white, "White");
-        m_blackVersion = getVersion(m_black);
-        m_whiteVersion = getVersion(m_white);
-        m_black.querySupportedCommands();
-        m_white.querySupportedCommands();
-        m_black.queryInterruptSupport();
-        m_white.queryInterruptSupport();
-        if (m_referee == null)
-        {
-            m_nameReferee = null;
-            m_refereeVersion = null;
-        }
-        else
-        {
-            m_referee.queryProtocolVersion();
-            m_nameReferee = getName(m_referee, "Referee");
-            m_refereeVersion = getVersion(m_referee);
-            m_referee.querySupportedCommands();
-            m_referee.queryInterruptSupport();
-        }
-        if (m_observer != null)
-        {
-            m_observer.queryProtocolVersion();
-            m_observer.querySupportedCommands();
-            m_observer.queryInterruptSupport();
-        }
+        for (Program program : m_allPrograms)
+            program.setLabel(m_allPrograms);
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
@@ -279,27 +243,10 @@ public class TwoGtp
         }
     }
 
-    public void interruptProgram(GtpClient gtp)
-    {
-        try
-        {
-            if (gtp.isInterruptSupported())
-                gtp.sendInterrupt();
-        }
-        catch (GtpError e)
-        {
-            System.err.println(e);
-        }
-    }
-
     public void interruptCommand()
     {
-        interruptProgram(m_black);
-        interruptProgram(m_white);
-        if (m_referee != null)
-            interruptProgram(m_referee);
-        if (m_observer != null)
-            interruptProgram(m_observer);
+        for (Program program : m_allPrograms)
+            program.interruptProgram();
     }
 
     /** Limit number of moves.
@@ -309,6 +256,234 @@ public class TwoGtp
     public void setMaxMoves(int maxMoves)
     {
         m_maxMoves = maxMoves;
+    }
+
+    private final static class Program
+    {
+        public Program(String command, String defaultName, String logPrefix,
+                       boolean verbose) throws GtpError
+        {
+            m_defaultName = defaultName;
+            m_gtp = new GtpClient(command, null, verbose, null);
+            m_gtp.setLogPrefix(logPrefix);
+            m_synchronizer = new GtpSynchronizer(m_gtp);
+            m_gtp.queryProtocolVersion();
+            try
+            {
+                m_name = m_gtp.send("name");
+                if (m_name.trim().equals(""))
+                    m_name = defaultName;
+            }
+            catch (GtpError e)
+            {
+                m_name = defaultName;
+            }
+            try
+            {
+                m_version = m_gtp.send("version");
+            }
+            catch (GtpError e)
+            {
+                m_version = "";
+            }
+            m_gtp.querySupportedCommands();
+            m_gtp.queryInterruptSupport();
+        }
+
+        public void close()
+        {
+            // Some programs don't handle closing input stream well, so
+            // we send an explicit quit
+            try
+            {
+                m_gtp.send("quit");
+            }
+            catch (GtpError e)
+            {
+            }
+            m_gtp.close();
+            m_gtp.waitForExit();
+        }
+
+        /** Get cputime since program start or last invocation of this
+            function.
+        */
+        public double getAndClearCpuTime()
+        {
+            double cpuTime;
+            try
+            {
+                if (m_gtp.isCpuTimeSupported())
+                    cpuTime = m_gtp.getCpuTime();
+                else
+                    cpuTime = 0;
+            }
+            catch (GtpError e)
+            {
+                cpuTime = 0;
+            }
+            double result = Math.max(0, cpuTime - m_cpuTime);
+            m_cpuTime = cpuTime;
+            return result;
+        }
+
+        /** Get unique label.
+            Call setLabel() first.
+        */
+        public String getLabel()
+        {
+            return m_label;
+        }
+
+        public String getProgramCommand()
+        {
+            return m_gtp.getProgramCommand();
+        }
+
+        public String getResult()
+        {
+            try
+            {
+                return m_gtp.send("final_score");
+            }
+            catch (GtpError e)
+            {
+                return "?";
+            }
+        }
+
+        public void interruptProgram()
+        {
+            try
+            {
+                if (m_gtp.isInterruptSupported())
+                    m_gtp.sendInterrupt();
+            }
+            catch (GtpError e)
+            {
+                System.err.println(e);
+            }
+        }
+
+        public boolean isOutOfSync()
+        {
+            return m_synchronizer.isOutOfSync();
+        }
+
+        public boolean isProgramDead()
+        {
+            return m_gtp.isProgramDead();
+        }
+
+        public boolean isSupported(String command)
+        {
+            return m_gtp.isSupported(command);
+        }
+
+        public String send(String command) throws GtpError
+        {
+            return m_gtp.send(command);
+        }
+
+        public String sendCommandGenmove(GoColor color) throws GtpError
+        {
+            return send(m_gtp.getCommandGenmove(color));
+        }
+
+        public void sendIfSupported(String cmd, String cmdLine)
+        {
+            if (! m_gtp.isSupported(cmd))
+                return;
+            try
+            {
+                m_gtp.send(cmdLine);
+            }
+            catch (GtpError e)
+            {
+            }
+        }
+
+        /** Choose a unique label for this program.
+            The label will be the program name, if it is the only one with
+            this name, otherwise the program name with the version appended
+            (or numbers, if the version string is empty or more than 40
+            characters).
+            @param programs The list of all programs (must include this
+            program)
+        */
+        public void setLabel(ArrayList<Program> programs)
+        {
+            boolean isUnique = true;
+            for (Program program : programs)
+                if (program.m_name.equals(m_name))
+                {
+                    isUnique = false;
+                    break;
+                }
+            if (isUnique)
+                m_label = m_name;
+            else if (! m_version.trim().equals("")
+                     &&  m_version.length() <= 40)
+                m_label = m_name + ":" + m_version;
+            else
+                m_label = m_name + ":[" + (programs.indexOf(this) + 1) + "]";
+        }
+
+        public void setTableProperties(Table table)
+        {
+            table.setProperty(m_defaultName, m_name);
+            table.setProperty(m_defaultName + "Version", m_version);
+            table.setProperty(m_defaultName + "Command", getProgramCommand());
+        }
+
+        public void synchronize(ConstGame game) throws GtpError
+        {
+            try
+            {
+                ConstNode node = game.getGameInformationNode();
+                ConstGameInformation info = game.getGameInformation(node);
+                m_synchronizer.synchronize(game.getBoard(), info.getKomi(),
+                                           info.getTimeSettings());
+            }
+            catch (GtpError e)
+            {
+                throw new GtpError(m_label + ": " + e.getMessage());
+            }
+        }
+
+        public void synchronizeInit(ConstGame game) throws GtpError
+        {
+            try
+            {
+                ConstNode node = game.getGameInformationNode();
+                ConstGameInformation info = game.getGameInformation(node);
+                m_synchronizer.init(game.getBoard(), info.getKomi(),
+                                    info.getTimeSettings());
+            }
+            catch (GtpError e)
+            {
+                throw new GtpError(m_label + ": " + e.getMessage());
+            }
+        }
+
+        public void updateAfterGenmove(ConstBoard board)
+        {
+            m_synchronizer.updateAfterGenmove(board);
+        }
+
+        private double m_cpuTime;
+
+        private String m_defaultName;
+
+        private String m_label;
+
+        private GtpClient m_gtp;
+
+        private GtpSynchronizer m_synchronizer;
+
+        private String m_name;
+
+        private String m_version;
     }
 
     private final boolean m_alternate;
@@ -333,52 +508,28 @@ public class TwoGtp
     */
     private final Komi m_komi;
 
-    private double m_cpuTimeBlack;
-
-    private double m_cpuTimeWhite;
-
     private Game m_game;
 
     private GoColor m_resignColor;
 
     private final Openings m_openings;
 
-    private final String m_nameBlack;
+    private final Program m_black;
 
-    private final String m_nameReferee;
+    private final Program m_white;
 
-    private final String m_nameWhite;
+    private final Program m_referee;
 
-    private final String m_blackVersion;
+    private final Program m_observer;
+
+    private final ArrayList<Program> m_allPrograms;
 
     private String m_openingFile;
 
-    private final String m_refereeCommand;
-
-    private final String m_refereeVersion;
-
     private final String m_sgfFile;
-
-    private final String m_whiteVersion;
 
     private final ArrayList<ArrayList<Compare.Placement>> m_games
         = new ArrayList<ArrayList<Compare.Placement>>(100);
-
-    private final GtpClient m_black;
-
-    private final GtpClient m_observer;
-
-    private final GtpClient m_referee;
-
-    private final GtpClient m_white;
-
-    private final GtpSynchronizer m_synchronizerBlack;
-
-    private final GtpSynchronizer m_synchronizerWhite;
-
-    private final GtpSynchronizer m_synchronizerReferee;
-
-    private final GtpSynchronizer m_synchronizerObserver;
 
     private Table m_table;
 
@@ -388,36 +539,15 @@ public class TwoGtp
 
     private void checkInconsistentState() throws GtpError
     {
-        if (m_synchronizerBlack.isOutOfSync()
-            || m_synchronizerWhite.isOutOfSync()
-            || (m_referee != null && m_synchronizerReferee.isOutOfSync())
-            || (m_observer != null && m_synchronizerObserver.isOutOfSync()))
-            throw new GtpError("Inconsistent state");
+        for (Program program : m_allPrograms)
+            if (program.isOutOfSync())
+                throw new GtpError("Inconsistent state");
     }
 
-    public void close()
+    private void close()
     {
-        close(m_black);
-        close(m_white);
-        close(m_referee);
-        close(m_observer);
-    }
-
-    private void close(GtpClient gtp)
-    {
-        if (gtp == null)
-            return;
-        // Some programs don't handle closing input stream well, so
-        // we send an explicit quit
-        try
-        {
-            gtp.send("quit");
-        }
-        catch (GtpError e)
-        {
-        }
-        gtp.close();
-        gtp.waitForExit();
+        for (Program program : m_allPrograms)
+            program.close();
     }
 
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
@@ -526,21 +656,12 @@ public class TwoGtp
         columns.add("ERR");
         columns.add("ERR_MSG");
         m_table = new Table(columns);
-        String nameBlack = m_nameBlack;
-        String nameWhite = m_nameWhite;
-        if (! m_blackVersion.equals(""))
-            nameBlack = m_nameBlack + ":" + m_blackVersion;
-        if (! m_whiteVersion.equals(""))
-            nameWhite = m_nameWhite + ":" + m_whiteVersion;
-        String nameReferee = "-";
-        if (m_referee != null)
-            nameReferee = m_nameReferee + ":" + m_refereeVersion;
-        m_table.setProperty("Black", nameBlack);
-        m_table.setProperty("White", nameWhite);
-        m_table.setProperty("Referee", nameReferee);
-        m_table.setProperty("BlackCommand", m_black.getProgramCommand());
-        m_table.setProperty("WhiteCommand", m_white.getProgramCommand());
-        m_table.setProperty("RefereeCommand", m_refereeCommand);
+        m_black.setTableProperties(m_table);
+        m_white.setTableProperties(m_table);
+        if (m_referee == null)
+            m_table.setProperty("Referee", "-");
+        else
+            m_referee.setTableProperties(m_table);
         m_table.setProperty("Size", Integer.toString(m_size));
         m_table.setProperty("Komi", m_komi.toString());
         if (m_openings != null)
@@ -551,9 +672,9 @@ public class TwoGtp
         m_table.setProperty("Host", Platform.getHostInfo());
     }
 
-    private void forward(GtpClient gtp, GtpCommand cmd) throws GtpError
+    private void forward(Program program, GtpCommand cmd) throws GtpError
     {
-        cmd.setResponse(gtp.send(cmd.getLine()));
+        cmd.setResponse(program.send(cmd.getLine()));
     }
 
     private boolean gameOver()
@@ -566,20 +687,6 @@ public class TwoGtp
         return m_game.getBoard();
     }
 
-    private double getCpuTime(GtpClient gtp)
-    {
-        double result = 0;
-        try
-        {
-            if (gtp.isCpuTimeSupported())
-                result = gtp.getCpuTime();
-        }
-        catch (GtpError e)
-        {
-        }
-        return result;
-    }
-
     private ConstNode getCurrentNode()
     {
         return m_game.getCurrentNode();
@@ -588,20 +695,6 @@ public class TwoGtp
     private File getFile(int gameIndex)
     {
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
-    }
-
-    private static String getName(GtpClient gtp, String defaultName)
-    {
-        try
-        {
-            String name = gtp.send("name");
-            if (! name.trim().equals(""))
-                return name;
-        }
-        catch (GtpError e)
-        {
-        }
-        return defaultName;
     }
 
     private GoColor getToMove()
@@ -614,34 +707,6 @@ public class TwoGtp
         return m_game.getTree();
     }
 
-    private static String getVersion(GtpClient gtp)
-    {
-        try
-        {
-            String version = gtp.send("version");
-            if (! version.trim().equals(""))
-                return version;
-            if (version.length() > 40)
-                version = "";
-        }
-        catch (GtpError e)
-        {
-        }
-        return "";
-    }
-
-    private static String getResult(GtpClient gtp)
-    {
-        try
-        {
-            return gtp.send("final_score");
-        }
-        catch (GtpError e)
-        {
-            return "?";
-        }
-    }
-
     private File getResultFile()
     {
         return new File(m_sgfFile + ".dat");
@@ -650,23 +715,14 @@ public class TwoGtp
     private String getTitle()
     {
         StringBuilder buffer = new StringBuilder();
-        String nameBlack = m_nameBlack;
-        String nameWhite = m_nameWhite;
-        if (nameBlack.equals(nameWhite))
-        {
-            if (! m_blackVersion.equals(""))
-                nameBlack = m_nameBlack + ":" + m_blackVersion;
-            if (! m_whiteVersion.equals(""))
-                nameWhite = m_nameWhite + ":" + m_whiteVersion;
-        }
+        String nameBlack = m_black.getLabel();
+        String nameWhite = m_white.getLabel();
         if (isAlternated())
         {
             String tmpName = nameBlack;
             nameBlack = nameWhite;
             nameWhite = tmpName;
         }
-        nameBlack = StringUtil.capitalize(nameBlack);
-        nameWhite = StringUtil.capitalize(nameWhite);
         buffer.append(nameWhite);
         buffer.append(" vs ");
         buffer.append(nameBlack);
@@ -698,18 +754,14 @@ public class TwoGtp
             }
             else
             {
-                resultBlack = getResult(m_black);
-                resultWhite = getResult(m_white);
+                resultBlack = m_black.getResult();
+                resultWhite = m_white.getResult();
                 resultReferee = "?";
                 if (m_referee != null)
-                    resultReferee = getResult(m_referee);
+                    resultReferee = m_referee.getResult();
             }
-            double cpuTimeBlack
-                = Math.max(0, getCpuTime(m_black) - m_cpuTimeBlack);
-            double cpuTimeWhite
-                = Math.max(0, getCpuTime(m_white) - m_cpuTimeWhite);
-            m_cpuTimeBlack = cpuTimeBlack;
-            m_cpuTimeWhite = cpuTimeWhite;
+            double cpuTimeBlack = m_black.getAndClearCpuTime();
+            double cpuTimeWhite = m_white.getAndClearCpuTime();
             if (isAlternated())
             {
                 resultBlack = inverseResult(resultBlack);
@@ -830,8 +882,8 @@ public class TwoGtp
 
     private void newGame(int size) throws GtpError
     {
-        m_cpuTimeBlack = getCpuTime(m_black);
-        m_cpuTimeWhite = getCpuTime(m_white);
+        m_black.getAndClearCpuTime();
+        m_white.getAndClearCpuTime();
         initGame(size);
         m_gameSaved = false;
         sendIfSupported("komi", "komi " + m_komi);
@@ -879,22 +931,14 @@ public class TwoGtp
     {
         if (m_sgfFile.equals(""))
             return;
-        String nameBlack = m_nameBlack;
-        if (! m_blackVersion.equals(""))
-            nameBlack = nameBlack + ":" + m_blackVersion;
-        String nameWhite = m_nameWhite;
-        if (! m_whiteVersion.equals(""))
-            nameWhite = nameWhite + ":" + m_whiteVersion;
+        String nameBlack = m_black.getLabel();
+        String nameWhite = m_white.getLabel();
         String blackCommand = m_black.getProgramCommand();
         String whiteCommand = m_white.getProgramCommand();
         if (isAlternated())
         {
-            nameBlack = m_nameWhite;
-            if (! m_whiteVersion.equals(""))
-                nameBlack = nameBlack + ":" + m_whiteVersion;
-            nameWhite = m_nameBlack;
-            if (! m_blackVersion.equals(""))
-                nameWhite = nameWhite + ":" + m_blackVersion;
+            nameBlack = m_white.getLabel();
+            nameWhite = m_black.getLabel();
             blackCommand = m_white.getProgramCommand();
             whiteCommand = m_black.getProgramCommand();
             String resultTmp = inverseResult(resultWhite);
@@ -920,7 +964,7 @@ public class TwoGtp
             "\nResult[White]: " + resultWhite;
         if (m_referee != null)
             gameComment = gameComment +
-                "\nReferee: " + m_refereeCommand +
+                "\nReferee: " + m_referee.getProgramCommand() +
                 "\nResult[Referee]: " + resultReferee;
         gameComment = gameComment +
             "\nHost: " + host +
@@ -983,7 +1027,7 @@ public class TwoGtp
             response.append(GoPoint.toString(move.getPoint()));
             return;
         }
-        GtpClient gtp;
+        Program program;
         String name;
         String command;
         GtpSynchronizer synchronizer;
@@ -991,20 +1035,10 @@ public class TwoGtp
             (color == BLACK && isAlternated())
             || (color == WHITE && ! isAlternated());
         if (exchangeColors)
-        {
-            gtp = m_white;
-            name = m_nameWhite;
-            synchronizer = m_synchronizerWhite;
-            command = m_white.getCommandGenmove(color);
-        }
+            program = m_white;
         else
-        {
-            gtp = m_black;
-            name = m_nameBlack;
-            synchronizer = m_synchronizerBlack;
-            command = m_black.getCommandGenmove(color);
-        }
-        String responseGenmove = gtp.send(command);
+            program = m_black;
+        String responseGenmove = program.sendCommandGenmove(color);
         if (responseGenmove.equalsIgnoreCase("resign"))
         {
             response.append("resign");
@@ -1021,12 +1055,13 @@ public class TwoGtp
             }
             catch (GtpResponseFormatError e)
             {
-                throw new GtpError(name + " played invalid move: "
+                throw new GtpError(program.getLabel()
+                                   + " played invalid move: "
                                    + responseGenmove);
             }
             Move move = Move.get(color, point);
             m_game.play(move);
-            synchronizer.updateAfterGenmove(board);
+            program.updateAfterGenmove(board);
             synchronize();
             response.append(GoPoint.toString(move.getPoint()));
         }
@@ -1039,82 +1074,25 @@ public class TwoGtp
 
     private void sendIfSupported(String cmd, String cmdLine)
     {
-        sendIfSupported(m_black, cmd, cmdLine);
-        sendIfSupported(m_white, cmd, cmdLine);
-        if (m_referee != null)
-            sendIfSupported(m_referee, cmd, cmdLine);
-        if (m_observer != null)
-            sendIfSupported(m_observer, cmd, cmdLine);
-    }
-
-    private void sendIfSupported(GtpClient gtp, String cmd, String cmdLine)
-    {
-        if (! gtp.isSupported(cmd))
-            return;
-        try
-        {
-            gtp.send(cmdLine);
-        }
-        catch (GtpError e)
-        {
-        }
+        for (Program program : m_allPrograms)
+            program.sendIfSupported(cmd, cmdLine);
     }
 
     private void synchronize() throws GtpError
     {
-        synchronize(m_synchronizerBlack, m_nameBlack);
-        synchronize(m_synchronizerWhite, m_nameWhite);
-        synchronize(m_synchronizerReferee, m_nameReferee);
-        synchronize(m_synchronizerObserver, "Observer");
-    }
-
-    private void synchronize(GtpSynchronizer synchronizer,
-                             String name) throws GtpError
-    {
-        if (synchronizer == null)
-            return;
-        try
-        {
-            ConstNode node = m_game.getGameInformationNode();
-            ConstGameInformation info = m_game.getGameInformation(node);
-            synchronizer.synchronize(getBoard(), info.getKomi(),
-                                     info.getTimeSettings());
-        }
-        catch (GtpError e)
-        {
-            throw new GtpError(name + ": " + e.getMessage());
-        }
+        for (Program program : m_allPrograms)
+            program.synchronize(m_game);
     }
 
     private void synchronizeInit() throws GtpError
     {
-        synchronizeInit(m_synchronizerBlack, m_nameBlack);
-        synchronizeInit(m_synchronizerWhite, m_nameWhite);
-        synchronizeInit(m_synchronizerReferee, m_nameReferee);
-        synchronizeInit(m_synchronizerObserver, "Observer");
+        for (Program program : m_allPrograms)
+            program.synchronizeInit(m_game);
     }
 
-    private void synchronizeInit(GtpSynchronizer synchronizer,
-                                 String name) throws GtpError
+    private void twogtpColor(Program program, GtpCommand cmd) throws GtpError
     {
-        if (synchronizer == null)
-            return;
-        try
-        {
-            ConstNode node = m_game.getGameInformationNode();
-            ConstGameInformation info = m_game.getGameInformation(node);
-            synchronizer.init(getBoard(), info.getKomi(),
-                              info.getTimeSettings());
-        }
-        catch (GtpError e)
-        {
-            throw new GtpError(name + ": " + e.getMessage());
-        }
-    }
-
-    private void twogtpColor(GtpClient gtp, GtpCommand cmd) throws GtpError
-    {
-        cmd.setResponse(gtp.send(cmd.getArgLine()));
+        cmd.setResponse(program.send(cmd.getArgLine()));
     }
 
     private void twogtpObserver(GtpCommand cmd) throws GtpError
