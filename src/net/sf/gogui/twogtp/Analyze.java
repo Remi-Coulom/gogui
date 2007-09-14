@@ -285,13 +285,13 @@ public class Analyze
                   "<th>Game</th>\n");
         if (referee != null)
             out.print("<th>Result [" + referee + "]</th>\n");
-        out.print("<th>Result [" + black + "]</th>\n" +
-                  "<th>Result [" + white + "]</th>\n");
+        out.print("<th>Result " + black + "</th>\n" +
+                  "<th>Result " + white + "</th>\n");
         out.print("<th>Colors Exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
-                  "<th>CpuTime Black</th>\n" +
-                  "<th>CpuTime White</th>\n" +
+                  "<th>CpuTime " + black + "</th>\n" +
+                  "<th>CpuTime " + white + "</th>\n" +
                   "<th>Error</th>\n" +
                   "<th>Error Message</th>\n" +
                   "</tr>\n" +
@@ -355,7 +355,7 @@ public class Analyze
         throws Exception
     {
         String value = m_table.getProperty(key, "");
-        writeHtmlRow(out, key, value);
+        writeHtmlRow(out, keyLabel, value);
     }
 
     private void writeHtmlRow(PrintStream out, String label,
