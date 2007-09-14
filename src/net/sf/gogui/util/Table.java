@@ -166,6 +166,15 @@ public class Table
 
     /** Get meta information.
         @param key the property key
+        @return The property value or null, if it dows not exist
+    */
+    public String getProperty(String key)
+    {
+        return getProperty(key, null);
+    }
+
+    /** Get meta information.
+        @param key the property key
         @param def the default value, if this property does not exist
     */
     public String getProperty(String key, String def)
