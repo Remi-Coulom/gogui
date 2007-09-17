@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.AWTKeyStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -58,6 +59,10 @@ public class Comment
         m_textPane.addCaretListener(caretListener);
         setViewportView(m_textPane);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        if (Platform.isMac())
+            m_normalFont = new Font("Lucida Grande", Font.PLAIN, 11);
+        else
+            m_normalFont = UIManager.getFont("TextPane.font");
         setMonoFont(false);
     }
 
@@ -124,7 +129,7 @@ public class Comment
         if (enable)
             GuiUtil.setMonospacedFont(m_textPane);
         else
-            m_textPane.setFont(UIManager.getFont("TextPane.font"));
+            m_textPane.setFont(m_normalFont);
         m_monoFont = enable;
         m_textPane.repaint();
     }
@@ -161,6 +166,8 @@ public class Comment
     private final JTextPane m_textPane;
 
     private final Listener m_listener;
+
+    private final Font m_normalFont;
 
     private void fireChangedEvent()
     {
