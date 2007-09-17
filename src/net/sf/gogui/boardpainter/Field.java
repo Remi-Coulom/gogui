@@ -51,8 +51,8 @@ public class Field
             drawTerritoryGraphics();
         if (m_color != EMPTY)
             drawStone(m_color, false);
-        if (m_shadowStone != null)
-            drawStone(m_shadowStone, true);
+        if (m_ghostStone != null)
+            drawStone(m_ghostStone, true);
         if (m_label != null && ! m_label.equals(""))
             drawLabel(x, y, graphics, boardImage, boardWidth);
         if (m_territory != EMPTY && m_graphics2D != null)
@@ -116,10 +116,10 @@ public class Field
         return m_select;
     }
 
-    /** @see #setShadowStone */
-    public GoColor getShadowStone()
+    /** @see #setGhostStone */
+    public GoColor getGhostStone()
     {
-        return m_shadowStone;
+        return m_ghostStone;
     }
 
     public static int getStoneMargin(int size)
@@ -209,9 +209,9 @@ public class Field
         @param color The color of the shadow stone or null to remove a
         shadow stone.
     */
-    public void setShadowStone(GoColor color)
+    public void setGhostStone(GoColor color)
     {
-        m_shadowStone = color;
+        m_ghostStone = color;
     }
 
     public void setLabel(String s)
@@ -311,7 +311,7 @@ public class Field
 
     private GoColor m_color = EMPTY;
 
-    private GoColor m_shadowStone;
+    private GoColor m_ghostStone;
 
     private Graphics m_graphics;
 
@@ -402,7 +402,7 @@ public class Field
         int ascent = (int)lineMetrics.getAscent();
         int x = Math.max((m_size - width) / 2, 0);
         int y = (ascent + m_size) / 2;
-        if (m_shadowStone == null)
+        if (m_ghostStone == null)
         {
             if (m_color == BLACK)
                 m_graphics.setColor(Color.white);
@@ -411,7 +411,7 @@ public class Field
         }
         else
         {
-            if (m_shadowStone == BLACK)
+            if (m_ghostStone == BLACK)
                 m_graphics.setColor(Color.white);
             else
                 m_graphics.setColor(Color.black);
@@ -419,7 +419,7 @@ public class Field
         Rectangle clip = m_graphics.getClipBounds();
         width = Math.min(width, (int)(0.95 * m_size));
         m_graphics.setClip(x, y - ascent, width, height);
-        if (m_color == EMPTY && m_shadowStone == null)
+        if (m_color == EMPTY && m_ghostStone == null)
         {
             Rectangle boardClip = boardGraphics.getClipBounds();
             boardGraphics.setClip(fieldX + x, fieldY + y - ascent,
@@ -484,18 +484,18 @@ public class Field
         m_graphics.setPaintMode();
     }
 
-    private void drawStone(GoColor color, boolean isShadowStone)
+    private void drawStone(GoColor color, boolean isGhostStone)
     {
         if (color == BLACK)
             drawStone(color, COLOR_STONE_BLACK, COLOR_STONE_BLACK_BRIGHT,
-                      isShadowStone);
+                      isGhostStone);
         else if (color == WHITE)
             drawStone(color, COLOR_STONE_WHITE, COLOR_STONE_WHITE_BRIGHT,
-                      isShadowStone);
+                      isGhostStone);
     }
 
     private void drawStone(GoColor color, Color colorNormal,
-                           Color colorBright, boolean isShadowStone)
+                           Color colorBright, boolean isGhostStone)
     {
         int margin = getStoneMargin(m_size);
         if (m_graphics2D != null && m_size >= 7)
@@ -508,7 +508,7 @@ public class Field
         {
             m_graphics.setColor(colorNormal);
         }
-        if (isShadowStone)
+        if (isGhostStone)
             setComposite(COMPOSITE_85);
         m_graphics.fillOval(margin, margin,
                             m_size - 2 * margin, m_size - 2 * margin);

@@ -374,7 +374,7 @@ public final class AnalyzeShow
                 ++n;
                 if (point != null)
                 {
-                    guiBoard.setShadowStone(point, color);
+                    guiBoard.setGhostStone(point, color);
                     guiBoard.setLabel(point, Integer.toString(n));
                 }
             }

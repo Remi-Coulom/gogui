@@ -86,7 +86,7 @@ public final class GuiBoard
         clearAllSelect();
         clearAllInfluence();
         clearAllLabels();
-        clearAllShadowStones();
+        clearAllGhostStones();
         clearAllTerritory();
         clearLastMove();
     }
@@ -139,11 +139,11 @@ public final class GuiBoard
     }
 
     /** Clear all shadow stones. */
-    public void clearAllShadowStones()
+    public void clearAllGhostStones()
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setShadowStone(GoPoint.get(x, y), null);
+                setGhostStone(GoPoint.get(x, y), null);
     }
 
     /** Clear all territory. */
@@ -472,6 +472,16 @@ public final class GuiBoard
         }
     }
 
+    public void setGhostStone(GoPoint point, GoColor color)
+    {
+        Field field = getField(point);
+        if (! ObjectUtil.equals(field.getGhostStone(), color))
+        {
+            field.setGhostStone(color);
+            m_panel.repaintWithShadow(point);
+        }
+    }
+
     /** Set influence value.
         @param point The point.
         @param value The influence value between -1 and 1.
@@ -606,16 +616,6 @@ public final class GuiBoard
             m_showGrid = showGrid;
             m_dirty = new Rectangle(0, 0, getWidth(), getHeight());
             repaint();
-        }
-    }
-
-    public void setShadowStone(GoPoint point, GoColor color)
-    {
-        Field field = getField(point);
-        if (! ObjectUtil.equals(field.getShadowStone(), color))
-        {
-            field.setShadowStone(color);
-            m_panel.repaintWithShadow(point);
         }
     }
 
