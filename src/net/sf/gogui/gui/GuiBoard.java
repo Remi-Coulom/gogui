@@ -25,7 +25,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import javax.swing.JPanel;
 import net.sf.gogui.boardpainter.BoardPainter;
-import net.sf.gogui.boardpainter.GuiField;
+import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.EMPTY;
@@ -278,7 +278,7 @@ public final class GuiBoard
         assert size > 0 && size <= GoPoint.MAX_SIZE;
         m_size = size;
         m_constants = BoardConstants.get(size);
-        m_field = new GuiField[size][size];
+        m_field = new Field[size][size];
         removeAll();
         m_cursor = null;
         setLayout(new SquareLayout());
@@ -357,13 +357,8 @@ public final class GuiBoard
                 }
             });
         for (int y = size - 1; y >= 0; --y)
-        {
             for (int x = 0; x < size; ++x)
-            {
-                GuiField field = new GuiField();
-                m_field[x][y] = field;
-            }
-        }
+                m_field[x][y] = new Field();
         m_lastMove = null;
         setCursor(GoPoint.get(m_size / 2, m_size / 2));
         revalidate();
@@ -380,7 +375,7 @@ public final class GuiBoard
         m_lastMove = point;
         if (m_lastMove != null)
         {
-            GuiField field = getField(m_lastMove);
+            Field field = getField(m_lastMove);
             field.setLastMoveMarker(true);
             repaint(point);
             m_lastMove = point;
@@ -423,7 +418,7 @@ public final class GuiBoard
     */
     public void setColor(GoPoint point, GoColor color)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getColor() != color)
         {
             field.setColor(color);
@@ -453,7 +448,7 @@ public final class GuiBoard
     */
     public void setFieldBackground(GoPoint point, Color color)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if ((field.getFieldBackground() == null && color != null)
             || (field.getFieldBackground() != null
                 && ! field.getFieldBackground().equals(color)))
@@ -469,7 +464,7 @@ public final class GuiBoard
     */
     public void setCrossHair(GoPoint point, boolean crossHair)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getCrossHair() != crossHair)
         {
             field.setCrossHair(crossHair);
@@ -494,7 +489,7 @@ public final class GuiBoard
     */
     public void setLabel(GoPoint point, String label)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if ((field.getLabel() == null && label != null)
             || (field.getLabel() != null
                 && ! field.getLabel().equals(label)))
@@ -519,7 +514,7 @@ public final class GuiBoard
     */
     public void setMark(GoPoint point, boolean mark)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getMark() != mark)
         {
             getField(point).setMark(mark);
@@ -533,7 +528,7 @@ public final class GuiBoard
     */
     public void setMarkCircle(GoPoint point, boolean mark)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getMarkCircle() != mark)
         {
             getField(point).setMarkCircle(mark);
@@ -547,7 +542,7 @@ public final class GuiBoard
     */
     public void setMarkSquare(GoPoint point, boolean mark)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getMarkSquare() != mark)
         {
             getField(point).setMarkSquare(mark);
@@ -561,7 +556,7 @@ public final class GuiBoard
     */
     public void setMarkTriangle(GoPoint point, boolean mark)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getMarkTriangle() != mark)
         {
             getField(point).setMarkTriangle(mark);
@@ -581,7 +576,7 @@ public final class GuiBoard
     */
     public void setSelect(GoPoint point, boolean select)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getSelect() != select)
         {
             getField(point).setSelect(select);
@@ -616,7 +611,7 @@ public final class GuiBoard
 
     public void setShadowStone(GoPoint point, GoColor color)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (! ObjectUtil.equals(field.getShadowStone(), color))
         {
             field.setShadowStone(color);
@@ -631,7 +626,7 @@ public final class GuiBoard
     */
     public void setTerritory(GoPoint point, GoColor color)
     {
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getTerritory() != color)
         {
             field.setTerritory(color);
@@ -695,7 +690,7 @@ public final class GuiBoard
             dirty.x = location.x;
             dirty.y = location.y;
             int offset = m_painter.getShadowOffset()
-                - GuiField.getStoneMargin(m_painter.getFieldSize());
+                - Field.getStoneMargin(m_painter.getFieldSize());
             dirty.width = m_painter.getFieldSize() + offset;
             dirty.height = m_painter.getFieldSize() + offset;
             addDirty(dirty);
@@ -728,7 +723,7 @@ public final class GuiBoard
             dirty.x = location.x;
             dirty.y = location.y;
             int offset = m_painter.getShadowOffset()
-                - GuiField.getStoneMargin(m_painter.getFieldSize());
+                - Field.getStoneMargin(m_painter.getFieldSize());
             dirty.width = m_painter.getFieldSize() + offset;
             dirty.height = m_painter.getFieldSize() + offset;
             addDirty(dirty);
@@ -781,7 +776,7 @@ public final class GuiBoard
 
     private final BoardPainter m_painter;
 
-    private GuiField m_field[][];
+    private Field m_field[][];
 
     private Image m_image;
 
@@ -801,7 +796,7 @@ public final class GuiBoard
     {
         if (m_lastMove != null)
         {
-            GuiField field = getField(m_lastMove);
+            Field field = getField(m_lastMove);
             field.setLastMoveMarker(false);
             repaint(m_lastMove);
             m_lastMove = null;
@@ -828,7 +823,7 @@ public final class GuiBoard
             m_listener.fieldClicked(p, modifiedSelect);
     }
 
-    private GuiField getField(GoPoint p)
+    private Field getField(GoPoint p)
     {
         assert p != null;
         return m_field[p.getX()][p.getY()];
@@ -899,7 +894,7 @@ public final class GuiBoard
     {
         if (point == null)
             return;
-        GuiField field = getField(point);
+        Field field = getField(point);
         if (field.getCursor() != cursor)
         {
             field.setCursor(cursor);

@@ -22,9 +22,9 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** State of a field on the board. */
-public class GuiField
+public class Field
 {
-    public GuiField()
+    public Field()
     {
     }
 

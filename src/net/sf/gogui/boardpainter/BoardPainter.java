@@ -40,7 +40,7 @@ public class BoardPainter
         @param width The width/height of the image.
         @param showGrid Show grid coordinates.
     */
-    public void draw(Graphics graphics, GuiField[][] field, int width,
+    public void draw(Graphics graphics, Field[][] field, int width,
                      boolean showGrid)
     {
         if (graphics instanceof Graphics2D)
@@ -126,7 +126,7 @@ public class BoardPainter
 
     public int getShadowOffset()
     {
-        return (m_fieldSize  - 2 * GuiField.getStoneMargin(m_fieldSize)) / 12;
+        return (m_fieldSize  - 2 * Field.getStoneMargin(m_fieldSize)) / 12;
     }
 
     /** Preferred border size (in fraction of field size) if grid is drawn. */
@@ -158,7 +158,7 @@ public class BoardPainter
 
     private Image m_image;
 
-    private void drawFields(Graphics graphics, GuiField field[][])
+    private void drawFields(Graphics graphics, Field field[][])
     {
         assert field.length == m_size;
         for (int x = 0; x < m_size; ++x)
@@ -263,7 +263,7 @@ public class BoardPainter
         }
     }
 
-    private void drawShadows(Graphics graphics, GuiField[][] field)
+    private void drawShadows(Graphics graphics, Field[][] field)
     {
         if (m_fieldSize <= 5)
             return;
@@ -272,7 +272,7 @@ public class BoardPainter
         if (graphics2D == null)
             return;
         graphics2D.setComposite(COMPOSITE_3);
-        int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
+        int size = m_fieldSize - 2 * Field.getStoneMargin(m_fieldSize);
         int offsetX = getShadowOffset() / 2; // Relates to stone gradient
         int offsetY = getShadowOffset();
         for (int x = 0; x < m_size; ++x)

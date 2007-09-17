@@ -25,8 +25,8 @@ import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
-import net.sf.gogui.boardpainter.GuiField;
 import net.sf.gogui.boardpainter.BoardPainter;
+import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
@@ -116,11 +116,11 @@ public final class ThumbnailCreator
             m_description = "";
             ConstBoard board = readFile(input);
             int size = board.getSize();
-            GuiField[][] field = new GuiField[size][size];
+            Field[][] field = new Field[size][size];
             for (int x = 0; x < size; ++x)
                 for (int y = 0; y < size; ++y)
                 {
-                    field[x][y] = new GuiField();
+                    field[x][y] = new Field();
                     GoColor color = board.getColor(GoPoint.get(x, y));
                     field[x][y].setColor(color);
                 }
@@ -234,7 +234,7 @@ public final class ThumbnailCreator
         return board;
     }
 
-    private BufferedImage getImage(GuiField[][] field, int width, int height)
+    private BufferedImage getImage(Field[][] field, int width, int height)
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
