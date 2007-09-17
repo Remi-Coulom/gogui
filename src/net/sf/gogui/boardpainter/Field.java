@@ -270,8 +270,8 @@ public class Field
     private static final AlphaComposite COMPOSITE_7
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
 
-    private static final AlphaComposite COMPOSITE_85
-        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85f);
+    private static final AlphaComposite COMPOSITE_8
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
 
     private static final AlphaComposite COMPOSITE_95
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.95f);
@@ -509,7 +509,7 @@ public class Field
             m_graphics.setColor(colorNormal);
         }
         if (isGhostStone)
-            setComposite(COMPOSITE_85);
+            setComposite(COMPOSITE_8);
         m_graphics.fillOval(margin, margin,
                             m_size - 2 * margin, m_size - 2 * margin);
     }
