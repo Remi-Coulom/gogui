@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: AnalyzeCommand.java 4830 2007-09-05 18:08:19Z enz $
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gui;
+package net.sf.gogui.gtp;
 
 import java.awt.Frame;
 import java.io.BufferedReader;

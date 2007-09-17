@@ -2974,6 +2974,26 @@ public class GoGui
         runLengthyCommand(command, callback);
     }
 
+    /** Find initial analyze command given with command line option. */
+    private AnalyzeCommand getInitialAnalyzeCommand()
+    {
+        ArrayList<String> commands = new ArrayList<String>(128);
+        ArrayList<String> labels = new ArrayList<String>(128);
+        try
+        {
+            AnalyzeCommand.read(commands, labels, m_gtp.getSupportedCommands(),
+                                m_analyzeCommands, m_programAnalyzeCommands);
+        }
+        catch (Exception e)
+        {
+            showError("Reading analyze configuration failed", e);
+        }
+        int index = labels.indexOf(m_initAnalyze);
+        if (index < 0)
+            return null;
+        return new AnalyzeCommand(commands.get(index));
+    }
+
     private ConstBoard getBoard()
     {
         return m_game.getBoard();
@@ -3234,11 +3254,7 @@ public class GoGui
             createAnalyzeDialog();
         if (! m_initAnalyze.equals(""))
         {
-            AnalyzeCommand analyzeCommand =
-                AnalyzeCommand.get(this, m_initAnalyze,
-                                   m_gtp.getSupportedCommands(),
-                                   m_analyzeCommands, m_programAnalyzeCommands,
-                                   m_messageDialogs);
+            AnalyzeCommand analyzeCommand = getInitialAnalyzeCommand();
             if (analyzeCommand == null)
             {
                 String name = getProgramName();
