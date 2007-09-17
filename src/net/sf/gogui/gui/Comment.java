@@ -23,6 +23,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import net.sf.gogui.util.Platform;
 
 /** Scroll pane for displaying a comment to the current game node. */
 public class Comment
