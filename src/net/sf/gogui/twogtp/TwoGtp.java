@@ -479,13 +479,13 @@ public class TwoGtp
 
         private double m_cpuTime;
 
-        private String m_defaultName;
+        private final String m_defaultName;
 
         private String m_label;
 
-        private GtpClient m_gtp;
+        private final GtpClient m_gtp;
 
-        private GtpSynchronizer m_synchronizer;
+        private final GtpSynchronizer m_synchronizer;
 
         private String m_name;
 

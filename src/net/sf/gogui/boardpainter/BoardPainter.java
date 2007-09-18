@@ -28,9 +28,10 @@ public class BoardPainter
     public BoardPainter()
     {
         ClassLoader classLoader = getClass().getClassLoader();
-        m_image = null;
         URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
-        if (url != null)
+        if (url == null)
+            m_image = null;
+        else
             m_image = loadImage(url);
     }
 
@@ -156,7 +157,7 @@ public class BoardPainter
 
     private static Font s_cachedFont;
 
-    private Image m_image;
+    private final Image m_image;
 
     private void drawFields(Graphics graphics, Field field[][])
     {

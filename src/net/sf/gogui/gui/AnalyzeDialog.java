@@ -207,7 +207,7 @@ public final class AnalyzeDialog
 
     private JRadioButton m_white;
 
-    private ArrayList<AnalyzeDefinition> m_commands;
+    private final ArrayList<AnalyzeDefinition> m_commands;
 
     private final Listener m_listener;
 

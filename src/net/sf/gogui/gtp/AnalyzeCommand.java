@@ -249,7 +249,7 @@ public class AnalyzeCommand
         m_optStringArg = value;
     }
 
-    private AnalyzeDefinition m_definition;
+    private final AnalyzeDefinition m_definition;
 
     private GoColor m_colorArg;
 

@@ -33,7 +33,7 @@ public final class Board
             throw new UnsupportedOperationException();
         }
 
-        private Iterator<GoPoint> m_iterator =
+        private final Iterator<GoPoint> m_iterator =
             m_constants.getPoints().iterator();
     }
 
@@ -500,7 +500,7 @@ public final class Board
 
     private int m_size;
 
-    private BlackWhiteSet<Integer> m_captured
+    private final BlackWhiteSet<Integer> m_captured
         = new BlackWhiteSet<Integer>(0, 0);
 
     private final ArrayList<StackEntry> m_stack
@@ -522,7 +522,7 @@ public final class Board
 
     private GoPoint m_koPoint;
 
-    private BlackWhiteSet<PointList> m_setup
+    private final BlackWhiteSet<PointList> m_setup
         = new BlackWhiteSet<PointList>(new PointList(), new PointList());
 
     private boolean m_isSetupHandicap;

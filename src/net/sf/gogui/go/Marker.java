@@ -93,7 +93,7 @@ public class Marker
             m_mark[points.get(i).getIndex()] = true;
     }
 
-    private int m_size;
+    private final int m_size;
 
     private boolean m_mark[];
 }

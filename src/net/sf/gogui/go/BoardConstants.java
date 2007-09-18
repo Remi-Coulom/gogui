@@ -138,9 +138,9 @@ public final class BoardConstants
 
     private final int m_handicapLine3;
 
-    private PointList m_allPoints;
+    private final PointList m_allPoints;
 
-    private ConstPointList[] m_adjacent;
+    private final ConstPointList[] m_adjacent;
 
     private BoardConstants(int size)
     {

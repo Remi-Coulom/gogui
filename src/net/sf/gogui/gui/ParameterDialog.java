@@ -206,18 +206,19 @@ public class ParameterDialog
             assert args[0].equals("list");
             m_items = new String[args.length - 1];
             m_labels = new String[args.length - 1];
-            m_initialIndex = 0;
+            int initialIndex = 0;
             int maxLength = 0;
             for (int i = 1; i < args.length; ++i)
             {
                 String item = args[i];
                 if (item.equals(value))
-                    m_initialIndex = i - 1;
+                    initialIndex = i - 1;
                 maxLength = max(item.length(), maxLength);
                 m_items[i - 1] = item;
                 m_labels[i - 1] =
                     StringUtil.capitalize(item.replace('_', ' '));
             }
+            m_initialIndex = initialIndex;
         }
 
         public String getNewValue()
@@ -256,11 +257,11 @@ public class ParameterDialog
             panel.add(m_comboBox);
         }
 
-        private int m_initialIndex;
+        private final int m_initialIndex;
 
-        private String[] m_items;
+        private final String[] m_items;
 
-        private String[] m_labels;
+        private final String[] m_labels;
 
         private JComboBox m_comboBox;
     }

@@ -212,7 +212,7 @@ public class GtpRegress
     */
     private File m_outFile;
 
-    private File m_gtpFile;
+    private final File m_gtpFile;
 
     private String m_currentStyle;
 
