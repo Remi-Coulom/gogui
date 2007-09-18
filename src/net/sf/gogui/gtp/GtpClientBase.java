@@ -17,7 +17,8 @@ import net.sf.gogui.util.StringUtil;
 /** Interface to a Go program that uses GTP.
     This class implements most of the functionality of a connection to a GTP
     command apart from how commands are actually sent to the program.
-    Subclasses need to implement the abstract function GtpClientBase.send().
+    Subclasses need to implement the abstract function send() and a few
+    functions related to querying and using the ability to interrupt commands.
 */
 public abstract class GtpClientBase
 {

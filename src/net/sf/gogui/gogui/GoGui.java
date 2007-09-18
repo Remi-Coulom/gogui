@@ -70,6 +70,7 @@ import net.sf.gogui.gtp.AnalyzeCommand;
 import net.sf.gogui.gtp.AnalyzeDefinition;
 import net.sf.gogui.gtp.AnalyzeType;
 import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpClientUtil;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
@@ -989,7 +990,7 @@ public class GoGui
                         SwingUtilities.invokeLater(this);
                         return;
                     }
-                    m_newProgram.m_name = m_gtp.getProgramLabel();
+                    m_newProgram.m_name = m_gtp.getLabel();
                     m_newProgram.m_version = m_version;
                     m_newProgram.setUniqueLabel(m_programs);
                     m_newProgram = editor.editItem(GoGui.this, "New Program",
@@ -1613,7 +1614,7 @@ public class GoGui
         else if (m_program != null && ! StringUtil.isEmpty(m_program.m_label))
             return m_program.m_label;
         else
-            return m_gtp.getProgramLabel();
+            return m_gtp.getLabel();
     }
 
     public GoColor getSetupColor()
@@ -2346,10 +2347,12 @@ public class GoGui
             }
             try
             {
+                String programAnalyzeCommands
+                    = GtpClientUtil.getAnalyzeCommands(m_gtp);
                 m_analyzeCommands
                     = AnalyzeDefinition.read(m_gtp.getSupportedCommands(),
                                              m_analyzeCommandsFile,
-                                             m_gtp.getAnalyzeCommands());
+                                             programAnalyzeCommands);
             }
             catch (ErrorMessage e)
             {
@@ -3805,7 +3808,7 @@ public class GoGui
         if (m_gtp == null)
             m_titleFromProgram = null;
         else
-            m_titleFromProgram = m_gtp.getTitleFromProgram();
+            m_titleFromProgram = GtpClientUtil.getTitle(m_gtp);
         if (m_titleFromProgram != null)
             setTitle(m_titleFromProgram);
     }

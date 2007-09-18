@@ -13,20 +13,24 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 
 /** Wrapper around gtp.GtpClient to be used in a GUI environment.
-    Allows to send fast commands immediately in the event dispatch thread
-    and potentially slow commands in a separate thread with a callback
-    in the event thread after the command finished.
+    Allows to send fast commands with the GtpClientBase.send() function
+    immediately in the event dispatch thread and potentially slow commands in
+    a separate thread with a callback in the event thread after the command
+    finished.
     Fast commands are ones that the Go engine is supposed to answer quickly
     (like boardsize, play and undo), however they have a timeout to
     prevent the GUI to hang, if the program does not respond.
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
+    This class also contains a GtpSynchronizer.
 */
 public class GuiGtpClient
+    extends GtpClientBase
 {
     public GuiGtpClient(GtpClient gtp, Component owner,
                         GtpSynchronizer.Listener listener,
@@ -86,53 +90,9 @@ public class GuiGtpClient
         m_gtp.destroyProcess();
     }
 
-    public void setAutoNumber(boolean enable)
-    {
-        m_gtp.setAutoNumber(enable);
-    }
-
-    /** Query analyze commands configuration from the program.
-        @return The response to gogui-analyze_commands or null, if this
-        command is not supported.
-    */
-    public String getAnalyzeCommands()
-    {
-        String command;
-        if (isSupported("gogui-analyze_commands"))
-            command = "gogui-analyze_commands";
-        else if (isSupported("gogui_analyze_commands"))
-            // Used by old versions of GoGui
-            command = "gogui_analyze_commands";
-        else
-            return null;
-        try
-        {
-            return send(command);
-        }
-        catch (GtpError e)
-        {
-            return null;
-        }
-    }
-
     public boolean getAnyCommandsResponded()
     {
         return m_gtp.getAnyCommandsResponded();
-    }
-
-    public String getCommandClearBoard(int size)
-    {
-        return m_gtp.getCommandClearBoard(size);
-    }
-
-    public String getCommandGenmove(GoColor color)
-    {
-        return m_gtp.getCommandGenmove(color);
-    }
-
-    public String getCommandPlay(Move move)
-    {
-        return m_gtp.getCommandPlay(move);
     }
 
     /** Get exception of asynchronous command.
@@ -149,28 +109,9 @@ public class GuiGtpClient
         }
     }
 
-    public String getName()
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        return m_gtp.getName();
-    }
-
-    public String getProgramLabel()
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        return m_gtp.getLabel();
-    }
-
     public String getProgramCommand()
     {
-        assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getProgramCommand();
-    }
-
-    public int getProtocolVersion()
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        return m_gtp.getProtocolVersion();
     }
 
     /** Get response to asynchronous command.
@@ -184,27 +125,6 @@ public class GuiGtpClient
             assert ! m_commandInProgress;
             return m_response;
         }
-    }
-
-    public ArrayList<String> getSupportedCommands()
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        return m_gtp.getSupportedCommands();
-    }
-
-    public String getTitleFromProgram()
-    {
-        try
-        {
-            if (isSupported("gogui-title"))
-                return send("gogui-title");
-            else if (isSupported("gogui_title"))
-                return send("gogui_title");
-        }
-        catch (GtpError e)
-        {
-        }
-        return null;
     }
 
     public void sendInterrupt() throws GtpError
@@ -223,18 +143,6 @@ public class GuiGtpClient
     public boolean isCommandInProgress()
     {
         return m_commandInProgress;
-    }
-
-    public boolean isGenmoveSupported()
-    {
-        return m_gtp.isGenmoveSupported();
-    }
-
-    public boolean isSupported(String command)
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        assert ! m_commandInProgress;
-        return m_gtp.isSupported(command);
     }
 
     public boolean isInterruptSupported()
@@ -256,35 +164,6 @@ public class GuiGtpClient
     public void queryInterruptSupport()
     {
         m_gtp.queryInterruptSupport();
-    }
-
-    public void queryName() throws GtpError
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        assert ! m_commandInProgress;
-        TimeoutCallback timeoutCallback = new TimeoutCallback("name");
-        m_gtp.queryName(TIMEOUT, timeoutCallback);
-    }
-
-    public void queryProtocolVersion()
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        assert ! m_commandInProgress;
-        m_gtp.queryProtocolVersion();
-    }
-
-    public void querySupportedCommands() throws GtpError
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        assert ! m_commandInProgress;
-        m_gtp.querySupportedCommands();
-    }
-
-    public String queryVersion() throws GtpError
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        assert ! m_commandInProgress;
-        return m_gtp.queryVersion();
     }
 
     /** Send asynchronous command. */
@@ -310,22 +189,9 @@ public class GuiGtpClient
         return m_gtp.send(command, TIMEOUT, timeoutCallback);
     }
 
-    public void sendBoardsize(int size) throws GtpError
+    public void setAutoNumber(boolean enable)
     {
-        m_gtp.sendBoardsize(size);
-    }
-
-    public void sendClearBoard(int size) throws GtpError
-    {
-        m_gtp.sendClearBoard(size);
-    }
-
-    public void sendPlay(Move move) throws GtpError
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        assert ! m_commandInProgress;
-        TimeoutCallback timeoutCallback = new TimeoutCallback("play");
-        m_gtp.sendPlay(move, TIMEOUT, timeoutCallback);
+        m_gtp.setAutoNumber(enable);
     }
 
     public void synchronize(ConstBoard board, Komi komi,
@@ -348,6 +214,11 @@ public class GuiGtpClient
         assert SwingUtilities.isEventDispatchThread();
         assert ! m_commandInProgress;
         m_gtpSynchronizer.updateHumanMove(board, move);
+    }
+
+    public void waitForExit()
+    {
+        m_gtp.waitForExit();
     }
 
     public boolean wasKilled()
