@@ -87,7 +87,7 @@ public final class GoPoint
     }
 
     /** See getIndex() */
-    public static final int getIndex(int x, int y)
+    public static int getIndex(int x, int y)
     {
         return y * MAX_SIZE + x;
     }
