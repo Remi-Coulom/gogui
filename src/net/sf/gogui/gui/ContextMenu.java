@@ -38,26 +38,12 @@ public class ContextMenu
     }
 
     public ContextMenu(GoPoint point, boolean noProgram,
-                       ArrayList<String> supportedCommands,
-                       File analyzeCommands, String programAnalyzeCommands,
+                       ArrayList<AnalyzeDefinition> commands,
                        boolean mark, boolean markCircle, boolean markSquare,
                        boolean markTriangle, Listener listener)
     {
         m_point = point;
         m_listener = listener;
-        ArrayList<AnalyzeDefinition> commands = null;
-        if (! noProgram)
-        {
-            try
-            {
-                commands = AnalyzeDefinition.read(supportedCommands,
-                                                  analyzeCommands,
-                                                  programAnalyzeCommands);
-            }
-            catch (ErrorMessage e)
-            {
-            }
-        }
         m_actionListener = new ActionListener()
             {
                 public void actionPerformed(ActionEvent event)

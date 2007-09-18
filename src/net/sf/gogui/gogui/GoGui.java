@@ -133,7 +133,7 @@ public class GoGui
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
                  String gtpFile, String gtpCommand, String initAnalyze,
-                 File analyzeCommands)
+                 File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -141,7 +141,7 @@ public class GoGui
         m_file = file;
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
-        m_analyzeCommands = analyzeCommands;
+        m_analyzeCommandsFile = analyzeCommandsFile;
         m_move = move;
         if (initComputerColor)
         {
@@ -2076,7 +2076,7 @@ public class GoGui
 
     private Pattern m_pattern;
 
-    private final File m_analyzeCommands;
+    private final File m_analyzeCommandsFile;
 
     private AnalyzeCommand m_analyzeCommand;
 
@@ -2108,7 +2108,7 @@ public class GoGui
 
     private ScoreDialog m_scoreDialog;
 
-    private String m_programAnalyzeCommands;
+    private ArrayList<AnalyzeDefinition> m_analyzeCommands;
 
     /** Program information.
         Can be null even if a program is attached, if only m_programName
@@ -2345,7 +2345,17 @@ public class GoGui
                 Program.save(m_programs);
                 m_menuBar.setPrograms(m_programs);
             }
-            m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
+            try
+            {
+                m_analyzeCommands
+                    = AnalyzeDefinition.read(m_gtp.getSupportedCommands(),
+                                             m_analyzeCommandsFile,
+                                             m_gtp.getAnalyzeCommands());
+            }
+            catch (ErrorMessage e)
+            {
+                showError("Could not read analyze configuration file", e);
+            }
             restoreSize(m_shell, "shell");
             m_shell.setProgramName(getProgramLabel());
             ArrayList<String> supportedCommands =
@@ -2728,11 +2738,8 @@ public class GoGui
 
     private void createAnalyzeDialog()
     {
-        m_analyzeDialog =
-            new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
-                              m_analyzeCommands,
-                              m_programAnalyzeCommands, m_gtp,
-                              m_messageDialogs);
+        m_analyzeDialog = new AnalyzeDialog(this, this, m_analyzeCommands,
+                                            m_gtp, m_messageDialogs);
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -2750,9 +2757,7 @@ public class GoGui
         boolean noProgram = (m_gtp == null);
         if (! noProgram)
             supportedCommands = m_gtp.getSupportedCommands();
-        return new ContextMenu(point, noProgram, supportedCommands,
-                               m_analyzeCommands,
-                               m_programAnalyzeCommands,
+        return new ContextMenu(point, noProgram, m_analyzeCommands,
                                m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),
                                m_guiBoard.getMarkSquare(point),
@@ -2978,20 +2983,9 @@ public class GoGui
     /** Find initial analyze command given with command line option. */
     private AnalyzeCommand getInitialAnalyzeCommand()
     {
-        try
-        {
-            ArrayList<AnalyzeDefinition> commands
-                = AnalyzeDefinition.read(m_gtp.getSupportedCommands(),
-                                         m_analyzeCommands,
-                                         m_programAnalyzeCommands);
-            for (AnalyzeDefinition definition : commands)
-                if (definition.getLabel().equals(m_initAnalyze))
-                    return new AnalyzeCommand(definition);
-        }
-        catch (Exception e)
-        {
-            showError("Reading analyze configuration failed", e);
-        }
+        for (AnalyzeDefinition definition : m_analyzeCommands)
+            if (definition.getLabel().equals(m_initAnalyze))
+                return new AnalyzeCommand(definition);
         return null;
     }
 

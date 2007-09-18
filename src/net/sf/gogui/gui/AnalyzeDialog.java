@@ -70,19 +70,16 @@ public final class AnalyzeDialog
     }
 
     public AnalyzeDialog(Frame owner, Listener listener,
-                         ArrayList<String> supportedCommands,
-                         File analyzeCommands,
-                         String programAnalyzeCommands, GuiGtpClient gtp,
-                         MessageDialogs messageDialogs)
+                         ArrayList<AnalyzeDefinition> commands,
+                         GuiGtpClient gtp, MessageDialogs messageDialogs)
     {
         super(owner, "Analyze");
         m_messageDialogs = messageDialogs;
         m_gtp = gtp;
-        m_supportedCommands = supportedCommands;
-        m_programAnalyzeCommands = programAnalyzeCommands;
+        m_commands = commands;
         m_listener = listener;
         Container contentPane = getContentPane();
-        JPanel commandPanel = createCommandPanel(analyzeCommands);
+        JPanel commandPanel = createCommandPanel();
         contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
         setSelectedColor(BLACK);
@@ -212,11 +209,7 @@ public final class AnalyzeDialog
 
     private ArrayList<AnalyzeDefinition> m_commands;
 
-    private final ArrayList<String> m_supportedCommands;
-
     private final Listener m_listener;
-
-    private final String m_programAnalyzeCommands;
 
     private String m_lastUpdateOptionsCommand;
 
@@ -281,7 +274,7 @@ public final class AnalyzeDialog
         return m_colorBox;
     }
 
-    private JPanel createCommandPanel(File analyzeCommands)
+    private JPanel createCommandPanel()
     {
         JPanel panel = new JPanel(new BorderLayout());
         m_list = new JList();
@@ -314,22 +307,11 @@ public final class AnalyzeDialog
             scrollPane.setBorder(null);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
-        try
-        {
-            m_commands =
-                AnalyzeDefinition.read(m_supportedCommands, analyzeCommands,
-                                       m_programAnalyzeCommands);
-            String[] labels = new String[m_commands.size()];
-            for (int i = 0; i < m_commands.size(); ++i)
-                labels[i] = m_commands.get(i).getLabel();
-            m_list.setListData(labels);
-            comboBoxChanged();
-        }
-        catch (Exception e)
-        {
-            showError("Loading analyze configuration file failed",
-                      e.getMessage());
-        }
+        String[] labels = new String[m_commands.size()];
+        for (int i = 0; i < m_commands.size(); ++i)
+            labels[i] = m_commands.get(i).getLabel();
+        m_list.setListData(labels);
+        comboBoxChanged();
         loadRecent();
         return panel;
     }
