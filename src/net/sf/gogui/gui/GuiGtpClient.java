@@ -25,12 +25,8 @@ import net.sf.gogui.gtp.GtpSynchronizer;
     prevent the GUI to hang, if the program does not respond.
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
-
-    @todo Don't derive from thread (naming conflict Thread.getName()
-    GtpClientBase.getName())
 */
 public class GuiGtpClient
-    extends Thread
 {
     public GuiGtpClient(GtpClient gtp, Component owner,
                         GtpSynchronizer.Listener listener,
@@ -40,6 +36,39 @@ public class GuiGtpClient
         m_owner = owner;
         m_messageDialogs = messageDialogs;
         m_gtpSynchronizer = new GtpSynchronizer(gtp, listener, false);
+        Thread thread = new Thread() {
+                public void run() {
+                    synchronized (m_mutex)
+                    {
+                        boolean firstWait = true;
+                        while (true)
+                        {
+                            try
+                            {
+                                if (m_command == null || ! firstWait)
+                                    m_mutex.wait();
+                            }
+                            catch (InterruptedException e)
+                            {
+                                System.err.println("Interrupted");
+                            }
+                            firstWait = false;
+                            m_response = null;
+                            m_exception = null;
+                            try
+                            {
+                                m_response = m_gtp.send(m_command);
+                            }
+                            catch (GtpError e)
+                            {
+                                m_exception = e;
+                            }
+                            SwingUtilities.invokeLater(m_callback);
+                        }
+                    }
+                }
+            };
+        thread.start();
     }
 
     public void close()
@@ -256,38 +285,6 @@ public class GuiGtpClient
         assert SwingUtilities.isEventDispatchThread();
         assert ! m_commandInProgress;
         return m_gtp.queryVersion();
-    }
-
-    public void run()
-    {
-        synchronized (m_mutex)
-        {
-            boolean firstWait = true;
-            while (true)
-            {
-                try
-                {
-                    if (m_command == null || ! firstWait)
-                        m_mutex.wait();
-                }
-                catch (InterruptedException e)
-                {
-                    System.err.println("Interrupted");
-                }
-                firstWait = false;
-                m_response = null;
-                m_exception = null;
-                try
-                {
-                    m_response = m_gtp.send(m_command);
-                }
-                catch (GtpError e)
-                {
-                    m_exception = e;
-                }
-                SwingUtilities.invokeLater(m_callback);
-            }
-        }
     }
 
     /** Send asynchronous command. */
