@@ -5,7 +5,6 @@
 package net.sf.gogui.twogtp;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -200,7 +199,7 @@ public class Analyze
             String name = file.getName();
             gamePrefix = name.substring(0, name.length() - 5);
         }
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         NumberFormat format = StringUtil.getNumberFormat(1);
         String black;
         if (m_table.hasProperty("BlackLabel"))
@@ -405,7 +404,7 @@ public class Analyze
 
     private void writeData(File file) throws Exception
     {
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         NumberFormat format1 = StringUtil.getNumberFormat(1);
         NumberFormat format2 = StringUtil.getNumberFormat(2);
         Histogram histoBlack = m_statisticsBlack.m_histo;

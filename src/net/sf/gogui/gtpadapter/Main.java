@@ -5,7 +5,6 @@
 package net.sf.gogui.gtpadapter;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
@@ -71,7 +70,7 @@ public final class Main
             if (opt.contains("log"))
             {
                 File file = new File(opt.get("log"));
-                log = new PrintStream(new FileOutputStream(file));
+                log = new PrintStream(file);
             }
             String program = arguments.get(0);
             GtpAdapter adapter

@@ -17,7 +17,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
@@ -521,7 +520,7 @@ public class GtpShell
             return;
         try
         {
-            PrintStream out = new PrintStream(new FileOutputStream(file));
+            PrintStream out = new PrintStream(file);
             out.println("# Name: " + m_programName);
             out.println("# Version: " + m_programVersion);
             out.println("# Command: " + m_programCommand);

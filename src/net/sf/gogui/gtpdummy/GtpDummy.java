@@ -5,7 +5,6 @@
 package net.sf.gogui.gtpdummy;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Random;
@@ -112,7 +111,7 @@ public class GtpDummy
         File file = new File(cmd.getArg());
         try
         {
-            PrintStream out = new PrintStream(new FileOutputStream(file));
+            PrintStream out = new PrintStream(file);
             out.println("Hello world!");
             out.close();
         }

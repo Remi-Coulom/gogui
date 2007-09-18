@@ -7,7 +7,6 @@ package net.sf.gogui.gtpstatistics;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class Analyze
         File file = new File(m_output + ".html");
         initGameInfo();
         findGameGlobalCommands();
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         startHtml(out, "Statistics Summary");
         startInfo(out, "Statistics Summary");
         writeInfo(out);
@@ -534,7 +533,7 @@ public class Analyze
         CommandStatistics commandStatistics
             = getCommandStatistics(commandIndex);
         File file = getCommandFile(commandIndex);
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         startHtml(out, command);
         startInfo(out, command);
         writeInfoBasics(out);
@@ -652,7 +651,7 @@ public class Analyze
         throws Exception
     {
         File file = getGameFile(gameNumber);
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         String title = "Game " + (gameNumber + 1) + " (" + name + ")";
         startHtml(out, title);
         startInfo(out, title);

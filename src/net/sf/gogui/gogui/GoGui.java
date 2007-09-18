@@ -617,7 +617,7 @@ public class GoGui
         try
         {
             String text = BoardUtil.toString(getBoard(), false);
-            PrintStream out = new PrintStream(new FileOutputStream(file));
+            PrintStream out = new PrintStream(file);
             out.print(text);
             out.close();
         }

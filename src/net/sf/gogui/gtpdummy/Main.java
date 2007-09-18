@@ -5,7 +5,6 @@
 package net.sf.gogui.gtpdummy;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
@@ -51,7 +50,7 @@ public final class Main
             if (opt.contains("log"))
             {
                 File file = new File(opt.get("log"));
-                log = new PrintStream(new FileOutputStream(file));
+                log = new PrintStream(file);
             }
             long randomSeed = 0;
             boolean useRandomSeed = false;

@@ -7,7 +7,6 @@ package net.sf.gogui.gtpregress;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -570,7 +569,7 @@ public class GtpRegress
         if (parent != null && ! parent.exists())
             parent.mkdir();
         m_currentStyle = null;
-        m_out = new PrintStream(new FileOutputStream(m_outFile));
+        m_out = new PrintStream(m_outFile);
         m_out.print("<html>\n" +
                     "<head>\n" +
                     "<title>Output: " + m_testFile + "</title>\n" +
@@ -901,7 +900,7 @@ public class GtpRegress
     private void writeData() throws FileNotFoundException
     {
         File file = new File(m_prefix + "summary.dat");
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         NumberFormat format1 = StringUtil.getNumberFormat(1);
         TestSummary s = getTotalSummary();
         double time = ((double)s.m_timeMillis) / 1000F;
@@ -922,7 +921,7 @@ public class GtpRegress
         throws FileNotFoundException
     {
         File file = new File(m_prefix + "index.html");
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Regression Test Summary</title>\n" +
@@ -1046,7 +1045,7 @@ public class GtpRegress
                                + " unexpected failures");
         }
         File file = new File(m_prefix + m_outName + ".html");
-        PrintStream out = new PrintStream(new FileOutputStream(file));
+        PrintStream out = new PrintStream(file);
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Summary: " + m_testFile + "</title>\n" +
