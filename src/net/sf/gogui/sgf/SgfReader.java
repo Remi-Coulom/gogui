@@ -918,14 +918,13 @@ public final class SgfReader
         m_byoyomi = -1;
         m_preByoyomi = -1;
         m_props.clear();
-        while (readProp(son));
+        while (readProp());
         handleProps(son, isRoot);
         setTimeSettings(son);
         return son;
     }
 
-    private boolean readProp(Node node)
-        throws IOException, SgfError
+    private boolean readProp() throws IOException, SgfError
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
