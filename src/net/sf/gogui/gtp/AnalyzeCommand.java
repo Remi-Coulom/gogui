@@ -25,124 +25,19 @@ import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
 
-/** Analyze command.
+/** Concrete analyze command including data for wildcard replacements.
     See GoGui documentation, chapter "Analyze Commands"
 */
 public class AnalyzeCommand
 {
-    public static final int BWBOARD = 0;
-
-    public static final int CBOARD = 1;
-
-    public static final int DBOARD = 2;
-
-    public static final int EPLIST = 3;
-
-    public static final int GFX = 4;
-
-    public static final int HSTRING = 5;
-
-    public static final int HPSTRING = 6;
-
-    public static final int NONE = 7;
-
-    public static final int PARAM = 8;
-
-    public static final int PLIST = 9;
-
-    public static final int PSTRING = 10;
-
-    public static final int PSPAIRS = 11;
-
-    public static final int STRING = 12;
-
-    public static final int SBOARD = 13;
-
-    public static final int VAR = 14;
-
-    public static final int VARB = 15;
-
-    public static final int VARC = 16;
-
-    public static final int VARP = 17;
-
-    public static final int VARPO = 18;
-
-    public static final int VARW = 19;
-
-    public AnalyzeCommand(String line)
+    public AnalyzeCommand(AnalyzeDefinition definition)
     {
-        String array[] = line.split("/");
-        String typeStr = array[0];
-        if (typeStr.equals("bwboard"))
-            m_type = AnalyzeCommand.BWBOARD;
-        else if (typeStr.equals("cboard"))
-            m_type = AnalyzeCommand.CBOARD;
-        else if (typeStr.equals("dboard"))
-            m_type = AnalyzeCommand.DBOARD;
-        else if (typeStr.equals("eplist"))
-            m_type = AnalyzeCommand.EPLIST;
-        else if (typeStr.equals("gfx"))
-            m_type = AnalyzeCommand.GFX;
-        else if (typeStr.equals("hstring"))
-            m_type = AnalyzeCommand.HSTRING;
-        else if (typeStr.equals("hpstring"))
-            m_type = AnalyzeCommand.HPSTRING;
-        else if (typeStr.equals("param"))
-            m_type = AnalyzeCommand.PARAM;
-        else if (typeStr.equals("plist"))
-            m_type = AnalyzeCommand.PLIST;
-        else if (typeStr.equals("pspairs"))
-            m_type = AnalyzeCommand.PSPAIRS;
-        else if (typeStr.equals("pstring"))
-            m_type = AnalyzeCommand.PSTRING;
-        else if (typeStr.equals("string"))
-            m_type = AnalyzeCommand.STRING;
-        else if (typeStr.equals("sboard"))
-            m_type = AnalyzeCommand.SBOARD;
-        else if (typeStr.equals("var"))
-            m_type = AnalyzeCommand.VAR;
-        else if (typeStr.equals("varb"))
-            m_type = AnalyzeCommand.VARB;
-        else if (typeStr.equals("varc"))
-            m_type = AnalyzeCommand.VARC;
-        else if (typeStr.equals("varp"))
-            m_type = AnalyzeCommand.VARP;
-        else if (typeStr.equals("varpo"))
-            m_type = AnalyzeCommand.VARPO;
-        else if (typeStr.equals("varw"))
-            m_type = AnalyzeCommand.VARW;
-        else
-            m_type = AnalyzeCommand.NONE;
-        m_label = array[1];
-        m_command = array[2];
-    }
-
-    public AnalyzeCommand(int type, String label, String command)
-    {
-        m_type = type;
-        m_label = label;
-        m_command = command;
-    }
-
-    public AnalyzeCommand cloneCommand()
-    {
-        AnalyzeCommand command =
-            new AnalyzeCommand(m_type, m_label, m_command);
-        command.m_colorArg = m_colorArg;
-        command.m_fileArg = m_fileArg;
-        command.m_fileOpenArg = m_fileOpenArg;
-        command.m_fileSaveArg = m_fileSaveArg;
-        command.m_optStringArg = m_optStringArg;
-        command.m_stringArg = m_stringArg;
-        command.m_pointArg = m_pointArg;
-        command.m_pointListArg = m_pointListArg;
-        return command;
+        m_definition = definition;
     }
 
     public String getLabel()
     {
-        return m_label;
+        return m_definition.getLabel();
     }
 
     public GoColor getColorArg()
@@ -160,14 +55,14 @@ public class AnalyzeCommand
         return m_pointListArg;
     }
 
-    public int getType()
+    public AnalyzeType getType()
     {
-        return m_type;
+        return m_definition.getType();
     }
 
     public String getResultTitle()
     {
-        StringBuilder buffer = new StringBuilder(m_label);
+        StringBuilder buffer = new StringBuilder(getLabel());
         if (needsColorArg() && m_colorArg != null)
         {
             if (m_colorArg == BLACK)
@@ -208,150 +103,72 @@ public class AnalyzeCommand
         return false;
     }
 
-    /** Should the response be shown as text.
-        Returns true for types that should be shown (not necessarily only)
-        as text to the user.
-        That is string and variation commands.
-    */
-    public static boolean isTextType(int type)
+    public boolean isTextType()
     {
-        return type == STRING
-            || type == HSTRING
-            || type == HPSTRING
-            || type == PSTRING
-            || type == VAR
-            || type == VARC
-            || type == VARW
-            || type == VARB
-            || type == VARP
-            || type == VARPO;
+        return m_definition.isTextType();
     }
 
     public boolean needsColorArg()
     {
-        return (m_command.indexOf("%c") >= 0);
+        return m_definition.needsColorArg();
     }
 
     public boolean needsFileArg()
     {
-        return (m_command.indexOf("%f") >= 0);
+        return m_definition.needsFileArg();
     }
 
     public boolean needsFileOpenArg()
     {
-        return (m_command.indexOf("%r") >= 0);
+        return m_definition.needsFileOpenArg();
     }
 
     public boolean needsFileSaveArg()
     {
-        return (m_command.indexOf("%w") >= 0);
+        return m_definition.needsFileSaveArg();
     }
 
     public boolean needsOnlyPointArg()
     {
-        return (needsPointArg()
-                && ! needsColorArg()
-                && ! needsFileArg()
-                && ! needsFileOpenArg()
-                && ! needsFileSaveArg()
-                && ! needsPointListArg()
-                && ! needsStringArg()
-                && ! needsOptStringArg());
+        return m_definition.needsOnlyPointArg();
     }
 
     public boolean needsOnlyPointAndColorArg()
     {
-        return (needsPointArg() && needsColorArg()
-                && ! needsFileArg()
-                && ! needsFileOpenArg()
-                && ! needsFileSaveArg()
-                && ! needsPointListArg()
-                && ! needsStringArg()
-                && ! needsOptStringArg());
+        return m_definition.needsOnlyPointAndColorArg();
     }
 
     public boolean needsPointArg()
     {
-        return (m_command.indexOf("%p") >= 0);
+        return m_definition.needsPointArg();
     }
 
     public boolean needsPointListArg()
     {
-        return (m_command.indexOf("%P") >= 0 || m_type == EPLIST);
+        return m_definition.needsPointListArg();
     }
 
     public boolean needsStringArg()
     {
-        return (m_command.indexOf("%s") >= 0);
+        return m_definition.needsStringArg();
     }
 
     public boolean needsOptStringArg()
     {
-        return (m_command.indexOf("%o") >= 0);
-    }
-
-    public static void read(ArrayList<String> commands,
-                            ArrayList<String> labels,
-                            ArrayList<String> supportedCommands,
-                            File analyzeCommands,
-                            String programAnalyzeCommands)
-        throws ErrorMessage
-    {
-        commands.clear();
-        labels.clear();
-        if (analyzeCommands != null)
-        {
-            try
-            {
-                Reader fileReader = new FileReader(analyzeCommands);
-                BufferedReader reader = new BufferedReader(fileReader);
-                readConfig(reader, analyzeCommands.getName(), commands, labels,
-                           null);
-            }
-            catch (FileNotFoundException e)
-            {
-                throw new ErrorMessage("File \"" + analyzeCommands
-                                       + "\" not found");
-            }
-        }
-        else if (programAnalyzeCommands != null)
-        {
-            Reader stringReader = new StringReader(programAnalyzeCommands);
-            BufferedReader reader = new BufferedReader(stringReader);
-            readConfig(reader, "program response to gogui-analyze_commands",
-                       commands, labels, null);
-            return;
-        }
-        else
-        {
-            String resource = "net/sf/gogui/gui/analyze-commands";
-            URL url = ClassLoader.getSystemClassLoader().getResource(resource);
-            if (url == null)
-                return;
-            try
-            {
-                InputStream inputStream = url.openStream();
-                Reader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader reader = new BufferedReader(inputStreamReader);
-                readConfig(reader, "builtin default commands", commands,
-                           labels, supportedCommands);
-            }
-            catch (IOException e)
-            {
-                throw new ErrorMessage(e.getMessage());
-            }
-        }
+        return m_definition.needsOptStringArg();
     }
 
     public String replaceWildCards(GoColor toMove)
     {
-        String result = m_command.replaceAll("%m", toMove.toString());
+        String command = m_definition.getCommand();
+        String result = command.replaceAll("%m", toMove.toString());
         if (needsPointArg() && m_pointArg != null)
             result = result.replaceAll("%p", m_pointArg.toString());
         if (needsPointListArg())
         {
             String pointList = GoPoint.toString(m_pointListArg);
-            if (m_type == EPLIST && m_pointListArg.size() > 0)
+            if (getType() == AnalyzeType.EPLIST
+                && m_pointListArg.size() > 0)
                 result = result + ' ' + pointList;
             else
                 result = result.replaceAll("%P", pointList);
@@ -445,7 +262,7 @@ public class AnalyzeCommand
         m_optStringArg = value;
     }
 
-    private final int m_type;
+    private AnalyzeDefinition m_definition;
 
     private GoColor m_colorArg;
 
@@ -455,68 +272,11 @@ public class AnalyzeCommand
 
     private File m_fileSaveArg;
 
-    private final String m_label;
-
     private String m_optStringArg;
-
-    private final String m_command;
 
     private String m_stringArg;
 
     private GoPoint m_pointArg;
 
     private PointList m_pointListArg = new PointList();
-
-    private static void readConfig(BufferedReader reader, String name,
-                                   ArrayList<String> commands,
-                                   ArrayList<String> labels,
-                                   ArrayList<String> supportedCommands)
-        throws ErrorMessage
-    {
-        try
-        {
-            String line;
-            int lineNumber = 0;
-            while ((line = reader.readLine()) != null)
-            {
-                ++lineNumber;
-                line = line.trim();
-                if (line.length() > 0 && line.charAt(0) != '#')
-                {
-                    String array[] = line.split("/");
-                    if (array.length < 3 || array.length > 5)
-                        throw new ErrorMessage("Error in " + name + " line "
-                                               + lineNumber);
-                    if (supportedCommands != null)
-                    {
-                        String[] cmdArray
-                            = StringUtil.splitArguments(array[2].trim());
-                        if (cmdArray.length == 0
-                            || ! supportedCommands.contains(cmdArray[0]))
-                            continue;
-                    }
-                    String label = array[1];
-                    if (labels.contains(label))
-                        continue;
-                    labels.add(label);
-                    commands.add(line);
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            throw new ErrorMessage("Error reading " + name);
-        }
-        finally
-        {
-            try
-            {
-                reader.close();
-            }
-            catch (IOException e)
-            {
-                throw new ErrorMessage("Error reading " + name);
-            }
-        }
-    }
 }

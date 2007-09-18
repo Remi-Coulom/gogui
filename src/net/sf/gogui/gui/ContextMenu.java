@@ -16,6 +16,8 @@ import net.sf.gogui.game.MarkType;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gtp.AnalyzeCommand;
+import net.sf.gogui.gtp.AnalyzeDefinition;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 
@@ -43,14 +45,14 @@ public class ContextMenu
     {
         m_point = point;
         m_listener = listener;
-        ArrayList<String> commands = new ArrayList<String>();
-        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<AnalyzeDefinition> commands = null;
         if (! noProgram)
         {
             try
             {
-                AnalyzeCommand.read(commands, labels, supportedCommands,
-                                    analyzeCommands, programAnalyzeCommands);
+                commands = AnalyzeDefinition.read(supportedCommands,
+                                                  analyzeCommands,
+                                                  programAnalyzeCommands);
             }
             catch (ErrorMessage e)
             {
@@ -122,7 +124,7 @@ public class ContextMenu
         add(m_markTriangle);
         add(createItem("Edit Label", "edit-label"));
         addSeparator();
-        if (! noProgram && ! commands.isEmpty())
+        if (! noProgram && commands != null && ! commands.isEmpty())
         {
             String analyzeMenuLabel = "Analyze at " + point;
             if (Platform.isMac())
@@ -135,8 +137,7 @@ public class ContextMenu
             add(m_analyzeMenu);
             for (int i = 0; i < commands.size(); ++i)
             {
-                String line = commands.get(i);
-                AnalyzeCommand command = new AnalyzeCommand(line);
+                AnalyzeDefinition command = commands.get(i);
                 if (command.needsOnlyPointArg())
                     addCommand(command);
                 else if (command.needsOnlyPointAndColorArg())
@@ -194,24 +195,25 @@ public class ContextMenu
     private final ArrayList<AnalyzeCommand> m_commands
         = new ArrayList<AnalyzeCommand>();
 
-    private void addColorCommand(AnalyzeCommand command)
+    private void addColorCommand(AnalyzeDefinition definition)
     {
-        String label = command.getLabel();
-        JMenu menu = new JMenu(label);
+        JMenu menu = new JMenu(definition.getLabel());
         // For com.jgoodies.looks
         menu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
-        command.setColorArg(BLACK);
-        JMenuItem item = createItem(command, "Black");
+        AnalyzeCommand commandBlack = new AnalyzeCommand(definition);
+        commandBlack.setColorArg(BLACK);
+        JMenuItem item = createItem(commandBlack, "Black");
         menu.add(item);
-        command = command.cloneCommand();
-        command.setColorArg(WHITE);
-        item = createItem(command, "White");
+        AnalyzeCommand commandWhite = new AnalyzeCommand(definition);
+        commandWhite.setColorArg(WHITE);
+        item = createItem(commandWhite, "White");
         menu.add(item);
         m_analyzeMenu.add(menu);
     }
 
-    private void addCommand(AnalyzeCommand command)
+    private void addCommand(AnalyzeDefinition definition)
     {
+        AnalyzeCommand command = new AnalyzeCommand(definition);
         JMenuItem item = createItem(command, command.getLabel());
         m_analyzeMenu.add(item);
     }

@@ -46,6 +46,9 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.gtp.AnalyzeCommand;
+import net.sf.gogui.gtp.AnalyzeDefinition;
+import net.sf.gogui.gtp.AnalyzeType;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
@@ -207,11 +210,9 @@ public final class AnalyzeDialog
 
     private JRadioButton m_white;
 
-    private final ArrayList<String> m_commands = new ArrayList<String>(128);
+    private ArrayList<AnalyzeDefinition> m_commands;
 
     private final ArrayList<String> m_supportedCommands;
-
-    private final ArrayList<String> m_labels = new ArrayList<String>(128);
 
     private final Listener m_listener;
 
@@ -315,9 +316,13 @@ public final class AnalyzeDialog
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
         try
         {
-            AnalyzeCommand.read(m_commands, m_labels, m_supportedCommands,
-                                analyzeCommands, m_programAnalyzeCommands);
-            m_list.setListData(m_labels.toArray());
+            m_commands =
+                AnalyzeDefinition.read(m_supportedCommands, analyzeCommands,
+                                       m_programAnalyzeCommands);
+            String[] labels = new String[m_commands.size()];
+            for (int i = 0; i < m_commands.size(); ++i)
+                labels[i] = m_commands.get(i).getLabel();
+            m_list.setListData(labels);
             comboBoxChanged();
         }
         catch (Exception e)
@@ -380,12 +385,20 @@ public final class AnalyzeDialog
         return m_comboBoxHistory.getItemCount();
     }
 
+    private int getCommandIndex(String label)
+    {
+        for (int i = 0; i < m_commands.size(); ++i)
+            if (m_commands.get(i).getLabel().equals(label))
+                return i;
+        return -1;
+    }
+
     private int getSelectedCommand()
     {
         Object item = m_comboBoxHistory.getSelectedItem();
         if (item == null)
             return -1;
-        return m_labels.indexOf(item.toString());
+        return getCommandIndex(item.toString());
     }
 
     private void insertComboBoxItem(String label, int index)
@@ -402,7 +415,7 @@ public final class AnalyzeDialog
         for (int i = 0; i < m_fullRecentList.size(); ++i)
         {
             String name = m_fullRecentList.get(i);
-            if (m_labels.indexOf(name) >= 0)
+            if (getCommandIndex(name) >= 0)
                 m_comboBoxHistory.addItem(GuiUtil.createComboBoxItem(name));
             if (m_comboBoxHistory.getItemCount() > 20)
                 break;
@@ -434,8 +447,7 @@ public final class AnalyzeDialog
             return;
         }
         updateRecent(index);
-        String analyzeCommand = m_commands.get(index);
-        AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
+        AnalyzeCommand command = new AnalyzeCommand(m_commands.get(index));
         if (command.needsColorArg())
             command.setColorArg(getSelectedColor());
         String label = command.getResultTitle();
@@ -471,7 +483,7 @@ public final class AnalyzeDialog
                 return;
             }
         }
-        if (command.getType() == AnalyzeCommand.EPLIST)
+        if (command.getType() == AnalyzeType.EPLIST)
         {
             command.setPointListArg(new PointList());
             String commandWithoutArg =
@@ -530,7 +542,7 @@ public final class AnalyzeDialog
 
     private void selectCommand(int index)
     {
-        String label = m_labels.get(index);
+        String label = m_commands.get(index).getLabel();
         updateOptions(label);
         m_comboBoxHistory.removeActionListener(this);
         if (m_firstIsTemp && getComboBoxItemCount() > 0)
@@ -569,7 +581,7 @@ public final class AnalyzeDialog
         if (label.equals(m_lastUpdateOptionsCommand))
             return;
         m_lastUpdateOptionsCommand = label;
-        int index = m_labels.indexOf(label);
+        int index = getCommandIndex(label);
         if (index < 0)
             return;
         AnalyzeCommand command =
@@ -577,15 +589,15 @@ public final class AnalyzeDialog
         boolean needsColorArg = command.needsColorArg();
         m_black.setEnabled(needsColorArg);
         m_white.setEnabled(needsColorArg);
-        m_autoRun.setEnabled(command.getType() != AnalyzeCommand.PARAM);
+        m_autoRun.setEnabled(command.getType() != AnalyzeType.PARAM);
         m_autoRun.setSelected(false);
-        m_clearBoard.setEnabled(command.getType() != AnalyzeCommand.PARAM);
+        m_clearBoard.setEnabled(command.getType() != AnalyzeType.PARAM);
         m_runButton.setEnabled(true);
     }
 
     private void updateRecent(int index)
     {
-        String label = m_labels.get(index);
+        String label = m_commands.get(index).getLabel();
         insertComboBoxItem(label, 0);
         for (int i = 1; i < getComboBoxItemCount(); ++i)
             if (getComboBoxItem(i).equals(label))

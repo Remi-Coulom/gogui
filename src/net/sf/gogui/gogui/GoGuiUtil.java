@@ -14,8 +14,10 @@ import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.gtp.AnalyzeCommand;
+import net.sf.gogui.gtp.AnalyzeDefinition;
+import net.sf.gogui.gtp.AnalyzeType;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.StatusBar;
@@ -25,13 +27,14 @@ import net.sf.gogui.gui.TextViewer;
 public final class GoGuiUtil
 {
     public static void showAnalyzeTextOutput(Frame owner, GuiBoard guiBoard,
-                                             int type, GoPoint pointArg,
-                                             String title, String response)
+                                             AnalyzeType type,
+                                             GoPoint pointArg, String title,
+                                             String response)
     {
-        boolean highlight = (type == AnalyzeCommand.HSTRING
-                             || type == AnalyzeCommand.HPSTRING);
+        boolean highlight = (type == AnalyzeType.HSTRING
+                             || type == AnalyzeType.HPSTRING);
         TextViewer.Listener listener = null;
-        if (type == AnalyzeCommand.PSTRING || type == AnalyzeCommand.HPSTRING)
+        if (type == AnalyzeType.PSTRING || type == AnalyzeType.HPSTRING)
             listener = new PointSelectionMarker(guiBoard);
         // Remove first line, if empty (formatted responses frequently start
         // with an empty line to avoid text on the line with the status

@@ -20,6 +20,8 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.gtp.AnalyzeCommand;
+import net.sf.gogui.gtp.AnalyzeType;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.StringUtil;
@@ -39,47 +41,47 @@ public final class AnalyzeShow
         GuiBoardUtil.setSelect(guiBoard, pointListArg, true);
         if (pointArg != null)
             guiBoard.setSelect(pointArg, true);
-        int type = command.getType();
+        AnalyzeType type = command.getType();
         int size = board.getSize();
         switch (type)
         {
-        case AnalyzeCommand.BWBOARD:
+        case BWBOARD:
             {
                 String b[][] = GtpUtil.parseStringBoard(response, size);
                 GuiBoardUtil.showBWBoard(guiBoard, b);
             }
             break;
-        case AnalyzeCommand.CBOARD:
+        case CBOARD:
             {
                 String colors[][] = GtpUtil.parseStringBoard(response, size);
                 GuiBoardUtil.showColorBoard(guiBoard, colors);
             }
             break;
-        case AnalyzeCommand.DBOARD:
+        case DBOARD:
             {
                 double b[][] = GtpUtil.parseDoubleBoard(response, size);
                 GuiBoardUtil.showDoubleBoard(guiBoard, b);
             }
             break;
-        case AnalyzeCommand.GFX:
+        case GFX:
             {
                 showGfx(response, guiBoard, statusBar);
             }
             break;
-        case AnalyzeCommand.PLIST:
+        case PLIST:
             {
                 PointList points = GtpUtil.parsePointList(response, size);
                 GuiBoardUtil.showPointList(guiBoard, points);
             }
             break;
-        case AnalyzeCommand.HPSTRING:
-        case AnalyzeCommand.PSTRING:
+        case HPSTRING:
+        case PSTRING:
             {
                 PointList points = GtpUtil.parsePointString(response, size);
                 GuiBoardUtil.showPointList(guiBoard, points);
             }
             break;
-        case AnalyzeCommand.PSPAIRS:
+        case PSPAIRS:
             {
                 PointList pointList = new PointList(32);
                 ArrayList<String> stringList = new ArrayList<String>(32);
@@ -89,40 +91,40 @@ public final class AnalyzeShow
                                                   stringList);
             }
             break;
-        case AnalyzeCommand.SBOARD:
+        case SBOARD:
             {
                 String b[][] = GtpUtil.parseStringBoard(response, size);
                 GuiBoardUtil.showStringBoard(guiBoard, b);
             }
             break;
-        case AnalyzeCommand.VAR:
+        case VAR:
             {
                 showVariation(guiBoard, response, board.getToMove());
             }
             break;
-        case AnalyzeCommand.VARB:
+        case VARB:
             {
                 showVariation(guiBoard, response, BLACK);
             }
             break;
-        case AnalyzeCommand.VARC:
+        case VARC:
             {
                 showVariation(guiBoard, response, command.getColorArg());
             }
             break;
-        case AnalyzeCommand.VARW:
+        case VARW:
             {
                 showVariation(guiBoard, response, WHITE);
             }
             break;
-        case AnalyzeCommand.VARP:
+        case VARP:
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
                 if (c != EMPTY)
                     showVariation(guiBoard, response, c);
             }
             break;
-        case AnalyzeCommand.VARPO:
+        case VARPO:
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
                 if (c != EMPTY)

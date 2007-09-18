@@ -66,13 +66,15 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.Score;
 import net.sf.gogui.go.Score.ScoringMethod;
+import net.sf.gogui.gtp.AnalyzeCommand;
+import net.sf.gogui.gtp.AnalyzeDefinition;
+import net.sf.gogui.gtp.AnalyzeType;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.AnalyzeDialog;
 import net.sf.gogui.gui.AnalyzeShow;
 import net.sf.gogui.gui.BoardSizeDialog;
@@ -1261,7 +1263,7 @@ public class GoGui
         else if (needsPointArg || m_analyzeCommand.needsPointListArg())
         {
             m_guiBoard.clearAllSelect();
-            if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
+            if (m_analyzeCommand.getType() == AnalyzeType.EPLIST)
                 GuiBoardUtil.setSelect(m_guiBoard,
                                         m_analyzeCommand.getPointListArg(),
                                         true);
@@ -2163,7 +2165,7 @@ public class GoGui
             String response = m_gtp.getResponse();
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_statusBar,
                              getBoard(), response);
-            int type = m_analyzeCommand.getType();
+            AnalyzeType type = m_analyzeCommand.getType();
             GoPoint pointArg = null;
             if (m_analyzeCommand.needsPointArg())
                 pointArg = m_analyzeCommand.getPointArg();
@@ -2173,11 +2175,11 @@ public class GoGui
                 if (list.size() > 0)
                     pointArg = list.get(list.size() - 1);
             }
-            if (type == AnalyzeCommand.PARAM)
+            if (type == AnalyzeType.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
                                                title, response, m_gtp,
                                                m_messageDialogs);
-            if (AnalyzeCommand.isTextType(type))
+            if (m_analyzeCommand.isTextType())
             {
                 if (response.indexOf("\n") < 0)
                 {
@@ -2189,8 +2191,7 @@ public class GoGui
                     GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
                                                     pointArg, title, response);
             }
-            if ("".equals(m_statusBar.getText())
-                && type != AnalyzeCommand.PARAM)
+            if ("".equals(m_statusBar.getText()) && type != AnalyzeType.PARAM)
                 showStatus(title);
             if (checkComputerMove)
                 checkComputerMove();
@@ -2977,21 +2978,21 @@ public class GoGui
     /** Find initial analyze command given with command line option. */
     private AnalyzeCommand getInitialAnalyzeCommand()
     {
-        ArrayList<String> commands = new ArrayList<String>(128);
-        ArrayList<String> labels = new ArrayList<String>(128);
         try
         {
-            AnalyzeCommand.read(commands, labels, m_gtp.getSupportedCommands(),
-                                m_analyzeCommands, m_programAnalyzeCommands);
+            ArrayList<AnalyzeDefinition> commands
+                = AnalyzeDefinition.read(m_gtp.getSupportedCommands(),
+                                         m_analyzeCommands,
+                                         m_programAnalyzeCommands);
+            for (AnalyzeDefinition definition : commands)
+                if (definition.getLabel().equals(m_initAnalyze))
+                    return new AnalyzeCommand(definition);
         }
         catch (Exception e)
         {
             showError("Reading analyze configuration failed", e);
         }
-        int index = labels.indexOf(m_initAnalyze);
-        if (index < 0)
-            return null;
-        return new AnalyzeCommand(commands.get(index));
+        return null;
     }
 
     private ConstBoard getBoard()
