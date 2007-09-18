@@ -4,7 +4,6 @@
 
 package net.sf.gogui.gtp;
 
-import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,12 +15,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
 

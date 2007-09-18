@@ -13,7 +13,6 @@ import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.BlackWhiteEmptySet;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;

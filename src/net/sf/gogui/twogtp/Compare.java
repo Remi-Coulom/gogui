@@ -10,17 +10,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.MoveUtil;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.sgf.SgfReader;
 

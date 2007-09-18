@@ -9,7 +9,6 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Score;
 import net.sf.gogui.go.Score.ScoringMethod;
 import static net.sf.gogui.go.Score.ScoringMethod.AREA;
 import static net.sf.gogui.go.Score.ScoringMethod.TERRITORY;

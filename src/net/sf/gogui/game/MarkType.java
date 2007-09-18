@@ -4,8 +4,6 @@
 
 package net.sf.gogui.game;
 
-import java.util.ArrayList;
-
 /** Markup types for points in nodes of a game tree. */
 public enum MarkType
 {

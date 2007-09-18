@@ -7,7 +7,6 @@ package net.sf.gogui.game;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 import net.sf.gogui.go.ConstBoard;
@@ -16,11 +15,9 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
-import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
 /** Utility functions operating on a tree of nodes. */

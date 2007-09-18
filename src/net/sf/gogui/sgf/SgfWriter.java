@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import java.util.Iterator;
 import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;

@@ -6,7 +6,6 @@ package net.sf.gogui.go;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
-import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** Move containing a point and a color.
     The point can be <code>null</code> (for pass move).

@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
-import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
-import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.ErrorMessage;
 

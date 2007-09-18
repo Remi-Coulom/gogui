@@ -18,7 +18,6 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
-import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
 class GameTreeNode

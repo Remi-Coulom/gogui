@@ -26,7 +26,6 @@ import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 import static net.sf.gogui.go.GoColor.WHITE_BLACK;
 import net.sf.gogui.util.StringUtil;

@@ -9,7 +9,6 @@ import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
-import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;

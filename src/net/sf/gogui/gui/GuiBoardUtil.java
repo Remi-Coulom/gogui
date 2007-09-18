@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import net.sf.gogui.game.ConstNode;

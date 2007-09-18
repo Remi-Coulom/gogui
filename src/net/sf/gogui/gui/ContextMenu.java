@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -18,7 +17,6 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.AnalyzeCommand;
 import net.sf.gogui.gtp.AnalyzeDefinition;
-import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 
 /** Context menu for fields on board. */
