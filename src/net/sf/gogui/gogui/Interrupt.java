@@ -38,7 +38,7 @@ public final class Interrupt
             return false;
         }
         String disableKey = "net.sf.gogui.gogui.Interrupt.interrupt";
-        String name = gtp.getProgramName();
+        String name = gtp.getName();
         if (name == null)
             name = "the Go program";
         if (! messageDialogs.showQuestion(disableKey, parent,

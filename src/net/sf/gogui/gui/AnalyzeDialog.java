@@ -421,7 +421,7 @@ public final class AnalyzeDialog
         int index = getSelectedCommand();
         if (index < 0)
         {
-            String name = m_gtp.getProgramName();
+            String name = m_gtp.getName();
             if (name == null)
                 name = "The current Go program";
             showError("Command not supported",

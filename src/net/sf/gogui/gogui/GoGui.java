@@ -1202,7 +1202,7 @@ public class GoGui
         {
             String disableKey =
                 "net.sf.gogui.gogui.GoGui.score-not-supported";
-            String name = getProgramName();
+            String name = getName();
             if (name == null)
                 name = "The attached Go program";
             m_messageDialogs.showInfo(disableKey, this,
@@ -1586,6 +1586,16 @@ public class GoGui
         return m_commandCompletion;
     }
 
+    /** Get name of currently attached program.
+        @return Name or null, if no program is attached or name is not known.
+    */
+    public String getProgramName()
+    {
+        if (m_gtp == null)
+            return null;
+        return m_gtp.getName();
+    }
+
     public int getNumberPrograms()
     {
         return m_programs.size();
@@ -1604,16 +1614,6 @@ public class GoGui
             return m_program.m_label;
         else
             return m_gtp.getProgramLabel();
-    }
-
-    /** Get name of currently attached program.
-        @return Name or null, if no program is attached or name is not known.
-    */
-    public String getProgramName()
-    {
-        if (m_gtp == null)
-            return null;
-        return m_gtp.getProgramName();
     }
 
     public GoColor getSetupColor()
@@ -1912,7 +1912,7 @@ public class GoGui
 
         public void run()
         {
-            String name = getProgramName();
+            String name = getName();
             String mainMessage =
                 (name == null ? "The Go program" : name) +
                 " sent a malformed response";
@@ -2339,7 +2339,7 @@ public class GoGui
             {
             }
             if (m_program != null
-                && m_program.updateInfo(getProgramName(), m_version))
+                && m_program.updateInfo(getName(), m_version))
             {
                 Program.save(m_programs);
                 m_menuBar.setPrograms(m_programs);

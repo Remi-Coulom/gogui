@@ -149,16 +149,16 @@ public class GuiGtpClient
         }
     }
 
+    public String getName()
+    {
+        assert SwingUtilities.isEventDispatchThread();
+        return m_gtp.getName();
+    }
+
     public String getProgramLabel()
     {
         assert SwingUtilities.isEventDispatchThread();
         return m_gtp.getLabel();
-    }
-
-    public String getProgramName()
-    {
-        assert SwingUtilities.isEventDispatchThread();
-        return m_gtp.getName();
     }
 
     public String getProgramCommand()
