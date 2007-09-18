@@ -2767,10 +2767,7 @@ public class GoGui
 
     private ContextMenu createContextMenu(GoPoint point)
     {
-        ArrayList<String> supportedCommands = null;
         boolean noProgram = (m_gtp == null);
-        if (! noProgram)
-            supportedCommands = m_gtp.getSupportedCommands();
         return new ContextMenu(point, noProgram, m_analyzeCommands,
                                m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),

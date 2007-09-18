@@ -1051,9 +1051,6 @@ public class TwoGtp
             return;
         }
         Program program;
-        String name;
-        String command;
-        GtpSynchronizer synchronizer;
         boolean exchangeColors =
             (color == BLACK && isAlternated())
             || (color == WHITE && ! isAlternated());

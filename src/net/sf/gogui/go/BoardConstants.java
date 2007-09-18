@@ -172,7 +172,6 @@ public final class BoardConstants
                 GoPoint p = GoPoint.get(x, y);
                 m_allPoints.add(p);
                 PointList adjacent = new PointList();
-                int i = 0;
                 if (x > 0)
                     adjacent.add(GoPoint.get(x - 1, y));
                 if (x < m_size - 1)
