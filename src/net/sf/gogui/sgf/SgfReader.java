@@ -378,11 +378,6 @@ public final class SgfReader
         }
     }
 
-    private GoPoint getPointList(int i)
-    {
-        return m_pointList.get(i);
-    }
-
     private void handleProps(Node node, boolean isRoot)
         throws IOException, SgfError, SgfCharsetChanged
     {

@@ -546,11 +546,6 @@ public final class AnalyzeDialog
             m_white.setSelected(true);
     }
 
-    private void showError(String mainMessage, String optionalMessage)
-    {
-        showError(mainMessage, optionalMessage, true);
-    }
-
     private void showError(String mainMessage, String optionalMessage,
                            boolean isCritical)
     {
