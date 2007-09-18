@@ -178,7 +178,7 @@ public final class TimeSettings
 
     private static long parseTime(String s) throws ErrorMessage
     {
-        long factor = MSEC_PER_MIN;;
+        long factor = MSEC_PER_MIN;
         s = s.trim();
         if (s.endsWith("m"))
             s = s.substring(0, s.length() - "m".length());
