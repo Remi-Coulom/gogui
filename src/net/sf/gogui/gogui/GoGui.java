@@ -554,8 +554,7 @@ public class GoGui
 
     public void actionExportLatexMainVariation()
     {
-        File file = FileDialogs.showSave(this, "Export LaTeX",
-                                         m_messageDialogs);
+        File file = showSave("Export LaTeX");
         if (file == null)
             return;
         try
@@ -573,8 +572,7 @@ public class GoGui
 
     public void actionExportLatexPosition()
     {
-        File file = FileDialogs.showSave(this, "Export LaTeX Position",
-                                         m_messageDialogs);
+        File file = showSave("Export LaTeX Position");
         if (file == null)
             return;
         try
@@ -613,8 +611,7 @@ public class GoGui
 
     public void actionExportTextPosition()
     {
-        File file = FileDialogs.showSave(this, "Export Text Position",
-                                         m_messageDialogs);
+        File file = showSave("Export Text Position");
         if (file == null)
             return;
         try
@@ -1171,6 +1168,21 @@ public class GoGui
     {
         saveDialog();
         updateViews(false);
+    }
+
+    public void actionSaveParameters()
+    {
+        File file = showSave("Save Parameters");
+        if (file == null)
+            return;
+        try
+        {
+            GtpClientUtil.saveParameters(m_gtp, m_analyzeCommands, file);
+        }
+        catch (ErrorMessage e)
+        {
+            showError("Could not save parameters", e);
+        }
     }
 
     public void actionScore()
@@ -3994,6 +4006,11 @@ public class GoGui
         return m_messageDialogs.showQuestion(this, mainMessage,
                                              optionalMessage,
                                              destructiveOption, isCritical);
+    }
+
+    private File showSave(String title)
+    {
+        return FileDialogs.showSave(this, title, m_messageDialogs);
     }
 
     private void showShell()

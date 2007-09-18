@@ -469,6 +469,7 @@ public class GoGuiMenuBar
         menu.addSeparator();
         menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
         menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);
+        menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_P);
         menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
         m_recentGtp = new RecentFileMenu("Send Recent",
                                          "net/sf/gogui/recentgtpfiles",

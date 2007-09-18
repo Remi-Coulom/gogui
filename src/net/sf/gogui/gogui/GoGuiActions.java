@@ -115,7 +115,7 @@ public class GoGuiActions
                    "Show information about GoGui, Go program and Java") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionAbout(); } };
-    
+
     public final Action m_actionAddBookmark =
         new Action(this, "Add Bookmark",
                    "Add bookmark at current position in current file",
@@ -405,7 +405,7 @@ public class GoGuiActions
                    "Import position as text diagram from file") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPosition(); } };
-    
+
     public final Action m_actionImportTextPositionFromClipboard =
         new Action(this, "Text Position from Clipboard",
                    "Import position as text diagram from clipboard") {
@@ -523,6 +523,12 @@ public class GoGuiActions
         new Action(this, "Save As...", "Save As", "document-save-as") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveAs(); } };
+
+    public final Action m_actionSaveParameters =
+        new Action(this, "Save Parameters...",
+                   "Query parameters and save them to a GTP file") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSaveParameters(); } };
 
     public final Action m_actionScore =
         new Action(this, "Score", "Score position") {
