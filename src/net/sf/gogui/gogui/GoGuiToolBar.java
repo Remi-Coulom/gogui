@@ -15,7 +15,6 @@ import javax.swing.JToolBar;
 import javax.swing.JToggleButton;
 import net.sf.gogui.util.Platform;
 
-
 /** Tool bar for GoGui. */
 public class GoGuiToolBar
     extends JToolBar
