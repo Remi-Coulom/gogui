@@ -69,6 +69,7 @@ import net.sf.gogui.go.Score.ScoringMethod;
 import net.sf.gogui.gtp.AnalyzeCommand;
 import net.sf.gogui.gtp.AnalyzeDefinition;
 import net.sf.gogui.gtp.AnalyzeType;
+import net.sf.gogui.gtp.AnalyzeUtil;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientUtil;
 import net.sf.gogui.gtp.GtpCommand;
@@ -1172,6 +1173,16 @@ public class GoGui
 
     public void actionSaveParameters()
     {
+        if (! AnalyzeUtil.hasParameterCommands(m_analyzeCommands))
+        {
+            String name = getProgramName();
+            if (name == null)
+                name = "The attached Go program";
+            showError("No parameter commands supported",
+                      name + " does not support any analyze commands of"
+                      + " type \"param\".");
+            return;
+        }
         File file = showSave("Save Parameters");
         if (file == null)
             return;

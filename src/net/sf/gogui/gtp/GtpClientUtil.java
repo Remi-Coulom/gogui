@@ -114,16 +114,6 @@ public final class GtpClientUtil
                        ArrayList<AnalyzeDefinition> analyzeCommands,
                        File file) throws ErrorMessage
     {
-        boolean anyParamCommand = false;
-        for (AnalyzeDefinition definition : analyzeCommands)
-            if (definition.getType() == AnalyzeType.PARAM)
-            {
-                anyParamCommand = true;
-                break;
-            }
-        if (! anyParamCommand)
-            throw new ErrorMessage("The program does not support any"
-                                   + " analyze commands of type \"param\"");
         PrintStream out = null;
         try
         {

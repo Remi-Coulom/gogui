@@ -893,6 +893,18 @@ Save the sent GTP commands to a file.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>Save Parameters</guimenuitem></term>
+<listitem>
+<para>
+Saves a GTP file for restoring the current state of all parameters from all
+analyze commands of type "param" (see <xref linkend="analyze"/>). To restore
+the parameters, use the <xref linkend="sendfile"/> or
+<xref linkend="sendrecent"/> menu items.
+</para>
+</listitem>
+</varlistentry>
+
 <varlistentry id="sendfile">
 <term><guimenuitem>Send File</guimenuitem></term>
 <listitem>
@@ -908,7 +920,7 @@ error message if a command fails.
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="sendrecent">
 <term><guimenuitem>Send Recent</guimenuitem></term>
 <listitem>
 <para>

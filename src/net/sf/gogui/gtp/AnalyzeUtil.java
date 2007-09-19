@@ -4,6 +4,7 @@
 
 package net.sf.gogui.gtp;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
 
@@ -29,6 +30,16 @@ public class AnalyzeUtil
                                              String value)
     {
         return command + " " + key + " " + value;
+    }
+
+    public static boolean
+        hasParameterCommands(ArrayList<AnalyzeDefinition> analyzeCommands)
+    {
+        boolean anyParamCommand = false;
+        for (AnalyzeDefinition definition : analyzeCommands)
+            if (definition.getType() == AnalyzeType.PARAM)
+                return true;
+        return false;
     }
 
     /** Parse a line in the response of an analyze command of type "param".
