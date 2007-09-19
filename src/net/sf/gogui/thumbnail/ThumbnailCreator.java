@@ -15,6 +15,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.imageio.IIOImage;
@@ -116,13 +118,13 @@ public final class ThumbnailCreator
             m_description = "";
             ConstBoard board = readFile(input);
             int size = board.getSize();
-            Field[][] field = new Field[size][size];
+            Field[][] fields = new Field[size][size];
             for (int x = 0; x < size; ++x)
                 for (int y = 0; y < size; ++y)
                 {
-                    field[x][y] = new Field();
+                    fields[x][y] = new Field();
                     GoColor color = board.getColor(GoPoint.get(x, y));
-                    field[x][y].setColor(color);
+                    fields[x][y].setColor(color);
                 }
             int imageSize = thumbnailSize;
             if (scale)
@@ -133,7 +135,7 @@ public final class ThumbnailCreator
             {
                 // Create large image and scale down, looks better than
                 // creating small image
-                image = getImage(field, 2 * imageSize, 2 * imageSize);
+                image = getImage(fields, 2 * imageSize, 2 * imageSize);
                 BufferedImage newImage = createImage(imageSize, imageSize);
                 Graphics2D graphics = newImage.createGraphics();
                 Image scaledInstance
@@ -143,11 +145,18 @@ public final class ThumbnailCreator
                 image = newImage;
             }
             else
-                image = getImage(field, imageSize, imageSize);
+                image = getImage(fields, imageSize, imageSize);
             if (output == null)
                 output = getThumbnailFileNormalSize(input);
             long lastModified = getLastModified(input);
-            writeImage(image, output, uri, lastModified);
+            Map<String,String> metaData = new TreeMap<String,String>();
+            metaData.put("Thumb::URI", uri.toString());
+            metaData.put("Thumb::MTime", Long.toString(lastModified));
+            metaData.put("Thumb::Mimetype", "application/x-go-sgf");
+            if (! m_description.equals(""))
+                metaData.put("Description", m_description);
+            metaData.put("Software", "GoGui " + Version.get());
+            writeImage(image, output, metaData);
         }
         catch (FileNotFoundException e)
         {
@@ -297,32 +306,36 @@ public final class ThumbnailCreator
         System.err.println(line);
     }
 
-    private void writeImage(BufferedImage image, File file, URI uri,
-                            long lastModified)
+    private void writeImage(BufferedImage image, File file,
+                            Map<String,String> metaData)
         throws IOException, Error
     {
         Iterator iter = ImageIO.getImageWritersBySuffix("png");
         ImageWriter writer = (ImageWriter)iter.next();
-        ImageTypeSpecifier specifier = new ImageTypeSpecifier(image);
-        IIOMetadata meta = writer.getDefaultImageMetadata(specifier, null);
-        String formatName = "javax_imageio_1.0";
-        org.w3c.dom.Node node = meta.getAsTree(formatName);
-        addMeta(node, "Thumb::URI", uri.toString());
-        addMeta(node, "Thumb::MTime", Long.toString(lastModified));
-        addMeta(node, "Thumb::Mimetype", "application/x-go-sgf");
-        if (! m_description.equals(""))
-            addMeta(node, "Description", m_description);
-        addMeta(node, "Software", "GoGui " + Version.get());
-        try
+        IIOMetadata meta = null;
+        if (metaData != null)
         {
-            meta.mergeTree(formatName, node);
+            ImageTypeSpecifier specifier = new ImageTypeSpecifier(image);
+            meta = writer.getDefaultImageMetadata(specifier, null);
+            String formatName = "javax_imageio_1.0";
+            org.w3c.dom.Node node = meta.getAsTree(formatName);
+            for (Map.Entry<String,String> entry : metaData.entrySet())
+            {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                addMeta(node, key, value);
+            }
+            try
+            {
+                meta.mergeTree(formatName, node);
+            }
+            catch (IIOInvalidTreeException e)
+            {
+                assert false;
+                return;
+            }
         }
-        catch (IIOInvalidTreeException e)
-        {
-            assert false;
-            return;
-        }
-        // Renaming a temporary file as required bu the standard does
+        // Renaming a temporary file as required by the standard does
         // not work, because File.renameTo may fail on some platforms
         //File tempFile = File.createTempFile("gogui-thumbnail", ".png");
         //tempFile.deleteOnExit();
