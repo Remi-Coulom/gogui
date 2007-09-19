@@ -135,7 +135,8 @@ public final class ThumbnailCreator
             {
                 // Create large image and scale down, looks better than
                 // creating small image
-                image = getImage(fields, 2 * imageSize, 2 * imageSize);
+                image = getImage(m_painter, fields, 2 * imageSize,
+                                 2 * imageSize);
                 BufferedImage newImage = createImage(imageSize, imageSize);
                 Graphics2D graphics = newImage.createGraphics();
                 Image scaledInstance
@@ -156,7 +157,17 @@ public final class ThumbnailCreator
             if (! m_description.equals(""))
                 metaData.put("Description", m_description);
             metaData.put("Software", "GoGui " + Version.get());
+            // Renaming a temporary file as required by the standard does
+            // not work, because File.renameTo may fail on some platforms
+            //File tempFile = File.createTempFile("gogui-thumbnail", ".png");
+            //tempFile.deleteOnExit();
+            //ImageOutputStream ios
+            //    = ImageIO.createImageOutputStream(tempFile);
             writeImage(image, output, metaData);
+            //if (! tempFile.renameTo(output))
+            //    throw new Error("Could not rename " + tempFile + " to "
+            //                    + output);
+            m_lastThumbnail = output;
         }
         catch (FileNotFoundException e)
         {
@@ -195,7 +206,8 @@ public final class ThumbnailCreator
         return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
-    private void addMeta(org.w3c.dom.Node node, String keyword, String value)
+    private static void addMeta(org.w3c.dom.Node node, String keyword,
+                                String value)
     {
         IIOMetadataNode text = new IIOMetadataNode("Text");
         IIOMetadataNode textEntry = new IIOMetadataNode("TextEntry");
@@ -243,11 +255,13 @@ public final class ThumbnailCreator
         return board;
     }
 
-    private BufferedImage getImage(Field[][] field, int width, int height)
+    private static BufferedImage getImage(BoardPainter painter,
+                                          Field[][] field, int width,
+                                          int height)
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
-        m_painter.draw(graphics, field, width, false);
+        painter.draw(graphics, field, width, false);
         graphics.dispose();
         return image;
     }
@@ -306,8 +320,8 @@ public final class ThumbnailCreator
         System.err.println(line);
     }
 
-    private void writeImage(BufferedImage image, File file,
-                            Map<String,String> metaData)
+    private static void writeImage(BufferedImage image, File file,
+                                   Map<String,String> metaData)
         throws IOException, Error
     {
         Iterator iter = ImageIO.getImageWritersBySuffix("png");
@@ -335,16 +349,8 @@ public final class ThumbnailCreator
                 return;
             }
         }
-        // Renaming a temporary file as required by the standard does
-        // not work, because File.renameTo may fail on some platforms
-        //File tempFile = File.createTempFile("gogui-thumbnail", ".png");
-        //tempFile.deleteOnExit();
-        //ImageOutputStream ios = ImageIO.createImageOutputStream(tempFile);
         ImageOutputStream ios = ImageIO.createImageOutputStream(file);
         writer.setOutput(ios);
         writer.write(null, new IIOImage(image, null, meta), null);
-        //if (! tempFile.renameTo(file))
-        //    throw new Error("Could not rename " + tempFile + " to " + file);
-        m_lastThumbnail = file;
     }
 }
