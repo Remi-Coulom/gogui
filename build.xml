@@ -320,7 +320,7 @@ ${looks.zipfile}
 <target name="extract-quaqua" unless="quaqua.available">
 <fail unless="quaqua.zip-available">
 Please download the Quaqua Look and Feel from
-http://http://www.randelshofer.ch/quaqua/download.html and copy it to
+http://www.randelshofer.ch/quaqua/download.html and copy it to
 ${quaqua.nestedzipfile}
 </fail>
 <unzip src="${quaqua.nestedzipfile}" dest="external/quaqua">
