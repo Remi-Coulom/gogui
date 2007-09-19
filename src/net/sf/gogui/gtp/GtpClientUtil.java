@@ -11,6 +11,8 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import net.sf.gogui.go.Move;
+import static net.sf.gogui.gtp.AnalyzeUtil.getParameterCommand;
+import static net.sf.gogui.gtp.AnalyzeUtil.parseParameterLine;
 import net.sf.gogui.util.ErrorMessage;
 
 /** Utility functions for using a GtpClient. */
@@ -100,8 +102,8 @@ public final class GtpClientUtil
         current parameter values and creates a config file with GTP commands
         that allows to restore the values.
         @param gtp The GTP connection.
-        @param analyzeCommands The analyze command definitions (e.g. from
-        AnalyzeDefinition.read()).
+        @param analyzeCommands The analyze command definitions for this
+        program (e.g. from AnalyzeDefinition.read()).
         @throws ErrorMessage If writing the file fails or none of the analyze
         commands have the type "param" (error responses from the program are
         written in comment lines in the resulting file).
@@ -122,27 +124,54 @@ public final class GtpClientUtil
         if (! anyParamCommand)
             throw new ErrorMessage("The program does not support any"
                                    + " analyze commands of type \"param\"");
+        PrintStream out = null;
         try
         {
-            PrintStream out = new PrintStream(file);
+            out = new PrintStream(file);
             for (AnalyzeDefinition definition : analyzeCommands)
                 if (definition.getType() == AnalyzeType.PARAM)
                 {
                     out.print("# ");
                     out.println(definition.getLabel());
-                    String response = gtp.send(definition.getCommand());
+                    String response;
+                    try
+                    {
+                        response = gtp.send(definition.getCommand());
+                    }
+                    catch (GtpError e)
+                    {
+                        out.print("# ? ");
+                        out.println(e.getMessage());
+                        out.println();
+                        continue;
+                    }
                     BufferedReader reader
                         = new BufferedReader(new StringReader(response));
                     while (true)
                     {
+                        String line = reader.readLine();
+                        if (line == null)
+                            break;
+                        AnalyzeUtil.Result result = parseParameterLine(line);
+                        if (result == null)
+                            continue;
+                        String command =
+                            getParameterCommand(definition.getCommand(),
+                                                result.m_key, result.m_value);
+                        out.println(command);
                     }
+                    out.println();
                 }
         }
         catch (IOException e)
         {
             throw new ErrorMessage(e.getMessage());
         }
-        throw new ErrorMessage("GtpClientUtil not yet fully implemented");
+        finally
+        {
+            if (out != null)
+                out.close();
+        }
     }
 
     /** Make constructor unavailable; class is for namespace only. */

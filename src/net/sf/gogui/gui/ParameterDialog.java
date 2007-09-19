@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import static java.lang.Math.max;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.NoSuchElementException;
 import javax.swing.Box;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
@@ -34,7 +32,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import net.sf.gogui.gtp.AnalyzeUtil;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.ParameterType;
 import static net.sf.gogui.gui.GuiUtil.SMALL_PAD;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
@@ -329,48 +329,21 @@ public class ParameterDialog
             }
             if (line == null)
                 break;
-            line = line.trim();
-            if (line.startsWith("[") && line.endsWith("]"))
-            {
-                // Might be used as label for grouping parameters on tabbing
-                // panes in a later version of GoGui, so we silently accept it
+            AnalyzeUtil.Result result = AnalyzeUtil.parseParameterLine(line);
+            if (result == null)
                 continue;
-            }
-            Scanner scanner = new Scanner(line);
-            String type;
-            try
-            {
-                type = scanner.next("^\\[[^\\]]*\\]");
-                line = line.substring(type.length()).trim();
-                type = type.substring(1, type.length() - 1);
-            }
-            catch (NoSuchElementException e)
-            {
-                // Treat unknown types as string for compatibiliy with future
-                // types
-                type = "string";
-            }
-            int pos = line.indexOf(' ');
-            String key;
-            String value;
-            if (pos < 0)
-            {
-                key = line.trim();
-                value = "";
-            }
-            else
-            {
-                key = line.substring(0, pos).trim();
-                value = line.substring(pos + 1).trim();
-            }
-            if (type.equals("bool"))
-                parameters.add(new BoolParameter(key, value));
-            else if (type.startsWith("list/"))
-                parameters.add(new ListParameter(type, key, value));
+            if (result.m_type == ParameterType.BOOL)
+                parameters.add(new BoolParameter(result.m_key,
+                                                 result.m_value));
+            else if (result.m_type == ParameterType.LIST)
+                parameters.add(new ListParameter(result.m_typeInfo,
+                                                 result.m_key,
+                                                 result.m_value));
             else
                 // Treat unknown types as string for compatibiliy with future
                 // types
-                parameters.add(new StringParameter(key, value));
+                parameters.add(new StringParameter(result.m_key,
+                                                   result.m_value));
         }
         return parameters;
     }
@@ -425,8 +398,8 @@ public class ParameterDialog
                                              Parameter parameter)
     {
         String key = parameter.getKey();
-        String newValue = parameter.getNewValue();
-        return paramCommand + " " + key + " " + newValue;
+        String value = parameter.getNewValue();
+        return AnalyzeUtil.getParameterCommand(paramCommand, key, value);
     }
 
     private static void showError(JDialog owner, MessageDialogs messageDialogs,
