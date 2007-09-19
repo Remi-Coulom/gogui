@@ -146,7 +146,7 @@ public final class ThumbnailCreator
                 image = newImage;
             }
             else
-                image = getImage(fields, imageSize, imageSize);
+                image = getImage(m_painter, fields, imageSize, imageSize);
             if (output == null)
                 output = getThumbnailFileNormalSize(input);
             long lastModified = getLastModified(input);
@@ -201,7 +201,7 @@ public final class ThumbnailCreator
 
     private final BoardPainter m_painter;
 
-    private BufferedImage createImage(int width, int height)
+    private static BufferedImage createImage(int width, int height)
     {
         return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
