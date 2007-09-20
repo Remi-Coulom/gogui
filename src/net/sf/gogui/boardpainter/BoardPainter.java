@@ -41,7 +41,7 @@ public class BoardPainter
         @param width The width/height of the image.
         @param showGrid Show grid coordinates.
     */
-    public void draw(Graphics graphics, Field[][] field, int width,
+    public void draw(Graphics graphics, ConstField[][] field, int width,
                      boolean showGrid)
     {
         if (graphics instanceof Graphics2D)
@@ -159,7 +159,18 @@ public class BoardPainter
 
     private final Image m_image;
 
-    private void drawFields(Graphics graphics, Field field[][])
+    private void drawBackground(Graphics graphics)
+    {
+        if (m_image == null)
+        {
+            graphics.setColor(new Color(212, 167, 102));
+            graphics.fillRect(0, 0, m_width, m_width);
+        }
+        else
+            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
+    }
+
+    private void drawFields(Graphics graphics, ConstField field[][])
     {
         assert field.length == m_size;
         for (int x = 0; x < m_size; ++x)
@@ -172,17 +183,6 @@ public class BoardPainter
                                  location.y, m_image, m_width);
             }
         }
-    }
-
-    private void drawBackground(Graphics graphics)
-    {
-        if (m_image == null)
-        {
-            graphics.setColor(new Color(212, 167, 102));
-            graphics.fillRect(0, 0, m_width, m_width);
-        }
-        else
-            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
     }
 
     private void drawGrid(Graphics graphics)
@@ -264,7 +264,7 @@ public class BoardPainter
         }
     }
 
-    private void drawShadows(Graphics graphics, Field[][] field)
+    private void drawShadows(Graphics graphics, ConstField[][] field)
     {
         if (m_fieldSize <= 5)
             return;
