@@ -25,6 +25,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import javax.swing.JPanel;
 import net.sf.gogui.boardpainter.BoardPainter;
+import net.sf.gogui.boardpainter.ConstField;
 import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
@@ -171,6 +172,16 @@ public final class GuiBoard
     public int getBoardSize()
     {
         return m_size;
+    }
+
+    /** Return a field.
+        Returns only a const interface to the field, the field state should
+        be modified using GuiBoard functions to guarantee the UI repaint after
+        field changes.
+    */
+    public ConstField getFieldConst(GoPoint p)
+    {
+        return getField(p);
     }
 
     public Dimension getFieldSize()
