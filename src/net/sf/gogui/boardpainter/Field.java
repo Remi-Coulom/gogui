@@ -23,6 +23,7 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** State of a field on the board. */
 public class Field
+    implements ConstField
 {
     public Field()
     {
