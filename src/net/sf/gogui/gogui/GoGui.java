@@ -243,7 +243,7 @@ public class GoGui
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);
         m_showVariations = m_prefs.getBoolean("show-variations", false);
         boolean showCursor = m_prefs.getBoolean("show-cursor", false);
-        boolean showGrid = m_prefs.getBoolean("show-grid", true);
+        boolean showGrid = m_prefs.getBoolean("show-grid", false);
         m_guiBoard.setShowCursor(showCursor);
         m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar);
