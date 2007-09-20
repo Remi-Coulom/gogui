@@ -507,11 +507,18 @@ public class GoGuiActions
                 m_goGui.actionPrint(); } };
 
     public final Action m_actionReattachProgram =
-        new Action(this, "Reattach",
+        new Action(this, "Reattach Program",
                    "Restart Go program and attach it to the currrent position",
                    KeyEvent.VK_T) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachProgram(); } };
+
+    public final Action m_actionReattachWithParameters =
+        new Action(this, "Reattach With Parameters",
+                   "Reattach Go program and restore program-specific"
+                   + " parameters") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionReattachWithParameters(); } };
 
     public final Action m_actionSave =
         new Action(this, "Save", "Save", KeyEvent.VK_S, "document-save") {
@@ -794,7 +801,8 @@ public class GoGuiActions
         m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
-        updateActionReattachProgram(isProgramAttached, name);
+        m_actionReattachProgram.setEnabled(isProgramAttached);
+        m_actionReattachWithParameters.setEnabled(isProgramAttached);
         updateActionSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == BLACK);
@@ -977,16 +985,6 @@ public class GoGuiActions
         if (! isProgramAttached)
             desc = desc + " (no program attached)";
         m_actionPlay.setDescription(desc);
-    }
-
-    private void updateActionReattachProgram(boolean isProgramAttached,
-                                             String name)
-    {
-        m_actionReattachProgram.setEnabled(isProgramAttached);
-        if (! isProgramAttached || name == null)
-            m_actionReattachProgram.setName("Reattach Program");
-        else
-            m_actionReattachProgram.setName("Reattach " + name);
     }
 
     private void updateActionSave(File file, boolean isModified)

@@ -378,16 +378,6 @@ Terminate the currently attached Go program.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Reattach</guimenuitem></term>
-<listitem>
-<para>
-Restart the current Go program and synchronize it to the current game at
-the current position again.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Play Single Move</guimenuitem></term>
 <listitem>
 <para>
@@ -875,6 +865,27 @@ Show the GTP shell window.
 </listitem>
 </varlistentry>
 
+<varlistentry id="reattachprogram">
+<term><guimenuitem>Reattach Program</guimenuitem></term>
+<listitem>
+<para>
+Restart the current Go program and synchronize it to the current game at
+the current position again.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Reattach With Parameters</guimenuitem></term>
+<listitem>
+<para>
+Like <xref linkend="reattachprogram"/>, but saves the current program
+parameters to a temporary GTP file and restores them after the program
+was reattached. See <xref linkend="saveparameters"/>.
+</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><guimenuitem>Save Log</guimenuitem></term>
 <listitem>
@@ -893,7 +904,7 @@ Save the sent GTP commands to a file.
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="saveparameters">
 <term><guimenuitem>Save Parameters</guimenuitem></term>
 <listitem>
 <para>

@@ -447,9 +447,7 @@ public class GoGuiMenuBar
         m_menuAttach = createMenu("Attach", KeyEvent.VK_A);
         m_menuAttach.setEnabled(false);
         menu.add(m_menuAttach);
-        menu.addSeparator();
         menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
-        menu.addItem(actions.m_actionReattachProgram, KeyEvent.VK_R);
         menu.addSeparator();
         menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_I);
@@ -463,13 +461,16 @@ public class GoGuiMenuBar
                                          RecentFileMenu.Listener listener)
     {
         MenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
-        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_T);
         menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
         menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
         menu.addSeparator();
+        menu.addItem(actions.m_actionReattachProgram, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionReattachWithParameters, KeyEvent.VK_P);
+        menu.addSeparator();
         menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
         menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);
-        menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_P);
+        menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_M);
         menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
         m_recentGtp = new RecentFileMenu("Send Recent",
                                          "net/sf/gogui/recentgtpfiles",

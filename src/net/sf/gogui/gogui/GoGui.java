@@ -1138,6 +1138,45 @@ public class GoGui
         SwingUtilities.invokeLater(runnable);
     }
 
+    public void actionReattachWithParameters()
+    {
+        if (m_gtp == null)
+            return;
+        if (! checkCommandInProgress())
+            return;
+        if (! checkHasParameterCommands())
+            return;
+        protectGui();
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    try
+                    {
+                        File file;
+                        try
+                        {
+                            file = File.createTempFile("gogui-param", ".gtp");
+                        }
+                        catch (IOException e)
+                        {
+                            showError("Could not create temporary file with"
+                                      + " current parameters", e);
+                            return;
+                        }
+                        if (! saveParameters(file))
+                            return;
+                        if (! attachNewProgram(m_programCommand, m_program))
+                            return;
+                        sendGtpFile(file);
+                    }
+                    finally
+                    {
+                        unprotectGui();
+                    }
+                }
+            };
+        SwingUtilities.invokeLater(runnable);
+    }
+
     public void actionSave()
     {
         if (! isModified())
@@ -1173,27 +1212,12 @@ public class GoGui
 
     public void actionSaveParameters()
     {
-        if (! AnalyzeUtil.hasParameterCommands(m_analyzeCommands))
-        {
-            String name = getProgramName();
-            if (name == null)
-                name = "The attached Go program";
-            showError("No parameter commands supported",
-                      name + " does not support any analyze commands of"
-                      + " type \"param\".");
+        if (! checkHasParameterCommands())
             return;
-        }
         File file = showSave("Save Parameters");
         if (file == null)
             return;
-        try
-        {
-            GtpClientUtil.saveParameters(m_gtp, m_analyzeCommands, file);
-        }
-        catch (ErrorMessage e)
-        {
-            showError("Could not save parameters", e);
-        }
+        saveParameters(file);
     }
 
     public void actionScore()
@@ -2232,7 +2256,7 @@ public class GoGui
         }
     }
 
-    private void attachNewProgram(String command, Program program)
+    private boolean attachNewProgram(String command, Program program)
     {
         if (m_gtp != null)
         {
@@ -2246,7 +2270,7 @@ public class GoGui
                 if (! m_shell.isVisible() && m_shell.isLastTextNonGTP())
                     showShell();
             updateViews(false);
-            return;
+            return false;
         }
         if (m_shell != null && m_session.isVisible("shell"))
             m_shell.setVisible(true);
@@ -2254,6 +2278,7 @@ public class GoGui
             createAnalyzeDialog();
         toFrontLater();
         updateViews(false);
+        return true;
     }
 
     /** Attach program.
@@ -2492,6 +2517,21 @@ public class GoGui
             else if (computerToMove())
                 generateMove(false);
         }
+    }
+
+    private boolean checkHasParameterCommands()
+    {
+        if (! AnalyzeUtil.hasParameterCommands(m_analyzeCommands))
+        {
+            String name = getProgramName();
+            if (name == null)
+                name = "The attached Go program";
+            showError("No parameter commands supported",
+                      name + " does not support any analyze commands of"
+                      + " type \"param\".");
+            return false;
+        }
+        return true;
     }
 
     private void checkLostOnTime(GoColor color)
@@ -3561,6 +3601,20 @@ public class GoGui
         if (file == null)
             return false;
         return save(file);
+    }
+
+    private boolean saveParameters(File file)
+    {
+        try
+        {
+            GtpClientUtil.saveParameters(m_gtp, m_analyzeCommands, file);
+        }
+        catch (ErrorMessage e)
+        {
+            showError("Could not save parameters", e);
+            return false;
+        }
+        return true;
     }
 
     private void savePosition(File file) throws FileNotFoundException

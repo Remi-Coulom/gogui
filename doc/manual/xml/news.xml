@@ -34,7 +34,12 @@ still be used by wrapping their invocation with GtpAdapter with the option
 </listitem>
 <listitem>
 <simpara>
-New menu item Tools / Save Parameters.
+Move menu item Reattach Program from Program to Tools menu.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item Tools / Save Parameters and Reattach With Parameters.
 </simpara>
 </listitem>
 <listitem>
