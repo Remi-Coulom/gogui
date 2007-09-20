@@ -761,9 +761,9 @@ public class GoGuiActions
         m_actionBoardSizeOther.setSelected(boardSize < 9 || boardSize > 19
                                            || boardSize % 2 == 0);
         m_actionClockHalt.setEnabled(clock.isRunning());
-        updateActionClockResume(clock);
-        updateActionClockRestore(node, clock);
-        updateActionClockStart(clock);
+        updateClockResume(clock);
+        updateClockRestore(node, clock);
+        updateClockStart(clock);
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
         m_actionComputerBoth.setEnabled(isProgramAttached);
@@ -773,7 +773,7 @@ public class GoGuiActions
         m_actionComputerWhite.setEnabled(isProgramAttached);
         m_actionComputerWhite.setSelected(! computerBlack && computerWhite);
         m_actionDeleteSideVariations.setEnabled(isInMain && treeHasVariations);
-        updateActionDetachProgram(isProgramAttached, name);
+        updateDetachProgram(isProgramAttached, name);
         m_actionEditPrograms.setEnabled(numberPrograms > 0);
         m_actionEnd.setEnabled(hasChildren);
         m_actionFindNext.setEnabled(hasPattern);
@@ -790,20 +790,20 @@ public class GoGuiActions
         m_actionHandicap7.setSelected(handicap == 7);
         m_actionHandicap8.setSelected(handicap == 8);
         m_actionHandicap9.setSelected(handicap == 9);
-        updateActionInterrupt(isProgramAttached, isInterruptSupported,
-                              isCommandInProgress, name);
+        updateInterrupt(isProgramAttached, isInterruptSupported,
+                        isCommandInProgress, name);
         m_actionKeepOnlyPosition.setEnabled(hasFather || hasChildren);
         m_actionMakeMainVariation.setEnabled(! isInMain);
         m_actionNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_actionNextVariation.setEnabled(hasNextVariation);
-        updateActionPass(toMove);
-        updateActionPlay(toMove, isProgramAttached, name);
+        updatePass(toMove);
+        updatePlay(toMove, isProgramAttached, name);
         m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
         m_actionReattachProgram.setEnabled(isProgramAttached);
         m_actionReattachWithParameters.setEnabled(isProgramAttached);
-        updateActionSave(file, isModified);
+        updateSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == BLACK);
         m_actionSetupWhite.setSelected(setupMode
@@ -868,7 +868,7 @@ public class GoGuiActions
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     }
 
-    private void updateActionClockRestore(ConstNode node, ConstClock clock)
+    private void updateClockRestore(ConstNode node, ConstClock clock)
     {
         boolean enabled = false;
         String desc = null;
@@ -890,7 +890,7 @@ public class GoGuiActions
         m_actionClockRestore.setDescription(desc);
     }
 
-    private void updateActionClockResume(ConstClock clock)
+    private void updateClockResume(ConstClock clock)
     {
         boolean enabled = false;
         String desc = null;
@@ -909,7 +909,7 @@ public class GoGuiActions
         m_actionClockResume.setDescription(desc);
     }
 
-    private void updateActionClockStart(ConstClock clock)
+    private void updateClockStart(ConstClock clock)
     {
         boolean enabled = false;
         String desc = null;
@@ -928,8 +928,7 @@ public class GoGuiActions
         m_actionClockStart.setDescription(desc);
     }
 
-    private void updateActionDetachProgram(boolean isProgramAttached,
-                                           String name)
+    private void updateDetachProgram(boolean isProgramAttached, String name)
     {
         m_actionDetachProgram.setEnabled(isProgramAttached);
         if (! isProgramAttached || name == null)
@@ -938,10 +937,9 @@ public class GoGuiActions
             m_actionDetachProgram.setName("Detach " + name);
     }
 
-    private void updateActionInterrupt(boolean isProgramAttached,
-                                       boolean isInterruptSupported,
-                                       boolean isCommandInProgress,
-                                       String name)
+    private void updateInterrupt(boolean isProgramAttached,
+                                 boolean isInterruptSupported,
+                                 boolean isCommandInProgress, String name)
     {
         String desc;
         if (isProgramAttached)
@@ -962,7 +960,7 @@ public class GoGuiActions
                                      && isInterruptSupported);
     }
 
-    private void updateActionPass(GoColor toMove)
+    private void updatePass(GoColor toMove)
     {
         assert toMove.isBlackWhite();
         if (toMove == BLACK)
@@ -971,8 +969,8 @@ public class GoGuiActions
             m_actionPass.setDescription("Play a pass for White");
     }
 
-    private void updateActionPlay(GoColor toMove, boolean isProgramAttached,
-                                  String name)
+    private void updatePlay(GoColor toMove, boolean isProgramAttached,
+                            String name)
     {
         m_actionPlay.setEnabled(isProgramAttached);
         String desc;
@@ -987,7 +985,7 @@ public class GoGuiActions
         m_actionPlay.setDescription(desc);
     }
 
-    private void updateActionSave(File file, boolean isModified)
+    private void updateSave(File file, boolean isModified)
     {
         String desc = "Save";
         if (file != null)
