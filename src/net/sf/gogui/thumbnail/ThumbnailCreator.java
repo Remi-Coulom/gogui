@@ -13,21 +13,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.ImageWriter;
-import javax.imageio.metadata.IIOInvalidTreeException;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-import javax.imageio.stream.ImageOutputStream;
 import net.sf.gogui.boardpainter.BoardPainter;
+import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameInformation;
@@ -135,9 +126,11 @@ public final class ThumbnailCreator
             {
                 // Create large image and scale down, looks better than
                 // creating small image
-                image = getImage(m_painter, fields, 2 * imageSize,
-                                 2 * imageSize);
-                BufferedImage newImage = createImage(imageSize, imageSize);
+                image = BoardPainterUtil.getImage(m_painter, fields,
+                                                  2 * imageSize,
+                                                  2 * imageSize);
+                BufferedImage newImage
+                    = BoardPainterUtil.createImage(imageSize, imageSize);
                 Graphics2D graphics = newImage.createGraphics();
                 Image scaledInstance
                     = image.getScaledInstance(imageSize, imageSize,
@@ -146,7 +139,8 @@ public final class ThumbnailCreator
                 image = newImage;
             }
             else
-                image = getImage(m_painter, fields, imageSize, imageSize);
+                image = BoardPainterUtil.getImage(m_painter, fields,
+                                                  imageSize, imageSize);
             if (output == null)
                 output = getThumbnailFileNormalSize(input);
             long lastModified = getLastModified(input);
@@ -163,7 +157,7 @@ public final class ThumbnailCreator
             //tempFile.deleteOnExit();
             //ImageOutputStream ios
             //    = ImageIO.createImageOutputStream(tempFile);
-            writeImage(image, output, metaData);
+            BoardPainterUtil.writeImage(image, output, metaData);
             //if (! tempFile.renameTo(output))
             //    throw new Error("Could not rename " + tempFile + " to "
             //                    + output);
@@ -201,25 +195,6 @@ public final class ThumbnailCreator
 
     private final BoardPainter m_painter;
 
-    private static BufferedImage createImage(int width, int height)
-    {
-        return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-    }
-
-    private static void addMeta(org.w3c.dom.Node node, String keyword,
-                                String value)
-    {
-        IIOMetadataNode text = new IIOMetadataNode("Text");
-        IIOMetadataNode textEntry = new IIOMetadataNode("TextEntry");
-        textEntry.setAttribute("value", value);
-        textEntry.setAttribute("keyword", keyword);
-        textEntry.setAttribute("encoding", Locale.getDefault().toString());
-        textEntry.setAttribute("language", "en");
-        textEntry.setAttribute("compression", "none");
-        text.appendChild(textEntry);
-        node.appendChild(text);
-    }
-
     private ConstBoard readFile(File file)
         throws FileNotFoundException, SgfError
     {
@@ -253,17 +228,6 @@ public final class ThumbnailCreator
         new BoardUpdater().update(tree, node, board);
         //System.err.print(net.sf.gogui.go.BoardUtil.toString(board));
         return board;
-    }
-
-    private static BufferedImage getImage(BoardPainter painter,
-                                          Field[][] field, int width,
-                                          int height)
-    {
-        BufferedImage image = createImage(width, height);
-        Graphics2D graphics = image.createGraphics();
-        painter.draw(graphics, field, width, false);
-        graphics.dispose();
-        return image;
     }
 
     private long getLastModified(File file) throws Error
@@ -318,39 +282,5 @@ public final class ThumbnailCreator
         if (! m_verbose)
             return;
         System.err.println(line);
-    }
-
-    private static void writeImage(BufferedImage image, File file,
-                                   Map<String,String> metaData)
-        throws IOException, Error
-    {
-        Iterator iter = ImageIO.getImageWritersBySuffix("png");
-        ImageWriter writer = (ImageWriter)iter.next();
-        IIOMetadata meta = null;
-        if (metaData != null)
-        {
-            ImageTypeSpecifier specifier = new ImageTypeSpecifier(image);
-            meta = writer.getDefaultImageMetadata(specifier, null);
-            String formatName = "javax_imageio_1.0";
-            org.w3c.dom.Node node = meta.getAsTree(formatName);
-            for (Map.Entry<String,String> entry : metaData.entrySet())
-            {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                addMeta(node, key, value);
-            }
-            try
-            {
-                meta.mergeTree(formatName, node);
-            }
-            catch (IIOInvalidTreeException e)
-            {
-                assert false;
-                return;
-            }
-        }
-        ImageOutputStream ios = ImageIO.createImageOutputStream(file);
-        writer.setOutput(ios);
-        writer.write(null, new IIOImage(image, null, meta), null);
     }
 }
