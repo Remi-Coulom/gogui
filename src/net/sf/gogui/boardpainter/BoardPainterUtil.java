@@ -47,7 +47,7 @@ public class BoardPainterUtil
     */
     public static void writeImage(BufferedImage image, File file,
                                   Map<String,String> metaData)
-        throws IOException, Error
+        throws IOException
     {
         Iterator iter = ImageIO.getImageWritersBySuffix("png");
         ImageWriter writer = (ImageWriter)iter.next();
