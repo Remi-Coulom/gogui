@@ -72,7 +72,8 @@ public final class ExportPng
         }
         catch (IOException e)
         {
-            messageDialogs.showError(parent, "Invalid value", e);
+            messageDialogs.showError(parent, "Writing image failed",
+                                     e.getMessage());
         }
     }
 

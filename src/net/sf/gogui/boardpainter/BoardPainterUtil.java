@@ -76,7 +76,16 @@ public class BoardPainterUtil
         }
         ImageOutputStream ios = ImageIO.createImageOutputStream(file);
         writer.setOutput(ios);
-        writer.write(null, new IIOImage(image, null, meta), null);
+        try
+        {
+            writer.write(null, new IIOImage(image, null, meta), null);
+        }
+        catch (IllegalStateException e)
+        {
+            // ImageWriter on Linux Java 1.5 throws an  IllegalStateException
+            // instead of an IOException, if it has no write permissions
+            throw new IOException("Could not write to file " + file);
+        }
     }
 
     /** Make constructor unavailable; class is for namespace only. */
