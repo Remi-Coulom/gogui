@@ -32,7 +32,7 @@ public class BoardPainterUtil
         The image can be written to a file with writeImage().
     */
     public static BufferedImage getImage(BoardPainter painter,
-                                         Field[][] field, int width,
+                                         ConstField[][] field, int width,
                                          int height)
     {
         BufferedImage image = createImage(width, height);
