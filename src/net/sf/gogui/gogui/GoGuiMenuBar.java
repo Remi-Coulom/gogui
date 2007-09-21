@@ -358,6 +358,7 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionExportSgfPosition, KeyEvent.VK_S);
         menu.addItem(actions.m_actionExportLatexMainVariation, KeyEvent.VK_L);
         menu.addItem(actions.m_actionExportLatexPosition, KeyEvent.VK_P);
+        menu.addItem(actions.m_actionExportPng, KeyEvent.VK_I);
         menu.addItem(actions.m_actionExportTextPosition, KeyEvent.VK_T);
         menu.addItem(actions.m_actionExportTextPositionToClipboard,
                      KeyEvent.VK_C);

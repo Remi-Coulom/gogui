@@ -628,6 +628,11 @@ public class GoGui
         }
     }
 
+    public void actionExportPng()
+    {
+        ExportPng.run(this, m_guiBoard, m_prefs, m_messageDialogs);
+    }
+
     public void actionExportTextPositionToClipboard()
     {
         GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));

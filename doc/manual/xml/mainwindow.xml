@@ -212,6 +212,16 @@ Some board markups are also exported
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>PNG Image</guimenuitem></term>
+<listitem>
+<para>
+Export the current position including all markup to an image file in PNG
+format
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guisubmenu>Export</guisubmenu> / <guimenuitem>Text Position</guimenuitem></term>
 <listitem>
 <para>

@@ -39,7 +39,12 @@ Move menu item Reattach Program from Program to Tools menu.
 </listitem>
 <listitem>
 <simpara>
-New menu item Tools / Save Parameters and Reattach With Parameters.
+New menu items Tools / Save Parameters and Reattach With Parameters.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item File / Export / PNG Image.
 </simpara>
 </listitem>
 <listitem>

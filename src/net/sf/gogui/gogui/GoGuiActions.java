@@ -293,6 +293,12 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportLatexPosition(); } };
 
+    public final Action m_actionExportPng =
+        new Action(this, "PNG Image...",
+                   "Export position as an image in PNG format") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionExportPng(); } };
+
     public final Action m_actionExportTextPosition =
         new Action(this, "Text Position...",
                    "Export position as text diagram") {
