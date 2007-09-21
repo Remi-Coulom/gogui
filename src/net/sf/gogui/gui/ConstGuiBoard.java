@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import net.sf.gogui.boardpainter.ConstField;
 import net.sf.gogui.go.GoPoint;
 
 /** Const functions of gui.GuiBoard.
@@ -14,6 +15,8 @@ import net.sf.gogui.go.GoPoint;
 public interface ConstGuiBoard
 {
     int getBoardSize();
+
+    ConstField getFieldConst(GoPoint p);
 
     Dimension getFieldSize();
 
