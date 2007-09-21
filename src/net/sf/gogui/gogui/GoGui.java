@@ -567,7 +567,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e, false);
+            showError("Export failed", e);
         }
     }
 
@@ -591,7 +591,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e, false);
+            showError("Export failed", e);
         }
     }
 
@@ -606,7 +606,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Could not save position", e, false);
+            showError("Could not save position", e);
         }
     }
 
@@ -624,7 +624,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e, false);
+            showError("Export failed", e);
         }
     }
 

@@ -72,6 +72,7 @@ public final class ExportPng
         }
         catch (IOException e)
         {
+            messageDialogs.showError(parent, "Invalid value", e);
         }
     }
 
