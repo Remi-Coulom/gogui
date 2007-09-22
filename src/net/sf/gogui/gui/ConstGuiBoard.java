@@ -37,4 +37,6 @@ public interface ConstGuiBoard
     boolean getShowCursor();
 
     boolean getShowGrid();
+
+    int getWidth();
 }

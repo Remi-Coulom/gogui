@@ -23,7 +23,7 @@ public final class ExportPng
     public static void run(Component parent, ConstGuiBoard guiBoard,
                            Preferences prefs, MessageDialogs messageDialogs)
     {
-        String value = prefs.get(PREF_WIDTH, "512");
+        String value = Integer.toString(guiBoard.getWidth());
         boolean done = false;
         int width = 0;
         while (! done)
@@ -53,7 +53,6 @@ public final class ExportPng
                 continue;
             }
         }
-        prefs.put(PREF_WIDTH, Integer.toString(width));
         File file
             = FileDialogs.showSave(parent, "Export PNG Image", messageDialogs);
         if (file == null)
@@ -76,8 +75,6 @@ public final class ExportPng
                                      e.getMessage());
         }
     }
-
-    private static final String PREF_WIDTH = "gogui-export-png-width";
 
     /** Make constructor unavailable; class is for namespace only. */
     private ExportPng()
