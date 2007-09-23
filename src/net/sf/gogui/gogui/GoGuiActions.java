@@ -55,12 +55,12 @@ public class GoGuiActions
         public Action(GoGuiActions actions, String name, String desc,
                       int accel, String icon)
         {
-            this(actions, name, desc, accel, getShortcut(), icon);
+            this(actions, name, desc, accel, SHORTCUT, icon);
         }
 
         public Action(GoGuiActions actions, String name, String desc, int accel)
         {
-            this(actions, name, desc, accel, getShortcut(), null);
+            this(actions, name, desc, accel, SHORTCUT, null);
         }
 
         public Action(GoGuiActions actions, String name, String desc,
@@ -138,8 +138,7 @@ public class GoGuiActions
     public final Action m_actionBackwardTen =
         new Action(this, "Backward 10",
                    "Go ten moves backward",
-                   KeyEvent.VK_LEFT,
-                   getShortcut() | ActionEvent.SHIFT_MASK,
+                   KeyEvent.VK_LEFT, SHORTCUT | ActionEvent.SHIFT_MASK,
                    "gogui-previous-10") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(10); } };
@@ -264,8 +263,7 @@ public class GoGuiActions
 
     public final Action m_actionDocumentation =
         new Action(this, "GoGui Help",
-                   "Open GoGui manual", KeyEvent.VK_F1,
-                   getFunctionKeyShortcut()) {
+                   "Open GoGui manual", KeyEvent.VK_F1, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDocumentation(); } };
 
@@ -320,7 +318,7 @@ public class GoGuiActions
 
     public final Action m_actionFindNext =
         new Action(this, "Find Next", "Search for next match in comments",
-                   KeyEvent.VK_F3, getFunctionKeyShortcut()) {
+                   KeyEvent.VK_F3, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFindNext(); } };
 
@@ -332,8 +330,7 @@ public class GoGuiActions
 
     public final Action m_actionForwardTen =
         new Action(this, "Forward 10", "Go ten moves forward",
-                   KeyEvent.VK_RIGHT,
-                   getShortcut() | ActionEvent.SHIFT_MASK,
+                   KeyEvent.VK_RIGHT, SHORTCUT | ActionEvent.SHIFT_MASK,
                    "gogui-next-10") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionForward(10); } };
@@ -430,7 +427,7 @@ public class GoGuiActions
 
     public final Action m_actionMainWindowActivate =
         new Action(this, "Main Window", "Activate main window",
-                   KeyEvent.VK_F6, getFunctionKeyShortcut()) {
+                   KeyEvent.VK_F6, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionMainWindowActivate(); } };
 
@@ -443,7 +440,7 @@ public class GoGuiActions
     public final Action m_actionNextEarlierVariation =
         new Action(this, "Next Earlier Variation",
                    "Go to next earlier variation", KeyEvent.VK_DOWN,
-                   getShortcut() | ActionEvent.SHIFT_MASK) {
+                   SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNextEarlierVariation(); } };
 
@@ -472,30 +469,27 @@ public class GoGuiActions
 
     public final Action m_actionPass =
         new Action(this, "Pass", "Play a pass", KeyEvent.VK_F2,
-                   getFunctionKeyShortcut(), "gogui-pass") {
+                   FUNCTION_KEY, "gogui-pass") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPass(); } };
 
     public final Action m_actionPlay =
         new Action(this, "Computer Play", "Make computer play",
-                   KeyEvent.VK_F5, getFunctionKeyShortcut(),
-                   "gogui-play") {
+                   KeyEvent.VK_F5, FUNCTION_KEY, "gogui-play") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPlay(false); } };
 
     public final Action m_actionPlaySingleMove =
         new Action(this, "Play Single Move",
                    "Make computer play a move (do not change computer color)",
-                   KeyEvent.VK_F5,
-                   getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK) {
+                   KeyEvent.VK_F5, FUNCTION_KEY | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPlay(true); } };
 
     public final Action m_actionPreviousEarlierVariation =
         new Action(this, "Previous Earlier Variation",
                    "Go to previous earlier variation",
-                   KeyEvent.VK_UP,
-                   getShortcut() | ActionEvent.SHIFT_MASK) {
+                   KeyEvent.VK_UP, SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPreviousEarlierVariation(); } };
 
@@ -564,19 +558,19 @@ public class GoGuiActions
     public final Action m_actionShowAnalyzeDialog =
         new Action(this, "Analyze Commands",
                    "Show window with analyze commands",
-                   KeyEvent.VK_F8, getFunctionKeyShortcut()) {
+                   KeyEvent.VK_F8, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowAnalyzeDialog(); } };
 
     public final Action m_actionShowShell =
         new Action(this, "GTP Shell", "Show GTP shell window",
-                   KeyEvent.VK_F9, getFunctionKeyShortcut()) {
+                   KeyEvent.VK_F9, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowShell(); } };
 
     public final Action m_actionShowTree =
         new Action(this, "Tree Viewer", "Show game tree window",
-                   KeyEvent.VK_F7, getFunctionKeyShortcut()) {
+                   KeyEvent.VK_F7, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowTree(); } };
 
@@ -854,24 +848,17 @@ public class GoGuiActions
 
     private final GoGui m_goGui;
 
-    /** Get shortcut modifier for function keys.
-        Returns 0, unless platform is Mac.
+    private static final int SHORTCUT
+        = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+    /** Shortcut modifier for function keys.
+        0, unless platform is Mac.
     */
-    private static int getFunctionKeyShortcut()
-    {
-        if (Platform.isMac())
-            return getShortcut();
-        return 0;
-    }
+    private static final int FUNCTION_KEY = (Platform.isMac() ? SHORTCUT : 0);
 
     private static KeyStroke getKeyStroke(int keyCode, int modifier)
     {
         return KeyStroke.getKeyStroke(keyCode, modifier);
-    }
-
-    private static int getShortcut()
-    {
-        return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     }
 
     private void updateClockRestore(ConstNode node, ConstClock clock)
