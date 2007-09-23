@@ -163,6 +163,40 @@ Command: <userinput>Mango-9x9-0.16.exe</userinput>
 </section>
 
 <section>
+<title>MoGo</title>
+<indexterm>
+<primary>MoGo</primary>
+</indexterm>
+<para>
+<ulink url="http://www.lri.fr/~gelly/MoGo.htm">
+http://www.lri.fr/~gelly/MoGo.htm</ulink>
+</para>
+<para>
+Operating systems: GNU/Linux, Windows
+</para>
+<para>
+Command (for 9x9 boards):
+<userinput>mogo --9 --time 12</userinput> (12sec/move)
+</para>
+<para>
+Command (for 19x19 boards):
+<userinput>mogo --19 --time 12</userinput> (12sec/move)
+</para>
+<para>
+<note>
+<simpara>
+The working directory for the program in the Program dialog needs to be
+set to the same directory as the mogo executable is in.
+MoGo's GTP implementation does not implement command IDs (as of MoGo release 3);
+<guimenu>View</guimenu> / <guisubmenu>Shell</guisubmenu>
+/ <guimenuitem>Auto Number</guimenuitem> needs to be turned off.
+</simpara>
+</note>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
 <title>WallyPlus</title>
 <indexterm>
 <primary>WallyPlus</primary>
