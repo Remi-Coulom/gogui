@@ -41,6 +41,11 @@ public class GoGuiActions
     static abstract class Action
         extends AbstractAction
     {
+        public Action(GoGuiActions actions, String name)
+        {
+            this(actions, name, null, null, 0, null);
+        }
+
         public Action(GoGuiActions actions, String name, String desc)
         {
             this(actions, name, desc, null, 0, null);
@@ -73,7 +78,8 @@ public class GoGuiActions
                       Integer accel, int modifier, String icon)
         {
             putValue(AbstractAction.NAME, name);
-            setDescription(desc);
+            if (desc != null)
+                setDescription(desc);
             if (accel != null)
             {
                 KeyStroke keyStroke = getKeyStroke(accel.intValue(), modifier);
@@ -110,221 +116,199 @@ public class GoGuiActions
         = new ArrayList<Action>();
 
     public final Action m_actionAbout =
-        new Action(this, "About",
-                   "Show information about GoGui, Go program and Java") {
+        new Action(this, "About") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionAbout(); } };
 
     public final Action m_actionAddBookmark =
-        new Action(this, "Add Bookmark",
-                   "Add bookmark at current position in current file",
-                   KeyEvent.VK_B) {
+        new Action(this, "Add Bookmark", null, KeyEvent.VK_B) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionAddBookmark(); } };
 
     public final Action m_actionBackToMainVariation =
-        new Action(this, "Back to Main Variation",
-                   "Go back to main variation", KeyEvent.VK_M) {
+        new Action(this, "Back to Main Variation", null, KeyEvent.VK_M) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackToMainVariation(); } };
 
     public final Action m_actionBackward =
-        new Action(this, "Backward",
-                   "Go one move backward", KeyEvent.VK_LEFT,
+        new Action(this, "Backward", "Go one move backward", KeyEvent.VK_LEFT,
                    "gogui-previous") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(1); } };
 
     public final Action m_actionBackwardTen =
-        new Action(this, "Backward 10",
-                   "Go ten moves backward",
+        new Action(this, "Backward 10", "Go ten moves backward",
                    KeyEvent.VK_LEFT, SHORTCUT | ActionEvent.SHIFT_MASK,
                    "gogui-previous-10") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(10); } };
 
     public final Action m_actionBeginning =
-        new Action(this, "Beginning",
-                   "Go to beginning of game", KeyEvent.VK_HOME,
-                   "gogui-first") {
+        new Action(this, "Beginning", "Go to beginning of game",
+                   KeyEvent.VK_HOME, "gogui-first") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBeginning(); } };
 
     public final Action m_actionBoardSize9 =
-        new Action(this, "9", "Change board size to 9x9") {
+        new Action(this, "9") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(9); } };
 
     public final Action m_actionBoardSize11 =
-        new Action(this, "11", "Change board size to 11x11") {
+        new Action(this, "11") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(11); } };
 
     public final Action m_actionBoardSize13 =
-        new Action(this, "13", "Change board size to 13x13") {
+        new Action(this, "13") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(13); } };
 
     public final Action m_actionBoardSize15 =
-        new Action(this,  "15", "Change board size to 15x15") {
+        new Action(this,  "15") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(15); } };
 
     public final Action m_actionBoardSize17 =
-        new Action(this, "17", "Change board size to 17x17") {
+        new Action(this, "17") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(17); } };
 
     public final Action m_actionBoardSize19 =
-        new Action(this, "19", "Change board size to 19x19") {
+        new Action(this, "19") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(19); } };
 
     public final Action m_actionBoardSizeOther =
-        new Action(this, "Other", "Change board size to other values") {
+        new Action(this, "Other") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSizeOther(); } };
 
     public final Action m_actionClockHalt =
-        new Action(this, "Halt", "Halt clock") {
+        new Action(this, "Halt") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockHalt(); } };
 
     public final Action m_actionClockResume =
-        new Action(this, "Resume", "Resume clock") {
+        new Action(this, "Resume") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockResume(); } };
 
     public final Action m_actionClockRestore =
-        new Action(this, "Restore",
-                   "Restore clock to time stored at current position") {
+        new Action(this, "Restore") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockRestore(); } };
 
     public final Action m_actionClockStart =
-        new Action(this, "Start", "Start clock") {
+        new Action(this, "Start") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockStart(); } };
 
     public final Action m_actionComputerBlack =
-        new Action(this, "Black", "Make computer play Black") {
+        new Action(this, "Black") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(true, false); } };
 
     public final Action m_actionComputerBoth =
-        new Action(this, "Both", "Make computer play both sides") {
+        new Action(this, "Both") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(true, true); } };
 
     public final Action m_actionComputerNone =
-        new Action(this, "None", "Make computer play no side") {
+        new Action(this, "None") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(false, false); } };
 
     public final Action m_actionComputerWhite =
-        new Action(this, "White", "Make computer play White") {
+        new Action(this, "White") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(false, true); } };
 
     public final Action m_actionEditBookmarks =
-        new Action(this, "Edit Bookmarks...", "Edit list of bookmarks") {
+        new Action(this, "Edit Bookmarks...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEditBookmarks(); } };
 
     public final Action m_actionEditPrograms =
-        new Action(this, "Edit Programs...", "Edit list of programs") {
+        new Action(this, "Edit Programs...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEditPrograms(); } };
 
     public final Action m_actionGoto =
-        new Action(this, "Go to Move...",
-                   "Go to position after a move number", KeyEvent.VK_G) {
+        new Action(this, "Go to Move...", null, KeyEvent.VK_G) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGoto(); } };
 
     public final Action m_actionGotoVariation =
-        new Action(this, "Go to Variation...",
-                   "Go to beginning of a variation") {
+        new Action(this, "Go to Variation...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGotoVariation(); } };
 
     public final Action m_actionDeleteSideVariations =
-        new Action(this, "Delete Side Variations",
-                   "Delete all variations but the main variation") {
+        new Action(this, "Delete Side Variations") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDeleteSideVariations(); } };
 
     public final Action m_actionDetachProgram =
-        new Action(this, "Detach",
-                   "Detach Go program from current game and terminate it")
+        new Action(this, "Detach Program")
         {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDetachProgram(); } };
 
     public final Action m_actionDocumentation =
-        new Action(this, "GoGui Help",
-                   "Open GoGui manual", KeyEvent.VK_F1, FUNCTION_KEY) {
+        new Action(this, "GoGui Help", null, KeyEvent.VK_F1, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDocumentation(); } };
 
     public final Action m_actionEnd =
-        new Action(this, "End",
-                   "Go to end of game", KeyEvent.VK_END, "gogui-last") {
+        new Action(this, "End", "Go to end of game", KeyEvent.VK_END,
+                   "gogui-last") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEnd(); } };
 
     public final Action m_actionExportSgfPosition =
-        new Action(this, "SGF Position...",
-                   "Export position as SGF file") {
+        new Action(this, "SGF Position...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportSgfPosition(); } };
 
     public final Action m_actionExportLatexMainVariation =
-        new Action(this, "LaTeX Main Variation...",
-                   "Export main variation as LaTeX PSGO file") {
+        new Action(this, "LaTeX Main Variation...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportLatexMainVariation(); } };
 
     public final Action m_actionExportLatexPosition =
-        new Action(this, "LaTeX Position...",
-                   "Export position as LaTeX PSGO file") {
+        new Action(this, "LaTeX Position...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportLatexPosition(); } };
 
     public final Action m_actionExportPng =
-        new Action(this, "PNG Image...",
-                   "Export position as an image in PNG format") {
+        new Action(this, "PNG Image...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportPng(); } };
 
     public final Action m_actionExportTextPosition =
-        new Action(this, "Text Position...",
-                   "Export position as text diagram") {
+        new Action(this, "Text Position...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportTextPosition(); } };
 
     public final Action m_actionExportTextPositionToClipboard =
-        new Action(this, "Text Position to Clipboard",
-                   "Export position as text diagram to clipboard") {
+        new Action(this, "Text Position to Clipboard") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportTextPositionToClipboard(); } };
 
     public final Action m_actionFind =
-        new Action(this, "Find in Comments...",
-                   "Search for matching text in comments",
-                   KeyEvent.VK_F) {
+        new Action(this, "Find in Comments...", null, KeyEvent.VK_F) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFind(); } };
 
     public final Action m_actionFindNext =
-        new Action(this, "Find Next", "Search for next match in comments",
-                   KeyEvent.VK_F3, FUNCTION_KEY) {
+        new Action(this, "Find Next", null, KeyEvent.VK_F3, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFindNext(); } };
 
     public final Action m_actionForward =
-        new Action(this, "Forward", "Go one move forward",
-                   KeyEvent.VK_RIGHT, "gogui-next") {
+        new Action(this, "Forward", "Go one move forward", KeyEvent.VK_RIGHT,
+                   "gogui-next") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionForward(1); } };
 
@@ -336,110 +320,102 @@ public class GoGuiActions
                 m_goGui.actionForward(10); } };
 
     public final Action m_actionGameInfo =
-        new Action(this, "Game Info",
-                   "Show and edit game information", KeyEvent.VK_I) {
+        new Action(this, "Game Info", null, KeyEvent.VK_I) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGameInfo(); } };
 
     public final Action m_actionShellSave =
-        new Action(this, "Save Log...", "Save GTP history") {
+        new Action(this, "Save Log...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShellSave(); } };
 
     public final Action m_actionShellSaveCommands =
-        new Action(this, "Save Commands...",
-                   "Save history of GTP commands") {
+        new Action(this, "Save Commands...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShellSaveCommands(); } };
 
     public final Action m_actionShellSendFile =
-        new Action(this, "Send File...", "Send file with GTP commands") {
+        new Action(this, "Send File...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShellSendFile(); } };
 
     public final Action m_actionHandicapNone =
-        new Action(this, "None", "Do not use handicap stones") {
+        new Action(this, "None") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(0); } };
 
     public final Action m_actionHandicap2 =
-        new Action(this, "2", "Use two handicap stones") {
+        new Action(this, "2") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(2); } };
 
     public final Action m_actionHandicap3 =
-        new Action(this, "3", "Use three handicap stones") {
+        new Action(this, "3") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(3); } };
 
     public final Action m_actionHandicap4 =
-        new Action(this, "4", "Use four handicap stones") {
+        new Action(this, "4") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(4); } };
 
     public final Action m_actionHandicap5 =
-        new Action(this, "5", "Use five handicap stones") {
+        new Action(this, "5") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(5); } };
 
     public final Action m_actionHandicap6 =
-        new Action(this, "6", "Use six handicap stones") {
+        new Action(this, "6") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(6); } };
 
     public final Action m_actionHandicap7 =
-        new Action(this, "7", "Use seven handicap stones") {
+        new Action(this, "7") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(7); } };
 
     public final Action m_actionHandicap8 =
-        new Action(this, "8", "Use eight handicap stones") {
+        new Action(this, "8") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(8); } };
 
     public final Action m_actionHandicap9 =
-        new Action(this, "9", "Use nine handicap stones") {
+        new Action(this, "9") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(9); } };
 
     public final Action m_actionImportTextPosition =
-        new Action(this, "Text Position...",
-                   "Import position as text diagram from file") {
+        new Action(this, "Text Position...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPosition(); } };
 
     public final Action m_actionImportTextPositionFromClipboard =
-        new Action(this, "Text Position from Clipboard",
-                   "Import position as text diagram from clipboard") {
+        new Action(this, "Text Position from Clipboard") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPositionFromClipboard(); } };
 
     public final Action m_actionInterrupt =
-        new Action(this, "Interrupt", "Interrupt", "gogui-interrupt") {
+        new Action(this, "Interrupt", null, "gogui-interrupt") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionInterrupt(); } };
 
     public final Action m_actionKeepOnlyPosition =
-        new Action(this, "Keep Only Position",
-                   "Delete variations and moves and keep only current position") {
+        new Action(this, "Keep Only Position") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionKeepOnlyPosition(); } };
 
     public final Action m_actionMainWindowActivate =
-        new Action(this, "Main Window", "Activate main window",
-                   KeyEvent.VK_F6, FUNCTION_KEY) {
+        new Action(this, "Main Window", null, KeyEvent.VK_F6, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionMainWindowActivate(); } };
 
     public final Action m_actionMakeMainVariation =
-        new Action(this, "Make Main Variation",
-                   "Make current variation the main variation") {
+        new Action(this, "Make Main Variation") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionMakeMainVariation(); } };
 
     public final Action m_actionNextEarlierVariation =
-        new Action(this, "Next Earlier Variation",
-                   "Go to next earlier variation", KeyEvent.VK_DOWN,
+        new Action(this, "Next Earlier Variation", null, KeyEvent.VK_DOWN,
                    SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNextEarlierVariation(); } };
@@ -451,19 +427,18 @@ public class GoGuiActions
                 m_goGui.actionNextVariation(); } };
 
     public final Action m_actionNewGame =
-        new Action(this, "New Game",
-                   "Clear board and start new game", "gogui-newgame") {
+        new Action(this, "New Game", "Clear board and start new game",
+                   "gogui-newgame") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNewGame(); } };
 
     public final Action m_actionNewProgram =
-        new Action(this, "New Program...", "Add new Go program") {
+        new Action(this, "New Program...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNewProgram(); } };
 
     public final Action m_actionOpen =
-        new Action(this, "Open...",
-                   "Open", KeyEvent.VK_O, "document-open") {
+        new Action(this, "Open...", "Open", KeyEvent.VK_O, "document-open") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionOpen(); } };
 
@@ -480,43 +455,35 @@ public class GoGuiActions
                 m_goGui.actionPlay(false); } };
 
     public final Action m_actionPlaySingleMove =
-        new Action(this, "Play Single Move",
-                   "Make computer play a move (do not change computer color)",
-                   KeyEvent.VK_F5, FUNCTION_KEY | ActionEvent.SHIFT_MASK) {
+        new Action(this, "Play Single Move", null, KeyEvent.VK_F5,
+                   FUNCTION_KEY | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPlay(true); } };
 
     public final Action m_actionPreviousEarlierVariation =
-        new Action(this, "Previous Earlier Variation",
-                   "Go to previous earlier variation",
+        new Action(this, "Previous Earlier Variation", null,
                    KeyEvent.VK_UP, SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPreviousEarlierVariation(); } };
 
     public final Action m_actionPreviousVariation =
-        new Action(this, "Previous Variation",
-                   "Go to previous variation", KeyEvent.VK_UP,
-                   "gogui-up") {
+        new Action(this, "Previous Variation", "Go to previous variation",
+                   KeyEvent.VK_UP, "gogui-up") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPreviousVariation(); } };
 
     public final Action m_actionPrint =
-        new Action(this, "Print...", "Print current position",
-                   KeyEvent.VK_P, null) {
+        new Action(this, "Print...", null, KeyEvent.VK_P, null) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPrint(); } };
 
     public final Action m_actionReattachProgram =
-        new Action(this, "Reattach Program",
-                   "Restart Go program and attach it to the currrent position",
-                   KeyEvent.VK_T) {
+        new Action(this, "Reattach Program", null, KeyEvent.VK_T) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachProgram(); } };
 
     public final Action m_actionReattachWithParameters =
-        new Action(this, "Reattach With Parameters",
-                   "Reattach Go program and restore program-specific"
-                   + " parameters") {
+        new Action(this, "Reattach With Parameters") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachWithParameters(); } };
 
@@ -531,13 +498,12 @@ public class GoGuiActions
                 m_goGui.actionSaveAs(); } };
 
     public final Action m_actionSaveParameters =
-        new Action(this, "Save Parameters...",
-                   "Query parameters and save them to a GTP file") {
+        new Action(this, "Save Parameters...") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveParameters(); } };
 
     public final Action m_actionScore =
-        new Action(this, "Score", "Score position") {
+        new Action(this, "Score") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionScore(); } };
 
@@ -556,137 +522,128 @@ public class GoGuiActions
                 m_goGui.actionSetup(WHITE); } };
 
     public final Action m_actionShowAnalyzeDialog =
-        new Action(this, "Analyze Commands",
-                   "Show window with analyze commands",
-                   KeyEvent.VK_F8, FUNCTION_KEY) {
+        new Action(this, "Analyze Commands", null, KeyEvent.VK_F8,
+                   FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowAnalyzeDialog(); } };
 
     public final Action m_actionShowShell =
-        new Action(this, "GTP Shell", "Show GTP shell window",
-                   KeyEvent.VK_F9, FUNCTION_KEY) {
+        new Action(this, "GTP Shell", null, KeyEvent.VK_F9, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowShell(); } };
 
     public final Action m_actionShowTree =
-        new Action(this, "Tree Viewer", "Show game tree window",
-                   KeyEvent.VK_F7, FUNCTION_KEY) {
+        new Action(this, "Tree Viewer", null, KeyEvent.VK_F7, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowTree(); } };
 
     public final Action m_actionToggleAutoNumber =
-        new Action(this, "Auto Number", null) {
+        new Action(this, "Auto Number") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleAutoNumber(); } };
 
     public final Action m_actionToggleBeepAfterMove =
-        new Action(this, "Play Sound",
-                   "Play a sound after computer played a move") {
+        new Action(this, "Play Sound") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleBeepAfterMove(); } };
 
     public final Action m_actionToggleCompletion =
-        new Action(this, "Popup Completions", null) {
+        new Action(this, "Popup Completions") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleCompletion(); } };
 
     public final Action m_actionToggleCommentMonoFont =
-        new Action(this, "Monospace Comment Font",
-                   "Use fixed width font for comment") {
+        new Action(this, "Monospace Comment Font") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleCommentMonoFont(); } };
 
     public final Action m_actionToggleShowCursor =
-        new Action(this, "Cursor", "Show cursor on board") {
+        new Action(this, "Cursor") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowCursor(); } };
 
     public final Action m_actionToggleShowGrid =
-        new Action(this, "Grid Labels", "Show board grid labels") {
+        new Action(this, "Grid Labels") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowGrid(); } };
 
     public final Action m_actionToggleShowInfoPanel =
-        new Action(this, "Info Panel",
-                   "Show panel with comment and game information") {
+        new Action(this, "Info Panel") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowInfoPanel(); } };
 
     public final Action m_actionToggleShowLastMove =
-        new Action(this, "Last Move", "Mark last move on board") {
+        new Action(this, "Last Move") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowLastMove(); } };
 
     public final Action m_actionToggleShowSubtreeSizes =
-        new Action(this, "Subtree Sizes", null) {
+        new Action(this, "Subtree Sizes") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowSubtreeSizes(); } };
 
     public final Action m_actionToggleShowToolbar =
-        new Action(this, "Toolbar", "Show tool bar") {
+        new Action(this, "Toolbar") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowToolbar(); } };
 
     public final Action m_actionToggleShowVariations =
-        new Action(this, "Variation Labels",
-                   "Label children moves with letters on board") {
+        new Action(this, "Variation Labels") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowVariations(); } };
 
     public final Action m_actionToggleTimeStamp =
-        new Action(this, "Timestamp", null) {
+        new Action(this, "Timestamp") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleTimeStamp(); } };
 
     public final Action m_actionTreeLabelsNumber =
-        new Action(this, "Move Number", null) {
+        new Action(this, "Move Number") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeLabels(GameTreePanel.LABEL_NUMBER); } };
 
     public final Action m_actionTreeLabelsMove =
-        new Action(this, "Move", null) {
+        new Action(this, "Move") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeLabels(GameTreePanel.LABEL_MOVE); } };
 
     public final Action m_actionTreeLabelsNone =
-        new Action(this, "None", null) {
+        new Action(this, "None") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeLabels(GameTreePanel.LABEL_NONE); } };
 
     public final Action m_actionTreeSizeLarge =
-        new Action(this, "Large", null) {
+        new Action(this, "Large") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_LARGE); } };
 
     public final Action m_actionTreeSizeNormal =
-        new Action(this, "Normal", null) {
+        new Action(this, "Normal") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_NORMAL); } };
 
     public final Action m_actionTreeSizeSmall =
-        new Action(this, "Small", null) {
+        new Action(this, "Small") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_SMALL); } };
 
     public final Action m_actionTreeSizeTiny =
-        new Action(this, "Tiny", null) {
+        new Action(this, "Tiny") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_TINY); } };
 
     public final Action m_actionTruncate =
-        new Action(this, "Truncate",
-                   "Truncate subtree including this position") {
+        new Action(this, "Truncate") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTruncate(); } };
 
     public final Action m_actionTruncateChildren =
-        new Action(this, "Truncate Children",
-                   "Truncate all children of this position") {
+        new Action(this, "Truncate Children") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTruncateChildren(); } };
 
     public final Action m_actionQuit =
-        new Action(this, "Quit", "Quit GoGui", KeyEvent.VK_Q, null) {
+        new Action(this, "Quit", null, KeyEvent.VK_Q, null) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionQuit(); } };
 
