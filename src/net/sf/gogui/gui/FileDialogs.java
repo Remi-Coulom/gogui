@@ -40,34 +40,19 @@ import net.sf.gogui.util.StringUtil;
 /** File dialogs. */
 public final class FileDialogs
 {
-    /** Dialog type for opening a file. */
-    public static final int FILE_OPEN = 0;
-
-    /** Dialog type for opening a directory. */
-    public static final int DIR_OPEN = 1;
-
-    /** Dialog type for saving to a file. */
-    public static final int FILE_SAVE = 2;
-
-    /** Dialog type for selecting a file.
-        Use this type, if a file name should be selected, but it is not known
-        what the file name is used for and if the file already exists.
-    */
-    public static final int FILE_SELECT = 3;
-
     public static File showOpen(Component parent, String title)
     {
-        return showFileChooser(parent, FILE_OPEN, null, false, title);
+        return showFileChooser(parent, Type.FILE_OPEN, null, false, title);
     }
 
     public static File showOpenDir(Component parent, String title)
     {
-        return showFileChooser(parent, DIR_OPEN, null, false, title);
+        return showFileChooser(parent, Type.DIR_OPEN, null, false, title);
     }
 
     public static File showOpenSgf(Component parent)
     {
-        return showFileChooser(parent, FILE_OPEN, null, true, null);
+        return showFileChooser(parent, Type.FILE_OPEN, null, true, null);
     }
 
     public static File showSave(Component parent, String title,
@@ -87,12 +72,33 @@ public final class FileDialogs
     /** File selection, unknown whether for load or save. */
     public static File showSelectFile(Component parent, String title)
     {
-        return showFileChooser(parent, FILE_SELECT, s_lastFile, false, title);
+        return showFileChooser(parent, Type.FILE_SELECT, s_lastFile, false,
+                               title);
     }
 
     public static void setLastFile(File file)
     {
         s_lastFile = file;
+    }
+
+    private enum Type
+    {
+        /** Dialog type for opening a file. */
+        FILE_OPEN,
+
+        /** Dialog type for opening a directory. */
+        DIR_OPEN,
+
+        /** Dialog type for saving to a file. */
+        FILE_SAVE,
+
+        /** Dialog type for selecting a file.
+            Use this type, if a file name should be selected, but it is not
+            known what the file name is used for and if the file already
+            exists.
+            @deprecated Not supported by native AWT FileDialog
+        */
+        FILE_SELECT
     }
 
     /** Use native AWT-dialogs.
@@ -124,13 +130,13 @@ public final class FileDialogs
         return null;
     }
 
-    private static File showFileChooser(Component parent, int type,
+    private static File showFileChooser(Component parent, Type type,
                                         File lastFile, boolean setSgfFilter,
                                         String title)
     {
         // Use native dialogs for some platforms. but not for type select
         // There is no native dialog for select
-        if (NATIVE_DIALOGS && type != FILE_SELECT)
+        if (NATIVE_DIALOGS && type != Type.FILE_SELECT)
         {
             Frame frame = findParentFrame(parent);
             return showFileChooserAWT(frame, type, title);
@@ -145,8 +151,8 @@ public final class FileDialogs
                                             String title,
                                             MessageDialogs messageDialogs)
     {
-        File file = showFileChooser(parent, FILE_SAVE, lastFile, setSgfFilter,
-                                    title);
+        File file = showFileChooser(parent, Type.FILE_SAVE, lastFile,
+                                    setSgfFilter, title);
         if (NATIVE_DIALOGS)
             // Overwrite warning is already part of FileDialog
             return file;
@@ -163,7 +169,7 @@ public final class FileDialogs
                                                   optionalMessage,
                                                   "Replace", true))
                 {
-                    file = showFileChooser(parent, FILE_SAVE, lastFile,
+                    file = showFileChooser(parent, Type.FILE_SAVE, lastFile,
                                            setSgfFilter, title);
                     continue;
                 }
@@ -173,7 +179,7 @@ public final class FileDialogs
         return file;
     }
 
-    private static File showFileChooserAWT(Frame parent, int type,
+    private static File showFileChooserAWT(Frame parent, Type type,
                                            String title)
     {
         FileDialog dialog = new FileDialog(parent);
@@ -196,9 +202,9 @@ public final class FileDialogs
         }
         dialog.setTitle(title);
         int mode = FileDialog.LOAD;
-        if (type == FILE_SAVE)
+        if (type == Type.FILE_SAVE)
             mode = FileDialog.SAVE;
-        if (type == DIR_OPEN)
+        if (type == Type.DIR_OPEN)
             System.setProperty("apple.awt.fileDialogForDirectories", "true");
         dialog.setMode(mode);
         /* Commented out, because there is no way to change the filter by the
@@ -214,14 +220,14 @@ public final class FileDialogs
         //dialog.setLocationRelativeTo(parent); // Java <= 1.4
         dialog.setLocationByPlatform(true);
         dialog.setVisible(true);
-        if (type == DIR_OPEN)
+        if (type == Type.DIR_OPEN)
             System.setProperty("apple.awt.fileDialogForDirectories", "false");
         if (dialog.getFile() == null)
             return null;
         return new File(dialog.getDirectory(), dialog.getFile());
     }
 
-    private static File showFileChooserSwing(Component parent, int type,
+    private static File showFileChooserSwing(Component parent, Type type,
                                              File lastFile,
                                              boolean setSgfFilter,
                                              String title)
@@ -254,7 +260,7 @@ public final class FileDialogs
         }
         else
             chooser.setFileFilter(chooser.getAcceptAllFileFilter());
-        if (type == FILE_SAVE)
+        if (type == Type.FILE_SAVE)
         {
             if (lastFile != null && lastFile.isFile() && lastFile.exists())
                 chooser.setSelectedFile(lastFile);
