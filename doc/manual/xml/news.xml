@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Use native file dialogs on Windows to avoid slow startup and directory
+reading of JFileChooser
 </simpara>
 </listitem>
 </itemizedlist>

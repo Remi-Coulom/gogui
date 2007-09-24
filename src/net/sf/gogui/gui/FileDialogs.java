@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// $Id: SimpleDialogs.java 4309 2007-02-14 22:49:26Z enz $
+// FileDialogs.java
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -53,7 +53,7 @@ public final class FileDialogs
         Use this type, if a file name should be selected, but it is not known
         what the file name is used for and if the file already exists.
     */
-    public static final int FILE_SELECT = 2;
+    public static final int FILE_SELECT = 3;
 
     public static File showOpen(Component parent, String title)
     {
@@ -95,6 +95,15 @@ public final class FileDialogs
         s_lastFile = file;
     }
 
+    /** Use native AWT-dialogs.
+        They are used on Mac OS X because JFileChooser looks too different
+        from the native dialogs (Java 1.5), and on Windows because
+        JFileChooser is too slow on Windows XP (startup and directory changing
+        takes up to 10 sec; Java 1.6)
+    */
+    private static final boolean NATIVE_DIALOGS =
+        (Platform.isMac() || Platform.isWindows());
+
     private static File s_lastFile;
 
     /** Make constructor unavailable; class is for namespace only. */
@@ -119,7 +128,9 @@ public final class FileDialogs
                                         File lastFile, boolean setSgfFilter,
                                         String title)
     {
-        if (Platform.isMac() && type != FILE_SELECT)
+        // Use native dialogs for some platforms. but not for type select
+        // There is no native dialog for select
+        if (NATIVE_DIALOGS && type != FILE_SELECT)
         {
             Frame frame = findParentFrame(parent);
             return showFileChooserAWT(frame, type, title);
@@ -136,7 +147,7 @@ public final class FileDialogs
     {
         File file = showFileChooser(parent, FILE_SAVE, lastFile, setSgfFilter,
                                     title);
-        if (Platform.isMac())
+        if (NATIVE_DIALOGS)
             // Overwrite warning is already part of FileDialog
             return file;
         while (file != null)
