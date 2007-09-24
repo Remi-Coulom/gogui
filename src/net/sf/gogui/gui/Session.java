@@ -61,7 +61,7 @@ public final class Session
         }
         if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE)
         {
-            window.setLocationRelativeTo(owner);
+            window.setLocationByPlatform(true);
             return;
         }
         Point ownerLocation = owner.getLocation();

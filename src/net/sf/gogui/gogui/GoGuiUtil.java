@@ -39,7 +39,7 @@ public final class GoGuiUtil
         TextViewer textViewer = new TextViewer(owner, title, response,
                                                highlight, listener);
         if (pointArg == null)
-            textViewer.setLocationRelativeTo(owner);
+            textViewer.setLocationByPlatform(true);
         else
         {
             Point location = guiBoard.getLocationOnScreen(pointArg);

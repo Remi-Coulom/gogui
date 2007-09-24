@@ -98,7 +98,7 @@ public class ParameterDialog
                 }
             });
         dialog.pack();        
-        dialog.setLocationRelativeTo(owner);
+        dialog.setLocationByPlatform(true);
         dialog.addWindowListener(new WindowAdapter() {
                 public void  windowOpened(WindowEvent e) {
                     // JDK 1.5 docs require to invoke selectInitialValue after

@@ -68,7 +68,7 @@ public class FindDialog
     public static Pattern run(Frame owner, String initialValue)
     {
         FindDialog dialog = new FindDialog(owner, initialValue);
-        dialog.setLocationRelativeTo(owner);
+        dialog.setLocationByPlatform(true);
         dialog.setVisible(true);
         String regex = dialog.m_pattern;
         if (StringUtil.isEmpty(regex))
