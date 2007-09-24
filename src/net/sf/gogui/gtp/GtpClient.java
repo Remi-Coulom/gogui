@@ -227,48 +227,10 @@ public final class GtpClient
         return m_program;
     }
 
-    /** Check if interrupting a command is supported.
-        Interrupting can supported by ANSI C signals or the special
-        comment line "# interrupt" as described in the GoGui documentation
-        chapter "Interrupting commands".
-        Note: call queryInterruptSupport() first.
-    */
-    public boolean isInterruptSupported()
-    {
-        return (m_isInterruptCommentSupported || m_pid != null);
-    }
-
     /** Check if program is dead. */
     public boolean isProgramDead()
     {
         return m_isProgramDead;
-    }
-
-    /** Query if interrupting is supported.
-        @see GtpClient#isInterruptSupported
-    */
-    public void queryInterruptSupport()
-    {
-        try
-        {
-            if (isSupported("gogui-interrupt"))
-            {
-                send("gogui-interrupt");
-                m_isInterruptCommentSupported = true;
-            }
-            else if (isSupported("gogui_interrupt"))
-            {
-                send("gogui_interrupt");
-                m_isInterruptCommentSupported = true;
-            }
-            else if (isSupported("gogui-sigint"))
-                m_pid = send("gogui-sigint").trim();
-            else if (isSupported("gogui_sigint"))
-                m_pid = send("gogui_sigint").trim();
-        }
-        catch (GtpError e)
-        {
-        }
     }
 
     /** Send a command.
@@ -348,44 +310,6 @@ public final class GtpClient
             m_callback.sentCommand(comment);
         m_out.println(comment);
         m_out.flush();
-    }
-
-    /** Interrupt current command.
-        Can be called from a different thread during a send.
-        Note: call queryInterruptSupport first
-        @see GtpClient#isInterruptSupported
-        @throws GtpError if interrupting commands is not supported.
-    */
-    public void sendInterrupt() throws GtpError
-    {
-        if (m_isInterruptCommentSupported)
-            sendComment("# interrupt");
-        else if (m_pid != null)
-        {
-            String command = "kill -INT " + m_pid;
-            if (m_log)
-                log(command);
-            Runtime runtime = Runtime.getRuntime();
-            try
-            {
-                Process process = runtime.exec(command);
-                int result = process.waitFor();
-                if (result != 0)
-                    throw new GtpError("Command \"" + command
-                                        + "\" returned " + result);
-            }
-            catch (IOException e)
-            {
-                throw new GtpError("Could not run command " + command +
-                                    ":\n" + e);
-            }
-            catch (InterruptedException e)
-            {
-                printInterrupted();
-            }
-        }
-        else
-            throw new GtpError("Interrupt not supported");
     }
 
     /** Enable auto-numbering commands.
@@ -646,8 +570,6 @@ public final class GtpClient
 
     private boolean m_anyCommandsResponded;
 
-    private boolean m_isInterruptCommentSupported;
-
     private boolean m_isProgramDead;
 
     private boolean m_wasKilled;
@@ -667,8 +589,6 @@ public final class GtpClient
     private String m_response;
 
     private String m_logPrefix;
-
-    private String m_pid;
 
     private final String m_program;
 

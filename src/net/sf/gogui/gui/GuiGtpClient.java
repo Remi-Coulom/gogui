@@ -143,11 +143,6 @@ public class GuiGtpClient
         return m_commandInProgress;
     }
 
-    public boolean isInterruptSupported()
-    {
-        return m_gtp.isInterruptSupported();
-    }
-
     public boolean isOutOfSync()
     {
         return m_gtpSynchronizer.isOutOfSync();
@@ -157,11 +152,6 @@ public class GuiGtpClient
     {
         assert SwingUtilities.isEventDispatchThread();
         return m_gtp.isProgramDead();
-    }
-
-    public void queryInterruptSupport()
-    {
-        m_gtp.queryInterruptSupport();
     }
 
     /** Send asynchronous command. */
@@ -176,6 +166,10 @@ public class GuiGtpClient
             m_commandInProgress = true;
             m_mutex.notifyAll();
         }
+    }
+
+    public void sendComment(String comment)
+    {
     }
 
     /** Send command in event dispatch thread. */

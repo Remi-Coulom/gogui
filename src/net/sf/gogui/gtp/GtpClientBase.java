@@ -4,6 +4,7 @@
 
 package net.sf.gogui.gtp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
@@ -202,8 +203,43 @@ public abstract class GtpClientBase
         return (! isSupported("list_commands") || isSupported("genmove"));
     }
 
-    /** Check if interrupting a command is supported. */
-    public abstract boolean isInterruptSupported();
+    /** Check if interrupting a command is supported.
+        Interrupting can supported by ANSI C signals or the special
+        comment line "# interrupt" as described in the GoGui documentation
+        chapter "Interrupting commands".
+        Note: call queryInterruptSupport() first.
+    */
+    public boolean isInterruptSupported()
+    {
+        return (m_isInterruptCommentSupported || m_pid != null);
+    }
+
+    /** Query if interrupting is supported.
+        @see GtpClient#isInterruptSupported
+    */
+    public void queryInterruptSupport()
+    {
+        try
+        {
+            if (isSupported("gogui-interrupt"))
+            {
+                send("gogui-interrupt");
+                m_isInterruptCommentSupported = true;
+            }
+            else if (isSupported("gogui_interrupt"))
+            {
+                send("gogui_interrupt");
+                m_isInterruptCommentSupported = true;
+            }
+            else if (isSupported("gogui-sigint"))
+                m_pid = send("gogui-sigint").trim();
+            else if (isSupported("gogui_sigint"))
+                m_pid = send("gogui_sigint").trim();
+        }
+        catch (GtpError e)
+        {
+        }
+    }
 
     /** Queries the name.
         @see #getName()
@@ -277,6 +313,11 @@ public abstract class GtpClientBase
     */
     public abstract String send(String command) throws GtpError;
 
+    /** Send comment.
+        @param comment comment line (must start with '#').
+    */
+    public abstract void sendComment(String comment);
+
     /** Send command for setting the board size.
         Send the command if it exists in the GTP protocol version.
         Note: call queryProtocolVersion first
@@ -308,9 +349,39 @@ public abstract class GtpClientBase
 
     /** Interrupt current command.
         Can be called from a different thread during a send.
+        Note: call queryInterruptSupport first
+        @see GtpClient#isInterruptSupported
         @throws GtpError if interrupting commands is not supported.
     */
-    public abstract void sendInterrupt() throws GtpError;
+    public void sendInterrupt() throws GtpError
+    {
+        if (m_isInterruptCommentSupported)
+            sendComment("# interrupt");
+        else if (m_pid != null)
+        {
+            String command = "kill -INT " + m_pid;
+            Runtime runtime = Runtime.getRuntime();
+            try
+            {
+                Process process = runtime.exec(command);
+                int result = process.waitFor();
+                if (result != 0)
+                    throw new GtpError("Command \"" + command
+                                        + "\" returned " + result);
+            }
+            catch (IOException e)
+            {
+                throw new GtpError("Could not run command " + command +
+                                    ":\n" + e);
+            }
+            catch (InterruptedException e)
+            {
+                printInterrupted();
+            }
+        }
+        else
+            throw new GtpError("Interrupt not supported");
+    }
 
     /** Enable lower case mode for play commands.
         For engines that don't implement GTP correctly and understand
@@ -326,7 +397,11 @@ public abstract class GtpClientBase
     */
     public abstract void waitForExit();
 
+    private boolean m_isInterruptCommentSupported;
+
     protected String m_name;
+
+    private String m_pid;
 
     /** Local variable in some functions, reused for efficiency. */
     private final StringBuilder m_buffer = new StringBuilder(128);
@@ -336,4 +411,10 @@ public abstract class GtpClientBase
     private int m_protocolVersion = 2;
 
     private String[] m_supportedCommands;
+
+    private void printInterrupted()
+    {
+        System.err.println("GtpClient: InterruptedException");
+        Thread.dumpStack();
+    }
 }
