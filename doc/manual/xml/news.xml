@@ -59,6 +59,43 @@ or in text windows created by analyze commands)
 </revision>
 
 <revision>
+<revnumber>1.0.2</revnumber>
+<date>24 Sep 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Use native file dialogs on Windows to avoid slow startup and directory
+reading of JFileChooser
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.1</revnumber>
+<date>11 Sep 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Cut excessively long program version strings in about dialog.
+Ignore long version strings in TwoGtp.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and code cleanup.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.0</revnumber>
 <date>29 Aug 2007</date>
 <authorinitials>enz</authorinitials>
