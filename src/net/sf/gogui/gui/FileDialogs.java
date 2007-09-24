@@ -102,7 +102,7 @@ public final class FileDialogs
         takes up to 10 sec; Java 1.6)
     */
     private static final boolean NATIVE_DIALOGS =
-        (Platform.isMac() || Platform.isWindows() || true);
+        (Platform.isMac() || Platform.isWindows());
 
     private static File s_lastFile;
 
