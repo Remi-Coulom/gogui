@@ -125,11 +125,6 @@ public class GuiGtpClient
         }
     }
 
-    public void sendInterrupt() throws GtpError
-    {
-        m_gtp.sendInterrupt();
-    }
-
     public void initSynchronize(ConstBoard board, Komi komi,
                                 TimeSettings timeSettings) throws GtpError
     {
@@ -170,6 +165,7 @@ public class GuiGtpClient
 
     public void sendComment(String comment)
     {
+        m_gtp.sendComment(comment);
     }
 
     /** Send command in event dispatch thread. */
