@@ -476,7 +476,8 @@ public class GoGuiActions
                 m_goGui.actionReattachProgram(); } };
 
     public final Action m_actionReattachWithParameters =
-        new Action("Reattach With Parameters") {
+        new Action("Reattach With Parameters", null, KeyEvent.VK_T,
+                   SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachWithParameters(); } };
 
