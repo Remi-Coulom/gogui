@@ -477,6 +477,12 @@ public final class GtpClient
                     }
                     if (line.equals(""))
                     {
+                        // Give ErrorThread a chance to read first, otherwise
+                        // if something was written to stderr shortly before
+                        // the response, it will be handled only at the next
+                        // command, because stderr is only handled while
+                        // waiting for a response
+                        Thread.yield();
                         putMessage(Message.RESPONSE);
                         break;
                     }
