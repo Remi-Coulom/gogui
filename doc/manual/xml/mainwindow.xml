@@ -216,7 +216,11 @@ Some board markups are also exported
 <listitem>
 <para>
 Export the current position including all markup to an image file in PNG
-format
+format. The width of the image can be specified in an input dialog, which
+offers the current width of the board on the screen as the default value.
+For exporting images with very small sizes, it can produce better results
+to export to an image with a larger size and use an external graphics
+program to downscale it using a high-quality scaling algorithm.
 </para>
 </listitem>
 </varlistentry>
