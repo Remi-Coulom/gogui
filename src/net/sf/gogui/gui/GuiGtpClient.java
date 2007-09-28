@@ -37,7 +37,7 @@ public class GuiGtpClient
         m_gtp = gtp;
         m_owner = owner;
         m_messageDialogs = messageDialogs;
-        m_gtpSynchronizer = new GtpSynchronizer(gtp, listener, false);
+        m_gtpSynchronizer = new GtpSynchronizer(this, listener, false);
         Thread thread = new Thread() {
                 public void run() {
                     synchronized (m_mutex)
