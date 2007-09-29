@@ -30,7 +30,6 @@ public final class Main
                 "lowercase",
                 "noscore",
                 "name:",
-                "resign:",
                 "size:",
                 "verbose",
                 "version",
@@ -58,7 +57,6 @@ public final class Main
             String name = opt.get("name", null);
             String gtpFile = opt.get("gtpfile", null);
             boolean resign = opt.contains("resign");
-            int resignScore = opt.getInteger("resign");
             ArrayList<String> arguments = opt.getArguments();
             int size = opt.getInteger("size", 19, 1, GoPoint.MAX_SIZE);
             if (arguments.size() != 1)
@@ -78,8 +76,6 @@ public final class Main
                                  version1, fillPasses, lowerCase, size);
             if (name != null)
                 adapter.setName(name);
-            if (resign)
-                adapter.setResign(resignScore);
             adapter.mainLoop(System.in, System.out);
             adapter.close();
             if (log != null)

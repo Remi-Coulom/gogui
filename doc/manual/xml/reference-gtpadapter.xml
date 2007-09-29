@@ -25,7 +25,6 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-lowercase</option></arg>
 <arg><option>-name</option> <replaceable>name</replaceable></arg>
 <arg><option>-noscore</option></arg>
-<arg><option>-resign</option> <replaceable>score</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-version1</option></arg>
@@ -155,19 +154,6 @@ is interpreted as a version and used for answering the
 Hide the <command>final_score</command> and
 <command>final_status_list</command> commands, even if the program supports
 them.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<option>-resign</option> <replaceable>score</replaceable>
-</term>
-<listitem>
-<para>
-Send an <command>estimate_score</command> to the program before
-each <command>genmove</command> command and resign, if the estimation
-is below the given score (to the disadvantage of the side to move).
 </para>
 </listitem>
 </varlistentry>

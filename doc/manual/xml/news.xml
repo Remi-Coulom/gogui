@@ -59,6 +59,11 @@ or in text windows created by analyze commands)
 GoGui: option -analyze is no longer supported
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GtpAdapter: option -resign is no longer supported
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

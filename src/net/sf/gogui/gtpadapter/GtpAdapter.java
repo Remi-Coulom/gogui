@@ -139,8 +139,6 @@ public class GtpAdapter
 
     public void cmdGenmove(GoColor color, GtpCommand cmd) throws GtpError
     {
-        if (checkResign(color, cmd.getResponse()))
-            return;
         String command = m_gtp.getCommandGenmove(color);
         String response = send(command);
         if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
@@ -354,22 +352,6 @@ public class GtpAdapter
                     cmdVersion(cmd); } });
     }
 
-    /** Check estimate_score and resign, if score too bad.
-        Should be set before handling any commands.
-    */
-    public void setResign(int resignScore)
-    {
-        m_resign = true;
-        m_resignScore = Math.abs(resignScore);
-    }
-
-    private boolean m_resign;
-
-    /** Only accept this board size.
-        A value of -1 means accept any size.
-    */
-    private int m_resignScore;
-
     private Board m_board;
 
     private final GtpCallback m_callbackForward = new GtpCallback() {
@@ -384,54 +366,6 @@ public class GtpAdapter
 
     private TimeSettings m_timeSettings;
 
-    private boolean checkResign(GoColor color, StringBuilder response)
-    {
-        if (! m_resign)
-            return false;
-        StringBuilder programResponse = new StringBuilder();
-        try
-        {
-            send("estimate_score", programResponse);
-        }
-        catch (GtpError e)
-        {
-            return false;
-        }
-        boolean isValid = false;
-        double score = 0;
-        String[] args
-            = StringUtil.splitArguments(programResponse.toString());
-        if (args.length > 0)
-        {
-            String s = args[0];
-            try
-            {
-                if (! s.equals("?"))
-                {
-                    if (s.indexOf("B+") >= 0)
-                        score = Double.parseDouble(s.substring(2));
-                    else if (s.indexOf("W+") >= 0)
-                        score = - Double.parseDouble(s.substring(2));
-                    isValid = true;
-                }
-            }
-            catch (NumberFormatException e)
-            {
-            }
-        }
-        if (isValid)
-        {
-            boolean isBlack = (color == BLACK);
-            if ((isBlack && score < - m_resignScore)
-                || (! isBlack && score > m_resignScore))
-            {
-                response.append("resign");
-                return true;
-            }
-        }
-        return false;
-    }
-
     private GoPoint getPointArg(GtpCommand cmd, int i) throws GtpError
     {
         return cmd.getPointArg(i, m_board.getSize());
@@ -443,7 +377,6 @@ public class GtpAdapter
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         m_board = new Board(size);
-        m_resign = false;
         registerCommands(noScore, version1);
         synchronize();
     }
