@@ -45,8 +45,6 @@ public final class GoGuiSettings
 
     public String m_gtpFile;
 
-    public String m_initAnalyze;
-
     public String m_lookAndFeel;
 
     public String m_program;
@@ -57,7 +55,6 @@ public final class GoGuiSettings
     {
         m_prefs = Preferences.userNodeForPackage(c);
         String options[] = {
-            "analyze:",
             "analyze-commands:",
             "auto",
             "command:",
@@ -90,7 +87,6 @@ public final class GoGuiSettings
             System.out.println("GoGui " + Version.get());
             return;
         }
-        m_initAnalyze = opt.get("analyze");
         String analyzeCommandsFilename = opt.get("analyze-commands", null);
         if (analyzeCommandsFilename != null)
             m_analyzeCommands = new File(analyzeCommandsFilename);

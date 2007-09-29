@@ -54,6 +54,11 @@ contains points (like it is already done with text selection in comment
 or in text windows created by analyze commands)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: option -analyze is no longer supported
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

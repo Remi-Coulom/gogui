@@ -134,8 +134,7 @@ public class GoGui
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
-                 String gtpFile, String gtpCommand, String initAnalyze,
-                 File analyzeCommandsFile)
+                 String gtpFile, String gtpCommand, File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -162,7 +161,6 @@ public class GoGui
         }
         m_auto = auto;
         m_verbose = verbose;
-        m_initAnalyze = initAnalyze;
         m_showInfoPanel = true;
         m_showToolbar = false;
 
@@ -2144,8 +2142,6 @@ public class GoGui
 
     private final String m_gtpFile;
 
-    private final String m_initAnalyze;
-
     private String m_lastAnalyzeCommand;
 
     private String m_programCommand;
@@ -3047,15 +3043,6 @@ public class GoGui
         runLengthyCommand(command, callback);
     }
 
-    /** Find initial analyze command given with command line option. */
-    private AnalyzeCommand getInitialAnalyzeCommand()
-    {
-        for (AnalyzeDefinition definition : m_analyzeCommands)
-            if (definition.getLabel().equals(m_initAnalyze))
-                return new AnalyzeCommand(definition);
-        return null;
-    }
-
     private ConstBoard getBoard()
     {
         return m_game.getBoard();
@@ -3314,31 +3301,12 @@ public class GoGui
             createTree();
         if (m_gtp != null && m_session.isVisible("analyze"))
             createAnalyzeDialog();
-        if (! m_initAnalyze.equals(""))
-        {
-            AnalyzeCommand analyzeCommand = getInitialAnalyzeCommand();
-            if (analyzeCommand == null)
-            {
-                String name = getProgramName();
-                if (name == null)
-                    name = "the Go program";
-                showError("Unknown analyze command \"" + m_initAnalyze
-                          + "\"",
-                          "An analyze command with this label is not " +
-                          "supported by " + name + ".");
-            }
-            else
-                initAnalyzeCommand(analyzeCommand, false, true);
-        }
         setTitleFromProgram();
         updateViews(true);
         getLayeredPane().setVisible(true);
         unprotectGui();
         toFrontLater();
-        if (m_initAnalyze.equals(""))
-            checkComputerMove();
-        else
-            analyzeBegin(true);
+        checkComputerMove();
     }
 
     private void initScore(ConstPointList deadStones)

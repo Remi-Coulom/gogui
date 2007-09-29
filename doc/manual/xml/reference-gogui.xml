@@ -16,7 +16,6 @@
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gogui</command>
-<arg><option>-analyze</option> <replaceable>command</replaceable></arg>
 <arg><option>-analyze-commands</option> <replaceable>file</replaceable></arg>
 <arg><option>-auto</option></arg>
 <group choice="opt">
@@ -62,19 +61,6 @@ in the GoGui package.
 <refsection>
 <title>Options</title>
 <variablelist>
-
-<varlistentry>
-<term>
-<option>-analyze</option> <replaceable>command</replaceable>
-</term>
-<listitem>
-<para>
-Run the analyze command (given by its label) and run it on the initial
-position.
-This works only for commands not containing wildcards.
-</para>
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term>
