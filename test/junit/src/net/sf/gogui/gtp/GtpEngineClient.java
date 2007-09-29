@@ -21,17 +21,15 @@ public final class GtpEngineClient
     {
     }
 
-    public boolean isInterruptSupported()
-    {
-        // TODO: should forward to a GtpEngine function
-        return true;
-    }
-
     public String send(String command) throws GtpError
     {
         GtpCommand cmd = new GtpCommand(command);
         m_engine.handleCommand(cmd);
         return cmd.getResponse().toString();
+    }
+
+    public void sendComment(String comment)
+    {
     }
 
     public void sendInterrupt() throws GtpError
