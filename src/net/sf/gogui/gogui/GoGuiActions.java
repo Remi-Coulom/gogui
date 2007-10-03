@@ -904,10 +904,8 @@ public class GoGuiActions
     private void updatePass(GoColor toMove)
     {
         assert toMove.isBlackWhite();
-        if (toMove == BLACK)
-            m_actionPass.setDescription("Play a pass for Black");
-        else
-            m_actionPass.setDescription("Play a pass for White");
+        m_actionPass.setDescription("Play a pass for "
+                                    + toMove.getCapitalizedName());
     }
 
     private void updatePlay(GoColor toMove, boolean isProgramAttached,
@@ -921,10 +919,7 @@ public class GoGuiActions
             desc = "Continue play (" + name + " both)";
         else
         {
-            if (toMove == BLACK)
-                desc = "Make " + name + " play Black";
-            else
-                desc = "Make " + name + " play White";
+            desc = "Make " + name + " play " + toMove.getCapitalizedName();
             if (! isProgramAttached)
                 desc = desc + " (no program attached)";
         }
