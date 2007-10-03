@@ -815,6 +815,7 @@ public class GoGuiActions
         boolean isInterruptSupported = m_goGui.isInterruptSupported();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
+        boolean computerBoth = (computerBlack && computerWhite);
         boolean hasPattern = (m_goGui.getPattern() != null);
         int numberPrograms = m_goGui.getNumberPrograms();
         ConstClock clock = game.getClock();
@@ -839,7 +840,7 @@ public class GoGuiActions
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
         m_actionComputerBoth.setEnabled(isProgramAttached);
-        m_actionComputerBoth.setSelected(computerBlack && computerWhite);
+        m_actionComputerBoth.setSelected(computerBoth);
         m_actionComputerNone.setEnabled(isProgramAttached);
         m_actionComputerNone.setSelected(! computerBlack && ! computerWhite);
         m_actionComputerWhite.setEnabled(isProgramAttached);
@@ -869,7 +870,7 @@ public class GoGuiActions
         m_actionNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_actionNextVariation.setEnabled(hasNextVariation);
         updateActionPass(toMove);
-        updateActionPlay(toMove, isProgramAttached, name);
+        updateActionPlay(toMove, isProgramAttached, computerBoth, name);
         m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
@@ -1043,18 +1044,23 @@ public class GoGuiActions
     }
 
     private void updateActionPlay(GoColor toMove, boolean isProgramAttached,
-                                  String name)
+                                  boolean computerBoth, String name)
     {
         m_actionPlay.setEnabled(isProgramAttached);
         String desc;
         if (name == null)
             name = "computer";
-        if (toMove == GoColor.BLACK)
-            desc = "Make " + name + " play Black";
+        if (computerBoth)
+            desc = "Continue play (" + name + " both)";
         else
-            desc = "Make " + name + " play White";
-        if (! isProgramAttached)
-            desc = desc + " (no program attached)";
+        {
+            if (toMove == GoColor.BLACK)
+                desc = "Make " + name + " play Black";
+            else
+                desc = "Make " + name + " play White";
+            if (! isProgramAttached)
+                desc = desc + " (no program attached)";
+        }
         m_actionPlay.setDescription(desc);
     }
 
