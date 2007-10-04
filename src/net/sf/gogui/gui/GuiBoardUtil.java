@@ -16,6 +16,7 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Marker;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 
@@ -185,23 +186,24 @@ public final class GuiBoardUtil
     public static void showChildrenMoves(GuiBoard guiBoard,
                                          ConstPointList childrenMoves)
     {
-        guiBoard.clearAllLabels();
+        Marker marker = new Marker(guiBoard.getBoardSize());
         int numberMarked = 0;
         char label = 'A';
         for (int i = 0; i < childrenMoves.size(); ++i)
         {
-            GoPoint point = childrenMoves.get(i);
-            String s = guiBoard.getLabel(point);
-            if (! s.equals(""))
+            GoPoint p = childrenMoves.get(i);
+            if (marker.get(p))
             {
+                String s = guiBoard.getLabel(p);
                 if (! s.endsWith(">"))
-                    guiBoard.setLabel(point, s + ">");
+                    guiBoard.setLabel(p, s + ">");
                 continue;
             }
+            marker.set(p);
             if (numberMarked >= 26)
-                guiBoard.setLabel(point, "*");
+                guiBoard.setLabel(p, "*");
             else
-                guiBoard.setLabel(point, Character.toString(label));
+                guiBoard.setLabel(p, Character.toString(label));
             if (numberMarked < 26)
                 ++label;
             ++numberMarked;
