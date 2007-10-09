@@ -44,7 +44,7 @@ final class MoreExtraInfo
 
     public TimeInfo m_timeInfo;
 
-    public TreeMap<String,String> m_sgfProperties;
+    public SgfProperties m_sgfProperties;
 
     public Map<GoPoint,String> m_label;
 
@@ -150,11 +150,11 @@ public final class Node
         SGF properties, so that the old value is preserved if no new value
         is set in GameInformation.
         @param label The name of the property
-        @param value The value of the property, including the brackets
+        @param value The valuee of the property
     */
-    public void addSgfProperty(String label, String value)
+    public void addSgfProperty(String label, ArrayList<String> values)
     {
-        createSgfProperties().put(label, value);
+        createSgfProperties().add(label, values);
     }
 
     /** Add or remove a setup stone.
@@ -400,24 +400,21 @@ public final class Node
         to String value
         @see #addSgfProperty
     */
-    public Map<String,String> getSgfProperties()
+    public SgfProperties getSgfProperties()
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
         return m_extraInfo.m_moreExtraInfo.m_sgfProperties;
     }
 
-    /** Get other unspecified SGF properties (unmodifiable).
+    /** Get other unspecified SGF properties (const).
         @return The map with other SGF properties mapping String label
         to String value
         @see #addSgfProperty
     */
-    public Map<String,String> getSgfPropertiesUnmodifiable()
+    public ConstSgfProperties getSgfPropertiesConst()
     {
-        Map<String,String> sgfProperties = getSgfProperties();
-        if (sgfProperties == null)
-            return null;
-        return Collections.unmodifiableMap(sgfProperties);
+        return getSgfProperties();
     }
 
     /** Time left for color after move was made.
@@ -769,11 +766,11 @@ public final class Node
         return moreExtraInfo.m_setupInfo;
     }
 
-    private Map<String,String> createSgfProperties()
+    private SgfProperties createSgfProperties()
     {
         MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
         if (moreExtraInfo.m_sgfProperties == null)
-            moreExtraInfo.m_sgfProperties = new TreeMap<String,String>();
+            moreExtraInfo.m_sgfProperties = new SgfProperties();
         return moreExtraInfo.m_sgfProperties;
     }
 

@@ -1,0 +1,103 @@
+<!-- P is the Paragraph of HTML -->
+<!ELEMENT P (#PCDATA)>
+
+<!-- Each Go file consists of one or several GoGame -->
+<!ELEMENT Go (GoGame*)>
+
+<!-- Each GoGame consists of the game Information and the game tree -->
+
+<!ELEMENT GoGame (Information,Nodes)>
+<!ATTLIST GoGame name CDATA #IMPLIED>
+<!ELEMENT Nodes (((Node|Black|White),(Node|Variation|Black|White|Comment)*)?)>
+
+<!ELEMENT Information (Application?|BoardSize?|BlackPlayer?|BlackRank?|
+	WhitePlayer?|WhiteRank?|Date?|Time?|Komi?|Result?|Handicap?|User?|
+	Copyright?|Annotation?|BlackTeam?|WhiteTeam?|Round?|Rules?|Source?)*>
+<!ELEMENT Application (#PCDATA)>
+<!ATTLIST Application format CDATA #IMPLIED>
+<!ELEMENT BoardSize (#PCDATA)>
+<!ATTLIST BoardSize format CDATA #IMPLIED>
+<!ELEMENT BlackPlayer (#PCDATA)>
+<!ATTLIST BlackPlayer format CDATA #IMPLIED>
+<!ELEMENT WhitePlayer (#PCDATA)>
+<!ATTLIST WhitePlayer format CDATA #IMPLIED>
+<!ELEMENT BlackRank (#PCDATA)>
+<!ATTLIST BlackRank format CDATA #IMPLIED>
+<!ELEMENT WhiteRank (#PCDATA)>
+<!ATTLIST WhiteRank format CDATA #IMPLIED>
+<!ELEMENT Date (#PCDATA)>
+<!ATTLIST Date format CDATA #IMPLIED>
+<!ELEMENT Time (#PCDATA)>
+<!ATTLIST Time format CDATA #IMPLIED>
+<!ELEMENT Komi (#PCDATA)>
+<!ATTLIST Komi format CDATA #IMPLIED>
+<!ELEMENT Handicap (#PCDATA)>
+<!ATTLIST Handicap format CDATA #IMPLIED>
+<!ELEMENT Result (#PCDATA)>
+<!ATTLIST Result format CDATA #IMPLIED>
+<!ELEMENT User (#PCDATA)>
+<!ELEMENT Copyright (P+)>
+<!ELEMENT Annotation (#PCDATA)>
+<!ELEMENT BlackTeam (#PCDATA)>
+<!ELEMENT WhiteTeam (#PCDATA)>
+<!ELEMENT Round (#PCDATA)>
+<!ELEMENT Rules (#PCDATA)>
+<!ATTLIST Rules format CDATA #IMPLIED>
+<!ELEMENT Source (#PCDATA)>
+<!ATTLIST Source format CDATA #IMPLIED>
+
+<!-- Game representation in Nodes -->
+
+<!ELEMENT Node ((SGF|Comment|Black|White|AddBlack|AddWhite|Mark|Delete)*)>
+<!ATTLIST Node name CDATA #IMPLIED>
+
+<!-- Possible content of a node (unordered) -->
+
+<!-- Alternative form of specifying the position as tag content. -->
+<!-- The board position is either like D10 or 4,10 (for larger boards). -->
+<!ELEMENT at (#PCDATA)>
+
+<!ELEMENT Comment (P+)>
+<!ELEMENT Black ((at)*)>
+<!ATTLIST Black
+	at CDATA #IMPLIED
+	number CDATA #IMPLIED
+	timeleft CDATA #IMPLIED
+	annotate CDATA #IMPLIED>
+<!ELEMENT White ((at)*)>
+<!ATTLIST White
+	at CDATA #IMPLIED
+	number CDATA #IMPLIED
+	timeleft CDATA #IMPLIED
+	annotate CDATA #IMPLIED>
+<!ELEMENT AddBlack ((at)*)>
+<!ATTLIST AddBlack
+	at CDATA #IMPLIED>
+<!ELEMENT AddWhite ((at)*)>
+<!ATTLIST AddWhite
+	at CDATA #IMPLIED>
+<!ELEMENT Delete ((at)*)>
+<!ATTLIST Delete
+	at CDATA #IMPLIED>
+<!ELEMENT Mark ((at)*)>
+<!ATTLIST Mark 
+	label CDATA #IMPLIED
+	at CDATA #IMPLIED
+	type (square|circle|triangle) #IMPLIED
+	territory (black|white) #IMPLIED>
+<!ELEMENT BlackToPlay (#PCDATA)>
+<!ELEMENT WhiteToPlay (#PCDATA)>
+<!ELEMENT Line (#PCDATA)>
+<!ATTLIST Line 
+	format CDATA #IMPLIED
+	type CDATA #IMPLIED>
+
+<!-- This is to take care of SGF tags, which are not translated -->
+<!ELEMENT SGF (Arg*)>
+<!ATTLIST SGF
+	type CDATA #REQUIRED>
+<!ELEMENT Arg (#PCDATA)>
+
+<!-- Note that the Variation are ALTERNATIVES to the current node -->
+<!-- This is different from SGF and makes the file easier to read by humans -->
+<!ELEMENT Variation ((Node|Variation|White|Black|Comment)*)>

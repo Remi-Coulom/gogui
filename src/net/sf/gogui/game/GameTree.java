@@ -12,7 +12,12 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 
-/** Game tree. */
+/** Game tree.
+    Note that the tree can have different GameInformation objects for different
+    subtrees to allow the representation of trees loaded from SGF. Creating
+    trees with multiple GameInformation objects is not not actively supported
+    in GoGui, because they cannot be saved in (Jago's) XML format.
+*/
 public class GameTree
     implements ConstGameTree
 {

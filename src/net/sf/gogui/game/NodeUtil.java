@@ -623,16 +623,20 @@ public final class NodeUtil
                 appendInfo(buffer, "TimeSettings",
                            info.getTimeSettings().toString());
         }
-        Map<String,String> sgfProperties
-            = node.getSgfPropertiesUnmodifiable();
+        ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
         if (sgfProperties != null)
         {
             buffer.append("SgfProperties:\n");
-            for (Map.Entry<String,String> entry : sgfProperties.entrySet())
+            for (String key : sgfProperties.getKeys())
             {
-                String label = entry.getKey();
-                String value = entry.getValue();
-                appendInfo(buffer, label, value);
+                StringBuilder values = new StringBuilder();
+                for (int i = 0; i < sgfProperties.getNumberValues(key); ++i)
+                {
+                    values.append('[');
+                    values.append(sgfProperties.getValue(key, i));
+                    values.append(']');
+                }
+                appendInfo(buffer, key, values.toString());
             }
         }
         return buffer.toString();

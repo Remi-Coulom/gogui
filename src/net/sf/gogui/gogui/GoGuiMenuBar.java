@@ -362,6 +362,7 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionExportTextPosition, KeyEvent.VK_T);
         menu.addItem(actions.m_actionExportTextPositionToClipboard,
                      KeyEvent.VK_C);
+        menu.addItem(actions.m_actionExportXml, KeyEvent.VK_X);
         return menu;
     }
 
@@ -439,6 +440,7 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionImportTextPosition, KeyEvent.VK_T);
         menu.addItem(actions.m_actionImportTextPositionFromClipboard,
                      KeyEvent.VK_C);
+        menu.addItem(actions.m_actionImportXml, KeyEvent.VK_X);
         return menu;
     }
 

@@ -43,7 +43,7 @@ public interface ConstNode
 
     ConstPointList getSetup(GoColor c);
 
-    Map<String,String> getSgfPropertiesUnmodifiable();
+    ConstSgfProperties getSgfPropertiesConst();
 
     double getTimeLeft(GoColor color);
 

@@ -11,6 +11,7 @@ import java.util.Map;
 import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.ConstSgfProperties;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
@@ -367,17 +368,16 @@ public class SgfWriter
         {
             print("V[" + node.getValue() + "]");
         }
-        Map<String,String> sgfProperties =
-            node.getSgfPropertiesUnmodifiable();
+        ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
         if (sgfProperties != null)
         {
-            for (Map.Entry<String,String> entry : sgfProperties.entrySet())
+            for (String key : sgfProperties.getKeys())
             {
-                String label = entry.getKey();
-                if (label.equals("OT") && hasByoyomiInformation(node))
+                if (key.equals("OT") && hasByoyomiInformation(node))
                     continue;
-                String value = entry.getValue();
-                print(label + value);
+                print(key);
+                for (int i = 0; i < sgfProperties.getNumberValues(key); ++i)
+                    print("[" + sgfProperties.getValue(key, i) + "]");
             }
         }
         int numberChildren = node.getNumberChildren();

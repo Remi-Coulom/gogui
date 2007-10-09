@@ -214,19 +214,6 @@ public final class SgfReader
     private final Map<String,ArrayList<String>> m_props =
         new TreeMap<String,ArrayList<String>>();
 
-    private void addSgfProperty(Node node, String property,
-                                ArrayList<String> values)
-    {
-        m_buffer.setLength(0);
-        for (int i = 0; i < values.size(); ++i)
-        {
-            m_buffer.append('[');
-            m_buffer.append(values.get(i));
-            m_buffer.append(']');
-        }
-        node.addSgfProperty(property, m_buffer.toString());
-    }
-
     /** Apply some fixes for broken SGF files. */
     private void applyFixes()
     {
@@ -593,7 +580,7 @@ public final class SgfReader
             else if (p == "WR")
                 createGameInformation(node).setRank(WHITE, v);
             else if (p != "FF" && p != "GN" && p != "AP")
-                addSgfProperty(node, p, values);
+                node.addSgfProperty(p, values);
         }
     }
 
@@ -675,7 +662,7 @@ public final class SgfReader
         setWarning("overtime settings in unknown format");
         ArrayList<String> values = new ArrayList<String>();
         values.add(value);
-        addSgfProperty(node, "OT", values);
+        node.addSgfProperty("OT", values);
     }
 
     private boolean parseOverTime(String value, String regex,

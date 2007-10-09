@@ -403,6 +403,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/thumbnail/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
+ net/sf/gogui/xml/*.class
 "/>
 <fileset dir="mac/src" includes="
  net/sf/gogui/specialmac/*.class
