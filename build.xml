@@ -151,6 +151,7 @@ Comment out the exec svnversion for releases.
  COPYING
  INSTALL
  build.xml
+ config/go.dtd
  config/gogui*.desktop
  config/gogui-application-x-go-sgf.png
  config/gogui-application-x-go-sgf.svg
