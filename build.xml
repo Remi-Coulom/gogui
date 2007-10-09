@@ -132,6 +132,7 @@ Comment out the exec svnversion for releases.
   net/sf/gogui/images/*.png
   net/sf/gogui/gui/analyze-commands
   net/sf/gogui/gui/*.png
+  net/sf/gogui/xml/go.dtd
 "/>
 </copy>
 <copy todir="build/net/sf/gogui/doc">
@@ -191,6 +192,7 @@ Comment out the exec svnversion for releases.
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
  src/net/sf/gogui/gui/analyze-commands
+ src/net/sf/gogui/xml/go.dtd
  test/findbugs/gogui.fb
  test/checkstyle/checkstyle_checks.xml
  test/junit/src/net/sf/gogui/*/*.java
@@ -405,6 +407,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
  net/sf/gogui/xml/*.class
+ net/sf/gogui/xml/*.dtd
 "/>
 <fileset dir="mac/src" includes="
  net/sf/gogui/specialmac/*.class

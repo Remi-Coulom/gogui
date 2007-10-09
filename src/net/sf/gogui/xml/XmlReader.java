@@ -6,12 +6,17 @@ package net.sf.gogui.xml;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -48,6 +53,7 @@ public final class XmlReader
             m_node = m_root;
             XMLReader reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(new ContentHandler());
+            reader.setEntityResolver(new Resolver());
             reader.parse(new InputSource(in));
             int size;
             if (m_isBoardSizeKnown)
@@ -209,6 +215,47 @@ public final class XmlReader
         }
     }
 
+    private class Resolver
+        implements EntityResolver
+    {
+        /** Return internal go.dtd, if file does not exist. */
+        public InputSource resolveEntity(String publicId, String systemId)
+        {
+            if (systemId == null)
+                return null;
+            URI uri;
+            try
+            {
+                uri = new URI(systemId);
+            }
+            catch (URISyntaxException e)
+            {
+                return null;
+            }
+            if (! "file".equals(uri.getScheme()))
+                return null;
+            File file = new File(uri.getPath());
+            if (file.exists())
+                return null;
+            String resource = "net/sf/gogui/xml/go.dtd";
+            URL url = ClassLoader.getSystemClassLoader().getResource(resource);
+            if (url == null)
+            {
+                assert false;
+                return null;
+            }
+            try
+            {
+                return new InputSource(url.openStream());
+            }
+            catch (IOException e)
+            {
+                assert false;
+                return null;
+            }
+        }
+    }
+
     private static final int DEFAULT_BOARDSIZE = 19;
 
     private boolean m_isBoardSizeKnown;
@@ -259,12 +306,13 @@ public final class XmlReader
         {
             if (parent == null)
                 return;
-            throwError("Element " + m_element + " must be root element");
+            throwError("Element \"" + m_element + "\" must be root element.");
         }
         for (int i = 0; i < parents.length; ++i)
             if (parents[i].equals(parent))
                 return;
-        throwError("Element " + m_element + " cannot be child of " + parent);
+        throwError("Element \"" + m_element + "\" cannot be child of \""
+                   + parent + "\".");
     }
 
     private void createNode()
