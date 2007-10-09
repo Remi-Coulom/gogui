@@ -437,7 +437,7 @@ public final class XmlReader
 
     private void handleMove(GoColor c, Attributes atts) throws SAXException
     {
-        checkParent("Nodes", "Variation");
+        checkParent("Node", "Nodes", "Variation");
         if (! parentElement().equals("Node"))
             createNode();
         GoPoint p = getAt(atts);
