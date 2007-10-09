@@ -177,6 +177,18 @@ but parses the text selection copied to the clipboard.
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Import</guisubmenu> / <guimenuitem>XML</guimenuitem></term>
+<listitem>
+<para>
+Import a go game in XML format. Supports
+<ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
+Jago's XML format</ulink>. Files with more than one GoGame element are
+not supported.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guisubmenu>Export</guisubmenu> / <guimenuitem>SGF Position</guimenuitem></term>
 <listitem>
 <para>
