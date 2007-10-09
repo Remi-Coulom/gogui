@@ -243,6 +243,34 @@ Export the current position as a text diagram to the clipboard.
 </listitem>
 </varlistentry>
 
+<varlistentry id="exportxml">
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>XML</guimenuitem></term>
+<listitem>
+<para>
+Export the current game tree in
+<ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
+Jago's XML format</ulink>. Pass moves are written as move elements with an
+empty string for the at-property. This convention is also used by
+<ulink url="http://homepage.ntlworld.com/daniel.gilder/gosvg.html">
+GoSVG</ulink>, but actually not supported by Jago (as of version 4.9).
+Use <xref linkend="exportxmlnopass"/> to write XML files that can be read
+by Jago.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="exportxmlnopass">
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>XML (No Pass)</guimenuitem></term>
+<listitem>
+<para>
+Like <xref linkend="exportxml"/>, but writes the XML in a way that can be
+read by Jago. Jago (as of version 4.9) does not support move elements
+for pass moves. Nodes with a pass move get an additional comment "Pass", if
+they do not have a comment yet.
+</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><guimenuitem>Print</guimenuitem></term>
 <listitem>

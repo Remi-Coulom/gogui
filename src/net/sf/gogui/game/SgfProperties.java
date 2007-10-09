@@ -31,7 +31,7 @@ final class SgfProperties
 
     /** Get a list of all keys.
         This list is a copy of the keys at the time of the function call.
-    */  
+    */
     public ArrayList<String> getKeys()
     {
         return new ArrayList<String>(m_properties.keySet());
@@ -55,6 +55,11 @@ final class SgfProperties
     public boolean hasKey(String key)
     {
         return (getNumberValues(key) >= 0);
+    }
+
+    public boolean isEmpty()
+    {
+        return (m_properties.size() == 0);
     }
 
     private Map<String,ArrayList<String>> m_properties;

@@ -25,12 +25,21 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.util.HtmlUtil;
 
 /** Write a game or board position in XML style to a stream.
-    This class uses Jago's XML format, see http://www.rene-grothmann.de/jago    
+    This class uses Jago's XML format, see http://www.rene-grothmann.de/jago
 */
 public class XmlWriter
 {
-    public XmlWriter(OutputStream out, ConstGameTree tree, String application)
+    /** Construct writer and write tree.
+        @param usePass Write pass moves with empty at-property. This extension
+        is used by GoSVG
+        (http://homepage.ntlworld.com/daniel.gilder/gosvg.html), but not
+        supported by Jago (which does not write pass moves using move
+        elements, but adds a comment "Pass")
+    */
+    public XmlWriter(OutputStream out, ConstGameTree tree, String application,
+                     boolean usePass)
     {
+        m_usePass = usePass;
         try
         {
             m_out = new PrintStream(out, false, "UTF-8");
@@ -57,6 +66,8 @@ public class XmlWriter
                     "</Go>\n");
         m_out.close();
     }
+
+    private final boolean m_usePass;
 
     private int m_boardSize;
 
@@ -155,23 +166,25 @@ public class XmlWriter
                     break;
                 }
             }
+        boolean isPass = (move != null && move.getPoint() == null);
         boolean needsNode =
-            (move == null || move.getPoint() == null || sgfProperties != null
-             || node.hasSetup() || hasMarkup);
+            (move == null || (isPass && ! m_usePass)
+             || sgfProperties != null || node.hasSetup() || hasMarkup);
         if (needsNode)
             m_out.print("<Node>\n");
         if (move != null)
         {
             GoPoint p = move.getPoint();
-            if (p != null) // TODO: PASS not allowed as move attribute?
+            if (p != null || m_usePass)
             {
+                String at = (p == null ? "" : p.toString());
                 GoColor c = move.getColor();
                 int number = NodeUtil.getMoveNumber(node);
                 if (c == BLACK)
-                    m_out.print("<Black number=\"" + number + "\" at=\"" + p
+                    m_out.print("<Black number=\"" + number + "\" at=\"" + at
                                 + "\"/>\n");
                 else if (c == WHITE)
-                    m_out.print("<White number=\"" + number + "\" at=\"" + p
+                    m_out.print("<White number=\"" + number + "\" at=\"" + at
                                 + "\"/>\n");
             }
             else if (comment == null || comment.equals(""))

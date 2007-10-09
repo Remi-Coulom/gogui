@@ -54,6 +54,13 @@ public final class XmlReader
                 size = m_boardSize;
             else
                 size = Math.max(DEFAULT_BOARDSIZE, m_boardSize);
+            // Prune root node, if it is an unnecessary empty node
+            if (m_root.isEmpty() && m_root.getNumberChildren() == 1
+                && m_root.getChild().getMove() == null)
+            {
+                m_root = m_root.getChild();
+                m_root.setFather(null);
+            }
             m_tree = new GameTree(size, m_root);
             m_tree.getGameInformation(m_root).copyFrom(m_gameInformation);
         }
@@ -98,69 +105,97 @@ public final class XmlReader
     private class ContentHandler
         extends DefaultHandler
     {
-        public void startElement(String namespaceURI, String localName,
+        public void startElement(String namespaceURI, String name,
                                  String qualifiedName, Attributes atts)
             throws SAXException
-        {    
-            if (localName.equals("AddBlack"))
+        {
+            m_element = name;
+            if (name.equals("Application"))
+                checkParent("Information");
+            else if (name.equals("AddBlack"))
                 handleSetup(BLACK, atts);
-            else if (localName.equals("AddWhite"))
+            else if (name.equals("AddWhite"))
                 handleSetup(WHITE, atts);
-            else if (localName.equals("Black"))
+            else if (name.equals("Arg"))
+                checkParent("SGF");
+            else if (name.equals("Black"))
                 handleMove(BLACK, atts);
-            else if (localName.equals("Delete"))
+            else if (name.equals("BlackPlayer"))
+                checkParent("Information");
+            else if (name.equals("BlackRank"))
+                checkParent("Information");
+            else if (name.equals("BoardSize"))
+                checkParent("Information");
+            else if (name.equals("Comment"))
+                checkParent("Nodes", "Node", "Variation");
+            else if (name.equals("Date"))
+                checkParent("Information");
+            else if (name.equals("Delete"))
                 handleSetup(EMPTY, atts);
-            else if (localName.equals("GoGame"))
+            else if (name.equals("Go"))
+                checkParent();
+            else if (name.equals("GoGame"))
                 handleGoGame();
-            else if (localName.equals("Mark"))
+            else if (name.equals("Information"))
+                checkParent("GoGame");
+            else if (name.equals("Komi"))
+                checkParent("Information");
+            else if (name.equals("Mark"))
                 handleMark(atts);
-            else if (localName.equals("Node"))
+            else if (name.equals("Node"))
                 createNode();
-            else if (localName.equals("Nodes"))
+            else if (name.equals("Nodes"))
                 handleNodes();
-            else if (localName.equals("SGF"))
+            else if (name.equals("Result"))
+                checkParent("Information");
+            else if (name.equals("SGF"))
                 handleSGF(atts);
-            else if (localName.equals("Variation"))
+            else if (name.equals("Time"))
+                checkParent("Information");
+            else if (name.equals("Variation"))
                 handleVariation();
-            else if (localName.equals("White"))
+            else if (name.equals("White"))
                 handleMove(WHITE, atts);
-            else if (! localName.equals("Application")
-                     && ! localName.equals("Arg")
-                     && ! localName.equals("BlackPlayer")
-                     && ! localName.equals("BlackRank")
-                     && ! localName.equals("BoardSize")
-                     && ! localName.equals("Comment")
-                     && ! localName.equals("Go")
-                     && ! localName.equals("Information")
-                     && ! localName.equals("WhitePlayer")
-                     && ! localName.equals("WhiteRank"))
-                setWarning("Ignoring unknown element: " + localName);
-            m_element.push(localName);
+            else if (name.equals("WhitePlayer"))
+                checkParent("Information");
+            else if (name.equals("WhiteRank"))
+                checkParent("Information");
+            else
+                setWarning("Ignoring unknown element: " + name);
+            m_elementStack.push(name);
             m_characters.setLength(0);
         }
 
-        public void endElement(String namespaceURI, String localName,
+        public void endElement(String namespaceURI, String name,
                                String qualifiedName) throws SAXException
         {
-            if (localName.equals("Arg"))
+            if (name.equals("Arg"))
                 handleEndArg();
-            else if (localName.equals("BlackPlayer"))
+            else if (name.equals("Date"))
+                handleEndDate();
+            else if (name.equals("BlackPlayer"))
                 handleEndPlayer(BLACK);
-            else if (localName.equals("BlackRank"))
+            else if (name.equals("BlackRank"))
                 handleEndRank(BLACK);
-            else if (localName.equals("BoardSize"))
+            else if (name.equals("BoardSize"))
                 handleEndBoardSize();
-            else if (localName.equals("Comment"))
+            else if (name.equals("Comment"))
                 handleEndComment();
-            else if (localName.equals("SGF"))
+            else if (name.equals("Komi"))
+                handleEndKomi();
+            else if (name.equals("Result"))
+                handleEndResult();
+            else if (name.equals("SGF"))
                 handleEndSgf();
-            else if (localName.equals("WhitePlayer"))
+            else if (name.equals("Time"))
+                handleEndTime();
+            else if (name.equals("WhitePlayer"))
                 handleEndPlayer(WHITE);
-            else if (localName.equals("WhiteRank"))
+            else if (name.equals("WhiteRank"))
                 handleEndRank(WHITE);
-            else if (localName.equals("Variation"))
+            else if (name.equals("Variation"))
                 handleEndVariation();
-            m_element.pop();
+            m_elementStack.pop();
         }
 
         public void characters(char[] ch, int start, int length)
@@ -168,7 +203,7 @@ public final class XmlReader
         {
             m_characters.append(ch, start, length);
         }
-    }   
+    }
 
     private static final int DEFAULT_BOARDSIZE = 19;
 
@@ -184,8 +219,8 @@ public final class XmlReader
     */
     private int m_boardSize;
 
-    /** Current element. */
-    private Stack<String> m_element = new Stack<String>();
+    /** Element stack. */
+    private Stack<String> m_elementStack = new Stack<String>();
 
     /** Current node. */
     private Node m_node;
@@ -197,6 +232,9 @@ public final class XmlReader
     private Node m_root;
 
     private GameTree m_tree;
+
+    /** Current element */
+    private String m_element;
 
     /** Type of current SGF element. */
     private String m_sgfType;
@@ -210,6 +248,21 @@ public final class XmlReader
     /** Contains strings with warnings. */
     private final Set<String> m_warnings = new TreeSet<String>();
 
+    private void checkParent(String... parents) throws SAXException
+    {
+        String parent = parentElement();
+        if (parents.length == 0)
+        {
+            if (parent == null)
+                return;
+            throwError("Element " + m_element + " must be root element");
+        }
+        for (int i = 0; i < parents.length; ++i)
+            if (parents[i].equals(parent))
+                return;
+        throwError("Element " + m_element + " cannot be child of " + parent);
+    }
+
     private void createNode()
     {
         Node node = new Node();
@@ -220,18 +273,14 @@ public final class XmlReader
         m_node = node;
     }
 
-    private String currentElement()
-    {
-        if (m_element.isEmpty())
-            return null;
-        return m_element.peek();
-    }
-
     private GoPoint getAt(Attributes atts) throws SAXException
     {
         String value = atts.getValue("at");
         if (value == null)
             throwError("Missing at-property");
+        value = value.trim();
+        if (value.equals(""))
+            return null;
         GoPoint p;
         try
         {
@@ -281,6 +330,24 @@ public final class XmlReader
         m_node.setComment(m_characters.toString());
     }
 
+    private void handleEndDate() throws SAXException
+    {
+        m_gameInformation.setDate(m_characters.toString());
+    }
+
+    private void handleEndKomi() throws SAXException
+    {
+        String komi = m_characters.toString();
+        try
+        {
+            m_gameInformation.setKomi(Komi.parseKomi(komi));
+        }
+        catch (InvalidKomiException e)
+        {
+            setWarning("Invalid komi: " + komi);
+        }
+    }
+
     private void handleEndPlayer(GoColor c) throws SAXException
     {
         m_gameInformation.setPlayer(c, m_characters.toString());
@@ -291,10 +358,28 @@ public final class XmlReader
         m_gameInformation.setRank(c, m_characters.toString());
     }
 
+    private void handleEndResult() throws SAXException
+    {
+        m_gameInformation.setResult(m_characters.toString());
+    }
+
     private void handleEndSgf() throws SAXException
     {
         if (m_sgfType != null)
             m_node.addSgfProperty(m_sgfType, m_sgfArgs);
+    }
+
+    private void handleEndTime() throws SAXException
+    {
+        String time = m_characters.toString();
+        try
+        {
+            m_gameInformation.setTimeSettings(TimeSettings.parse(time));
+        }
+        catch (ErrorMessage e)
+        {
+            setWarning("Unknown time settings: " + e.getMessage());
+        }
     }
 
     private void handleEndVariation() throws SAXException
@@ -304,12 +389,14 @@ public final class XmlReader
 
     private void handleGoGame() throws SAXException
     {
+        checkParent("Go");
         if (++m_numberGames > 1)
             throwError("Multiple games per file not supported");
-    }            
+    }
 
     private void handleMark(Attributes atts) throws SAXException
     {
+        checkParent("Node");
         if (m_node == null)
             createNode();
         GoPoint p = getAt(atts);
@@ -344,7 +431,8 @@ public final class XmlReader
 
     private void handleMove(GoColor c, Attributes atts) throws SAXException
     {
-        if (! currentElement().equals("Node"))
+        checkParent("Nodes", "Variation");
+        if (! parentElement().equals("Node"))
             createNode();
         GoPoint p = getAt(atts);
         m_node.setMove(Move.get(c, p));
@@ -352,12 +440,14 @@ public final class XmlReader
 
     private void handleNodes() throws SAXException
     {
+        checkParent("GoGame");
         if (++m_numberTrees > 1)
-            throwError("More than one Nodes elements in element GoGame");
-    }            
+            throwError("More than one Nodes element in element GoGame");
+    }
 
     private void handleSetup(GoColor c, Attributes atts) throws SAXException
     {
+        checkParent("Node");
         if (m_node == null)
             createNode();
         GoPoint p = getAt(atts);
@@ -366,17 +456,26 @@ public final class XmlReader
 
     private void handleSGF(Attributes atts) throws SAXException
     {
+        checkParent("Node");
         m_sgfType = atts.getValue("type");
         m_sgfArgs.clear();
     }
 
     private void handleVariation() throws SAXException
     {
+        checkParent("Nodes", "Variation");
         if (m_node == null)
             throwError("Variation without main node");
         assert m_node.hasFather();
         m_variation.push(m_node);
         m_node = null;
+    }
+
+    private String parentElement()
+    {
+        if (m_elementStack.isEmpty())
+            return null;
+        return m_elementStack.peek();
     }
 
     private void setWarning(String message)

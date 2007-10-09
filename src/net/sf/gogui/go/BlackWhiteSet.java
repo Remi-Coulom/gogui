@@ -20,6 +20,15 @@ public class BlackWhiteSet<T>
         m_elementWhite = elementWhite;
     }
 
+    public boolean equals(Object object)
+    {
+        if (object == null || object.getClass() != getClass())
+            return false;
+        BlackWhiteSet set = (BlackWhiteSet)object;
+        return (set.m_elementBlack.equals(m_elementBlack)
+                && set.m_elementWhite.equals(m_elementWhite));
+    }
+
     public T get(GoColor c)
     {
         if (c == BLACK)

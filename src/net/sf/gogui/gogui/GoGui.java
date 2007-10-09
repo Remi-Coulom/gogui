@@ -640,18 +640,12 @@ public class GoGui
 
     public void actionExportXml()
     {
-        File file = showSave("Export XML");
-        if (file == null)
-            return;
-        try
-        {
-            String version = "GoGui:" + Version.get();
-            new XmlWriter(new FileOutputStream(file), getTree(), version);
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Export failed", e);
-        }
+        exportXml(true);
+    }
+
+    public void actionExportXmlNoPass()
+    {
+        exportXml(false);
     }
 
     public void actionFind()
@@ -907,13 +901,13 @@ public class GoGui
             if (warnings != null)
             {
                 String optionalMessage =
-                    "This file does not fully follow the XML format as " +
-                    "defined by Jago (http://www.rene-grothmann.de/jago). " +
+                    "There were problems reading this XML file.\n" +
                     "Some information might have been not read correctly " +
                     "or will be lost when modifying and saving the file.\n" +
                     "(" +
                     warnings.replaceAll("\n\\z", ")").replaceAll("\n", ")\n(");
-                showWarning("Unknown XML format", optionalMessage, true);
+                showWarning("Warnings reading this file",
+                            optionalMessage, true);
             }
             m_game.init(reader.getTree());
             m_guiBoard.initSize(getBoard().getSize());
@@ -3043,6 +3037,23 @@ public class GoGui
             return false;
         }
         return true;
+    }
+
+    private void exportXml(boolean usePass)
+    {
+        File file = showSave("Export XML");
+        if (file == null)
+            return;
+        try
+        {
+            String version = "GoGui:" + Version.get();
+            new XmlWriter(new FileOutputStream(file), getTree(), version,
+                          usePass);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
     }
 
     private String formatCommand(String command)

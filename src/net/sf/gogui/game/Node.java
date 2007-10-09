@@ -13,6 +13,9 @@ import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.BlackWhiteEmptySet;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.EMPTY;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
@@ -33,6 +36,13 @@ final class ExtraInfo
     public float m_value = Float.NaN;
 
     public MoreExtraInfo m_moreExtraInfo;
+
+    public boolean isEmpty()
+    {
+        return ((m_marked == null || m_marked.size() == 0)
+                && m_value == Float.NaN
+                && (m_moreExtraInfo == null || m_moreExtraInfo.isEmpty()));
+    }
 }
 
 /** More extended info.
@@ -49,6 +59,15 @@ final class MoreExtraInfo
     public Map<GoPoint,String> m_label;
 
     public GameInformation m_gameInformation;
+
+    public boolean isEmpty()
+    {
+        return ((m_setupInfo == null || m_setupInfo.isEmpty())
+                && (m_timeInfo == null || m_timeInfo.isEmpty())
+                && (m_sgfProperties == null || m_sgfProperties.isEmpty())
+                && (m_label == null || m_label.size() == 0)
+                && (m_gameInformation == null || m_gameInformation.isEmpty()));
+    }
 }
 
 final class SetupInfo
@@ -61,6 +80,13 @@ final class SetupInfo
     public BlackWhiteEmptySet<PointList> m_stones
         = new BlackWhiteEmptySet<PointList>(new PointList(), new PointList(),
                                             new PointList());
+
+    public boolean isEmpty()
+    {
+        return (m_player == null && m_stones.get(BLACK).size() == 0
+                 && m_stones.get(WHITE).size() == 0
+                && m_stones.get(EMPTY).size() == 0);
+    }
 }
 
 final class TimeInfo
@@ -70,6 +96,13 @@ final class TimeInfo
 
     public BlackWhiteSet<Double> m_timeLeft
         = new BlackWhiteSet<Double>(Double.NaN, Double.NaN);
+
+    public boolean isEmpty()
+    {
+        return (m_movesLeft.get(BLACK) == -1 && m_movesLeft.get(WHITE) == -1
+                && m_timeLeft.get(BLACK) == Double.NaN
+                && m_timeLeft.get(WHITE) == Double.NaN);
+    }
 }
 
 /** Node in a game tree.
@@ -497,6 +530,14 @@ public final class Node
         return (node.getChildIndex(this) != -1);
     }
 
+    /** Return true, if node stores no information.
+    */
+    public boolean isEmpty()
+    {
+        return (m_comment == null && m_move == null
+                && (m_extraInfo == null || m_extraInfo.isEmpty()));
+    }
+
     /** Make child the first child of this node.
         @param child One of the child nodes of this node.
     */
@@ -591,8 +632,6 @@ public final class Node
     }
 
     /** Set father of this node.
-        Usually you don't need this function and it may become deprecated
-        in the future. Use Node.append() to construct trees.
         @param father The new father.
     */
     public void setFather(Node father)

@@ -5,6 +5,7 @@
 package net.sf.gogui.game;
 
 import java.util.Locale;
+import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -35,12 +36,12 @@ public class GameInformation
         m_handicap = info.getHandicap();
         m_komi = info.getKomi();
         m_date = info.getDate();
-        m_playerBlack = info.getPlayer(BLACK);
-        m_playerWhite = info.getPlayer(WHITE);
+        m_player.set(BLACK, info.getPlayer(BLACK));
+        m_player.set(WHITE, info.getPlayer(WHITE));
         m_result = info.getResult();
         m_rules = info.getRules();
-        m_rankBlack = info.getRank(BLACK);
-        m_rankWhite = info.getRank(WHITE);
+        m_rank.set(BLACK, info.getRank(BLACK));
+        m_rank.set(WHITE, info.getRank(WHITE));
         m_timeSettings = info.getTimeSettings();
     }
 
@@ -52,14 +53,10 @@ public class GameInformation
         return (m_handicap == info.getHandicap()
                 && ObjectUtil.equals(m_komi, info.getKomi())
                 && ObjectUtil.equals(m_date, info.getDate())
-                && ObjectUtil.equals(m_playerBlack,
-                                     info.getPlayer(BLACK))
-                && ObjectUtil.equals(m_playerWhite,
-                                     info.getPlayer(WHITE))
+                && ObjectUtil.equals(m_player, info.m_player)
                 && ObjectUtil.equals(m_result, info.getResult())
                 && ObjectUtil.equals(m_rules, info.getRules())
-                && ObjectUtil.equals(m_rankBlack, info.getRank(BLACK))
-                && ObjectUtil.equals(m_rankWhite, info.getRank(WHITE))
+                && ObjectUtil.equals(m_rank, info.m_rank)
                 && ObjectUtil.equals(m_timeSettings, info.getTimeSettings()));
     }
 
@@ -86,11 +83,7 @@ public class GameInformation
     */
     public String getPlayer(GoColor c)
     {
-        assert c.isBlackWhite();
-        if (c == BLACK)
-            return m_playerBlack;
-        else
-            return m_playerWhite;
+        return m_player.get(c);
     }
 
     /** Get player rank.
@@ -98,11 +91,7 @@ public class GameInformation
     */
     public String getRank(GoColor c)
     {
-        assert c.isBlackWhite();
-        if (c == BLACK)
-            return m_rankBlack;
-        else
-            return m_rankWhite;
+        return m_rank.get(c);
     }
 
     public String getResult()
@@ -131,6 +120,15 @@ public class GameInformation
         return 0;
     }
 
+    public boolean isEmpty()
+    {
+        return (m_handicap == 0 && m_komi == null && m_date == null
+                && m_player.get(BLACK) == null && m_player.get(WHITE) == null
+                && m_rank.get(BLACK) == null && m_rank.get(WHITE) == null
+                && m_result == null && m_rules == null
+                && m_timeSettings == null);
+    }
+
     /** Try to parse rules.
         @return Score.ScoringMethod.TERRITORY if rules string (to lowercase)
         is "japanese", Score.ScoringMethod.AREA otherwise.
@@ -150,7 +148,7 @@ public class GameInformation
 
     public void setDate(String date)
     {
-        m_date = date;
+        m_date = checkEmpty(date);
     }
 
     public void setHandicap(int handicap)
@@ -165,30 +163,22 @@ public class GameInformation
 
     public void setPlayer(GoColor c, String name)
     {
-        assert c.isBlackWhite();
-        if (c == BLACK)
-            m_playerBlack = name;
-        else
-            m_playerWhite = name;
+        m_player.set(c, checkEmpty(name));
     }
 
     public void setRank(GoColor c, String rank)
     {
-        assert c.isBlackWhite();
-        if (c == BLACK)
-            m_rankBlack = rank;
-        else
-            m_rankWhite = rank;
+        m_rank.set(c, checkEmpty(rank));
     }
 
     public void setResult(String result)
     {
-        m_result = result;
+        m_result = checkEmpty(result);
     }
 
     public void setRules(String rules)
     {
-        m_rules = rules;
+        m_rules = checkEmpty(rules);
     }
 
     /** Set time settings.
@@ -205,8 +195,8 @@ public class GameInformation
     */
     public String suggestGameName()
     {
-        String playerBlack = m_playerBlack;
-        String playerWhite = m_playerWhite;
+        String playerBlack = m_player.get(BLACK);
+        String playerWhite = m_player.get(WHITE);
         boolean playerBlackKnown = ! StringUtil.isEmpty(playerBlack);
         boolean playerWhiteKnown = ! StringUtil.isEmpty(playerWhite);
         if (! playerBlackKnown && ! playerWhiteKnown)
@@ -228,11 +218,9 @@ public class GameInformation
 
     private String m_date;
 
-    private String m_playerBlack;
+    private BlackWhiteSet<String> m_player = new BlackWhiteSet<String>();
 
-    private String m_playerWhite;
-
-    private String m_rankBlack;
+    private BlackWhiteSet<String> m_rank = new BlackWhiteSet<String>();
 
     private String m_rankWhite;
 
@@ -241,4 +229,11 @@ public class GameInformation
     private String m_rules;
 
     private TimeSettings m_timeSettings;
+
+    private String checkEmpty(String s)
+    {
+        if (s == null || s.trim().equals(""))
+            return null;
+        return s;
+    }
 }

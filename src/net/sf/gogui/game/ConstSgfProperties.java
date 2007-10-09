@@ -18,4 +18,6 @@ public interface ConstSgfProperties
     String getValue(String key, int index);
 
     boolean hasKey(String key);
+
+    boolean isEmpty();
 }

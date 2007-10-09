@@ -49,6 +49,11 @@ New menu item File / Export / PNG Image.
 </listitem>
 <listitem>
 <simpara>
+Import and export Go games in XML format.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: mark points on board if text is selected in the GtpShell that
 contains points (like it is already done with text selection in comment
 or in text windows created by analyze commands)
