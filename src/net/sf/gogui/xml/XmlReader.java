@@ -136,6 +136,8 @@ public final class XmlReader
                 checkParent();
             else if (name.equals("GoGame"))
                 handleGoGame();
+            else if (name.equals("Handicap"))
+                checkParent("Information");
             else if (name.equals("Information"))
                 checkParent("GoGame");
             else if (name.equals("Komi"))
@@ -181,6 +183,8 @@ public final class XmlReader
                 handleEndBoardSize();
             else if (name.equals("Comment"))
                 handleEndComment();
+            else if (name.equals("Handicap"))
+                handleEndHandicap();
             else if (name.equals("Komi"))
                 handleEndKomi();
             else if (name.equals("Result"))
@@ -311,18 +315,11 @@ public final class XmlReader
 
     private void handleEndBoardSize() throws SAXException
     {
-        try
-        {
-            int boardSize = Integer.parseInt(m_characters.toString());
-            if (boardSize < 1 || boardSize > GoPoint.MAX_SIZE)
-                throw new SAXException("Unsupported board size");
-            m_isBoardSizeKnown = true;
-            m_boardSize = boardSize;
-        }
-        catch (NumberFormatException e)
-        {
-            throw new SAXException("Invalid board size");
-        }
+        int boardSize = parseInt();
+        if (boardSize < 1 || boardSize > GoPoint.MAX_SIZE)
+            throw new SAXException("Unsupported board size");
+        m_isBoardSizeKnown = true;
+        m_boardSize = boardSize;
     }
 
     private void handleEndComment() throws SAXException
@@ -333,6 +330,15 @@ public final class XmlReader
     private void handleEndDate() throws SAXException
     {
         m_gameInformation.setDate(m_characters.toString());
+    }
+
+    private void handleEndHandicap() throws SAXException
+    {
+        int handicap = parseInt();
+        if (handicap == 1 || handicap < 0)
+            setWarning("Ignoring invalif handicap: " + handicap);
+        else
+            m_gameInformation.setHandicap(handicap);
     }
 
     private void handleEndKomi() throws SAXException
@@ -476,6 +482,18 @@ public final class XmlReader
         if (m_elementStack.isEmpty())
             return null;
         return m_elementStack.peek();
+    }
+
+    private int parseInt() throws SAXException
+    {
+        try
+        {
+            return Integer.parseInt(m_characters.toString());
+        }
+        catch (NumberFormatException e)
+        {
+            throw new SAXException("Expected integer in element " + m_element);
+        }
     }
 
     private void setWarning(String message)
