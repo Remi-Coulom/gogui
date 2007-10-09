@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// $Id$
+// BlackWhiteSet.java
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.go;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import net.sf.gogui.util.ObjectUtil;
 
 /** A set containing one element for Black and one for White. */
 public class BlackWhiteSet<T>
@@ -25,8 +26,8 @@ public class BlackWhiteSet<T>
         if (object == null || object.getClass() != getClass())
             return false;
         BlackWhiteSet set = (BlackWhiteSet)object;
-        return (set.m_elementBlack.equals(m_elementBlack)
-                && set.m_elementWhite.equals(m_elementWhite));
+        return (ObjectUtil.equals(set.m_elementBlack, m_elementBlack)
+                && ObjectUtil.equals(set.m_elementWhite, m_elementWhite));
     }
 
     public T get(GoColor c)

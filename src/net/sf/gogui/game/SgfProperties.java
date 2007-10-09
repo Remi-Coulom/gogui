@@ -16,7 +16,7 @@ import java.util.TreeMap;
     @todo Iteration is inefficient, reimplement (but without sacrificing
     const-correctness)
 */
-final class SgfProperties
+public final class SgfProperties
     implements ConstSgfProperties
 {
     public SgfProperties()

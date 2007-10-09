@@ -18,6 +18,7 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.game.ConstSgfProperties;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -104,9 +105,9 @@ public final class SgfReaderTest
         assertNotNull(settings);
         assertFalse(settings.getUseByoyomi());
         assertEquals(1800000L, settings.getPreByoyomi());
-        Map<String,String> sgf = root.getSgfPropertiesUnmodifiable();
+        ConstSgfProperties sgf = root.getSgfPropertiesConst();
         assertNotNull(sgf);
-        assertEquals("[8 xyz 16]", sgf.get("OT"));
+        assertEquals("8 xyz 16", sgf.getValue("OT", 0));
     }
 
     /** Test that OT property in unknown format is replaced if changed. */
@@ -131,9 +132,9 @@ public final class SgfReaderTest
         assertEquals(1800000L, settings.getPreByoyomi());
         assertEquals(30000L, settings.getByoyomi());
         assertEquals(5, settings.getByoyomiMoves());
-        Map<String,String> sgf = root.getSgfPropertiesUnmodifiable();
+        ConstSgfProperties sgf = root.getSgfPropertiesConst();
         if (sgf != null)
-            assertEquals(null, sgf.get("OT"));
+            assertFalse(sgf.hasKey("OT"));
     }
 
     /** Test FF4 example after writing and reading again.
@@ -219,11 +220,10 @@ public final class SgfReaderTest
         checkLabel(node, "N1", "12345678");
         node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 0);
-        checkSgfProperty(node, "AR",
-                         "[aa:sc][sa:ac][aa:sa][aa:ac][cd:cj][gd:md][fh:ij]"
-                         + "[kj:nh]");
-        checkSgfProperty(node, "DD", "[kq:os][dq:hs]");
-        checkSgfProperty(node, "LN", "[pj:pd][nf:ff][ih:fj][kh:nj]");
+        checkSgfProperty(node, "AR", "aa:sc", "sa:ac", "aa:sa", "aa:ac",
+                         "cd:cj", "gd:md", "fh:ij", "kj:nh");
+        checkSgfProperty(node, "DD", "kq:os", "dq:hs");
+        checkSgfProperty(node, "LN", "pj:pd", "nf:ff", "ih:fj", "kh:nj");
         node = root.getChildConst(3);
         assertEquals(node.getNumberChildren(), 6);
         assertEquals(node.getComment(),
@@ -255,10 +255,12 @@ public final class SgfReaderTest
     }
 
     private void checkSgfProperty(ConstNode node, String property,
-                                  String value)
+                                  String... value)
         throws InvalidPointException
     {
-        assertEquals(value, node.getSgfPropertiesUnmodifiable().get(property));
+        ConstSgfProperties sgf = node.getSgfPropertiesConst();
+        for (int i = 0; i < value.length; ++i)
+            assertEquals(value[i], sgf.getValue(property, i));
     }
 
     private void checkSetup(ConstNode node, int black, int white, int empty)
