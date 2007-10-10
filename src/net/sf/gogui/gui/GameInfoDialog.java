@@ -108,7 +108,7 @@ public final class GameInfoDialog
         m_date = createEntry("Date", 12, info.getDate(),
                              "Date when the game was played", labels, values);
         m_rules = createEntry("Rules", 12, info.getRules(),
-                              "Used rules for the game", labels, values);
+                              "Rules used for the game", labels, values);
         String komi = "";
         if (info.getKomi() != null)
             komi = info.getKomi().toString();
