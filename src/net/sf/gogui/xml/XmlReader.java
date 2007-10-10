@@ -26,6 +26,8 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -68,7 +70,7 @@ public final class XmlReader
                 m_root.setFather(null);
             }
             m_tree = new GameTree(size, m_root);
-            m_tree.getGameInformation(m_root).copyFrom(m_gameInformation);
+            m_tree.getGameInformation(m_root).copyFrom(m_info);
         }
         catch (SAXException e)
         {
@@ -116,7 +118,9 @@ public final class XmlReader
             throws SAXException
         {
             m_element = name;
-            if (name.equals("Application"))
+            if (name.equals("Annotation"))
+                checkParent("Information");
+            else if (name.equals("Application"))
                 checkParent("Information");
             else if (name.equals("AddBlack"))
                 handleSetup(BLACK, atts);
@@ -130,10 +134,14 @@ public final class XmlReader
                 checkParent("Information");
             else if (name.equals("BlackRank"))
                 checkParent("Information");
+            else if (name.equals("BlackTeam"))
+                checkParent("Information");
             else if (name.equals("BoardSize"))
                 checkParent("Information");
             else if (name.equals("Comment"))
                 checkParent("Nodes", "Node", "Variation");
+            else if (name.equals("Copyright"))
+                checkParent("Information");
             else if (name.equals("Date"))
                 checkParent("Information");
             else if (name.equals("Delete"))
@@ -156,9 +164,15 @@ public final class XmlReader
                 handleNodes();
             else if (name.equals("Result"))
                 checkParent("Information");
+            else if (name.equals("Round"))
+                checkParent("Information");
+            else if (name.equals("Source"))
+                checkParent("Information");
             else if (name.equals("SGF"))
                 handleSGF(atts);
             else if (name.equals("Time"))
+                checkParent("Information");
+            else if (name.equals("User"))
                 checkParent("Information");
             else if (name.equals("Variation"))
                 handleVariation();
@@ -167,6 +181,8 @@ public final class XmlReader
             else if (name.equals("WhitePlayer"))
                 checkParent("Information");
             else if (name.equals("WhiteRank"))
+                checkParent("Information");
+            else if (name.equals("WhiteTeam"))
                 checkParent("Information");
             else
                 setWarning("Ignoring unknown element: " + name);
@@ -177,34 +193,48 @@ public final class XmlReader
         public void endElement(String namespaceURI, String name,
                                String qualifiedName) throws SAXException
         {
-            if (name.equals("Arg"))
-                handleEndArg();
-            else if (name.equals("Date"))
-                handleEndDate();
+            if (name.equals("Annotation"))
+                m_info.set(StringInfo.ANNOTATION, getCharacters());
+            else if (name.equals("Arg"))
+                m_sgfArgs.add(getCharacters());
             else if (name.equals("BlackPlayer"))
-                handleEndPlayer(BLACK);
+                m_info.set(StringInfoColor.NAME, BLACK, getCharacters());
             else if (name.equals("BlackRank"))
-                handleEndRank(BLACK);
+                m_info.set(StringInfoColor.RANK, BLACK, getCharacters());
+            else if (name.equals("BlackTeam"))
+                m_info.set(StringInfoColor.TEAM, BLACK, getCharacters());
             else if (name.equals("BoardSize"))
                 handleEndBoardSize();
             else if (name.equals("Comment"))
-                handleEndComment();
+                m_node.setComment(getCharacters());
+            else if (name.equals("Copyright"))
+                m_info.set(StringInfo.COPYRIGHT, getCharacters());
+            else if (name.equals("Date"))
+                m_info.set(StringInfo.DATE, getCharacters());
             else if (name.equals("Handicap"))
                 handleEndHandicap();
             else if (name.equals("Komi"))
                 handleEndKomi();
             else if (name.equals("Result"))
-                handleEndResult();
+                m_info.set(StringInfo.RESULT, getCharacters());
+            else if (name.equals("Round"))
+                m_info.set(StringInfo.ROUND, getCharacters());
             else if (name.equals("SGF"))
                 handleEndSgf();
+            else if (name.equals("Source"))
+                m_info.set(StringInfo.SOURCE, getCharacters());
             else if (name.equals("Time"))
                 handleEndTime();
+            else if (name.equals("User"))
+                m_info.set(StringInfo.USER, getCharacters());
             else if (name.equals("WhitePlayer"))
-                handleEndPlayer(WHITE);
+                m_info.set(StringInfoColor.NAME, WHITE, getCharacters());
             else if (name.equals("WhiteRank"))
-                handleEndRank(WHITE);
+                m_info.set(StringInfoColor.RANK, WHITE, getCharacters());
+            else if (name.equals("WhiteTeam"))
+                m_info.set(StringInfoColor.TEAM, WHITE, getCharacters());
             else if (name.equals("Variation"))
-                handleEndVariation();
+                m_node = m_variation.pop();
             m_elementStack.pop();
         }
 
@@ -278,7 +308,7 @@ public final class XmlReader
 
     private Stack<Node> m_variation = new Stack<Node>();
 
-    private GameInformation m_gameInformation = new GameInformation();
+    private GameInformation m_info = new GameInformation();
 
     private Node m_root;
 
@@ -356,9 +386,9 @@ public final class XmlReader
         return null; // Unreachable; avoid compiler error
     }
 
-    private void handleEndArg() throws SAXException
+    private String getCharacters()
     {
-        m_sgfArgs.add(m_characters.toString());
+        return m_characters.toString();
     }
 
     private void handleEndBoardSize() throws SAXException
@@ -370,51 +400,26 @@ public final class XmlReader
         m_boardSize = boardSize;
     }
 
-    private void handleEndComment() throws SAXException
-    {
-        m_node.setComment(m_characters.toString());
-    }
-
-    private void handleEndDate() throws SAXException
-    {
-        m_gameInformation.setDate(m_characters.toString());
-    }
-
     private void handleEndHandicap() throws SAXException
     {
         int handicap = parseInt();
         if (handicap == 1 || handicap < 0)
             setWarning("Ignoring invalif handicap: " + handicap);
         else
-            m_gameInformation.setHandicap(handicap);
+            m_info.setHandicap(handicap);
     }
 
     private void handleEndKomi() throws SAXException
     {
-        String komi = m_characters.toString();
+        String komi = getCharacters();
         try
         {
-            m_gameInformation.setKomi(Komi.parseKomi(komi));
+            m_info.setKomi(Komi.parseKomi(komi));
         }
         catch (InvalidKomiException e)
         {
             setWarning("Invalid komi: " + komi);
         }
-    }
-
-    private void handleEndPlayer(GoColor c) throws SAXException
-    {
-        m_gameInformation.setPlayer(c, m_characters.toString());
-    }
-
-    private void handleEndRank(GoColor c) throws SAXException
-    {
-        m_gameInformation.setRank(c, m_characters.toString());
-    }
-
-    private void handleEndResult() throws SAXException
-    {
-        m_gameInformation.setResult(m_characters.toString());
     }
 
     private void handleEndSgf() throws SAXException
@@ -425,20 +430,15 @@ public final class XmlReader
 
     private void handleEndTime() throws SAXException
     {
-        String time = m_characters.toString();
+        String time = getCharacters();
         try
         {
-            m_gameInformation.setTimeSettings(TimeSettings.parse(time));
+            m_info.setTimeSettings(TimeSettings.parse(time));
         }
         catch (ErrorMessage e)
         {
             setWarning("Unknown time settings: " + e.getMessage());
         }
-    }
-
-    private void handleEndVariation() throws SAXException
-    {
-        m_node = m_variation.pop();
     }
 
     private void handleGoGame() throws SAXException
@@ -536,7 +536,7 @@ public final class XmlReader
     {
         try
         {
-            return Integer.parseInt(m_characters.toString());
+            return Integer.parseInt(getCharacters());
         }
         catch (NumberFormatException e)
         {

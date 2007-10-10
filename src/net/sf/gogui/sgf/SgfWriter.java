@@ -13,6 +13,8 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstSgfProperties;
 import net.sf.gogui.game.MarkType;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
@@ -215,13 +217,13 @@ public class SgfWriter
 
     private void printGameInformation(ConstGameInformation info)
     {
-        String result = info.getResult();
-        String playerBlack = info.getPlayer(BLACK);
-        String playerWhite = info.getPlayer(WHITE);
-        String rankBlack = info.getRank(BLACK);
-        String rankWhite = info.getRank(WHITE);
-        String date = info.getDate();
-        String rules = info.getRules();
+        String result = info.get(StringInfo.RESULT);
+        String playerBlack = info.get(StringInfoColor.NAME, BLACK);
+        String playerWhite = info.get(StringInfoColor.NAME, WHITE);
+        String rankBlack = info.get(StringInfoColor.RANK, BLACK);
+        String rankWhite = info.get(StringInfoColor.RANK, WHITE);
+        String date = info.get(StringInfo.DATE);
+        String rules = info.get(StringInfo.RULES);
         int handicap = info.getHandicap();
         Komi komi = info.getKomi();
         TimeSettings timeSettings = info.getTimeSettings();

@@ -502,7 +502,8 @@ public final class NodeUtil
         if (info == null)
             info = new GameInformation();
         GameTree tree = new GameTree(board.getSize(), info.getKomi(), null,
-                                     info.getRules(), info.getTimeSettings());
+                                     info.get(StringInfo.RULES),
+                                     info.getTimeSettings());
         Node root = tree.getRoot();
         for (GoPoint p : board)
         {
@@ -599,28 +600,27 @@ public final class NodeUtil
         if (info != null)
         {
             buffer.append("GameInfo:\n");
-            if (info.getDate() != null)
-                appendInfo(buffer, "Date", info.getDate());
+            for (StringInfo type : EnumSet.allOf(StringInfo.class))
+            {
+                String s = info.get(type);
+                if (s != null)
+                    appendInfo(buffer, type.toString(), s);
+            }
+            for (StringInfoColor type : EnumSet.allOf(StringInfoColor.class))
+            {
+                String s = info.get(type, BLACK);
+                if (s != null)
+                    appendInfo(buffer, type.toString() + "[B]", s);
+                s = info.get(type, WHITE);
+                if (s != null)
+                    appendInfo(buffer, type.toString() + "[W]", s);
+            }
             if (info.getHandicap() != 0)
-                appendInfo(buffer, "Handicap", info.getHandicap());
+                appendInfo(buffer, "HANDICAP", info.getHandicap());
             if (info.getKomi() != null)
-                appendInfo(buffer, "Komi", info.getKomi().toString());
-            if (info.getPlayer(BLACK) != null)
-                appendInfo(buffer, "PlayerBlack",
-                           info.getPlayer(BLACK));
-            if (info.getPlayer(WHITE) != null)
-                appendInfo(buffer, "PlayerWhite",
-                           info.getPlayer(WHITE));
-            if (info.getRank(BLACK) != null)
-                appendInfo(buffer, "RankBlack", info.getRank(BLACK));
-            if (info.getRank(WHITE) != null)
-                appendInfo(buffer, "RankWhite", info.getRank(WHITE));
-            if (info.getResult() != null)
-                appendInfo(buffer, "Result", info.getResult());
-            if (info.getRules() != null)
-                appendInfo(buffer, "Rules", info.getRules());
+                appendInfo(buffer, "KOMI", info.getKomi().toString());
             if (info.getTimeSettings() != null)
-                appendInfo(buffer, "TimeSettings",
+                appendInfo(buffer, "TIMESETTINGS",
                            info.getTimeSettings().toString());
         }
         ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();

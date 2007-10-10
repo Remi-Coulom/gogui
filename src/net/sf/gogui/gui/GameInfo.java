@@ -22,6 +22,8 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
@@ -78,8 +80,10 @@ public class GameInfo
         ConstGameInformation info = tree.getGameInformationConst(node);
         for (GoColor c : BLACK_WHITE)
         {
-            updatePlayerToolTip(m_icon.get(c), info.getPlayer(c),
-                                info.getRank(c), c.getCapitalizedName());
+            String name = info.get(StringInfoColor.NAME, c);
+            String rank = info.get(StringInfoColor.RANK, c);
+            updatePlayerToolTip(m_icon.get(c), name, rank,
+                                c.getCapitalizedName());
             m_prisoners.get(c).setCount(board.getCaptured(c));
         }
         // Usually time left information is stored in a node only for the

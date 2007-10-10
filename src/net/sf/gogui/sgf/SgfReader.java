@@ -26,6 +26,8 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -426,7 +428,7 @@ public final class SgfReader
                 }
             }
             else if (p == "BR")
-                createGameInformation(node).setRank(BLACK, v);
+                set(node, StringInfoColor.RANK, BLACK, v);
             else if (p == "C")
             {
                 String comment;
@@ -451,7 +453,7 @@ public final class SgfReader
             else if (p == "CR")
                 parseMarked(node, MarkType.CIRCLE, values);
             else if (p == "DT")
-                createGameInformation(node).setDate(v);
+                set(node, StringInfo.DATE, v);
             else if (p == "FF")
             {
                 int format = -1;
@@ -534,15 +536,15 @@ public final class SgfReader
                 }
             }
             else if (p == "PB")
-                createGameInformation(node).setPlayer(BLACK, v);
+                set(node, StringInfoColor.NAME, BLACK, v);
             else if (p == "PW")
-                createGameInformation(node).setPlayer(WHITE, v);
+                set(node, StringInfoColor.NAME, WHITE, v);
             else if (p == "PL")
                 node.setPlayer(parseColor(v));
             else if (p == "RE")
-                createGameInformation(node).setResult(v);
+                set(node, StringInfo.RESULT, v);
             else if (p == "RU")
-                createGameInformation(node).setRules(v);
+                set(node, StringInfo.RULES, v);
             else if (p == "SQ")
                 parseMarked(node, MarkType.SQUARE, values);
             else if (p == "SL")
@@ -578,7 +580,7 @@ public final class SgfReader
                 }
             }
             else if (p == "WR")
-                createGameInformation(node).setRank(WHITE, v);
+                set(node, StringInfoColor.RANK, WHITE, v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 node.addSgfProperty(p, values);
         }
@@ -1025,6 +1027,19 @@ public final class SgfReader
             }
         }
         return m_buffer.toString();
+    }
+
+    private void set(Node node, StringInfo type, String value)
+    {
+        GameInformation info = createGameInformation(node);
+        info.set(type, value);
+    }
+
+    private void set(Node node, StringInfoColor type,
+                                    GoColor c, String value)
+    {
+        GameInformation info = createGameInformation(node);
+        info.set(type, c, value);
     }
 
     private void setTimeSettings(Node node)

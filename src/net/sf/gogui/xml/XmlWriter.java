@@ -15,6 +15,8 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstSgfProperties;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.MarkType;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.EMPTY;
@@ -96,18 +98,26 @@ public class XmlWriter
         m_out.print("<Information>\n" +
                     "<Application>" + application + "</Application>\n" +
                     "<BoardSize>" + m_boardSize + "</BoardSize>\n");
-        printInfo("WhitePlayer", info.getPlayer(WHITE));
-        printInfo("BlackPlayer", info.getPlayer(BLACK));
-        printInfo("WhiteRank", info.getRank(WHITE));
-        printInfo("BlackRank", info.getRank(BLACK));
-        printInfo("Date", info.getDate());
-        printInfo("Rules", info.getRules());
+        printInfo("WhitePlayer", info.get(StringInfoColor.NAME, WHITE));
+        printInfo("BlackPlayer", info.get(StringInfoColor.NAME, BLACK));
+        printInfo("WhiteRank", info.get(StringInfoColor.RANK, WHITE));
+        printInfo("BlackRank", info.get(StringInfoColor.RANK, BLACK));
+        printInfo("Date", info.get(StringInfo.DATE));
+        printInfo("Rules", info.get(StringInfo.RULES));
         if (info.getHandicap() > 0)
             printInfo("Handicap", Integer.toString(info.getHandicap()));
-        printInfo("Komi", info.getKomi().toString());
+        if (info.getKomi() != null)
+            printInfo("Komi", info.getKomi().toString());
         if (info.getTimeSettings() != null)
             printInfo("Time", info.getTimeSettings().toString());
-        printInfo("Result", info.getResult());
+        printInfo("Result", info.get(StringInfo.RESULT));
+        printInfo("WhiteTeam", info.get(StringInfoColor.TEAM, WHITE));
+        printInfo("BlackTeam", info.get(StringInfoColor.TEAM, BLACK));
+        printInfo("User", info.get(StringInfo.USER));
+        printInfo("Copyright", info.get(StringInfo.COPYRIGHT));
+        printInfo("Annotation", info.get(StringInfo.ANNOTATION));
+        printInfo("Source", info.get(StringInfo.SOURCE));
+        printInfo("Round", info.get(StringInfo.ROUND));
         m_out.print("</Information>\n");
     }
 

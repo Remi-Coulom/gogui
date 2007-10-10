@@ -22,6 +22,8 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
 
 /** Dialog for editing game settings and other information. */
@@ -103,11 +105,11 @@ public final class GameInfoDialog
         JPanel values =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-        m_result = createEntry("Result", 12, info.getResult(),
+        m_result = createEntry("Result", 12, info.get(StringInfo.RESULT),
                                "Result of the game", labels, values);
-        m_date = createEntry("Date", 12, info.getDate(),
+        m_date = createEntry("Date", 12, info.get(StringInfo.DATE),
                              "Date when the game was played", labels, values);
-        m_rules = createEntry("Rules", 12, info.getRules(),
+        m_rules = createEntry("Rules", 12, info.get(StringInfo.RULES),
                               "Rules used for the game", labels, values);
         String komi = "";
         if (info.getKomi() != null)
@@ -190,7 +192,7 @@ public final class GameInfoDialog
         box.add(GuiUtil.createFiller());
         playerInfo.m_box = box;
         playerInfo.m_name = new JTextField(18);
-        playerInfo.m_name.setText(info.getPlayer(c));
+        playerInfo.m_name.setText(info.get(StringInfoColor.NAME, c));
         box.add(playerInfo.m_name);
         playerInfo.m_name.setHorizontalAlignment(JTextField.CENTER);
         playerInfo.m_name.setToolTipText(name + " player name");
@@ -199,7 +201,7 @@ public final class GameInfoDialog
         playerInfo.m_rank.setHorizontalAlignment(JTextField.CENTER);
         playerInfo.m_rank.setToolTipText(name + " player rank");
         box.add(playerInfo.m_rank);
-        playerInfo.m_rank.setText(info.getRank(c));
+        playerInfo.m_rank.setText(info.get(StringInfoColor.RANK, c));
         box.setAlignmentY(Component.CENTER_ALIGNMENT);
         return playerInfo;
     }
@@ -216,13 +218,17 @@ public final class GameInfoDialog
 
     private void updateGameInfo(GameInformation info)
     {
-        info.setPlayer(BLACK, getTextFieldContent(m_black.m_name));
-        info.setPlayer(WHITE, getTextFieldContent(m_white.m_name));
-        info.setRank(BLACK, getTextFieldContent(m_black.m_rank));
-        info.setRank(WHITE, getTextFieldContent(m_white.m_rank));
-        info.setRules(getTextFieldContent(m_rules));
-        info.setResult(getTextFieldContent(m_result));
-        info.setDate(getTextFieldContent(m_date));
+        info.set(StringInfoColor.NAME, BLACK,
+                 getTextFieldContent(m_black.m_name));
+        info.set(StringInfoColor.NAME, WHITE,
+                 getTextFieldContent(m_white.m_name));
+        info.set(StringInfoColor.RANK, BLACK,
+                 getTextFieldContent(m_black.m_rank));
+        info.set(StringInfoColor.RANK, WHITE,
+                 getTextFieldContent(m_white.m_rank));
+        info.set(StringInfo.RULES, getTextFieldContent(m_rules));
+        info.set(StringInfo.RESULT, getTextFieldContent(m_result));
+        info.set(StringInfo.DATE, getTextFieldContent(m_date));
         String komiText = getTextFieldContent(m_komi);
         Komi komi = null;
         try

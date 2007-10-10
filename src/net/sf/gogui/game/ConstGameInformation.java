@@ -13,19 +13,13 @@ import net.sf.gogui.go.Score.ScoringMethod;
 */
 public interface ConstGameInformation
 {
-    String getDate();
+    String get(StringInfo type);
+
+    String get(StringInfoColor type, GoColor c);
 
     int getHandicap();
 
     Komi getKomi();
-
-    String getPlayer(GoColor c);
-
-    String getRank(GoColor c);
-
-    String getResult();
-
-    String getRules();
 
     TimeSettings getTimeSettings();
 

@@ -49,6 +49,8 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
@@ -3072,8 +3074,9 @@ public class GoGui
         ConstNode node = getCurrentNode();
         ConstNode father = node.getFatherConst();
         ConstGameInformation info = getGameInformation();
-        String playerToMove = info.getPlayer(toMove);
-        String playerOther = info.getPlayer(toMove.otherColor());
+        String playerToMove = info.get(StringInfoColor.NAME, toMove);
+        String playerOther =
+            info.get(StringInfoColor.NAME, toMove.otherColor());
         String name = getProgramLabel();
         if (! isSingleMove && m_file == null && playerToMove == null
             && (father == null
@@ -3865,7 +3868,7 @@ public class GoGui
 
     private void setResult(String result)
     {
-        String oldResult = getGameInformation().getResult();
+        String oldResult = getGameInformation().get(StringInfo.RESULT);
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
             && ! showQuestion("Replace old result " + oldResult + "\n" +
@@ -3909,9 +3912,11 @@ public class GoGui
         else
         {
             String name = getProgramLabel();
+            String nameBlack = info.get(StringInfoColor.NAME, BLACK);
+            String nameWhite = info.get(StringInfoColor.NAME, WHITE);
             if (! appName.equals("GoGui")
-                && (ObjectUtil.equals(info.getPlayer(BLACK), name)
-                    || ObjectUtil.equals(info.getPlayer(WHITE), name)))
+                && (ObjectUtil.equals(nameBlack, name)
+                    || ObjectUtil.equals(nameWhite, name)))
                 setTitle(gameName);
             else
                 setTitle(gameName + " - " + appName);

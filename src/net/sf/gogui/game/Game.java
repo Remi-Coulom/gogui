@@ -288,7 +288,7 @@ public class Game
     {
         Node node = m_tree.getGameInformationNode(m_current);
         GameInformation info = node.getGameInformation();
-        info.setPlayer(c, name);
+        info.set(StringInfoColor.NAME, c, name);
         setGameInformation(info, node); // updates m_modified
     }
 
@@ -296,7 +296,7 @@ public class Game
     {
         Node node = m_tree.getGameInformationNode(m_current);
         GameInformation info = node.getGameInformation();
-        info.setResult(result);
+        info.set(StringInfo.RESULT, result);
         setGameInformation(info, node); // updates m_modified
     }
 

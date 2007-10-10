@@ -5,6 +5,8 @@
 package net.sf.gogui.game;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -33,16 +35,24 @@ public class GameInformation
 
     public final void copyFrom(ConstGameInformation info)
     {
-        m_handicap = info.getHandicap();
-        m_komi = info.getKomi();
-        m_date = info.getDate();
-        m_player.set(BLACK, info.getPlayer(BLACK));
-        m_player.set(WHITE, info.getPlayer(WHITE));
-        m_result = info.getResult();
-        m_rules = info.getRules();
-        m_rank.set(BLACK, info.getRank(BLACK));
-        m_rank.set(WHITE, info.getRank(WHITE));
-        m_timeSettings = info.getTimeSettings();
+        GameInformation infoNonConst = (GameInformation)info;
+        m_handicap = infoNonConst.m_handicap;
+        m_komi = infoNonConst.m_komi;
+        m_timeSettings = infoNonConst.m_timeSettings;
+        m_stringInfo.clear();
+        m_stringInfo.putAll(infoNonConst.m_stringInfo);
+        m_stringInfoColor.clear();
+        for (Map.Entry<StringInfoColor,BlackWhiteSet<String>> entry
+                 : infoNonConst.m_stringInfoColor.entrySet())
+        {
+            StringInfoColor type = entry.getKey();
+            BlackWhiteSet<String> set = entry.getValue();
+            assert set != null;
+            BlackWhiteSet<String> newSet = new BlackWhiteSet<String>();
+            newSet.set(BLACK, set.get(BLACK));
+            newSet.set(WHITE, set.get(WHITE));
+            m_stringInfoColor.put(type, newSet);
+        }
     }
 
     public boolean equals(Object object)
@@ -52,17 +62,22 @@ public class GameInformation
         GameInformation info = (GameInformation)object;
         return (m_handicap == info.getHandicap()
                 && ObjectUtil.equals(m_komi, info.getKomi())
-                && ObjectUtil.equals(m_date, info.getDate())
-                && ObjectUtil.equals(m_player, info.m_player)
-                && ObjectUtil.equals(m_result, info.getResult())
-                && ObjectUtil.equals(m_rules, info.getRules())
-                && ObjectUtil.equals(m_rank, info.m_rank)
-                && ObjectUtil.equals(m_timeSettings, info.getTimeSettings()));
+                && ObjectUtil.equals(m_timeSettings, info.getTimeSettings())
+                && m_stringInfo.equals(info.m_stringInfo)
+                && m_stringInfoColor.equals(info.m_stringInfoColor));
     }
 
-    public String getDate()
+    public String get(StringInfo type)
     {
-        return m_date;
+        return m_stringInfo.get(type);
+    }
+
+    public String get(StringInfoColor type, GoColor c)
+    {
+        BlackWhiteSet<String> set = m_stringInfoColor.get(type);
+        if (set == null)
+            return null;
+        return set.get(c);
     }
 
     public int getHandicap()
@@ -78,33 +93,6 @@ public class GameInformation
         return m_komi;
     }
 
-    /** Get player name.
-        @return The player name or null if unknown.
-    */
-    public String getPlayer(GoColor c)
-    {
-        return m_player.get(c);
-    }
-
-    /** Get player rank.
-        @return The player rank or null if unknown.
-    */
-    public String getRank(GoColor c)
-    {
-        return m_rank.get(c);
-    }
-
-    public String getResult()
-    {
-        return m_result;
-    }
-
-    public String getRules()
-    {
-        return m_rules;
-    }
-
-    /** Get a copy of the time settings. */
     public TimeSettings getTimeSettings()
     {
         return m_timeSettings;
@@ -122,11 +110,8 @@ public class GameInformation
 
     public boolean isEmpty()
     {
-        return (m_handicap == 0 && m_komi == null && m_date == null
-                && m_player.get(BLACK) == null && m_player.get(WHITE) == null
-                && m_rank.get(BLACK) == null && m_rank.get(WHITE) == null
-                && m_result == null && m_rules == null
-                && m_timeSettings == null);
+        return (m_handicap == 0 && m_komi == null && m_stringInfo.isEmpty()
+                && m_stringInfoColor.isEmpty() && m_timeSettings == null);
     }
 
     /** Try to parse rules.
@@ -136,7 +121,7 @@ public class GameInformation
     public ScoringMethod parseRules()
     {
         ScoringMethod result = AREA;
-        String rules = m_rules;
+        String rules = get(StringInfo.RULES);
         if (rules != null)
         {
             rules = rules.trim().toLowerCase(Locale.ENGLISH);
@@ -146,9 +131,27 @@ public class GameInformation
         return result;
     }
 
-    public void setDate(String date)
+    public void set(StringInfo type, String value)
     {
-        m_date = checkEmpty(date);
+        value = checkEmpty(value);
+        if (type == null)
+            m_stringInfo.remove(type);
+        else
+            m_stringInfo.put(type, value);
+    }
+
+    public void set(StringInfoColor type, GoColor c, String value)
+    {
+        value = checkEmpty(value);
+        BlackWhiteSet<String> set = m_stringInfoColor.get(type);
+        if (set == null)
+        {
+            set = new BlackWhiteSet<String>();
+            m_stringInfoColor.put(type, set);
+        }
+        set.set(c, value);
+        if (set.get(BLACK) == null && set.get(WHITE) == null)
+            m_stringInfoColor.remove(type);
     }
 
     public void setHandicap(int handicap)
@@ -161,29 +164,7 @@ public class GameInformation
         m_komi = komi;
     }
 
-    public void setPlayer(GoColor c, String name)
-    {
-        m_player.set(c, checkEmpty(name));
-    }
-
-    public void setRank(GoColor c, String rank)
-    {
-        m_rank.set(c, checkEmpty(rank));
-    }
-
-    public void setResult(String result)
-    {
-        m_result = checkEmpty(result);
-    }
-
-    public void setRules(String rules)
-    {
-        m_rules = checkEmpty(rules);
-    }
-
-    /** Set time settings.
-        Keeps a copy of the arguments.
-    */
+    /** Set time settings. */
     public void setTimeSettings(TimeSettings timeSettings)
     {
         m_timeSettings = timeSettings;
@@ -195,8 +176,8 @@ public class GameInformation
     */
     public String suggestGameName()
     {
-        String playerBlack = m_player.get(BLACK);
-        String playerWhite = m_player.get(WHITE);
+        String playerBlack = get(StringInfoColor.NAME, BLACK);
+        String playerWhite = get(StringInfoColor.NAME, WHITE);
         boolean playerBlackKnown = ! StringUtil.isEmpty(playerBlack);
         boolean playerWhiteKnown = ! StringUtil.isEmpty(playerWhite);
         if (! playerBlackKnown && ! playerWhiteKnown)
@@ -216,19 +197,13 @@ public class GameInformation
 
     private Komi m_komi;
 
-    private String m_date;
-
-    private BlackWhiteSet<String> m_player = new BlackWhiteSet<String>();
-
-    private BlackWhiteSet<String> m_rank = new BlackWhiteSet<String>();
-
-    private String m_rankWhite;
-
-    private String m_result;
-
-    private String m_rules;
-
     private TimeSettings m_timeSettings;
+
+    private Map<StringInfo,String> m_stringInfo =
+        new TreeMap<StringInfo,String>();
+
+    private Map<StringInfoColor,BlackWhiteSet<String>> m_stringInfoColor =
+        new TreeMap<StringInfoColor,BlackWhiteSet<String>>();
 
     private String checkEmpty(String s)
     {

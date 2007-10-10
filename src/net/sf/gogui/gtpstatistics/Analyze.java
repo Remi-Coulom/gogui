@@ -17,6 +17,8 @@ import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.StringInfo;
+import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
@@ -664,13 +666,13 @@ public class Analyze
             SgfReader reader = new SgfReader(in, new File(game), null, 0);
             GameTree tree = reader.getTree();
             GameInformation info = tree.getGameInformation(tree.getRoot());
-            String playerBlack = info.getPlayer(BLACK);
+            String playerBlack = info.get(StringInfoColor.NAME, BLACK);
             if (playerBlack == null)
                 playerBlack = "?";
-            String playerWhite = info.getPlayer(WHITE);
+            String playerWhite = info.get(StringInfoColor.NAME, WHITE);
             if (playerWhite == null)
                 playerWhite = "?";
-            String result = info.getResult();
+            String result = info.get(StringInfo.RESULT);
             if (result == null)
                 result = "?";
             writeHtmlRow(out, "Black", playerBlack);

@@ -37,7 +37,7 @@ public class GameTree
         GameInformation info = m_root.createGameInformation();
         setDate();
         info.setKomi(komi);
-        info.setRules(rules);
+        info.set(StringInfo.RULES, rules);
         if (timeSettings != null)
             info.setTimeSettings(timeSettings);
         if (handicap != null)
@@ -146,8 +146,8 @@ public class GameTree
         int day = cal.get(Calendar.DAY_OF_MONTH);
         DecimalFormat format = new DecimalFormat("00");
         GameInformation info = m_root.getGameInformation();
-        info.setDate(Integer.toString(year) + "-"
-                     + format.format(month) + "-"
-                     + format.format(day));
+        info.set(StringInfo.DATE,
+                 Integer.toString(year) + "-" + format.format(month) + "-"
+                 + format.format(day));
     }
 }
