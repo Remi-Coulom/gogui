@@ -10,6 +10,8 @@
       <match type="string" offset="0:256" value="FF[2]"/>
       <match type="string" offset="0:256" value="FF[1]"/>
     </magic>
+    <sub-class-of type="text/plain"/>
     <glob pattern="*.sgf"/>
   </mime-type>
 </mime-info>
+
