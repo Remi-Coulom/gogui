@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// GameInformation.java
+// GameInfo.java
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -21,21 +21,21 @@ import net.sf.gogui.util.StringUtil;
 /** Game information.
     Contains information about handicap, rules and players.
 */
-public class GameInformation
-    implements ConstGameInformation
+public class GameInfo
+    implements ConstGameInfo
 {
-    public GameInformation()
+    public GameInfo()
     {
     }
 
-    public GameInformation(ConstGameInformation info)
+    public GameInfo(ConstGameInfo info)
     {
         copyFrom(info);
     }
 
-    public final void copyFrom(ConstGameInformation info)
+    public final void copyFrom(ConstGameInfo info)
     {
-        GameInformation infoNonConst = (GameInformation)info;
+        GameInfo infoNonConst = (GameInfo)info;
         m_handicap = infoNonConst.m_handicap;
         m_komi = infoNonConst.m_komi;
         m_timeSettings = infoNonConst.m_timeSettings;
@@ -59,7 +59,7 @@ public class GameInformation
     {
         if (object == null || object.getClass() != getClass())
             return false;
-        GameInformation info = (GameInformation)object;
+        GameInfo info = (GameInfo)object;
         return (m_handicap == info.getHandicap()
                 && ObjectUtil.equals(m_komi, info.getKomi())
                 && ObjectUtil.equals(m_timeSettings, info.getTimeSettings())

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileFilter;
 import java.io.IOException;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
@@ -57,9 +57,9 @@ public class Openings
     }
 
     /** Get game information of currently loaded file. */
-    public GameInformation getGameInformation()
+    public GameInfo getGameInfo()
     {
-        return m_tree.getGameInformation(m_tree.getRoot());
+        return m_tree.getGameInfo(m_tree.getRoot());
     }
 
     /** Get game tree of currently loaded file. */

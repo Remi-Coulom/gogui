@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.EnumSet;
 import java.util.Map;
-import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstSgfProperties;
@@ -55,12 +55,12 @@ public class XmlWriter
             m_out.print("<?xml version='1.0'?>\n");
         }
         ConstNode root = tree.getRootConst();
-        ConstGameInformation info = tree.getGameInformationConst(root);
+        ConstGameInfo info = tree.getGameInfoConst(root);
         m_out.print("<!DOCTYPE Go SYSTEM \"go.dtd\">\n" +
                     "<Go>\n" +
                     "<GoGame>\n");
         m_boardSize = tree.getBoardSize();
-        printGameInformation(application, info);
+        printGameInfo(application, info);
         m_out.print("<Nodes>\n");
         printNode(root, true);
         m_out.print("</Nodes>\n" +
@@ -92,8 +92,7 @@ public class XmlWriter
         m_out.print("<Comment>" + HtmlUtil.escape(comment) + "</Comment>\n");
     }
 
-    private void printGameInformation(String application,
-                                      ConstGameInformation info)
+    private void printGameInfo(String application, ConstGameInfo info)
     {
         m_out.print("<Information>\n" +
                     "<Application>" + application + "</Application>\n" +

@@ -41,12 +41,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
-import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.StringInfo;
@@ -740,11 +740,10 @@ public class GoGui
         if (! checkCommandInProgress())
             // Changes in game info may send GTP commands
             return;
-        ConstNode node = m_game.getGameInformationNode();
-        GameInformation info =
-            new GameInformation(node.getGameInformationConst());
+        ConstNode node = m_game.getGameInfoNode();
+        GameInfo info = new GameInfo(node.getGameInfoConst());
         GameInfoDialog.show(this, info, m_messageDialogs);
-        m_game.setGameInformation(info, node);
+        m_game.setGameInfo(info, node);
         currentNodeChanged(); // updates komi, time settings
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
@@ -1857,7 +1856,7 @@ public class GoGui
             if (! checkCommandInProgress())
                 return;
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
-            Komi komi = getGameInformation().getKomi();
+            Komi komi = getGameInfo().getKomi();
             m_scoreDialog.showScore(m_countScore, komi);
         }
         else if (modifiedSelect)
@@ -2926,7 +2925,7 @@ public class GoGui
         boolean wasOutOfSync = isOutOfSync();
         try
         {
-            ConstGameInformation info = getGameInformation();
+            ConstGameInfo info = getGameInfo();
             m_gtp.synchronize(getBoard(), info.getKomi(),
                               info.getTimeSettings());
         }
@@ -3073,7 +3072,7 @@ public class GoGui
         GoColor toMove = getToMove();
         ConstNode node = getCurrentNode();
         ConstNode father = node.getFatherConst();
-        ConstGameInformation info = getGameInformation();
+        ConstGameInfo info = getGameInfo();
         String playerToMove = info.get(StringInfoColor.NAME, toMove);
         String playerOther =
             info.get(StringInfoColor.NAME, toMove.otherColor());
@@ -3134,9 +3133,9 @@ public class GoGui
         return m_game.getCurrentNode();
     }
 
-    private ConstGameInformation getGameInformation()
+    private ConstGameInfo getGameInfo()
     {
-        return m_game.getGameInformation(getCurrentNode());
+        return m_game.getGameInfo(getCurrentNode());
     }
 
     private Komi getPrefsKomi()
@@ -3300,7 +3299,7 @@ public class GoGui
         {
             try
             {
-                ConstGameInformation info = getGameInformation();
+                ConstGameInfo info = getGameInfo();
                 m_gtp.initSynchronize(getBoard(), info.getKomi(),
                                       info.getTimeSettings());
             }
@@ -3388,11 +3387,11 @@ public class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
         {
-            ScoringMethod scoringMethod = getGameInformation().parseRules();
+            ScoringMethod scoringMethod = getGameInfo().parseRules();
             m_scoreDialog = new ScoreDialog(this, this, scoringMethod);
         }
         restoreLocation(m_scoreDialog, "score");
-        Komi komi = getGameInformation().getKomi();
+        Komi komi = getGameInfo().getKomi();
         m_scoreDialog.showScore(m_countScore, komi);
         m_scoreDialog.setVisible(true);
         showStatus("Please mark dead groups");
@@ -3868,7 +3867,7 @@ public class GoGui
 
     private void setResult(String result)
     {
-        String oldResult = getGameInformation().get(StringInfo.RESULT);
+        String oldResult = getGameInfo().get(StringInfo.RESULT);
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
             && ! showQuestion("Replace old result " + oldResult + "\n" +
@@ -3898,7 +3897,7 @@ public class GoGui
         }
         else if (isModified() && ! Platform.isMac())
             filename = "[modified]";
-        ConstGameInformation info = getGameInformation();
+        ConstGameInfo info = getGameInfo();
         String gameName = info.suggestGameName();
         if (gameName != null)
         {

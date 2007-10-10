@@ -84,14 +84,14 @@ public class Game
         return m_current;
     }
 
-    public ConstGameInformation getGameInformation(ConstNode node)
+    public ConstGameInfo getGameInfo(ConstNode node)
     {
-        return m_tree.getGameInformationConst(node);
+        return m_tree.getGameInfoConst(node);
     }
 
-    public ConstNode getGameInformationNode()
+    public ConstNode getGameInfoNode()
     {
-        return m_tree.getGameInformationNode(m_current);
+        return m_tree.getGameInfoNode(m_current);
     }
 
     public int getMoveNumber()
@@ -172,7 +172,7 @@ public class Game
 
     public void keepOnlyPosition()
     {
-        ConstGameInformation info = getGameInformation(m_current);
+        ConstGameInfo info = getGameInfo(m_current);
         m_tree = NodeUtil.makeTreeFromPosition(info, m_board);
         m_board.init(m_board.getSize());
         m_current = m_tree.getRoot();
@@ -256,13 +256,13 @@ public class Game
         ((Node)node).setComment(comment);
     }
 
-    public void setGameInformation(ConstGameInformation info, ConstNode node)
+    public void setGameInfo(ConstGameInfo info, ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();
-        ((Node)node).createGameInformation();
-        if (! ((Node)node).getGameInformation().equals(info))
+        ((Node)node).createGameInfo();
+        if (! ((Node)node).getGameInfo().equals(info))
         {
-            ((Node)node).getGameInformation().copyFrom(info);
+            ((Node)node).getGameInfo().copyFrom(info);
             updateClock();
             setModified();
         }
@@ -270,10 +270,10 @@ public class Game
 
     public void setKomi(Komi komi)
     {
-        Node node = m_tree.getGameInformationNode(m_current);
-        GameInformation info = node.getGameInformation();
+        Node node = m_tree.getGameInfoNode(m_current);
+        GameInfo info = node.getGameInfo();
         info.setKomi(komi);
-        setGameInformation(info, node); // updates m_modified
+        setGameInfo(info, node); // updates m_modified
     }
 
     /** Set label in current node. */
@@ -286,18 +286,18 @@ public class Game
 
     public void setPlayer(GoColor c, String name)
     {
-        Node node = m_tree.getGameInformationNode(m_current);
-        GameInformation info = node.getGameInformation();
+        Node node = m_tree.getGameInfoNode(m_current);
+        GameInfo info = node.getGameInfo();
         info.set(StringInfoColor.NAME, c, name);
-        setGameInformation(info, node); // updates m_modified
+        setGameInfo(info, node); // updates m_modified
     }
 
     public void setResult(String result)
     {
-        Node node = m_tree.getGameInformationNode(m_current);
-        GameInformation info = node.getGameInformation();
+        Node node = m_tree.getGameInfoNode(m_current);
+        GameInfo info = node.getGameInfo();
         info.set(StringInfo.RESULT, result);
-        setGameInformation(info, node); // updates m_modified
+        setGameInfo(info, node); // updates m_modified
     }
 
     public void setToMove(GoColor color)
@@ -382,8 +382,8 @@ public class Game
 
     private void updateClock()
     {
-        ConstNode node = getGameInformationNode();
-        ConstGameInformation info = node.getGameInformationConst();
+        ConstNode node = getGameInfoNode();
+        ConstGameInfo info = node.getGameInfoConst();
         if (info != null)
             m_clock.setTimeSettings(info.getTimeSettings());
     }

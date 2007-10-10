@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
@@ -220,7 +220,7 @@ public final class SgfReader
     private void applyFixes()
     {
         Node root = m_tree.getRoot();
-        GameInformation info = m_tree.getGameInformation(root);
+        GameInfo info = m_tree.getGameInfo(root);
         if (root.hasSetup() && root.getPlayer() == null)
         {
             if (info.getHandicap() > 0)
@@ -317,9 +317,9 @@ public final class SgfReader
         return property;
     }
 
-    private GameInformation createGameInformation(Node node)
+    private GameInfo createGameInfo(Node node)
     {
-        return node.createGameInformation();
+        return node.createGameInfo();
     }
 
     private void findRoot() throws SgfError, IOException
@@ -483,7 +483,7 @@ public final class SgfReader
                     try
                     {
                         int handicap = Integer.parseInt(v);
-                        createGameInformation(node).setHandicap(handicap);
+                        createGameInfo(node).setHandicap(handicap);
                     }
                     catch (NumberFormatException e)
                     {
@@ -617,7 +617,7 @@ public final class SgfReader
     {
         try
         {
-            createGameInformation(node).setKomi(Komi.parseKomi(value));
+            createGameInfo(node).setKomi(Komi.parseKomi(value));
         }
         catch (InvalidKomiException e)
         {
@@ -1031,14 +1031,14 @@ public final class SgfReader
 
     private void set(Node node, StringInfo type, String value)
     {
-        GameInformation info = createGameInformation(node);
+        GameInfo info = createGameInfo(node);
         info.set(type, value);
     }
 
     private void set(Node node, StringInfoColor type,
                                     GoColor c, String value)
     {
-        GameInformation info = createGameInformation(node);
+        GameInfo info = createGameInfo(node);
         info.set(type, c, value);
     }
 
@@ -1055,7 +1055,7 @@ public final class SgfReader
                  && m_byoyomiMoves > 0)
             s = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
         if (s != null)
-            node.createGameInformation().setTimeSettings(s);
+            node.createGameInfo().setTimeSettings(s);
     }
 
     private void setWarning(String message)

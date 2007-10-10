@@ -14,7 +14,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGame;
-import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
@@ -446,8 +446,8 @@ public class TwoGtp
         {
             try
             {
-                ConstNode node = game.getGameInformationNode();
-                ConstGameInformation info = game.getGameInformation(node);
+                ConstNode node = game.getGameInfoNode();
+                ConstGameInfo info = game.getGameInfo(node);
                 m_synchronizer.synchronize(game.getBoard(), info.getKomi(),
                                            info.getTimeSettings());
             }
@@ -461,8 +461,8 @@ public class TwoGtp
         {
             try
             {
-                ConstNode node = game.getGameInformationNode();
-                ConstGameInformation info = game.getGameInformation(node);
+                ConstNode node = game.getGameInfoNode();
+                ConstGameInfo info = game.getGameInfo(node);
                 m_synchronizer.init(game.getBoard(), info.getKomi(),
                                     info.getTimeSettings());
             }

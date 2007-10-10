@@ -10,11 +10,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Map;
-import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
@@ -100,7 +100,7 @@ public final class SgfReaderTest
         SgfReader reader = getReader("time-settings-unknown-ot.sgf");
         ConstGameTree tree = reader.getTree();
         ConstNode root = tree.getRootConst();
-        ConstGameInformation info = root.getGameInformationConst();
+        ConstGameInfo info = root.getGameInfoConst();
         TimeSettings settings = info.getTimeSettings();
         assertNotNull(settings);
         assertFalse(settings.getUseByoyomi());
@@ -117,7 +117,7 @@ public final class SgfReaderTest
         GameTree tree = reader.getTree();
         Node root = tree.getRoot();
         TimeSettings settings = new TimeSettings(1800000, 30000, 5);
-        root.getGameInformation().setTimeSettings(settings);
+        root.getGameInfo().setTimeSettings(settings);
         File file = File.createTempFile("gogui", null);
         OutputStream out = new FileOutputStream(file);
         new SgfWriter(out, tree, "GoGui", Version.get());
@@ -126,7 +126,7 @@ public final class SgfReaderTest
         tree = reader.getTree();
         root = tree.getRoot();
         file.delete();
-        settings = root.getGameInformation().getTimeSettings();
+        settings = root.getGameInfo().getTimeSettings();
         assertNotNull(settings);
         assertTrue(settings.getUseByoyomi());
         assertEquals(1800000L, settings.getPreByoyomi());
@@ -277,7 +277,7 @@ public final class SgfReaderTest
     {
         SgfReader reader = getReader(name);
         GameTree tree = reader.getTree();
-        GameInformation info = tree.getGameInformation(tree.getRoot());
+        GameInfo info = tree.getGameInfo(tree.getRoot());
         TimeSettings timeSettings = info.getTimeSettings();
         assertNotNull(timeSettings);
         assertEquals(timeSettings.getPreByoyomi(), preByoyomi);

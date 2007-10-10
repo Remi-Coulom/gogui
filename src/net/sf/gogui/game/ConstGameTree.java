@@ -11,7 +11,7 @@ public interface ConstGameTree
 {
     int getBoardSize();
 
-    ConstGameInformation getGameInformationConst(ConstNode node);
+    ConstGameInfo getGameInfoConst(ConstNode node);
 
     ConstNode getRootConst();
 

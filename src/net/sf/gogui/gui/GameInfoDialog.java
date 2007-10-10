@@ -21,7 +21,7 @@ import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
@@ -30,7 +30,7 @@ import net.sf.gogui.game.TimeSettings;
 public final class GameInfoDialog
     extends JOptionPane
 {
-    public static void show(Component parent, GameInformation info,
+    public static void show(Component parent, GameInfo info,
                             MessageDialogs messageDialogs)
     {
         GameInfoDialog gameInfo = new GameInfoDialog(info);
@@ -81,7 +81,7 @@ public final class GameInfoDialog
 
     private final JTextField m_rules;
 
-    private GameInfoDialog(GameInformation info)
+    private GameInfoDialog(GameInfo info)
     {
         Box outerBox = Box.createVerticalBox();
         m_black = createPlayerInfo(BLACK, "gogui-black-16x16",
@@ -182,7 +182,7 @@ public final class GameInfoDialog
     }
 
     private PlayerInfo createPlayerInfo(GoColor c, String icon, String name,
-                                        GameInformation info)
+                                        GameInfo info)
     {
         PlayerInfo playerInfo = new PlayerInfo();
         Box box = Box.createHorizontalBox();
@@ -216,7 +216,7 @@ public final class GameInfoDialog
         return getTextFieldContent(textField).equals("");
     }
 
-    private void updateGameInfo(GameInformation info)
+    private void updateGameInfo(GameInfo info)
     {
         info.set(StringInfoColor.NAME, BLACK,
                  getTextFieldContent(m_black.m_name));

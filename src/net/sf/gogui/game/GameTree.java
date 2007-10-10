@@ -13,9 +13,9 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 
 /** Game tree.
-    Note that the tree can have different GameInformation objects for different
+    Note that the tree can have different GameInfo objects for different
     subtrees to allow the representation of trees loaded from SGF. Creating
-    trees with multiple GameInformation objects is not not actively supported
+    trees with multiple GameInfo objects is not not actively supported
     in GoGui, because they cannot be saved in (Jago's) XML format.
 */
 public class GameTree
@@ -25,7 +25,7 @@ public class GameTree
     {
         m_boardSize = GoPoint.DEFAULT_SIZE;
         m_root = new Node();
-        m_root.createGameInformation();
+        m_root.createGameInfo();
         setDate();
     }
 
@@ -34,7 +34,7 @@ public class GameTree
     {
         m_boardSize = boardSize;
         m_root = new Node();
-        GameInformation info = m_root.createGameInformation();
+        GameInfo info = m_root.createGameInfo();
         setDate();
         info.setKomi(komi);
         info.set(StringInfo.RULES, rules);
@@ -55,7 +55,7 @@ public class GameTree
     public GameTree(int boardSize, Node root)
     {
         m_boardSize = boardSize;
-        root.createGameInformation();
+        root.createGameInfo();
         m_root = root;
     }
 
@@ -69,28 +69,28 @@ public class GameTree
         which has a game information (the root node is always guaranteed
         to have one).
     */
-    public GameInformation getGameInformation(ConstNode node)
+    public GameInfo getGameInfo(ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();
-        return getGameInformationNode(node).getGameInformation();
+        return getGameInfoNode(node).getGameInfo();
     }
 
     /** Find the node with game information valid for this node.
         @return The nearest ancestor node which has a game information
         (the root node is always guaranteed to have one).
     */
-    public Node getGameInformationNode(ConstNode node)
+    public Node getGameInfoNode(ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();
-        while (node.getGameInformationConst() == null)
+        while (node.getGameInfoConst() == null)
             node = node.getFatherConst();
         return (Node)node;
     }
 
-    /** @see #getGameInformation */
-    public ConstGameInformation getGameInformationConst(ConstNode node)
+    /** @see #getGameInfo */
+    public ConstGameInfo getGameInfoConst(ConstNode node)
     {
-        return getGameInformation((Node)node);
+        return getGameInfo((Node)node);
     }
 
     /** Get a non-const reference to a const node.
@@ -145,7 +145,7 @@ public class GameTree
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
         DecimalFormat format = new DecimalFormat("00");
-        GameInformation info = m_root.getGameInformation();
+        GameInfo info = m_root.getGameInfo();
         info.set(StringInfo.DATE,
                  Integer.toString(year) + "-" + format.format(month) + "-"
                  + format.format(day));

@@ -496,11 +496,11 @@ public final class NodeUtil
     }
 
     /** Create a game tree with the current board position as setup stones. */
-    public static GameTree makeTreeFromPosition(ConstGameInformation info,
+    public static GameTree makeTreeFromPosition(ConstGameInfo info,
                                                 ConstBoard board)
     {
         if (info == null)
-            info = new GameInformation();
+            info = new GameInfo();
         GameTree tree = new GameTree(board.getSize(), info.getKomi(), null,
                                      info.get(StringInfo.RULES),
                                      info.getTimeSettings());
@@ -596,7 +596,7 @@ public final class NodeUtil
         }
         if (! Float.isNaN(node.getValue()))
             appendInfo(buffer, "Value", Float.toString(node.getValue()));
-        ConstGameInformation info = node.getGameInformationConst();
+        ConstGameInfo info = node.getGameInfoConst();
         if (info != null)
         {
             buffer.append("GameInfo:\n");

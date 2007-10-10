@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
@@ -252,7 +252,7 @@ public class GtpTerminal
             if (warnings != null)
                 System.out.print(warnings);
             GameTree tree = reader.getTree();
-            GameInformation info = tree.getGameInformation(tree.getRoot());
+            GameInfo info = tree.getGameInfo(tree.getRoot());
             if (info.getHandicap() > 0)
             {
                 System.out.println("Handicap games not supported");

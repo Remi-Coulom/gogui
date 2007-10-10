@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstSgfProperties;
@@ -161,7 +161,7 @@ public class SgfWriter
 
     private boolean hasByoyomiInformation(ConstNode node)
     {
-        ConstGameInformation info = node.getGameInformationConst();
+        ConstGameInfo info = node.getGameInfoConst();
         if (info == null)
             return false;
         TimeSettings settings = info.getTimeSettings();
@@ -215,7 +215,7 @@ public class SgfWriter
         print(header.toString());
     }
 
-    private void printGameInformation(ConstGameInformation info)
+    private void printGameInfo(ConstGameInfo info)
     {
         String result = info.get(StringInfo.RESULT);
         String playerBlack = info.get(StringInfoColor.NAME, BLACK);
@@ -308,9 +308,9 @@ public class SgfWriter
             }
             print(";");
         }
-        ConstGameInformation info = node.getGameInformationConst();
+        ConstGameInfo info = node.getGameInfoConst();
         if (info != null)
-            printGameInformation(info);
+            printGameInfo(info);
         if (move != null)
         {
             String point = getPointValue(move.getPoint());

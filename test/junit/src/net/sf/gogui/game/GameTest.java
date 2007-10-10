@@ -94,12 +94,12 @@ public final class GameTest
         ConstNode root = game.getRoot();
         game.play(Move.get(BLACK, null));
         assertNotSame(root, game.getCurrentNode());
-        ConstGameInformation oldInfo = game.getGameInformation(root);
-        GameInformation newInfo = new GameInformation(oldInfo);
+        ConstGameInfo oldInfo = game.getGameInfo(root);
+        GameInfo newInfo = new GameInfo(oldInfo);
         TimeSettings newTimeSettings = new TimeSettings(300000);
         assertTrue(! newTimeSettings.equals(timeSettings));
         newInfo.setTimeSettings(newTimeSettings);
-        game.setGameInformation(newInfo, root);
+        game.setGameInfo(newInfo, root);
         assertEquals(newTimeSettings, game.getClock().getTimeSettings());
     }
 }

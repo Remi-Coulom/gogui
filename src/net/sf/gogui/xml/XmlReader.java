@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
@@ -70,7 +70,7 @@ public final class XmlReader
                 m_root.setFather(null);
             }
             m_tree = new GameTree(size, m_root);
-            m_tree.getGameInformation(m_root).copyFrom(m_info);
+            m_tree.getGameInfo(m_root).copyFrom(m_info);
         }
         catch (SAXException e)
         {
@@ -308,7 +308,7 @@ public final class XmlReader
 
     private Stack<Node> m_variation = new Stack<Node>();
 
-    private GameInformation m_info = new GameInformation();
+    private GameInfo m_info = new GameInfo();
 
     private Node m_root;
 

@@ -27,7 +27,7 @@ public final class SgfWriterTest
     {
         GameTree tree = new GameTree();
         TimeSettings settings = new TimeSettings(3600000, 60000, 10);
-        tree.getRoot().getGameInformation().setTimeSettings(settings);
+        tree.getRoot().getGameInfo().setTimeSettings(settings);
         String s = writeToString(tree);
         assertTrue(s.indexOf("TM[3600]") >= 0);
         assertTrue(s.indexOf("OT[10 moves / 1 min]") >= 0);

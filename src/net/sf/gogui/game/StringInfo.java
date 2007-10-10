@@ -4,7 +4,7 @@
 
 package net.sf.gogui.game;
 
-/** Information in GameInformation that can contain any text. */
+/** Information in GameInfo that can contain any text. */
 public enum StringInfo
 {
     ANNOTATION,

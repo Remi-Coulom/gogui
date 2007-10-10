@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.text.DecimalFormat;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
@@ -57,7 +57,7 @@ public class Analyze
         m_commandStatistics =
             new ArrayList<CommandStatistics>(m_commands.size());
         File file = new File(m_output + ".html");
-        initGameInfo();
+        initGameData();
         findGameGlobalCommands();
         PrintStream out = new PrintStream(file);
         startHtml(out, "Statistics Summary");
@@ -185,7 +185,7 @@ public class Analyze
         }
     }
 
-    private static class GameInfo
+    private static class GameData
     {
         public String m_file;
 
@@ -220,7 +220,7 @@ public class Analyze
 
     private ArrayList<GameGlobalCommand> m_gameGlobalCommands;
 
-    private ArrayList<GameInfo> m_gameInfo;
+    private ArrayList<GameData> m_gameData;
 
     private void endInfo(PrintStream out)
     {
@@ -237,10 +237,10 @@ public class Analyze
             String command = getCommand(i);
             boolean isGameGlobal = true;
             ArrayList<String> gameResult = new ArrayList<String>();
-            for (int j = 0; j < m_gameInfo.size(); ++j)
+            for (int j = 0; j < m_gameData.size(); ++j)
             {
-                GameInfo info = m_gameInfo.get(j);
-                Table table = TableUtil.select(m_table, "File", info.m_file,
+                GameData data = m_gameData.get(j);
+                Table table = TableUtil.select(m_table, "File", data.m_file,
                                                command);
                 ArrayList<String> notEmpty
                     = TableUtil.getColumnNotEmpty(table, command);
@@ -390,8 +390,8 @@ public class Analyze
     private String getGameLink(File fromFile, int gameNumber,
                                boolean shortName)
     {
-        GameInfo info = m_gameInfo.get(gameNumber);
-        File gameFile = new File(info.m_file);
+        GameData data = m_gameData.get(gameNumber);
+        File gameFile = new File(data.m_file);
         if (! gameFile.exists())
             return (shortName ? gameFile.getName() : gameFile.toString());
         String path = FileUtil.getRelativeURI(fromFile, gameFile);
@@ -404,11 +404,11 @@ public class Analyze
         return Math.max(10, Math.min(numberMoves * 9, 1040));
     }
 
-    private void initGameInfo() throws Table.InvalidLocation, IOException
+    private void initGameData() throws Table.InvalidLocation, IOException
     {
-        m_gameInfo = new ArrayList<GameInfo>();
+        m_gameData = new ArrayList<GameData>();
         String last = null;
-        GameInfo info = null;
+        GameData data = null;
         m_maxMove = 0;
         int[] count = new int[0];
         for (int row = 0; row < m_table.getNumberRows(); ++row)
@@ -426,14 +426,14 @@ public class Analyze
             m_maxMove = Math.max(m_maxMove, move);
             if (last == null || ! file.equals(last))
             {
-                if (info != null)
-                    m_gameInfo.add(info);
-                info = new GameInfo();
-                info.m_file = file;
-                info.m_name = new File(file).getName();
+                if (data != null)
+                    m_gameData.add(data);
+                data = new GameData();
+                data.m_file = file;
+                data.m_name = new File(file).getName();
             }
-            ++info.m_numberPositions;
-            info.m_finalPosition = move;
+            ++data.m_numberPositions;
+            data.m_finalPosition = move;
             last = file;
         }
         m_movePrintInterval = 1;
@@ -444,13 +444,13 @@ public class Analyze
                 break;
             m_movePrintInterval *= 2;
         }
-        m_gameInfo.add(info);
+        m_gameData.add(data);
         m_tableFinal = new Table(m_table.getColumnTitles());
-        for (int i = 0; i < m_gameInfo.size(); ++i)
+        for (int i = 0; i < m_gameData.size(); ++i)
         {
-            info = m_gameInfo.get(i);
-            String file = info.m_file;
-            String finalPosition = Integer.toString(info.m_finalPosition);
+            data = m_gameData.get(i);
+            String file = data.m_file;
+            String finalPosition = Integer.toString(data.m_finalPosition);
             int row = TableUtil.findRow(m_table, "File", file, "Move",
                                         finalPosition);
             TableUtil.appendRow(m_tableFinal, m_table, row);
@@ -665,7 +665,7 @@ public class Analyze
             InputStream in = new FileInputStream(new File(game));
             SgfReader reader = new SgfReader(in, new File(game), null, 0);
             GameTree tree = reader.getTree();
-            GameInformation info = tree.getGameInformation(tree.getRoot());
+            GameInfo info = tree.getGameInfo(tree.getRoot());
             String playerBlack = info.get(StringInfoColor.NAME, BLACK);
             if (playerBlack == null)
                 playerBlack = "?";
@@ -736,7 +736,7 @@ public class Analyze
     {
         out.print("<table border=\"0\" cellpadding=\"0\""
                   + " cellspacing=\"0\">\n");
-        for (int i = 0; i < m_gameInfo.size(); ++i)
+        for (int i = 0; i < m_gameData.size(); ++i)
         {
             String plotFile = getPlotFile(i, commandIndex).getName();
             File file = getGameFile(i);
@@ -758,20 +758,20 @@ public class Analyze
             if (! getGameGlobalCommand(i).allEmpty())
                 out.print("<th>" + getGameGlobalCommand(i).m_name + "</th>");
         out.print("</tr></thead>\n");
-        for (int i = 0; i < m_gameInfo.size(); ++i)
+        for (int i = 0; i < m_gameData.size(); ++i)
         {
-            GameInfo info = m_gameInfo.get(i);
+            GameData data = m_gameData.get(i);
             String file = getGameFile(i).getName();
             out.print("<tr><td style=\"background-color:" + COLOR_HEADER
                       + "\"><a href=\"" + file + "\">Game " + (i + 1)
-                      + "</a></td><td>" + info.m_name
-                      + "</td><td>" + info.m_numberPositions + "</td>");
+                      + "</a></td><td>" + data.m_name
+                      + "</td><td>" + data.m_numberPositions + "</td>");
             for (int j = 0; j < m_gameGlobalCommands.size(); ++j)
                 if (! getGameGlobalCommand(j).allEmpty())
                     out.print("<td>" + getGameGlobalCommand(j).getResult(i)
                               + "</td>");
             out.print("</tr>\n");
-            writeGamePage(info.m_file, info.m_name, i);
+            writeGamePage(data.m_file, data.m_name, i);
         }
         out.print("</table>\n");
     }
@@ -853,7 +853,7 @@ public class Analyze
         out.print("</td><td>");
         if (greaterOne && withMaxError)
         {
-            int movesPerGame = m_table.getNumberRows() / m_gameInfo.size();
+            int movesPerGame = m_table.getNumberRows() / m_gameData.size();
             out.print(format.format(statistics.getMaxError(movesPerGame)));
         }
         else if (! empty)

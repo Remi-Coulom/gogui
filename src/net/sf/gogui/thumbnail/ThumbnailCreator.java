@@ -21,7 +21,7 @@ import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.game.BoardUpdater;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
@@ -216,7 +216,7 @@ public final class ThumbnailCreator
             }
         }
         GameTree tree = reader.getTree();
-        GameInformation info = tree.getGameInformation(tree.getRoot());
+        GameInfo info = tree.getGameInfo(tree.getRoot());
         int size = tree.getBoardSize();
         m_description = info.suggestGameName();
         if (m_description == null)

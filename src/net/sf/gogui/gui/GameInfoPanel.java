@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
-import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
@@ -77,7 +77,7 @@ public class GameInfoPanel
         ConstBoard board = game.getBoard();
         ConstNode node = game.getCurrentNode();
         ConstGameTree tree = game.getTree();
-        ConstGameInformation info = tree.getGameInformationConst(node);
+        ConstGameInfo info = tree.getGameInfoConst(node);
         for (GoColor c : BLACK_WHITE)
         {
             String name = info.get(StringInfoColor.NAME, c);

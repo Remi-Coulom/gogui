@@ -58,7 +58,7 @@ final class MoreExtraInfo
 
     public Map<GoPoint,String> m_label;
 
-    public GameInformation m_gameInformation;
+    public GameInfo m_gameInformation;
 
     public boolean isEmpty()
     {
@@ -181,7 +181,7 @@ public final class Node
         format is not specified by the SGF standard, is in a known format used
         by some other programs. Otherwise it is should be put to the unknown
         SGF properties, so that the old value is preserved if no new value
-        is set in GameInformation.
+        is set in GameInfo.
         @param label The name of the property
         @param value The valuee of the property
     */
@@ -215,11 +215,11 @@ public final class Node
     }
 
     /** Create game information or return it if already existing. */
-    public GameInformation createGameInformation()
+    public GameInfo createGameInfo()
     {
         MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
         if (moreExtraInfo.m_gameInformation == null)
-            moreExtraInfo.m_gameInformation = new GameInformation();
+            moreExtraInfo.m_gameInformation = new GameInfo();
         return moreExtraInfo.m_gameInformation;
     }
 
@@ -307,16 +307,16 @@ public final class Node
         return m_father;
     }
 
-    public GameInformation getGameInformation()
+    public GameInfo getGameInfo()
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
         return m_extraInfo.m_moreExtraInfo.m_gameInformation;
     }
 
-    public ConstGameInformation getGameInformationConst()
+    public ConstGameInfo getGameInfoConst()
     {
-        return getGameInformation();
+        return getGameInfo();
     }
 
     /** Get label for a location on the board.
