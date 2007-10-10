@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
@@ -54,8 +55,9 @@ public final class XmlReader
             m_root = new Node();
             m_node = m_root;
             XMLReader reader = XMLReaderFactory.createXMLReader();
-            reader.setContentHandler(new ContentHandler());
-            reader.setEntityResolver(new Resolver());
+            Handler handler = new Handler();
+            reader.setContentHandler(handler);
+            reader.setEntityResolver(handler);
             reader.parse(new InputSource(in));
             int size;
             if (m_isBoardSizeKnown)
@@ -110,7 +112,7 @@ public final class XmlReader
         return result.toString();
     }
 
-    private class ContentHandler
+    private class Handler
         extends DefaultHandler
     {
         public void startElement(String namespaceURI, String name,
@@ -243,11 +245,7 @@ public final class XmlReader
         {
             m_characters.append(ch, start, length);
         }
-    }
 
-    private class Resolver
-        implements EntityResolver
-    {
         /** Return internal go.dtd, if file does not exist. */
         public InputSource resolveEntity(String publicId, String systemId)
         {
@@ -283,6 +281,11 @@ public final class XmlReader
                 assert false;
                 return null;
             }
+        }
+
+        public void setDocumentLocator(Locator locator)
+        {
+            m_locator = locator;
         }
     }
 
@@ -328,6 +331,8 @@ public final class XmlReader
 
     /** Contains strings with warnings. */
     private final Set<String> m_warnings = new TreeSet<String>();
+
+    private Locator m_locator;
 
     private void checkParent(String... parents) throws SAXException
     {
@@ -551,6 +556,9 @@ public final class XmlReader
 
     private void throwError(String message) throws SAXException
     {
+        if (m_locator != null)
+            message = "Line " + m_locator.getLineNumber() + ":"
+                + m_locator.getColumnNumber() + ": " + message;
         throw new SAXException(message);
     }
 }
