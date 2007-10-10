@@ -235,7 +235,7 @@ public final class XmlReader
             if (! "file".equals(uri.getScheme()))
                 return null;
             File file = new File(uri.getPath());
-            if (file.exists())
+            if (file.exists() || ! "go.dtd".equals(file.getName()))
                 return null;
             String resource = "net/sf/gogui/xml/go.dtd";
             URL url = ClassLoader.getSystemClassLoader().getResource(resource);
