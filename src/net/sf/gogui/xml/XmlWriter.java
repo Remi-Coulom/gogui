@@ -140,7 +140,7 @@ public class XmlWriter
             return;
         for (GoPoint p : pointList)
             m_out.print("<SGF type=\"SL\"><Arg>" + getSgfPoint(p)
-                        + "</Arg><SGF>\n");
+                        + "</Arg></SGF>\n");
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels != null)
             for (Map.Entry<GoPoint,String> e : labels.entrySet())
