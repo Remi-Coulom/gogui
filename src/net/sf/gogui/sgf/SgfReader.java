@@ -408,6 +408,8 @@ public final class SgfReader
                 parsePointList(values);
                 node.addStones(EMPTY, m_pointList);
             }
+            else if (p == "AN")
+                set(node, StringInfo.ANNOTATION, v);
             else if (p == "AW")
             {
                 parsePointList(values);
@@ -429,6 +431,8 @@ public final class SgfReader
             }
             else if (p == "BR")
                 set(node, StringInfoColor.RANK, BLACK, v);
+            else if (p == "BT")
+                set(node, StringInfoColor.TEAM, BLACK, v);
             else if (p == "C")
             {
                 String comment;
@@ -450,6 +454,8 @@ public final class SgfReader
                                    + "\"");
                 }
             }
+            else if (p == "CP")
+                set(node, StringInfo.COPYRIGHT, v);
             else if (p == "CR")
                 parseMarked(node, MarkType.CIRCLE, values);
             else if (p == "DT")
@@ -543,8 +549,12 @@ public final class SgfReader
                 node.setPlayer(parseColor(v));
             else if (p == "RE")
                 set(node, StringInfo.RESULT, v);
+            else if (p == "RO")
+                set(node, StringInfo.ROUND, v);
             else if (p == "RU")
                 set(node, StringInfo.RULES, v);
+            else if (p == "SO")
+                set(node, StringInfo.SOURCE, v);
             else if (p == "SQ")
                 parseMarked(node, MarkType.SQUARE, values);
             else if (p == "SL")
@@ -555,6 +565,8 @@ public final class SgfReader
                 parseTime(v);
             else if (p == "TR")
                 parseMarked(node, MarkType.TRIANGLE, values);
+            else if (p == "US")
+                set(node, StringInfo.USER, v);
             else if (p == "W")
                 node.setMove(Move.get(WHITE, parsePoint(v)));
             else if (p == "TW")
@@ -581,6 +593,8 @@ public final class SgfReader
             }
             else if (p == "WR")
                 set(node, StringInfoColor.RANK, WHITE, v);
+            else if (p == "WT")
+                set(node, StringInfoColor.TEAM, WHITE, v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 node.addSgfProperty(p, values);
         }

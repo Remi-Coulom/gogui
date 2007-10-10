@@ -217,22 +217,13 @@ public class SgfWriter
 
     private void printGameInfo(ConstGameInfo info)
     {
-        String result = info.get(StringInfo.RESULT);
-        String playerBlack = info.get(StringInfoColor.NAME, BLACK);
-        String playerWhite = info.get(StringInfoColor.NAME, WHITE);
-        String rankBlack = info.get(StringInfoColor.RANK, BLACK);
-        String rankWhite = info.get(StringInfoColor.RANK, WHITE);
-        String date = info.get(StringInfo.DATE);
-        String rules = info.get(StringInfo.RULES);
         int handicap = info.getHandicap();
         Komi komi = info.getKomi();
-        TimeSettings timeSettings = info.getTimeSettings();
         if (handicap > 0)
             print("HA[" + handicap + "]");
         else if (komi != null)
             print("KM[" + komi + "]");
-        if (rules != null && ! rules.equals(""))
-            print("RU[" + getEscaped(rules) + "]");
+        TimeSettings timeSettings = info.getTimeSettings();
         if (timeSettings != null)
         {
             print("TM[" + timeSettings.getPreByoyomi() / 1000 + "]");
@@ -253,19 +244,28 @@ public class SgfWriter
                           + byoyomi / 1000 + " sec]");
             }
         }
-        if (playerBlack != null && ! playerBlack.equals(""))
-            print("PB[" + getEscaped(playerBlack) + "]");
-        if (playerWhite != null && ! playerWhite.equals(""))
-            print("PW[" + getEscaped(playerWhite) + "]");
-        if (rankBlack != null && ! rankBlack.equals(""))
-            print("BR[" + getEscaped(rankBlack) + "]");
-        if (rankWhite != null && ! rankWhite.equals(""))
-            print("WR[" + getEscaped(rankWhite) + "]");
-        if (date != null && ! date.equals(""))
-            print("DT[" + getEscaped(date) + "]");
-        if (result != null && ! result.equals(""))
-            print("RE[" + result + "]");
+        printInfo("PB", info.get(StringInfoColor.NAME, BLACK));
+        printInfo("PW", info.get(StringInfoColor.NAME, WHITE));
+        printInfo("BR", info.get(StringInfoColor.RANK, BLACK));
+        printInfo("WR", info.get(StringInfoColor.RANK, WHITE));
+        printInfo("BT", info.get(StringInfoColor.TEAM, BLACK));
+        printInfo("WT", info.get(StringInfoColor.TEAM, WHITE));
+        printInfo("DT", info.get(StringInfo.DATE));
+        printInfo("RE", info.get(StringInfo.RESULT));
+        printInfo("RU", info.get(StringInfo.RULES));
+        printInfo("US", info.get(StringInfo.USER));
+        printInfo("CP", info.get(StringInfo.COPYRIGHT));
+        printInfo("AN", info.get(StringInfo.ANNOTATION));
+        printInfo("RO", info.get(StringInfo.ROUND));
+        printInfo("SO", info.get(StringInfo.SOURCE));
         printNewLine();
+    }
+
+    private void printInfo(String label, String value)
+    {
+        if (value == null || value.equals(""))
+            return;
+        print(label + "[" + getEscaped(value) + "]");
     }
 
     private void printLabels(ConstNode node)
