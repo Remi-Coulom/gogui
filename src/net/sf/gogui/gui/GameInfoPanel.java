@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// GameInfo.java
+// GameInfoPanel.java
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -33,10 +33,10 @@ import static net.sf.gogui.go.GoColor.WHITE_BLACK;
 import net.sf.gogui.util.StringUtil;
 
 /** Panel displaying information about the current position. */
-public class GameInfo
+public class GameInfoPanel
     extends JPanel
 {
-    public GameInfo(Game game)
+    public GameInfoPanel(Game game)
     {
         setBorder(GuiUtil.createEmptyBorder());
         JPanel panel =

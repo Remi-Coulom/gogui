@@ -88,8 +88,8 @@ import net.sf.gogui.gui.Comment;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.ContextMenu;
 import net.sf.gogui.gui.FindDialog;
-import net.sf.gogui.gui.GameInfo;
 import net.sf.gogui.gui.GameInfoDialog;
+import net.sf.gogui.gui.GameInfoPanel;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
@@ -175,9 +175,9 @@ public class GoGui
 
         m_infoPanel = new JPanel(new BorderLayout());
         m_game = new Game(boardSize);
-        m_gameInfo = new GameInfo(m_game);
-        m_gameInfo.setBorder(GuiUtil.createSmallEmptyBorder());
-        m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
+        m_gameInfoPanel = new GameInfoPanel(m_game);
+        m_gameInfoPanel.setBorder(GuiUtil.createSmallEmptyBorder());
+        m_infoPanel.add(m_gameInfoPanel, BorderLayout.NORTH);
         m_guiBoard = new GuiBoard(boardSize);
 
         m_statusBar = new StatusBar();
@@ -406,7 +406,7 @@ public class GoGui
         if (! getClock().isInitialized())
             return;
         m_game.restoreClock();
-        m_gameInfo.updateTimeFromClock(getClock());
+        m_gameInfoPanel.updateTimeFromClock(getClock());
         updateViews(false);
     }
 
@@ -755,7 +755,7 @@ public class GoGui
             m_timeSettings = info.getTimeSettings();
         setTitle();
         updateViews(false);
-        m_gameInfo.updateTimeFromClock(getClock());
+        m_gameInfoPanel.updateTimeFromClock(getClock());
     }
 
     public void actionGoto()
@@ -994,7 +994,7 @@ public class GoGui
             return;
         setFile(null);
         newGame(size);
-        m_gameInfo.updateTimeFromClock(getClock());
+        m_gameInfoPanel.updateTimeFromClock(getClock());
         if (m_gtp != null && ! m_gtp.isGenmoveSupported())
         {
             m_computerBlack = false;
@@ -2155,7 +2155,7 @@ public class GoGui
     /** File corresponding to the current game. */
     private File m_file;
 
-    private final GameInfo m_gameInfo;
+    private final GameInfoPanel m_gameInfoPanel;
 
     private GtpShell m_shell;
 
@@ -4220,7 +4220,7 @@ public class GoGui
         m_actions.update();
         m_toolBar.update();
         m_menuBar.update(isProgramAttached(), isTreeShown(), isShellShown());
-        m_gameInfo.update(game);
+        m_gameInfoPanel.update(game);
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();
         updateGuiBoard();
