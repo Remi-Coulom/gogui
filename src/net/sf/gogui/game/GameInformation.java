@@ -111,7 +111,7 @@ public class GameInformation
         return m_rules;
     }
 
-    /** Get a copy of the time settings. */
+    /** Get the time settings. */
     public TimeSettings getTimeSettings()
     {
         return m_timeSettings;
@@ -187,9 +187,7 @@ public class GameInformation
         m_rules = rules;
     }
 
-    /** Set time settings.
-        Keeps a copy of the arguments.
-    */
+    /** Set time settings. */
     public void setTimeSettings(TimeSettings timeSettings)
     {
         m_timeSettings = timeSettings;
