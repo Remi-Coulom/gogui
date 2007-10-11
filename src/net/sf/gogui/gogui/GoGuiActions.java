@@ -295,11 +295,6 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportXml(); } };
 
-    public final Action m_actionExportXmlNoPass =
-        new Action("XML (No Pass)...") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionExportXmlNoPass(); } };
-
     public final Action m_actionFind =
         new Action("Find in Comments...", null, KeyEvent.VK_F) {
             public void actionPerformed(ActionEvent e) {

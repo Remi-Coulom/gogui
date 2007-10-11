@@ -363,7 +363,6 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionExportTextPositionToClipboard,
                      KeyEvent.VK_C);
         menu.addItem(actions.m_actionExportXml, KeyEvent.VK_X);
-        menu.addItem(actions.m_actionExportXmlNoPass, KeyEvent.VK_N);
         return menu;
     }
 

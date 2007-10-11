@@ -642,12 +642,18 @@ public class GoGui
 
     public void actionExportXml()
     {
-        exportXml(true);
-    }
-
-    public void actionExportXmlNoPass()
-    {
-        exportXml(false);
+        File file = showSave("Export XML");
+        if (file == null)
+            return;
+        try
+        {
+            String version = "GoGui:" + Version.get();
+            new XmlWriter(new FileOutputStream(file), getTree(), version);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
     }
 
     public void actionFind()
@@ -3038,23 +3044,6 @@ public class GoGui
             return false;
         }
         return true;
-    }
-
-    private void exportXml(boolean usePass)
-    {
-        File file = showSave("Export XML");
-        if (file == null)
-            return;
-        try
-        {
-            String version = "GoGui:" + Version.get();
-            new XmlWriter(new FileOutputStream(file), getTree(), version,
-                          usePass);
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Export failed", e);
-        }
     }
 
     private String formatCommand(String command)

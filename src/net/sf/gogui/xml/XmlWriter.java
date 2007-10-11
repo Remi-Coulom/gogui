@@ -31,17 +31,9 @@ import net.sf.gogui.util.HtmlUtil;
 */
 public class XmlWriter
 {
-    /** Construct writer and write tree.
-        @param usePass Write pass moves with empty at-property. This extension
-        is used by GoSVG
-        (http://homepage.ntlworld.com/daniel.gilder/gosvg.html), but not
-        supported by Jago (which does not write pass moves using move
-        elements, but adds a comment "Pass")
-    */
-    public XmlWriter(OutputStream out, ConstGameTree tree, String application,
-                     boolean usePass)
+    /** Construct writer and write tree. */
+    public XmlWriter(OutputStream out, ConstGameTree tree, String application)
     {
-        m_usePass = usePass;
         try
         {
             m_out = new PrintStream(out, false, "UTF-8");
@@ -68,8 +60,6 @@ public class XmlWriter
                     "</Go>\n");
         m_out.close();
     }
-
-    private final boolean m_usePass;
 
     private int m_boardSize;
 
@@ -175,11 +165,9 @@ public class XmlWriter
                     break;
                 }
             }
-        boolean isPass = (move != null && move.getPoint() == null);
         boolean hasSetup = node.hasSetup();
         boolean needsNode =
-            (move == null || (isPass && ! m_usePass)
-             || sgfProperties != null || hasSetup || hasMarkup);
+            (move == null || sgfProperties != null || hasSetup || hasMarkup);
         boolean isEmptyRoot =
             (isRoot && move == null && sgfProperties == null && ! hasSetup
              && ! hasMarkup);
@@ -188,20 +176,15 @@ public class XmlWriter
         if (move != null)
         {
             GoPoint p = move.getPoint();
-            if (p != null || m_usePass)
-            {
-                String at = (p == null ? "" : p.toString());
-                GoColor c = move.getColor();
-                int number = NodeUtil.getMoveNumber(node);
-                if (c == BLACK)
-                    m_out.print("<Black number=\"" + number + "\" at=\"" + at
-                                + "\"/>\n");
-                else if (c == WHITE)
-                    m_out.print("<White number=\"" + number + "\" at=\"" + at
-                                + "\"/>\n");
-            }
-            else if (comment == null || comment.equals(""))
-                comment = "Pass";
+            String at = (p == null ? "" : p.toString());
+            GoColor c = move.getColor();
+            int number = NodeUtil.getMoveNumber(node);
+            if (c == BLACK)
+                m_out.print("<Black number=\"" + number + "\" at=\"" + at
+                            + "\"/>\n");
+            else if (c == WHITE)
+                m_out.print("<White number=\"" + number + "\" at=\"" + at
+                            + "\"/>\n");
         }
         printSetup(node);
         printMarkup(node);
