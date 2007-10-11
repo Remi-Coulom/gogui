@@ -376,10 +376,13 @@ public final class XmlReader
     private void appendComment()
     {
         String comment = m_node.getComment();
+        String mergedLines = getMergedLines();
+        if (mergedLines.equals(""))
+            return;
         if (comment == null)
-            m_node.setComment(getMergedLines());
+            m_node.setComment(mergedLines);
         else
-            m_node.setComment(comment + "\n\n" + getMergedLines());
+            m_node.setComment(comment + "\n\n" + mergedLines);
     }
 
     private void appendCopyright()
