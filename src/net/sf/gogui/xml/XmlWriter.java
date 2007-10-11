@@ -4,8 +4,11 @@
 
 package net.sf.gogui.xml;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.EnumSet;
 import java.util.Map;
@@ -78,8 +81,25 @@ public class XmlWriter
     {
         if (comment == null)
             return;
-        // TODO: Insert paragraphs if necessary
-        m_out.print("<Comment>" + HtmlUtil.escape(comment) + "</Comment>\n");
+        BufferedReader reader = new BufferedReader(new StringReader(comment));
+        m_out.print("<Comment>\n");
+        String line = null;
+        try
+        {
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.trim().equals(""))
+                    continue;
+                m_out.print("<P>");
+                m_out.print(HtmlUtil.escape(line));
+                m_out.print("</P>\n");
+            }
+        }
+        catch (IOException e)
+        {
+            assert(false);
+        }
+        m_out.print("</Comment>\n");
     }
 
     private void printGameInfo(String application, ConstGameInfo info)
@@ -149,7 +169,8 @@ public class XmlWriter
 
     private void printNode(ConstNode node, boolean isRoot)
     {
-        // TODO: Warning, if game information node for this node is not root
+        // TODO: Save game information as SGF, if game information for
+        // this node is not stored in the root node
         Move move = node.getMove();
         String comment = node.getComment();
         ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
@@ -170,7 +191,7 @@ public class XmlWriter
             (move == null || sgfProperties != null || hasSetup || hasMarkup);
         boolean isEmptyRoot =
             (isRoot && move == null && sgfProperties == null && ! hasSetup
-             && ! hasMarkup);
+             && ! hasMarkup && comment == null);
         if (needsNode && ! isEmptyRoot)
             m_out.print("<Node>\n");
         if (move != null)

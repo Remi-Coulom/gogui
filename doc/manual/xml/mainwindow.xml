@@ -180,10 +180,8 @@ but parses the text selection copied to the clipboard.
 <term><guisubmenu>Import</guisubmenu> / <guimenuitem>XML</guimenuitem></term>
 <listitem>
 <para>
-Import a go game in XML format. Supports
-<ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
-Jago's XML format</ulink>. Files with more than one GoGame element are
-not supported.
+Import a go game in XML format.
+See <xref linkend="xmlformat"/> for details.
 </para>
 </listitem>
 </varlistentry>
@@ -259,10 +257,8 @@ Export the current position as a text diagram to the clipboard.
 <term><guisubmenu>Export</guisubmenu> / <guimenuitem>XML</guimenuitem></term>
 <listitem>
 <para>
-Export the current game tree in
-<ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
-Jago's XML format</ulink>. Pass moves are written as move elements with an
-empty string for the at-property.
+Export the current game tree in XML format.
+See <xref linkend="xmlformat"/> for details.
 </para>
 </listitem>
 </varlistentry>

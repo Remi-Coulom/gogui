@@ -1,0 +1,55 @@
+<appendix id="xmlformat">
+
+<title>XML Format</title>
+
+<para>
+GoGui uses
+<ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
+Jago's XML format</ulink> for saving and loading Go games in XML format.
+Currently, only files containing a single GoGame element are supported.
+The document definition file, as retrieved from
+<ulink url="http://www.rene-grothmann.de/jago/Documentation/go.dtd">
+http://www.rene-grothmann.de/jago/Documentation/go.dtd</ulink> in 10/2007 is
+included in the GoGui package in src/net/sf/gogui/xml/go.dtd.
+If a file is read with a DOCTYPE containing go.dtd as a local file, but the
+local file cannot be found, this copy of go.dtd will be used for validation.
+</para>
+
+<para>
+The following list documents how GoGui handles cases in which the
+documentation for the XML format and the DTD file are ambiguous or
+contradicting.
+</para>
+
+<itemizedlist>
+<listitem>
+<simpara>
+Pass moves are written as move elements with an empty string for the
+at-property. Handling pass moves this way was first introduced by 
+<ulink url="http://homepage.ntlworld.com/daniel.gilder/gosvg.html">
+GoSVG</ulink>. Jago has read-support for pass moves since
+version 5.0.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The XML documentation says that a paragraph element is optional
+for comments that contain only a single paragraph, but go.dtd requires
+them. GoGui will always store comments in a paragraph. When reading a file,
+GoGui can handle the case of direct text in comments, as long its DOCTYPE
+contains no DTD file or a modified version of go.dtd that allows it.
+However mixed text and paragraph elements are not supported.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The XML format contains no support for line-breaks in comments.
+According to the documentation, paragraphs elements should be handled as
+in HTML. GoGui will replace a line-break by a new paragraph when storing
+a file. When reading a file, line-breaks and empty lines are trimmed. Other
+whitespace is never deleted when storing or reading a comment.
+</simpara>
+</listitem>
+</itemizedlist>
+
+</appendix>

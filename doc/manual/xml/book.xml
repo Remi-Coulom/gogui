@@ -30,6 +30,7 @@
 <!ENTITY setup SYSTEM "setup.xml">
 <!ENTITY tools SYSTEM "tools.xml">
 <!ENTITY version SYSTEM "version.xml">
+<!ENTITY xmlformat SYSTEM "xmlformat.xml">
 ]>
 
 <book>
@@ -75,6 +76,7 @@ GoGui is a graphical interface to programs that play the game of Go.
 &reference-sgfthumbnail;
 &reference-twogtp;
 </appendix>
+&xmlformat;
 &news;
 &bugs;
 &donations;

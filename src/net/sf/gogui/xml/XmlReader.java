@@ -4,9 +4,11 @@
 
 package net.sf.gogui.xml;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.File;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -59,11 +61,11 @@ public final class XmlReader
             try
             {
                 reader.setFeature("http://xml.org/sax/features/validation",
-                                  true);
+                                  false);
             }
             catch (SAXException e)
             {
-                setWarning("Could not activate XML validation"); 
+                setWarning("Could not activate XML validation");
             }
             Handler handler = new Handler();
             reader.setContentHandler(handler);
@@ -175,6 +177,8 @@ public final class XmlReader
                 createNode();
             else if (name.equals("Nodes"))
                 handleNodes();
+            else if (name.equals("P"))
+                checkParent("Comment", "Copyright");
             else if (name.equals("Result"))
                 checkParent("Information");
             else if (name.equals("Round"))
@@ -206,6 +210,7 @@ public final class XmlReader
         public void endElement(String namespaceURI, String name,
                                String qualifiedName) throws SAXException
         {
+            m_elementStack.pop();
             if (name.equals("Annotation"))
                 m_info.set(StringInfo.ANNOTATION, getCharacters());
             else if (name.equals("Arg"))
@@ -219,15 +224,17 @@ public final class XmlReader
             else if (name.equals("BoardSize"))
                 handleEndBoardSize();
             else if (name.equals("Comment"))
-                m_node.setComment(getCharacters());
+                appendComment();
             else if (name.equals("Copyright"))
-                m_info.set(StringInfo.COPYRIGHT, getCharacters());
+                appendCopyright();
             else if (name.equals("Date"))
                 m_info.set(StringInfo.DATE, getCharacters());
             else if (name.equals("Handicap"))
                 handleEndHandicap();
             else if (name.equals("Komi"))
                 handleEndKomi();
+            else if (name.equals("P"))
+                handleEndP();
             else if (name.equals("Result"))
                 m_info.set(StringInfo.RESULT, getCharacters());
             else if (name.equals("Round"))
@@ -248,7 +255,7 @@ public final class XmlReader
                 m_info.set(StringInfoColor.TEAM, WHITE, getCharacters());
             else if (name.equals("Variation"))
                 m_node = m_variation.pop();
-            m_elementStack.pop();
+            m_characters.setLength(0);
         }
 
         public void characters(char[] ch, int start, int length)
@@ -355,6 +362,25 @@ public final class XmlReader
 
     private Locator m_locator;
 
+    private void appendComment()
+    {
+        String comment = m_node.getComment();
+        if (comment == null)
+            m_node.setComment(getMergedLines());
+        else
+            m_node.setComment(comment + "\n\n" + getMergedLines());
+    }
+
+    private void appendCopyright()
+    {
+        String copyright = m_info.get(StringInfo.COPYRIGHT);
+        if (copyright == null)
+            m_info.set(StringInfo.COPYRIGHT, getMergedLines());
+        else
+            m_info.set(StringInfo.COPYRIGHT, copyright + "\n\n"
+                       + getMergedLines());
+    }
+
     private void checkParent(String... parents) throws SAXException
     {
         String parent = parentElement();
@@ -417,6 +443,30 @@ public final class XmlReader
         return m_characters.toString();
     }
 
+    private String getMergedLines()
+    {
+        String chars = getCharacters();
+        StringBuilder result = new StringBuilder(chars.length());
+        BufferedReader reader = new BufferedReader(new StringReader(chars));
+        try
+        {
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.trim().equals(""))
+                    continue;
+                if (result.length() > 0)
+                    result.append(' ');
+                result.append(line);
+            }
+        }
+        catch (IOException e)
+        {
+            assert(false);
+        }
+        return result.toString();
+    }
+
     private void handleEndBoardSize() throws SAXException
     {
         int boardSize = parseInt();
@@ -446,6 +496,16 @@ public final class XmlReader
         {
             setWarning("Invalid komi: " + komi);
         }
+    }
+
+    private void handleEndP() throws SAXException
+    {
+        String text = getCharacters();
+        String parent = parentElement();
+        if (parent.equals("Comment"))
+            appendComment();
+        else if (parent.equals("Copyright"))
+            appendCopyright();
     }
 
     private void handleEndSgf() throws SAXException
