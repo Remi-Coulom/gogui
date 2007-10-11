@@ -61,7 +61,7 @@ public final class XmlReader
             try
             {
                 reader.setFeature("http://xml.org/sax/features/validation",
-                                  false);
+                                  true);
             }
             catch (SAXException e)
             {
@@ -143,6 +143,9 @@ public final class XmlReader
                 handleSetup(WHITE, atts);
             else if (name.equals("Arg"))
                 checkParent("SGF");
+            else if (name.equals("at"))
+                checkParent("Black", "White", "AddBlack", "AddWhite", "Delete",
+                            "Mark");
             else if (name.equals("Black"))
                 handleMove(BLACK, atts);
             else if (name.equals("BlackPlayer"))
@@ -215,6 +218,8 @@ public final class XmlReader
                 m_info.set(StringInfo.ANNOTATION, getCharacters());
             else if (name.equals("Arg"))
                 m_sgfArgs.add(getCharacters());
+            else if (name.equals("at"))
+                handleEndAt();
             else if (name.equals("BlackPlayer"))
                 m_info.set(StringInfoColor.NAME, BLACK, getCharacters());
             else if (name.equals("BlackRank"))
@@ -362,6 +367,12 @@ public final class XmlReader
 
     private Locator m_locator;
 
+    /** Current mark type in Mark element. */
+    private MarkType m_markType;
+
+    /** Current label in Mark element. */
+    private String m_label;
+
     private void appendComment()
     {
         String comment = m_node.getComment();
@@ -407,37 +418,6 @@ public final class XmlReader
         m_node = node;
     }
 
-    private GoPoint getAt(Attributes atts) throws SAXException
-    {
-        String value = atts.getValue("at");
-        if (value == null)
-            throwError("Missing at-property");
-        value = value.trim();
-        if (value.equals(""))
-            return null;
-        GoPoint p;
-        try
-        {
-            if (m_isBoardSizeKnown)
-                p = GoPoint.parsePoint(value, m_boardSize);
-            else
-            {
-                p = GoPoint.parsePoint(value, GoPoint.MAX_SIZE);
-                if (p != null)
-                {
-                    m_boardSize = Math.max(m_boardSize, p.getX());
-                    m_boardSize = Math.max(m_boardSize, p.getY());
-                }
-            }
-            return p;
-        }
-        catch (InvalidPointException e)
-        {
-            throwError(e.getMessage());
-        }
-        return null; // Unreachable; avoid compiler error
-    }
-
     private String getCharacters()
     {
         return m_characters.toString();
@@ -465,6 +445,57 @@ public final class XmlReader
             assert(false);
         }
         return result.toString();
+    }
+
+    private GoPoint getPoint(String value) throws SAXException
+    {
+        value = value.trim();
+        if (value.equals(""))
+            return null;
+        GoPoint p;
+        try
+        {
+            if (m_isBoardSizeKnown)
+                p = GoPoint.parsePoint(value, m_boardSize);
+            else
+            {
+                p = GoPoint.parsePoint(value, GoPoint.MAX_SIZE);
+                if (p != null)
+                {
+                    m_boardSize = Math.max(m_boardSize, p.getX());
+                    m_boardSize = Math.max(m_boardSize, p.getY());
+                }
+            }
+            return p;
+        }
+        catch (InvalidPointException e)
+        {
+            throwError(e.getMessage());
+        }
+        return null; // Unreachable; avoid compiler error
+    }
+
+    private void handleEndAt() throws SAXException
+    {
+        GoPoint p = getPoint(getCharacters());
+        String parent = parentElement();
+        if (parent.equals("Black"))
+            m_node.setMove(Move.get(BLACK, p));
+        else if (parent.equals("White"))
+            m_node.setMove(Move.get(WHITE, p));
+        else if (parent.equals("AddBlack"))
+            m_node.addStone(BLACK, p);
+        else if (parent.equals("AddWhite"))
+            m_node.addStone(WHITE, p);
+        else if (parent.equals("Delete"))
+            m_node.addStone(EMPTY, p);
+        else if (parent.equals("Mark"))
+        {
+            if (m_markType != null)
+                m_node.addMarked(p, m_markType);
+            if (m_label != null)
+                m_node.setLabel(p, m_label);
+        }
     }
 
     private void handleEndBoardSize() throws SAXException
@@ -539,34 +570,41 @@ public final class XmlReader
         checkParent("Node");
         if (m_node == null)
             createNode();
-        GoPoint p = getAt(atts);
+        m_markType = null;
+        m_label = atts.getValue("label");
         String type = atts.getValue("type");
-        String label = atts.getValue("label");
         String territory = atts.getValue("territory");
-        if (label != null)
-            m_node.setLabel(p, label);
         if (type != null)
         {
             if (type.equals("triangle"))
-                m_node.addMarked(p, MarkType.TRIANGLE);
+                m_markType = MarkType.TRIANGLE;
             else if (type.equals("circle"))
-                m_node.addMarked(p, MarkType.CIRCLE);
+                m_markType = MarkType.CIRCLE;
             else if (type.equals("square"))
-                m_node.addMarked(p, MarkType.SQUARE);
+                m_markType = MarkType.SQUARE;
             else
                 setWarning("Unknown mark type " + type);
         }
         if (territory != null)
         {
             if (territory.equals("black"))
-                m_node.addMarked(p, MarkType.TERRITORY_BLACK);
+                m_markType = MarkType.TERRITORY_BLACK;
             else if (territory.equals("white"))
-                m_node.addMarked(p, MarkType.TERRITORY_WHITE);
+                m_markType = MarkType.TERRITORY_WHITE;
             else
                 setWarning("Unknown territory type " + territory);
         }
-        if (type == null && territory == null && label == null)
-            m_node.addMarked(p, MarkType.MARK);
+        if (type == null && territory == null && m_label == null)
+            m_markType = MarkType.MARK;
+        String value = atts.getValue("at");
+        if (value != null)
+        {
+            GoPoint p = getPoint(value);
+            if (m_markType != null)
+                m_node.addMarked(p, m_markType);
+            if (m_label != null)
+                m_node.setLabel(p, m_label);
+        }
     }
 
     private void handleMove(GoColor c, Attributes atts) throws SAXException
@@ -574,8 +612,9 @@ public final class XmlReader
         checkParent("Node", "Nodes", "Variation");
         if (! parentElement().equals("Node"))
             createNode();
-        GoPoint p = getAt(atts);
-        m_node.setMove(Move.get(c, p));
+        String value = atts.getValue("at");
+        if (value != null)
+            m_node.setMove(Move.get(c, getPoint(value)));
     }
 
     private void handleNodes() throws SAXException
@@ -590,8 +629,9 @@ public final class XmlReader
         checkParent("Node");
         if (m_node == null)
             createNode();
-        GoPoint p = getAt(atts);
-        m_node.addStone(c, p);
+        String value = atts.getValue("at");
+        if (value != null)
+            m_node.addStone(c, getPoint(value));
     }
 
     private void handleSGF(Attributes atts) throws SAXException
