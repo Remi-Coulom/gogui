@@ -5,9 +5,12 @@
 <para>
 GoGui uses
 <ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
-Jago's XML format</ulink> for saving and loading Go games in XML format.
+Jago's XML format</ulink> for importing and exporting Go games in XML format.
 Currently, only files containing a single GoGame element are supported.
-The document definition file, as retrieved from
+</para>
+
+<para>
+The document type definition file as retrieved from
 <ulink url="http://www.rene-grothmann.de/jago/Documentation/go.dtd">
 http://www.rene-grothmann.de/jago/Documentation/go.dtd</ulink> in 10/2007 is
 included in the GoGui package in src/net/sf/gogui/xml/go.dtd.
@@ -17,8 +20,8 @@ local file cannot be found, this copy of go.dtd will be used for validation.
 
 <para>
 The following list documents how GoGui handles cases in which the
-documentation for the XML format and the DTD file are ambiguous or
-contradicting.
+documentation for the XML format from the web page and the DTD file are
+ambiguous or contradicting.
 </para>
 
 <itemizedlist>
@@ -37,17 +40,17 @@ The XML documentation says that a paragraph element is optional
 for comments that contain only a single paragraph, but go.dtd requires
 them. GoGui will always store comments in a paragraph. When reading a file,
 GoGui can handle the case of direct text in comments, as long its DOCTYPE
-contains no DTD file or a modified version of go.dtd that allows it.
-However mixed text and paragraph elements are not supported.
+contains no DTD file or a DTD derived from go.dtd that allows direct text
+in comments. However mixed text and paragraph elements are not supported.
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 The XML format contains no support for line-breaks in comments.
-According to the documentation, paragraphs elements should be handled as
-in HTML. GoGui will replace a line-break by a new paragraph when storing
-a file. When reading a file, line-breaks and empty lines are trimmed. Other
-whitespace is never deleted when storing or reading a comment.
+According to the documentation, paragraphs elements should handle text as
+the HTML paragraph element. GoGui will replace a line-break by a new paragraph
+when storing a file. When reading a file, line-breaks and empty lines are
+trimmed. Other whitespace is never deleted when storing or reading a comment.
 </simpara>
 </listitem>
 </itemizedlist>
