@@ -20,6 +20,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -55,9 +56,19 @@ public final class XmlReader
             m_root = new Node();
             m_node = m_root;
             XMLReader reader = XMLReaderFactory.createXMLReader();
+            try
+            {
+                reader.setFeature("http://xml.org/sax/features/validation",
+                                  true);
+            }
+            catch (SAXException e)
+            {
+                setWarning("Could not activate XML validation"); 
+            }
             Handler handler = new Handler();
             reader.setContentHandler(handler);
             reader.setEntityResolver(handler);
+            reader.setErrorHandler(handler);
             reader.parse(new InputSource(in));
             int size;
             if (m_isBoardSizeKnown)
@@ -286,6 +297,16 @@ public final class XmlReader
         public void setDocumentLocator(Locator locator)
         {
             m_locator = locator;
+        }
+
+        public void error(SAXParseException e)
+        {
+            setWarning(e.getMessage());
+        }
+
+        public void warning(SAXParseException e)
+        {
+            setWarning(e.getMessage());
         }
     }
 
