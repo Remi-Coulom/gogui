@@ -146,11 +146,11 @@ public class XmlWriter
         printMarkup(node, MarkType.TERRITORY_BLACK, " territory=\"black\"");
         printMarkup(node, MarkType.TERRITORY_WHITE, " territory=\"white\"");
         ConstPointList pointList = node.getMarkedConst(MarkType.SELECT);
-        if (pointList == null)
-            return;
-        for (GoPoint p : pointList)
-            m_out.print("<SGF type=\"SL\"><Arg>" + getSgfPoint(p)
-                        + "</Arg></SGF>\n");
+        if (pointList != null)
+            for (GoPoint p : pointList)
+                m_out.print("<SGF type=\"SL\"><Arg>" + getSgfPoint(p)
+                            + "</Arg></SGF>\n");
+
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels != null)
             for (Map.Entry<GoPoint,String> e : labels.entrySet())
