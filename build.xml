@@ -742,6 +742,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/twogtp/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
+ net/sf/gogui/xml/*.class
 "/>
 </jar>
 </target>

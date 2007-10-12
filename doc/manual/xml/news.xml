@@ -49,7 +49,7 @@ New menu item File / Export / PNG Image.
 </listitem>
 <listitem>
 <simpara>
-Import and export Go games in XML format.
+GoGui: import and export Go games in XML format. TwoGtp: new option -xml.
 </simpara>
 </listitem>
 <listitem>

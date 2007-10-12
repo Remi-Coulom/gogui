@@ -217,6 +217,7 @@ public class Analyze
             white = m_table.getProperty("White");
         else
             white = "Black";
+        boolean useXml = (! m_table.getProperty("Xml", "0").equals("0"));
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + black + " - " + white + "</title>\n" +
@@ -295,9 +296,10 @@ public class Analyze
                   "<th>Error Message</th>\n" +
                   "</tr>\n" +
                   "</thead>\n");
+        String gameSuffix = (useXml ? ".xml" : ".sgf");
         for (Entry e : m_entries)
         {
-            String name = gamePrefix + "-" + e.m_gameIndex + ".sgf";
+            String name = gamePrefix + "-" + e.m_gameIndex + gameSuffix;
             out.print("<tr align=\"center\" bgcolor=\"" + COLOR_INFO
                       + "\"><td><a href=\"" + name + "\">" + name
                       + "</a></td>\n");

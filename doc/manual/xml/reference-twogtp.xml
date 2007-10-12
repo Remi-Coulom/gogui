@@ -36,6 +36,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
+<arg><option>-xml</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
 <command>twogtp</command>
@@ -355,6 +356,15 @@ Print version and exit.
 <listitem>
 <para>
 Command for the white program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-xml</option></term>
+<listitem>
+<para>
+Save games in XML format.
 </para>
 </listitem>
 </varlistentry>

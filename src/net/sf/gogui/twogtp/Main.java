@@ -41,7 +41,8 @@ public final class Main
                 "time:",
                 "verbose",
                 "version",
-                "white:"
+                "white:",
+                "xml"
             };
             Options opt = Options.parse(args, options);
             if (opt.contains("help"))
@@ -68,7 +69,8 @@ public final class Main
                     "-time spec      set time limits (min[+min/moves])\n" +
                     "-verbose        log GTP streams to stderr\n" +
                     "-version        print version and exit\n" +
-                    "-white          command for white program\n";
+                    "-white          command for white program\n" +
+                    "-xml            save games in XML format\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
@@ -114,10 +116,11 @@ public final class Main
             Openings openings = null;
             if (opt.contains("openings"))
                 openings = new Openings(new File(opt.get("openings")));
+            boolean useXml = opt.contains("xml");
             TwoGtp twoGtp
                 = new TwoGtp(black, white, referee, observer, size, komi,
                              games, alternate, sgfFile, force, verbose,
-                             openings, timeSettings);
+                             openings, timeSettings, useXml);
             twoGtp.setMaxMoves(maxMoves);
             if (auto)
             {

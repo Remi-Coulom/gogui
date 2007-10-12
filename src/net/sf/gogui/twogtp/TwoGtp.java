@@ -43,6 +43,7 @@ import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.version.Version;
+import net.sf.gogui.xml.XmlWriter;
 
 /** GTP adapter for playing games between two Go programs. */
 public class TwoGtp
@@ -50,8 +51,9 @@ public class TwoGtp
 {
     public TwoGtp(String black, String white, String referee, String observer,
                   int size, Komi komi, int numberGames, boolean alternate,
-                  String sgfFile, boolean force, boolean verbose,
-                  Openings openings, TimeSettings timeSettings)
+                  String filePrefix, boolean force, boolean verbose,
+                  Openings openings, TimeSettings timeSettings,
+                  boolean useXml)
         throws Exception
     {
         super(null);
@@ -61,7 +63,8 @@ public class TwoGtp
             throw new ErrorMessage("No black program set");
         if (white.equals(""))
             throw new ErrorMessage("No white program set");
-        m_sgfFile = sgfFile;
+        m_filePrefix = filePrefix;
+        m_useXml = useXml;
         if (force)
             getResultFile().delete();
         m_allPrograms = new ArrayList<Program>();
@@ -494,6 +497,8 @@ public class TwoGtp
 
     private final boolean m_alternate;
 
+    private final boolean m_useXml;
+
     private boolean m_gameSaved;
 
     private int m_maxMoves = 1000;
@@ -532,7 +537,7 @@ public class TwoGtp
 
     private String m_openingFile;
 
-    private final String m_sgfFile;
+    private final String m_filePrefix;
 
     private final ArrayList<ArrayList<Compare.Placement>> m_games
         = new ArrayList<ArrayList<Compare.Placement>>(100);
@@ -676,6 +681,7 @@ public class TwoGtp
                                 + m_openings.getNumber() + " files)");
         m_table.setProperty("Date", StringUtil.getDate());
         m_table.setProperty("Host", Platform.getHostInfo());
+        m_table.setProperty("Xml", m_useXml ? "1" : "0");
     }
 
     private void forward(Program program, GtpCommand cmd) throws GtpError
@@ -700,7 +706,10 @@ public class TwoGtp
 
     private File getFile(int gameIndex)
     {
-        return new File(m_sgfFile + "-" + gameIndex + ".sgf");
+        if (m_useXml)
+            return new File(m_filePrefix + "-" + gameIndex + ".xml");
+        else
+            return new File(m_filePrefix + "-" + gameIndex + ".sgf");
     }
 
     private GoColor getToMove()
@@ -715,7 +724,7 @@ public class TwoGtp
 
     private File getResultFile()
     {
-        return new File(m_sgfFile + ".dat");
+        return new File(m_filePrefix + ".dat");
     }
 
     private String getTitle()
@@ -733,7 +742,7 @@ public class TwoGtp
         buffer.append(" vs ");
         buffer.append(nameBlack);
         buffer.append(" (B)");
-        if (! m_sgfFile.equals(""))
+        if (! m_filePrefix.equals(""))
         {
             buffer.append(" (");
             buffer.append(m_gameIndex + 1);
@@ -935,7 +944,7 @@ public class TwoGtp
                           String resultReferee)
         throws FileNotFoundException
     {
-        if (m_sgfFile.equals(""))
+        if (m_filePrefix.equals(""))
             return;
         String nameBlack = m_black.getLabel();
         String nameWhite = m_white.getLabel();
@@ -997,7 +1006,10 @@ public class TwoGtp
         if (m_verbose)
             System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, getTree(), "TwoGtp", Version.get());
+        if (m_useXml)
+            new XmlWriter(out, getTree(), "TwoGtp:" +Version.get());
+        else
+            new SgfWriter(out, getTree(), "TwoGtp", Version.get());
     }
 
     private void saveResult(String resultBlack, String resultWhite,
@@ -1007,7 +1019,7 @@ public class TwoGtp
                             double cpuTimeWhite)
         throws ErrorMessage
     {
-        if (m_sgfFile.equals(""))
+        if (m_filePrefix.equals(""))
             return;
         NumberFormat format = StringUtil.getNumberFormat(1);
         m_table.startRow();
