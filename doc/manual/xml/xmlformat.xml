@@ -29,13 +29,13 @@ the DTD file are ambiguous or contradicting.
 <simpara>
 The root element (Go) is written with the XML namespace property
 xmlns='http://www.rene-grothmann.de/jago' to allow registering
-specific MIME-handlers for Go games.
+specific MIME-handlers for Go game files.
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Unknown elements or attributes are not preserved between reading and
-writing an XML file, but can generate a warning when reading the file.
+writing an XML file, but may generate a warning when reading the file.
 </simpara>
 </listitem>
 <listitem>
