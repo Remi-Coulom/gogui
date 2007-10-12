@@ -657,6 +657,17 @@ public final class XmlReader
         String value = atts.getValue("at");
         if (value != null)
             m_node.setMove(Move.get(c, getPoint(value)));
+        value = atts.getValue("timeleft");
+        if (value != null)
+        {
+            try
+            {
+                m_node.setTimeLeft(c, Double.parseDouble(value));
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
     }
 
     private void handleNodes() throws SAXException
