@@ -583,6 +583,10 @@ public final class XmlReader
             return;
         if (m_sgfType.equals("SL") && m_sgfArgs.size() > 0)
             m_node.addMarked(getSgfPoint(m_sgfArgs.get(0)), MarkType.SELECT);
+        else if (m_sgfType.equals("OB"))
+            setMovesLeft(BLACK);
+        else if (m_sgfType.equals("OW"))
+            setMovesLeft(WHITE);
         else
             m_node.addSgfProperty(m_sgfType, m_sgfArgs);
     }
@@ -720,6 +724,21 @@ public final class XmlReader
         catch (NumberFormatException e)
         {
             throw new SAXException("Expected integer in element " + m_element);
+        }
+    }
+
+    private void setMovesLeft(GoColor c)
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            int movesLeft = Integer.parseInt(m_sgfArgs.get(0));
+            if (movesLeft >= 0)
+                m_node.setMovesLeft(c, movesLeft);
+        }
+        catch (NumberFormatException e)
+        {
         }
     }
 

@@ -147,10 +147,10 @@ public class XmlWriter
         printMarkup(node, MarkType.TERRITORY_WHITE, " territory=\"white\"");
         ConstPointList pointList = node.getMarkedConst(MarkType.SELECT);
         if (pointList != null)
+            // There is no type select in the Mark element -> use SGF/SL
             for (GoPoint p : pointList)
                 m_out.print("<SGF type=\"SL\"><Arg>" + getSgfPoint(p)
                             + "</Arg></SGF>\n");
-
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         if (labels != null)
             for (Map.Entry<GoPoint,String> e : labels.entrySet())
@@ -186,6 +186,17 @@ public class XmlWriter
         else if (c == WHITE)
             m_out.print("<White number=\"" + number + "\" at=\"" + at
                         + "\"" + timeLeftAtt + "/>\n");
+        int movesLeft = node.getMovesLeft(c);
+        // There is no movesleft attribute in Black/White -> use SGF/OW,OB
+        if (movesLeft >= 0)
+        {
+            if (c == BLACK)
+                m_out.print("<SGF type=\"OB\"><Arg>" + movesLeft
+                            + "</Arg></SGF>\n");
+            else if (c == WHITE)
+                m_out.print("<SGF type=\"OW\"><Arg>" + movesLeft
+                            + "</Arg></SGF>\n");
+        }
     }
 
     private void printNode(ConstNode node, boolean isRoot)
@@ -208,11 +219,12 @@ public class XmlWriter
                 }
             }
         boolean hasSetup = node.hasSetup();
-        boolean needsNode =
-            (move == null || sgfProperties != null || hasSetup || hasMarkup);
-        boolean isEmptyRoot =
-            (isRoot && move == null && sgfProperties == null && ! hasSetup
-             && ! hasMarkup && comment == null);
+        // Moves left are currently written as SGF element, which needs a Node
+        boolean hasMovesLeft =
+            (move != null && node.getMovesLeft(move.getColor()) != -1);
+        boolean needsNode = (move == null || sgfProperties != null || hasSetup
+                             || hasMarkup || hasMovesLeft);
+        boolean isEmptyRoot = (isRoot && ! node.isEmpty());
         if (needsNode && ! isEmptyRoot)
             m_out.print("<Node>\n");
         printMove(node);
