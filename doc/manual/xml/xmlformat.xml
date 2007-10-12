@@ -31,7 +31,7 @@ contradicting.
 The root element (Go) is written with the XML namespace attribute
 xmlns='http://www.rene-grothmann.de/jago' to allow registering
 specific MIME-handlers for Go game files. This attribute is not allowed by
-the original DTD file.
+the original DTD file, but Jago simply ignores the attribute.
 </simpara>
 </listitem>
 <listitem>
