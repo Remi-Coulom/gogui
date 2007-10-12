@@ -19,17 +19,19 @@ local file cannot be found, this copy of go.dtd will be used for validation.
 </para>
 
 <para>
-The following list documents details of how GoGui handles XML documents
-ans how cases are handled in which Jago's documentation from the web page and
-the DTD file are ambiguous or contradicting.
+The following list documents details of how GoGui handles XML documents,
+how it deviates from Jago's DTD file, and how cases are handled in which
+Jago's documentation from the web page and the DTD file are ambiguous or
+contradicting.
 </para>
 
 <itemizedlist>
 <listitem>
 <simpara>
-The root element (Go) is written with the XML namespace property
+The root element (Go) is written with the XML namespace attribute
 xmlns='http://www.rene-grothmann.de/jago' to allow registering
-specific MIME-handlers for Go game files.
+specific MIME-handlers for Go game files. This attribute is not allowed by
+the original DTD file.
 </simpara>
 </listitem>
 <listitem>
