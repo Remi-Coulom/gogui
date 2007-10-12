@@ -581,8 +581,11 @@ public final class XmlReader
     {
         if (m_sgfType == null)
             return;
-        if (m_sgfType.equals("SL") && m_sgfArgs.size() > 0)
-            m_node.addMarked(getSgfPoint(m_sgfArgs.get(0)), MarkType.SELECT);
+        if (m_sgfType.equals("SL"))
+        {
+            for (int i = 0; i < m_sgfArgs.size(); ++i)
+            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
+        }
         else if (m_sgfType.equals("OB"))
             setMovesLeft(BLACK);
         else if (m_sgfType.equals("OW"))
