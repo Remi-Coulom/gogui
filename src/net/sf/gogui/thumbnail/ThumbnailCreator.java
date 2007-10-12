@@ -32,6 +32,7 @@ import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.version.Version;
+import net.sf.gogui.xml.XmlReader;
 
 /** Thumbnail creator.
     Creates thumbnails according to the freedesktop.org standard.
@@ -63,7 +64,7 @@ public final class ThumbnailCreator
         Does not create the thumnbail if an up-to-date thumbnail already
         exists.
     */
-    public void create(File input) throws Error
+    public void create(File input, boolean useXml) throws ErrorMessage
     {
         File file = getThumbnailFileNormalSize(input);
         if (file.exists())
@@ -85,7 +86,7 @@ public final class ThumbnailCreator
             {
             }
         }
-        create(input, null, 128, true);
+        create(input, null, 128, true, useXml);
     }
 
     /** Create thumbnail.
@@ -97,7 +98,7 @@ public final class ThumbnailCreator
         smaller than 19.
     */
     public void create(File input, File output, int thumbnailSize,
-                       boolean scale) throws Error
+                       boolean scale, boolean useXml) throws ErrorMessage
     {
         assert thumbnailSize > 0;
         m_lastThumbnail = null;
@@ -107,7 +108,7 @@ public final class ThumbnailCreator
             URI uri = getURI(input);
             log("URI: " + uri);
             m_description = "";
-            ConstBoard board = readFile(input);
+            ConstBoard board = readFile(input, useXml);
             int size = board.getSize();
             Field[][] fields = new Field[size][size];
             for (int x = 0; x < size; ++x)
@@ -195,14 +196,23 @@ public final class ThumbnailCreator
 
     private final BoardPainter m_painter;
 
-    private ConstBoard readFile(File file)
-        throws FileNotFoundException, SgfError
+    private ConstBoard readFile(File file, boolean useXml)
+        throws FileNotFoundException, SgfError, ErrorMessage
     {
         FileInputStream in = new FileInputStream(file);
-        SgfReader reader;
+        GameTree tree;
         try
         {
-            reader = new SgfReader(in, file, null, 0);
+            if (useXml)
+            {
+                XmlReader reader = new XmlReader(in);
+                tree = reader.getTree();
+            }
+            else
+            {
+                SgfReader reader = new SgfReader(in, file, null, 0);
+                tree = reader.getTree();
+            }
         }
         finally
         {
@@ -215,7 +225,6 @@ public final class ThumbnailCreator
                 log(e.getMessage());
             }
         }
-        GameTree tree = reader.getTree();
         GameInfo info = tree.getGameInfo(tree.getRoot());
         int size = tree.getBoardSize();
         m_description = info.suggestGameName();

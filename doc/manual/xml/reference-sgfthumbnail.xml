@@ -19,6 +19,7 @@ Create thumbnails for SGF files.
 <command>sgfthumbnail</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-verbose</option></arg>
+<arg><option>-xml</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg choice="plain">
 <replaceable>input.sgf</replaceable>
@@ -107,6 +108,15 @@ Print logging messages to standard error.
 <listitem>
 <para>
 Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-xml</option></term>
+<listitem>
+<para>
+Assume that the game file is in XML format.
 </para>
 </listitem>
 </varlistentry>
