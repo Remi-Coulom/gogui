@@ -167,6 +167,27 @@ public class XmlWriter
             m_out.print("<Mark at=\"" + p + "\"" + attributes + "/>\n");
     }
 
+    private void printMove(ConstNode node)
+    {
+        Move move = node.getMove();
+        if (move == null)
+            return;
+        GoPoint p = move.getPoint();
+        String at = (p == null ? "" : p.toString());
+        GoColor c = move.getColor();
+        int number = NodeUtil.getMoveNumber(node);
+        String timeLeftAtt = "";
+        double timeLeft = node.getTimeLeft(c);
+        if (! Double.isNaN(timeLeft))
+            timeLeftAtt = " timeleft=\"" + timeLeft + "\"";
+        if (c == BLACK)
+            m_out.print("<Black number=\"" + number + "\" at=\"" + at
+                        + "\"" + timeLeftAtt + "/>\n");
+        else if (c == WHITE)
+            m_out.print("<White number=\"" + number + "\" at=\"" + at
+                        + "\"" + timeLeftAtt + "/>\n");
+    }
+
     private void printNode(ConstNode node, boolean isRoot)
     {
         // TODO: Save game information as SGF, if game information for
@@ -194,19 +215,7 @@ public class XmlWriter
              && ! hasMarkup && comment == null);
         if (needsNode && ! isEmptyRoot)
             m_out.print("<Node>\n");
-        if (move != null)
-        {
-            GoPoint p = move.getPoint();
-            String at = (p == null ? "" : p.toString());
-            GoColor c = move.getColor();
-            int number = NodeUtil.getMoveNumber(node);
-            if (c == BLACK)
-                m_out.print("<Black number=\"" + number + "\" at=\"" + at
-                            + "\"/>\n");
-            else if (c == WHITE)
-                m_out.print("<White number=\"" + number + "\" at=\"" + at
-                            + "\"/>\n");
-        }
+        printMove(node);
         printSetup(node);
         printMarkup(node);
         printComment(comment);
