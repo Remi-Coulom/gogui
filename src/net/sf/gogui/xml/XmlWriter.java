@@ -223,8 +223,9 @@ public class XmlWriter
         boolean hasMovesLeft =
             (move != null && node.getMovesLeft(move.getColor()) != -1);
         boolean needsNode = (move == null || sgfProperties != null || hasSetup
-                             || hasMarkup || hasMovesLeft);
-        boolean isEmptyRoot = (isRoot && ! node.isEmpty());
+                             || hasMarkup || hasMovesLeft
+                             || (move == null && comment != null));
+        boolean isEmptyRoot = (isRoot && node.isEmpty());
         if (needsNode && ! isEmptyRoot)
             m_out.print("<Node>\n");
         printMove(node);

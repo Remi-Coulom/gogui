@@ -68,6 +68,17 @@ when storing a file. When reading a file, line-breaks and empty lines are
 trimmed. Other whitespace is never deleted when storing or reading a comment.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+According to the original DTD, valid children of GoGame are Information and
+Nodes. Comment is not allowed as the first element in Nodes. However, the
+first example on Jago's webpage shows a case, where a Comment and move
+elements are direct children of GoGame. GoGui will always use Nodes and will
+always embed a Comment in a Node, if it is the first element in Nodes.
+When reading, a Comment can be the first element in Nodes, but Nodes is
+required.
+</simpara>
+</listitem>
 </itemizedlist>
 
 </appendix>
