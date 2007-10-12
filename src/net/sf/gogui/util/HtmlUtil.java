@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// $Id$
+// HtmlUtil.java
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -12,10 +12,33 @@ public final class HtmlUtil
     /** Escape HTML special characters in text. */
     public static String escape(String text)
     {
-        text = text.replaceAll(">", "&gt;");
-        text = text.replaceAll("<", "&lt;");
-        text = text.replaceAll("&", "&amp;");
-        return text;
+        int len = text.length();
+        StringBuilder result = new StringBuilder(len);
+        for (int i = 0; i < len; ++i)
+        {
+            char c = text.charAt(i);
+            switch (c)
+            {
+            case '>':
+                result.append("&gt;");
+                break;
+            case '<':
+                result.append("&lt;");
+                break;
+            case '&':
+                result.append("&amp;");
+                break;
+            case '"':
+                result.append("&quot;");
+                break;
+            case '\'':
+                result.append("&apos;");
+                break;
+            default:
+                result.append(c);
+            }
+        }
+        return result.toString();
     }
 
     /** Return a footer.
