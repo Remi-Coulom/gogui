@@ -59,6 +59,8 @@ public interface ConstNode
 
     boolean hasSetup();
 
+    boolean isEmpty();
+
     ConstNode variationAfter(ConstNode child);
 
     ConstNode variationBefore(ConstNode child);
