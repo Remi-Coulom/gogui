@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -478,6 +479,40 @@ public final class XmlReader
         return null; // Unreachable; avoid compiler error
     }
 
+    private GoPoint getSgfPoint(String s) throws SAXException
+    {
+        s = s.trim().toLowerCase(Locale.ENGLISH);
+        if (s.equals(""))
+            return null;
+        GoPoint p;
+        if (s.length() > 2
+            || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
+            // Human-readable encoding as used by SmartGo
+            return getPoint(s);
+        else if (s.length() != 2)
+            throwError("Invalid SGF coordinates: " + s);
+        if (! m_isBoardSizeKnown)
+        {
+            // We need to know the boardsize for parsing SGF points to mirror
+            // the y-coordinate and the size is not allowed to change later
+            m_boardSize = DEFAULT_BOARDSIZE;
+            m_isBoardSizeKnown = true;
+        }
+        if (s.equals("tt") && m_boardSize <= 19)
+            return null;
+        int x = s.charAt(0) - 'a';
+        int y = m_boardSize - (s.charAt(1) - 'a') - 1;
+        if (x < 0 || x >= m_boardSize || y < 0 || y >= m_boardSize)
+        {
+            if (x == m_boardSize && y == -1)
+                // Some programs encode pass moves, e.g. as jj for boardsize 9
+                return null;
+            throwError("Coordinates \"" + s + "\" outside board size "
+                       + m_boardSize);
+        }
+        return GoPoint.get(x, y);
+    }
+
     private void handleEndAt() throws SAXException
     {
         GoPoint p = getPoint(getCharacters());
@@ -544,7 +579,11 @@ public final class XmlReader
 
     private void handleEndSgf() throws SAXException
     {
-        if (m_sgfType != null)
+        if (m_sgfType == null)
+            return;
+        if (m_sgfType.equals("SL") && m_sgfArgs.size() > 0)
+            m_node.addMarked(getSgfPoint(m_sgfArgs.get(0)), MarkType.SELECT);
+        else
             m_node.addSgfProperty(m_sgfType, m_sgfArgs);
     }
 
