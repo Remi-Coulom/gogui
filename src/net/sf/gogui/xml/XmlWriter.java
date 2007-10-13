@@ -88,8 +88,6 @@ public class XmlWriter
         {
             while ((line = reader.readLine()) != null)
             {
-                if (line.trim().equals(""))
-                    continue;
                 m_out.print("<P>");
                 m_out.print(HtmlUtil.escape(line));
                 m_out.print("</P>\n");

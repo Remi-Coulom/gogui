@@ -63,15 +63,6 @@ in comments. However mixed text and paragraph elements are not supported.
 </listitem>
 <listitem>
 <simpara>
-The XML format contains no support for line-breaks in comments.
-According to the documentation, paragraphs elements should handle text as
-the HTML paragraph element. GoGui will replace a line-break by a new paragraph
-when storing a file. When reading a file, line-breaks and empty lines are
-trimmed. Other whitespace is never deleted when storing or reading a comment.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 According to the original DTD, valid children of GoGame are Information and
 Nodes. Comment is not allowed as the first element in Nodes. However, the
 first example on Jago's webpage shows a case, where a Comment and move

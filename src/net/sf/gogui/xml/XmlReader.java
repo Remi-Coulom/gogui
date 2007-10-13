@@ -230,7 +230,7 @@ public final class XmlReader
             else if (name.equals("BoardSize"))
                 handleEndBoardSize();
             else if (name.equals("Comment"))
-                appendComment();
+                appendComment(true);
             else if (name.equals("Copyright"))
                 appendCopyright();
             else if (name.equals("Date"))
@@ -374,16 +374,16 @@ public final class XmlReader
     /** Current label in Mark element. */
     private String m_label;
 
-    private void appendComment()
+    private void appendComment(boolean onlyIfNotEmpty)
     {
         String comment = m_node.getComment();
         String mergedLines = getMergedLines();
-        if (mergedLines.equals(""))
+        if (onlyIfNotEmpty && getMergedLines().equals(""))
             return;
         if (comment == null)
             m_node.setComment(mergedLines);
         else
-            m_node.setComment(comment + "\n\n" + mergedLines);
+            m_node.setComment(comment + "\n" + mergedLines);
     }
 
     private void appendCopyright()
@@ -572,7 +572,7 @@ public final class XmlReader
         String text = getCharacters();
         String parent = parentElement();
         if (parent.equals("Comment"))
-            appendComment();
+            appendComment(false);
         else if (parent.equals("Copyright"))
             appendCopyright();
     }
