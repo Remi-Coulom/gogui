@@ -3493,6 +3493,11 @@ public class GoGui
             showError("Could not read file", e);
             return false;
         }
+        catch (ErrorMessage e)
+        {
+            showError("Could not read file", e);
+            return false;
+        }
         catch (Throwable t)
         {
             t.printStackTrace();

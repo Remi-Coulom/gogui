@@ -62,11 +62,10 @@ public final class XmlReader
             try
             {
                 reader.setFeature("http://xml.org/sax/features/validation",
-                                  true);
+                                  false);
             }
             catch (SAXException e)
             {
-                setWarning("Could not activate XML validation");
             }
             Handler handler = new Handler();
             reader.setContentHandler(handler);
@@ -270,7 +269,11 @@ public final class XmlReader
             m_characters.append(ch, start, length);
         }
 
-        /** Return internal go.dtd, if file does not exist. */
+        /** Return internal go.dtd, if file does not exist.
+            Currently, GoGui does not validate the documents, but this
+            still avoids a missing entity error message, if an XML file
+            references go.dtd, but it is not found.
+        */
         public InputSource resolveEntity(String publicId, String systemId)
         {
             if (systemId == null)

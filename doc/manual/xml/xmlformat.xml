@@ -3,36 +3,27 @@
 <title>XML Format</title>
 
 <para>
-The document type definition file as retrieved from
+GoGui saves files that are valid XML files according to the document type
+definition file as retrieved from
 <ulink url="http://www.rene-grothmann.de/jago/Documentation/go.dtd">
-http://www.rene-grothmann.de/jago/Documentation/go.dtd</ulink> in 10/2007 is
-included in the GoGui package in src/net/sf/gogui/xml/go.dtd.
-If a file is read with a DOCTYPE containing go.dtd as a local file, but the
-local file cannot be found, this copy of go.dtd will be used for validation.
-</para>
-
-<para>
-The following list documents details of how GoGui handles XML documents,
-how it deviates from Jago's DTD file, and how cases are handled in which
-Jago's documentation from the web page and the DTD file are ambiguous or
-contradicting.
+http://www.rene-grothmann.de/jago/Documentation/go.dtd</ulink> in 10/2007.
+A copy of this file is included in the GoGui package in
+src/net/sf/gogui/xml/go.dtd.
+It should be noted that the XML examples on Jago's web page and the format
+of the files saved by Jago version 5.0 are not fully conforming to this
+DTD file.
+Therfore, GoGui does not strictly validate XML files and understands
+some of the undocumented deviations used by Jago. However, unknown
+elements or attributes are not preserved between reading and
+writing an XML file. GoGui will show a warning, when reading such a file.
+The following list explains more details about how GoGui handles XML files.
 </para>
 
 <itemizedlist>
 <listitem>
 <simpara>
-The root element (Go) is written with the XML namespace attribute
-xmlns='http://www.rene-grothmann.de/jago' to allow registering
-specific MIME-handlers for Go game files. This attribute is not allowed by
-the original DTD file, but Jago simply ignores the attribute.
 GoGui uses the MIME-type application/x-go+xml for Go XML files in its desktop
-configuration files.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Unknown elements or attributes are not preserved between reading and
-writing an XML file, but may generate a warning when reading the file.
+configuration files (on GNU/Linux).
 </simpara>
 </listitem>
 <listitem>
@@ -49,9 +40,8 @@ version 5.0.
 The XML documentation says that a paragraph element is optional
 for comments that contain only a single paragraph, but go.dtd requires
 them. GoGui will always store comments in a paragraph. When reading a file,
-GoGui can handle the case of direct text in comments, as long its DOCTYPE
-contains no DTD file or a DTD derived from go.dtd that allows direct text
-in comments. However mixed text and paragraph elements are not supported.
+GoGui can handle the case of direct text in comments. However mixed text
+and paragraph elements are not supported.
 </simpara>
 </listitem>
 <listitem>
