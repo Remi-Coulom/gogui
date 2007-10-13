@@ -29,6 +29,13 @@ public final class SgfProperties
         m_properties.put(key, new ArrayList<String>(values));
     }
 
+    public void add(String key, String value)
+    {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add(value);
+        m_properties.put(key, values);
+    }
+
     /** Get a list of all keys.
         This list is a copy of the keys at the time of the function call.
     */

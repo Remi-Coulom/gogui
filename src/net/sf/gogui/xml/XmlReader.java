@@ -774,10 +774,10 @@ public final class XmlReader
     {
         checkParent("Go");
         checkAttributes("name");
-        if (m_atts.getValue("name") != null)
-            // Not supported in game.GameInformation
-            setWarning("Attribute \"name\" in element"
-                       +" \"GoGame\" not supported");
+        String name = m_atts.getValue("name");
+        if (name != null)
+            // Not supported in game.GameInformation, put it in SGF properties
+            m_node.addSgfProperty("GN", name);
         if (++m_numberGames > 1)
             throwError("Multiple games per file not supported");
     }
@@ -861,13 +861,13 @@ public final class XmlReader
     private void startMove(GoColor c) throws SAXException
     {
         checkParent("Node", "Nodes", "Variation");
-        checkAttributes("annotate", "at", "timeleft", "name", "number");
         if (! parentElement().equals("Node"))
             createNode();
-        if (m_atts.getValue("name") != null)
-            // Not allowed by DTD, but used by Jago 5.0
-            setWarning("Ignoring attribute \"name\" in element \"" + m_element
-                       + "\"");
+        checkAttributes("annotate", "at", "timeleft", "name", "number");
+        String name = m_atts.getValue("name");
+        if (name != null)
+            // Not supported in game.Node, put it in SGF properties
+            m_node.addSgfProperty("N", name);
         if (m_atts.getValue("annotate") != null)
             // Allowed by DTD, but unclear content and not supported in
             // game.Node
@@ -896,9 +896,10 @@ public final class XmlReader
         // by Jago 5.0
         checkAttributes("blacktime", "name", "whitetime");
         createNode();
-        if (m_atts.getValue("name") != null)
-            // Not supported in game.Node
-            setWarning("Attribute \"name\" in element \"Node\" not supported");
+        String name = m_atts.getValue("name");
+        if (name != null)
+            // Not supported in game.Node, put it in SGF properties
+            m_node.addSgfProperty("N", name);
         String value = m_atts.getValue("blacktime");
         if (value != null)
         {

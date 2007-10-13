@@ -190,6 +190,11 @@ public final class Node
         createSgfProperties().add(label, values);
     }
 
+    public void addSgfProperty(String label, String value)
+    {
+        createSgfProperties().add(label, value);
+    }
+
     /** Add or remove a setup stone.
         It is not checked, if this stone is already in the list of added
         or removed stones.

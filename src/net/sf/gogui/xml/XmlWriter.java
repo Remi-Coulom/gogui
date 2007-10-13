@@ -54,8 +54,16 @@ public class XmlWriter
         }
         ConstNode root = tree.getRootConst();
         ConstGameInfo info = tree.getGameInfoConst(root);
+        // Game name is not supported in game.GameInformation, but XmlReader
+        // puts it into the SGF-Proprty "GN"
+        String gameNameAtt = "";
+        ConstSgfProperties sgfProperties = root.getSgfPropertiesConst();
+        if (sgfProperties != null && sgfProperties.hasKey("GN")
+            && sgfProperties.getNumberValues("GN") > 0)
+            gameNameAtt = " name=\""
+                + HtmlUtil.escape(sgfProperties.getValue("GN", 0)) + "\"";
         m_out.print("<Go>\n" +
-                    "<GoGame>\n");
+                    "<GoGame" + gameNameAtt + ">\n");
         m_boardSize = tree.getBoardSize();
         printGameInfo(application, info);
         m_out.print("<Nodes>\n");
@@ -206,6 +214,13 @@ public class XmlWriter
         Move move = node.getMove();
         String comment = node.getComment();
         ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
+        // Game name is not supported in game.GameInformation, but XmlReader
+        // puts it into the SGF-Proprty "N"
+        String nameAtt = "";
+        if (sgfProperties != null && sgfProperties.hasKey("N")
+            && sgfProperties.getNumberValues("N") > 0)
+            nameAtt = " name=\""
+                + HtmlUtil.escape(sgfProperties.getValue("N", 0)) + "\"";
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         boolean hasMarkup = (labels != null && ! labels.isEmpty());
         if (! hasMarkup)
@@ -222,17 +237,18 @@ public class XmlWriter
         // Moves left are currently written as SGF element, which needs a Node
         boolean hasMovesLeft =
             (move != null && node.getMovesLeft(move.getColor()) != -1);
-        boolean needsNode = (move == null || sgfProperties != null || hasSetup
+        boolean needsNode = (move == null || ! nameAtt.equals("")
+                             || sgfProperties != null || hasSetup
                              || hasMarkup || hasMovesLeft
                              || (move == null && comment != null));
         boolean isEmptyRoot = (isRoot && node.isEmpty());
         if (needsNode && ! isEmptyRoot)
-            m_out.print("<Node>\n");
+            m_out.print("<Node" + nameAtt + ">\n");
         printMove(node);
         printSetup(node);
         printMarkup(node);
         printComment(comment);
-        printSgfProperties(node);
+        printSgfProperties(node, isRoot);
         if (needsNode && ! isEmptyRoot)
             m_out.print("</Node>\n");
         ConstNode father = node.getFatherConst();
@@ -251,13 +267,19 @@ public class XmlWriter
             printNode(child, false);
     }
 
-    private void printSgfProperties(ConstNode node)
+    private void printSgfProperties(ConstNode node, boolean isRoot)
     {
         ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
         if (sgfProperties == null)
             return;
         for (String key : sgfProperties.getKeys())
         {
+            if (key.equals("N"))
+                // Already handled in constructor
+                continue;
+            if (isRoot && key.equals("GN"))
+                // Already handled in printNode
+                continue;
             m_out.print("<SGF type=\"" + key + "\">");
             int numberValues = sgfProperties.getNumberValues(key);
             for (int i = 0; i < numberValues; ++i)
