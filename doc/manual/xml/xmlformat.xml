@@ -38,10 +38,18 @@ version 5.0.
 <listitem>
 <simpara>
 The XML documentation says that a paragraph element is optional
-for comments that contain only a single paragraph, but go.dtd requires
+for comments that contain only a single paragraph, but the DTD file requires
 them. GoGui will always store comments in a paragraph. When reading a file,
 GoGui can handle the case of direct text in comments. However mixed text
 and paragraph elements are not supported.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+SGF comments can have linebreaks and use empty lines to separate paragraphs.
+GoGui handle paragraphs like Jago does: every comment line (which may be
+displayed using line-wrapping in the Gui) is stored in a paragraph, empty
+lines are stored as paragraphs without text content.
 </simpara>
 </listitem>
 <listitem>
