@@ -32,6 +32,8 @@ The root element (Go) is written with the XML namespace attribute
 xmlns='http://www.rene-grothmann.de/jago' to allow registering
 specific MIME-handlers for Go game files. This attribute is not allowed by
 the original DTD file, but Jago simply ignores the attribute.
+GoGui uses the MIME-type application/x-go+xml for Go XML files in its desktop
+configuration files.
 </simpara>
 </listitem>
 <listitem>

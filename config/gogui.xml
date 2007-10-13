@@ -13,5 +13,15 @@
     <sub-class-of type="text/plain"/>
     <glob pattern="*.sgf"/>
   </mime-type>
+  <mime-type type="application/x-go+xml">
+    <comment>Go Game</comment>
+    <comment xml:lang="de">Go Partie</comment>
+    <magic priority="80">
+      <match type="string" offset="0:64" value="&lt;!DOCTYPE Go "/>
+      <match type="string" offset="0:64" value="&lt;Go&gt;"/>
+    </magic>
+    <sub-class-of type="application/xml"/>
+    <root-XML namespaceURI='http://www.rene-grothmann.de/jago' localName='Go'/>
+    <glob pattern="*.xml"/>
+  </mime-type>
 </mime-info>
-
