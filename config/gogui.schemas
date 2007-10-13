@@ -25,5 +25,29 @@
 </locale>
 </schema>
 
+<schema>
+<key>/schemas/desktop/gnome/thumbnailers/application@x-go+xml/enable</key>
+<applyto>/desktop/gnome/thumbnailers/application@x-go+xml/enable</applyto>
+<owner>gogui</owner>
+<type>bool</type>
+<default>true</default>
+<locale name="C">
+<short>Enable thumbnailing of Go games in XML format.</short>
+<long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails.</long>
+</locale>
+</schema>
+
+<schema>
+<key>/schemas/desktop/gnome/thumbnailers/application@x-go+xml/command</key>
+<applyto>/desktop/gnome/thumbnailers/application@x-go+xml/command</applyto>
+<owner>gogui</owner>
+<type>string</type>
+<default>/usr/bin/sgfthumbnail -xml -size %s %i %o</default>
+<locale name="C">
+<short>Thumbnail command for Go games in XML format.</short>
+<long>Valid command plus arguments for SGF thumbnailer.</long>
+</locale>
+</schema>
+
 </schemalist>
 </gconfschemafile>
