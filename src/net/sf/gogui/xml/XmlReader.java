@@ -857,9 +857,18 @@ public final class XmlReader
     private void startMove(GoColor c) throws SAXException
     {
         checkParent("Node", "Nodes", "Variation");
-        checkAttributes("at", "timeleft", "number"); // TODO: handle annotate
+        checkAttributes("annotate", "at", "timeleft", "name", "number");
         if (! parentElement().equals("Node"))
             createNode();
+        if (m_atts.getValue("name") != null)
+            // Not allowed by DTD, but used by Jago 5.0
+            setWarning("Ignoring attribute \"name\" in element \"" + m_element
+                       + "\"");
+        if (m_atts.getValue("annotate") != null)
+            // Allowed by DTD, but unclear content and not supported in
+            // game.Node
+            setWarning("Ignoring attribute \"annotate\" in element \""
+                       + m_element + "\"");
         String value = m_atts.getValue("at");
         if (value != null)
             m_node.setMove(Move.get(c, getPoint(value)));
@@ -881,8 +890,12 @@ public final class XmlReader
         checkParent("Nodes", "Variation");
         // blacktime and whitetime are not allowed in the DTD, but used
         // by Jago 5.0
-        checkAttributes("blacktime", "whitetime");
+        checkAttributes("blacktime", "name", "whitetime");
         createNode();
+        if (m_atts.getValue("name") != null)
+            // Not supported in game.Node
+            setWarning("Ignoring attribute \"name\" in element \""
+                       + m_element + "\"");
         String value = m_atts.getValue("blacktime");
         if (value != null)
         {
