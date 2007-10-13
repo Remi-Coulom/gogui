@@ -10,9 +10,7 @@ import java.util.TreeMap;
 
 /** Unknown SGF properties.
     Non-type-checked SGF properties for preserving unknown properties.
-    Should only be used for unknown properties (therefore it contains
-    only functions to add and query properties, but not delete or modify
-    them).
+    Should only be used for unknown properties.
     @todo Iteration is inefficient, reimplement (but without sacrificing
     const-correctness)
 */
@@ -22,6 +20,16 @@ public final class SgfProperties
     public SgfProperties()
     {
         m_properties = new TreeMap<String,ArrayList<String>>();
+    }
+
+    public SgfProperties(ConstSgfProperties props)
+    {
+        this();
+        if (props == null)
+            return;
+        for (Map.Entry<String,ArrayList<String>> entry :
+                 ((SgfProperties)props).m_properties.entrySet())
+            add(entry.getKey(), entry.getValue());
     }
 
     public void add(String key, ArrayList<String> values)
@@ -67,6 +75,11 @@ public final class SgfProperties
     public boolean isEmpty()
     {
         return (m_properties.size() == 0);
+    }
+
+    public void remove(String key)
+    {
+        m_properties.remove(key);
     }
 
     private Map<String,ArrayList<String>> m_properties;

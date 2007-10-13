@@ -18,6 +18,7 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstSgfProperties;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.MarkType;
+import net.sf.gogui.game.SgfProperties;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.go.GoColor;
@@ -209,18 +210,20 @@ public class XmlWriter
 
     private void printNode(ConstNode node, boolean isRoot)
     {
-        // TODO: Save game information as SGF, if game information for
-        // this node is not stored in the root node
         Move move = node.getMove();
         String comment = node.getComment();
-        ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
+        SgfProperties sgfProps =
+            new SgfProperties(node.getSgfPropertiesConst());
         // Game name is not supported in game.GameInformation, but XmlReader
         // puts it into the SGF-Proprty "N"
         String nameAtt = "";
-        if (sgfProperties != null && sgfProperties.hasKey("N")
-            && sgfProperties.getNumberValues("N") > 0)
+        if (sgfProps != null && sgfProps.hasKey("N")
+            && sgfProps.getNumberValues("N") > 0)
+        {
             nameAtt = " name=\""
-                + HtmlUtil.escape(sgfProperties.getValue("N", 0)) + "\"";
+                + HtmlUtil.escape(sgfProps.getValue("N", 0)) + "\"";
+            sgfProps.remove("N");
+        }
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         boolean hasMarkup = (labels != null && ! labels.isEmpty());
         if (! hasMarkup)
@@ -237,10 +240,13 @@ public class XmlWriter
         // Moves left are currently written as SGF element, which needs a Node
         boolean hasMovesLeft =
             (move != null && node.getMovesLeft(move.getColor()) != -1);
+        ConstGameInfo info = node.getGameInfoConst();
+        boolean hasNonRootGameInfo = (info != null && ! isRoot);
         boolean needsNode = (move == null || ! nameAtt.equals("")
-                             || sgfProperties != null || hasSetup
+                             || sgfProps != null || hasSetup
                              || hasMarkup || hasMovesLeft
-                             || (move == null && comment != null));
+                             || (move == null && comment != null)
+                             || hasNonRootGameInfo);
         boolean isEmptyRoot = (isRoot && node.isEmpty());
         if (needsNode && ! isEmptyRoot)
             m_out.print("<Node" + nameAtt + ">\n");
@@ -248,7 +254,9 @@ public class XmlWriter
         printSetup(node);
         printMarkup(node);
         printComment(comment);
-        printSgfProperties(node, isRoot);
+        if (hasNonRootGameInfo)
+            putGameInfoSgf(info, sgfProps);
+        printSgfProperties(sgfProps);
         if (needsNode && ! isEmptyRoot)
             m_out.print("</Node>\n");
         ConstNode father = node.getFatherConst();
@@ -267,24 +275,15 @@ public class XmlWriter
             printNode(child, false);
     }
 
-    private void printSgfProperties(ConstNode node, boolean isRoot)
+    private void printSgfProperties(ConstSgfProperties sgfProps)
     {
-        ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
-        if (sgfProperties == null)
-            return;
-        for (String key : sgfProperties.getKeys())
+        for (String key : sgfProps.getKeys())
         {
-            if (key.equals("N"))
-                // Already handled in constructor
-                continue;
-            if (isRoot && key.equals("GN"))
-                // Already handled in printNode
-                continue;
             m_out.print("<SGF type=\"" + key + "\">");
-            int numberValues = sgfProperties.getNumberValues(key);
+            int numberValues = sgfProps.getNumberValues(key);
             for (int i = 0; i < numberValues; ++i)
                 m_out.print("<Arg>" +
-                            HtmlUtil.escape(sgfProperties.getValue(key, i))
+                            HtmlUtil.escape(sgfProps.getValue(key, i))
                             + "</Arg>");
             m_out.print("</SGF>\n");
         }
@@ -306,5 +305,55 @@ public class XmlWriter
             m_out.print("<SGF type=\"PL\"><Arg>B</Arg></SGF>\n");
         else if (WHITE.equals(player))
             m_out.print("<SGF type=\"PL\"><Arg>W</Arg></SGF>\n");
+    }
+
+    /** Put game information for non-root nodes into SGF properties.
+        Game information for non-root nodes Not supported directly in XML.
+    */
+    private void putGameInfoSgf(ConstGameInfo info, SgfProperties sgfProps)
+    {
+        putGameInfoSgf(info, sgfProps, "PB", StringInfoColor.NAME, BLACK);
+        putGameInfoSgf(info, sgfProps, "PW", StringInfoColor.NAME, WHITE);
+        putGameInfoSgf(info, sgfProps, "BR", StringInfoColor.RANK, BLACK);
+        putGameInfoSgf(info, sgfProps, "WR", StringInfoColor.RANK, WHITE);
+        putGameInfoSgf(info, sgfProps, "BT", StringInfoColor.TEAM, BLACK);
+        putGameInfoSgf(info, sgfProps, "WT", StringInfoColor.TEAM, WHITE);
+        putGameInfoSgf(info, sgfProps, "DT", StringInfo.DATE);
+        putGameInfoSgf(info, sgfProps, "RU", StringInfo.RULES);
+        putGameInfoSgf(info, sgfProps, "RE", StringInfo.RESULT);
+        putGameInfoSgf(info, sgfProps, "US", StringInfo.USER);
+        putGameInfoSgf(info, sgfProps, "CP", StringInfo.COPYRIGHT);
+        putGameInfoSgf(info, sgfProps, "AN", StringInfo.ANNOTATION);
+        if (info.getHandicap() > 0)
+            putGameInfoSgf(sgfProps, "HA",
+                           Integer.toString(info.getHandicap()));
+        if (info.getKomi() != null)
+            putGameInfoSgf(sgfProps, "KM", info.getKomi().toString());
+        if (info.getTimeSettings() != null)
+            putGameInfoSgf(sgfProps, "TM", info.getTimeSettings().toString());
+    }
+
+    private void putGameInfoSgf(SgfProperties sgfProps, String key,
+                                String value)
+    {
+        sgfProps.add(key, value);
+    }
+
+    private void putGameInfoSgf(ConstGameInfo info, SgfProperties sgfProps,
+                                String key, StringInfo type)
+    {
+        String value = info.get(type);
+        if (value == null)
+            return;
+        sgfProps.add(key, value);
+    }
+
+    private void putGameInfoSgf(ConstGameInfo info, SgfProperties sgfProps,
+                                String key, StringInfoColor type, GoColor c)
+    {
+        String value = info.get(type, c);
+        if (value == null)
+            return;
+        sgfProps.add(key, value);
     }
 }
