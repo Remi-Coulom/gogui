@@ -148,7 +148,10 @@ public final class ThumbnailCreator
             Map<String,String> metaData = new TreeMap<String,String>();
             metaData.put("Thumb::URI", uri.toString());
             metaData.put("Thumb::MTime", Long.toString(lastModified));
-            metaData.put("Thumb::Mimetype", "application/x-go-sgf");
+            if (useXml)
+                metaData.put("Thumb::Mimetype", "application/x-go-sgf");
+            else
+                metaData.put("Thumb::Mimetype", "application/x-go+xml");
             if (! m_description.equals(""))
                 metaData.put("Description", m_description);
             metaData.put("Software", "GoGui " + Version.get());
