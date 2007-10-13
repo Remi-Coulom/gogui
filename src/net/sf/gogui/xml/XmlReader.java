@@ -13,6 +13,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Stack;
@@ -137,82 +139,88 @@ public final class XmlReader
                                  String qualifiedName, Attributes atts)
             throws SAXException
         {
+            checkNoCharacters();
             m_element = name;
+            m_atts = atts;
             if (name.equals("Annotation"))
-                checkParent("Information");
+                startInfoElemWithoutFormat();
             else if (name.equals("Application"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("AddBlack"))
-                handleSetup(BLACK, atts);
+                startSetup(BLACK);
             else if (name.equals("AddWhite"))
-                handleSetup(WHITE, atts);
+                startSetup(WHITE);
             else if (name.equals("Arg"))
                 checkParent("SGF");
             else if (name.equals("at"))
                 checkParent("Black", "White", "AddBlack", "AddWhite", "Delete",
                             "Mark");
             else if (name.equals("Black"))
-                handleMove(BLACK, atts);
+                startMove(BLACK);
             else if (name.equals("BlackPlayer"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("BlackRank"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("BlackTeam"))
-                checkParent("Information");
+                startInfoElemWithoutFormat();
             else if (name.equals("BlackToPlay"))
-                handleToPlay(BLACK);
+                startToPlay(BLACK);
             else if (name.equals("BoardSize"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("Comment"))
-                checkParent("Nodes", "Node", "Variation");
+                startComment();
             else if (name.equals("Copyright"))
                 checkParent("Information");
             else if (name.equals("Date"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("Delete"))
-                handleSetup(EMPTY, atts);
+                startSetup(EMPTY);
             else if (name.equals("Go"))
-                checkParent();
+                startGo();
             else if (name.equals("GoGame"))
-                handleGoGame();
+                startGoGame();
             else if (name.equals("Handicap"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("Information"))
-                checkParent("GoGame");
+                startInformation();
+            else if (name.equals("Line"))
+                startLine();
             else if (name.equals("Komi"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("Mark"))
-                handleMark(atts);
+                startMark();
             else if (name.equals("Node"))
-                createNode();
+                startNode();
             else if (name.equals("Nodes"))
-                handleNodes();
+                startNodes();
             else if (name.equals("P"))
-                checkParent("Comment", "Copyright");
+                startP();
             else if (name.equals("Result"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("Round"))
-                checkParent("Information");
+                startInfoElemWithoutFormat();
+            else if (name.equals("Rules"))
+                startInfoElemWithFormat();
             else if (name.equals("Source"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("SGF"))
-                handleSGF(atts);
+                startSGF();
             else if (name.equals("Time"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("User"))
-                checkParent("Information");
+                startInfoElemWithoutFormat();
             else if (name.equals("Variation"))
-                handleVariation();
+                startVariation();
             else if (name.equals("White"))
-                handleMove(WHITE, atts);
+                startMove(WHITE);
             else if (name.equals("WhitePlayer"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("WhiteRank"))
-                checkParent("Information");
+                startInfoElemWithFormat();
             else if (name.equals("WhiteTeam"))
-                checkParent("Information");
+                startInfoElemWithoutFormat();
             else if (name.equals("WhiteToPlay"))
-                handleToPlay(WHITE);
+                startToPlay(WHITE);
             else
                 setWarning("Ignoring unknown element: " + name);
             m_elementStack.push(name);
@@ -222,53 +230,79 @@ public final class XmlReader
         public void endElement(String namespaceURI, String name,
                                String qualifiedName) throws SAXException
         {
-            m_elementStack.pop();
-            if (name.equals("Annotation"))
+            m_element = m_elementStack.pop();
+            if (name.equals("AddBlack"))
+                endSetup(BLACK);
+            else if (name.equals("AddWhite"))
+                endSetup(WHITE);
+            else if (name.equals("Annotation"))
                 m_info.set(StringInfo.ANNOTATION, getCharacters());
             else if (name.equals("Arg"))
                 m_sgfArgs.add(getCharacters());
             else if (name.equals("at"))
-                handleEndAt();
+                endAt();
+            else if (name.equals("Black"))
+                endMove(BLACK);
             else if (name.equals("BlackPlayer"))
                 m_info.set(StringInfoColor.NAME, BLACK, getCharacters());
             else if (name.equals("BlackRank"))
                 m_info.set(StringInfoColor.RANK, BLACK, getCharacters());
             else if (name.equals("BlackTeam"))
                 m_info.set(StringInfoColor.TEAM, BLACK, getCharacters());
+            else if (name.equals("BlackToPlay"))
+                endToPlay();
             else if (name.equals("BoardSize"))
-                handleEndBoardSize();
+                endBoardSize();
             else if (name.equals("Comment"))
                 appendComment(true);
             else if (name.equals("Copyright"))
-                appendCopyright();
+                appendCopyright(true);
             else if (name.equals("Date"))
                 m_info.set(StringInfo.DATE, getCharacters());
+            else if (name.equals("Delete"))
+                endSetup(EMPTY);
+            else if (name.equals("Go"))
+                checkNoCharacters();
+            else if (name.equals("GoGame"))
+                checkNoCharacters();
             else if (name.equals("Handicap"))
-                handleEndHandicap();
+                endHandicap();
+            else if (name.equals("Information"))
+                checkNoCharacters();
             else if (name.equals("Komi"))
-                handleEndKomi();
+                endKomi();
+            else if (name.equals("Mark"))
+                endMark();
+            else if (name.equals("Nodes"))
+                checkNoCharacters();
             else if (name.equals("P"))
-                handleEndP();
+                endP();
             else if (name.equals("Result"))
                 m_info.set(StringInfo.RESULT, getCharacters());
             else if (name.equals("Round"))
                 m_info.set(StringInfo.ROUND, getCharacters());
+            else if (name.equals("Rules"))
+                m_info.set(StringInfo.RULES, getCharacters());
             else if (name.equals("SGF"))
-                handleEndSgf();
+                endSgf();
             else if (name.equals("Source"))
                 m_info.set(StringInfo.SOURCE, getCharacters());
             else if (name.equals("Time"))
-                handleEndTime();
+                endTime();
             else if (name.equals("User"))
                 m_info.set(StringInfo.USER, getCharacters());
+            else if (name.equals("White"))
+                endMove(WHITE);
             else if (name.equals("WhitePlayer"))
                 m_info.set(StringInfoColor.NAME, WHITE, getCharacters());
             else if (name.equals("WhiteRank"))
                 m_info.set(StringInfoColor.RANK, WHITE, getCharacters());
             else if (name.equals("WhiteTeam"))
                 m_info.set(StringInfoColor.TEAM, WHITE, getCharacters());
+            else if (name.equals("WhiteToPlay"))
+                endToPlay();
             else if (name.equals("Variation"))
-                m_node = m_variation.pop();
+                endVariation();
             m_characters.setLength(0);
         }
 
@@ -366,6 +400,9 @@ public final class XmlReader
     /** Current element */
     private String m_element;
 
+    /** Attributes of current element */
+    private Attributes m_atts;
+
     /** Type of current SGF element. */
     private String m_sgfType;
 
@@ -390,7 +427,7 @@ public final class XmlReader
     {
         String comment = m_node.getComment();
         String mergedLines = getMergedLines();
-        if (onlyIfNotEmpty && getMergedLines().equals(""))
+        if (onlyIfNotEmpty && mergedLines.equals(""))
             return;
         if (comment == null)
             m_node.setComment(mergedLines);
@@ -398,30 +435,52 @@ public final class XmlReader
             m_node.setComment(comment + "\n" + mergedLines);
     }
 
-    private void appendCopyright()
+    private void appendCopyright(boolean onlyIfNotEmpty)
     {
         String copyright = m_info.get(StringInfo.COPYRIGHT);
+        String mergedLines = getMergedLines();
+        if (onlyIfNotEmpty && mergedLines.equals(""))
+            return;
         if (copyright == null)
-            m_info.set(StringInfo.COPYRIGHT, getMergedLines());
+            m_info.set(StringInfo.COPYRIGHT, mergedLines);
         else
-            m_info.set(StringInfo.COPYRIGHT, copyright + "\n\n"
-                       + getMergedLines());
+            m_info.set(StringInfo.COPYRIGHT, copyright + "\n"
+                       + mergedLines);
+    }
+
+    private void checkAttributes(String... atts) throws SAXException
+    {
+        List<String> list = Arrays.asList(atts);
+        for (int i = 0; i < m_atts.getLength(); ++i)
+        {
+            String name = m_atts.getLocalName(i);
+            if (! list.contains(name))
+                setWarning("Unknown attribute \"" + name + "\" for element \""
+                           + m_element + "\"");
+        }
+    }
+
+    private void checkNoCharacters() throws SAXException
+    {
+        if (! getCharacters().trim().equals(""))
+            setWarning("Cannot handle text content in element \"" + m_element
+                       + "\"");
+    }
+
+    private void checkRoot() throws SAXException
+    {
+        String parent = parentElement();
+        if (parent != null)
+            throwError("Element \"" + m_element + "\" cannot be child of \""
+                       + parent + "\"");
     }
 
     private void checkParent(String... parents) throws SAXException
     {
         String parent = parentElement();
-        if (parents.length == 0)
-        {
-            if (parent == null)
-                return;
-            throwError("Element \"" + m_element + "\" must be root element.");
-        }
-        for (int i = 0; i < parents.length; ++i)
-            if (parents[i].equals(parent))
-                return;
-        throwError("Element \"" + m_element + "\" cannot be child of \""
-                   + parent + "\".");
+        if (! Arrays.asList(parents).contains(parent))
+            throwError("Element \"" + m_element + "\" cannot be child of \""
+                       + parent + "\"");
     }
 
     private void createNode()
@@ -432,6 +491,182 @@ public final class XmlReader
         else if (! m_variation.isEmpty())
             m_variation.peek().getFather().append(node);
         m_node = node;
+    }
+
+    private void endAt() throws SAXException
+    {
+        GoPoint p = getPoint(getCharacters());
+        String parent = parentElement();
+        if (parent.equals("Black"))
+            m_node.setMove(Move.get(BLACK, p));
+        else if (parent.equals("White"))
+            m_node.setMove(Move.get(WHITE, p));
+        else if (parent.equals("AddBlack"))
+            m_node.addStone(BLACK, p);
+        else if (parent.equals("AddWhite"))
+            m_node.addStone(WHITE, p);
+        else if (parent.equals("Delete"))
+            m_node.addStone(EMPTY, p);
+        else if (parent.equals("Mark"))
+        {
+            if (m_markType != null)
+                m_node.addMarked(p, m_markType);
+            if (m_label != null)
+                m_node.setLabel(p, m_label);
+        }
+    }
+
+    private void endBoardSize() throws SAXException
+    {
+        int boardSize = parseInt();
+        if (boardSize < 1 || boardSize > GoPoint.MAX_SIZE)
+            throw new SAXException("Unsupported board size");
+        m_isBoardSizeKnown = true;
+        m_boardSize = boardSize;
+    }
+
+    private void endHandicap() throws SAXException
+    {
+        int handicap = parseInt();
+        if (handicap == 1 || handicap < 0)
+            setWarning("Ignoring invalid handicap: " + handicap);
+        else
+            m_info.setHandicap(handicap);
+    }
+
+    private void endKomi() throws SAXException
+    {
+        String komi = getCharacters();
+        try
+        {
+            m_info.setKomi(Komi.parseKomi(komi));
+        }
+        catch (InvalidKomiException e)
+        {
+            setWarning("Invalid komi: " + komi);
+        }
+    }
+
+    private void endMark() throws SAXException
+    {
+        // According to the DTD, mark cannot contain
+        // text content, but we accept it, if the point is text content
+        // instead of a at-subelement or an at-attribute
+        String value = getCharacters();
+        if (! value.trim().equals(""))
+        {
+            GoPoint p = getPoint(value);
+            if (m_markType != null)
+                m_node.addMarked(p, m_markType);
+            if (m_label != null)
+                m_node.setLabel(p, m_label);
+        }
+    }
+
+    private void endMove(GoColor c) throws SAXException
+    {
+        // According to the DTD, Black and White cannot contain text
+        // content, but we accept it, if the move is text content instead
+        // of a at-subelement or an at-attribute
+        String value = getCharacters();
+        if (! value.trim().equals(""))
+            m_node.setMove(Move.get(c, getPoint(value)));
+    }
+
+    private void endP() throws SAXException
+    {
+        String text = getCharacters();
+        String parent = parentElement();
+        if (parent.equals("Comment"))
+            appendComment(false);
+        else if (parent.equals("Copyright"))
+            appendCopyright(false);
+    }
+
+    private void endSetup(GoColor c) throws SAXException
+    {
+        // According to the DTD, AddBlack, AddWhite, and Delete cannot contain
+        // text content, but we accept it, if the point is text content instead
+        // of a at-subelement or an at-attribute
+        String value = getCharacters();
+        if (! value.trim().equals(""))
+            m_node.addStone(c, getPoint(value));
+    }
+
+    private void endSgf() throws SAXException
+    {
+        checkNoCharacters();
+        if (m_sgfType == null)
+            return;
+        if (m_sgfType.equals("SL"))
+        {
+            for (int i = 0; i < m_sgfArgs.size(); ++i)
+            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
+        }
+        else if (m_sgfType.equals("OB"))
+            endSgfMovesLeft(BLACK);
+        else if (m_sgfType.equals("OW"))
+            endSgfMovesLeft(WHITE);
+        else if (m_sgfType.equals("PL"))
+            endSgfPlayer();
+        else
+            m_node.addSgfProperty(m_sgfType, m_sgfArgs);
+    }
+
+    private void endSgfMovesLeft(GoColor c)
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            int movesLeft = Integer.parseInt(m_sgfArgs.get(0));
+            if (movesLeft >= 0)
+                m_node.setMovesLeft(c, movesLeft);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+    }
+
+    private void endSgfPlayer()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        String value = m_sgfArgs.get(0).trim().toLowerCase(Locale.ENGLISH);
+        GoColor c;
+        if (value.equals("b") || value.equals("black"))
+            c = BLACK;
+        else if (value.equals("w") || value.equals("white"))
+            c = WHITE;
+        else
+            return;
+        m_node.setPlayer(c);
+    }
+
+    private void endTime() throws SAXException
+    {
+        String time = getCharacters();
+        try
+        {
+            m_info.setTimeSettings(TimeSettings.parse(time));
+        }
+        catch (ErrorMessage e)
+        {
+            setWarning("Unknown time settings: " + e.getMessage());
+        }
+    }
+
+    private void endToPlay() throws SAXException
+    {
+        if (! getCharacters().trim().equals(""))
+            setWarning("Ignoring text content in element \"" + m_element
+                       + "\"");
+    }
+
+    private void endVariation() throws SAXException
+    {
+        checkNoCharacters();
+        m_node = m_variation.pop();
     }
 
     private String getCharacters()
@@ -523,148 +758,69 @@ public final class XmlReader
         return GoPoint.get(x, y);
     }
 
-    private void handleEndAt() throws SAXException
+    private void startComment() throws SAXException
     {
-        GoPoint p = getPoint(getCharacters());
-        String parent = parentElement();
-        if (parent.equals("Black"))
-            m_node.setMove(Move.get(BLACK, p));
-        else if (parent.equals("White"))
-            m_node.setMove(Move.get(WHITE, p));
-        else if (parent.equals("AddBlack"))
-            m_node.addStone(BLACK, p);
-        else if (parent.equals("AddWhite"))
-            m_node.addStone(WHITE, p);
-        else if (parent.equals("Delete"))
-            m_node.addStone(EMPTY, p);
-        else if (parent.equals("Mark"))
-        {
-            if (m_markType != null)
-                m_node.addMarked(p, m_markType);
-            if (m_label != null)
-                m_node.setLabel(p, m_label);
-        }
+        checkParent("Nodes", "Node", "Variation");
+        checkAttributes();
     }
 
-    private void handleEndBoardSize() throws SAXException
+    private void startGo() throws SAXException
     {
-        int boardSize = parseInt();
-        if (boardSize < 1 || boardSize > GoPoint.MAX_SIZE)
-            throw new SAXException("Unsupported board size");
-        m_isBoardSizeKnown = true;
-        m_boardSize = boardSize;
+        checkRoot();
+        checkAttributes();
     }
 
-    private void handleEndHandicap() throws SAXException
-    {
-        int handicap = parseInt();
-        if (handicap == 1 || handicap < 0)
-            setWarning("Ignoring invalif handicap: " + handicap);
-        else
-            m_info.setHandicap(handicap);
-    }
-
-    private void handleEndKomi() throws SAXException
-    {
-        String komi = getCharacters();
-        try
-        {
-            m_info.setKomi(Komi.parseKomi(komi));
-        }
-        catch (InvalidKomiException e)
-        {
-            setWarning("Invalid komi: " + komi);
-        }
-    }
-
-    private void handleEndP() throws SAXException
-    {
-        String text = getCharacters();
-        String parent = parentElement();
-        if (parent.equals("Comment"))
-            appendComment(false);
-        else if (parent.equals("Copyright"))
-            appendCopyright();
-    }
-
-    private void handleEndSgf() throws SAXException
-    {
-        if (m_sgfType == null)
-            return;
-        if (m_sgfType.equals("SL"))
-        {
-            for (int i = 0; i < m_sgfArgs.size(); ++i)
-            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
-        }
-        else if (m_sgfType.equals("OB"))
-            handleEndSgfMovesLeft(BLACK);
-        else if (m_sgfType.equals("OW"))
-            handleEndSgfMovesLeft(WHITE);
-        else if (m_sgfType.equals("PL"))
-            handleEndSgfPlayer();
-        else
-            m_node.addSgfProperty(m_sgfType, m_sgfArgs);
-    }
-
-    private void handleEndSgfMovesLeft(GoColor c)
-    {
-        if (m_sgfArgs.size() == 0)
-            return;
-        try
-        {
-            int movesLeft = Integer.parseInt(m_sgfArgs.get(0));
-            if (movesLeft >= 0)
-                m_node.setMovesLeft(c, movesLeft);
-        }
-        catch (NumberFormatException e)
-        {
-        }
-    }
-
-    private void handleEndSgfPlayer()
-    {
-        if (m_sgfArgs.size() == 0)
-            return;
-        String value = m_sgfArgs.get(0).trim().toLowerCase(Locale.ENGLISH);
-        GoColor c;
-        if (value.equals("b") || value.equals("black"))
-            c = BLACK;
-        else if (value.equals("w") || value.equals("white"))
-            c = WHITE;
-        else
-            return;
-        m_node.setPlayer(c);
-    }
-
-    private void handleEndTime() throws SAXException
-    {
-        String time = getCharacters();
-        try
-        {
-            m_info.setTimeSettings(TimeSettings.parse(time));
-        }
-        catch (ErrorMessage e)
-        {
-            setWarning("Unknown time settings: " + e.getMessage());
-        }
-    }
-
-    private void handleGoGame() throws SAXException
+    private void startGoGame() throws SAXException
     {
         checkParent("Go");
+        checkAttributes(); // TODO: handle name
         if (++m_numberGames > 1)
             throwError("Multiple games per file not supported");
     }
 
-    private void handleMark(Attributes atts) throws SAXException
+    private void startInfoElemWithFormat() throws SAXException
+    {
+        checkParent("Information");
+        checkAttributes("format");
+        String format = m_atts.getValue("format");
+        if (format == null)
+            return;
+        format = format.trim().toLowerCase(Locale.ENGLISH);
+        if (! format.equals("sgf"))
+            setWarning("Unknown format attribute \"" + format
+                       + "\" for element \"" + m_element +"\"");
+    }
+
+    private void startInfoElemWithoutFormat() throws SAXException
+    {
+        checkParent("Information");
+        checkAttributes();
+    }
+
+    private void startInformation() throws SAXException
+    {
+        checkParent("GoGame");
+        checkAttributes();
+    }
+
+    private void startLine() throws SAXException
+    {
+        // Line has no legal parent according to the DTD, so we
+        // ignore it
+        setWarning("Element \"Line\" cannot be child of element \""
+                   + parentElement() + "\""); 
+    }
+
+    private void startMark() throws SAXException
     {
         checkParent("Node");
+        checkAttributes("at", "label", "territory", "type");
         if (m_node == null)
             createNode();
         m_markType = null;
-        m_label = atts.getValue("label");
-        String type = atts.getValue("type");
-        String territory = atts.getValue("territory");
+        m_label = m_atts.getValue("label");
+        String type = m_atts.getValue("type");
+        String territory = m_atts.getValue("territory");
         if (type != null)
         {
             if (type.equals("triangle"))
@@ -687,7 +843,7 @@ public final class XmlReader
         }
         if (type == null && territory == null && m_label == null)
             m_markType = MarkType.MARK;
-        String value = atts.getValue("at");
+        String value = m_atts.getValue("at");
         if (value != null)
         {
             GoPoint p = getPoint(value);
@@ -698,15 +854,16 @@ public final class XmlReader
         }
     }
 
-    private void handleMove(GoColor c, Attributes atts) throws SAXException
+    private void startMove(GoColor c) throws SAXException
     {
         checkParent("Node", "Nodes", "Variation");
+        checkAttributes("at", "timeleft", "number"); // TODO: handle annotate
         if (! parentElement().equals("Node"))
             createNode();
-        String value = atts.getValue("at");
+        String value = m_atts.getValue("at");
         if (value != null)
             m_node.setMove(Move.get(c, getPoint(value)));
-        value = atts.getValue("timeleft");
+        value = m_atts.getValue("timeleft");
         if (value != null)
         {
             try
@@ -719,43 +876,85 @@ public final class XmlReader
         }
     }
 
-    private void handleNodes() throws SAXException
+    private void startNode() throws SAXException
+    {
+        checkParent("Nodes", "Variation");
+        // blacktime and whitetime are not allowed in the DTD, but used
+        // by Jago 5.0
+        checkAttributes("blacktime", "whitetime");
+        createNode();
+        String value = m_atts.getValue("blacktime");
+        if (value != null)
+        {
+            try
+            {
+                m_node.setTimeLeft(BLACK, Double.parseDouble(value));
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
+        value = m_atts.getValue("whitetime");
+        if (value != null)
+        {
+            try
+            {
+                m_node.setTimeLeft(WHITE, Double.parseDouble(value));
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
+    }
+
+    private void startNodes() throws SAXException
     {
         checkParent("GoGame");
+        checkAttributes();
         if (++m_numberTrees > 1)
             throwError("More than one Nodes element in element GoGame");
     }
 
-    private void handleSetup(GoColor c, Attributes atts) throws SAXException
+    private void startP() throws SAXException
+    {
+        checkParent("Comment", "Copyright");
+        checkAttributes();
+    }
+
+    private void startSetup(GoColor c) throws SAXException
     {
         checkParent("Node");
+        checkAttributes("at");
         if (m_node == null)
             createNode();
-        String value = atts.getValue("at");
+        String value = m_atts.getValue("at");
         if (value != null)
             m_node.addStone(c, getPoint(value));
     }
 
-    private void handleSGF(Attributes atts) throws SAXException
+    private void startSGF() throws SAXException
     {
         checkParent("Node");
-        m_sgfType = atts.getValue("type");
+        checkAttributes("type");
+        m_sgfType = m_atts.getValue("type");
         m_sgfArgs.clear();
     }
 
-    private void handleToPlay(GoColor c) throws SAXException
+    private void startToPlay(GoColor c) throws SAXException
     {
         // According to the DTD, BlackToPlay and WhiteToPlay can never
         // occur in a valid document, because they have no legal parent.
         // I assume that they were meant to be child elements of Node
         // and set the player in setup positions
         checkParent("Node");
+        checkAttributes();
         m_node.setPlayer(c);
     }
 
-    private void handleVariation() throws SAXException
+    private void startVariation() throws SAXException
     {
         checkParent("Nodes", "Variation");
+        checkAttributes();
         if (m_node == null)
             throwError("Variation without main node");
         assert m_node.hasFather();
