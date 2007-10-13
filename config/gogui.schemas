@@ -26,8 +26,8 @@
 </schema>
 
 <schema>
-<key>/schemas/desktop/gnome/thumbnailers/application@x-go+xml/enable</key>
-<applyto>/desktop/gnome/thumbnailers/application@x-go+xml/enable</applyto>
+<key>/schemas/desktop/gnome/thumbnailers/application@x-go@xml/enable</key>
+<applyto>/desktop/gnome/thumbnailers/application@x-go@xml/enable</applyto>
 <owner>gogui</owner>
 <type>bool</type>
 <default>true</default>
@@ -38,8 +38,8 @@
 </schema>
 
 <schema>
-<key>/schemas/desktop/gnome/thumbnailers/application@x-go+xml/command</key>
-<applyto>/desktop/gnome/thumbnailers/application@x-go+xml/command</applyto>
+<key>/schemas/desktop/gnome/thumbnailers/application@x-go@xml/command</key>
+<applyto>/desktop/gnome/thumbnailers/application@x-go@xml/command</applyto>
 <owner>gogui</owner>
 <type>string</type>
 <default>/usr/bin/sgfthumbnail -xml -size %s %i %o</default>
