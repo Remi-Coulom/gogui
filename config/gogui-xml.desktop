@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=GoGui (XML)
-GenericName=Go Game GUI (with XML file argument)
+Name=GoGui
+GenericName=Go Game GUI
 Exec=gogui -xml %f
 Terminal=false
 Type=Application
