@@ -44,7 +44,7 @@ public class XmlWriter
         try
         {
             m_out = new PrintStream(out, false, "UTF-8");
-            m_out.print("<?xml version='1.0' encoding='utf-8'?>\n");
+            m_out.print("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
         }
         catch (UnsupportedEncodingException e)
         {
