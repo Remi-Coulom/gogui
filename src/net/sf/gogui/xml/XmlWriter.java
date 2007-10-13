@@ -31,6 +31,9 @@ import net.sf.gogui.util.HtmlUtil;
 
 /** Write a game or board position in XML style to a stream.
     This class uses Jago's XML format, see http://www.rene-grothmann.de/jago
+    It writes files that are valid XML documents according to the go.dtd
+    from the Jago webpage (10/2007), see also the appendix "XML Format"
+    of the GoGui documentation.
 */
 public class XmlWriter
 {
@@ -273,5 +276,13 @@ public class XmlWriter
             m_out.print("<AddWhite at=\"" + p + "\"/>\n");
         for (GoPoint p : node.getSetup(EMPTY))
             m_out.print("<Delete at=\"" + p + "\"/>\n");
+        GoColor player = node.getPlayer();
+        // The BlackToPlay, WhiteToPlay elements in the DTD are not usable:
+        // they don't have a legal parent and it is not clear why they
+        // have a text content -> save player with a SGF property
+        if (BLACK.equals(player))
+            m_out.print("<SGF type=\"PL\"><Arg>B</Arg></SGF>\n");
+        else if (WHITE.equals(player))
+            m_out.print("<SGF type=\"PL\"><Arg>W</Arg></SGF>\n");
     }
 }

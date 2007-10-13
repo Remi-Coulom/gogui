@@ -55,6 +55,16 @@ When reading, a Comment can be the first element in Nodes, but Nodes is
 required.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+The BlackToPlay, WhiteToPlay elements in the DTD have no legal parent and it
+is not clear why they have a text content.
+Therefore, GoGui saves the player in a setup position
+using the legacy SGF PL-property. However when reading a file, it handles
+the above elements if they are the child of a Node element to set the current
+player.
+</simpara>
+</listitem>
 </itemizedlist>
 
 </appendix>

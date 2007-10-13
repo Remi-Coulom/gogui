@@ -47,7 +47,12 @@ import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
 
 /** Read files in Jago's XML format.
-    Uses SAX for memory efficient parsing of large files.
+    This class reads files in Jago's XML format, see
+    http://www.rene-grothmann.de/jago. It can understand valid XML files
+    according to the go.dtd from the Jago webpage (10/2007) and also handles
+    some deviations used by Jago or in the examples used on the Jago
+    webpage, see also the appendix "XML Format" of the GoGui documentation.
+    The implementation uses SAX for memory efficient parsing of large files.
 */
 public final class XmlReader
 {
@@ -154,6 +159,8 @@ public final class XmlReader
                 checkParent("Information");
             else if (name.equals("BlackTeam"))
                 checkParent("Information");
+            else if (name.equals("BlackToPlay"))
+                handleToPlay(BLACK);
             else if (name.equals("BoardSize"))
                 checkParent("Information");
             else if (name.equals("Comment"))
@@ -204,6 +211,8 @@ public final class XmlReader
                 checkParent("Information");
             else if (name.equals("WhiteTeam"))
                 checkParent("Information");
+            else if (name.equals("WhiteToPlay"))
+                handleToPlay(WHITE);
             else
                 setWarning("Ignoring unknown element: " + name);
             m_elementStack.push(name);
@@ -590,11 +599,43 @@ public final class XmlReader
             m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
         }
         else if (m_sgfType.equals("OB"))
-            setMovesLeft(BLACK);
+            handleEndSgfMovesLeft(BLACK);
         else if (m_sgfType.equals("OW"))
-            setMovesLeft(WHITE);
+            handleEndSgfMovesLeft(WHITE);
+        else if (m_sgfType.equals("PL"))
+            handleEndSgfPlayer();
         else
             m_node.addSgfProperty(m_sgfType, m_sgfArgs);
+    }
+
+    private void handleEndSgfMovesLeft(GoColor c)
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            int movesLeft = Integer.parseInt(m_sgfArgs.get(0));
+            if (movesLeft >= 0)
+                m_node.setMovesLeft(c, movesLeft);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+    }
+
+    private void handleEndSgfPlayer()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        String value = m_sgfArgs.get(0).trim().toLowerCase(Locale.ENGLISH);
+        GoColor c;
+        if (value.equals("b") || value.equals("black"))
+            c = BLACK;
+        else if (value.equals("w") || value.equals("white"))
+            c = WHITE;
+        else
+            return;
+        m_node.setPlayer(c);
     }
 
     private void handleEndTime() throws SAXException
@@ -704,6 +745,16 @@ public final class XmlReader
         m_sgfArgs.clear();
     }
 
+    private void handleToPlay(GoColor c) throws SAXException
+    {
+        // According to the DTD, BlackToPlay and WhiteToPlay can never
+        // occur in a valid document, because they have no legal parent.
+        // I assume that they were meant to be child elements of Node
+        // and set the player in setup positions
+        checkParent("Node");
+        m_node.setPlayer(c);
+    }
+
     private void handleVariation() throws SAXException
     {
         checkParent("Nodes", "Variation");
@@ -730,21 +781,6 @@ public final class XmlReader
         catch (NumberFormatException e)
         {
             throw new SAXException("Expected integer in element " + m_element);
-        }
-    }
-
-    private void setMovesLeft(GoColor c)
-    {
-        if (m_sgfArgs.size() == 0)
-            return;
-        try
-        {
-            int movesLeft = Integer.parseInt(m_sgfArgs.get(0));
-            if (movesLeft >= 0)
-                m_node.setMovesLeft(c, movesLeft);
-        }
-        catch (NumberFormatException e)
-        {
         }
     }
 
