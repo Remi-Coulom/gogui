@@ -773,7 +773,11 @@ public final class XmlReader
     private void startGoGame() throws SAXException
     {
         checkParent("Go");
-        checkAttributes(); // TODO: handle name
+        checkAttributes("name");
+        if (m_atts.getValue("name") != null)
+            // Not supported in game.GameInformation
+            setWarning("Attribute \"name\" in element"
+                       +" \"GoGame\" not supported");
         if (++m_numberGames > 1)
             throwError("Multiple games per file not supported");
     }
@@ -867,8 +871,8 @@ public final class XmlReader
         if (m_atts.getValue("annotate") != null)
             // Allowed by DTD, but unclear content and not supported in
             // game.Node
-            setWarning("Ignoring attribute \"annotate\" in element \""
-                       + m_element + "\"");
+            setWarning("Attribute \"annotate\" in element \""
+                       + m_element + "\" not supported");
         String value = m_atts.getValue("at");
         if (value != null)
             m_node.setMove(Move.get(c, getPoint(value)));
@@ -894,8 +898,7 @@ public final class XmlReader
         createNode();
         if (m_atts.getValue("name") != null)
             // Not supported in game.Node
-            setWarning("Ignoring attribute \"name\" in element \""
-                       + m_element + "\"");
+            setWarning("Attribute \"name\" in element \"Node\" not supported");
         String value = m_atts.getValue("blacktime");
         if (value != null)
         {
