@@ -113,9 +113,10 @@ public class XmlWriter
 
     private void printGameInfo(String application, ConstGameInfo info)
     {
-        m_out.print("<Information>\n" +
-                    "<Application>" + application + "</Application>\n" +
-                    "<BoardSize>" + m_boardSize + "</BoardSize>\n");
+        m_out.print("<Information>\n");
+        if (application != null)
+            m_out.print("<Application>" + application + "</Application>\n");
+        m_out.print("<BoardSize>" + m_boardSize + "</BoardSize>\n");
         printInfo("WhitePlayer", info.get(StringInfoColor.NAME, WHITE));
         printInfo("BlackPlayer", info.get(StringInfoColor.NAME, BLACK));
         printInfo("WhiteRank", info.get(StringInfoColor.RANK, WHITE));
@@ -243,7 +244,8 @@ public class XmlWriter
         ConstGameInfo info = node.getGameInfoConst();
         boolean hasNonRootGameInfo = (info != null && ! isRoot);
         boolean needsNode = (move == null || ! nameAtt.equals("")
-                             || sgfProps != null || hasSetup
+                             || (sgfProps != null && ! sgfProps.isEmpty())
+                             || hasSetup
                              || hasMarkup || hasMovesLeft
                              || (move == null && comment != null)
                              || hasNonRootGameInfo);

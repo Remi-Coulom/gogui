@@ -30,7 +30,7 @@ public final class XmlReaderTest
     public void testComment() throws Exception
     {
         ConstGameTree tree =
-            getTree("<?xml version='1.0' encoding='utf-8'?>" +
+            getTree("<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                     "<Go><GoGame><Nodes><Node>" +
                     "<Comment>" +
                     "<P>abc</P>" +
@@ -53,7 +53,7 @@ public final class XmlReaderTest
         // but since the first node has no move content and the implicit
         // root node is empty, the node with the comment should be the root
         ConstGameTree tree =
-            getTree("<?xml version='1.0' encoding='utf-8'?>" +
+            getTree("<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                     "<Go><GoGame name=\"gameName\"><Nodes>" +
                     "<Node><Comment><P>abc</P></Comment></Node>" +
                     "</Nodes></GoGame></Go>");
