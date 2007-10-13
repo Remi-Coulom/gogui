@@ -49,7 +49,10 @@ and paragraph elements are not supported.
 SGF comments can have linebreaks and use empty lines to separate paragraphs.
 GoGui handle paragraphs like Jago does: every comment line (which may be
 displayed using line-wrapping in the Gui) is stored in a paragraph, empty
-lines are stored as paragraphs without text content.
+lines are stored as paragraphs without text content. Despite of the
+documentation on Jago's web site that paragraphs are handled as in HTML,
+GoGui does not ignore any whitespaces, it only replaces newlines by empty
+characters when reading the text content of a paragraph.
 </simpara>
 </listitem>
 <listitem>

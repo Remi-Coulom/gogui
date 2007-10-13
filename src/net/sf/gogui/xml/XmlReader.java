@@ -449,8 +449,6 @@ public final class XmlReader
             String line;
             while ((line = reader.readLine()) != null)
             {
-                if (line.trim().equals(""))
-                    continue;
                 if (result.length() > 0)
                     result.append(' ');
                 result.append(line);
