@@ -319,8 +319,9 @@ public class XmlWriter
         putGameInfoSgf(info, sgfProps, "BT", StringInfoColor.TEAM, BLACK);
         putGameInfoSgf(info, sgfProps, "WT", StringInfoColor.TEAM, WHITE);
         putGameInfoSgf(info, sgfProps, "DT", StringInfo.DATE);
-        putGameInfoSgf(info, sgfProps, "RU", StringInfo.RULES);
         putGameInfoSgf(info, sgfProps, "RE", StringInfo.RESULT);
+        putGameInfoSgf(info, sgfProps, "RO", StringInfo.ROUND);
+        putGameInfoSgf(info, sgfProps, "RU", StringInfo.RULES);
         putGameInfoSgf(info, sgfProps, "US", StringInfo.USER);
         putGameInfoSgf(info, sgfProps, "CP", StringInfo.COPYRIGHT);
         putGameInfoSgf(info, sgfProps, "AN", StringInfo.ANNOTATION);

@@ -598,19 +598,101 @@ public final class XmlReader
         checkNoCharacters();
         if (m_sgfType == null)
             return;
-        if (m_sgfType.equals("SL"))
-        {
-            for (int i = 0; i < m_sgfArgs.size(); ++i)
-            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
-        }
+        if (m_sgfType.equals("AN"))
+            endSgfInfo(StringInfo.ANNOTATION);
+        else if (m_sgfType.equals("BR"))
+            endSgfInfo(StringInfoColor.RANK, BLACK);
+        else if (m_sgfType.equals("BT"))
+            endSgfInfo(StringInfoColor.TEAM, BLACK);
+        else if (m_sgfType.equals("CP"))
+            endSgfInfo(StringInfo.COPYRIGHT);
+        else if (m_sgfType.equals("DT"))
+            endSgfInfo(StringInfo.DATE);
+        else if (m_sgfType.equals("HA"))
+            endSgfHandicap();
         else if (m_sgfType.equals("OB"))
             endSgfMovesLeft(BLACK);
         else if (m_sgfType.equals("OW"))
             endSgfMovesLeft(WHITE);
+        else if (m_sgfType.equals("KM"))
+            endSgfKomi();
+        else if (m_sgfType.equals("PB"))
+            endSgfInfo(StringInfoColor.NAME, BLACK);
+        else if (m_sgfType.equals("PW"))
+            endSgfInfo(StringInfoColor.NAME, WHITE);
         else if (m_sgfType.equals("PL"))
             endSgfPlayer();
+        else if (m_sgfType.equals("RE"))
+            endSgfInfo(StringInfo.RESULT);
+        else if (m_sgfType.equals("RO"))
+            endSgfInfo(StringInfo.ROUND);
+        else if (m_sgfType.equals("RU"))
+            endSgfInfo(StringInfo.RULES);
+        else if (m_sgfType.equals("SL"))
+        {
+            for (int i = 0; i < m_sgfArgs.size(); ++i)
+            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
+        }
+        else if (m_sgfType.equals("TM"))
+            endSgfTimeSettings();
+        else if (m_sgfType.equals("WR"))
+            endSgfInfo(StringInfoColor.RANK, WHITE);
+        else if (m_sgfType.equals("WT"))
+            endSgfInfo(StringInfoColor.TEAM, WHITE);
+        else if (m_sgfType.equals("US"))
+            endSgfInfo(StringInfo.USER);
         else
             m_node.addSgfProperty(m_sgfType, m_sgfArgs);
+    }
+
+    /** Handle non-root handicap info from SGF properties. */
+    private void endSgfHandicap()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            int handicap = Integer.parseInt(m_sgfArgs.get(0));
+            GameInfo info = m_node.createGameInfo();;
+            info.setHandicap(handicap);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+    }
+
+    /** Handle non-root game info from SGF properties. */
+    private void endSgfInfo(StringInfo type)
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        GameInfo info = m_node.createGameInfo();;
+        info.set(type, m_sgfArgs.get(0));
+    }
+
+    /** Handle non-root game info from SGF properties. */
+    private void endSgfInfo(StringInfoColor type, GoColor c)
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        GameInfo info = m_node.createGameInfo();;
+        info.set(type, c, m_sgfArgs.get(0));
+    }
+
+    /** Handle non-root komi from SGF properties. */
+    private void endSgfKomi()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            Komi komi = Komi.parseKomi(m_sgfArgs.get(0));
+            GameInfo info = m_node.createGameInfo();;
+            info.setKomi(komi);
+        }
+        catch (InvalidKomiException e)
+        {
+        }
     }
 
     private void endSgfMovesLeft(GoColor c)
@@ -641,6 +723,22 @@ public final class XmlReader
         else
             return;
         m_node.setPlayer(c);
+    }
+
+    /** Handle non-root time settings from SGF properties. */
+    private void endSgfTimeSettings()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            TimeSettings timeSettings = TimeSettings.parse(m_sgfArgs.get(0));
+            GameInfo info = m_node.createGameInfo();;
+            info.setTimeSettings(timeSettings);
+        }
+        catch (ErrorMessage e)
+        {
+        }
     }
 
     private void endTime() throws SAXException
