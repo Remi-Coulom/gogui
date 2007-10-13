@@ -3,13 +3,6 @@
 <title>XML Format</title>
 
 <para>
-GoGui uses
-<ulink url="http://www.rene-grothmann.de/jago/Documentation/xml.html">
-Jago's XML format</ulink> for importing and exporting Go games in XML format.
-Currently, only files containing a single GoGame element are supported.
-</para>
-
-<para>
 The document type definition file as retrieved from
 <ulink url="http://www.rene-grothmann.de/jago/Documentation/go.dtd">
 http://www.rene-grothmann.de/jago/Documentation/go.dtd</ulink> in 10/2007 is

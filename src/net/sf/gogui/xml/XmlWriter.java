@@ -52,7 +52,6 @@ public class XmlWriter
         ConstNode root = tree.getRootConst();
         ConstGameInfo info = tree.getGameInfoConst(root);
         m_out.print("<!DOCTYPE Go SYSTEM \"go.dtd\">\n" +
-                    "<Go xmlns='http://www.rene-grothmann.de/jago'>\n" +
                     "<GoGame>\n");
         m_boardSize = tree.getBoardSize();
         printGameInfo(application, info);

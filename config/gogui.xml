@@ -21,7 +21,6 @@
       <match type="string" offset="0:64" value="&lt;Go&gt;"/>
     </magic>
     <sub-class-of type="application/xml"/>
-    <root-XML namespaceURI='http://www.rene-grothmann.de/jago' localName='Go'/>
     <glob pattern="*.xml"/>
   </mime-type>
 </mime-info>
