@@ -34,6 +34,7 @@ import javax.swing.event.ChangeListener;
 import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
+import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
@@ -435,7 +436,7 @@ class SgfPreview
             {
                 if (m_file.length() > 500000)
                     throw new ThumbnailCreator.Error("File too large for preview");
-                m_thumbnailCreator.create(m_file);
+                m_thumbnailCreator.create(m_file, false);
                 File thumbnail = m_thumbnailCreator.getLastThumbnail();
                 m_image = loadImage(thumbnail);
                 String description = m_thumbnailCreator.getLastDescription();
@@ -444,7 +445,7 @@ class SgfPreview
                 else
                     m_imagePanel.setToolTipText(null);
             }
-            catch (ThumbnailCreator.Error e)
+            catch (ErrorMessage e)
             {
                 m_image = MISSING_IMAGE;
                 m_lastError = e.getMessage();
