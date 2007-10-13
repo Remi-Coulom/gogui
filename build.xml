@@ -152,7 +152,6 @@ Comment out the exec svnversion for releases.
  COPYING
  INSTALL
  build.xml
- config/go.dtd
  config/gogui*.desktop
  config/gogui-application-x-go-sgf.png
  config/gogui-application-x-go-sgf.svg
@@ -705,6 +704,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
  net/sf/gogui/xml/*.class
+ net/sf/gogui/xml/*.dtd
 "/>
 </jar>
 </target>
