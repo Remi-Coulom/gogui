@@ -93,6 +93,8 @@ public final class XmlReader
             }
             m_tree = new GameTree(size, m_root);
             m_tree.getGameInfo(m_root).copyFrom(m_info);
+            if (m_gameName != null)
+                m_root.addSgfProperty("GN", m_gameName);
         }
         catch (SAXException e)
         {
@@ -422,6 +424,8 @@ public final class XmlReader
 
     /** Current label in Mark element. */
     private String m_label;
+
+    private String m_gameName;
 
     private void appendComment(boolean onlyIfNotEmpty)
     {
@@ -874,8 +878,9 @@ public final class XmlReader
         checkAttributes("name");
         String name = m_atts.getValue("name");
         if (name != null)
-            // Not supported in game.GameInformation, put it in SGF properties
-            m_node.addSgfProperty("GN", name);
+            // Not supported in game.GameInformation, put it in later
+            // in SGF properties
+            m_gameName = name;
         if (++m_numberGames > 1)
             throwError("Multiple games per file not supported");
     }
