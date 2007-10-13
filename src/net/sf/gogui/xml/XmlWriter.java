@@ -51,7 +51,7 @@ public class XmlWriter
         }
         ConstNode root = tree.getRootConst();
         ConstGameInfo info = tree.getGameInfoConst(root);
-        m_out.print("<!DOCTYPE Go SYSTEM \"go.dtd\">\n" +
+        m_out.print("<Go>\n" +
                     "<GoGame>\n");
         m_boardSize = tree.getBoardSize();
         printGameInfo(application, info);
