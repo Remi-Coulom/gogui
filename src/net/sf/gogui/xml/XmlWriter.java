@@ -243,29 +243,46 @@ public class XmlWriter
             (move != null && node.getMovesLeft(move.getColor()) != -1);
         ConstGameInfo info = node.getGameInfoConst();
         boolean hasNonRootGameInfo = (info != null && ! isRoot);
+        // Does the content need an embedding node?
+        // (not needed if only move and comment)
         boolean needsNode = (move == null || ! nameAtt.equals("")
                              || (sgfProps != null && ! sgfProps.isEmpty())
                              || hasSetup
                              || hasMarkup || hasMovesLeft
                              || (move == null && comment != null)
                              || hasNonRootGameInfo);
-        boolean isEmptyRoot = (isRoot && node.isEmpty());
-        if (needsNode && ! isEmptyRoot)
-            m_out.print("<Node" + nameAtt + ">\n");
-        printMove(node);
-        printSetup(node);
-        printMarkup(node);
-        printComment(comment);
-        if (hasNonRootGameInfo)
-            putGameInfoSgf(info, sgfProps);
-        printSgfProperties(sgfProps);
-        if (needsNode && ! isEmptyRoot)
-            m_out.print("</Node>\n");
+        int numberChildren = node.getNumberChildren();
+        boolean isEmpty = node.isEmpty();
+        // Empty root node is only printed if the child has a move
+        boolean isUnnecessaryRoot =
+            (isRoot && isEmpty
+             && (numberChildren == 0
+                 || (numberChildren == 1
+                     && node.getChildConst().getMove() == null)));
+        if (! isUnnecessaryRoot)
+        {
+            if (isEmpty)
+                m_out.print("<Node" + nameAtt + "/>\n");
+            else
+            {
+                if (needsNode)
+                    m_out.print("<Node" + nameAtt + ">\n");
+                printMove(node);
+                printSetup(node);
+                printMarkup(node);
+                printComment(comment);
+                if (hasNonRootGameInfo)
+                    putGameInfoSgf(info, sgfProps);
+                printSgfProperties(sgfProps);
+                if (needsNode)
+                    m_out.print("</Node>\n");
+            }
+        }
         ConstNode father = node.getFatherConst();
         if (father != null && father.getChildConst() == node)
         {
-            int numberChildren = father.getNumberChildren();
-            for (int i = 1; i < numberChildren; ++i)
+            int numberSiblings = father.getNumberChildren();
+            for (int i = 1; i < numberSiblings; ++i)
             {
                 m_out.print("<Variation>\n");
                 printNode(father.getChildConst(i), false);

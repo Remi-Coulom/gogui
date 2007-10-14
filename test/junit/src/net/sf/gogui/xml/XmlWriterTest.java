@@ -42,8 +42,7 @@ public final class XmlWriterTest
                      "<BoardSize>19</BoardSize>\n" +
                      "</Information>\n" +
                      "<Nodes>\n" +
-                     "<Node>\n" +
-                     "</Node>\n" +
+                     "<Node/>\n" +
                      "<Black number=\"1\" at=\"\"/>\n" +
                      "</Nodes>\n" +
                      "</GoGame>\n" +

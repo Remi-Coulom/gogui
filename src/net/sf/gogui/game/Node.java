@@ -40,7 +40,7 @@ final class ExtraInfo
     public boolean isEmpty()
     {
         return ((m_marked == null || m_marked.size() == 0)
-                && m_value == Float.NaN
+                && Float.isNaN(m_value)
                 && (m_moreExtraInfo == null || m_moreExtraInfo.isEmpty()));
     }
 }
@@ -100,8 +100,8 @@ final class TimeInfo
     public boolean isEmpty()
     {
         return (m_movesLeft.get(BLACK) == -1 && m_movesLeft.get(WHITE) == -1
-                && m_timeLeft.get(BLACK) == Double.NaN
-                && m_timeLeft.get(WHITE) == Double.NaN);
+                && Double.isNaN(m_timeLeft.get(BLACK))
+                && Double.isNaN(m_timeLeft.get(WHITE)));
     }
 }
 
