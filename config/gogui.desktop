@@ -8,5 +8,5 @@ Icon=gogui.png
 Terminal=false
 Type=Application
 Categories=Java;Application;Game;BoardGame;
-MimeType=application/x-go-sgf
+MimeType=application/x-go-sgf;application/x-go+xml
 # DocPath will be added by install.sh

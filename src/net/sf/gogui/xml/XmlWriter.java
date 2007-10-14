@@ -99,9 +99,14 @@ public class XmlWriter
         {
             while ((line = reader.readLine()) != null)
             {
-                m_out.print("<P>");
-                m_out.print(HtmlUtil.escape(line));
-                m_out.print("</P>\n");
+                if (line.equals(""))
+                    m_out.print("<P/>\n");
+                else
+                {
+                    m_out.print("<P>");
+                    m_out.print(HtmlUtil.escape(line));
+                    m_out.print("</P>\n");
+                }
             }
         }
         catch (IOException e)
