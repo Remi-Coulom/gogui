@@ -243,22 +243,29 @@ public class XmlWriter
             (move != null && node.getMovesLeft(move.getColor()) != -1);
         ConstGameInfo info = node.getGameInfoConst();
         boolean hasNonRootGameInfo = (info != null && ! isRoot);
-        // Does the content need an embedding node?
-        // (not needed if only move and comment)
-        boolean needsNode = (move == null || ! nameAtt.equals("")
-                             || (sgfProps != null && ! sgfProps.isEmpty())
-                             || hasSetup
-                             || hasMarkup || hasMovesLeft
-                             || (move == null && comment != null)
-                             || hasNonRootGameInfo);
+
+        // Root is considered empty, even if it has game info, because
+        // this is written in Information element
+        boolean isEmptyButMoveOrComment
+            = ((sgfProps == null || sgfProps.isEmpty())
+               && ! hasSetup && ! hasMarkup && ! hasMovesLeft
+               && !  hasNonRootGameInfo);
+
+        // Is a node element needed? (not if only move and comment)
+        boolean needsNode = (! isEmptyButMoveOrComment || ! nameAtt.equals("")
+                             || (move == null && comment != null));
+
         int numberChildren = node.getNumberChildren();
-        boolean isEmpty = node.isEmpty();
+        boolean isEmpty =
+            (isEmptyButMoveOrComment && comment == null && move == null);
+
         // Empty root node is only printed if the child has a move
         boolean isUnnecessaryRoot =
             (isRoot && isEmpty
              && (numberChildren == 0
                  || (numberChildren == 1
                      && node.getChildConst().getMove() == null)));
+
         if (! isUnnecessaryRoot)
         {
             if (isEmpty)

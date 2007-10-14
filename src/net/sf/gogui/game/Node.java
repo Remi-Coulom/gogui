@@ -535,8 +535,7 @@ public final class Node
         return (node.getChildIndex(this) != -1);
     }
 
-    /** Return true, if node stores no information.
-    */
+    /** Return true, if node stores no information. */
     public boolean isEmpty()
     {
         return (m_comment == null && m_move == null

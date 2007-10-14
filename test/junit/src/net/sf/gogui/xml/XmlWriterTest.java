@@ -12,6 +12,7 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import static net.sf.gogui.go.GoColor.BLACK;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.ErrorMessage;
 
@@ -40,6 +41,31 @@ public final class XmlWriterTest
                      "<GoGame>\n" +
                      "<Information>\n" +
                      "<BoardSize>19</BoardSize>\n" +
+                     "</Information>\n" +
+                     "<Nodes>\n" +
+                     "<Node/>\n" +
+                     "<Black number=\"1\" at=\"\"/>\n" +
+                     "</Nodes>\n" +
+                     "</GoGame>\n" +
+                     "</Go>\n",
+                     getText(19, root));
+    }
+
+    /** Test that a root node that is empty apart from game info and should
+        be written, because the child has a move is written using a
+        self-closing tag.
+    */
+    public void testEmptyRootWithGameInfo() throws Exception
+    {
+        Node root = new Node();
+        root.append(new Node(Move.get(BLACK, null)));
+        root.createGameInfo().setKomi(new Komi(5.5));
+        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                     "<Go>\n" +
+                     "<GoGame>\n" +
+                     "<Information>\n" +
+                     "<BoardSize>19</BoardSize>\n" +
+                     "<Komi>5.5</Komi>\n" +
                      "</Information>\n" +
                      "<Nodes>\n" +
                      "<Node/>\n" +
