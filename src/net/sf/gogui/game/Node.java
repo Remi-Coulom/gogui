@@ -58,7 +58,7 @@ final class MoreExtraInfo
 
     public Map<GoPoint,String> m_label;
 
-    public GameInfo m_gameInformation;
+    public GameInfo m_info;
 
     public boolean isEmpty()
     {
@@ -66,7 +66,7 @@ final class MoreExtraInfo
                 && (m_timeInfo == null || m_timeInfo.isEmpty())
                 && (m_sgfProperties == null || m_sgfProperties.isEmpty())
                 && (m_label == null || m_label.size() == 0)
-                && (m_gameInformation == null || m_gameInformation.isEmpty()));
+                && (m_info == null || m_info.isEmpty()));
     }
 }
 
@@ -223,9 +223,9 @@ public final class Node
     public GameInfo createGameInfo()
     {
         MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
-        if (moreExtraInfo.m_gameInformation == null)
-            moreExtraInfo.m_gameInformation = new GameInfo();
-        return moreExtraInfo.m_gameInformation;
+        if (moreExtraInfo.m_info == null)
+            moreExtraInfo.m_info = new GameInfo();
+        return moreExtraInfo.m_info;
     }
 
     /** Child of main variation or null if no child.
@@ -316,7 +316,7 @@ public final class Node
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
-        return m_extraInfo.m_moreExtraInfo.m_gameInformation;
+        return m_extraInfo.m_moreExtraInfo.m_info;
     }
 
     public ConstGameInfo getGameInfoConst()
