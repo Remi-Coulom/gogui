@@ -31,7 +31,6 @@ public final class SgfToTex
                 "config:",
                 "force",
                 "help",
-                "pass",
                 "title:",
                 "version"
             };
@@ -46,7 +45,6 @@ public final class SgfToTex
                 System.out.println("SgfToTex " + Version.get());
                 System.exit(0);
             }
-            boolean usePass = opt.contains("pass");
             boolean force = opt.contains("force");
             String title = opt.get("title", "");
             ArrayList<String> arguments = opt.getArguments();
@@ -84,7 +82,7 @@ public final class SgfToTex
                         FileUtil.removeExtension(new File(outFile.getName()),
                                                   "tex");
             }
-            convert(in, inFileName, out, title, usePass);
+            convert(in, inFileName, out, title);
         }
         catch (Throwable t)
         {
@@ -99,11 +97,11 @@ public final class SgfToTex
     }
 
     private static void convert(InputStream in, String name, OutputStream out,
-                                String title, boolean usePass)
+                                String title)
         throws SgfError
     {
         SgfReader reader = new SgfReader(in, new File(name), null, 0);
-        new TexWriter(title, out, reader.getTree(), usePass);
+        new TexWriter(title, out, reader.getTree());
     }
 
     private static void printUsage(PrintStream out)
@@ -113,7 +111,6 @@ public final class SgfToTex
                   "-config  config file\n" +
                   "-force   overwrite existing files\n" +
                   "-help    display this help and exit\n" +
-                  "-pass    use \\pass command\n" +
                   "-title   use title\n" +
                   "-version print version and exit\n");
     }

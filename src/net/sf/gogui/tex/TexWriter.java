@@ -25,12 +25,11 @@ import net.sf.gogui.util.StringUtil;
 public class TexWriter
 {
     public TexWriter(String title, OutputStream out, ConstBoard board,
-                     boolean usePass, String[][] markLabel, boolean[][] mark,
+                     String[][] markLabel, boolean[][] mark,
                      boolean[][] markTriangle, boolean[][] markCircle,
                      boolean[][] markSquare, boolean[][] markSelect)
     {
         m_out = new PrintStream(out);
-        m_usePass = usePass;
         printBeginDocument();
         if (! StringUtil.isEmpty(title))
             m_out.println("\\section*{" + escape(title) + "}");
@@ -45,11 +44,9 @@ public class TexWriter
         m_out.close();
     }
 
-    public TexWriter(String title, OutputStream out, ConstGameTree tree,
-                     boolean usePass)
+    public TexWriter(String title, OutputStream out, ConstGameTree tree)
     {
         m_out = new PrintStream(out);
-        m_usePass = usePass;
         printBeginDocument();
         if (! StringUtil.isEmpty(title))
             m_out.println("\\section*{" + escape(title) + "}");
@@ -64,8 +61,6 @@ public class TexWriter
         printEndDocument();
         m_out.close();
     }
-
-    private final boolean m_usePass;
 
     private final PrintStream m_out;
 
@@ -93,12 +88,8 @@ public class TexWriter
 
     private void printBeginDocument()
     {
-        String requiredVersion = "0.12";
-        if (m_usePass)
-            requiredVersion = "0.14";
         m_out.println("\\documentclass{article}");
-        m_out.println("\\usepackage{psgo} % version " + requiredVersion
-                      + " or newer");
+        m_out.println("\\usepackage{psgo} % version 0.14 or newer");
         m_out.println("\\pagestyle{empty}");
         m_out.println("\\begin{document}");
         m_out.println();
@@ -166,26 +157,16 @@ public class TexWriter
                 (blackToMove && color != BLACK)
                 || (! blackToMove && color != WHITE);
             boolean isPass = (point == null);
-            if (isPass
-                || firstMoveAtPoint[point.getX()][point.getY()] != null)
+            if (isPass || firstMoveAtPoint[point.getX()][point.getY()] != null)
             {
                 needsComment.add(node);
-                if (m_usePass)
-                    m_out.print("\\pass");
-                else
-                    m_out.print("\\refstepcounter{gomove} \\toggleblackmove");
-                if (isPass)
-                {
-                    if (! m_usePass)
-                        m_out.print(" % \\pass");
-                }
-                else
+                m_out.print("\\pass");
+                if (! isPass)
                 {
                     m_out.print(" % \\move");
                     printCoordinates(point);
                 }
-                m_out.println(" % " + (blackToMove ? "B " : "W ")
-                              + moveNumber);
+                m_out.println(" % " + (blackToMove ? "B " : "W ") + moveNumber);
             }
             else
             {

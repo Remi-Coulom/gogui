@@ -19,7 +19,6 @@ SGF to LaTeX converter.
 <cmdsynopsis>
 <command>sgftotex</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-pass</option></arg>
 <arg><option>-force</option></arg>
 <arg><option>-title</option> <replaceable>s</replaceable></arg>
 <arg><replaceable>file.sgf</replaceable>
@@ -77,19 +76,6 @@ Overwrite existing files.
 <listitem>
 <para>
 Display help and exit.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><option>-pass</option></term>
-<listitem>
-<para>
-Use <userinput>\pass</userinput> command for pass moves
-(only supported for PSGO style version 0.14 or newer).
-Otherwise pass moves are printed as a combination of
-<userinput>\refstepcounter</userinput> and
-<userinput>\toggleblackmove</userinput> commands.
 </para>
 </listitem>
 </varlistentry>

@@ -565,9 +565,9 @@ public class GoGui
         try
         {
             OutputStream out = new FileOutputStream(file);
-            String title = FileUtil.removeExtension(new File(file.getName()),
-                                                     "tex");
-            new TexWriter(title, out, getTree(), false);
+            String title =
+                FileUtil.removeExtension(new File(file.getName()), "tex");
+            new TexWriter(title, out, getTree());
         }
         catch (FileNotFoundException e)
         {
@@ -585,7 +585,7 @@ public class GoGui
             OutputStream out = new FileOutputStream(file);
             String title = FileUtil.removeExtension(new File(file.getName()),
                                                      "tex");
-            new TexWriter(title, out, getBoard(), false,
+            new TexWriter(title, out, getBoard(),
                           GuiBoardUtil.getLabels(m_guiBoard),
                           GuiBoardUtil.getMark(m_guiBoard),
                           GuiBoardUtil.getMarkTriangle(m_guiBoard),
