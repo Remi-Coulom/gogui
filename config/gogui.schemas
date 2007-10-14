@@ -42,7 +42,7 @@
 <applyto>/desktop/gnome/thumbnailers/application@x-go@xml/command</applyto>
 <owner>gogui</owner>
 <type>string</type>
-<default>/usr/bin/sgfthumbnail -xml -size %s %i %o</default>
+<default>/usr/bin/sgfthumbnail -size %s %i %o</default>
 <locale name="C">
 <short>Thumbnail command for Go games in XML format.</short>
 <long>Valid command plus arguments for SGF thumbnailer.</long>

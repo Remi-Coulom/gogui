@@ -35,8 +35,6 @@ public final class GoGuiSettings
 
     public boolean m_verbose;
 
-    public boolean m_useXml;
-
     public int m_move;
 
     public File m_file;
@@ -74,8 +72,7 @@ public final class GoGuiSettings
             "size:",
             "time:",
             "verbose",
-            "version",
-            "xml"
+            "version"
         };
         Options opt = Options.parse(args, options);
         if (opt.contains("help"))
@@ -130,7 +127,6 @@ public final class GoGuiSettings
             m_prefs.putInt("boardsize", opt.getInteger("size"));
         m_time = opt.get("time", null);
         m_verbose = opt.contains("verbose");
-        m_useXml = opt.contains("xml");
         ArrayList<String> arguments = opt.getArguments();
         m_file = null;
         if (arguments.size() == 1)
@@ -167,8 +163,7 @@ public final class GoGuiSettings
             "-size             Set board size\n" +
             "-time             Set time limits (min[+min/moves])\n" +
             "-verbose          Print debugging messages\n" +
-            "-version          Print version and exit\n" +
-            "-xml              Argument is a game file in XML format\n";
+            "-version          Print version and exit\n";
         System.out.print(helpText);
     }
 

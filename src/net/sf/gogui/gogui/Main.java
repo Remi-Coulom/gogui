@@ -136,8 +136,7 @@ public final class Main
                                   settings.m_computerBlack,
                                   settings.m_computerWhite, settings.m_auto,
                                   settings.m_gtpFile, settings.m_gtpCommand,
-                                  settings.m_analyzeCommands,
-                                  settings.m_useXml);
+                                  settings.m_analyzeCommands);
                     }
                     catch (ErrorMessage e)
                     {

@@ -27,8 +27,7 @@ public final class Main
                 "help",
                 "size:",
                 "verbose",
-                "version",
-                "xml"
+                "version"
             };
             Options opt = Options.parse(args, options);
             if (opt.contains("help"))
@@ -67,11 +66,10 @@ public final class Main
             if (arguments.size() == 2)
                 output = new File(arguments.get(1));
             int size = opt.getInteger("size", 128, 1);
-            boolean useXml = opt.contains("xml");
             ThumbnailCreator thumbnailCreator = new ThumbnailCreator(verbose);
             try
             {
-                thumbnailCreator.create(input, output, size, true, useXml);
+                thumbnailCreator.create(input, output, size, true);
             }
             catch (ThumbnailCreator.Error e)
             {

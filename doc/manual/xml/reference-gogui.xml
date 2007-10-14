@@ -34,8 +34,7 @@
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><option>-xml</option></arg>
-<arg><replaceable>file.sgf</replaceable></arg>
+<arg><replaceable>file</replaceable></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
@@ -338,17 +337,6 @@ Go engine will more likely be in the correct order.
 <listitem>
 <para>
 Print version and exit.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<option>-xml</option>
-</term>
-<listitem>
-<para>
-Assume that the file argument is a game file in XML format.
 </para>
 </listitem>
 </varlistentry>

@@ -52,6 +52,9 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.gamefile.GameFile;
+import net.sf.gogui.gamefile.GameReader;
+import net.sf.gogui.gamefile.GameWriter;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.ConstBoard;
@@ -138,14 +141,12 @@ public class GoGui
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
-                 String gtpFile, String gtpCommand, File analyzeCommandsFile,
-                 boolean useXml)
+                 String gtpFile, String gtpCommand, File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
-        m_file = file;
-        m_useXml = useXml;
+        m_initialFile = file;
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
         m_analyzeCommandsFile = analyzeCommandsFile;
@@ -275,7 +276,7 @@ public class GoGui
 
     public void actionAddBookmark()
     {
-        if (m_file == null)
+        if (m_gameFile == null)
         {
             showError("Cannot set bookmark if no file is loaded",
                       "Bookmarks can only be set in loaded files.",
@@ -300,7 +301,7 @@ public class GoGui
         }
         String variation = NodeUtil.getVariationString(getCurrentNode());
         int move = NodeUtil.getMoveNumber(getCurrentNode());
-        Bookmark bookmark = new Bookmark(m_file, move, variation);
+        Bookmark bookmark = new Bookmark(m_gameFile.m_file, move, variation);
         BookmarkEditor editor = new BookmarkEditor();
         bookmark = editor.editItem(this, "Add Bookmark", bookmark, true,
                                    m_messageDialogs);
@@ -642,23 +643,6 @@ public class GoGui
         GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));
     }
 
-    public void actionExportXml()
-    {
-        File file = showSave("Export XML");
-        if (file == null)
-            return;
-        try
-        {
-            String version = "GoGui:" + Version.get();
-            new XmlWriter(new FileOutputStream(file), getTree(), version);
-            createThumbnail(file, true);
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Export failed", e);
-        }
-    }
-
     public void actionFind()
     {
         if (! checkStateChangePossible())
@@ -787,8 +771,8 @@ public class GoGui
             return;
         Bookmark bookmark = m_bookmarks.get(i);
         File file = bookmark.m_file;
-        if (m_file == null || ! file.equals(m_file))
-            if (! loadFile(file, -1, false))
+        if (m_gameFile == null || ! file.equals(m_gameFile.m_file))
+            if (! loadFile(file, -1))
                 return;
         updateViews(true);
         String variation = bookmark.m_variation;
@@ -893,46 +877,6 @@ public class GoGui
             showError("No text selection in clipboard", "", false);
         else
             importTextPosition(new StringReader(text));
-    }
-
-    public void actionImportXml()
-    {
-        if (! checkStateChangePossible())
-            return;
-        if (! checkSaveGame())
-            return;
-        File file = FileDialogs.showOpen(this, "Import XML");
-        if (file == null)
-            return;
-        try
-        {
-            XmlReader reader = new XmlReader(new FileInputStream(file));
-            String warnings = reader.getWarnings();
-            if (warnings != null)
-            {
-                String optionalMessage =
-                    "There were problems reading this XML file.\n" +
-                    "Some information might have been not read correctly " +
-                    "or will be lost when modifying and saving the file.\n" +
-                    "(" +
-                    warnings.replaceAll("\n\\z", ")").replaceAll("\n", ")\n(");
-                showWarning("Warnings reading this file",
-                            optionalMessage, true);
-            }
-            createThumbnail(file, true);
-            m_game.init(reader.getTree());
-            m_guiBoard.initSize(getBoard().getSize());
-            initGtp();
-            boardChangedBegin(false, true);
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("File not found", "", false);
-        }
-        catch (ErrorMessage e)
-        {
-            showError("Error reading file", e);
-        }
     }
 
     public void actionInterrupt()
@@ -1117,7 +1061,7 @@ public class GoGui
             protectGui();
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    loadFile(file, -1, false);
+                    loadFile(file, -1);
                     boardChangedBegin(false, true);
                     if (protectGui)
                         unprotectGui();
@@ -1246,13 +1190,14 @@ public class GoGui
     {
         if (! isModified())
             return;
-        if (m_file == null)
+        if (m_gameFile == null)
             actionSaveAs();
         else
         {
-            if (m_file.exists())
+            File file = m_gameFile.m_file;
+            if (file.exists())
             {
-                String mainMessage = "Replace file \"" + m_file.getName()
+                String mainMessage = "Replace file \"" + file.getName()
                     + "\"?";
                 String optionalMessage =
                     "If you overwrite the file with your changed version, " +
@@ -1264,7 +1209,7 @@ public class GoGui
                                                     "Replace", true))
                     return;
             }
-            save(m_file);
+            save(m_gameFile);
         }
         updateViews(false);
     }
@@ -1904,7 +1849,9 @@ public class GoGui
 
     public File getFile()
     {
-        return m_file;
+        if (m_gameFile == null)
+            return null;
+        return m_gameFile.m_file;
     }
 
     public ConstGame getGame()
@@ -2070,49 +2017,34 @@ public class GoGui
     private static class LoadFileRunnable
         implements GuiUtil.ProgressRunnable
     {
-        public LoadFileRunnable(FileInputStream in, File file, boolean useXml)
+        public LoadFileRunnable(File file)
         {
-            m_in = in;
             m_file = file;
-            m_useXml = useXml;
         }
 
         public GameTree getTree()
         {
-            return m_tree;
+            return m_reader.getTree();
         }
 
         public String getWarnings()
         {
-            return m_warnings;
+            return m_reader.getWarnings();
+        }
+
+        public GameFile getGameFile()
+        {
+            return m_reader.getFile();
         }
 
         public void run(ProgressShow progressShow) throws Throwable
         {
-            if (m_useXml)
-            {
-                XmlReader reader = new XmlReader(m_in);
-                m_tree = reader.getTree();
-                m_warnings = reader.getWarnings();
-            }
-            else
-            {
-                SgfReader reader = new SgfReader(m_in, m_file, progressShow,
-                                                 m_file.length());
-                m_tree = reader.getTree();
-                m_warnings = reader.getWarnings();
-            }
+            m_reader = new GameReader(m_file, progressShow);
         }
-
-        private boolean m_useXml;
 
         private final File m_file;
 
-        private final FileInputStream m_in;
-
-        private GameTree m_tree;
-
-        private String m_warnings;
+        private GameReader m_reader;
     }
 
     private boolean m_analyzeAutoRun;
@@ -2159,9 +2091,6 @@ public class GoGui
 
     private boolean m_showVariations;
 
-    /** Assume that the file to load at startup is in XML format. */
-    private final boolean m_useXml;
-
     private final boolean m_verbose;
 
     private int m_handicap;
@@ -2186,7 +2115,9 @@ public class GoGui
     private final Interrupt m_interrupt = new Interrupt();
 
     /** File corresponding to the current game. */
-    private File m_file;
+    private GameFile m_gameFile;
+
+    private File m_initialFile;
 
     private final GameInfoPanel m_gameInfoPanel;
 
@@ -2721,10 +2652,10 @@ public class GoGui
             m_game.clearModified();
             return true;
         case 1:
-            if (m_file == null)
+            if (m_gameFile == null)
                 return saveDialog();
             else
-                return save(m_file);
+                return save(m_gameFile);
         case 2:
             return false;
         default:
@@ -2931,7 +2862,7 @@ public class GoGui
         m_gameTreeViewer.setVisible(true);
     }
 
-    private void createThumbnail(File file, boolean useXml)
+    private void createThumbnail(File file)
     {
         if (! ThumbnailPlatform.checkThumbnailSupport())
             return;
@@ -2940,7 +2871,7 @@ public class GoGui
         {
             try
             {
-                m_thumbnailCreator.create(file, useXml);
+                m_thumbnailCreator.create(file);
             }
             catch (ErrorMessage e)
             {
@@ -3091,7 +3022,7 @@ public class GoGui
         String playerOther =
             info.get(StringInfoColor.NAME, toMove.otherColor());
         String name = getProgramLabel();
-        if (! isSingleMove && m_file == null && playerToMove == null
+        if (! isSingleMove && m_gameFile == null && playerToMove == null
             && (father == null
                 || (! father.hasFather()
                     && (playerOther == null || playerOther.equals(name)))))
@@ -3356,10 +3287,10 @@ public class GoGui
                 m_programCommand = m_program.m_command;
             }
         }
-        if (m_file == null)
+        if (m_initialFile == null)
             newGame(getBoardSize());
         else
-            newGameFile(getBoardSize(), m_move, m_useXml);
+            newGameFile(getBoardSize(), m_move);
         if (! m_prefs.getBoolean("show-info-panel", true))
             showInfoPanel(true);
         if (m_prefs.getBoolean("show-toolbar", true))
@@ -3437,12 +3368,11 @@ public class GoGui
         return (m_gtp != null && m_gtp.isOutOfSync());
     }
 
-    private boolean loadFile(File file, int move, boolean useXml)
+    private boolean loadFile(File file, int move)
     {
         try
         {
-            FileInputStream in = new FileInputStream(file);
-            LoadFileRunnable runnable = new LoadFileRunnable(in, file, useXml);
+            LoadFileRunnable runnable = new LoadFileRunnable(file);
             if (file.length() > 500000)
             {
                 newGame(getBoardSize()); // Frees space if already large tree
@@ -3462,12 +3392,8 @@ public class GoGui
                 if (node != null)
                     m_game.gotoNode(node);
             }
-            // XML not yet handled correctly in bookmarks
-            if (! m_useXml)
-            {
-                setFile(file);
-                FileDialogs.setLastFile(file);
-            }
+            setFile(runnable.getGameFile());
+            FileDialogs.setLastFile(file);
             String warnings = runnable.getWarnings();
             if (warnings != null)
             {
@@ -3481,7 +3407,7 @@ public class GoGui
             }
             m_computerBlack = false;
             m_computerWhite = false;
-            createThumbnail(file, useXml);
+            createThumbnail(file);
         }
         catch (FileNotFoundException e)
         {
@@ -3517,11 +3443,11 @@ public class GoGui
         clearStatus();
     }
 
-    private void newGameFile(int size, int move, boolean useXml)
+    private void newGameFile(int size, int move)
     {
         initGame(size);
-        if (! loadFile(m_file, move, useXml))
-            m_file = null;
+        if (! loadFile(m_initialFile, move))
+            m_gameFile = null;
     }
 
     /** Paint point immediately to pretend better responsiveness.
@@ -3560,7 +3486,7 @@ public class GoGui
                     assert SwingUtilities.isEventDispatchThread();
                     if (! checkSaveGame())
                         return true;
-                    loadFile(new File(filename), -1, false);
+                    loadFile(new File(filename), -1);
                     boardChangedBegin(false, true);
                     return true;
                 }
@@ -3639,22 +3565,20 @@ public class GoGui
     /** Save game to file.
         @return true If successfully saved.
     */
-    private boolean save(File file)
+    private boolean save(GameFile gameFile)
     {
-        OutputStream out;
         try
         {
-            out = new FileOutputStream(file);
+            new GameWriter(gameFile, getTree(), "GoGui", Version.get());
         }
-        catch (FileNotFoundException e)
+        catch (ErrorMessage e)
         {
             showError("Saving file failed", e);
             return false;
         }
-        new SgfWriter(out, getTree(), "GoGui", Version.get());
-        m_menuBar.addRecent(file);
-        createThumbnail(file, false);
-        setFile(file);
+        m_menuBar.addRecent(gameFile.m_file);
+        createThumbnail(gameFile.m_file);
+        setFile(gameFile);
         m_game.clearModified();
         updateViews(false);
         return true;
@@ -3665,7 +3589,13 @@ public class GoGui
         File file = FileDialogs.showSaveSgf(this, m_messageDialogs);
         if (file == null)
             return false;
-        return save(file);
+        GameFile gameFile = new GameFile();
+        gameFile.m_file = file;
+        if (FileUtil.hasExtension(file, "xml"))
+            gameFile.m_format = GameFile.Format.XML;
+        else
+            gameFile.m_format = GameFile.Format.SGF;
+        return save(gameFile);
     }
 
     private boolean saveParameters(File file)
@@ -3858,9 +3788,9 @@ public class GoGui
         component.setCursor(Cursor.getDefaultCursor());
     }
 
-    private void setFile(File file)
+    private void setFile(GameFile gameFile)
     {
-        m_file = file;
+        m_gameFile = gameFile;
         setTitle();
     }
 
@@ -3911,9 +3841,9 @@ public class GoGui
         if (m_gtp != null)
             appName = getProgramLabel();
         String filename = null;
-        if (m_file != null)
+        if (m_gameFile != null)
         {
-            filename = m_file.getName();
+            filename = m_gameFile.m_file.getName();
             if (isModified() && ! Platform.isMac())
                 filename = filename + " [modified]";
         }

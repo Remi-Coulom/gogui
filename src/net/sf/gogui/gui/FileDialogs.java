@@ -31,7 +31,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import net.sf.gogui.sgf.SgfFilter;
+import net.sf.gogui.gamefile.GameFileFilter;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
@@ -247,11 +247,11 @@ public final class FileDialogs
         else
             chooser = new JFileChooser(s_lastFile);
         chooser.setMultiSelectionEnabled(false);
-        javax.swing.filechooser.FileFilter sgfFilter = new SgfFilter();
-        chooser.addChoosableFileFilter(sgfFilter);
+        javax.swing.filechooser.FileFilter filter = new GameFileFilter();
+        chooser.addChoosableFileFilter(filter);
         if (setSgfFilter)
         {
-            chooser.setFileFilter(sgfFilter);
+            chooser.setFileFilter(filter);
             if (ThumbnailPlatform.checkThumbnailSupport())
             {
                 SgfPreview preview = new SgfPreview();
@@ -347,7 +347,8 @@ class SgfPreview
             {
                 String name = file.getAbsolutePath();
                 if (name == null
-                    || ! name.toLowerCase(Locale.ENGLISH).endsWith(".sgf"))
+                    || ! (name.toLowerCase(Locale.ENGLISH).endsWith(".sgf")
+                          || name.toLowerCase(Locale.ENGLISH).endsWith(".xml")))
                     file = null;
             }
             m_file = file;
@@ -436,7 +437,7 @@ class SgfPreview
             {
                 if (m_file.length() > 500000)
                     throw new ThumbnailCreator.Error("File too large for preview");
-                m_thumbnailCreator.create(m_file, false);
+                m_thumbnailCreator.create(m_file);
                 File thumbnail = m_thumbnailCreator.getLastThumbnail();
                 m_image = loadImage(thumbnail);
                 String description = m_thumbnailCreator.getLastDescription();

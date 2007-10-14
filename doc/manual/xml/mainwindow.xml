@@ -111,7 +111,8 @@ On Mac OS X, the accelerators are defined in combination with the Apple key.
 <para>
 Open a game from a file in
 <ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
-format.
+format or Jago XML format (see <xref linkend="xmlformat"/>).
+The file format is auto-detected.
 Game collections are not supported.
 </para>
 </listitem>
@@ -133,6 +134,8 @@ Open a game from a list of recently used files.
 Save the current game to the associated file name.
 If the game has no file name, this menu item acts like
 <guimenuitem>Save As</guimenuitem>.
+The file will be saves in the same format (SGF or Jago XML) as it originally
+had when it was loaded.
 </para>
 </listitem>
 </varlistentry>
@@ -141,7 +144,9 @@ If the game has no file name, this menu item acts like
 <term><guimenuitem>Save As</guimenuitem></term>
 <listitem>
 <para>
-Save the current game to a file in SGF format.
+Save the current game to a file.
+If the chosen filename has "xml" as a file ending, it will be saved
+in XML format (see <xref linkend="xmlformat"/>), otherwise in SGF format.
 </para>
 </listitem>
 </varlistentry>
@@ -172,16 +177,6 @@ and '$' characters) are ignored, as well as single inserted invalid lines
 Import a text position from the clipboard. Same as
 <guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position</guimenuitem>,
 but parses the text selection copied to the clipboard.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Import</guisubmenu> / <guimenuitem>XML</guimenuitem></term>
-<listitem>
-<para>
-Import a go game in XML format.
-See <xref linkend="xmlformat"/> for details.
 </para>
 </listitem>
 </varlistentry>
@@ -249,16 +244,6 @@ Export the current position as a text diagram to a file.
 <listitem>
 <para>
 Export the current position as a text diagram to the clipboard.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="exportxml">
-<term><guisubmenu>Export</guisubmenu> / <guimenuitem>XML</guimenuitem></term>
-<listitem>
-<para>
-Export the current game tree in XML format.
-See <xref linkend="xmlformat"/> for details.
 </para>
 </listitem>
 </varlistentry>

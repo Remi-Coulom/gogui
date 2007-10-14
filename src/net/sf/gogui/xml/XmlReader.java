@@ -79,6 +79,8 @@ public final class XmlReader
             reader.setEntityResolver(handler);
             reader.setErrorHandler(handler);
             reader.parse(new InputSource(in));
+            if (! m_rootFound)
+                throw new ErrorMessage("This file is not a Go game");
             int size;
             if (m_isBoardSizeKnown)
                 size = m_boardSize;
@@ -374,6 +376,8 @@ public final class XmlReader
     private static final int DEFAULT_BOARDSIZE = 19;
 
     private boolean m_isBoardSizeKnown;
+
+    private boolean m_rootFound;
 
     private int m_numberGames;
 
@@ -869,6 +873,7 @@ public final class XmlReader
     private void startGo() throws SAXException
     {
         checkRoot();
+        m_rootFound = true;
         checkAttributes();
     }
 

@@ -23,6 +23,8 @@ import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.gamefile.GameFile;
+import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
@@ -64,7 +66,7 @@ public final class ThumbnailCreator
         Does not create the thumnbail if an up-to-date thumbnail already
         exists.
     */
-    public void create(File input, boolean useXml) throws ErrorMessage
+    public void create(File input) throws ErrorMessage
     {
         File file = getThumbnailFileNormalSize(input);
         if (file.exists())
@@ -86,7 +88,7 @@ public final class ThumbnailCreator
             {
             }
         }
-        create(input, null, 128, true, useXml);
+        create(input, null, 128, true);
     }
 
     /** Create thumbnail.
@@ -98,7 +100,7 @@ public final class ThumbnailCreator
         smaller than 19.
     */
     public void create(File input, File output, int thumbnailSize,
-                       boolean scale, boolean useXml) throws ErrorMessage
+                       boolean scale) throws ErrorMessage
     {
         assert thumbnailSize > 0;
         m_lastThumbnail = null;
@@ -108,7 +110,7 @@ public final class ThumbnailCreator
             URI uri = getURI(input);
             log("URI: " + uri);
             m_description = "";
-            ConstBoard board = readFile(input, useXml);
+            ConstBoard board = readFile(input);
             int size = board.getSize();
             Field[][] fields = new Field[size][size];
             for (int x = 0; x < size; ++x)
@@ -148,10 +150,14 @@ public final class ThumbnailCreator
             Map<String,String> metaData = new TreeMap<String,String>();
             metaData.put("Thumb::URI", uri.toString());
             metaData.put("Thumb::MTime", Long.toString(lastModified));
-            if (useXml)
+            switch (m_gameFile.m_format)
+            {
+            case XML:
                 metaData.put("Thumb::Mimetype", "application/x-go-sgf");
-            else
+                break;
+            case SGF:
                 metaData.put("Thumb::Mimetype", "application/x-go+xml");
+            }
             if (! m_description.equals(""))
                 metaData.put("Description", m_description);
             metaData.put("Software", "GoGui " + Version.get());
@@ -199,35 +205,13 @@ public final class ThumbnailCreator
 
     private final BoardPainter m_painter;
 
-    private ConstBoard readFile(File file, boolean useXml)
-        throws FileNotFoundException, SgfError, ErrorMessage
+    private GameFile m_gameFile;
+
+    private ConstBoard readFile(File file) throws ErrorMessage
     {
-        FileInputStream in = new FileInputStream(file);
-        GameTree tree;
-        try
-        {
-            if (useXml)
-            {
-                XmlReader reader = new XmlReader(in);
-                tree = reader.getTree();
-            }
-            else
-            {
-                SgfReader reader = new SgfReader(in, file, null, 0);
-                tree = reader.getTree();
-            }
-        }
-        finally
-        {
-            try
-            {
-                in.close();
-            }
-            catch (IOException e)
-            {
-                log(e.getMessage());
-            }
-        }
+        GameReader reader = new GameReader(file, null);
+        m_gameFile = reader.getFile();
+        GameTree tree = reader.getTree();
         GameInfo info = tree.getGameInfo(tree.getRoot());
         int size = tree.getBoardSize();
         m_description = info.suggestGameName();

@@ -87,7 +87,6 @@ install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
 
 install -d $PREFIX/share/applications
 install -m 644 config/gogui.desktop $PREFIX/share/applications
-install -m 644 config/gogui-xml.desktop $PREFIX/share/applications
 # Add DocPath entry used by KDE 3.4
 echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
     >> $PREFIX/share/applications/gogui.desktop

@@ -1,15 +1,15 @@
 //----------------------------------------------------------------------------
-// SgfFilter.java
+// GameFileFilter.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.sgf;
+package net.sf.gogui.gamefile;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 import net.sf.gogui.util.FileUtil;
 
-/** Swing file filter for SGF files. */
-public class SgfFilter
+/** Swing file filter for SGF or Jago XML files. */
+public class GameFileFilter
     extends FileFilter
 {
     /** Accept function.
@@ -20,12 +20,14 @@ public class SgfFilter
     {
         if (file.isDirectory())
             return true;
-        return FileUtil.hasExtension(file, "sgf")
-            || FileUtil.hasExtension(file, "SGF");
+        return (FileUtil.hasExtension(file, "sgf")
+                || FileUtil.hasExtension(file, "SGF")
+                || FileUtil.hasExtension(file, "xml")
+                || FileUtil.hasExtension(file, "XML"));
     }
 
     public String getDescription()
     {
-        return "Go Games (*.sgf,*.SGF)";
+        return "Go Games (*.sgf,*.xml)";
     }
 }

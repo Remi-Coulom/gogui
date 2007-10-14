@@ -290,11 +290,6 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportTextPositionToClipboard(); } };
 
-    public final Action m_actionExportXml =
-        new Action("XML...") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionExportXml(); } };
-
     public final Action m_actionFind =
         new Action("Find in Comments...", null, KeyEvent.VK_F) {
             public void actionPerformed(ActionEvent e) {
@@ -391,11 +386,6 @@ public class GoGuiActions
         new Action("Text Position from Clipboard") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPositionFromClipboard(); } };
-
-    public final Action m_actionImportXml =
-        new Action("XML...") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionImportXml(); } };
 
     public final Action m_actionInterrupt =
         new Action("Interrupt", null, "gogui-interrupt") {
