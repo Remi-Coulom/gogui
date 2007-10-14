@@ -17,9 +17,13 @@ public final class HtmlUtilTest
         return new junit.framework.TestSuite(HtmlUtilTest.class);
     }
 
+    public void testEscape()
+    {
+        assertEquals("&lt;ok&gt;&amp;", HtmlUtil.escapeText("<ok>&"));
+    }
+
     public void testEscapeAttr()
     {
-        assertEquals("&lt;ok&gt;&amp;&quot;&apos;",
-                     HtmlUtil.escapeAttr("<ok>&\"'"));
+        assertEquals("&lt;ok&gt;&amp;&quot;", HtmlUtil.escapeAttr("<ok>&\""));
     }
 }
