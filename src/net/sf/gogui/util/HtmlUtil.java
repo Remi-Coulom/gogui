@@ -9,8 +9,11 @@ import  net.sf.gogui.version.Version;
 /** Static utility functions related to HTML writing. */
 public final class HtmlUtil
 {
-    /** Escape HTML special characters in text. */
-    public static String escape(String text)
+    /** Escape XML special characters for attribute values.
+        This assumes that the attribute will be quotes with ", it does
+        not escape '.
+    */
+    public static String escapeAttr(String text)
     {
         int len = text.length();
         StringBuilder result = new StringBuilder(len);
@@ -31,8 +34,31 @@ public final class HtmlUtil
             case '"':
                 result.append("&quot;");
                 break;
-            case '\'':
-                result.append("&apos;");
+            default:
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+
+    /** Escape XML special characters for text content. */
+    public static String escapeText(String text)
+    {
+        int len = text.length();
+        StringBuilder result = new StringBuilder(len);
+        for (int i = 0; i < len; ++i)
+        {
+            char c = text.charAt(i);
+            switch (c)
+            {
+            case '>':
+                result.append("&gt;");
+                break;
+            case '<':
+                result.append("&lt;");
+                break;
+            case '&':
+                result.append("&amp;");
                 break;
             default:
                 result.append(c);

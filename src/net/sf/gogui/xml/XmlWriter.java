@@ -62,7 +62,7 @@ public class XmlWriter
         if (sgfProperties != null && sgfProperties.hasKey("GN")
             && sgfProperties.getNumberValues("GN") > 0)
             gameNameAtt = " name=\""
-                + HtmlUtil.escape(sgfProperties.getValue("GN", 0)) + "\"";
+                + HtmlUtil.escapeAttr(sgfProperties.getValue("GN", 0)) + "\"";
         m_out.print("<Go>\n" +
                     "<GoGame" + gameNameAtt + ">\n");
         m_boardSize = tree.getBoardSize();
@@ -104,7 +104,7 @@ public class XmlWriter
                 else
                 {
                     m_out.print("<P>");
-                    m_out.print(HtmlUtil.escape(line));
+                    m_out.print(HtmlUtil.escapeText(line));
                     m_out.print("</P>\n");
                 }
             }
@@ -227,7 +227,7 @@ public class XmlWriter
             && sgfProps.getNumberValues("N") > 0)
         {
             nameAtt = " name=\""
-                + HtmlUtil.escape(sgfProps.getValue("N", 0)) + "\"";
+                + HtmlUtil.escapeAttr(sgfProps.getValue("N", 0)) + "\"";
             sgfProps.remove("N");
         }
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
@@ -305,7 +305,7 @@ public class XmlWriter
             int numberValues = sgfProps.getNumberValues(key);
             for (int i = 0; i < numberValues; ++i)
                 m_out.print("<Arg>" +
-                            HtmlUtil.escape(sgfProps.getValue(key, i))
+                            HtmlUtil.escapeText(sgfProps.getValue(key, i))
                             + "</Arg>");
             m_out.print("</SGF>\n");
         }

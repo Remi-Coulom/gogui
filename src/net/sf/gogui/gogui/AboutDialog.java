@@ -75,13 +75,13 @@ public final class AboutDialog
                 if (version.length() > 40)
                     version = version.substring(0, 40) + "...";
                 versionInfo = "<p align=\"center\" width=\"" + width
-                    + "\">Version " + HtmlUtil.escape(version) + "</p>";
+                    + "\">Version " + HtmlUtil.escapeText(version) + "</p>";
             }
             programPanel =
                 createPanel("<p align=\"center\"><img src=\""
                             + getImage("gogui-program.png") + "\"></p>" +
                             "<p align=\"center\" width=\"" + width + "\"><b>"
-                            + HtmlUtil.escape(name) + "</b></p>" +
+                            + HtmlUtil.escapeText(name) + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +
                             "Program command:<br>" +
