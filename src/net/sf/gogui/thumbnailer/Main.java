@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.sgfthumbnail;
+package net.sf.gogui.thumbnailer;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -12,10 +12,10 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** SgfThumbnail main function. */
+/** GoGuiThumbnailer main function. */
 public final class Main
 {
-    /** SgfThumbnail main function. */
+    /** GoGuiThumbnailer main function. */
     public static void main(String[] args)
     {
         try
@@ -37,7 +37,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("SgfThumbnail " + Version.get());
+                System.out.println("GoGuiThumbnailer " + Version.get());
                 return;
             }
             /*
@@ -92,7 +92,7 @@ public final class Main
     private static void printUsage(PrintStream out)
     {
         String helpText =
-            "Usage: java -jar sgfthumbnail.jar [options] input [output]\n" +
+            "Usage: gogui-thumbnailer [options] input [output]\n" +
             "Options:\n" +
             "-config    config file\n" +
             "-help      Print help and exit\n" +

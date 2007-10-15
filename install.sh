@@ -113,7 +113,7 @@ install -m 644 config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
 
 install -d $SYSCONFDIR/gconf/schemas
 cat config/gogui.schemas \
-| sed "s;/usr/bin/sgfthumbnail;$PREFIX/bin/sgfthumbnail;" \
+| sed "s;/usr/bin/gogui-thumbnailer;$PREFIX/bin/gogui-thumbnailer;" \
 > $SYSCONFDIR/gconf/schemas/gogui.schemas
 
 # Install scrollkeeper entry

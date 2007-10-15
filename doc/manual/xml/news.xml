@@ -71,6 +71,12 @@ GtpAdapter: option -resign is no longer supported
 </listitem>
 <listitem>
 <simpara>
+Rename command line tools using prefix gogui- to avoid conflict with
+tools from other packages.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Replace sgftotex by gogui-convert, which can read SGF or XML files and
 supports several output formats
 </simpara>
