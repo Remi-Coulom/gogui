@@ -21,7 +21,7 @@ See <xref linkend="reference-adapter"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
-<term>gogui-isplay</term>
+<term>gogui-display</term>
 <listitem>
 <para>
 Go Text Protocol adapter showing the current board in a window.
