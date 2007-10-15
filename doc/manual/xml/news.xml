@@ -69,6 +69,12 @@ GoGui: option -analyze is no longer supported
 GtpAdapter: option -resign is no longer supported
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Replace sgftotex by gogui-convert, which can read SGF or XML files and
+supports several output formats
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

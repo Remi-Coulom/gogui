@@ -40,6 +40,7 @@ Comment out the exec svnversion for releases.
 
 <property name="scripts" value="
  gogui
+ gogui-convert
  gtpdisplay
  gtpregress
  gtpstatistics
@@ -48,7 +49,6 @@ Comment out the exec svnversion for releases.
  gtpdummy
  gtpserver
  netgtp
- sgftotex
  sgfthumbnail
  twogtp
 "/>
@@ -70,6 +70,7 @@ Comment out the exec svnversion for releases.
  description="Compile all programs (default target)"
  depends="
   gogui.jar,
+  gogui-convert.jar,
   gtpadapter.jar,
   gtpdisplay.jar,
   gtpdummy.jar,
@@ -78,7 +79,6 @@ Comment out the exec svnversion for releases.
   gtpserver.jar,
   gtpterminal.jar,
   netgtp.jar,
-  sgftotex.jar,
   sgfthumbnail.jar,
   twogtp.jar
 "/>
@@ -89,6 +89,7 @@ Comment out the exec svnversion for releases.
 <fileset dir="lib"
  includes="
    gogui.jar,
+   gogui-convert.jar,
    gtpadapter.jar,
    gtpdisplay.jar,
    gtpdummy.jar,
@@ -99,7 +100,6 @@ Comment out the exec svnversion for releases.
    ${looks.jarfile},
    ${quaqua.jarfile},
    netgtp.jar,
-   sgftotex.jar,
    sgfthumbnail.jar,
    twogtp.jar
   "
@@ -204,6 +204,7 @@ Comment out the exec svnversion for releases.
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
  bin/gogui,
+ bin/gogui-convert,
  bin/gtpadapter,
  bin/gtpdisplay,
  bin/gtpdummy,
@@ -212,11 +213,32 @@ Comment out the exec svnversion for releases.
  bin/gtpstatistics,
  bin/gtpterminal,
  bin/netgtp,
- bin/sgftotex,
  bin/sgfthumbnail,
  bin/twogtp,
 " />
 </zip>
+</target>
+
+<target name="gogui-convert.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-convert.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.convert.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/convert/*.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+"/>
+</jar>
 </target>
 
 <target name="doc" depends="extract-docbook,doc-check-uptodate"
@@ -578,6 +600,7 @@ ${quaqua.nestedzipfile}
  overview="src/net/sf/gogui/overview.html"
  packagenames="
   net/sf/gogui/boardpainter.*,
+  net/sf/gogui/convert.*,
   net/sf/gogui/game.*,
   net/sf/gogui/go.*,
   net/sf/gogui/gogui.*,
@@ -593,7 +616,6 @@ ${quaqua.nestedzipfile}
   net/sf/gogui/netgtp.*,
   net/sf/gogui/sgf.*,
   net/sf/gogui/sgfthumbnail.*,
-  net/sf/gogui/sgftotex.*,
   net/sf/gogui/tex.*,
   net/sf/gogui/thumbnail.*,
   net/sf/gogui/twogtp.*,
@@ -667,26 +689,6 @@ ${quaqua.nestedzipfile}
 
 <target name="run" depends="gogui.jar" description="Run GoGui">
 <java jar="lib/gogui.jar" fork="true"/>
-</target>
-
-<target name="sgftotex.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/sgftotex.jar" compress="true">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.sgftotex.SgfToTex"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/sgftotex/*.class
- net/sf/gogui/tex/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
-"/>
-</jar>
 </target>
 
 <target name="sgfthumbnail.jar" depends="compile">

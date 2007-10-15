@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY reference-convert SYSTEM "reference-convert.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
 <!ENTITY reference-gtpadapter SYSTEM "reference-gtpadapter.xml">
 <!ENTITY reference-gtpdisplay SYSTEM "reference-gtpdisplay.xml">
@@ -10,7 +11,6 @@
 <!ENTITY reference-gtpstatistics SYSTEM "reference-gtpstatistics.xml">
 <!ENTITY reference-gtpterminal SYSTEM "reference-gtpterminal.xml">
 <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
-<!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
 <!ENTITY reference-sgfthumbnail SYSTEM "reference-sgfthumbnail.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
 <!ENTITY version SYSTEM "version.xml">
@@ -20,6 +20,7 @@
 <title>GoGui Manual Pages</title>
 
 <reference>
+&reference-convert;
 &reference-gogui;
 &reference-gtpadapter;
 &reference-gtpdisplay;
@@ -29,7 +30,6 @@
 &reference-gtpstatistics;
 &reference-gtpterminal;
 &reference-netgtp;
-&reference-sgftotex;
 &reference-sgfthumbnail;
 &reference-twogtp;
 </reference>

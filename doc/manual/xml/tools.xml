@@ -121,11 +121,11 @@ See <xref linkend="reference-sgfthumbnail"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
-<term>SgfToTex</term>
+<term>GoGuiConvert</term>
 <listitem>
 <para>
-SGF to LaTeX converter.
-See <xref linkend="reference-sgftotex"/> for a complete reference.
+Convert SGF and Jago XML Go game files to other formats.
+See <xref linkend="reference-convert"/> for a complete reference.
 </para>
 </listitem>
 </varlistentry>
