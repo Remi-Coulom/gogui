@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpdummy;
+package net.sf.gogui.dummy;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -10,10 +10,10 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** GtpDummy main function. */
+/** Dummy main function. */
 public final class Main
 {
-    /** GtpDummy main function. */
+    /** Dummy main function. */
     public static void main(String[] args)
     {
         try
@@ -30,7 +30,7 @@ public final class Main
             if (opt.contains("help"))
             {
                 String helpText =
-                    "Usage: java -jar gtpdummy.jar [options]\n" +
+                    "Usage: gogui-dummy [options]\n" +
                     "\n" +
                     "-config    config file\n" +
                     "-help      display this help and exit\n" +
@@ -43,7 +43,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GtpDummy " + Version.get());
+                System.out.println("gogui-dummy " + Version.get());
                 return;
             }
             PrintStream log = null;
@@ -60,9 +60,8 @@ public final class Main
                 useRandomSeed = true;
             }
             int resign = opt.getInteger("resign", -1);
-            GtpDummy gtpDummy = new GtpDummy(log, useRandomSeed, randomSeed,
-                                             resign);
-            gtpDummy.mainLoop(System.in, System.out);
+            Dummy dummy = new Dummy(log, useRandomSeed, randomSeed, resign);
+            dummy.mainLoop(System.in, System.out);
             if (log != null)
                 log.close();
         }

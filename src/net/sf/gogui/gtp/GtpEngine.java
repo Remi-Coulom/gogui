@@ -211,7 +211,7 @@ public class GtpEngine
 
     /** Print invalid response directly to output stream.
         Should only be used for simulationg broken GTP implementations
-        like used in GtpDummy's dummy_invalid command.
+        like used in the gogui-dummy_invalid command.
         @param text Text to print to output stream.
         No newline will be appended.
     */

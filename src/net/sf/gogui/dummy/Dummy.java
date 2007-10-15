@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpDummy.java
+// Dummy.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpdummy;
+package net.sf.gogui.dummy;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,19 +17,19 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.version.Version;
 
 /** Dummy Go program for testing GTP controlling programs.
-    See the GtpDummy documentation for information about the extension
+    See the gogui-dummy documentation for information about the extension
     commands.
 */
-public class GtpDummy
+public class Dummy
     extends GtpEngine
 {
-    public GtpDummy(PrintStream log, boolean useRandomSeed, long randomSeed,
-                    int resign)
+    public Dummy(PrintStream log, boolean useRandomSeed, long randomSeed,
+                 int resign)
         throws Exception
     {
         super(log);
         registerCommands();
-        setName("GtpDummy");
+        setName("gogui-dummy");
         setVersion(Version.get());
         m_random = new Random();
         m_resign = resign;
@@ -62,7 +62,7 @@ public class GtpDummy
 
     public void cmdCrash(GtpCommand cmd)
     {
-        System.err.println("Aborting GtpDummy");
+        System.err.println("Aborting gogui-dummy");
         System.exit(-1);
     }
 
@@ -150,22 +150,22 @@ public class GtpDummy
     {
         cmd.checkArgNone();
         String response =
-            "bwboard/BWBoard/gtpdummy-bwboard\n" +
-            "none/Crash/gtpdummy-crash\n" +
-            "none/Delay/gtpdummy-delay %o\n" +
-            "eplist/EPList/gtpdummy-eplist\n" +
-            "string/File Open/gtpdummy-file_open %r\n" +
-            "none/File Save/gtpdummy-file_save %w\n" +
-            "gfx/Gfx/gtpdummy-gfx\n" +
-            "none/Invalid/gtpdummy-invalid\n" +
-            "none/Invalid Empty/gtpdummy-invalid_empty\n" +
-            "none/Live Gfx/gtpdummy-live_gfx\n" +
-            "string/Long Response/gtpdummy-long_response %s\n" +
-            "none/Next Failure/gtpdummy-next_failure %s\n" +
-            "none/Next Success/gtpdummy-next_success %s\n" +
-            "sboard/SBoard/gtpdummy-sboard\n" +
-            "none/Sleep/gtpdummy-sleep %s\n" +
-            "none/Sleep 20s/gtpdummy-sleep\n";
+            "bwboard/BWBoard/gogui-dummy-bwboard\n" +
+            "none/Crash/gogui-dummy-crash\n" +
+            "none/Delay/gogui-dummy-delay %o\n" +
+            "eplist/EPList/gogui-dummy-eplist\n" +
+            "string/File Open/gogui-dummy-file_open %r\n" +
+            "none/File Save/gogui-dummy-file_save %w\n" +
+            "gfx/Gfx/gogui-dummy-gfx\n" +
+            "none/Invalid/gogui-dummy-invalid\n" +
+            "none/Invalid Empty/gogui-dummy-invalid_empty\n" +
+            "none/Live Gfx/gogui-dummy-live_gfx\n" +
+            "string/Long Response/gogui-dummy-long_response %s\n" +
+            "none/Next Failure/gogui-dummy-next_failure %s\n" +
+            "none/Next Success/gogui-dummy-next_success %s\n" +
+            "sboard/SBoard/gogui-dummy-sboard\n" +
+            "none/Sleep/gogui-dummy-sleep %s\n" +
+            "none/Sleep 20s/gogui-dummy-sleep\n";
         cmd.setResponse(response);
     }
 
@@ -363,7 +363,7 @@ public class GtpDummy
 
     private String m_nextResponse;
 
-    /** Editable point list for gtpdummy-eplist command. */
+    /** Editable point list for gogui-dummy-eplist command. */
     private PointList m_ePList = new PointList();
 
     private void initSize(int size)
@@ -388,49 +388,49 @@ public class GtpDummy
         register("clear_board", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdClearBoard(cmd); } });
-        register("gtpdummy-bwboard", new GtpCallback() {
+        register("gogui-dummy-bwboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdBWBoard(cmd); } });
-        register("gtpdummy-crash", new GtpCallback() {
+        register("gogui-dummy-crash", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdCrash(cmd); } });
-        register("gtpdummy-delay", new GtpCallback() {
+        register("gogui-dummy-delay", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdDelay(cmd); } });
-        register("gtpdummy-eplist", new GtpCallback() {
+        register("gogui-dummy-eplist", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdEPList(cmd); } });
-        register("gtpdummy-file_open", new GtpCallback() {
+        register("gogui-dummy-file_open", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdFileOpen(cmd); } });
-        register("gtpdummy-file_save", new GtpCallback() {
+        register("gogui-dummy-file_save", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdFileSave(cmd); } });
-        register("gtpdummy-gfx", new GtpCallback() {
+        register("gogui-dummy-gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGfx(cmd); } });
-        register("gtpdummy-invalid", new GtpCallback() {
+        register("gogui-dummy-invalid", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdInvalid(cmd); } });
-        register("gtpdummy-invalid_empty", new GtpCallback() {
+        register("gogui-dummy-invalid_empty", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdInvalidEmpty(cmd); } });
-        register("gtpdummy-live_gfx", new GtpCallback() {
+        register("gogui-dummy-live_gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLiveGfx(cmd); } });
-        register("gtpdummy-long_response", new GtpCallback() {
+        register("gogui-dummy-long_response", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLongResponse(cmd); } });
-        register("gtpdummy-next_failure", new GtpCallback() {
+        register("gogui-dummy-next_failure", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdNextFailure(cmd); } });
-        register("gtpdummy-next_success", new GtpCallback() {
+        register("gogui-dummy-next_success", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdNextSuccess(cmd); } });
-        register("gtpdummy-sboard", new GtpCallback() {
+        register("gogui-dummy-sboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdSBoard(cmd); } });
-        register("gtpdummy-sleep", new GtpCallback() {
+        register("gogui-dummy-sleep", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdSleep(cmd); } });
         register("echo", new GtpCallback() {
