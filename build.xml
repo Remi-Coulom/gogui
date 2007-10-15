@@ -15,7 +15,8 @@ Comment out the exec svnversion for releases.
 <exec executable="svnversion" outputproperty="svnversion"/>
 <property name="version" value="1.1pre.SVN${svnversion}"/>
 
-<tstamp/>
+<tstamp><format property="DSTAMP" pattern="yyyy-MM-dd" timezone="UCT"/>
+<format property="TSTAMP" pattern="hh:mm" timezone="UCT"/></tstamp>
 
 <property environment="env"/>
 
@@ -156,6 +157,7 @@ Comment out the exec svnversion for releases.
  config/gogui-application-x-go-sgf.png
  config/gogui-application-x-go-sgf.svg
  config/gogui.omf
+ config/gogui.omf.in
  config/gogui.schemas
  config/gogui.xml
  config/x-go-sgf.desktop
@@ -765,16 +767,17 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
 <copy
  file="mac/packaging/Info.plist.in"
  tofile="mac/packaging/Info.plist" overwrite="true"/>
-<replace file="mac/packaging/Info.plist" token="@VERSION@"
- value="${version}"/>
+<replace file="mac/packaging/Info.plist" token="@VERSION@" value="${version}"/>
+<copy
+ file="config/gogui.omf.in" tofile="config/gogui.omf" overwrite="true"/>
+<replace file="config/gogui.omf" token="@DATE@" value="${DSTAMP}"/>
 </target>
 
 <target name="version-check-uptodate">
 <loadfile property="version_java_contents" failonerror="false"
  srcFile="src/net/sf/gogui/version/Version.java"/>
 <condition property="version-uptodate">
-<contains string="${version_java_contents}"
- substring="&quot;${version}&quot;"/>
+<contains string="${version_java_contents}" substring="&quot;${version}&quot;"/>
 </condition>
 </target>
 
