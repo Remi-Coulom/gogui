@@ -11,7 +11,7 @@
 <!ENTITY reference-gtpstatistics SYSTEM "reference-gtpstatistics.xml">
 <!ENTITY reference-gtpterminal SYSTEM "reference-gtpterminal.xml">
 <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
-<!ENTITY reference-sgfthumbnail SYSTEM "reference-sgfthumbnail.xml">
+<!ENTITY reference-thumbnailer SYSTEM "reference-thumbnailer.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
 <!ENTITY version SYSTEM "version.xml">
 ]>
