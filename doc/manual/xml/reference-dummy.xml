@@ -113,7 +113,7 @@ Print version and exit.
 <variablelist>
 
 <varlistentry>
-<term><command>gtpdummy-bwboard</command></term>
+<term><command>gogui-dummy-bwboard</command></term>
 <listitem>
 <para>
 Output a board randomly filled with "B" and "W".
@@ -122,7 +122,7 @@ Output a board randomly filled with "B" and "W".
 </varlistentry>
 
 <varlistentry>
-<term><command>gtpdummy-crash</command></term>
+<term><command>gogui-dummy-crash</command></term>
 <listitem>
 <para>
 Exit the program with return code -1.
@@ -132,7 +132,7 @@ Exit the program with return code -1.
 
 <varlistentry>
 <term>
-<command>gtpdummy-delay <replaceable>seconds</replaceable></command>
+<command>gogui-dummy-delay <replaceable>seconds</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -145,7 +145,7 @@ If no argument is given, the current delay value is returned.
 
 <varlistentry>
 <term>
-<command>gtpdummy-eplist</command>
+<command>gogui-dummy-eplist</command>
 </term>
 <listitem>
 <para>
@@ -158,7 +158,7 @@ If the argument is "show", the current point list is shown.
 
 <varlistentry>
 <term>
-<command>gtpdummy-file_open</command>
+<command>gogui-dummy-file_open</command>
 </term>
 <listitem>
 <para>
@@ -170,7 +170,7 @@ Takes a filename argument and returns some information about this file.
 
 <varlistentry>
 <term>
-<command>gtpdummy-file_save</command>
+<command>gogui-dummy-file_save</command>
 </term>
 <listitem>
 <para>
@@ -182,7 +182,7 @@ Takes a filename argument and writes a test string into the file.
 
 <varlistentry>
 <term>
-<command>gtpdummy-gfx</command>
+<command>gogui-dummy-gfx</command>
 </term>
 <listitem>
 <para>
@@ -192,7 +192,7 @@ Command for testing the gfx analyze return type of GoGui.
 </varlistentry>
 
 <varlistentry>
-<term><command>gtpdummy-invalid</command></term>
+<term><command>gogui-dummy-invalid</command></term>
 <listitem>
 <para>
 Print an invalid GTP response which does not start with a status character.
@@ -201,7 +201,7 @@ Print an invalid GTP response which does not start with a status character.
 </varlistentry>
 
 <varlistentry>
-<term><command>gtpdummy-invalid_empty</command></term>
+<term><command>gogui-dummy-invalid_empty</command></term>
 <listitem>
 <para>
 Print an invalid GTP response which has an addition empty line before
@@ -212,7 +212,7 @@ the status character.
 
 <varlistentry>
 <term>
-<command>gtpdummy-live_gfx</command>
+<command>gogui-dummy-live_gfx</command>
 </term>
 <listitem>
 <para>
@@ -223,7 +223,7 @@ Command for testing live graphics in GoGui.
 
 <varlistentry>
 <term>
-<command>gtpdummy-long_response <replaceable>n</replaceable></command>
+<command>gogui-dummy-long_response <replaceable>n</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -234,7 +234,7 @@ Print a GTP response with n lines.
 
 <varlistentry>
 <term>
-<command>gtpdummy-next_failure <replaceable>response</replaceable>
+<command>gogui-dummy-next_failure <replaceable>response</replaceable>
 </command>
 </term>
 <listitem>
@@ -246,7 +246,7 @@ Let the next command fail with the given response.
 
 <varlistentry>
 <term>
-<command>gtpdummy-next_success <replaceable>response</replaceable>
+<command>gogui-dummy-next_success <replaceable>response</replaceable>
 </command>
 </term>
 <listitem>
@@ -257,7 +257,7 @@ Let the next command succeed with the given response.
 </varlistentry>
 
 <varlistentry>
-<term><command>gtpdummy-sboard</command></term>
+<term><command>gogui-dummy-sboard</command></term>
 <listitem>
 <para>
 Command for testing GoGui's analyze command type 'sboard'.
@@ -268,7 +268,7 @@ Returns a board of strings.
 
 <varlistentry>
 <term>
-<command>gtpdummy-sleep <replaceable>seconds</replaceable>
+<command>gogui-dummy-sleep <replaceable>seconds</replaceable>
 </command>
 </term>
 <listitem>

@@ -403,7 +403,7 @@ Return a title for the current game, consisting of the game number (if option
 
 <varlistentry>
 <term>
-<command>twogtp-black <replaceable>command</replaceable></command>
+<command>gogui-twogtp-black <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -414,7 +414,7 @@ Send command to the black player.
 
 <varlistentry>
 <term>
-<command>twogtp-observer <replaceable>command</replaceable></command>
+<command>gogui-twogtp-observer <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -425,7 +425,7 @@ Send command to the observer program.
 
 <varlistentry>
 <term>
-<command>twogtp-referee <replaceable>command</replaceable></command>
+<command>gogui-twogtp-referee <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -436,7 +436,7 @@ Send command to the referee program.
 
 <varlistentry>
 <term>
-<command>twogtp-white <replaceable>command</replaceable></command>
+<command>gogui-twogtp-white <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>

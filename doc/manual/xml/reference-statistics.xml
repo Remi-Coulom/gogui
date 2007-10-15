@@ -332,7 +332,7 @@ gogui-statistics -program "gnugo --mode gtp" \
 <para>
 <programlisting>
 <userinput>
-gogui-statistics -analyze gtpstatistics.dat -output statistics/olympiad2004
+gogui-statistics -analyze statistics.dat -output statistics/olympiad2004
 </userinput>
 </programlisting>
 </para>

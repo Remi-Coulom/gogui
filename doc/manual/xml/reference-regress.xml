@@ -69,12 +69,12 @@ additional files with name
 are generated.
 Additionally, a text file <filename>summary.dat</filename> is generated,
 with a table row containing the most important summary statistics.
-GtpRegress will start a new instance of the Go program for each test and
+gogui-regress will start a new instance of the Go program for each test and
 use the directory of the test file as the working directory for the Go
 program.
 </para>
 <para>
-The return value of <command>gtpregress</command> is 0, if all tests
+The return value of gogui-regress is 0, if all tests
 completed successfully with no unexpected fails, 1 if there was at
 least one unexpected fail, and 2 if the Go program crashed or some other
 error occurred.

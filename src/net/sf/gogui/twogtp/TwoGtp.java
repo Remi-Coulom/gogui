@@ -160,13 +160,13 @@ public class TwoGtp
             ;
         else if (command.equals("gogui-title"))
             cmd.setResponse(getTitle());
-        else if (command.equals("twogtp-black"))
+        else if (command.equals("gogui-twogtp-black"))
             twogtpColor(m_black, cmd);
-        else if (command.equals("twogtp-white"))
+        else if (command.equals("gogui-twogtp-white"))
             twogtpColor(m_white, cmd);
-        else if (command.equals("twogtp-referee"))
+        else if (command.equals("gogui-twogtp-referee"))
             twogtpReferee(cmd);
-        else if (command.equals("twogtp-observer"))
+        else if (command.equals("gogui-twogtp-observer"))
             twogtpObserver(cmd);
         else if (command.equals("quit"))
         {
@@ -205,10 +205,10 @@ public class TwoGtp
                             "quit\n" +
                             "scoring_system\n" +
                             "time_settings\n" +
-                            "twogtp-black\n" +
-                            "twogtp-observer\n" +
-                            "twogtp-referee\n" +
-                            "twogtp-white\n" +
+                            "gogui-twogtp-black\n" +
+                            "gogui-twogtp-observer\n" +
+                            "gogui-twogtp-referee\n" +
+                            "gogui-twogtp-white\n" +
                             "undo\n" +
                             "version\n");
         else if (GtpUtil.isStateChangingCommand(command))
@@ -242,7 +242,7 @@ public class TwoGtp
                 && ! isExtCommandObserver
                 && ! isExtCommandWhite)
                 throw new GtpError("unknown command");
-            throw new GtpError("use twogtp-black/white/referee/observer");
+            throw new GtpError("use gogui-twogtp-black/white/referee/observer");
         }
     }
 
