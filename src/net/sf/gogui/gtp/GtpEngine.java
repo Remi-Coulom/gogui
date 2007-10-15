@@ -304,16 +304,16 @@ public class GtpEngine
 
 /** Thread reading the command stream.
     Reading is done in a seperate thread to allow the notification
-    of GtpServer about an asynchronous interrupt received using
+    of Server about an asynchronous interrupt received using
     the special comment line '# interrupt'.
 */
 class ReadThread
     extends Thread
 {
-    public ReadThread(GtpEngine gtpServer, InputStream in, boolean log)
+    public ReadThread(GtpEngine server, InputStream in, boolean log)
     {
         m_in = new BufferedReader(new InputStreamReader(in));
-        m_gtpServer = gtpServer;
+        m_server = server;
         m_log = log;
     }
 
@@ -361,11 +361,11 @@ class ReadThread
                 else
                 {
                     if (m_log)
-                        m_gtpServer.log(line);
+                        m_server.log(line);
                     line = line.trim();
                     if (line.equals("# interrupt"))
                     {
-                        m_gtpServer.interruptCommand();
+                        m_server.interruptCommand();
                     }
                     if (line.equals("") || line.charAt(0) == '#')
                         continue;
@@ -403,5 +403,5 @@ class ReadThread
 
     private GtpCommand m_command;
 
-    private final GtpEngine m_gtpServer;
+    private final GtpEngine m_server;
 }

@@ -332,14 +332,14 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-regress.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpregress.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.regress.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
- net/sf/gogui/gtpregress/*.class
+ net/sf/gogui/regress/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
 "/>
@@ -350,12 +350,12 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-server.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpserver.GtpServer"/>
+<attribute name="Main-Class" value="net.sf.gogui.server.Server"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/gtpserver/*.class
+ net/sf/gogui/server/*.class
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/Options.class
  net/sf/gogui/util/ProcessUtil*.class
@@ -391,7 +391,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-terminal.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpterminal.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.terminal.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -399,8 +399,8 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
- net/sf/gogui/gtpterminal/*.class
  net/sf/gogui/sgf/*.class
+ net/sf/gogui/terminal/*.class
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/FileUtil.class
  net/sf/gogui/util/MessageQueue.class
@@ -673,13 +673,13 @@ ${quaqua.nestedzipfile}
   net/sf/gogui/go.*,
   net/sf/gogui/gogui.*,
   net/sf/gogui/gtp.*,
-  net/sf/gogui/gtpregress.*,
-  net/sf/gogui/gtpserver.*,
-  net/sf/gogui/gtpterminal.*,
   net/sf/gogui/gui.*,
   net/sf/gogui/netgtp.*,
+  net/sf/gogui/regress.*,
+  net/sf/gogui/server.*,
   net/sf/gogui/sgf.*,
   net/sf/gogui/statistics.*,
+  net/sf/gogui/terminal.*,
   net/sf/gogui/tex.*,
   net/sf/gogui/thumbnail.*,
   net/sf/gogui/thumbnailer.*,

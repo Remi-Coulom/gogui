@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpTerminal.java
+// Terminal.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpterminal;
+package net.sf.gogui.terminal;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,10 +34,10 @@ import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 /** Simple text based interface to Go programs supporting GTP. */
-public class GtpTerminal
+public class Terminal
     implements GtpClient.IOCallback
 {
-    public GtpTerminal(String program, int size, boolean verbose)
+    public Terminal(String program, int size, boolean verbose)
         throws Exception
     {
         if (program.equals(""))
@@ -350,7 +350,7 @@ public class GtpTerminal
         try
         {
             OutputStream out = new FileOutputStream(file);
-            new SgfWriter(out, m_tree, "GtpTerminal", Version.get());
+            new SgfWriter(out, m_tree, "gogui-terminal", Version.get());
         }
         catch (FileNotFoundException e)
         {

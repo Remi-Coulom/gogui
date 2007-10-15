@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpServer.java
+// Server.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpserver;
+package net.sf.gogui.server;
 
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.ProcessUtil;
@@ -19,7 +19,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /** Connects a Go program supporting GTP to a socket. */
-public final class GtpServer
+public final class Server
 {
     /** Constructor.
         @param verbose Log everything sent and received to stderr
@@ -34,9 +34,9 @@ public final class GtpServer
         @param timeout Timeout in seconds, zero for no timeout.
         remote host. Only used if remoteHost is set.
     */
-    public GtpServer(boolean verbose, boolean loop, String program,
-                     String remoteHost, int port, String userFile,
-                     int timeout)
+    public Server(boolean verbose, boolean loop, String program,
+                  String remoteHost, int port, String userFile,
+                  int timeout)
         throws Exception
     {
         Runtime runtime = Runtime.getRuntime();
@@ -59,7 +59,7 @@ public final class GtpServer
                 socket = serverSocket.accept();
             }
             if (verbose)
-                System.err.println("gtpserver: Connected with "
+                System.err.println("gogui-server: Connected with "
                                    + socket.getInetAddress());
             if (timeout >= 0)
                 socket.setSoTimeout(timeout * 1000);
@@ -113,7 +113,7 @@ public final class GtpServer
             }
             if (opt.contains("version"))
             {
-                System.out.println("GtpServer " + Version.get());
+                System.out.println("gogui-server " + Version.get());
                 return;
             }
             if (! opt.contains("port"))
@@ -137,8 +137,8 @@ public final class GtpServer
                 System.exit(-1);
             }
             String program = arguments.get(0);
-            new GtpServer(verbose, loop, program, remoteHost, port, userFile,
-                          timeout);
+            new Server(verbose, loop, program, remoteHost, port, userFile,
+                       timeout);
         }
         catch (Throwable t)
         {
@@ -180,7 +180,7 @@ public final class GtpServer
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar gtpserver.jar [options] program\n" +
+        out.print("Usage: gogui-server [options] program\n" +
                   "\n" +
                   "-config  config file\n" +
                   "-help    display this help and exit\n" +

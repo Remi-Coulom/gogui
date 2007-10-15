@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpterminal;
+package net.sf.gogui.terminal;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -11,10 +11,10 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** GtpTerminal main function. */
+/** Terminal main function. */
 public final class Main
 {
-    /** GtpTerminal main function. */
+    /** Terminal main function. */
     public static void main(String[] args)
     {
         try
@@ -34,7 +34,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GtpTerminal " + Version.get());
+                System.out.println("gogui-terminal " + Version.get());
                 return;
             }
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
@@ -47,9 +47,9 @@ public final class Main
                 System.exit(-1);
             }
             String program = arguments.get(0);
-            GtpTerminal gtpTerminal = new GtpTerminal(program, size, verbose);
-            gtpTerminal.mainLoop();
-            gtpTerminal.close();
+            Terminal terminal = new Terminal(program, size, verbose);
+            terminal.mainLoop();
+            terminal.close();
         }
         catch (Throwable t)
         {
@@ -66,7 +66,7 @@ public final class Main
     private static void printUsage(PrintStream out)
     {
         String helpText =
-            "Usage: java -jar gtpterminal.jar program\n" +
+            "Usage: gogui-terminal program\n" +
             "\n" +
             "-config       config file\n" +
             "-help         print help and exit\n" +
