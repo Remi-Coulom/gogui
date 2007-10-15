@@ -36,7 +36,11 @@ public final class Bookmark
         String name = "";
         if (file != null)
         {
-            File fileNoExt = new File(FileUtil.removeExtension(file, "sgf"));
+            File fileNoExt;
+            if (FileUtil.hasExtension(file, "xml"))
+                fileNoExt = new File(FileUtil.removeExtension(file, "xml"));
+            else
+                fileNoExt = new File(FileUtil.removeExtension(file, "sgf"));
             name = fileNoExt.getName();
             boolean hasVariation = ! variation.trim().equals("");
             if (move > 0 || hasVariation)
