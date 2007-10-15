@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpregress;
+package net.sf.gogui.regress;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -11,7 +11,7 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** GtpRegress main function. */
+/** Regress main function. */
 public final class Main
 {
     public static void main(String[] args)
@@ -35,7 +35,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GtpRegress " + Version.get());
+                System.out.println("gogui-regress " + Version.get());
                 return;
             }
             boolean verbose = opt.contains("verbose");
@@ -54,10 +54,9 @@ public final class Main
             String program = arguments.get(0);
             ArrayList<String> tests = new ArrayList<String>(arguments);
             tests.remove(0);
-            GtpRegress gtpRegress =
-                new GtpRegress(program, tests, output, longOutput, verbose,
-                               gtpFile);
-            System.exit(gtpRegress.getResult() ? 0 : 1);
+            Regress regress = new Regress(program, tests, output, longOutput,
+                                          verbose, gtpFile);
+            System.exit(regress.getResult() ? 0 : 1);
         }
         catch (Throwable t)
         {
@@ -73,7 +72,7 @@ public final class Main
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar gtpregress.jar [options] program test.tst"
+        out.print("Usage: gogui-regress [options] program test.tst"
                   + " [...]\n" +
                   "\n" +
                   "-config       Config file\n" +

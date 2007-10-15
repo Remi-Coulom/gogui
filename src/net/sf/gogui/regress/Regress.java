@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpRegress.java
+// Regress.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpregress;
+package net.sf.gogui.regress;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,19 +28,19 @@ import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
 /** Runs GTP regression tests. */
-public class GtpRegress
+public class Regress
     implements GtpClient.IOCallback
 {
     /** Constructor.
         @param gtpFile File with GTP commands to send at startup or
         <code>null</code> for no file.
     */
-    public GtpRegress(String program, ArrayList<String> tests, String output,
-                      boolean longOutput, boolean verbose, File gtpFile)
+    public Regress(String program, ArrayList<String> tests, String output,
+                   boolean longOutput, boolean verbose, File gtpFile)
         throws Exception
     {
-        tests = GtpRegressUtil.expandTestSuites(tests);
-        GtpRegressUtil.checkFiles(tests);
+        tests = RegressUtil.expandTestSuites(tests);
+        RegressUtil.checkFiles(tests);
         m_result = true;
         m_program = program;
         m_longOutput = longOutput;
@@ -147,7 +147,7 @@ public class GtpRegress
     {
         public File m_file;
 
-        /** See GtpRegress#m_outName */
+        /** See Regress#m_outName */
         public String m_outName;
 
         public int m_numberTests;
@@ -293,7 +293,7 @@ public class GtpRegress
         if (m_currentStyle != null)
             m_out.print("</span>");
         m_out.print("</pre>\n" +
-                    HtmlUtil.getFooter("GtpRegress") +
+                    HtmlUtil.getFooter("gogui-regress") +
                     "</body>\n" +
                     "</html>\n");
         m_out.close();
@@ -573,7 +573,7 @@ public class GtpRegress
         m_out.print("<html>\n" +
                     "<head>\n" +
                     "<title>Output: " + m_testFile + "</title>\n" +
-                    HtmlUtil.getMeta("GtpRegress") +
+                    HtmlUtil.getMeta("gogui-regress") +
                     "<style type=\"text/css\">\n" +
                     "<!--\n" +
                     "body { margin:0; }\n" +
@@ -925,7 +925,7 @@ public class GtpRegress
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Regression Test Summary</title>\n" +
-                  HtmlUtil.getMeta("GtpRegress") +
+                  HtmlUtil.getMeta("gogui-regress") +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "body { margin:0; }\n" +
@@ -977,7 +977,7 @@ public class GtpRegress
         }
         writeSummaryRow(out, getTotalSummary(), true, true);
         out.print("</table>\n" +
-                  HtmlUtil.getFooter("GtpRegress") +
+                  HtmlUtil.getFooter("gogui-regress") +
                   "</body>\n" +
                   "</html>\n");
         out.close();
@@ -1049,7 +1049,7 @@ public class GtpRegress
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Summary: " + m_testFile + "</title>\n" +
-                  HtmlUtil.getMeta("GtpRegress") +
+                  HtmlUtil.getMeta("gogui-regress") +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "body { margin:0; }\n" +
@@ -1158,7 +1158,7 @@ public class GtpRegress
                       "</tr>\n");
         }
         out.print("</table>\n" +
-                  HtmlUtil.getFooter("GtpRegress") +
+                  HtmlUtil.getFooter("gogui-regress") +
                   "</body>\n" +
                   "</html>\n");
         out.close();

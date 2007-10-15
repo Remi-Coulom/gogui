@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpRegressUtil.java
+// RegressUtil.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpregress;
+package net.sf.gogui.regress;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 
 /** Utility functions used in this package. */
-public class GtpRegressUtil
+public class RegressUtil
 {
     /** Check if files exist.
         @param list List of file names (as strings)
@@ -64,7 +64,7 @@ public class GtpRegressUtil
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private GtpRegressUtil()
+    private RegressUtil()
     {
     }
 
