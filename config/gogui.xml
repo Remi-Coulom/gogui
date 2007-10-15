@@ -17,8 +17,8 @@
     <comment>Go Game</comment>
     <comment xml:lang="de">Go Partie</comment>
     <magic priority="80">
-      <match type="string" offset="0:64" value="&lt;!DOCTYPE Go "/>
-      <match type="string" offset="0:64" value="&lt;Go&gt;"/>
+      <match type="string" offset="0:256" value="&lt;!DOCTYPE Go "/>
+      <match type="string" offset="0:256" value="&lt;Go&gt;"/>
     </magic>
     <sub-class-of type="application/xml"/>
     <glob pattern="*.xml"/>
