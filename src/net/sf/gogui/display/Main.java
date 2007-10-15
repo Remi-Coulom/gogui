@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpdisplay;
+package net.sf.gogui.display;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** GtpDisplay main function. */
+/** Display main function. */
 public final class Main
 {
     public static void main(String[] args)
@@ -33,7 +33,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GtpDisplay " + Version.get());
+                System.out.println("gogui-display " + Version.get());
                 System.exit(0);
             }
             boolean verbose = opt.contains("verbose");
@@ -48,9 +48,9 @@ public final class Main
             if (arguments.size() == 1)
                 program = arguments.get(0);
             GuiUtil.initLookAndFeel(lookAndFeel);
-            GtpDisplay gtpDisplay = new GtpDisplay(program, verbose);
-            gtpDisplay.mainLoop(System.in, System.out);
-            gtpDisplay.close();
+            Display display = new Display(program, verbose);
+            display.mainLoop(System.in, System.out);
+            display.close();
         }
         catch (Throwable t)
         {
@@ -67,7 +67,7 @@ public final class Main
     private static void printUsage(PrintStream out)
     {
         String helpText =
-            "Usage: java -jar gtpdisplay.jar program\n" +
+            "Usage: gogui-display program\n" +
             "\n" +
             "-config       Config file\n" +
             "-help         Print help and exit\n" +

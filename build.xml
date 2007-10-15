@@ -266,19 +266,19 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-display.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.display.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 <attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/boardpainter/*.class
+ net/sf/gogui/display/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gui/*.class
  net/sf/gogui/gui/*.png
  net/sf/gogui/gtp/*.class
- net/sf/gogui/gtpdisplay/*.class
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class
  net/sf/gogui/tex/*.class
@@ -294,15 +294,15 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-dummy.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpdummy.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.dummy.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
+ net/sf/gogui/dummy/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
- net/sf/gogui/gtpdummy/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
@@ -667,12 +667,12 @@ ${quaqua.nestedzipfile}
   net/sf/gogui/adapter.*,
   net/sf/gogui/boardpainter.*,
   net/sf/gogui/convert.*,
+  net/sf/gogui/display.*,
+  net/sf/gogui/dummy.*,
   net/sf/gogui/game.*,
   net/sf/gogui/go.*,
   net/sf/gogui/gogui.*,
   net/sf/gogui/gtp.*,
-  net/sf/gogui/gtpdisplay.*,
-  net/sf/gogui/gtpdummy.*,
   net/sf/gogui/gtpregress.*,
   net/sf/gogui/gtpserver.*,
   net/sf/gogui/gtpterminal.*,

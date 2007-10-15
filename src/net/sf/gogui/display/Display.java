@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpDisplay.java
+// Display.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpdisplay;
+package net.sf.gogui.display;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -36,10 +36,10 @@ import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.util.StringUtil;
 
 /** GTP adapter showing the current board in a window. */
-public class GtpDisplay
+public class Display
     extends GtpEngine
 {
-    public GtpDisplay(String program, boolean verbose)
+    public Display(String program, boolean verbose)
         throws Exception
     {
         super(null);
@@ -99,14 +99,14 @@ public class GtpDisplay
             m_guiBoard.setShowCursor(false);
             m_gtp.queryName();
             m_name = m_gtp.getLabel();
-            String title = "GtpDisplay - " + m_name;
+            String title = "gogui-display - " + m_name;
             m_frame.setTitle(title);
         }
         else
         {
             m_gtp = null;
             m_name = null;
-            m_frame.setTitle("GtpDisplay");
+            m_frame.setTitle("gogui-display");
         }
         registerCommands();
         GuiUtil.setGoIcon(m_frame);
@@ -146,7 +146,7 @@ public class GtpDisplay
     public void cmdName(GtpCommand cmd)
     {
         if (m_gtp == null)
-            cmd.setResponse("GtpDisplay");
+            cmd.setResponse("gogui-display");
         else
             cmd.setResponse(m_name);
     }
@@ -205,7 +205,7 @@ public class GtpDisplay
     private final String m_name;
 
     private final MessageDialogs m_messageDialogs =
-        new MessageDialogs("GtpDisplay");
+        new MessageDialogs("gogui-display");
 
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {
@@ -233,7 +233,7 @@ public class GtpDisplay
         if (m_gtp == null)
         {
             if (! m_messageDialogs.showQuestion(m_frame,
-                                                "Terminate GtpDisplay?",
+                                                "Terminate gogui-display?",
                                                 "", "Terminate", true))
                 return;
             System.exit(0);
@@ -296,7 +296,7 @@ public class GtpDisplay
         {
             if (m_frame == null)
                 // can that happen?
-                throw new GtpError("GtpDisplay terminated");
+                throw new GtpError("gogui-display terminated");
             m_color = color;
             showStatus("Input move for " + m_color
                        + " (Ctrl-button and click for pass)");
