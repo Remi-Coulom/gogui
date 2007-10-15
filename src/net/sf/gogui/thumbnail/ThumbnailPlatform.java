@@ -12,12 +12,11 @@ public final class ThumbnailPlatform
 {
     public static boolean checkThumbnailSupport()
     {
-        File dir = getNormalDir();
-        // On Windows we try to create the directory, not in other platforms,
-        // because we cannot create it with the right permissions from Java
-        if (! dir.exists() && Platform.isWindows())
-            dir.mkdirs();
-        return dir.exists();
+        if (Platform.isWindows())
+            return false;
+        // Don't try to create the directory, because we cannot create it with
+        // the right permissions from Java
+        return getNormalDir().exists();
     }
 
     /** Get directory for normal size thumbnails. */
