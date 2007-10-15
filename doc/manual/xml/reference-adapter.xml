@@ -1,7 +1,7 @@
-<refentry id="reference-gtpadapter">
+<refentry id="reference-adapter">
 
 <refmeta>
-<refentrytitle>gtpadapter</refentrytitle>
+<refentrytitle>gogui-adapter</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -9,7 +9,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gtpadapter</refname>
+<refname>gogui-adapter</refname>
 <refpurpose>
 Go Text Protocol adapter for logging or protocol translations.
 </refpurpose>
@@ -17,7 +17,7 @@ Go Text Protocol adapter for logging or protocol translations.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtpadapter</command>
+<command>gogui-adapter</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
@@ -31,12 +31,12 @@ Go Text Protocol adapter for logging or protocol translations.
 </cmdsynopsis>
 
 <cmdsynopsis>
-<command>gtpadapter</command>
+<command>gogui-adapter</command>
 <arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
-<command>gtpadapter</command>
+<command>gogui-adapter</command>
 <arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>

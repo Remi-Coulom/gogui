@@ -1,7 +1,7 @@
-<refentry id="reference-gtpserver">
+<refentry id="reference-server">
 
 <refmeta>
-<refentrytitle>gtpserver</refentrytitle>
+<refentrytitle>gogui-server</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -9,7 +9,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gtpserver</refname>
+<refname>gogui-server</refname>
 <refpurpose>
 Connects a Go program supporting Go Text Protocol to a socket.
 </refpurpose>
@@ -17,7 +17,7 @@ Connects a Go program supporting Go Text Protocol to a socket.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtpserver</command>
+<command>gogui-server</command>
 <arg choice="plain"><option>-port</option> <replaceable>n</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-loop</option></arg>
@@ -28,11 +28,11 @@ Connects a Go program supporting Go Text Protocol to a socket.
 <arg choice="plain"><replaceable>program</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpserver</command>
+<command>gogui-server</command>
 <arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpserver</command>
+<command>gogui-server</command>
 <arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>

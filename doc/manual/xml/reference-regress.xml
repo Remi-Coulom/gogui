@@ -1,6 +1,6 @@
-<refentry id="reference-gtpregress">
+<refentry id="reference-regress">
 <refmeta>
-<refentrytitle>gtpregress</refentrytitle>
+<refentrytitle>gogui-regress</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -8,7 +8,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gtpregress</refname>
+<refname>gogui-regress</refname>
 <refpurpose>
 Runs GTP regression tests.
 </refpurpose>
@@ -16,7 +16,7 @@ Runs GTP regression tests.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtpregress</command>
+<command>gogui-regress</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-long</option></arg>
@@ -28,10 +28,10 @@ Runs GTP regression tests.
 </arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpregress</command> <arg><option>-help</option></arg>
+<command>gogui-regress</command> <arg><option>-help</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpregress</command> <arg><option>-version</option></arg>
+<command>gogui-regress</command> <arg><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 

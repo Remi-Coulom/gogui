@@ -1,7 +1,7 @@
-<refentry id="reference-gtpdisplay">
+<refentry id="reference-display">
 
 <refmeta>
-<refentrytitle>gtpdisplay</refentrytitle>
+<refentrytitle>gogui-display</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -9,7 +9,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gtpdisplay</refname>
+<refname>gogui-display</refname>
 <refpurpose>
 Go Text Protocol adapter showing the current board in a window.
 </refpurpose>
@@ -17,7 +17,7 @@ Go Text Protocol adapter showing the current board in a window.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtpdisplay</command>
+<command>gogui-display</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-laf</option> <replaceable>name</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -25,12 +25,12 @@ Go Text Protocol adapter showing the current board in a window.
 </cmdsynopsis>
 
 <cmdsynopsis>
-<command>gtpdisplay</command>
+<command>gogui-display</command>
 <arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
-<command>gtpdisplay</command>
+<command>gogui-display</command>
 <arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>

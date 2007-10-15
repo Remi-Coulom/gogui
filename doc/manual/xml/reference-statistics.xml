@@ -1,6 +1,6 @@
-<refentry id="reference-gtpstatistics">
+<refentry id="reference-statistics">
 <refmeta>
-<refentrytitle>gtpstatistics</refentrytitle>
+<refentrytitle>gogui-statistics</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -8,7 +8,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gtpstatistics</refname>
+<refname>gogui-statistics</refname>
 <refpurpose>
 Runs GTP commands on all positions of game collections.
 </refpurpose>
@@ -16,7 +16,7 @@ Runs GTP commands on all positions of game collections.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtpstatistics</command>
+<command>gogui-statistics</command>
 <arg><option>-backward</option></arg>
 <arg><option>-begin</option> <replaceable>commands</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
@@ -35,13 +35,13 @@ Runs GTP commands on all positions of game collections.
 </arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpstatistics</command> <arg><option>-help</option></arg>
+<command>gogui-statistics</command> <arg><option>-help</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpstatistics</command> <arg><option>-version</option></arg>
+<command>gogui-statistics</command> <arg><option>-version</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpstatistics</command>
+<command>gogui-statistics</command>
 <arg><option>-analyze</option> <replaceable>file</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-output</option> <replaceable>file</replaceable></arg>

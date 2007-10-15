@@ -15,4 +15,4 @@ if [ "$GOGUI_ENABLE_ASSERTIONS" = "1" ]; then
     OPTIONS="-ea"
 fi
 
-"$JAVA" $OPTIONS -jar "$GOGUI_LIB/gtpdisplay.jar" "$@"
+"$JAVA" $OPTIONS -jar "$GOGUI_LIB/gogui-dummy.jar" "$@"

@@ -1,7 +1,7 @@
-<refentry id="reference-gtpdummy">
+<refentry id="reference-dummy">
 
 <refmeta>
-<refentrytitle>gtpdummy</refentrytitle>
+<refentrytitle>gogui-dummy</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -9,7 +9,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gtpdummy</refname>
+<refname>gogui-dummy</refname>
 <refpurpose>
 Dummy Go program for testing GTP controllers.
 </refpurpose>
@@ -17,17 +17,17 @@ Dummy Go program for testing GTP controllers.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtpdummy</command>
+<command>gogui-dummy</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
 <arg><option>-resign</option> <replaceable>n</replaceable></arg>
 <arg><option>-srand</option> <replaceable>seed</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpdummy</command><arg choice="plain"><option>-help</option></arg>
+<command>gogui-dummy</command><arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gtpdummy</command><arg choice="plain"><option>-version</option></arg>
+<command>gogui-dummy</command><arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 

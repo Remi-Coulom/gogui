@@ -16,15 +16,15 @@
 <!ENTITY programs SYSTEM "programs.xml">
 <!ENTITY readme SYSTEM "readme.xml">
 <!ENTITY reference-convert SYSTEM "reference-convert.xml">
+<!ENTITY reference-adapter SYSTEM "reference-adapter.xml">
+<!ENTITY reference-display SYSTEM "reference-display.xml">
+<!ENTITY reference-dummy SYSTEM "reference-dummy.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
-<!ENTITY reference-gtpadapter SYSTEM "reference-gtpadapter.xml">
-<!ENTITY reference-gtpdisplay SYSTEM "reference-gtpdisplay.xml">
-<!ENTITY reference-gtpdummy SYSTEM "reference-gtpdummy.xml">
-<!ENTITY reference-gtpregress SYSTEM "reference-gtpregress.xml">
-<!ENTITY reference-gtpserver SYSTEM "reference-gtpserver.xml">
-<!ENTITY reference-gtpstatistics SYSTEM "reference-gtpstatistics.xml">
-<!ENTITY reference-gtpterminal SYSTEM "reference-gtpterminal.xml">
 <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
+<!ENTITY reference-regress SYSTEM "reference-regress.xml">
+<!ENTITY reference-server SYSTEM "reference-server.xml">
+<!ENTITY reference-statistics SYSTEM "reference-statistics.xml">
+<!ENTITY reference-terminal SYSTEM "reference-terminal.xml">
 <!ENTITY reference-thumbnailer SYSTEM "reference-thumbnailer.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
 <!ENTITY setup SYSTEM "setup.xml">
@@ -63,16 +63,16 @@ GoGui is a graphical interface to programs that play the game of Go.
 &tools;
 <appendix id="appendix-reference">
 <title>Reference</title>
+&reference-adapter;
 &reference-convert;
+&reference-display;
+&reference-dummy;
 &reference-gogui;
-&reference-gtpadapter;
-&reference-gtpdisplay;
-&reference-gtpdummy;
-&reference-gtpregress;
-&reference-gtpserver;
-&reference-gtpstatistics;
-&reference-gtpterminal;
 &reference-netgtp;
+&reference-regress;
+&reference-server;
+&reference-statistics;
+&reference-terminal;
 &reference-thumbnailer;
 &reference-twogtp;
 </appendix>
