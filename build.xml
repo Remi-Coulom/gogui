@@ -223,15 +223,15 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-adapter.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpadapter.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.adapter.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
+ net/sf/gogui/adapter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
- net/sf/gogui/gtpadapter/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
@@ -370,7 +370,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-statistics.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gtpstatistics.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.statistics.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -379,8 +379,8 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gui/*.class
- net/sf/gogui/gtpstatistics/*.class
  net/sf/gogui/sgf/*.class
+ net/sf/gogui/statistics/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
@@ -664,22 +664,22 @@ ${quaqua.nestedzipfile}
  windowtitle="GoGui Source Documentation"
  overview="src/net/sf/gogui/overview.html"
  packagenames="
+  net/sf/gogui/adapter.*,
   net/sf/gogui/boardpainter.*,
   net/sf/gogui/convert.*,
   net/sf/gogui/game.*,
   net/sf/gogui/go.*,
   net/sf/gogui/gogui.*,
   net/sf/gogui/gtp.*,
-  net/sf/gogui/gtpadapter.*,
   net/sf/gogui/gtpdisplay.*,
   net/sf/gogui/gtpdummy.*,
   net/sf/gogui/gtpregress.*,
   net/sf/gogui/gtpserver.*,
-  net/sf/gogui/gtpstatistics.*,
   net/sf/gogui/gtpterminal.*,
   net/sf/gogui/gui.*,
   net/sf/gogui/netgtp.*,
   net/sf/gogui/sgf.*,
+  net/sf/gogui/statistics.*,
   net/sf/gogui/tex.*,
   net/sf/gogui/thumbnail.*,
   net/sf/gogui/thumbnailer.*,

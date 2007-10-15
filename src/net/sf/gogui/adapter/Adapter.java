@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpAdapter.java
+// Adapter.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpadapter;
+package net.sf.gogui.adapter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,7 +40,7 @@ import net.sf.gogui.util.StringUtil;
 
 /** GTP adapter for logging or protocol translations.
 */
-public class GtpAdapter
+public class Adapter
     extends GtpEngine
 {
     /** Constructor.
@@ -58,9 +58,9 @@ public class GtpAdapter
         @param lowerCase Translate move commands to the engine to lower-case.
         @param size Board size at startup.
     */
-    public GtpAdapter(String program, PrintStream log, String gtpFile,
-                      boolean verbose, boolean noScore, boolean version1,
-                      boolean fillPasses, boolean lowerCase, int size)
+    public Adapter(String program, PrintStream log, String gtpFile,
+                   boolean verbose, boolean noScore, boolean version1,
+                   boolean fillPasses, boolean lowerCase, int size)
         throws Exception
     {
         super(log);
@@ -78,8 +78,8 @@ public class GtpAdapter
     /** Construct with existing GtpClientBase.
         For testing this class.
     */
-    public GtpAdapter(GtpClientBase gtp, PrintStream log, boolean noScore,
-                      boolean version1, boolean lowerCase, int size)
+    public Adapter(GtpClientBase gtp, PrintStream log, boolean noScore,
+                   boolean version1, boolean lowerCase, int size)
         throws GtpError
     {
         super(log);

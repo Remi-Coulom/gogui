@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpadapter;
+package net.sf.gogui.adapter;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -71,9 +71,9 @@ public final class Main
                 log = new PrintStream(file);
             }
             String program = arguments.get(0);
-            GtpAdapter adapter
-                = new GtpAdapter(program, log, gtpFile, verbose, noScore,
-                                 version1, fillPasses, lowerCase, size);
+            Adapter adapter = new Adapter(program, log, gtpFile, verbose,
+                                          noScore, version1, fillPasses,
+                                          lowerCase, size);
             if (name != null)
                 adapter.setName(name);
             adapter.mainLoop(System.in, System.out);
