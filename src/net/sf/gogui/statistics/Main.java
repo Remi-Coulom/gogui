@@ -2,7 +2,7 @@
 // Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -13,7 +13,7 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** GtpStatistics main function. */
+/** Statistics main function. */
 public final class Main
 {
     public static void main(String[] args)
@@ -48,7 +48,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GtpStatistics " + Version.get());
+                System.out.println("gogui-statistics " + Version.get());
                 return;
             }
             boolean analyze = opt.contains("analyze");
@@ -99,18 +99,18 @@ public final class Main
                 if (opt.contains("output"))
                     output = new File(opt.get("output"));
                 else
-                    output = new File("gtpstatistics.dat");
+                    output = new File("statistics.dat");
                 if (output.exists() && ! force)
                     throw new ErrorMessage("File \"" + output +
                                            "\" already exists");
-                GtpStatistics gtpStatistics = new GtpStatistics();
-                gtpStatistics.setMin(min);
-                gtpStatistics.setMax(max);
-                gtpStatistics.setQuiet(quiet);
-                gtpStatistics.run(program, arguments, boardSize, commands,
-                                  beginCommands, finalCommands, verbose,
-                                  allowSetup, backward);
-                gtpStatistics.saveTable(output);
+                Statistics statistics = new Statistics();
+                statistics.setMin(min);
+                statistics.setMax(max);
+                statistics.setQuiet(quiet);
+                statistics.run(program, arguments, boardSize, commands,
+                               beginCommands, finalCommands, verbose,
+                               allowSetup, backward);
+                statistics.saveTable(output);
             }
         }
         catch (Throwable t)
@@ -142,7 +142,7 @@ public final class Main
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar gtpstatistics.jar -program program"
+        out.print("Usage: gogui-statistics -program program"
                   + " [options] file.sgf|dir [...]\n" +
                   "\n" +
                   "-analyze      Create HTML file from result file\n" +

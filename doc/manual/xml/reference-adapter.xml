@@ -191,7 +191,7 @@ Print version and exit.
 <term><option>-version1</option></term>
 <listitem>
 <para>
-Sets, whether GtpAdapter reports protocol version 1 in response to the
+Sets, whether gogui-adapter reports protocol version 1 in response to the
 <command>protocol_version</command> command and implements version 1 commands.
 </para>
 </listitem>
@@ -206,7 +206,7 @@ Sets, whether GtpAdapter reports protocol version 1 in response to the
 <variablelist>
 
 <varlistentry>
-<term><command>gtpadapter-showboard</command></term>
+<term><command>gogui-adapter-showboard</command></term>
 <listitem>
 <para>
 Show the internal Go board.

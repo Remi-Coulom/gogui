@@ -2,7 +2,7 @@
 // CommandStatistics.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import java.awt.Color;
 import java.io.File;

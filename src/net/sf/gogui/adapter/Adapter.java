@@ -170,7 +170,7 @@ public class Adapter
     {
         cmd.checkArgNone();
         String response =
-            "string/GtpAdapter ShowBoard/gtpadapter-showboard\n";
+            "string/Adapter ShowBoard/gogui-adapter-showboard\n";
         String command = null;
         if (m_gtp.isSupported("gogui-analyze_commands"))
             command = "gogui-analyze_commands";
@@ -181,7 +181,7 @@ public class Adapter
         cmd.setResponse(response);
     }
 
-    public void cmdGtpAdapterShowBoard(GtpCommand cmd) throws GtpError
+    public void cmdAdapterShowBoard(GtpCommand cmd) throws GtpError
     {
         cmd.getResponse().append("\n");
         cmd.getResponse().append(BoardUtil.toString(m_board, true));
@@ -403,9 +403,9 @@ public class Adapter
         register("gogui-analyze_commands", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoGuiAnalyzeCommands(cmd); } });
-        register("gtpadapter-showboard", new GtpCallback() {
+        register("gogui-adapter-showboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
-                    cmdGtpAdapterShowBoard(cmd); } });
+                    cmdAdapterShowBoard(cmd); } });
         register("komi", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdKomi(cmd); } });

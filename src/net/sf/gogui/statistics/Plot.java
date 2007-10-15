@@ -2,7 +2,7 @@
 // Plot.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import java.awt.Stroke;
 import java.awt.BasicStroke;

@@ -13,10 +13,10 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
-/** GtpAdapter main function. */
+/** Adapter main function. */
 public final class Main
 {
-    /** GtpAdapter main function. */
+    /** Adapter main function. */
     public static void main(String[] args)
     {
         try
@@ -46,7 +46,7 @@ public final class Main
                 if (opt.getArguments().size() > 0)
                     throw new ErrorMessage("No arguments allowed with"
                                            + " option -version");
-                System.out.println("GtpAdapter " + Version.get());
+                System.out.println("gogui-adapter " + Version.get());
                 return;
             }
             boolean verbose = opt.contains("verbose");
@@ -96,7 +96,7 @@ public final class Main
     private static void printUsage(PrintStream out)
     {
         String helpText =
-            "Usage: java -jar gtpadapter.jar program\n" +
+            "Usage: gogui-adapter program\n" +
             "\n" +
             "-config       config file\n" +
             "-fillpasses   fill non-alternating moves with pass moves\n" +

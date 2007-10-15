@@ -2,7 +2,7 @@
 // PositionStatistics.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import net.sf.gogui.util.Histogram;
 import net.sf.gogui.util.Statistics;

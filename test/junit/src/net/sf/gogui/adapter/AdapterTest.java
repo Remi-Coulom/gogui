@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpAdapterTest.java
+// AdapterTest.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpadapter;
+package net.sf.gogui.adapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,7 +16,7 @@ import net.sf.gogui.gtp.GtpExpectEngine;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StreamCopy;
 
-public final class GtpAdapterTest
+public final class AdapterTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -26,11 +26,11 @@ public final class GtpAdapterTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(GtpAdapterTest.class);
+        return new junit.framework.TestSuite(AdapterTest.class);
     }
 
     /** Test clear_board and boardsize commands.
-        The GtpSynchronizer used by GtpAdapter should always send a boardsize
+        The GtpSynchronizer used by Adapter should always send a boardsize
         and clear_board command after receiving a boardsize command to avoid
         not knowing the state after the boardsize command.
     */
@@ -110,7 +110,7 @@ public final class GtpAdapterTest
         assertExpectQueueEmpty();
     }
 
-    private GtpAdapter m_adapter;
+    private Adapter m_adapter;
 
     private GtpExpectEngine m_expect;
 
@@ -158,16 +158,16 @@ public final class GtpAdapterTest
             // Much slower than using GtpEngineClient
             GtpEngineConnection expectConnection
                 = new GtpEngineConnection(m_expect);
-            m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null,
-                                       false, false, lowerCase, 19);
+            m_adapter = new Adapter(expectConnection.getGtpClient(), null,
+                                    false, false, lowerCase, 19);
             GtpEngineConnection adapterConnection
                 = new GtpEngineConnection(m_adapter);
             m_gtp = adapterConnection.getGtpClient();
         }
         else
         {
-            m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null,
-                                       false, false, lowerCase, 19);
+            m_adapter = new Adapter(new GtpEngineClient(m_expect), null,
+                                    false, false, lowerCase, 19);
             m_gtp = new GtpEngineClient(m_adapter);
         }
         assertExpectQueueEmpty();

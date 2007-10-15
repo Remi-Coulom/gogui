@@ -2,7 +2,7 @@
 // FileCheck.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import java.io.InputStream;
 import java.io.File;
@@ -18,7 +18,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 
-/** Check that SGF files meet the requirements for a GtpStatistics run. */
+/** Check that SGF files meet the requirements for a Statistics run. */
 public class FileCheck
 {
     public FileCheck(ArrayList<String> sgfFiles, int size, boolean allowSetup)

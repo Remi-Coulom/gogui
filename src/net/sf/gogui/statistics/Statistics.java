@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// GtpStatistics.java
+// Statistics.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import java.io.InputStream;
 import java.io.File;
@@ -36,7 +36,7 @@ import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 
 /** Run commands of a GTP engine on all positions in a game collection. */
-public class GtpStatistics
+public class Statistics
 {
     public void run(String program, ArrayList<String> sgfFiles, int size,
                     ArrayList<String> commands,

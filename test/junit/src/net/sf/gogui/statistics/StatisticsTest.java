@@ -1,15 +1,15 @@
 //----------------------------------------------------------------------------
-// GtpStatisticsTest.java
+// StatisticsTest.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gtpstatistics;
+package net.sf.gogui.statistics;
 
 import java.util.ArrayList;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpEngineClient;
 import net.sf.gogui.gtp.GtpExpectEngine;
 
-public final class GtpStatisticsTest
+public final class StatisticsTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -19,7 +19,7 @@ public final class GtpStatisticsTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(GtpStatisticsTest.class);
+        return new junit.framework.TestSuite(StatisticsTest.class);
     }
 
     public void testBasics() throws Exception
@@ -47,10 +47,10 @@ public final class GtpStatisticsTest
         expect.expect("play B C7");
         expect.expect("foo");
         expect.expect("quit");
-        GtpStatistics gtpStatistics = new GtpStatistics();
-        gtpStatistics.setQuiet(true);
-        gtpStatistics.run(gtp, program, sgfFiles, size, commands, null, null,
-                          allowSetup, backward);
+        Statistics statistics = new Statistics();
+        statistics.setQuiet(true);
+        statistics.run(gtp, program, sgfFiles, size, commands, null, null,
+                       allowSetup, backward);
         assertTrue(expect.isExpectQueueEmpty());
     }
 }
