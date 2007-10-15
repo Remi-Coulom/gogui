@@ -42,6 +42,7 @@ Comment out the exec svnversion for releases.
  gogui
  gogui-convert
  gogui-thumbnailer
+ gogui-twogtp
  gtpdisplay
  gtpregress
  gtpstatistics
@@ -50,7 +51,6 @@ Comment out the exec svnversion for releases.
  gtpdummy
  gtpserver
  netgtp
- twogtp
 "/>
 
 <available property="docbook.available"
@@ -72,6 +72,7 @@ Comment out the exec svnversion for releases.
   gogui.jar,
   gogui-convert.jar,
   gogui-thumbnailer.jar,
+  gogui-twogtp.jar,
   gtpadapter.jar,
   gtpdisplay.jar,
   gtpdummy.jar,
@@ -79,8 +80,7 @@ Comment out the exec svnversion for releases.
   gtpstatistics.jar,
   gtpserver.jar,
   gtpterminal.jar,
-  netgtp.jar,
-  twogtp.jar
+  netgtp.jar
 "/>
 
 <target name="clean" depends="clean-build-dir"
@@ -91,6 +91,7 @@ Comment out the exec svnversion for releases.
    gogui.jar,
    gogui-convert.jar,
    gogui-thumbnailer.jar,
+   gogui-twogtp.jar,
    gtpadapter.jar,
    gtpdisplay.jar,
    gtpdummy.jar,
@@ -100,8 +101,7 @@ Comment out the exec svnversion for releases.
    gtpterminal.jar,
    ${looks.jarfile},
    ${quaqua.jarfile},
-   netgtp.jar,
-   twogtp.jar
+   netgtp.jar
   "
 />
 </delete>
@@ -206,6 +206,7 @@ Comment out the exec svnversion for releases.
  bin/gogui,
  bin/gogui-convert,
  bin/gogui-thumbnailer,
+ bin/gogui-twogtp,
  bin/gtpadapter,
  bin/gtpdisplay,
  bin/gtpdummy,
@@ -213,8 +214,7 @@ Comment out the exec svnversion for releases.
  bin/gtpserver,
  bin/gtpstatistics,
  bin/gtpterminal,
- bin/netgtp,
- bin/twogtp,
+ bin/netgtp
 " />
 </zip>
 </target>
@@ -261,6 +261,27 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/version/*.class
  net/sf/gogui/xml/*.class
  net/sf/gogui/xml/*.dtd
+"/>
+</jar>
+</target>
+
+<target name="gogui-twogtp.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-twogtp.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.twogtp.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/twogtp/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/xml/*.class
 "/>
 </jar>
 </target>
@@ -731,27 +752,6 @@ ${quaqua.nestedzipfile}
 
 <target name="test-depend">
 <depend srcdir="test" destdir="build/test" cache="build/depcache-test"/>
-</target>
-
-<target name="twogtp.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/twogtp.jar" compress="true">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.twogtp.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/twogtp/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/xml/*.class
-"/>
-</jar>
 </target>
 
 <target name="version" depends="version-check-uptodate"

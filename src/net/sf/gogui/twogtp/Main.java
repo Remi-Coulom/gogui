@@ -48,7 +48,7 @@ public final class Main
             if (opt.contains("help"))
             {
                 String helpText =
-                    "Usage: java -jar twogtp.jar [options]\n" +
+                    "Usage: gogui-twogtp [options]\n" +
                     "\n" +
                     "-alternate      alternate colors\n" +
                     "-analyze file   analyze result file\n" +
@@ -83,7 +83,7 @@ public final class Main
             boolean force = opt.contains("force");
             if (opt.contains("version"))
             {
-                System.out.println("TwoGtp " + Version.get());
+                System.out.println("GoGuiTwoGtp " + Version.get());
                 System.exit(0);
             }
             if (opt.contains("analyze"))

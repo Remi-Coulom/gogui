@@ -1,7 +1,7 @@
 <refentry id="reference-twogtp">
 
 <refmeta>
-<refentrytitle>twogtp</refentrytitle>
+<refentrytitle>gogui-twogtp</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -9,7 +9,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>twogtp</refname>
+<refname>gogui-twogtp</refname>
 <refpurpose>
 Go Text Protocol adapter for playing games between two Go programs.
 </refpurpose>
@@ -17,7 +17,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>twogtp</command>
+<command>gogui-twogtp</command>
 <arg choice="plain"><option>-black</option> <replaceable>command</replaceable>
   </arg>
 <arg choice="plain"><option>-white</option> <replaceable>command</replaceable>
@@ -39,22 +39,22 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-xml</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>twogtp</command>
+<command>gogui-twogtp</command>
 <arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>twogtp</command>
+<command>gogui-twogtp</command>
 <arg choice="plain"><option>-analyze</option></arg>
 <arg choice="plain"><replaceable>file.dat</replaceable></arg>
 <arg><option>-force</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>twogtp</command>
+<command>gogui-twogtp</command>
 <arg choice="plain"><option>-compare</option></arg>
 <arg choice="plain" rep="repeat"><replaceable>file.sgf</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>twogtp</command>
+<command>gogui-twogtp</command>
 <arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -464,7 +464,7 @@ save games and results to files with filename prefix gnugo5:
 <userinput>
 BLACK="gnugo --mode gtp"
 WHITE="gnugo --mode gtp --level 5"
-twogtp -black "$BLACK" -white "$WHITE" -games 100 \
+gogui-twogtp -black "$BLACK" -white "$WHITE" -games 100 \
   -size 9 -alternate -sgffile gnugo5 -auto
 </userinput>
 </programlisting>
@@ -480,7 +480,7 @@ section:
 <para>
 <programlisting>
 <userinput>
-twogtp -analyze gnugo5.dat
+gogui-twogtp -analyze gnugo5.dat
 </userinput>
 </programlisting>
 </para>
@@ -498,7 +498,7 @@ as a graphical display
 <userinput>
 BLACK="gnugo --mode gtp"
 WHITE="gnugo --mode gtp --level 5"
-gogui -program "twogtp -black \"$BLACK\" -white \"$WHITE\""
+gogui -program "gogui-twogtp -black \"$BLACK\" -white \"$WHITE\""
 </userinput>
 </programlisting>
 </para>
@@ -515,7 +515,7 @@ as a graphical display (start games automatically):
 <userinput>
 BLACK="gnugo --mode gtp"
 WHITE="gnugo --mode gtp --level 5"
-TWOGTP="twogtp -black \"$BLACK\" -white \"$WHITE\" -games 100 \
+TWOGTP="gogui-twogtp -black \"$BLACK\" -white \"$WHITE\" -games 100 \
   -size 9 -alternate -sgffile gnugo5"
 gogui -size 9 -program "$TWOGTP" -computer-both -auto
 </userinput>
