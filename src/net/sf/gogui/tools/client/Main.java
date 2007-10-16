@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
-// NetGtp.java
+// Main.java
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.tools.netgtp;
+package net.sf.gogui.tools.client;
 
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StreamCopy;
@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /** Connects to a remote Go program supporting GTP. */
-public final class NetGtp
+public final class Main
 {
     private static Socket connect(String hostname, int port, int timeout)
         throws IOException
@@ -47,8 +47,7 @@ public final class NetGtp
         }
     }
 
-    public NetGtp(String hostname, int port, int timeout)
-        throws Exception
+    public Main(String hostname, int port, int timeout) throws Exception
     {
         Socket socket = connect(hostname, port, timeout);
         Thread fromNet =
@@ -104,7 +103,7 @@ public final class NetGtp
             }
             String hostname = arguments.get(0);
             int port = Integer.parseInt(arguments.get(1));
-            new NetGtp(hostname, port, timeout);
+            new Main(hostname, port, timeout);
         }
         catch (Throwable t)
         {
@@ -116,7 +115,7 @@ public final class NetGtp
     private static void printUsage(PrintStream out)
     {
         String text =
-            "Usage: java -jar netgtp.jar [options] hostname port\n" +
+            "Usage: gogui-client [options] hostname port\n" +
             "\n" +
             "-config  config file\n" +
             "-help    display this help and exit\n" +

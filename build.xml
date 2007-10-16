@@ -41,10 +41,10 @@ Comment out the exec svnversion for releases.
 <property name="scripts" value="
  gogui
  gogui-adapter
+ gogui-client
  gogui-convert
  gogui-display
  gogui-dummy
- gogui-netgtp
  gogui-regress
  gogui-server
  gogui-statistics
@@ -71,10 +71,10 @@ Comment out the exec svnversion for releases.
  depends="
   gogui.jar,
   gogui-adapter.jar,
+  gogui-client.jar,
   gogui-convert.jar,
   gogui-display.jar,
   gogui-dummy.jar,
-  gogui-netgtp.jar,
   gogui-regress.jar,
   gogui-statistics.jar,
   gogui-server.jar,
@@ -90,6 +90,7 @@ Comment out the exec svnversion for releases.
  includes="
    gogui.jar,
    gogui-adapter.jar,
+   gogui-client.jar,
    gogui-convert.jar,
    gogui-display.jar,
    gogui-dummy.jar,
@@ -101,7 +102,6 @@ Comment out the exec svnversion for releases.
    gogui-twogtp.jar,
    ${looks.jarfile},
    ${quaqua.jarfile},
-   netgtp.jar
   "
 />
 </delete>
@@ -205,10 +205,10 @@ Comment out the exec svnversion for releases.
  install.sh,
  bin/gogui,
  bin/gogui-adapter,
+ bin/gogui-client,
  bin/gogui-convert,
  bin/gogui-display,
  bin/gogui-dummy,
- bin/gogui-netgtp
  bin/gogui-regress,
  bin/gogui-server,
  bin/gogui-statistics,
@@ -235,6 +235,25 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/sgf/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-client.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-client.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/client/*.class
 "/>
 </jar>
 </target>
@@ -305,25 +324,6 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/gtp/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-netgtp.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-netgtp.jar" compress="true">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.netgtp.NetGtp"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/netgtp/*.class
- net/sf/gogui/util/ErrorMessage.class
- net/sf/gogui/util/Options.class
- net/sf/gogui/util/StreamCopy.class
- net/sf/gogui/util/StringUtil.class
- net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -666,6 +666,7 @@ ${quaqua.nestedzipfile}
  packagenames="
   net/sf/gogui/adapter.*,
   net/sf/gogui/boardpainter.*,
+  net/sf/gogui/client.*,
   net/sf/gogui/convert.*,
   net/sf/gogui/display.*,
   net/sf/gogui/dummy.*,
@@ -674,7 +675,6 @@ ${quaqua.nestedzipfile}
   net/sf/gogui/gogui.*,
   net/sf/gogui/gtp.*,
   net/sf/gogui/gui.*,
-  net/sf/gogui/netgtp.*,
   net/sf/gogui/regress.*,
   net/sf/gogui/server.*,
   net/sf/gogui/sgf.*,

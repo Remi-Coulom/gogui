@@ -15,12 +15,12 @@
 <!ENTITY news SYSTEM "news.xml">
 <!ENTITY programs SYSTEM "programs.xml">
 <!ENTITY readme SYSTEM "readme.xml">
-<!ENTITY reference-convert SYSTEM "reference-convert.xml">
 <!ENTITY reference-adapter SYSTEM "reference-adapter.xml">
+<!ENTITY reference-client SYSTEM "reference-client.xml">
+<!ENTITY reference-convert SYSTEM "reference-convert.xml">
 <!ENTITY reference-display SYSTEM "reference-display.xml">
 <!ENTITY reference-dummy SYSTEM "reference-dummy.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
-<!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
 <!ENTITY reference-regress SYSTEM "reference-regress.xml">
 <!ENTITY reference-server SYSTEM "reference-server.xml">
 <!ENTITY reference-statistics SYSTEM "reference-statistics.xml">
@@ -64,11 +64,11 @@ GoGui is a graphical interface to programs that play the game of Go.
 <appendix id="appendix-reference">
 <title>Reference</title>
 &reference-adapter;
+&reference-client;
 &reference-convert;
 &reference-display;
 &reference-dummy;
 &reference-gogui;
-&reference-netgtp;
 &reference-regress;
 &reference-server;
 &reference-statistics;

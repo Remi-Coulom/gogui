@@ -2,11 +2,11 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY reference-adapter SYSTEM "reference-adapter.xml">
+<!ENTITY reference-client SYSTEM "reference-client.xml">
 <!ENTITY reference-convert SYSTEM "reference-convert.xml">
 <!ENTITY reference-display SYSTEM "reference-display.xml">
 <!ENTITY reference-dummy SYSTEM "reference-dummy.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
-<!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
 <!ENTITY reference-regress SYSTEM "reference-regress.xml">
 <!ENTITY reference-server SYSTEM "reference-server.xml">
 <!ENTITY reference-statistics SYSTEM "reference-statistics.xml">
@@ -25,7 +25,7 @@
 &reference-display;
 &reference-dummy;
 &reference-gogui;
-&reference-netgtp;
+&reference-client;
 &reference-regress;
 &reference-server;
 &reference-statistics;

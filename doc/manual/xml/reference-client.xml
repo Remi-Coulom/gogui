@@ -1,7 +1,7 @@
-<refentry id="reference-netgtp">
+<refentry id="reference-client">
 
 <refmeta>
-<refentrytitle>gogui-netgtp</refentrytitle>
+<refentrytitle>gogui-client</refentrytitle>
 <manvolnum>1</manvolnum>
 <refmiscinfo class="source-name">GoGui</refmiscinfo>
 <refmiscinfo class="version">GoGui &version;</refmiscinfo>
@@ -9,7 +9,7 @@
 </refmeta>
 
 <refnamediv>
-<refname>gogui-netgtp</refname>
+<refname>gogui-client</refname>
 <refpurpose>
 Connects to a remote Go program supporting the Go Text Protocol.
 </refpurpose>
@@ -17,7 +17,7 @@ Connects to a remote Go program supporting the Go Text Protocol.
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gogui-netgtp</command>
+<command>gogui-client</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-help</option></arg>
 <arg><option>-timeout</option> <replaceable>sec</replaceable></arg>
