@@ -228,13 +228,13 @@ Comment out the exec svnversion for releases.
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/adapter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
+ net/sf/gogui/adapter/*.class
 "/>
 </jar>
 </target>
@@ -267,7 +267,6 @@ Comment out the exec svnversion for releases.
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/convert/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/gamefile/*.class
  net/sf/gogui/go/*.class
@@ -276,6 +275,7 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
  net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/convert/*.class
 "/>
 </jar>
 </target>
@@ -292,7 +292,6 @@ Comment out the exec svnversion for releases.
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/boardpainter/*.class
- net/sf/gogui/display/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gui/*.class
@@ -303,6 +302,7 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/tex/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/*.class
 "/>
 </jar>
 <copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
@@ -318,12 +318,12 @@ Comment out the exec svnversion for releases.
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/dummy/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
+ net/sf/gogui/tools/dummy/*.class
 "/>
 </jar>
 </target>
@@ -339,9 +339,9 @@ Comment out the exec svnversion for releases.
 <fileset dir="build" includes="
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
- net/sf/gogui/regress/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/regress/*.class
 "/>
 </jar>
 </target>
@@ -355,13 +355,13 @@ Comment out the exec svnversion for releases.
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
- net/sf/gogui/server/*.class
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/Options.class
  net/sf/gogui/util/ProcessUtil*.class
  net/sf/gogui/util/StreamCopy.class
  net/sf/gogui/util/StringUtil.class
  net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/server/*.class
 "/>
 </jar>
 </target>
@@ -380,9 +380,9 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gui/*.class
  net/sf/gogui/sgf/*.class
- net/sf/gogui/statistics/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
+ net/sf/gogui/tools/statistics/*.class
 "/>
 </jar>
 </target>
@@ -400,7 +400,6 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/sgf/*.class
- net/sf/gogui/terminal/*.class
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/FileUtil.class
  net/sf/gogui/util/MessageQueue.class
@@ -409,6 +408,7 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/util/ProgressShow*.class
  net/sf/gogui/util/StringUtil.class
  net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/terminal/*.class
 "/>
 </jar>
 </target>
@@ -428,11 +428,11 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/go/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/thumbnail/*.class
- net/sf/gogui/thumbnailer/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
  net/sf/gogui/xml/*.class
  net/sf/gogui/xml/*.dtd
+ net/sf/gogui/tools/thumbnailer/*.class
 "/>
 </jar>
 </target>
@@ -450,10 +450,10 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/sgf/*.class
- net/sf/gogui/twogtp/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
  net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/twogtp/*.class
 "/>
 </jar>
 </target>
@@ -664,28 +664,28 @@ ${quaqua.nestedzipfile}
  windowtitle="GoGui Source Documentation"
  overview="src/net/sf/gogui/overview.html"
  packagenames="
-  net/sf/gogui/adapter.*,
   net/sf/gogui/boardpainter.*,
-  net/sf/gogui/client.*,
-  net/sf/gogui/convert.*,
-  net/sf/gogui/display.*,
-  net/sf/gogui/dummy.*,
   net/sf/gogui/game.*,
   net/sf/gogui/go.*,
   net/sf/gogui/gogui.*,
   net/sf/gogui/gtp.*,
   net/sf/gogui/gui.*,
-  net/sf/gogui/regress.*,
-  net/sf/gogui/server.*,
   net/sf/gogui/sgf.*,
   net/sf/gogui/statistics.*,
   net/sf/gogui/terminal.*,
   net/sf/gogui/tex.*,
   net/sf/gogui/thumbnail.*,
-  net/sf/gogui/thumbnailer.*,
-  net/sf/gogui/twogtp.*,
   net/sf/gogui/util.*,
   net/sf/gogui/version.*
+  net/sf/gogui/tools/adapter.*,
+  net/sf/gogui/tools/client.*,
+  net/sf/gogui/tools/convert.*,
+  net/sf/gogui/tools/display.*,
+  net/sf/gogui/tools/dummy.*,
+  net/sf/gogui/tools/regress.*,
+  net/sf/gogui/tools/server.*,
+  net/sf/gogui/tools/thumbnailer.*,
+  net/sf/gogui/tools/twogtp.*,
 ">
 <tag name="bug" scope="all" description="Bugs:"/>
 <tag name="todo" scope="all" description="To do:"/>
