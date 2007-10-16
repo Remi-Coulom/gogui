@@ -63,6 +63,7 @@ public final class XmlReader
     {
         try
         {
+            m_isFirstElement = true;
             m_root = new Node();
             m_node = m_root;
             XMLReader reader = XMLReaderFactory.createXMLReader();
@@ -79,8 +80,6 @@ public final class XmlReader
             reader.setEntityResolver(handler);
             reader.setErrorHandler(handler);
             reader.parse(new InputSource(in));
-            if (! m_rootFound)
-                throw new ErrorMessage("This file is not a Go game");
             int size;
             if (m_isBoardSizeKnown)
                 size = m_boardSize;
@@ -146,6 +145,12 @@ public final class XmlReader
             checkNoCharacters();
             m_element = name;
             m_atts = atts;
+            if (m_isFirstElement)
+            {
+                if (! m_element.equals("Go"))
+                    throw new SAXException("Not a Go game");
+                m_isFirstElement = false;
+            }
             if (name.equals("Annotation"))
                 startInfoElemWithoutFormat();
             else if (name.equals("Application"))
@@ -374,6 +379,8 @@ public final class XmlReader
     }
 
     private static final int DEFAULT_BOARDSIZE = 19;
+
+    private boolean m_isFirstElement;
 
     private boolean m_isBoardSizeKnown;
 
