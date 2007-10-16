@@ -85,16 +85,11 @@ install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
 
 # Install desktop entry
 
-install -d $PREFIX/share/applications
-install -m 644 config/gogui.desktop $PREFIX/share/applications
-# Add DocPath entry used by KDE 3.4
-echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
-    >> $PREFIX/share/applications/gogui.desktop
+xdg-desktop-menu install config/gogui-gogui.desktop
 
 # Install shared mime info
 
-install -d $PREFIX/share/mime/packages
-install -m 644 config/gogui.xml $PREFIX/share/mime/packages
+xdg-mime install config/gogui-mime.xml
 
 # Install mime icon
 
@@ -128,10 +123,8 @@ cat config/gogui.omf \
 # Fail quietly on error, some programs might not be available
 #-----------------------------------------------------------------------------
 
-# Update shared mime/desktop databases and scrollkeeper.
+# Update scrollkeeper.
 
-update-mime-database $PREFIX/share/mime >/dev/null 2>&1
-update-desktop-database $PREFIX/share/applications >/dev/null 2>&1
 scrollkeeper-update >/dev/null 2>&1
 
 # Gnome thumbnailer
