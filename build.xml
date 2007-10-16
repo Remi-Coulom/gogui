@@ -223,7 +223,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-adapter.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.adapter.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -243,7 +243,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-convert.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.convert.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -266,7 +266,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-display.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.display.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 <attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
@@ -294,7 +294,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-dummy.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.dummy.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -313,7 +313,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-netgtp.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.netgtp.NetGtp"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.netgtp.NetGtp"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -332,7 +332,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-regress.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.regress.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -350,7 +350,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-server.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.server.Server"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -370,7 +370,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-statistics.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.statistics.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -391,7 +391,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-terminal.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.terminal.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -417,7 +417,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-thumbnailer.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.sgfthumbnail.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -441,7 +441,7 @@ Comment out the exec svnversion for releases.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-twogtp.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.twogtp.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -719,6 +719,8 @@ ${quaqua.nestedzipfile}
 <copy todir="build/test">
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.png"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/tools/*/*.sgf"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/tools/*/*.png"/>
 </copy>
 </target>
 
