@@ -9,4 +9,4 @@ Icon=gogui-application-x-go-sgf
 Patterns=*.sgf;
 DefaultApp=gogui
 Comment=Go Game
-Comment[de]=Go Partie
+Comment[de]=Go-Partie
