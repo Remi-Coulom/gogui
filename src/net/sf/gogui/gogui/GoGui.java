@@ -18,7 +18,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -113,7 +112,6 @@ import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.sgf.SgfError;
-import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.text.TextParser;
@@ -127,8 +125,6 @@ import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-import net.sf.gogui.xml.XmlReader;
-import net.sf.gogui.xml.XmlWriter;
 
 /** Graphical user interface to a Go program. */
 public class GoGui

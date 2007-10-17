@@ -22,7 +22,6 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
-import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.ConstBoard;

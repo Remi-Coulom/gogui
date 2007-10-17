@@ -36,7 +36,6 @@ import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.ErrorMessage;
-import net.sf.gogui.util.StringUtil;
 
 /** GTP adapter for logging or protocol translations.
 */

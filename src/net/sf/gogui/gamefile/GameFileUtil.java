@@ -5,8 +5,6 @@
 package net.sf.gogui.gamefile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.GameTree;

@@ -5,17 +5,12 @@
 package net.sf.gogui.tools.convert;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.gamefile.GameReader;
-import net.sf.gogui.sgf.SgfError;
-import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.util.FileUtil;
