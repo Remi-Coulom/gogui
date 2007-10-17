@@ -6,9 +6,7 @@ package net.sf.gogui.tex;
 
 import java.io.ByteArrayOutputStream;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 
 public final class TexWriterTest

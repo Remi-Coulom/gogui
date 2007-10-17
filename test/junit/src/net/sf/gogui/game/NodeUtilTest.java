@@ -4,10 +4,8 @@
 
 package net.sf.gogui.game;
 
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;

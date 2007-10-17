@@ -6,7 +6,6 @@ package net.sf.gogui.game;
 
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
 
 public final class ClockTest
     extends junit.framework.TestCase

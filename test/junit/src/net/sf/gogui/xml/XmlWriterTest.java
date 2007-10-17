@@ -4,18 +4,13 @@
 
 package net.sf.gogui.xml;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import net.sf.gogui.game.ConstGameTree;
-import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.util.ErrorMessage;
 
 public final class XmlWriterTest
     extends junit.framework.TestCase

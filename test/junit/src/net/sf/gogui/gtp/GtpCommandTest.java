@@ -4,8 +4,6 @@
 
 package net.sf.gogui.gtp;
 
-import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 
