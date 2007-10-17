@@ -335,6 +335,11 @@ public final class XmlReader
             m_characters.append(ch, start, length);
         }
 
+        public void fatalError(SAXParseException e) throws SAXException
+        {
+            throwError(e.getMessage());
+        }
+
         /** Return internal go.dtd, if file does not exist.
             Currently, GoGui does not validate the documents, but this
             still avoids a missing entity error message, if an XML file
