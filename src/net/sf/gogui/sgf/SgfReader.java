@@ -39,49 +39,8 @@ import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.util.ByteCountInputStream;
 import net.sf.gogui.util.ProgressShow;
-
-class ByteCountInputStream
-    extends InputStream
-{
-    public ByteCountInputStream(InputStream in)
-    {
-        m_in = in;
-    }
-
-    public long getCount()
-    {
-        return m_byteCount;
-    }
-
-    public int read() throws IOException
-    {
-        int result = m_in.read();
-        if (result > 0)
-            ++m_byteCount;
-        return result;
-    }
-
-    public int read(byte[] b) throws IOException
-    {
-        int result = m_in.read(b);
-        if (result > 0)
-            m_byteCount += result;
-        return result;
-    }
-
-    public int read(byte[] b, int off, int len) throws IOException
-    {
-        int result = m_in.read(b, off, len);
-        if (result > 0)
-            m_byteCount += result;
-        return result;
-    }
-
-    private long m_byteCount;
-
-    private final InputStream m_in;
-}
 
 /** SGF reader.
     @bug The error messages sometimes contain wrong line numbers, because of

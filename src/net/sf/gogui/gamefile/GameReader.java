@@ -43,7 +43,8 @@ public class GameReader
         {
         case XML:
             {
-                XmlReader reader = new XmlReader(in);
+                XmlReader reader = new XmlReader(in, progressShow,
+                                                 file.length());
                 m_tree = reader.getTree();
                 m_warnings = reader.getWarnings();
             }

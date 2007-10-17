@@ -46,7 +46,9 @@ import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.util.ByteCountInputStream;
 import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.ProgressShow;
 
 /** Read files in Jago's XML format.
     This class reads files in Jago's XML format, see
@@ -58,9 +60,22 @@ import net.sf.gogui.util.ErrorMessage;
 */
 public final class XmlReader
 {
-    public XmlReader(InputStream in)
+    /** Construct reader and read.
+        @param progressShow Callback to show progress, can be null
+        @param streamSize Size of stream if progressShow != null
+    */
+    public XmlReader(InputStream in, ProgressShow progressShow,
+                     long streamSize)
         throws ErrorMessage
     {
+        m_progressShow = progressShow;
+        m_streamSize = streamSize;
+        if (progressShow != null)
+        {
+            progressShow.showProgress(0);
+            m_byteCountInputStream = new ByteCountInputStream(in);
+            in = m_byteCountInputStream;
+        }
         try
         {
             m_isFirstElement = true;
@@ -142,6 +157,8 @@ public final class XmlReader
                                  String qualifiedName, Attributes atts)
             throws SAXException
         {
+            if (m_progressShow != null)
+                showProgress();
             checkNoCharacters();
             m_element = name;
             m_atts = atts;
@@ -396,6 +413,10 @@ public final class XmlReader
     */
     private int m_boardSize;
 
+    private int m_lastPercent;
+
+    private final long m_streamSize;
+
     /** Element stack. */
     private Stack<String> m_elementStack = new Stack<String>();
 
@@ -437,6 +458,10 @@ public final class XmlReader
     private String m_label;
 
     private String m_gameName;
+
+    private ByteCountInputStream m_byteCountInputStream;
+
+    private final ProgressShow m_progressShow;
 
     private void appendComment(boolean onlyIfNotEmpty)
     {
@@ -869,6 +894,21 @@ public final class XmlReader
                        + m_boardSize);
         }
         return GoPoint.get(x, y);
+    }
+
+    private void showProgress()
+    {
+        int percent;
+        if (m_streamSize > 0)
+        {
+            long count = m_byteCountInputStream.getCount();
+            percent = (int)(count * 100 / m_streamSize);
+        }
+        else
+            percent = 100;
+        if (percent != m_lastPercent)
+            m_progressShow.showProgress(percent);
+        m_lastPercent = percent;
     }
 
     private void startComment() throws SAXException
