@@ -21,8 +21,8 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.MessageDialogs;
-import net.sf.gogui.util.HtmlUtil;
 import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.XmlUtil;
 import net.sf.gogui.version.Version;
 
 /** About dialog for GoGui. */
@@ -75,13 +75,13 @@ public final class AboutDialog
                 if (version.length() > 40)
                     version = version.substring(0, 40) + "...";
                 versionInfo = "<p align=\"center\" width=\"" + width
-                    + "\">Version " + HtmlUtil.escapeText(version) + "</p>";
+                    + "\">Version " + XmlUtil.escapeText(version) + "</p>";
             }
             programPanel =
                 createPanel("<p align=\"center\"><img src=\""
                             + getImage("gogui-program.png") + "\"></p>" +
                             "<p align=\"center\" width=\"" + width + "\"><b>"
-                            + HtmlUtil.escapeText(name) + "</b></p>" +
+                            + XmlUtil.escapeText(name) + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +
                             "Program command:<br>" +

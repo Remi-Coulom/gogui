@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------
-// FileUtilTest.java
+// XmlUtilTest.java
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
 
-public final class HtmlUtilTest
+public final class XmlUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -14,16 +14,16 @@ public final class HtmlUtilTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(HtmlUtilTest.class);
+        return new junit.framework.TestSuite(XmlUtilTest.class);
     }
 
     public void testEscape()
     {
-        assertEquals("&lt;ok&gt;&amp;", HtmlUtil.escapeText("<ok>&"));
+        assertEquals("&lt;ok&gt;&amp;", XmlUtil.escapeText("<ok>&"));
     }
 
     public void testEscapeAttr()
     {
-        assertEquals("&lt;ok&gt;&amp;&quot;", HtmlUtil.escapeAttr("<ok>&\""));
+        assertEquals("&lt;ok&gt;&amp;&quot;", XmlUtil.escapeAttr("<ok>&\""));
     }
 }

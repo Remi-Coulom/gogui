@@ -50,6 +50,34 @@ public final class XmlWriterTest
                      getText(19, root));
     }
 
+    /** Test that invalid XML characters in comment are not written.
+        This happened when an SGF file was loaded that had the control
+        character Unicode 0x13 in its comment, and then saved again as XML.
+        Not all UTF-8 characters are valid in XML, see
+        http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char.
+    */
+    public void testInvalidXml() throws Exception
+    {
+        Node root = new Node();
+        root.setComment("foo\u0013bar");
+        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                     "<Go>\n" +
+                     "<GoGame>\n" +
+                     "<Information>\n" +
+                     "<BoardSize>19</BoardSize>\n" +
+                     "</Information>\n" +
+                     "<Nodes>\n" +
+                     "<Node>\n" +
+                     "<Comment>\n" +
+                     "<P>foobar</P>\n" +
+                     "</Comment>\n" +
+                     "</Node>\n" +
+                     "</Nodes>\n" +
+                     "</GoGame>\n" +
+                     "</Go>\n",
+                     getText(19, root));
+    }
+
     /** Test that a node containing only a move is not embedded in an
         unnecessary Node element.
     */

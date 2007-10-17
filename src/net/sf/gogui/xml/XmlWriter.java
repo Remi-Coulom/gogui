@@ -28,7 +28,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.util.HtmlUtil;
+import net.sf.gogui.util.XmlUtil;
 
 /** Write a game or board position in XML style to a stream.
     This class uses Jago's XML format, see http://www.rene-grothmann.de/jago
@@ -62,7 +62,7 @@ public class XmlWriter
         if (sgfProperties != null && sgfProperties.hasKey("GN")
             && sgfProperties.getNumberValues("GN") > 0)
             gameNameAtt = " name=\""
-                + HtmlUtil.escapeAttr(sgfProperties.getValue("GN", 0)) + "\"";
+                + XmlUtil.escapeAttr(sgfProperties.getValue("GN", 0)) + "\"";
         m_out.print("<Go>\n" +
                     "<GoGame" + gameNameAtt + ">\n");
         m_boardSize = tree.getBoardSize();
@@ -103,8 +103,10 @@ public class XmlWriter
                     m_out.print("<P/>\n");
                 else
                 {
+                    line = XmlUtil.stripInvalidXml(line);
+                    line = XmlUtil.escapeText(line);
                     m_out.print("<P>");
-                    m_out.print(HtmlUtil.escapeText(line));
+                    m_out.print(line);
                     m_out.print("</P>\n");
                 }
             }
@@ -227,7 +229,7 @@ public class XmlWriter
             && sgfProps.getNumberValues("N") > 0)
         {
             nameAtt = " name=\""
-                + HtmlUtil.escapeAttr(sgfProps.getValue("N", 0)) + "\"";
+                + XmlUtil.escapeAttr(sgfProps.getValue("N", 0)) + "\"";
             sgfProps.remove("N");
         }
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
@@ -304,7 +306,7 @@ public class XmlWriter
             int numberValues = sgfProps.getNumberValues(key);
             for (int i = 0; i < numberValues; ++i)
                 m_out.print("<Arg>" +
-                            HtmlUtil.escapeText(sgfProps.getValue(key, i))
+                            XmlUtil.escapeText(sgfProps.getValue(key, i))
                             + "</Arg>");
             m_out.print("</SGF>\n");
         }
