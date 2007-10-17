@@ -65,7 +65,7 @@ public final class XmlReaderTest
     private static XmlReader getReader(String text) throws ErrorMessage
     {
         InputStream in = new ByteArrayInputStream(text.getBytes());
-        return new XmlReader(in);
+        return new XmlReader(in, null, 0);
     }
 
     private static ConstGameTree getTree(String text) throws ErrorMessage

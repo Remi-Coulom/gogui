@@ -242,7 +242,7 @@ public class XmlWriter
                     break;
                 }
             }
-        boolean hasSetup = node.hasSetup();
+        boolean hasSetup = node.hasSetup() || node.getPlayer() != null;
         // Moves left are currently written as SGF element, which needs a Node
         boolean hasMovesLeft =
             (move != null && node.getMovesLeft(move.getColor()) != -1);
