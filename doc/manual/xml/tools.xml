@@ -21,6 +21,16 @@ See <xref linkend="reference-adapter"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
+<term>gogui-client</term>
+<listitem>
+<para>
+Connects to a Go program supporting GTP on a remote computer.
+See <xref linkend="reference-client"/> for a complete reference.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>gogui-display</term>
 <listitem>
 <para>
@@ -36,16 +46,6 @@ See <xref linkend="reference-display"/> for a complete reference.
 <para>
 Dummy Go program for testing GTP controllers.
 See <xref linkend="reference-dummy"/> for a complete reference.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>gogui-netgtp</term>
-<listitem>
-<para>
-Connects to a Go program supporting GTP on a remote computer.
-See <xref linkend="reference-netgtp"/> for a complete reference.
 </para>
 </listitem>
 </varlistentry>
