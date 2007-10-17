@@ -260,7 +260,6 @@ public class XmlWriter
         boolean needsNode = (! isEmptyButMoveOrComment || ! nameAtt.equals("")
                              || (move == null && comment != null));
 
-        int numberChildren = node.getNumberChildren();
         boolean isEmpty =
             (isEmptyButMoveOrComment && comment == null && move == null);
 

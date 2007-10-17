@@ -628,14 +628,6 @@ public final class GtpClient
         m_inputThread.start();
     }
 
-    private synchronized void log(String msg)
-    {
-        if (m_logPrefix != null)
-            System.err.print(m_logPrefix);
-        System.err.print(" ");
-        System.err.println(msg);
-    }
-
     private synchronized void logError(String text)
     {
         System.err.print(text);

@@ -398,8 +398,6 @@ public final class XmlReader
 
     private boolean m_isBoardSizeKnown;
 
-    private boolean m_rootFound;
-
     private int m_numberGames;
 
     private int m_numberTrees;
@@ -612,7 +610,6 @@ public final class XmlReader
 
     private void endP() throws SAXException
     {
-        String text = getCharacters();
         String parent = parentElement();
         if (parent.equals("Comment"))
             appendComment(false);
@@ -864,7 +861,6 @@ public final class XmlReader
         s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals(""))
             return null;
-        GoPoint p;
         if (s.length() > 2
             || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
             // Human-readable encoding as used by SmartGo
@@ -917,7 +913,6 @@ public final class XmlReader
     private void startGo() throws SAXException
     {
         checkRoot();
-        m_rootFound = true;
         checkAttributes();
     }
 

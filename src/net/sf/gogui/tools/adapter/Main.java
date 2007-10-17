@@ -56,7 +56,6 @@ public final class Main
             boolean lowerCase = opt.contains("lowercase");
             String name = opt.get("name", null);
             String gtpFile = opt.get("gtpfile", null);
-            boolean resign = opt.contains("resign");
             ArrayList<String> arguments = opt.getArguments();
             int size = opt.getInteger("size", 19, 1, GoPoint.MAX_SIZE);
             if (arguments.size() != 1)

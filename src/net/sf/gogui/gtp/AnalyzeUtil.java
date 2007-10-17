@@ -35,7 +35,6 @@ public class AnalyzeUtil
     public static boolean
         hasParameterCommands(ArrayList<AnalyzeDefinition> analyzeCommands)
     {
-        boolean anyParamCommand = false;
         for (AnalyzeDefinition definition : analyzeCommands)
             if (definition.getType() == AnalyzeType.PARAM)
                 return true;
