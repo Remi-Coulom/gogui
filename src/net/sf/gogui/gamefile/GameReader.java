@@ -24,8 +24,7 @@ public class GameReader
     /** Construct reader and read a game.
         @param progressShow Callback to show progress, can be null
     */
-    public GameReader(File file, ProgressShow progressShow)
-        throws ErrorMessage
+    public GameReader(File file, ProgressShow progressShow) throws ErrorMessage
     {
         m_gameFile = new GameFile();
         GameFile.Format format = detectFormat(file);
@@ -58,6 +57,11 @@ public class GameReader
             }
             break;
         }
+    }
+
+    public GameReader(File file) throws ErrorMessage
+    {
+        this(file, null);
     }
 
     public GameFile getFile()

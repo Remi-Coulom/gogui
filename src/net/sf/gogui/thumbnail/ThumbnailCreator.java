@@ -209,7 +209,7 @@ public final class ThumbnailCreator
 
     private ConstBoard readFile(File file) throws ErrorMessage
     {
-        GameReader reader = new GameReader(file, null);
+        GameReader reader = new GameReader(file);
         m_gameFile = reader.getFile();
         GameTree tree = reader.getTree();
         GameInfo info = tree.getGameInfo(tree.getRoot());

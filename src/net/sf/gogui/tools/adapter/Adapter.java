@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.gamefile.GameFileUtil;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
@@ -34,7 +35,6 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.sgf.SgfUtil;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
 
@@ -199,7 +199,7 @@ public class Adapter
         }
     }
 
-    public void cmdLoadsgf(GtpCommand cmd) throws GtpError
+    public void cmdLoad(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArgLessEqual(2);
         File file = new File(cmd.getArg(0));
@@ -208,7 +208,7 @@ public class Adapter
             maxMove = cmd.getIntArg(1);
         try
         {
-            BoardUtil.copy(m_board, SgfUtil.loadSgf(file, maxMove));
+            BoardUtil.copy(m_board, GameFileUtil.load(file, maxMove));
         }
         catch (ErrorMessage e)
         {
@@ -411,7 +411,10 @@ public class Adapter
                     cmdKomi(cmd); } });
         register("loadsgf", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
-                    cmdLoadsgf(cmd); } });
+                    cmdLoad(cmd); } });
+        register("loadxml", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdLoad(cmd); } });
         setName(null);
         register("place_free_handicap", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {

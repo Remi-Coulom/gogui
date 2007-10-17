@@ -75,7 +75,7 @@ public final class Main
                 throw new Exception("File \"" + in + "\" not found");
             if (out.exists() && ! force)
                 throw new Exception("File \"" + out + "\" already exists");
-            GameReader reader = new GameReader(in, null);
+            GameReader reader = new GameReader(in);
             ConstGameTree tree = reader.getTree();
             String warnings = reader.getWarnings();
             if (warnings != null)
