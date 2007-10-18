@@ -126,6 +126,33 @@ public final class XmlWriterTest
                      getText(19, root));
     }
 
+    /** Test that time left information in node without move is written.
+        Since go.dtd 2007 allows timeleft attributes only for the elements
+        Black and White, the timeleft information should be written using
+        legacy SGF BL/TL properties.
+    */
+    public void testTimeLeftWithoutMove() throws Exception
+    {
+        Node root = new Node();
+        root.setTimeLeft(BLACK, 2.0);
+        root.setTimeLeft(WHITE, 2.0);
+        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                     "<Go>\n" +
+                     "<GoGame>\n" +
+                     "<Information>\n" +
+                     "<BoardSize>19</BoardSize>\n" +
+                     "</Information>\n" +
+                     "<Nodes>\n" +
+                     "<Node>\n" +
+                     "<SGF type=\"BL\"><Arg>2.0</Arg></SGF>\n" +
+                     "<SGF type=\"WL\"><Arg>2.0</Arg></SGF>\n" +
+                     "</Node>\n" +
+                     "</Nodes>\n" +
+                     "</GoGame>\n" +
+                     "</Go>\n",
+                     getText(19, root));
+    }
+
     private static String getText(int boardSize, Node root)
     {
         GameTree tree = new GameTree(boardSize, root);

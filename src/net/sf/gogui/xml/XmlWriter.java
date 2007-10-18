@@ -232,6 +232,16 @@ public class XmlWriter
                 + XmlUtil.escapeAttr(sgfProps.getValue("N", 0)) + "\"";
             sgfProps.remove("N");
         }
+
+        // Preserve time left that cannot be written as timeleft attribute
+        // of move element as SGF element
+        if (! Double.isNaN(node.getTimeLeft(BLACK))
+            && (move == null || move.getColor() != BLACK))
+            sgfProps.add("BL", Double.toString(node.getTimeLeft(BLACK)));
+        if (! Double.isNaN(node.getTimeLeft(WHITE))
+            && (move == null || move.getColor() != WHITE))
+            sgfProps.add("WL", Double.toString(node.getTimeLeft(WHITE)));
+
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         boolean hasMarkup = (labels != null && ! labels.isEmpty());
         if (! hasMarkup)
