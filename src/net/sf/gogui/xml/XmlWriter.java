@@ -220,8 +220,7 @@ public class XmlWriter
     {
         Move move = node.getMove();
         String comment = node.getComment();
-        SgfProperties sgfProps =
-            new SgfProperties(node.getSgfPropertiesConst());
+        SgfProperties sgfProps = NodeUtil.cleanSgfProps(node);
         // Game name is not supported in game.GameInformation, but XmlReader
         // puts it into the SGF-Proprty "N"
         String nameAtt = "";

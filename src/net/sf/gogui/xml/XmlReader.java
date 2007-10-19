@@ -43,6 +43,7 @@ import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.sgf.SgfUtil;
 import net.sf.gogui.util.ByteCountInputStream;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ProgressShow;
@@ -296,6 +297,8 @@ public final class XmlReader
                 endKomi();
             else if (name.equals("Mark"))
                 endMark();
+            else if (name.equals("Node"))
+                endNode();
             else if (name.equals("Nodes"))
                 checkNoCharacters();
             else if (name.equals("P"))
@@ -463,6 +466,24 @@ public final class XmlReader
 
     private final ProgressShow m_progressShow;
 
+    /** Time settings information for current node from legacy SGF
+        properties.
+    */
+    private int m_byoyomiMoves;
+
+    /** Time settings information for current node from legacy SGF
+        properties.
+    */
+    private long m_byoyomi;
+
+    /** Time settings information for current node from legacy SGF
+        properties.
+    */
+    private long m_preByoyomi;
+
+    /** Has current node inconsistent SGF/FF3 overtime settings properties. */
+    private boolean m_ignoreOvertime;
+
     private void appendComment(boolean onlyIfNotEmpty)
     {
         String comment = m_node.getComment();
@@ -613,6 +634,12 @@ public final class XmlReader
             m_node.setMove(Move.get(c, getPoint(value)));
     }
 
+    private void endNode() throws SAXException
+    {
+        checkNoCharacters();
+        setSgfTimeSettings();
+    }
+
     private void endP() throws SAXException
     {
         String parent = parentElement();
@@ -653,6 +680,12 @@ public final class XmlReader
             endSgfHandicap();
         else if (m_sgfType.equals("OB"))
             endSgfMovesLeft(BLACK);
+        else if (m_sgfType.equals("OM"))
+            endSgfOvertimeMoves();
+        else if (m_sgfType.equals("OP"))
+            endSgfOvertimePeriod();
+        else if (m_sgfType.equals("OT"))
+            endSgfOvertime();
         else if (m_sgfType.equals("OW"))
             endSgfMovesLeft(WHITE);
         else if (m_sgfType.equals("KM"))
@@ -750,6 +783,59 @@ public final class XmlReader
         }
     }
 
+    /** FF4 OT property */
+    private void endSgfOvertime()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        String value = m_sgfArgs.get(0).trim();
+        if (value.equals("") || value.equals("-"))
+            return;
+        SgfUtil.Overtime overtime = SgfUtil.parseOvertime(value);
+        if (overtime == null)
+        {
+            setWarning("overtime settings in unknown format");
+            m_node.addSgfProperty("OT", value);
+        }
+        else
+        {
+            m_byoyomi = overtime.m_byoyomi;
+            m_byoyomiMoves = overtime.m_byoyomiMoves;
+        }
+    }
+
+    /** FF3 OM property */
+    private void endSgfOvertimeMoves()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            m_byoyomiMoves = Integer.parseInt(m_sgfArgs.get(0));
+        }
+        catch (NumberFormatException e)
+        {
+            setWarning("Invalid value for byoyomi moves");
+            m_ignoreOvertime = true;
+        }
+    }
+
+    /** FF3 OP property */
+    private void endSgfOvertimePeriod()
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            m_byoyomi = (long)(Double.parseDouble(m_sgfArgs.get(0)) * 1000);
+        }
+        catch (NumberFormatException e)
+        {
+            setWarning("Invalid value for byoyomi time");
+            m_ignoreOvertime = true;
+        }
+    }
+
     private void endSgfPlayer()
     {
         if (m_sgfArgs.size() == 0)
@@ -797,15 +883,18 @@ public final class XmlReader
     {
         if (m_sgfArgs.size() == 0)
             return;
-        try
+        String value = m_sgfArgs.get(0).trim();
+        if (value.equals("") || value.equals("-"))
+            return;
+        long preByoyomi = SgfUtil.parseTime(value);
+        if (preByoyomi < 0)
         {
-            TimeSettings timeSettings = TimeSettings.parse(m_sgfArgs.get(0));
-            GameInfo info = m_node.createGameInfo();;
-            info.setTimeSettings(timeSettings);
+            setWarning("Unknown format in time property");
+            m_node.addSgfProperty("TM", value); // Preserve information
         }
-        catch (ErrorMessage e)
-        {
-        }
+        else
+            m_preByoyomi = preByoyomi;
+
     }
 
     private void endTime() throws SAXException
@@ -920,6 +1009,22 @@ public final class XmlReader
                        + m_boardSize);
         }
         return GoPoint.get(x, y);
+    }
+
+    private void setSgfTimeSettings()
+    {
+        TimeSettings s = null;
+        if (m_preByoyomi > 0
+            && (m_ignoreOvertime || m_byoyomi <= 0 || m_byoyomiMoves <= 0))
+            s = new TimeSettings(m_preByoyomi);
+        else if (m_preByoyomi <= 0 && ! m_ignoreOvertime && m_byoyomi > 0
+                 && m_byoyomiMoves > 0)
+            s = new TimeSettings(0, m_byoyomi, m_byoyomiMoves);
+        else if (m_preByoyomi > 0  && ! m_ignoreOvertime && m_byoyomi > 0
+                 && m_byoyomiMoves > 0)
+            s = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+        if (s != null)
+            m_node.createGameInfo().setTimeSettings(s);
     }
 
     private void showProgress()
@@ -1102,6 +1207,10 @@ public final class XmlReader
             {
             }
         }
+        m_ignoreOvertime = false;
+        m_byoyomiMoves = -1;
+        m_byoyomi = -1;
+        m_preByoyomi = -1;
     }
 
     private void startNodes() throws SAXException

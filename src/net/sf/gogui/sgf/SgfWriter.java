@@ -13,6 +13,7 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstSgfProperties;
 import net.sf.gogui.game.MarkType;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
 import net.sf.gogui.game.TimeSettings;
@@ -337,25 +338,15 @@ public class SgfWriter
         }
         String comment = node.getComment();
         if (! StringUtil.isEmpty(comment))
-        {
             print("C[" + getEscaped(comment) + "]");
-        }
         if (! Double.isNaN(node.getTimeLeft(BLACK)))
-        {
             print("BL[" + node.getTimeLeft(BLACK) + "]");
-        }
         if (node.getMovesLeft(BLACK) >= 0)
-        {
             print("OB[" + node.getMovesLeft(BLACK) + "]");
-        }
         if (! Double.isNaN(node.getTimeLeft(WHITE)))
-        {
             print("WL[" + node.getTimeLeft(WHITE) + "]");
-        }
         if (node.getMovesLeft(WHITE) >= 0)
-        {
             print("OW[" + node.getMovesLeft(WHITE) + "]");
-        }
         if (node.getPlayer() != null)
             printToPlay(node.getPlayer());
         printMarked(node, "MA", MarkType.MARK);
@@ -367,21 +358,17 @@ public class SgfWriter
         printMarked(node, "TW", MarkType.TERRITORY_WHITE);
         printLabels(node);
         if (! Double.isNaN(node.getValue()))
-        {
             print("V[" + node.getValue() + "]");
-        }
-        ConstSgfProperties sgfProperties = node.getSgfPropertiesConst();
-        if (sgfProperties != null)
-        {
-            for (String key : sgfProperties.getKeys())
+        ConstSgfProperties sgfProps = NodeUtil.cleanSgfProps(node);
+        if (sgfProps != null)
+            for (String key : sgfProps.getKeys())
             {
                 if (key.equals("OT") && hasByoyomiInformation(node))
                     continue;
                 print(key);
-                for (int i = 0; i < sgfProperties.getNumberValues(key); ++i)
-                    print("[" + sgfProperties.getValue(key, i) + "]");
+                for (int i = 0; i < sgfProps.getNumberValues(key); ++i)
+                    print("[" + sgfProps.getValue(key, i) + "]");
             }
-        }
         int numberChildren = node.getNumberChildren();
         if (numberChildren == 0)
             return;

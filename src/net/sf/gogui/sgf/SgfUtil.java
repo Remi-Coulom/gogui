@@ -7,9 +7,64 @@ package net.sf.gogui.sgf;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Utility functions used in this package. */
-final class SgfUtil
+public final class SgfUtil
 {
+    /** Result of parseOvertime() */
+    public static final class Overtime
+    {
+        public long m_byoyomi;
+
+        public int m_byoyomiMoves;
+    }
+
+    public static Overtime parseOvertime(String value)
+    {
+        value = value.trim();
+        Overtime result = null;
+
+        /* Used by SgfWriter */
+        result =
+            parseOvertime(value,
+                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*",
+                          true, 1000L);
+        if (result != null)
+            return result;
+
+        /* Used by Smart Go */
+        result =
+            parseOvertime(value,
+                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min\\s*",
+                          true, 60000L);
+        if (result != null)
+            return result;
+
+        /* Used by Kiseido Game Server, CGoban 2 */
+        result =
+            parseOvertime(value,
+                          "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
+                          true, 1000L);
+        if (result != null)
+            return result;
+
+        /* Used by ? */
+        result =
+            parseOvertime(value,
+                          "\\s*(\\d+)x(\\d+)\\s*",
+                          true, 1000L);
+        if (result != null)
+            return result;
+
+        /* Used by Quarry, CGoban 2 */
+        result =
+            parseOvertime(value,
+                          "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
+                          true, 1000L);
+        if (result != null)
+            return result;
+
+        return result;
+    }
+
     /** Parse value of TM property.
         According to FF4, TM needs to be a real value, but older SGF versions
         allow a string with unspecified content. We try to parse a few known
@@ -72,5 +127,47 @@ final class SgfUtil
     /** Make constructor unavailable; class is for namespace only. */
     private SgfUtil()
     {
+    }
+
+    private static Overtime parseOvertime(String value, String regex,
+                                          boolean byoyomiMovesFirst,
+                                          long timeUnitFactor)
+    {
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(value);
+        long byoyomi;
+        int byoyomiMoves;
+        if (matcher.matches())
+        {
+            assert matcher.groupCount() == 2;
+            try
+            {
+                String group1;
+                String group2;
+                if (byoyomiMovesFirst)
+                {
+                    group1 = matcher.group(1);
+                    group2 = matcher.group(2);
+                }
+                else
+                {
+                    group1 = matcher.group(2);
+                    group2 = matcher.group(1);
+                }
+                Overtime overtime = new Overtime();
+                overtime.m_byoyomiMoves = Integer.parseInt(group1);
+                overtime.m_byoyomi =
+                    (long)(Double.parseDouble(group2) * timeUnitFactor);
+                return overtime;
+            }
+            catch (NumberFormatException e)
+            {
+                // should not happen if patterns match only integer
+                assert false;
+                return null;
+            }
+        }
+        else
+            return null;
     }
 }

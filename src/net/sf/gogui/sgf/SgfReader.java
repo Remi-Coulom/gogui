@@ -20,8 +20,6 @@ import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
@@ -485,11 +483,11 @@ public final class SgfReader
                 }
             }
             else if (p == "OM")
-                parseOverTimeMoves(v);
+                parseOvertimeMoves(v);
             else if (p == "OP")
-                parseOverTimePeriod(v);
+                parseOvertimePeriod(v);
             else if (p == "OT")
-                parseOverTime(node, v);
+                parseOvertime(node, v);
             else if (p == "OW")
             {
                 try
@@ -607,81 +605,23 @@ public final class SgfReader
             node.addMarked(p, type);
     }
 
-    private void parseOverTime(Node node, String value)
+    private void parseOvertime(Node node, String value)
     {
-        /* Used by SgfWriter */
-        if (parseOverTime(value,
-                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*",
-                          true, 1000L))
-            return;
-        /* Used by Smart Go */
-        if (parseOverTime(value,
-                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min\\s*",
-                          true, 60000L))
-            return;
-        /* Used by Kiseido Game Server, CGoban 2 */
-        if (parseOverTime(value,
-                          "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
-                          true, 1000L))
-            return;
-        /* Used by ? */
-        if (parseOverTime(value,
-                          "\\s*(\\d+)x(\\d+)\\s*",
-                          true, 1000L))
-            return;
-        /* Used by Quarry, CGoban 2 */
-        if (parseOverTime(value,
-                          "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
-                          true, 1000L))
-            return;
-        setWarning("overtime settings in unknown format");
-        node.addSgfProperty("OT", value);
-    }
-
-    private boolean parseOverTime(String value, String regex,
-                                  boolean byoyomiMovesFirst,
-                                  long timeUnitFactor)
-    {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(value);
-        long byoyomi;
-        int byoyomiMoves;
-        if (matcher.matches())
+        SgfUtil.Overtime overtime = SgfUtil.parseOvertime(value);
+        if (overtime == null)
         {
-            assert matcher.groupCount() == 2;
-            try
-            {
-                String group1;
-                String group2;
-                if (byoyomiMovesFirst)
-                {
-                    group1 = matcher.group(1);
-                    group2 = matcher.group(2);
-                }
-                else
-                {
-                    group1 = matcher.group(2);
-                    group2 = matcher.group(1);
-                }
-                byoyomiMoves = Integer.parseInt(group1);
-                byoyomi = (long)(Double.parseDouble(group2) * timeUnitFactor);
-            }
-            catch (NumberFormatException e)
-            {
-                // should not happen if patterns match only integer
-                assert false;
-                return false;
-            }
+            setWarning("overtime settings in unknown format");
+            node.addSgfProperty("OT", value);
         }
         else
-            return false;
-        m_byoyomi = byoyomi;
-        m_byoyomiMoves = byoyomiMoves;
-        return true;
+        {
+            m_byoyomi = overtime.m_byoyomi;
+            m_byoyomiMoves = overtime.m_byoyomiMoves;
+        }
     }
 
     /** FF3 OM property */
-    private void parseOverTimeMoves(String value)
+    private void parseOvertimeMoves(String value)
     {
         try
         {
@@ -695,7 +635,7 @@ public final class SgfReader
     }
 
     /** FF3 OP property */
-    private void parseOverTimePeriod(String value)
+    private void parseOvertimePeriod(String value)
     {
         try
         {
@@ -798,7 +738,10 @@ public final class SgfReader
             return;
         long preByoyomi = SgfUtil.parseTime(value);
         if (preByoyomi < 0)
+        {
             setWarning("Unknown format in time property");
+            node.addSgfProperty("TM", value); // Preserve information
+        }
         else
             m_preByoyomi = preByoyomi;
     }
