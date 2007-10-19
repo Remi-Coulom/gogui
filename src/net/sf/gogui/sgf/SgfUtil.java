@@ -24,41 +24,40 @@ public final class SgfUtil
 
         /* Used by SgfWriter */
         result =
-            parseOvertime(value,
-                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*",
+            parseOvertime(value, "(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec",
                           true, 1000L);
         if (result != null)
             return result;
 
         /* Used by Smart Go */
         result =
-            parseOvertime(value,
-                          "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min\\s*",
+            parseOvertime(value, "(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min",
                           true, 60000L);
         if (result != null)
             return result;
 
         /* Used by Kiseido Game Server, CGoban 2 */
         result =
-            parseOvertime(value,
-                          "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
-                          true, 1000L);
+            parseOvertime(value, "(\\d+)x(\\d+)\\s*byo-yomi", true, 1000L);
         if (result != null)
             return result;
 
         /* Used by ? */
         result =
-            parseOvertime(value,
-                          "\\s*(\\d+)x(\\d+)\\s*",
-                          true, 1000L);
+            parseOvertime(value, "(\\d+)x(\\d+)", true, 1000L);
         if (result != null)
             return result;
 
         /* Used by Quarry, CGoban 2 */
         result =
-            parseOvertime(value,
-                          "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
-                          true, 1000L);
+            parseOvertime(value, "(\\d+)/(\\d+)\\s*canadian", true, 1000L);
+        if (result != null)
+            return result;
+
+        /* "60 sec/move byo-yomi" (found in a game from
+           http://homepages.cwi.nl/~aeb/go/games/index.html) */
+        result =
+            parseOvertime(value, "(\\d+)\\s*sec/move byo-yomi", 1000L);
         if (result != null)
             return result;
 
@@ -108,8 +107,10 @@ public final class SgfUtil
             }
 
             // Formats found in some games of
-            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html
-            pattern = Pattern.compile("(\\d+)\\s*(?:h|hours|hours\\s+each)");
+            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html and
+            // other sources
+            pattern =
+                Pattern.compile("(\\d+)\\s*(?:h|hrs|hours|hours)(?:\\s+each)*");
             matcher = pattern.matcher(value);
             if (matcher.matches())
             {
@@ -127,6 +128,35 @@ public final class SgfUtil
     /** Make constructor unavailable; class is for namespace only. */
     private SgfUtil()
     {
+    }
+
+    private static Overtime parseOvertime(String value, String regex,
+                                          long timeUnitFactor)
+    {
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(value);
+        long byoyomi;
+        if (matcher.matches())
+        {
+            assert matcher.groupCount() == 1;
+            try
+            {
+                String group = matcher.group(1);
+                Overtime overtime = new Overtime();
+                overtime.m_byoyomiMoves = 1;
+                overtime.m_byoyomi =
+                    (long)(Double.parseDouble(group) * timeUnitFactor);
+                return overtime;
+            }
+            catch (NumberFormatException e)
+            {
+                // should not happen if patterns match only integer
+                assert false;
+                return null;
+            }
+        }
+        else
+            return null;
     }
 
     private static Overtime parseOvertime(String value, String regex,
