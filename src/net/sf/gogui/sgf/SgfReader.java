@@ -635,9 +635,7 @@ public final class SgfReader
                           true, 1000L))
             return;
         setWarning("overtime settings in unknown format");
-        ArrayList<String> values = new ArrayList<String>();
-        values.add(value);
-        node.addSgfProperty("OT", values);
+        node.addSgfProperty("OT", value);
     }
 
     private boolean parseOverTime(String value, String regex,
@@ -798,60 +796,11 @@ public final class SgfReader
         value = value.trim();
         if (value.equals("") || value.equals("-"))
             return;
-        try
-        {
-            m_preByoyomi = (long)(Double.parseDouble(value) * 1000);
-            return;
-        }
-        catch (NumberFormatException e1)
-        {
-        }
-        try
-        {
-            Pattern pattern;
-            Matcher matcher;
-
-            // Pattern as written by CGoban 1.9.12
-            pattern = Pattern.compile("(\\d{1,2}):(\\d{2})");
-            matcher = pattern.matcher(value.trim());
-            if (matcher.matches())
-            {
-                assert matcher.groupCount() == 2;
-                m_preByoyomi =
-                    Integer.parseInt(matcher.group(1)) * 60000L
-                    + Integer.parseInt(matcher.group(2)) * 1000L;
-                return;
-            }
-
-            pattern = Pattern.compile("(\\d+):(\\d{2}):(\\d{2})");
-            matcher = pattern.matcher(value.trim());
-            if (matcher.matches())
-            {
-                assert matcher.groupCount() == 3;
-                m_preByoyomi =
-                    Integer.parseInt(matcher.group(1)) * 3600000L
-                    + Integer.parseInt(matcher.group(2)) * 60000L
-                    + Integer.parseInt(matcher.group(3)) * 1000L;
-                return;
-            }
-
-            // Formats found in some games of
-            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html
-            pattern = Pattern.compile("(\\d+)\\s*(?:h|hours|hours\\s+each)");
-            matcher = pattern.matcher(value.trim());
-            if (matcher.matches())
-            {
-                assert matcher.groupCount() == 1;
-                m_preByoyomi = Integer.parseInt(matcher.group(1)) * 3600000L;
-                return;
-            }
-        }
-        catch (NumberFormatException e2)
-        {
-            assert false; // patterns should match only valid integers
-            return;
-        }
-        setWarning("Unknown format in time property " + value);
+        long preByoyomi = SgfUtil.parseTime(value);
+        if (preByoyomi < 0)
+            setWarning("Unknown format in time property");
+        else
+            m_preByoyomi = preByoyomi;
     }
 
     private Node readNext(Node father, boolean isRoot)
