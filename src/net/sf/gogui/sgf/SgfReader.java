@@ -575,7 +575,7 @@ public final class SgfReader
         int i = -1;
         try
         {
-            i = Integer.parseInt(s);
+            i = Integer.parseInt(s.trim());
         }
         catch (NumberFormatException e)
         {

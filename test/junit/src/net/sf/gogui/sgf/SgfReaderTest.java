@@ -4,6 +4,7 @@
 
 package net.sf.gogui.sgf;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,6 +87,16 @@ public final class SgfReaderTest
         checkTimeSettings("time-settings-kgs.sgf", 1800000, 30000, 5);
     }
 
+    /** Test that spaces in size property value are ignored.
+        I don't think they are allowed by the SGF standard, but there is
+        no reason to create an error in this case.
+    */
+    public void testSizeWithSpaces() throws Exception
+    {
+        ConstGameTree tree = readSgfFileString("(;FF[4]SZ[ 13 ])");
+        assertEquals(13, tree.getBoardSize());
+    }
+
     public void testSizeAfterPoints() throws Exception
     {
         readSgfFile("size-after-valid-points.sgf", false, false);
@@ -148,15 +159,6 @@ public final class SgfReaderTest
         reader = new SgfReader(new FileInputStream(file), file, null, 0);
         checkFF4Example(reader);
         file.delete();
-    }
-
-    private SgfReader getReader(String name)
-        throws SgfError, Exception
-    {
-        InputStream in = getClass().getResourceAsStream(name);
-        if (in == null)
-            throw new Exception("Resource " + name + " not found");
-        return new SgfReader(in, null, null, 0);
     }
 
     public void checkFF4Example(SgfReader reader) throws Exception
@@ -283,16 +285,27 @@ public final class SgfReaderTest
         assertEquals(timeSettings.getByoyomiMoves(), byoyomiMoves);
     }
 
+    private SgfReader getReader(String name) throws SgfError, Exception
+    {
+        InputStream in = getClass().getResourceAsStream(name);
+        if (in == null)
+            throw new Exception("Resource " + name + " not found");
+        return new SgfReader(in, null, null, 0);
+    }
+
+    private SgfReader getReaderString(String text) throws SgfError, Exception
+    {
+        InputStream in = new ByteArrayInputStream(text.getBytes());
+        return new SgfReader(in, null, null, 0);
+    }
+
     private void readSgfFile(String name, boolean expectFailure,
                              boolean expectWarnings) throws Exception
     {
         try
         {
             SgfReader reader = getReader(name);
-            if (expectWarnings && reader.getWarnings() == null)
-                fail("Reading " + name + " should result in warnings");
-            if (! expectWarnings && reader.getWarnings() != null)
-                fail("Reading " + name + " should result in no warnings");
+            readSgfFile(reader, expectFailure, expectWarnings);
         }
         catch (SgfError error)
         {
@@ -301,6 +314,41 @@ public final class SgfReaderTest
             return;
         }
         if (expectFailure)
-            fail("Reading " + name + " should result in a failure");
+            fail("Reading should result in a failure");
+    }
+
+    private void readSgfFile(SgfReader reader, boolean expectFailure,
+                             boolean expectWarnings) throws Exception
+    {
+        if (expectWarnings && reader.getWarnings() == null)
+            fail("Reading should result in warnings");
+        if (! expectWarnings && reader.getWarnings() != null)
+            fail("Reading should result in no warnings");
+    }
+
+    private ConstGameTree readSgfFileString(String name, boolean expectFailure,
+                                            boolean expectWarnings)
+        throws Exception
+    {
+        SgfReader reader;
+        try
+        {
+            reader = getReaderString(name);
+            readSgfFile(reader, expectFailure, expectWarnings);
+        }
+        catch (SgfError error)
+        {
+            if (! expectFailure)
+                fail(error.getMessage());
+            return null;
+        }
+        if (expectFailure)
+            fail("Reading should result in a failure");
+        return reader.getTree();
+    }
+
+    private ConstGameTree readSgfFileString(String name) throws Exception
+    {
+        return readSgfFileString(name, false, false);
     }
 }
