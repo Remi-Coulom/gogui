@@ -521,7 +521,7 @@ public final class SgfReader
             else if (p == "TB")
                 parseMarked(node, MarkType.TERRITORY_BLACK, values);
             else if (p == "TM")
-                parseTime(v);
+                parseTime(node, v);
             else if (p == "TR")
                 parseMarked(node, MarkType.TRIANGLE, values);
             else if (p == "US")
@@ -788,8 +788,12 @@ public final class SgfReader
         }
     }
 
-    /** FF4 TM property */
-    private void parseTime(String value)
+    /** TM property.
+        According to FF4, TM needs to be a real value, but older SGF versions
+        allow a string with unspecified content. We try to parse a few known
+        formats.
+    */
+    private void parseTime(Node node, String value)
     {
         value = value.trim();
         if (value.equals("") || value.equals("-"))
@@ -806,26 +810,50 @@ public final class SgfReader
         {
             Pattern pattern;
             Matcher matcher;
+
             // Pattern as written by CGoban 1.9.12
-            pattern = Pattern.compile("(\\d{1,2}+):(\\d\\d)");
+            pattern = Pattern.compile("(\\d{1,2}):(\\d{2})");
             matcher = pattern.matcher(value.trim());
             if (matcher.matches())
             {
                 assert matcher.groupCount() == 2;
                 m_preByoyomi =
-                    (Integer.parseInt(matcher.group(1)) * 60L
-                     + Integer.parseInt(matcher.group(2))) * 1000L;
+                    Integer.parseInt(matcher.group(1)) * 60000L
+                    + Integer.parseInt(matcher.group(2)) * 1000L;
                 return;
             }
-            pattern = Pattern.compile("(\\d+):(\\d\\d):(\\d\\d)");
+
+            pattern = Pattern.compile("(\\d+):(\\d{2}):(\\d{2})");
             matcher = pattern.matcher(value.trim());
             if (matcher.matches())
             {
                 assert matcher.groupCount() == 3;
                 m_preByoyomi =
-                    (Integer.parseInt(matcher.group(1)) * 3600L
-                     + Integer.parseInt(matcher.group(2)) * 60L
-                     + Integer.parseInt(matcher.group(3))) * 1000L;
+                    Integer.parseInt(matcher.group(1)) * 3600000L
+                    + Integer.parseInt(matcher.group(2)) * 60000L
+                    + Integer.parseInt(matcher.group(3)) * 1000L;
+                return;
+            }
+
+            // Time using unit 'h', found in some games of
+            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html
+            pattern = Pattern.compile("(\\d+)\\s*h");
+            matcher = pattern.matcher(value.trim());
+            if (matcher.matches())
+            {
+                assert matcher.groupCount() == 1;
+                m_preByoyomi = Integer.parseInt(matcher.group(1)) * 3600000L;
+                return;
+            }
+
+            // Time using 'hours each', found in some games of
+            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html
+            pattern = Pattern.compile("(\\d+)\\s*hours\\s+each");
+            matcher = pattern.matcher(value.trim());
+            if (matcher.matches())
+            {
+                assert matcher.groupCount() == 1;
+                m_preByoyomi = Integer.parseInt(matcher.group(1)) * 3600000L;
                 return;
             }
         }
@@ -834,7 +862,7 @@ public final class SgfReader
             assert false; // patterns should match only valid integers
             return;
         }
-        setWarning("Invalid value for time");
+        setWarning("Unknown format in time property");
     }
 
     private Node readNext(Node father, boolean isRoot)
