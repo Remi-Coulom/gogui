@@ -639,6 +639,8 @@ public final class XmlReader
             return;
         if (m_sgfType.equals("AN"))
             endSgfInfo(StringInfo.ANNOTATION);
+        else if (m_sgfType.equals("BL"))
+            endSgfTimeLeft(BLACK);
         else if (m_sgfType.equals("BR"))
             endSgfInfo(StringInfoColor.RANK, BLACK);
         else if (m_sgfType.equals("BT"))
@@ -668,10 +670,9 @@ public final class XmlReader
         else if (m_sgfType.equals("RU"))
             endSgfInfo(StringInfo.RULES);
         else if (m_sgfType.equals("SL"))
-        {
-            for (int i = 0; i < m_sgfArgs.size(); ++i)
-            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
-        }
+            endSgfSelect();
+        else if (m_sgfType.equals("WL"))
+            endSgfTimeLeft(WHITE);
         else if (m_sgfType.equals("TM"))
             endSgfTimeSettings();
         else if (m_sgfType.equals("WR"))
@@ -762,6 +763,33 @@ public final class XmlReader
         else
             return;
         m_node.setPlayer(c);
+    }
+
+    private void endSgfSelect() throws SAXException
+    {
+        for (int i = 0; i < m_sgfArgs.size(); ++i)
+            m_node.addMarked(getSgfPoint(m_sgfArgs.get(i)), MarkType.SELECT);
+    }
+
+    /** Handle BL, WL SGF properties.
+        XmlWriter uses these legacy SGF properties to preserve time left
+        information that cannot be stored in a timleft-attribute of a move,
+        because the node has no move or not a move of the corresponding color.
+        Jago's blacktime/whitetime Node-attribute is not defined in
+        go.dtd (2007)
+    */
+    private void endSgfTimeLeft(GoColor c)
+    {
+        if (m_sgfArgs.size() == 0)
+            return;
+        try
+        {
+            double timeLeft = Double.parseDouble(m_sgfArgs.get(0));
+            m_node.setTimeLeft(c, timeLeft);
+        }
+        catch (NumberFormatException e)
+        {
+        }
     }
 
     /** Handle non-root time settings from SGF properties. */
