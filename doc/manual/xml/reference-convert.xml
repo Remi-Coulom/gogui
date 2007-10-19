@@ -29,8 +29,13 @@ Convert SGF and Jago XML Go game files to other formats.
 </arg>
 <arg><option>-force</option></arg>
 <arg><option>-title</option> <replaceable>s</replaceable></arg>
-<arg choice="plain"><replaceable>infile</replaceable>
-<arg choice="plain"><replaceable>outfile</replaceable></arg></arg>
+<arg choice="plain"><replaceable>infile</replaceable></arg>
+<arg choice="plain"><replaceable>outfile</replaceable></arg>
+
+<command>gogui-convert</command>
+<arg choice="plain"><option>-check</option></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg choice="plain"><replaceable>infile</replaceable></arg>
 
 <command>gogui-convert</command>
 <arg choice="plain"><option>-help</option></arg>
@@ -50,6 +55,17 @@ Convert SGF and Jago XML Go game files to other formats.
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-check</option>
+</term>
+<listitem>
+<para>
+Do not convert but only check if reading and parsing the input file succeeds.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term>
