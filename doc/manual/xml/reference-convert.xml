@@ -27,6 +27,7 @@ Convert SGF and Jago XML Go game files to other formats.
     <arg choice="plain">xml</arg>
   </group>
 </arg>
+<arg><option>-werror</option></arg>
 <arg><option>-force</option></arg>
 <arg><option>-title</option> <replaceable>s</replaceable></arg>
 <arg choice="plain"><replaceable>infile</replaceable></arg>
@@ -34,6 +35,7 @@ Convert SGF and Jago XML Go game files to other formats.
 
 <command>gogui-convert</command>
 <arg choice="plain"><option>-check</option></arg>
+<arg><option>-werror</option></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg choice="plain"><replaceable>infile</replaceable></arg>
 
@@ -130,6 +132,15 @@ Specify section title to be used in the LaTeX document before the Go diagram.
 <listitem>
 <para>
 Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-werror</option></term>
+<listitem>
+<para>
+Handle warnings when reading the input files as an error.
 </para>
 </listitem>
 </varlistentry>

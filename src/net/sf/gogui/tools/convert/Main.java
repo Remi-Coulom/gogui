@@ -34,7 +34,8 @@ public final class Main
                 "format:",
                 "help",
                 "title:",
-                "version"
+                "version",
+                "werror"
             };
             Options opt = Options.parse(args, options);
             if (opt.contains("help"))
@@ -49,13 +50,14 @@ public final class Main
             }
             boolean force = opt.contains("force");
             String title = opt.get("title", "");
+            boolean werror = opt.contains("werror");
             boolean checkOnly = opt.contains("check");
             ArrayList<String> arguments = opt.getArguments();
             if (! (arguments.size() == 2
                    || (arguments.size() == 1 && checkOnly)))
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             File in = new File(arguments.get(0));
             File out = null;
@@ -81,7 +83,10 @@ public final class Main
             ConstGameTree tree = reader.getTree();
             String warnings = reader.getWarnings();
             if (warnings != null)
+            {
                 System.err.println(warnings);
+                System.exit(1);
+            }
             if (! checkOnly)
             {
                 String version = Version.get();
@@ -100,7 +105,7 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 
@@ -113,11 +118,13 @@ public final class Main
     {
         out.print("Usage: gogui-convert infile outfile\n" +
                   "\n" +
+                  "-check   only check reading a file\n" +
                   "-config  config file\n" +
                   "-force   overwrite existing files\n" +
                   "-format  output format (sgf,tex,xml)\n" +
                   "-help    display this help and exit\n" +
                   "-title   use title\n" +
-                  "-version print version and exit\n");
+                  "-version print version and exit\n" +
+                  "-werror  handle read warnings as errors\n");
     }
 }
