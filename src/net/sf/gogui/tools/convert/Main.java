@@ -85,7 +85,8 @@ public final class Main
             if (warnings != null)
             {
                 System.err.println(warnings);
-                System.exit(1);
+                if (werror)
+                    System.exit(1);
             }
             if (! checkOnly)
             {
