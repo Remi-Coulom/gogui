@@ -809,7 +809,11 @@ public final class SgfReader
                 throw getError("Property \"" + p + "\" has no value");
             p = checkForObsoleteLongProps(p);
             if (m_props.containsKey(p))
-                setWarning("Duplicate property " + p + " in node");
+                // Silently accept duplicate properties, as long as they have
+                // the same value (only check for single value properties)
+                if (m_props.get(p).size() > 1 || values.size() > 1
+                    || ! values.get(0).equals(m_props.get(p).get(0)))
+                    setWarning("Duplicate property " + p + " in node");
             m_props.put(p, values);
             return true;
         }
