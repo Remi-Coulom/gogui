@@ -104,7 +104,7 @@ public final class Server
             if (loop && opt.contains("remote"))
             {
                 System.err.println("Option -loop can't be used with -remote");
-                System.exit(-1);
+                System.exit(1);
             }
             if (opt.contains("help"))
             {
@@ -119,7 +119,7 @@ public final class Server
             if (! opt.contains("port"))
             {
                 System.err.println("Please specify port with option -port");
-                System.exit(-1);
+                System.exit(1);
             }
             int port = opt.getInteger("port");
             String remoteHost = opt.get("remote", null);
@@ -128,13 +128,13 @@ public final class Server
             if (userFile != null && remoteHost == null)
             {
                 System.err.println("Option -user only valid with -remote");
-                System.exit(-1);
+                System.exit(1);
             }
             ArrayList<String> arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             String program = arguments.get(0);
             new Server(verbose, loop, program, remoteHost, port, userFile,
@@ -143,7 +143,7 @@ public final class Server
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 

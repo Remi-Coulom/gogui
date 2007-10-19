@@ -63,7 +63,7 @@ public class Dummy
     public void cmdCrash(GtpCommand cmd)
     {
         System.err.println("Aborting gogui-dummy");
-        System.exit(-1);
+        System.exit(1);
     }
 
     public void cmdClearBoard(GtpCommand cmd) throws GtpError

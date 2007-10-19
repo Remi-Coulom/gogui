@@ -52,7 +52,7 @@ public final class Main
         catch (RuntimeException e)
         {
             showCrashDialog(e);
-            System.exit(-1);
+            System.exit(1);
         }
         catch (ErrorMessage e)
         {
@@ -62,7 +62,7 @@ public final class Main
         catch (Throwable t)
         {
             showError("Unexpected failure", StringUtil.printException(t));
-            System.exit(-1);
+            System.exit(1);
         }
     }
 
@@ -75,7 +75,7 @@ public final class Main
         catch (RuntimeException e)
         {
             showCrashDialog(e);
-            System.exit(-1);
+            System.exit(1);
         }
         catch (ErrorMessage e)
         {
@@ -85,7 +85,7 @@ public final class Main
         catch (Throwable t)
         {
             showError("Unexpected failure", StringUtil.printException(t));
-            System.exit(-1);
+            System.exit(1);
         }
     }
 
@@ -121,7 +121,7 @@ public final class Main
                     if (e instanceof RuntimeException
                         || e instanceof AssertionError)
                         showCrashDialog(e);
-                    System.exit(-1);
+                    System.exit(1);
                 }
             };
         Runnable runnable = new Runnable() {

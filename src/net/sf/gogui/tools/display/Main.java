@@ -42,7 +42,7 @@ public final class Main
             if (arguments.size() > 1)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             String program = null;
             if (arguments.size() == 1)
@@ -55,7 +55,7 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 

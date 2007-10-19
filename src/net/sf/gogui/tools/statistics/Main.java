@@ -60,7 +60,7 @@ public final class Main
                 if (! opt.contains("program"))
                 {
                     System.out.println("Need option -program");
-                    System.exit(-1);
+                    System.exit(1);
                 }
                 program = opt.get("program");
             }
@@ -82,7 +82,7 @@ public final class Main
                 if (size > 0)
                 {
                     printUsage(System.err);
-                    System.exit(-1);
+                    System.exit(1);
                 }
                 String fileName = opt.get("analyze");
                 String output = opt.get("output");
@@ -93,7 +93,7 @@ public final class Main
                 if (size < 1)
                 {
                     printUsage(System.err);
-                    System.exit(-1);
+                    System.exit(1);
                 }
                 File output;
                 if (opt.contains("output"))
@@ -116,7 +116,7 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 

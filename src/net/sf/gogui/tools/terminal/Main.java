@@ -44,7 +44,7 @@ public final class Main
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             String program = arguments.get(0);
             Terminal terminal = new Terminal(program, size, verbose);
@@ -54,7 +54,7 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 

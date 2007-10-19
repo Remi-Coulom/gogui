@@ -59,7 +59,7 @@ public final class Main
             if (arguments.isEmpty() || arguments.size() > 2)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             File input = new File(arguments.get(0));
             File output = null;
@@ -74,13 +74,13 @@ public final class Main
             catch (ThumbnailCreator.Error e)
             {
                 System.err.println(e.getMessage());
-                System.exit(-1);
+                System.exit(1);
             }
         }
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 

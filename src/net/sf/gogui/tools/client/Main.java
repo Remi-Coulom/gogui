@@ -99,7 +99,7 @@ public final class Main
             if (arguments.size() != 2)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             String hostname = arguments.get(0);
             int port = Integer.parseInt(arguments.get(1));
@@ -108,7 +108,7 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 

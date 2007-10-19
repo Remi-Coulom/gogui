@@ -61,7 +61,7 @@ public final class Main
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                System.exit(1);
             }
             PrintStream log = null;
             if (opt.contains("log"))
@@ -83,7 +83,7 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(-1);
+            System.exit(1);
         }
     }
 
