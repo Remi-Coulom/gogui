@@ -225,6 +225,7 @@ public final class SgfReader
     }
 
     /** Check for obsolete long names for standard properties.
+        These are still used in asome old SGF files.
         @param property Property name
         @return Short standard version of the property or original property
     */
@@ -267,10 +268,7 @@ public final class SgfReader
         else if (property == "WHITE")
             shortName = "W";
         if (shortName != null)
-        {
-            setWarning("Verbose names for standard properties");
             return shortName;
-        }
         return property;
     }
 

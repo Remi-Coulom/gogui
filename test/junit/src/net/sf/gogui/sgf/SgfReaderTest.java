@@ -82,7 +82,7 @@ public final class SgfReaderTest
 
     public void testRead() throws Exception
     {
-        readSgfFile("verbose-property-names.sgf", false, true);
+        readSgfFile("verbose-property-names.sgf", false, false);
         checkTimeSettings("time-settings-1.sgf", 1800000, 60000, 5);
         checkTimeSettings("time-settings-kgs.sgf", 1800000, 30000, 5);
     }
