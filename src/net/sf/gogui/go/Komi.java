@@ -43,7 +43,8 @@ public final class Komi
             return null;
         try
         {
-            double komi = Double.parseDouble(s);
+            // Also accept , instead of .
+            double komi = Double.parseDouble(s.replace(',', '.'));
             return new Komi(komi);
         }
         catch (NumberFormatException e)

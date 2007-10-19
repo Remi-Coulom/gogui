@@ -38,6 +38,7 @@ public final class KomiTest
     public void testParseKomi() throws InvalidKomiException
     {
         assertEquals(new Komi(5.5), Komi.parseKomi("5.5"));
+        assertEquals(new Komi(5.5), Komi.parseKomi("5,5"));
         assertEquals(new Komi(0), Komi.parseKomi("0"));
         assertNull(Komi.parseKomi(""));
     }
