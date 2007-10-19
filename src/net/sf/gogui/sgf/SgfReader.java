@@ -608,7 +608,7 @@ public final class SgfReader
         SgfUtil.Overtime overtime = SgfUtil.parseOvertime(value);
         if (overtime == null)
         {
-            setWarning("overtime settings in unknown format");
+            setWarning("Overtime settings in unknown format");
             node.addSgfProperty("OT", value);
         }
         else
