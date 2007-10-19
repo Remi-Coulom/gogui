@@ -835,20 +835,9 @@ public final class SgfReader
                 return;
             }
 
-            // Time using unit 'h', found in some games of
+            // Formats found in some games of
             // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html
-            pattern = Pattern.compile("(\\d+)\\s*h");
-            matcher = pattern.matcher(value.trim());
-            if (matcher.matches())
-            {
-                assert matcher.groupCount() == 1;
-                m_preByoyomi = Integer.parseInt(matcher.group(1)) * 3600000L;
-                return;
-            }
-
-            // Time using 'hours each', found in some games of
-            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html
-            pattern = Pattern.compile("(\\d+)\\s*hours\\s+each");
+            pattern = Pattern.compile("(\\d+)\\s*(?:h|hours|hours\\s+each)");
             matcher = pattern.matcher(value.trim());
             if (matcher.matches())
             {
@@ -862,7 +851,7 @@ public final class SgfReader
             assert false; // patterns should match only valid integers
             return;
         }
-        setWarning("Unknown format in time property");
+        setWarning("Unknown format in time property " + value);
     }
 
     private Node readNext(Node father, boolean isRoot)
