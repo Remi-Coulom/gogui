@@ -233,6 +233,18 @@ public final class StringUtil
         return result;
     }
 
+    /** Trim trailing whitespaces. */
+    public static String trimTrailing(String s)
+    {
+        int i;
+        for (i = s.length() - 1; i >= 0; --i)
+            if (! Character.isWhitespace(s.charAt(i)))
+                break;
+        if (i <= 0 || i == s.length() - 1)
+            return s;
+        return s.substring(0, i + 1);
+    }
+
     /** Make constructor unavailable; class is for namespace only. */
     private StringUtil()
     {
