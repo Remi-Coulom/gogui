@@ -35,12 +35,13 @@ public final class XmlReaderTest
             getTree("<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                     "<Go><GoGame><Nodes><Node>" +
                     "<Comment>" +
+                    "<P/>" +
                     "<P>abc</P>" +
                     "<P>   </P>" +
                     "<P>abc</P>" +
                     "</Comment>" +
                     "</Node></Nodes></GoGame></Go>");
-        assertEquals("abc\n   \nabc", tree.getRootConst().getComment());
+        assertEquals("\nabc\n   \nabc", tree.getRootConst().getComment());
     }
 
     /** Test that the implicit root node is pruned if it is empty and

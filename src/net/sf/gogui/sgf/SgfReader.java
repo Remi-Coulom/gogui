@@ -401,14 +401,7 @@ public final class SgfReader
             else if (p == "BT")
                 set(node, StringInfoColor.TEAM, BLACK, v);
             else if (p == "C")
-            {
-                String comment;
-                if (node.getComment() == null)
-                    comment = v.trim();
-                else
-                    comment = node.getComment() + "\n" + v.trim();
-                node.setComment(comment);
-            }
+                node.setComment(v);
             else if (p == "CA")
             {
                 if (isRoot && m_isFile && m_newCharset == null)
