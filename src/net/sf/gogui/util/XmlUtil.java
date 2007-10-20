@@ -11,7 +11,7 @@ public final class XmlUtil
 {
     /** Escape XML special characters for attribute values.
         This assumes that the attribute will be quotes with ", it does
-        not escape '.
+        not escape '. Also strips invalid XML characters.
     */
     public static String escapeAttr(String text)
     {
@@ -20,6 +20,8 @@ public final class XmlUtil
         for (int i = 0; i < len; ++i)
         {
             char c = text.charAt(i);
+            if (isInvalidXml(c))
+                continue;
             switch (c)
             {
             case '>':
@@ -41,7 +43,9 @@ public final class XmlUtil
         return result.toString();
     }
 
-    /** Escape XML special characters for text content. */
+    /** Escape XML special characters for text content.
+        Also strips invalid XML characters.
+    */
     public static String escapeText(String text)
     {
         int len = text.length();
@@ -49,6 +53,8 @@ public final class XmlUtil
         for (int i = 0; i < len; ++i)
         {
             char c = text.charAt(i);
+            if (isInvalidXml(c))
+                continue;
             switch (c)
             {
             case '>':
@@ -67,33 +73,17 @@ public final class XmlUtil
         return result.toString();
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private XmlUtil()
+    {
+    }
 
-    public static boolean isInvalidXml(char c)
+    /** See http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char */
+    private static boolean isInvalidXml(char c)
     {
         return ! (c == 0x9 || c == 0xA || c == 0xD
                   || (c >= 0x20 && c <= 0xD7FF)
                   || (c >= 0xE000 && c <= 0xFFFD)
                   || (c >= 0x10000 && c <= 0x10FFFF));
-    }
-
-    /** Strip invalid XML characters.
-        See http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char
-    */
-    public static String stripInvalidXml(String s)
-    {
-        StringBuilder result = new StringBuilder();
-        char current;
-        for (int i = 0; i < s.length(); ++i)
-        {
-            char c = s.charAt(i);
-            if (! isInvalidXml(c))
-                result.append(c);
-        }
-        return result.toString();
-    }
-
-    /** Make constructor unavailable; class is for namespace only. */
-    private XmlUtil()
-    {
     }
 }

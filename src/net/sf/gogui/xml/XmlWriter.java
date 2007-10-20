@@ -102,13 +102,7 @@ public class XmlWriter
                 if (line.equals(""))
                     m_out.print("<P/>\n");
                 else
-                {
-                    line = XmlUtil.stripInvalidXml(line);
-                    line = XmlUtil.escapeText(line);
-                    m_out.print("<P>");
-                    m_out.print(line);
-                    m_out.print("</P>\n");
-                }
+                    printElementLine("P", line);
             }
         }
         catch (IOException e)
@@ -118,12 +112,18 @@ public class XmlWriter
         m_out.print("</Comment>\n");
     }
 
+    private void printElementLine(String element, String text)
+    {
+        m_out.print("<" + element + ">" + XmlUtil.escapeText(text)
+                    + "</" + element + ">\n");
+    }
+
     private void printGameInfo(String application, ConstGameInfo info)
     {
         m_out.print("<Information>\n");
         if (application != null)
-            m_out.print("<Application>" + application + "</Application>\n");
-        m_out.print("<BoardSize>" + m_boardSize + "</BoardSize>\n");
+            printElementLine("Application", application);
+        printElementLine("BoardSize", Integer.toString(m_boardSize));
         printInfo("WhitePlayer", info.get(StringInfoColor.NAME, WHITE));
         printInfo("BlackPlayer", info.get(StringInfoColor.NAME, BLACK));
         printInfo("WhiteRank", info.get(StringInfoColor.RANK, WHITE));
@@ -147,11 +147,11 @@ public class XmlWriter
         m_out.print("</Information>\n");
     }
 
-    private void printInfo(String tag, String value)
+    private void printInfo(String element, String value)
     {
         if (value == null)
             return;
-        m_out.print("<" + tag + ">" + value + "</" + tag + ">\n");
+        printElementLine(element, value);
     }
 
     private void printMarkup(ConstNode node)
@@ -172,7 +172,7 @@ public class XmlWriter
         if (labels != null)
             for (Map.Entry<GoPoint,String> e : labels.entrySet())
                 m_out.print("<Mark at=\"" + e.getKey() + "\" label=\""
-                            + e.getValue() + "\"/>\n");
+                            + XmlUtil.escapeAttr(e.getValue()) + "\"/>\n");
     }
 
     private void printMarkup(ConstNode node, MarkType type, String attributes)
