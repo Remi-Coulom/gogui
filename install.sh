@@ -74,14 +74,9 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 # Install icons
 
-install -d $PREFIX/share/icons/hicolor/48x48/apps
-install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
-    $PREFIX/share/icons/hicolor/48x48/apps/gogui.png
-# hicolor is the standard according to freedesktop.org, but for compatibility
-# we also install the icon to pixmaps
-install -d $PREFIX/share/pixmaps
-install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
-    $PREFIX/share/pixmaps/gogui.png
+xdg-icon-resource install --size 48 config/gogui-gogui.png
+xdg-icon-resource install --size 48 --context mimetypes \
+    config/gogui-application-x-go-sgf.png
 
 # Install desktop entry
 
@@ -90,12 +85,6 @@ xdg-desktop-menu install config/gogui-gogui.desktop
 # Install shared mime info
 
 xdg-mime install config/gogui-mime.xml
-
-# Install mime icon
-
-install -d $PREFIX/share/icons/hicolor/48x48/mimetypes
-install -m 644 config/gogui-application-x-go-sgf.png \
-  $PREFIX/share/icons/hicolor/48x48/mimetypes
 
 # Install KDE mime entry
 # Could create a conflict with other packages.
