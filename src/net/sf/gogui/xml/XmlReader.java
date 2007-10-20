@@ -195,7 +195,7 @@ public final class XmlReader
             else if (name.equals("Comment"))
                 startComment();
             else if (name.equals("Copyright"))
-                checkParent("Information");
+                startCopyright();
             else if (name.equals("Date"))
                 startInfoElemWithFormat();
             else if (name.equals("Delete"))
@@ -279,9 +279,9 @@ public final class XmlReader
             else if (name.equals("BoardSize"))
                 endBoardSize();
             else if (name.equals("Comment"))
-                appendComment(true);
+                endComment();
             else if (name.equals("Copyright"))
-                appendCopyright(true);
+                endCopyright();
             else if (name.equals("Date"))
                 m_info.set(StringInfo.DATE, getCharacters());
             else if (name.equals("Delete"))
@@ -487,30 +487,7 @@ public final class XmlReader
     /** Has current node inconsistent SGF/FF3 overtime settings properties. */
     private boolean m_ignoreOvertime;
 
-    private void appendComment(boolean onlyIfNotEmpty)
-    {
-        String comment = m_node.getComment();
-        String mergedLines = getMergedLines();
-        if (onlyIfNotEmpty && mergedLines.equals(""))
-            return;
-        if (comment == null)
-            m_node.setComment(mergedLines);
-        else
-            m_node.setComment(comment + "\n" + mergedLines);
-    }
-
-    private void appendCopyright(boolean onlyIfNotEmpty)
-    {
-        String copyright = m_info.get(StringInfo.COPYRIGHT);
-        String mergedLines = getMergedLines();
-        if (onlyIfNotEmpty && mergedLines.equals(""))
-            return;
-        if (copyright == null)
-            m_info.set(StringInfo.COPYRIGHT, mergedLines);
-        else
-            m_info.set(StringInfo.COPYRIGHT, copyright + "\n"
-                       + mergedLines);
-    }
+    private String m_paragraphElementText;
 
     private void checkAttributes(String... atts) throws SAXException
     {
@@ -589,6 +566,16 @@ public final class XmlReader
         m_boardSize = boardSize;
     }
 
+    private void endComment()
+    {
+        m_node.setComment(getParagraphElementText());
+    }
+
+    private void endCopyright()
+    {
+        m_info.set(StringInfo.COPYRIGHT, getParagraphElementText());
+    }
+
     private void endHandicap() throws SAXException
     {
         int handicap = parseInt();
@@ -645,11 +632,8 @@ public final class XmlReader
 
     private void endP() throws SAXException
     {
-        String parent = parentElement();
-        if (parent.equals("Comment"))
-            appendComment(false);
-        else if (parent.equals("Copyright"))
-            appendCopyright(false);
+        m_paragraphElementText =
+            m_paragraphElementText + getMergedLines() + "\n";
     }
 
     private void endSetup(GoColor c) throws SAXException
@@ -962,6 +946,19 @@ public final class XmlReader
         return result.toString();
     }
 
+    private String getParagraphElementText()
+    {
+        String text = m_paragraphElementText;
+        String mergedLines = getMergedLines();
+        // Handle direct text content even if not allowed by DTD
+        if (! mergedLines.equals(""))
+            text = text + mergedLines + "\n";
+        // Remove exactly one trailing newline
+        if (text.endsWith("\n"))
+            text = text.substring(0, text.length() - 1);
+        return text;
+    }
+
     private GoPoint getPoint(String value) throws SAXException
     {
         value = value.trim();
@@ -1061,6 +1058,14 @@ public final class XmlReader
     {
         checkParent("Nodes", "Node", "Variation");
         checkAttributes();
+        m_paragraphElementText = "";
+    }
+
+    private void startCopyright() throws SAXException
+    {
+        checkParent("Information");
+        checkAttributes();
+        m_paragraphElementText = "";
     }
 
     private void startGo() throws SAXException
