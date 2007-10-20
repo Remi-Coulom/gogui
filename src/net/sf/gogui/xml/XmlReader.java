@@ -342,9 +342,9 @@ public final class XmlReader
         }
 
         /** Return a fake go.dtd, if go.dtd does not exist as file.
-            Currently, GoGui does not validate the documents, but this
-            still avoids a missing entity error message, if an XML file
-            references go.dtd, but it is not found.
+            GoGui does not validate the document anyway, but this avoids a
+            missing entity error message, if an XML file references go.dtd,
+            but it is not found.
         */
         public InputSource resolveEntity(String publicId, String systemId)
         {
