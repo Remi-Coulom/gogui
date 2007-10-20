@@ -94,23 +94,24 @@ public class XmlWriter
     {
         if (value == null)
             return;
-        BufferedReader reader = new BufferedReader(new StringReader(value));
+        StringReader reader = new StringReader(value);
         m_out.print("<" + element + ">\n");
-        String line = null;
-        try
+        boolean endsWithNewline = false;
+        while (true)
         {
-            while ((line = reader.readLine()) != null)
-            {
-                if (line.equals(""))
-                    m_out.print("<P/>\n");
-                else
-                    printElementLine("P", line);
-            }
+            String line = readLine(reader);
+            if (line.equals(""))
+                break;
+            endsWithNewline = line.endsWith("\n");
+            if (endsWithNewline)
+                line = line.substring(0, line.length() - 1);
+            if (line.equals(""))
+                m_out.print("<P/>\n");
+            else
+                printElementLine("P", line);
         }
-        catch (IOException e)
-        {
-            assert(false);
-        }
+        if (endsWithNewline)
+            m_out.print("<P/>\n");
         m_out.print("</" + element + ">\n");
     }
 
@@ -406,5 +407,28 @@ public class XmlWriter
         if (value == null)
             return;
         sgfProps.add(key, value);
+    }
+
+    /** Reads a line without trimming the trailing newline. */
+    private static String readLine(StringReader reader)
+    {
+        StringBuilder result = new StringBuilder();
+        try
+        {
+            int c;
+            do
+            {
+                c = reader.read();
+                if (c == -1)
+                    break;
+                result.append((char)c);
+            }
+            while ((char)c != '\n');
+        }
+        catch (IOException e)
+        {
+            assert false;
+        }
+        return result.toString();
     }
 }

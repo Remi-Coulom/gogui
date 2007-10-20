@@ -26,6 +26,53 @@ public final class XmlWriterTest
         return new junit.framework.TestSuite(XmlWriterTest.class);
     }
 
+    /** Test linebreak-to-paragraph conversion in comments.
+        See appendix "XML Format" in the GoGui documentation.
+        This should allow loss-less conversion from SGF to XML and back.
+    */
+    public void testCommentParagraphs() throws Exception
+    {
+        Node root = new Node();
+        root.setComment("line1\nline2");
+        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                     "<Go>\n" +
+                     "<GoGame>\n" +
+                     "<Information>\n" +
+                     "<BoardSize>19</BoardSize>\n" +
+                     "</Information>\n" +
+                     "<Nodes>\n" +
+                     "<Node>\n" +
+                     "<Comment>\n" +
+                     "<P>line1</P>\n" +
+                     "<P>line2</P>\n" +
+                     "</Comment>\n" +
+                     "</Node>\n" +
+                     "</Nodes>\n" +
+                     "</GoGame>\n" +
+                     "</Go>\n",
+                     getText(19, root));
+
+        root.setComment("line1\nline2\n");
+        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                     "<Go>\n" +
+                     "<GoGame>\n" +
+                     "<Information>\n" +
+                     "<BoardSize>19</BoardSize>\n" +
+                     "</Information>\n" +
+                     "<Nodes>\n" +
+                     "<Node>\n" +
+                     "<Comment>\n" +
+                     "<P>line1</P>\n" +
+                     "<P>line2</P>\n" +
+                     "<P/>\n" +
+                     "</Comment>\n" +
+                     "</Node>\n" +
+                     "</Nodes>\n" +
+                     "</GoGame>\n" +
+                     "</Go>\n",
+                     getText(19, root));
+    }
+
     /** Test that a root node that is empty apart from game info and should
         be written, because the child has a move is written using a
         self-closing tag.
