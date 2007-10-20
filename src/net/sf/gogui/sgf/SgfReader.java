@@ -442,7 +442,7 @@ public final class SgfReader
             }
             else if (p == "HA")
             {
-                // Some SGF files contain HA[], interpret as no handicap
+                // Some SGF files contain HA[], interpret as unknown handicap
                 v = v.trim();
                 if (! v.equals(""))
                 {
@@ -451,7 +451,8 @@ public final class SgfReader
                         int handicap = Integer.parseInt(v);
                         if (handicap == 1 || handicap < 0)
                             setWarning("Invalid handicap value");
-                        createGameInfo(node).setHandicap(handicap);
+                        else
+                            createGameInfo(node).setHandicap(handicap);
                     }
                     catch (NumberFormatException e)
                     {
