@@ -79,7 +79,9 @@ public final class XmlReader
             m_isFirstElement = true;
             m_gameInfoPreByoyomi = -1;
             m_root = new Node();
-            m_info = m_root.createGameInfo();
+            // Don't create game info yet, because implicit empty root
+            // might be truncated later
+            m_info = new GameInfo();
             m_node = m_root;
             XMLReader reader = XMLReaderFactory.createXMLReader();
             try
@@ -108,6 +110,7 @@ public final class XmlReader
                 m_root.setFather(null);
             }
             m_tree = new GameTree(size, m_root);
+            m_tree.getGameInfo(m_root).copyFrom(m_info);
             if (m_gameName != null)
                 m_root.addSgfProperty("GN", m_gameName);
         }
@@ -694,7 +697,7 @@ public final class XmlReader
         else if (m_sgfType.equals("WL"))
             endSgfTimeLeft(WHITE);
         else if (m_sgfType.equals("TM"))
-            endSgfTimeSettings();
+            endSgfTime();
         else if (m_sgfType.equals("WR"))
             endSgfInfo(StringInfoColor.RANK, WHITE);
         else if (m_sgfType.equals("WT"))
@@ -865,8 +868,7 @@ public final class XmlReader
         }
     }
 
-    /** Handle non-root time settings from SGF properties. */
-    private void endSgfTimeSettings()
+    private void endSgfTime()
     {
         if (m_sgfArgs.size() == 0)
             return;
@@ -1023,7 +1025,7 @@ public final class XmlReader
     private void setSgfTimeSettings()
     {
         long preByoyomi = m_preByoyomi;
-        if (preByoyomi < 0)
+        if (m_node == m_root && preByoyomi < 0)
             preByoyomi = m_gameInfoPreByoyomi;
         TimeSettings s = null;
         if (preByoyomi > 0
@@ -1036,7 +1038,12 @@ public final class XmlReader
                  && m_byoyomiMoves > 0)
             s = new TimeSettings(preByoyomi, m_byoyomi, m_byoyomiMoves);
         if (s != null)
-            m_node.createGameInfo().setTimeSettings(s);
+        {
+            if (m_node == m_root)
+                m_info.setTimeSettings(s);
+            else
+                m_node.createGameInfo().setTimeSettings(s);
+        }
     }
 
     private void showProgress()
