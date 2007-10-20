@@ -80,15 +80,26 @@ public final class SgfReaderTest
         readSgfFile("invalidmove.sgf", true, false);
     }
 
-    /** Test that linebreaks in a text value is handled correctly.
-        See SGF spec about soft and hard linebreaks.
-    */
+    /** Test that linebreaks in a text value is handled correctly. */
     public void testLinebreaks() throws Exception
     {
-        ConstGameTree tree =
-            readSgfFileString("(;C[foo\nbar \\\nfoo])",
-                              false, false);
+        // Test soft and hard linebreaks (see SGF spec)
+        ConstGameTree tree = readSgfFileString("(;C[foo\nbar \\\nfoo])");
         assertEquals("foo\nbar foo", tree.getRootConst().getComment());
+
+        // Test that the linebreaks LF, CR, LFCR, CRLF are handled correctly
+        tree = readSgfFileString("(;C[foo\nbar])");
+        assertEquals("foo\nbar", tree.getRootConst().getComment());
+        tree = readSgfFileString("(;C[foo\rbar])");
+        assertEquals("foo\nbar", tree.getRootConst().getComment());
+        tree = readSgfFileString("(;C[foo\n\rbar])");
+        assertEquals("foo\nbar", tree.getRootConst().getComment());
+        tree = readSgfFileString("(;C[foo\r\nbar])");
+        assertEquals("foo\nbar", tree.getRootConst().getComment());
+        tree = readSgfFileString("(;C[foo\r\n\rbar])");
+        assertEquals("foo\n\nbar", tree.getRootConst().getComment());
+        tree = readSgfFileString("(;C[foo\r\n\n\rbar])");
+        assertEquals("foo\n\nbar", tree.getRootConst().getComment());
     }
 
     public void testRead() throws Exception

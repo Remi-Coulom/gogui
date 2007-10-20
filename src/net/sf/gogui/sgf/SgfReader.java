@@ -900,6 +900,7 @@ public final class SgfReader
         }
         m_buffer.setLength(0);
         boolean quoted = false;
+        Character last = null;
         while (true)
         {
             int c = m_reader.read();
@@ -919,7 +920,26 @@ public final class SgfReader
                     break;
                 quoted = (c == '\\');
                 if (! quoted)
-                    m_buffer.append((char)c);
+                {
+                    // Transform all linebreaks allowed in SGF (LF, CR, LFCR,
+                    // CRLF) to a single '\n'
+                    boolean isLinebreak = (c == '\n' || c == '\r');
+                    boolean lastLinebreak =
+                        (last != null && (last.charValue() == '\n'
+                                          || last.charValue() == '\r'));
+                    boolean filterSecondLinebreak =
+                        (isLinebreak && lastLinebreak && c != last.charValue());
+                    if (filterSecondLinebreak)
+                        last = null;
+                    else
+                    {
+                        if (isLinebreak)
+                            m_buffer.append('\n');
+                        else
+                            m_buffer.append((char)c);
+                        last = Character.valueOf((char)c);
+                    }
+                }
             }
         }
         return m_buffer.toString();
