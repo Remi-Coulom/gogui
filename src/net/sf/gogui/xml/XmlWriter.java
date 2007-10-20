@@ -88,12 +88,12 @@ public class XmlWriter
         return "" + (char)x + (char)y;
     }
 
-    private void printComment(String comment)
+    private void printElementWithParagraphs(String element, String value)
     {
-        if (comment == null)
+        if (value == null)
             return;
-        BufferedReader reader = new BufferedReader(new StringReader(comment));
-        m_out.print("<Comment>\n");
+        BufferedReader reader = new BufferedReader(new StringReader(value));
+        m_out.print("<" + element + ">\n");
         String line = null;
         try
         {
@@ -109,7 +109,7 @@ public class XmlWriter
         {
             assert(false);
         }
-        m_out.print("</Comment>\n");
+        m_out.print("</" + element + ">\n");
     }
 
     private void printElementLine(String element, String text)
@@ -140,10 +140,10 @@ public class XmlWriter
         printInfo("WhiteTeam", info.get(StringInfoColor.TEAM, WHITE));
         printInfo("BlackTeam", info.get(StringInfoColor.TEAM, BLACK));
         printInfo("User", info.get(StringInfo.USER));
-        printInfo("Copyright", info.get(StringInfo.COPYRIGHT));
         printInfo("Annotation", info.get(StringInfo.ANNOTATION));
         printInfo("Source", info.get(StringInfo.SOURCE));
         printInfo("Round", info.get(StringInfo.ROUND));
+        printElementWithParagraphs("Copyright", info.get(StringInfo.COPYRIGHT));
         m_out.print("</Information>\n");
     }
 
@@ -283,7 +283,7 @@ public class XmlWriter
             printMove(node);
             printSetup(node);
             printMarkup(node);
-            printComment(comment);
+            printElementWithParagraphs("Comment", comment);
             if (hasNonRootGameInfo)
                 putGameInfoSgf(info, sgfProps);
             printSgfProperties(sgfProps);
