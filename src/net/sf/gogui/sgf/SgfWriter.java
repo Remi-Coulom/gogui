@@ -228,22 +228,9 @@ public class SgfWriter
         if (timeSettings != null)
         {
             print("TM[" + timeSettings.getPreByoyomi() / 1000 + "]");
-            if (timeSettings.getUseByoyomi())
-            {
-                // I'd really like to use OM/OP properties from FF[3] for
-                // overtime, because the content of OT in FF[4] is not
-                // standardized. At least SgfReader should be able to parse
-                // the output of SgfWriter and maybe a few other ones that
-                // are commonly used
-                int byoyomiMoves = timeSettings.getByoyomiMoves();
-                long byoyomi = timeSettings.getByoyomi();
-                if (byoyomi % 60000 == 0)
-                    print("OT[" + byoyomiMoves + " moves / "
-                          + byoyomi / 60000 + " min]");
-                else
-                    print("OT[" + byoyomiMoves + " moves / "
-                          + byoyomi / 1000 + " sec]");
-            }
+            String overtime = SgfUtil.getOvertime(timeSettings);
+            if (overtime != null)
+                print("OT[" + overtime + "]");
         }
         printInfo("PB", info.get(StringInfoColor.NAME, BLACK));
         printInfo("PW", info.get(StringInfoColor.NAME, WHITE));

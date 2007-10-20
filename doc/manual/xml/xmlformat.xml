@@ -48,7 +48,7 @@ and paragraph elements are not supported.
 <simpara>
 SGF comments can have linebreaks and use empty lines to separate paragraphs.
 GoGui handle paragraphs like Jago does: every comment line (which may be
-displayed using line-wrapping in the Gui) is stored in a paragraph, empty
+displayed using line-wrapping in the GUI) is stored in a paragraph, empty
 lines are stored as paragraphs without text content. Despite of the
 documentation on Jago's web site that paragraphs are handled as in HTML,
 GoGui does not ignore any whitespaces, it only replaces newlines by empty
@@ -60,8 +60,8 @@ characters when reading the text content of a paragraph.
 According to the original DTD, valid children of GoGame are Information and
 Nodes. Comment is not allowed as the first element in Nodes. However, the
 first example on Jago's webpage shows a case, where a Comment and move
-elements are direct children of GoGame. GoGui will always use Nodes and will
-always embed a Comment in a Node, if it is the first element in Nodes.
+elements are direct children of GoGame. GoGui will always use the Nodes element
+and will always embed a Comment in a Node, if it is the first element in Nodes.
 When reading, a Comment can be the first element in Nodes, but Nodes is
 required.
 </simpara>
@@ -74,6 +74,21 @@ Therefore, GoGui saves the player in a setup position
 using the legacy SGF PL-property. However when reading a file, it handles
 the above elements if they are the child of a Node element to set the current
 player.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+In general, GoGui tries to preserve information using the legacy SGF element,
+if the DTD has no elements for this information or does not support storing
+the information in the current node. For example, the DTD allows only
+one game information per GoGame element, but SGF allows game information
+in non-root nodes. In this case, SGF elements are used to store the
+information.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The Line element in the DTD has no legal parent. It is not used.
 </simpara>
 </listitem>
 </itemizedlist>

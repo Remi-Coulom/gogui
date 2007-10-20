@@ -38,6 +38,33 @@ public final class NodeUtil
         return node;
     }
 
+    /** Remove SGF properties for information already contained in game info.
+        This can be used for example, if a SGF reader cannot handle an unknown
+        format of the TM property, puts it into the SGF properties of the node
+        to preserve the information for future saving, but later a
+        well-defined time settings was set in the game information of the node.
+        Handles the following properties: TM (because FF3 allowed an arbitrary
+        text in TM), OT (FF4 allows arbitrary text)
+        @return The cleaned properties, empty properties, if
+        node.getSgfProperties() was null
+    */
+    public static SgfProperties cleanSgfProps(ConstNode node)
+    {
+        SgfProperties props = new SgfProperties(node.getSgfPropertiesConst());
+        ConstGameInfo info = node.getGameInfoConst();
+        if (info != null)
+        {
+            if (info.getTimeSettings() != null)
+            {
+                props.remove("OT");
+                props.remove("TM");
+                props.remove("OM"); // FF3
+                props.remove("OP"); // FF3
+            }
+        }
+        return props;
+    }
+
     /** Check if the comment of the current node contains a pattern.
         @param node The node to check.
         @param pattern The pattern.
@@ -476,31 +503,6 @@ public final class NodeUtil
     public static boolean isRootWithoutChildren(ConstNode node)
     {
         return (! node.hasFather() && ! node.hasChildren());
-    }
-
-    /** Remove SGF properties for information already contained in game info.
-        This can be used for example, if a SGF reader cannot handle an unknown
-        format of the TM property, puts it into the SGF properties of the node
-        to preserve the information for future saving, but later a
-        well-defined time settings was set in the game information of the node.
-        Handles the following properties: TM (because FF3 allowed an arbitrary
-        text in TM), OT (FF4 allows arbitrary text)
-        @return The cleaned properties, empty properties, if
-        node.getSgfProperties() was null
-    */
-    public static SgfProperties cleanSgfProps(ConstNode node)
-    {
-        SgfProperties props = new SgfProperties(node.getSgfPropertiesConst());
-        ConstGameInfo info = node.getGameInfoConst();
-        if (info != null)
-        {
-            if (info.getTimeSettings() != null)
-            {
-                props.remove("OT");
-                props.remove("TM");
-            }
-        }
-        return props;
     }
 
     /** Make the variation of the current node to be the main variation

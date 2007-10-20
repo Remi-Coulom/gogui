@@ -794,8 +794,8 @@ public final class XmlReader
         SgfUtil.Overtime overtime = SgfUtil.parseOvertime(value);
         if (overtime == null)
         {
-            setWarning("overtime settings in unknown format");
-            m_node.addSgfProperty("OT", value);
+            setWarning("Overtime settings in unknown format");
+            m_node.addSgfProperty("OT", value); // Preserve information
         }
         else
         {
@@ -899,15 +899,17 @@ public final class XmlReader
 
     private void endTime() throws SAXException
     {
-        String time = getCharacters();
-        try
+        String value = getCharacters().trim();
+        if (value.equals("") || value.equals("-"))
+            return;
+        long preByoyomi = SgfUtil.parseTime(value);
+        if (preByoyomi < 0)
         {
-            m_info.setTimeSettings(TimeSettings.parse(time));
+            setWarning("Unknown format in Time element");
+            m_node.addSgfProperty("TM", value); // Preserve information
         }
-        catch (ErrorMessage e)
-        {
-            setWarning("Unknown time settings: " + e.getMessage());
-        }
+        else
+            m_preByoyomi = preByoyomi;
     }
 
     private void endToPlay() throws SAXException

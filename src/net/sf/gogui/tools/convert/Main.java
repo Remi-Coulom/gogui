@@ -13,6 +13,7 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
+import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
@@ -73,12 +74,13 @@ public final class Main
                 if (! format.equals("sgf")
                     && ! format.equals("tex")
                     && ! format.equals("xml"))
-                    throw new Exception("Unknown format");
+                    throw new ErrorMessage("Unknown format");
                 if (out.exists() && ! force)
-                    throw new Exception("File \"" + out + "\" already exists");
+                    throw new ErrorMessage("File \"" + out
+                                           + "\" already exists");
             }
             if (! in.exists())
-                throw new Exception("File \"" + in + "\" not found");
+                throw new ErrorMessage("File \"" + in + "\" not found");
             GameReader reader = new GameReader(in);
             ConstGameTree tree = reader.getTree();
             String warnings = reader.getWarnings();

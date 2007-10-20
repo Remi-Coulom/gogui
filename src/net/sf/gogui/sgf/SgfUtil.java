@@ -6,6 +6,7 @@ package net.sf.gogui.sgf;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.sf.gogui.game.TimeSettings;
 
 public final class SgfUtil
 {
@@ -15,6 +16,33 @@ public final class SgfUtil
         public long m_byoyomi;
 
         public int m_byoyomiMoves;
+    }
+
+    /** Format byoyomi information for OT property.
+        The format is "N moves / S min" or "N moves / S sec"
+        This format is also recognized by parseOvertime.
+        Returns null, if timeSettings does not define byoyomi
+    */
+    public static String getOvertime(TimeSettings timeSettings)
+    {
+        if (! timeSettings.getUseByoyomi())
+            return null;
+        StringBuilder result = new StringBuilder();
+        int byoyomiMoves = timeSettings.getByoyomiMoves();
+        long byoyomi = timeSettings.getByoyomi();
+        result.append(byoyomiMoves);
+        result.append(" moves / ");
+        if (byoyomi % 60000 == 0)
+        {
+            result.append(byoyomi / 60000L);
+            result.append(" min");
+        }
+        else
+        {
+            result.append(byoyomi / 1000L);
+            result.append(" sec");
+        }
+        return result.toString();
     }
 
     public static Overtime parseOvertime(String value)

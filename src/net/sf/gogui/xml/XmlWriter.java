@@ -21,6 +21,7 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.SgfProperties;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.EMPTY;
@@ -28,6 +29,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.sgf.SgfUtil;
 import net.sf.gogui.util.XmlUtil;
 
 /** Write a game or board position in XML style to a stream.
@@ -135,7 +137,10 @@ public class XmlWriter
         if (info.getKomi() != null)
             printInfo("Komi", info.getKomi().toString());
         if (info.getTimeSettings() != null)
-            printInfo("Time", info.getTimeSettings().toString());
+        {
+            long time = info.getTimeSettings().getPreByoyomi() / 1000L;
+            printInfo("Time", Long.toString(time));
+        }
         printInfo("Result", info.get(StringInfo.RESULT));
         printInfo("WhiteTeam", info.get(StringInfoColor.TEAM, WHITE));
         printInfo("BlackTeam", info.get(StringInfoColor.TEAM, BLACK));
@@ -241,6 +246,20 @@ public class XmlWriter
             && (move == null || move.getColor() != WHITE))
             sgfProps.add("WL", Double.toString(node.getTimeLeft(WHITE)));
 
+        ConstGameInfo info = node.getGameInfoConst();
+
+        // Write overtime information as SGF element (no XML element exists)
+        if (isRoot)
+        {
+            TimeSettings timeSettings = info.getTimeSettings();
+            if (timeSettings != null)
+            {
+                String overtime = SgfUtil.getOvertime(timeSettings);
+                if (overtime != null)
+                    sgfProps.add("OT", overtime);
+            }
+        }
+
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
         boolean hasMarkup = (labels != null && ! labels.isEmpty());
         if (! hasMarkup)
@@ -257,7 +276,6 @@ public class XmlWriter
         // Moves left are currently written as SGF element, which needs a Node
         boolean hasMovesLeft =
             (move != null && node.getMovesLeft(move.getColor()) != -1);
-        ConstGameInfo info = node.getGameInfoConst();
         boolean hasNonRootGameInfo = (info != null && ! isRoot);
 
         // Root is considered empty, even if it has game info, because
