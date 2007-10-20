@@ -159,7 +159,7 @@ Comment out the exec svnversion for releases.
  config/gogui.omf
  config/gogui.omf.in
  config/gogui.schemas
- config/gogui-mome.xml
+ config/gogui-mime.xml
  config/x-go-sgf.desktop
  doc/README
  doc/manual/html/*.html
