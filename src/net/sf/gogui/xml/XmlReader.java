@@ -340,47 +340,6 @@ public final class XmlReader
             throwError(e.getMessage());
         }
 
-        /** Return internal go.dtd, if file does not exist.
-            Currently, GoGui does not validate the documents, but this
-            still avoids a missing entity error message, if an XML file
-            references go.dtd, but it is not found.
-        */
-        public InputSource resolveEntity(String publicId, String systemId)
-        {
-            if (systemId == null)
-                return null;
-            URI uri;
-            try
-            {
-                uri = new URI(systemId);
-            }
-            catch (URISyntaxException e)
-            {
-                return null;
-            }
-            if (! "file".equals(uri.getScheme()))
-                return null;
-            File file = new File(uri.getPath());
-            if (file.exists() || ! "go.dtd".equals(file.getName()))
-                return null;
-            String resource = "net/sf/gogui/xml/go.dtd";
-            URL url = ClassLoader.getSystemClassLoader().getResource(resource);
-            if (url == null)
-            {
-                assert false;
-                return null;
-            }
-            try
-            {
-                return new InputSource(url.openStream());
-            }
-            catch (IOException e)
-            {
-                assert false;
-                return null;
-            }
-        }
-
         public void setDocumentLocator(Locator locator)
         {
             m_locator = locator;

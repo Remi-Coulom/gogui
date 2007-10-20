@@ -8,7 +8,7 @@ definition file as retrieved from
 <ulink url="http://www.rene-grothmann.de/jago/Documentation/go.dtd">
 http://www.rene-grothmann.de/jago/Documentation/go.dtd</ulink> in 10/2007.
 A copy of this file is included in the GoGui package in
-src/net/sf/gogui/xml/go.dtd.
+config/go.dtd.
 It should be noted that the XML examples on Jago's web page and the format
 of the files saved by Jago version 5.0 are not fully conforming to this
 DTD file.
@@ -53,7 +53,7 @@ lines are stored as paragraphs without text content. Despite of the
 documentation on Jago's web site that paragraphs are handled as in HTML,
 GoGui does not ignore any whitespaces, it only replaces newlines by empty
 characters when reading the text content of a paragraph. GoGui stores
-the paragraph text in a single line. Tjis allows loss-less forward and
+the paragraph text in a single line. This allows loss-less forward and
 backward conversion between SGF and XML.
 </simpara>
 </listitem>
