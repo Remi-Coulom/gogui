@@ -5,6 +5,7 @@
 package net.sf.gogui.xml;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.File;
@@ -338,6 +339,33 @@ public final class XmlReader
         public void fatalError(SAXParseException e) throws SAXException
         {
             throwError(e.getMessage());
+        }
+
+        /** Return a fake go.dtd, if go.dtd does not exist as file.
+            Currently, GoGui does not validate the documents, but this
+            still avoids a missing entity error message, if an XML file
+            references go.dtd, but it is not found.
+        */
+        public InputSource resolveEntity(String publicId, String systemId)
+        {
+            if (systemId == null)
+                return null;
+            URI uri;
+            try
+            {
+                uri = new URI(systemId);
+            }
+            catch (URISyntaxException e)
+            {
+                return null;
+            }
+            if (! "file".equals(uri.getScheme()))
+                return null;
+            File file = new File(uri.getPath());
+            if (file.exists() || ! "go.dtd".equals(file.getName()))
+                return null;
+            String text = "<?xml version='1.0' encoding='UTF-8'?>";
+            return new InputSource(new ByteArrayInputStream(text.getBytes()));
         }
 
         public void setDocumentLocator(Locator locator)
