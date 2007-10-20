@@ -185,7 +185,7 @@ public class GoGui
             {
                 public void changed(String comment)
                 {
-                    m_game.setComment(StringUtil.trimTrailing(comment));
+                    m_game.setComment(comment);
                     // Cannot call updateViews, which calls
                     // Comment.setComment(), in comment callback
                     SwingUtilities.invokeLater(new Runnable() {
