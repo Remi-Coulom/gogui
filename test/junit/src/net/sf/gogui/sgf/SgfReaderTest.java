@@ -43,7 +43,7 @@ public final class SgfReaderTest
 
     public void testDuplicateProperty() throws Exception
     {
-        readSgfFile("duplicate-property.sgf", false, true);
+        readSgfFileString("(;C[foo]C[bar])", false, true);
     }
 
     public void testFF4Example() throws Exception
