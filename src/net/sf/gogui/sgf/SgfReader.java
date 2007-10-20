@@ -243,16 +243,24 @@ public final class SgfReader
             shortName = "AW";
         else if (property == "BLACK")
             shortName = "B";
+        else if (property == "BLACKRANK")
+            shortName = "BR";
         else if (property == "COMMENT")
             shortName = "C";
+        else if (property == "COPYRIGHT")
+            shortName = "CP";
         else if (property == "DATE")
             shortName = "DT";
+        else if (property == "EVENT")
+            shortName = "EV";
         else if (property == "GAME")
             shortName = "GM";
         else if (property == "HANDICAP")
             shortName = "HA";
         else if (property == "KOMI")
             shortName = "KM";
+        else if (property == "PLACE")
+            shortName = "PC";
         else if (property == "PLAYERBLACK")
             shortName = "PB";
         else if (property == "PLAYERWHITE")
@@ -261,12 +269,16 @@ public final class SgfReader
             shortName = "PL";
         else if (property == "RESULT")
             shortName = "RE";
+        else if (property == "ROUND")
+            shortName = "RO";
         else if (property == "RULES")
             shortName = "RU";
         else if (property == "SIZE")
             shortName = "SZ";
         else if (property == "WHITE")
             shortName = "W";
+        else if (property == "WHITERANK")
+            shortName = "WR";
         if (shortName != null)
             return shortName;
         return property;
