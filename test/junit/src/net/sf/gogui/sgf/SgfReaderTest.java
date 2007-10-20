@@ -80,6 +80,17 @@ public final class SgfReaderTest
         readSgfFile("invalidmove.sgf", true, false);
     }
 
+    /** Test that linebreaks in a text value is handled correctly.
+        See SGF spec about soft and hard linebreaks.
+    */
+    public void testLinebreaks() throws Exception
+    {
+        ConstGameTree tree =
+            readSgfFileString("(;C[foo\nbar \\\nfoo])",
+                              false, false);
+        assertEquals("foo\nbar foo", tree.getRootConst().getComment());
+    }
+
     public void testRead() throws Exception
     {
         readSgfFile("verbose-property-names.sgf", false, false);
