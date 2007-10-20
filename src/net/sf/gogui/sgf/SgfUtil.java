@@ -106,16 +106,22 @@ public final class SgfUtil
                         + Integer.parseInt(matcher.group(3)) * 1000L);
             }
 
-            // Formats found in some games of
-            // http://www.cs.ualberta.ca/~mmueller/go/honinbo.html and
-            // other sources
             pattern =
-                Pattern.compile("(\\d+)\\s*(?:h|hrs|hours|hours)(?:\\s+each)*");
+                Pattern.compile("(\\d+)\\s*(?:h|hrs|hours|hours)(?:\\s+each)?+");
             matcher = pattern.matcher(value);
             if (matcher.matches())
             {
                 assert matcher.groupCount() == 1;
                 return Integer.parseInt(matcher.group(1)) * 3600000L;
+            }
+
+            pattern =
+                Pattern.compile("(\\d+)\\s*(?:m|min)");
+            matcher = pattern.matcher(value);
+            if (matcher.matches())
+            {
+                assert matcher.groupCount() == 1;
+                return Integer.parseInt(matcher.group(1)) * 60000L;
             }
         }
         catch (NumberFormatException e2)
