@@ -485,8 +485,6 @@ public final class XmlReader
 
     private String m_paragraphElementText;
 
-    private boolean m_isFirstNode;
-
     private void checkAttributes(String... atts) throws SAXException
     {
         List<String> list = Arrays.asList(atts);
@@ -1126,8 +1124,6 @@ public final class XmlReader
     {
         checkParent("Node");
         checkAttributes("at", "label", "territory", "type");
-        if (m_node == null)
-            createNode();
         m_markType = null;
         m_label = m_atts.getValue("label");
         String type = m_atts.getValue("type");
@@ -1194,7 +1190,6 @@ public final class XmlReader
             {
             }
         }
-        m_isFirstNode = false;
     }
 
     private void startNode() throws SAXException
@@ -1203,10 +1198,13 @@ public final class XmlReader
         // blacktime and whitetime are not allowed in the DTD, but used
         // by Jago 5.0
         checkAttributes("blacktime", "name", "whitetime");
-        if (! m_isFirstNode)
+        // Don't create new node, if this is the first node and nothing
+        // was added to the root node yet. This allows having an implicit
+        // root node to handle cases like Comment being the first child of
+        // Nodes (example on Jago's webpage) without creating an unnecessary
+        // node if the first child of Nodes is a Node
+        if (m_node != m_root || ! m_node.isEmpty())
             createNode();
-        else
-            m_isFirstNode = false;
         String name = m_atts.getValue("name");
         if (name != null)
             // Not supported in game.Node, put it in SGF properties
@@ -1245,7 +1243,6 @@ public final class XmlReader
         checkAttributes();
         if (++m_numberTrees > 1)
             throwError("More than one Nodes element in element GoGame");
-        m_isFirstNode = true;
     }
 
     private void startP() throws SAXException
@@ -1258,8 +1255,6 @@ public final class XmlReader
     {
         checkParent("Node");
         checkAttributes("at");
-        if (m_node == null)
-            createNode();
         String value = m_atts.getValue("at");
         if (value != null)
             m_node.addStone(c, getPoint(value));
