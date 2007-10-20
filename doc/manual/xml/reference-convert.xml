@@ -90,19 +90,12 @@ Overwrite existing files.
 </varlistentry>
 
 <varlistentry>
-<term>
-  <option>-format</option>
-  <group choice="plain">
-    <arg choice="plain">sgf</arg>
-    <arg choice="plain">tex</arg>
-    <arg choice="plain">xml</arg>
-  </group>
-</term>
+<term><option>-format</option></term>
 <listitem>
 <para>
 Specify the output format. If this option is not used, the output format
 will be derived from the file extension of the output file name.
-LaTeX files are written using PSGO style.
+Supported formats are sgf, xml, tex (LaTeX files using PSGO style).
 </para>
 </listitem>
 </varlistentry>
