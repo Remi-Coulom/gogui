@@ -153,13 +153,13 @@ Comment out the exec svnversion for releases.
  INSTALL
  build.xml
  config/go.dtd
- config/gogui*.desktop
+ config/gogui-gogui.desktop
+ config/gogui-gogui.png
  config/gogui-application-x-go-sgf.png
- config/gogui-application-x-go-sgf.svg
  config/gogui.omf
  config/gogui.omf.in
  config/gogui.schemas
- config/gogui.xml
+ config/gogui-mome.xml
  config/x-go-sgf.desktop
  doc/README
  doc/manual/html/*.html
