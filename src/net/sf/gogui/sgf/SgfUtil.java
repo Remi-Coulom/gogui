@@ -107,7 +107,7 @@ public final class SgfUtil
             }
 
             pattern =
-                Pattern.compile("(\\d+)\\s*(?:h|hrs|hours|hours)(?:\\s+each)?+");
+                Pattern.compile("(\\d+)\\s*(?:h|hr|hrs|hours|hours)(?:\\s+each)?+");
             matcher = pattern.matcher(value);
             if (matcher.matches())
             {
