@@ -102,13 +102,6 @@ public final class XmlReader
                 size = m_boardSize;
             else
                 size = Math.max(DEFAULT_BOARDSIZE, m_boardSize);
-            // Prune root node, if it is an unnecessary empty node
-            if (m_root.isEmpty() && m_root.getNumberChildren() == 1
-                && m_root.getChild().getMove() == null)
-            {
-                m_root = m_root.getChild();
-                m_root.setFather(null);
-            }
             m_tree = new GameTree(size, m_root);
             m_tree.getGameInfo(m_root).copyFrom(m_info);
             if (m_gameName != null)
@@ -491,6 +484,8 @@ public final class XmlReader
     private boolean m_ignoreOvertime;
 
     private String m_paragraphElementText;
+
+    private boolean m_isFirstNode;
 
     private void checkAttributes(String... atts) throws SAXException
     {
@@ -1199,6 +1194,7 @@ public final class XmlReader
             {
             }
         }
+        m_isFirstNode = false;
     }
 
     private void startNode() throws SAXException
@@ -1207,7 +1203,10 @@ public final class XmlReader
         // blacktime and whitetime are not allowed in the DTD, but used
         // by Jago 5.0
         checkAttributes("blacktime", "name", "whitetime");
-        createNode();
+        if (! m_isFirstNode)
+            createNode();
+        else
+            m_isFirstNode = false;
         String name = m_atts.getValue("name");
         if (name != null)
             // Not supported in game.Node, put it in SGF properties
@@ -1246,6 +1245,7 @@ public final class XmlReader
         checkAttributes();
         if (++m_numberTrees > 1)
             throwError("More than one Nodes element in element GoGame");
+        m_isFirstNode = true;
     }
 
     private void startP() throws SAXException

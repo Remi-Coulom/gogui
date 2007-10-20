@@ -44,6 +44,23 @@ public final class XmlReaderTest
         assertEquals("\nabc\n   \nabc", tree.getRootConst().getComment());
     }
 
+    /** Test that overtime information is read from SGF element. */
+    public void testOvertime() throws Exception
+    {
+        ConstGameTree tree =
+            getTree("<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                    "<Go><GoGame>" +
+                    "<Information><Time>18000</Time></Information>" +
+                    "<Nodes><Node>" +
+                    "<SGF type=\"OT\"><Arg>1 moves / 1 min</Arg></SGF>" +
+                    "</Node></Nodes></GoGame></Go>");
+        ConstGameInfo info = tree.getRootConst().getGameInfoConst();
+        TimeSettings timeSettings = info.getTimeSettings();
+        assertEquals(18000000L, timeSettings.getPreByoyomi());
+        assertEquals(60000L, timeSettings.getByoyomi());
+        assertEquals(1, timeSettings.getByoyomiMoves());
+    }
+
     /** Test that the implicit root node is pruned if it is empty and
         the GoGame has a name attribute.
         This bug occured, because the reader stored a game name in a legacy
