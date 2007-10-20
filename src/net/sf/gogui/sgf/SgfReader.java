@@ -449,6 +449,8 @@ public final class SgfReader
                     try
                     {
                         int handicap = Integer.parseInt(v);
+                        if (handicap == 1 || handicap < 0)
+                            setWarning("Invalid handicap value");
                         createGameInfo(node).setHandicap(handicap);
                     }
                     catch (NumberFormatException e)

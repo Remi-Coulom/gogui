@@ -345,7 +345,10 @@ public final class SgfReaderTest
         if (expectWarnings && reader.getWarnings() == null)
             fail("Reading should result in warnings");
         if (! expectWarnings && reader.getWarnings() != null)
-            fail("Reading should result in no warnings");
+        {
+            fail("Reading should result in no warnings:\n"
+                 + reader.getWarnings());
+        }
     }
 
     private ConstGameTree readSgfFileString(String name, boolean expectFailure,
