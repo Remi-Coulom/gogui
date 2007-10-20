@@ -52,7 +52,9 @@ displayed using line-wrapping in the GUI) is stored in a paragraph, empty
 lines are stored as paragraphs without text content. Despite of the
 documentation on Jago's web site that paragraphs are handled as in HTML,
 GoGui does not ignore any whitespaces, it only replaces newlines by empty
-characters when reading the text content of a paragraph.
+characters when reading the text content of a paragraph. GoGui stores
+the paragraph text in a single line. Tjis allows loss-less forward and
+backward conversion between SGF and XML.
 </simpara>
 </listitem>
 <listitem>

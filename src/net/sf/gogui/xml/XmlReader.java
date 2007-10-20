@@ -77,7 +77,9 @@ public final class XmlReader
         try
         {
             m_isFirstElement = true;
+            m_gameInfoPreByoyomi = -1;
             m_root = new Node();
+            m_info = m_root.createGameInfo();
             m_node = m_root;
             XMLReader reader = XMLReaderFactory.createXMLReader();
             try
@@ -106,7 +108,6 @@ public final class XmlReader
                 m_root.setFather(null);
             }
             m_tree = new GameTree(size, m_root);
-            m_tree.getGameInfo(m_root).copyFrom(m_info);
             if (m_gameName != null)
                 m_root.addSgfProperty("GN", m_gameName);
         }
@@ -480,6 +481,8 @@ public final class XmlReader
         properties.
     */
     private long m_preByoyomi;
+
+    private long m_gameInfoPreByoyomi;
 
     /** Has current node inconsistent SGF/FF3 overtime settings properties. */
     private boolean m_ignoreOvertime;
@@ -909,7 +912,14 @@ public final class XmlReader
             m_node.addSgfProperty("TM", value); // Preserve information
         }
         else
-            m_preByoyomi = preByoyomi;
+        {
+            // Set time settings now but also remember value, because time
+            // settings could be overwritten in setSgfTimeSettings() after
+            // overtime information is known from SGF element
+            m_gameInfoPreByoyomi = preByoyomi;
+            TimeSettings timeSettings = new TimeSettings(preByoyomi);
+            m_info.setTimeSettings(timeSettings);
+        }
     }
 
     private void endToPlay() throws SAXException
@@ -1015,16 +1025,19 @@ public final class XmlReader
 
     private void setSgfTimeSettings()
     {
+        long preByoyomi = m_preByoyomi;
+        if (preByoyomi < 0)
+            preByoyomi = m_gameInfoPreByoyomi;
         TimeSettings s = null;
-        if (m_preByoyomi > 0
+        if (preByoyomi > 0
             && (m_ignoreOvertime || m_byoyomi <= 0 || m_byoyomiMoves <= 0))
-            s = new TimeSettings(m_preByoyomi);
-        else if (m_preByoyomi <= 0 && ! m_ignoreOvertime && m_byoyomi > 0
+            s = new TimeSettings(preByoyomi);
+        else if (preByoyomi <= 0 && ! m_ignoreOvertime && m_byoyomi > 0
                  && m_byoyomiMoves > 0)
             s = new TimeSettings(0, m_byoyomi, m_byoyomiMoves);
-        else if (m_preByoyomi > 0  && ! m_ignoreOvertime && m_byoyomi > 0
+        else if (preByoyomi > 0  && ! m_ignoreOvertime && m_byoyomi > 0
                  && m_byoyomiMoves > 0)
-            s = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+            s = new TimeSettings(preByoyomi, m_byoyomi, m_byoyomiMoves);
         if (s != null)
             m_node.createGameInfo().setTimeSettings(s);
     }

@@ -6,8 +6,10 @@ package net.sf.gogui.xml;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.util.ErrorMessage;
 
 public final class XmlReaderTest
@@ -60,6 +62,17 @@ public final class XmlReaderTest
         ConstNode root = tree.getRootConst();
         assertFalse(root.hasChildren());
         assertEquals("abc", root.getComment());
+    }
+
+    public void testTime() throws Exception
+    {
+        ConstGameTree tree =
+            getTree("<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                    "<Go><GoGame><Information><Time>3600</Time>" +
+                    "</Information></GoGame></Go>");
+        ConstGameInfo info = tree.getRootConst().getGameInfoConst();
+        TimeSettings timeSettings = info.getTimeSettings();
+        assertEquals(3600000L, timeSettings.getPreByoyomi());
     }
 
     private static XmlReader getReader(String text) throws ErrorMessage
