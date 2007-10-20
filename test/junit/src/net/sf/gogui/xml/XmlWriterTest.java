@@ -7,6 +7,7 @@ package net.sf.gogui.xml;
 import java.io.ByteArrayOutputStream;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.game.StringInfoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.Komi;
@@ -44,6 +45,27 @@ public final class XmlWriterTest
                      "<Nodes>\n" +
                      "<Node/>\n" +
                      "<Black number=\"1\" at=\"\"/>\n" +
+                     "</Nodes>\n" +
+                     "</GoGame>\n" +
+                     "</Go>\n",
+                     getText(19, root));
+    }
+
+    /** Test that special charcaters are escaped in BlackRank. */
+    public void testEscapeBlackRank() throws Exception
+    {
+        Node root = new Node();
+        root.createGameInfo().set(StringInfoColor.RANK, BLACK,
+                                  "9d, Tengen & Oza");
+        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                     "<Go>\n" +
+                     "<GoGame>\n" +
+                     "<Information>\n" +
+                     "<BoardSize>19</BoardSize>\n" +
+                     "<BlackRank>9d, Tengen &amp; Oza</BlackRank>\n" +
+                     "</Information>\n" +
+                     "<Nodes>\n" +
+                     "<Node/>\n" +
                      "</Nodes>\n" +
                      "</GoGame>\n" +
                      "</Go>\n",
