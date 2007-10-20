@@ -84,7 +84,7 @@ public final class Main
             String warnings = reader.getWarnings();
             if (warnings != null)
             {
-                System.err.println(warnings);
+                System.err.print(warnings);
                 if (werror)
                     System.exit(1);
             }
