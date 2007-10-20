@@ -913,6 +913,7 @@ public final class SgfReader
                     m_buffer.append((char)c);
                     quoted = false;
                 }
+                last = Character.valueOf((char)c);
             }
             else
             {
