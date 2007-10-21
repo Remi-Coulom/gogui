@@ -76,7 +76,7 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 xdg-icon-resource install --size 48 config/gogui-gogui.png
 xdg-icon-resource install --size 48 --context mimetypes \
-    config/gogui-application-x-go-sgf.png
+    config/application-x-go-sgf.png
 
 # Install desktop entry
 

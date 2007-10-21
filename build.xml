@@ -155,7 +155,7 @@ Comment out the exec svnversion for releases.
  config/go.dtd
  config/gogui-gogui.desktop
  config/gogui-gogui.png
- config/gogui-application-x-go-sgf.png
+ config/application-x-go-sgf.png
  config/gogui.omf
  config/gogui.omf.in
  config/gogui.schemas
