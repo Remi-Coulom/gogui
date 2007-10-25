@@ -1175,12 +1175,18 @@ public class GoGui
             return;
         if (! checkStateChangePossible())
             return;
-        if (m_gtp == null)
+        boolean programReady = (m_gtp != null && checkProgramReady());
+        if (m_gtp == null || ! programReady)
         {
             String disableKey = "net.sf.gogui.gogui.GoGui.score-no-program";
+            String optionalMessage;
+            if (m_gtp == null)
+                optionalMessage = "No program is attached.";
+            else
+                optionalMessage = "Program cannot be used for scoring.";
             m_messageDialogs.showInfo(disableKey, this,
                                       "Please mark dead groups manually",
-                                      "No program is attached.", true);
+                                      optionalMessage, true);
             updateViews(false);
             initScore(null);
             return;
