@@ -2358,11 +2358,11 @@ public class GoGui
 
                 public void receivedStdErr(String s)
                 {
-                    if (m_shell != null)
-                    {
-                        m_shell.receivedStdErr(s);
-                        m_liveGfx.receivedStdErr(s);
-                    }
+                    if (m_shell == null)
+                        return;
+                    boolean invokeLater = ! isCommandInProgress();
+                    m_shell.receivedStdErr(s, invokeLater);
+                    m_liveGfx.receivedStdErr(s);
                 }
 
                 public void sentCommand(String s)

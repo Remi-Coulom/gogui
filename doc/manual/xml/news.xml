@@ -44,6 +44,13 @@ New menu items Tools / Save Parameters and Reattach With Parameters.
 </listitem>
 <listitem>
 <simpara>
+Show stderr output of program in GTP shell, even if the engine is not
+processing a command (e.g. because it is pondering while waiting foe the
+next command)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New menu item File / Export / PNG Image.
 </simpara>
 </listitem>

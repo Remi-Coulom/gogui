@@ -28,15 +28,6 @@ import net.sf.gogui.util.ProcessUtil;
     <p>
     Callbacks can be registered to monitor the input, output and error stream
     and to handle timeout and invalid responses.
-    All callbacks are only called in the send functions and from the caller's
-    thread.
-    </p>
-    <p>
-    Internally the class reads the output and error streams from different
-    threads and puts them on a message queue, so that the callbacks should
-    be in the same order as the received data.
-    It was not possible to use java.nio.Selector, because the streams in
-    class Process are not SelectableChannels (Java 1.5.0).
     </p>
 */
 public final class GtpClient
@@ -87,7 +78,10 @@ public final class GtpClient
         void show(String line);
     }
 
-    /** Callback interface for logging or displaying the GTP stream. */
+    /** Callback interface for logging or displaying the GTP stream.
+        Note that some of the callback functions are called from different
+        threads.
+     */
     public interface IOCallback
     {
         void receivedInvalidResponse(String s);
@@ -277,7 +271,6 @@ public final class GtpClient
         {
             if (m_out.checkError())
             {
-                readRemainingErrorMessages();
                 throwProgramDied();
             }
             if (m_callback != null)
@@ -393,7 +386,7 @@ public final class GtpClient
     {
         public Message(int type, String text)
         {
-            assert type == RESPONSE || type == INVALID || type == ERROR;
+            assert type == RESPONSE || type == INVALID;
             m_type = type;
             m_text = text;
         }
@@ -401,8 +394,6 @@ public final class GtpClient
         public static final int RESPONSE = 0;
 
         public static final int INVALID = 1;
-
-        public static final int ERROR = 2;
 
         public int m_type;
 
@@ -552,11 +543,12 @@ public final class GtpClient
                     String text = null;
                     if (n > 0)
                         text = new String(buffer, 0, n);
-                    m_queue.put(new Message(Message.ERROR, text));
                     if (text == null)
                         return;
                     if (m_log)
                         logError(text);
+                    if (m_callback != null)
+                        m_callback.receivedStdErr(text);
                 }
             }
             catch (Throwable t)
@@ -566,8 +558,6 @@ public final class GtpClient
         }
 
         private final Reader m_in;
-
-        private final BlockingQueue<Message> m_queue;
     }
 
     private InvalidResponseCallback m_invalidResponseCallback;
@@ -605,14 +595,6 @@ public final class GtpClient
     private InputThread m_inputThread;
 
     private ErrorThread m_errorThread;
-
-    private void handleErrorStream(String text)
-    {
-        if (text == null)
-            return;
-        if (m_callback != null)
-            m_callback.receivedStdErr(text);
-    }
 
     private void init(InputStream in, OutputStream out, InputStream err)
     {
@@ -659,33 +641,12 @@ public final class GtpClient
         Thread.dumpStack();
     }
 
-    private void readRemainingErrorMessages()
-    {
-        Message message;
-        while (! m_queue.isEmpty())
-        {
-            try
-            {
-                message = m_queue.take();
-            }
-            catch (InterruptedException e)
-            {
-                printInterrupted();
-                return;
-            }
-            if (message.m_type == Message.ERROR && message.m_text != null)
-                handleErrorStream(message.m_text);
-        }
-    }
-
     private String readResponse(long timeout) throws GtpError
     {
         while (true)
         {
             Message message = waitForMessage(timeout);
-            if (message.m_type == Message.ERROR)
-                handleErrorStream(message.m_text);
-            else if (message.m_type == Message.INVALID)
+            if (message.m_type == Message.INVALID)
             {
                 m_fullResponse = message.m_text;
                 if (m_callback != null)
@@ -700,7 +661,6 @@ public final class GtpClient
                 if (response == null)
                 {
                     m_isProgramDead = true;
-                    readRemainingErrorMessages();
                     throwProgramDied();
                 }
                 m_anyCommandsResponded = true;
