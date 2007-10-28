@@ -283,7 +283,6 @@ public final class MessageDialogs
         boolean isMac = Platform.isMac();
         Box box = Box.createVerticalBox();
         JLabel label;
-        label = new JLabel("<html><b>" + mainMessage + "</b></html>");
         if (isMac)
         {
             label = new JLabel(mainMessage);

@@ -226,7 +226,7 @@ public final class XmlWriterTest
     {
         GameTree tree = new GameTree(boardSize, root);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        XmlWriter writer = new XmlWriter(out, tree, null);
+        new XmlWriter(out, tree, null);
         return out.toString();
     }
 }
