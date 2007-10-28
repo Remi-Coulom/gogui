@@ -134,7 +134,7 @@ public class GameInfo
     public void set(StringInfo type, String value)
     {
         value = checkEmpty(value);
-        if (type == null)
+        if (value == null)
             m_stringInfo.remove(type);
         else
             m_stringInfo.put(type, value);
