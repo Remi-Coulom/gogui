@@ -450,6 +450,7 @@ public final class GtpClient
                         m_callback.receivedInvalidResponse(line);
                     if (m_invalidResponseCallback != null)
                         m_invalidResponseCallback.show(line);
+                    m_buffer.setLength(0);
                     continue;
                 }
                 while (true)
