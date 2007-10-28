@@ -2364,11 +2364,6 @@ public class GoGui
                 {
                     if (m_shell == null)
                         return;
-                    // SwingUtilities.invokeAndWait is faster, because it
-                    // avoids too many callbacks with small chunks of text,
-                    // but invokeAndWait can only be used if the response is
-                    // not handled in the same GUI event
-                    //boolean invokeLater = ! isCommandInProgress();
                     boolean invokeLater = true;
                     m_shell.receivedStdErr(s, invokeLater);
                     m_liveGfx.receivedStdErr(s);
