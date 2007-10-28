@@ -2346,20 +2346,32 @@ public class GoGui
             {
                 public void receivedInvalidResponse(String s)
                 {
-                    if (m_shell != null)
-                        m_shell.receivedInvalidResponse(s);
+                    if (m_shell == null)
+                        return;
+                    // See comment in receivedStdErr about using
+                    // SwingUtilities.invokeAndWait
+                    boolean invokeLater = ! isCommandInProgress();
+                    m_shell.receivedInvalidResponse(s, invokeLater);
                 }
 
                 public void receivedResponse(boolean error, String s)
                 {
-                    if (m_shell != null)
-                        m_shell.receivedResponse(error, s);
+                    if (m_shell == null)
+                        return;
+                    // See comment in receivedStdErr about using
+                    // SwingUtilities.invokeAndWait
+                    boolean invokeLater = ! isCommandInProgress();
+                    m_shell.receivedResponse(error, s, invokeLater);
                 }
 
                 public void receivedStdErr(String s)
                 {
                     if (m_shell == null)
                         return;
+                    // SwingUtilities.invokeAndWait is faster, because it
+                    // avoids too many callbacks with small chunks of text,
+                    // but invokeAndWait can only be used if the response is
+                    // not handled in the same GUI event
                     boolean invokeLater = ! isCommandInProgress();
                     m_shell.receivedStdErr(s, invokeLater);
                     m_liveGfx.receivedStdErr(s);

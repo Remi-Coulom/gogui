@@ -104,26 +104,40 @@ public class GtpShell
         return m_gtpShellText.isLastTextNonGTP();
     }
 
-    public void receivedInvalidResponse(final String response)
+    public void receivedInvalidResponse(final String response,
+                                        boolean invokeLater)
     {
         if (SwingUtilities.isEventDispatchThread())
             appendInvalidResponse(response);
         else
-            invokeAndWait(new Runnable() {
+        {
+            Runnable r = new Runnable() {
                     public void run() {
                         appendInvalidResponse(response);
-                    } });
+                    } };
+            if (invokeLater)
+                SwingUtilities.invokeLater(r);
+            else
+                invokeAndWait(r);
+        }
     }
 
-    public void receivedResponse(final boolean error, final String response)
+    public void receivedResponse(final boolean error, final String response,
+                                 boolean invokeLater)
     {
         if (SwingUtilities.isEventDispatchThread())
             appendResponse(error, response);
         else
-            invokeAndWait(new Runnable() {
+        {
+            Runnable r = new Runnable() {
                     public void run() {
                         appendResponse(error, response);
-                    } });
+                    } };
+            if (invokeLater)
+                SwingUtilities.invokeLater(r);
+            else
+                invokeAndWait(r);
+        }
     }
 
     public void receivedStdErr(final String s, boolean invokeLater)

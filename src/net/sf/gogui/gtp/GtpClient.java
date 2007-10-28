@@ -384,18 +384,10 @@ public final class GtpClient
 
     private static final class Message
     {
-        public Message(int type, String text)
+        public Message(String text)
         {
-            assert type == RESPONSE || type == INVALID;
-            m_type = type;
             m_text = text;
         }
-
-        public static final int RESPONSE = 0;
-
-        public static final int INVALID = 1;
-
-        public int m_type;
 
         public String m_text;
     }
@@ -448,13 +440,16 @@ public final class GtpClient
                 String line = readLine();
                 if (line == null)
                 {
-                    putMessage(Message.RESPONSE, null);
+                    putMessage(null);
                     return;
                 }
                 appendBuffer(line);
                 if (! isResponseStart(line))
                 {
-                    putMessage(Message.INVALID);
+                    if (m_callback != null)
+                        m_callback.receivedInvalidResponse(line);
+                    if (m_invalidResponseCallback != null)
+                        m_invalidResponseCallback.show(line);
                     continue;
                 }
                 while (true)
@@ -463,35 +458,29 @@ public final class GtpClient
                     appendBuffer(line);
                     if (line == null)
                     {
-                        putMessage(Message.RESPONSE, null);
+                        putMessage(null);
                         return;
                     }
                     if (line.equals(""))
                     {
-                        // Give ErrorThread a chance to read first, otherwise
-                        // if something was written to stderr shortly before
-                        // the response, it will be handled only at the next
-                        // command, because stderr is only handled while
-                        // waiting for a response
-                        Thread.yield();
-                        putMessage(Message.RESPONSE);
+                        putMessage();
                         break;
                     }
                 }
             }
         }
 
-        private void putMessage(int type)
+        private void putMessage()
         {
-            putMessage(type, m_buffer.toString());
+            putMessage(m_buffer.toString());
             m_buffer.setLength(0);
         }
 
-        private void putMessage(int type, String text)
+        private void putMessage(String text)
         {
             try
             {
-                m_queue.put(new Message(type, text));
+                m_queue.put(new Message(text));
             }
             catch (InterruptedException e)
             {
@@ -646,39 +635,27 @@ public final class GtpClient
         while (true)
         {
             Message message = waitForMessage(timeout);
-            if (message.m_type == Message.INVALID)
+            String response = message.m_text;
+            if (response == null)
             {
-                m_fullResponse = message.m_text;
-                if (m_callback != null)
-                    m_callback.receivedInvalidResponse(m_fullResponse);
-                if (m_invalidResponseCallback != null)
-                    m_invalidResponseCallback.show(m_fullResponse);
+                m_isProgramDead = true;
+                throwProgramDied();
             }
+            m_anyCommandsResponded = true;
+            boolean error = (response.charAt(0) != '=');
+            m_fullResponse = response;
+            if (m_callback != null)
+                m_callback.receivedResponse(error, m_fullResponse);
+            assert response.length() >= 3;
+            int index = response.indexOf(' ');
+            int length = response.length();
+            if (index < 0)
+                m_response = response.substring(1, length - 2);
             else
-            {
-                assert message.m_type == Message.RESPONSE;
-                String response = message.m_text;
-                if (response == null)
-                {
-                    m_isProgramDead = true;
-                    throwProgramDied();
-                }
-                m_anyCommandsResponded = true;
-                boolean error = (response.charAt(0) != '=');
-                m_fullResponse = response;
-                if (m_callback != null)
-                    m_callback.receivedResponse(error, m_fullResponse);
-                assert response.length() >= 3;
-                int index = response.indexOf(' ');
-                int length = response.length();
-                if (index < 0)
-                    m_response = response.substring(1, length - 2);
-                else
-                    m_response = response.substring(index + 1, length - 2);
-                if (error)
-                    throw new GtpError(m_response);
-                return m_response;
-            }
+                m_response = response.substring(index + 1, length - 2);
+            if (error)
+                throw new GtpError(m_response);
+            return m_response;
         }
     }
 
