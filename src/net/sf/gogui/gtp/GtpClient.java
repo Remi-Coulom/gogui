@@ -382,10 +382,20 @@ public final class GtpClient
         return m_wasKilled;
     }
 
+    private static final class Message
+    {
+        public Message(String text)
+        {
+            m_text = text;
+        }
+
+        public String m_text;
+    }
+
     private class InputThread
         extends Thread
     {
-        InputThread(InputStream in, BlockingQueue<String> queue)
+        InputThread(InputStream in, BlockingQueue<Message> queue)
         {
             m_in = new BufferedReader(new InputStreamReader(in));
             m_queue = queue;
@@ -405,7 +415,7 @@ public final class GtpClient
 
         private final BufferedReader m_in;
 
-        private final BlockingQueue<String> m_queue;
+        private final BlockingQueue<Message> m_queue;
 
         private final StringBuilder m_buffer = new StringBuilder(1024);
 
@@ -471,7 +481,7 @@ public final class GtpClient
         {
             try
             {
-                m_queue.put(text);
+                m_queue.put(new Message(text));
             }
             catch (InterruptedException e)
             {
@@ -498,7 +508,7 @@ public final class GtpClient
     private class ErrorThread
         extends Thread
     {
-        public ErrorThread(InputStream in, BlockingQueue<String> queue)
+        public ErrorThread(InputStream in, BlockingQueue<Message> queue)
         {
             m_in = new InputStreamReader(in);
             m_queue = queue;
@@ -568,7 +578,7 @@ public final class GtpClient
 
     private final String m_program;
 
-    private BlockingQueue<String> m_queue;
+    private BlockingQueue<Message> m_queue;
 
     private TimeoutCallback m_timeoutCallback;
 
@@ -580,7 +590,7 @@ public final class GtpClient
     {
         m_out = new PrintWriter(out);
         m_isProgramDead = false;
-        m_queue = new ArrayBlockingQueue<String>(10);
+        m_queue = new ArrayBlockingQueue<Message>(10);
         m_inputThread = new InputThread(in, m_queue);
         if (err != null)
         {
@@ -625,7 +635,8 @@ public final class GtpClient
     {
         while (true)
         {
-            String response = waitForMessage(timeout);
+            Message message = waitForMessage(timeout);
+            String response = message.m_text;
             if (response == null)
             {
                 m_isProgramDead = true;
@@ -661,9 +672,9 @@ public final class GtpClient
             throw new GtpError(name + " terminated unexpectedly.");
     }
 
-    private String waitForMessage(long timeout) throws GtpError
+    private Message waitForMessage(long timeout) throws GtpError
     {
-        String message = null;
+        Message message = null;
         if (timeout < 0)
         {
             try
