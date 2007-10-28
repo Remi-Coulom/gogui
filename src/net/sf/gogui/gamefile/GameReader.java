@@ -94,9 +94,10 @@ public class GameReader
             return GameFile.Format.SGF;
         if (extension.equals("xml"))
             return GameFile.Format.XML;
+        FileReader reader = null;
         try
         {
-            FileReader reader = new FileReader(file);
+            reader = new FileReader(file);
             char[] buffer = new char[5];
             int n = reader.read(buffer, 0, 5);
             if (n == 5 && new String(buffer).equals("<?xml"))
@@ -104,6 +105,17 @@ public class GameReader
         }
         catch (IOException e)
         {
+        }
+        finally
+        {
+            try
+            {
+                if (reader != null)
+                    reader.close();
+            }
+            catch (IOException e)
+            {
+            }
         }
         return GameFile.Format.SGF;
     }
