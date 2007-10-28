@@ -471,9 +471,6 @@ Comment out the exec svnversion for releases.
 <!-- Remove empty div sections that create unwanted space in JEditorPane -->
 <replace dir="doc/manual/html" includes="*.html"
  token="&lt;div&gt;&lt;/div&gt;" encoding="UTF-8"/>
-<copy todir="doc/manual/html">
-<fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
-</copy>
 <exec executable="xsltproc">
 <arg line="--param chunk.quietly 1"/>
 <arg line="-o doc/manual/man/"/>
@@ -497,9 +494,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  location="${docbook.path}/html/chunk.xsl"/>
 </xmlcatalog>
 </style>
-<copy todir="doc/manual/html">
-<fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
-</copy>
 </target>
 
 <target name="docvalidate">
