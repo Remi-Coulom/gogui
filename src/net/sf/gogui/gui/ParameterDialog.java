@@ -97,7 +97,7 @@ public class ParameterDialog
                     }
                 }
             });
-        dialog.pack();        
+        dialog.pack();
         dialog.setLocationByPlatform(true);
         dialog.addWindowListener(new WindowAdapter() {
                 public void  windowOpened(WindowEvent e) {

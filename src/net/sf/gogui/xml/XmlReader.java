@@ -1104,7 +1104,7 @@ public final class XmlReader
         // Line has no legal parent according to the DTD, so we
         // ignore it
         setWarning("Element \"Line\" cannot be child of element \""
-                   + parentElement() + "\""); 
+                   + parentElement() + "\"");
     }
 
     private void startMark() throws SAXException
