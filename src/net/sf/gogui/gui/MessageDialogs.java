@@ -351,9 +351,6 @@ public final class MessageDialogs
         box.invalidate();
         dialog.pack();
 
-        // not automatically double-buffered on Linux Java 1.5 (?)
-        optionPane.setDoubleBuffered(true);
-
         dialog.setVisible(true);
         dialog.dispose();
         if (disableKey != null && disableCheckBox.isSelected())
