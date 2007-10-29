@@ -29,7 +29,7 @@ public class Dummy
     {
         super(log);
         registerCommands();
-        setName("gogui-dummy");
+        setName("GoGuiDummy");
         setVersion(Version.get());
         m_random = new Random();
         m_resign = resign;

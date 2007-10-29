@@ -184,7 +184,7 @@ public class TwoGtp
         else if (command.equals("scoring_system"))
             sendIfSupported(command, cmd.getLine());
         else if (command.equals("name"))
-            cmd.setResponse("TwoGtp");
+            cmd.setResponse("GoGuiTwoGtp");
         else if (command.equals("version"))
             cmd.setResponse(Version.get());
         else if (command.equals("protocol_version"))
@@ -1007,9 +1007,9 @@ public class TwoGtp
             System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
         if (m_useXml)
-            new XmlWriter(out, getTree(), "TwoGtp:" +Version.get());
+            new XmlWriter(out, getTree(), "GoGuiTwoGtp:" +Version.get());
         else
-            new SgfWriter(out, getTree(), "TwoGtp", Version.get());
+            new SgfWriter(out, getTree(), "GoGuiTwoGtp", Version.get());
     }
 
     private void saveResult(String resultBlack, String resultWhite,
