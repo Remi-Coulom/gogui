@@ -111,6 +111,8 @@ public class ParameterDialog
     /** Length of a textfield for editing string parameters. */
     private static final int TEXTFIELD_LEN = 13;
 
+    private static final int MAX_PARAM_PER_COLUMN = 30;
+
     private abstract static class Parameter
     {
         public Parameter(String key, String value)
@@ -358,9 +360,12 @@ public class ParameterDialog
         JPanel panel = null;
         GridBagLayout gridbag = null;
         int gridy = 0;
+        int paramPerColumn =
+            (numberParameters + 1)
+            / (numberParameters / MAX_PARAM_PER_COLUMN + 1);
         while (i < numberParameters)
         {
-            if (i % 30 == 0)
+            if (i % paramPerColumn == 0)
             {
                 if (panel != null)
                 {
