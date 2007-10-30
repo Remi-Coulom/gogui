@@ -518,7 +518,7 @@ public final class GtpClient
         {
             try
             {
-                char[] buffer = new char[1024];
+                char[] buffer = new char[4096];
                 while (true)
                 {
                     int n;
@@ -528,17 +528,15 @@ public final class GtpClient
                     }
                     catch (IOException e)
                     {
-                        n = -1;
-                    }
-                    String text = null;
-                    if (n > 0)
-                        text = new String(buffer, 0, n);
-                    if (text == null)
                         return;
-                    if (m_log)
-                        logError(text);
+                    }
+                    if (n <= 0)
+                        return;
+                    String text = new String(buffer, 0, n);
                     if (m_callback != null)
                         m_callback.receivedStdErr(text);
+                    if (m_log)
+                        logError(text);
                 }
             }
             catch (Throwable t)
