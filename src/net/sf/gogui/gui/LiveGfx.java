@@ -12,11 +12,14 @@ import net.sf.gogui.go.ConstBoard;
 */
 public class LiveGfx
 {
-    public LiveGfx(ConstBoard board, GuiBoard guiBoard, StatusBar statusBar)
+    public interface Listener
     {
-        m_board = board;
-        m_guiBoard = guiBoard;
-        m_statusBar = statusBar;
+        void showLiveGfx(String text);
+    }
+
+    public LiveGfx(Listener listener)
+    {
+        m_listener = listener;
         m_duringMultiLineResponse = false;
     }
 
@@ -41,15 +44,11 @@ public class LiveGfx
 
     private boolean m_duringMultiLineResponse;
 
+    Listener m_listener;
+
     private final StringBuilder m_buffer = new StringBuilder(1024);
 
     private final StringBuilder m_response = new StringBuilder(1024);
-
-    private final ConstBoard m_board;
-
-    private final GuiBoard m_guiBoard;
-
-    private final StatusBar m_statusBar;
 
     private void handleLine(String s)
     {
@@ -84,35 +83,11 @@ public class LiveGfx
 
     private void showGfx(final String text)
     {
-        Runnable runnable = new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
                 public void run()
                 {
-                    m_guiBoard.clearAll();
-                    GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board,
-                                                   false);
-                    AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
+                    m_listener.showLiveGfx(text);
                 }
-            };
-        if (SwingUtilities.isEventDispatchThread())
-        {
-            runnable.run();
-            return;
-        }
-        try
-        {
-            // Use invokeAndWait to ensure that each gogui-gfx command is
-            // really shown (and no commands are merged by the repaint
-            // manager)
-            SwingUtilities.invokeAndWait(runnable);
-            // Throttle thread a bit to avoid long delays of other repaint
-            // events in the event queue
-            Thread.sleep(50);
-        }
-        catch (InterruptedException e)
-        {
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-        }
+            });
     }
 }

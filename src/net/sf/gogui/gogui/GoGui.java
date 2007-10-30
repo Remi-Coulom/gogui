@@ -132,7 +132,7 @@ public class GoGui
     implements AnalyzeDialog.Listener, GuiBoard.Listener,
                GameTreeViewer.Listener, GtpShell.Listener,
                ScoreDialog.Listener, GoGuiMenuBar.Listener,
-               ContextMenu.Listener
+               ContextMenu.Listener, LiveGfx.Listener
 {
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean initComputerColor,
@@ -1948,6 +1948,17 @@ public class GoGui
         return (m_gtp != null);
     }
 
+    public void showLiveGfx(String text)
+    {
+        // The live gfx events can arrive delayed, we don't want to allow
+        // them to paint on the board, if no command is currently running
+        if (! isCommandInProgress())
+            return;
+        m_guiBoard.clearAll();
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), false);
+        AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
+    }
+
     private class AnalyzeContinue
         implements Runnable
     {
@@ -2375,8 +2386,7 @@ public class GoGui
                         m_shell.sentCommand(s);
                 }
 
-                private LiveGfx m_liveGfx =
-                    new LiveGfx(getBoard(), m_guiBoard, m_statusBar);
+                private LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
             };
         GtpSynchronizer.Listener synchronizerCallback =
             new GtpSynchronizer.Listener() {

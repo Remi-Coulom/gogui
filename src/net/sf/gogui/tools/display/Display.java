@@ -27,6 +27,7 @@ import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
+import net.sf.gogui.gui.AnalyzeShow;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiUtil;
@@ -38,6 +39,7 @@ import net.sf.gogui.util.StringUtil;
 /** GTP adapter showing the current board in a window. */
 public class Display
     extends GtpEngine
+    implements LiveGfx.Listener
 {
     public Display(String program, boolean verbose)
         throws Exception
@@ -47,18 +49,15 @@ public class Display
         m_board = new Board(m_size);
         m_frame = new JFrame();
         m_frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        WindowAdapter windowAdapter = new WindowAdapter()
-            {
-                public void windowClosing(WindowEvent event)
-                {
+        WindowAdapter windowAdapter = new WindowAdapter() {
+                public void windowClosing(WindowEvent event) {
                     closeFrame();
                 }
             };
         m_frame.addWindowListener(windowAdapter);
         Container contentPane = m_frame.getContentPane();
         m_guiBoard = new GuiBoard(m_size);
-        m_guiBoard.setListener(new GuiBoard.Listener()
-            {
+        m_guiBoard.setListener(new GuiBoard.Listener() {
                 public void contextMenu(GoPoint point, Component invoker,
                                         int x, int y)
                 {
@@ -90,8 +89,7 @@ public class Display
                     public void sentCommand(String s) {
                     }
 
-                    private LiveGfx m_liveGfx =
-                        new LiveGfx(m_board, m_guiBoard, m_statusBar);
+                    private LiveGfx m_liveGfx = new LiveGfx(Display.this);
                 };
             m_gtp = new GtpClient(program, null, verbose, ioCallback);
             m_gtp.queryProtocolVersion();
@@ -177,6 +175,16 @@ public class Display
         {
             System.err.println(e);
         }
+    }
+
+    public void showLiveGfx(final String text)
+    {
+        invokeAndWait(new Runnable() {
+                public void run() {
+                    m_guiBoard.clearAll();
+                    GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
+                    AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
+                } });
     }
 
     /** Only accept this board size.
