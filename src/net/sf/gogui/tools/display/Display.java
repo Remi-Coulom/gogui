@@ -179,12 +179,10 @@ public class Display
 
     public void showLiveGfx(final String text)
     {
-        invokeAndWait(new Runnable() {
-                public void run() {
-                    m_guiBoard.clearAll();
-                    GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
-                    AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
-                } });
+        assert SwingUtilities.isEventDispatchThread();
+        m_guiBoard.clearAll();
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
+        AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
     }
 
     /** Only accept this board size.

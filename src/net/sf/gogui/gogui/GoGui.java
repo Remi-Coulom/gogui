@@ -1950,6 +1950,7 @@ public class GoGui
 
     public void showLiveGfx(String text)
     {
+        assert SwingUtilities.isEventDispatchThread();
         // The live gfx events can arrive delayed, we don't want to allow
         // them to paint on the board, if no command is currently running
         if (! isCommandInProgress())
