@@ -12,8 +12,7 @@ The following Go programs are known to work with GoGui:
 <primary>AmigoGtp</primary>
 </indexterm>
 <para>
-<ulink url="http://www.cs.ualberta.ca/~games/go/software/gtpengine/">
-http://www.cs.ualberta.ca/~games/go/software/gtpengine/</ulink>
+<ulink url="http://www.cs.ualberta.ca/~games/go/software/gtpengine/"/>
 </para>
 <para>
 Operating systems: Unix, Windows
@@ -30,7 +29,7 @@ Command: <userinput>amigogtp</userinput>
 <primary>Aya</primary>
 </indexterm>
 <para>
-<ulink url="http://www32.ocn.ne.jp/~yss/">http://www32.ocn.ne.jp/~yss/</ulink>
+<ulink url="http://www32.ocn.ne.jp/~yss/"/>
 </para>
 <para>
 Operating systems: Windows
@@ -59,8 +58,7 @@ command:
 <primary>BadukiPlus</primary>
 </indexterm>
 <para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm">
-http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
+<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm"/>
 </para>
 <para>
 Operating systems: Unix
@@ -84,8 +82,7 @@ BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 <primary>GNU Go</primary>
 </indexterm>
 <para>
-<ulink url="http://www.gnu.org/software/gnugo/gnugo.html">
-http://www.gnu.org/software/gnugo/gnugo.html</ulink>
+<ulink url="http://www.gnu.org/software/gnugo/gnugo.html"/>
 </para>
 <para>
 Operating systems: Unix, Windows, Macintosh
@@ -102,8 +99,7 @@ Command: <userinput>gnugo --mode gtp</userinput>
 <primary>Go169</primary>
 </indexterm>
 <para>
-<ulink url="http://www.cis.hut.fi/praiko/go169/">
-http://www.cis.hut.fi/praiko/go169/</ulink>
+<ulink url="http://www.cis.hut.fi/praiko/go169/"/>
 </para>
 <para>
 Operating systems: Windows
@@ -132,8 +128,7 @@ command:
 <primary>INDIGO</primary>
 </indexterm>
 <para>
-<ulink url="http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html">
-http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
+<ulink url="http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html"/>
 </para>
 <para>
 Operating systems: GNU/Linux
@@ -150,8 +145,7 @@ Command: <userinput>Indigo2006.19x19 -gtp</userinput>
 <primary>Mango</primary>
 </indexterm>
 <para>
-<ulink url="http://www.cs.unimaas.nl/go4go/mango/index.htm">
-http://www.cs.unimaas.nl/go4go/mango/index.htm</ulink>
+<ulink url="http://www.cs.unimaas.nl/go4go/mango/index.htm"/>
 </para>
 <para>
 Operating systems: Windows
@@ -168,8 +162,7 @@ Command: <userinput>Mango-9x9-0.16.exe</userinput>
 <primary>MoGo</primary>
 </indexterm>
 <para>
-<ulink url="http://www.lri.fr/~gelly/MoGo.htm">
-http://www.lri.fr/~gelly/MoGo.htm</ulink>
+<ulink url="http://www.lri.fr/~gelly/MoGo.htm"/>
 </para>
 <para>
 Operating systems: GNU/Linux, Windows
@@ -202,8 +195,7 @@ MoGo's GTP implementation does not implement command IDs (as of MoGo release 3);
 <primary>WallyPlus</primary>
 </indexterm>
 <para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm">
-http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm</ulink>
+<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm"/>
 </para>
 <para>
 Operating systems: Unix
