@@ -4,8 +4,6 @@
 
 package net.sf.gogui.util;
 
-import  net.sf.gogui.version.Version;
-
 /** Static utility functions related to XML. */
 public final class XmlUtil
 {

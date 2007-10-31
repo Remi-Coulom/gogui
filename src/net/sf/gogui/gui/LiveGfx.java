@@ -5,7 +5,6 @@
 package net.sf.gogui.gui;
 
 import javax.swing.SwingUtilities;
-import net.sf.gogui.go.ConstBoard;
 
 /** Parse standard error of a GTP engine for GoGui live graphics commands.
     See chapter "Live Graphics" in the GoGui documentation.
