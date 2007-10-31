@@ -1310,6 +1310,8 @@ public class GoGui
     {
         if (! checkProgramReady())
             return;
+        if (! checkStateChangePossible())
+            return;
         initAnalyzeCommand(command, autoRun, clearBoard);
         m_analyzeOneRunOnly = oneRunOnly;
         boolean needsPointArg = m_analyzeCommand.needsPointArg();
