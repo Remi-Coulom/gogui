@@ -466,6 +466,14 @@ public final class GtpClient
 
         private void putMessage()
         {
+            // Calling Thread.yield increases the probability that the IO
+            // callbacks for stderr and stdout are called in the right order
+            // for the typical use case of a program writing to stderr
+            // before writing the response. The yield costs some performance
+            // however and could have a negative effect, if the program
+            // writes to stderr immediately after the response (e.g. logging
+            // output during pondering).
+            Thread.yield();
             putMessage(m_buffer.toString());
             m_buffer.setLength(0);
         }
