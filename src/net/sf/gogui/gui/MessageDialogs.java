@@ -5,6 +5,7 @@ package net.sf.gogui.gui;
 import java.awt.Component;
 import java.util.TreeSet;
 import java.util.Set;
+import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JCheckBox;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.StringUtil;
 
 /** Simple message dialogs. */
@@ -66,7 +68,7 @@ public final class MessageDialogs
                          String mainMessage, String optionalMessage,
                          boolean isCritical)
     {
-        if (disableKey != null && m_disabled.contains(disableKey))
+        if (checkDisabled(disableKey))
             return;
         int type;
         if (isCritical)
@@ -100,7 +102,7 @@ public final class MessageDialogs
                                        String destructiveOption,
                                        String nonDestructiveOption)
     {
-        if (disableKey != null && m_disabled.contains(disableKey))
+        if (checkDisabled(disableKey))
             return 0;
         Object[] options = new Object[3];
         int destructiveIndex;
@@ -145,7 +147,7 @@ public final class MessageDialogs
                             String mainMessage, String optionalMessage,
                             boolean isCritical)
     {
-        if (disableKey != null && m_disabled.contains(disableKey))
+        if (checkDisabled(disableKey))
             return;
         int type;
         if (isCritical)
@@ -187,7 +189,7 @@ public final class MessageDialogs
                                 String cancelOption,
                                 boolean isCritical)
     {
-        if (disableKey != null && m_disabled.contains(disableKey))
+        if (checkDisabled(disableKey))
             return true;
         Object[] options = new Object[2];
         if (Platform.isMac())
@@ -233,7 +235,7 @@ public final class MessageDialogs
                                        String destructiveOption,
                                        boolean isCritical)
     {
-        if (disableKey != null && m_disabled.contains(disableKey))
+        if (checkDisabled(disableKey))
             return true;
         Object[] options = new Object[2];
         String cancelOption = "Cancel";
@@ -269,6 +271,21 @@ public final class MessageDialogs
         Box.Filler filler = GuiUtil.createFiller();
         filler.setAlignmentX(Component.LEFT_ALIGNMENT);
         component.add(filler);
+    }
+
+    private boolean checkDisabled(String disableKey)
+    {
+        if (disableKey == null)
+            return false;
+        Preferences prefs =
+            PrefUtil.createNode("net/sf/gogui/gui/messagedialogs/disabled");
+        boolean permanentlyDisabled = prefs.getBoolean(disableKey, false);
+        if (permanentlyDisabled)
+            return true;
+        // Make sure this entry exists (right now these settings can only
+        // be directly edited in the backing store)
+        prefs.putBoolean(disableKey, permanentlyDisabled);
+        return m_disabled.contains(disableKey);
     }
 
     private Object show(String disableKey, Component parent, String title,
