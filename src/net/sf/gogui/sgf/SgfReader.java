@@ -124,10 +124,6 @@ public final class SgfReader
     private static class SgfCharsetChanged
         extends Exception
     {
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     private final boolean m_isFile;

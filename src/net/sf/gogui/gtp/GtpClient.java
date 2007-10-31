@@ -49,11 +49,6 @@ public final class GtpClient
         {
             this(program, e.getMessage());
         }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     /** Callback if a timeout occured. */

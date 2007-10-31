@@ -2115,11 +2115,6 @@ public class GoGui
 
     private int m_treeSize;
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final GuiBoard m_guiBoard;
 
     private GuiGtpClient m_gtp;

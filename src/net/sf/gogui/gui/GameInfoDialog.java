@@ -58,11 +58,6 @@ public final class GameInfoDialog
         public JTextField m_rank;
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private TimeField m_byoyomi;
 
     private JTextField m_byoyomiMoves;
@@ -419,11 +414,6 @@ class TimeField
         }
         return true;
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 
     private final JTextField m_textField;
 

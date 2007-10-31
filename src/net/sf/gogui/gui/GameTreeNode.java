@@ -154,11 +154,6 @@ class GameTreeNode
 
     private final int m_moveNumber;
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private static final Color COLOR_LIGHT_BLUE = new Color(103, 122, 164);
 
     private static final Color COLOR_CURSOR = new Color(142, 168, 226);

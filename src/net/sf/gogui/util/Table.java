@@ -27,11 +27,6 @@ public class Table
         {
             super(message);
         }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     /** Error thrown on invalid file format when reading a table. */
@@ -42,11 +37,6 @@ public class Table
         {
             super(message);
         }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     /** Error thrown if table element has not the expected type. */
@@ -57,11 +47,6 @@ public class Table
         {
             super(message);
         }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     public Table()

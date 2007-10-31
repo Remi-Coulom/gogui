@@ -155,11 +155,6 @@ public class ContextMenu
         return m_commands.isEmpty();
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final ActionListener m_actionListener;
 
     private final GoPoint m_point;

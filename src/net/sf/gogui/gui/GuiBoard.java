@@ -749,11 +749,6 @@ public final class GuiBoard
             int minimumSize = 4 * m_size + 2;
             setMinimumSize(new Dimension(minimumSize, minimumSize));
         }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     private static final boolean DEBUG_REPAINT = false;
@@ -767,11 +762,6 @@ public final class GuiBoard
     private int m_imageWidth;
 
     private int m_size;
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 
     private BoardConstants m_constants;
 

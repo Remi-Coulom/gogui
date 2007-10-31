@@ -124,11 +124,6 @@ public class ScoreDialog
 
     private final ScoringMethod m_initialRules;
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final JButton m_cancelButton;
 
     private final ColorFields m_territory;

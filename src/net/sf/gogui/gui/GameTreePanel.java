@@ -416,11 +416,6 @@ public class GameTreePanel
 
     private int m_maxY;
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private Dimension m_preferredNodeSize;
 
     private Font m_font;

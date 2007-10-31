@@ -35,11 +35,6 @@ class AntialiasingEditorPane
         GuiUtil.setAntiAlias(graphics);
         super.paintComponent(graphics);
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 }
 
 /** Window for displaying help in HTML format.
@@ -129,11 +124,6 @@ public class Help
     }
 
     private int m_historyIndex = -1;
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 
     private JButton m_buttonBack;
 

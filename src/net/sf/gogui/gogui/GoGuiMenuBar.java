@@ -189,11 +189,6 @@ public class GoGuiMenuBar
         m_menuViewShell.setEnabled(isShellShown);
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final Listener m_listener;
 
     private final MenuChecked m_menuBookmarks;
@@ -568,11 +563,6 @@ class MenuChecked
         return item;
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final ArrayList<Integer> m_mnemonics = new ArrayList<Integer>();
 
     private void setMnemonic(JMenuItem item, int mnemonic)
@@ -602,11 +592,6 @@ class GoGuiRadioButtonMenuItem
                 }
             });
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 }
 
 /** Checkbox item with additional "selected" action property. */
@@ -623,9 +608,4 @@ class GoGuiCheckBoxMenuItem
                 }
             });
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 }

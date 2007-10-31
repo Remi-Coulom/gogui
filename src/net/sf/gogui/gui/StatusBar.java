@@ -162,11 +162,6 @@ public class StatusBar
         m_moveTextSeparator.setVisible(show);
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private static final Icon ICON_BLACK =
         GuiUtil.getIcon("gogui-black-16x16", "Black");
 
@@ -211,9 +206,4 @@ class TextFieldWithToolTip
         else
             setToolTipText(text);
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 }

@@ -189,11 +189,6 @@ public class ProgramEditor
         return new Program(object);
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private JPanel m_panelLeft;
 
     private JPanel m_panelRight;

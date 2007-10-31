@@ -61,11 +61,6 @@ public class GoGuiToolBar
         m_buttonSave.setText(null);
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final GoGui m_goGui;
 
     private final JButton m_buttonSave;
@@ -117,9 +112,4 @@ class GoGuiToggleButton
                 }
             });
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 }

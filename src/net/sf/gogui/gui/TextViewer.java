@@ -55,11 +55,6 @@ public class TextViewer
         initialize(text, highlight, listener);
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private JTextPane m_textPane;
 
     private Listener m_listener;

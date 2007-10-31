@@ -42,11 +42,6 @@ class RecentMenuItem
         m_label = label;
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private String m_label;
 
     private final String m_value;

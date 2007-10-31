@@ -100,11 +100,6 @@ public class GoGuiActions
         {
             putValue("selected", Boolean.valueOf(selected));
         }
-
-        /** Serial version to suppress compiler warning.
-            Contains a marker comment for serialver.sf.net
-        */
-        private static final long serialVersionUID = 0L; // SUID
     }
 
     public final ArrayList<Action> m_allActions

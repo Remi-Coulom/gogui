@@ -28,10 +28,5 @@ public class GtpError
         m_command = command;
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private String m_command;
 }

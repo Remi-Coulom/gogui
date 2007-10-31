@@ -42,11 +42,6 @@ public final class AboutDialog
         dialog.dispose();
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for use with serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final JTabbedPane m_tabbedPane;
 
     private final MessageDialogs m_messageDialogs;

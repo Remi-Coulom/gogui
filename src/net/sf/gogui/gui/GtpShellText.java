@@ -136,11 +136,6 @@ class GtpShellText
 
     private final long m_startTime;
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private void appendText(String text, String style)
     {
         assert SwingUtilities.isEventDispatchThread();

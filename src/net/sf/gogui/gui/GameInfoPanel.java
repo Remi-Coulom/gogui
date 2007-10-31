@@ -108,11 +108,6 @@ public class GameInfoPanel
         }
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private final BlackWhiteSet<GuiClock> m_clock
         = new BlackWhiteSet<GuiClock>();
 
@@ -195,11 +190,6 @@ class GuiClock
         setToolTipText(toolTip);
     }
 
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
     private static final int COLUMNS = 8;
 
     private final GoColor m_color;
@@ -238,11 +228,6 @@ class Prisoners
             buffer.append(" stones captured");
         setToolTipText(buffer.toString());
     }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sf.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
 
     private final JLabel m_text;
 
