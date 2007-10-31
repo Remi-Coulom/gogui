@@ -169,7 +169,6 @@ public final class SgfUtil
     {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(value);
-        long byoyomi;
         if (matcher.matches())
         {
             assert matcher.groupCount() == 1;
@@ -199,8 +198,6 @@ public final class SgfUtil
     {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(value);
-        long byoyomi;
-        int byoyomiMoves;
         if (matcher.matches())
         {
             assert matcher.groupCount() == 2;
