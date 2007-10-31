@@ -380,7 +380,8 @@ public class GoGuiActions
                 m_goGui.actionImportTextPositionFromClipboard(); } };
 
     public final Action m_actionInterrupt =
-        new Action("Interrupt", null, "gogui-interrupt") {
+        new Action("Interrupt", null, KeyEvent.VK_ESCAPE, SHORTCUT,
+                   "gogui-interrupt") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionInterrupt(); } };
 
