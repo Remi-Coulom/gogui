@@ -35,16 +35,6 @@ public final class Interrupt
                 gtp.destroyGtp();
             return false;
         }
-        String disableKey = "net.sf.gogui.gogui.Interrupt.interrupt";
-        String name = gtp.getName();
-        if (name == null)
-            name = "the Go program";
-        if (! messageDialogs.showQuestion(disableKey, parent,
-                                          "Interrupt " + name + "?",
-                                          "The command in progress might " +
-                                          "not complete successfully.",
-                                          "Interrupt", true))
-            return false;
         if (! gtp.isCommandInProgress())
             return false;
         try
