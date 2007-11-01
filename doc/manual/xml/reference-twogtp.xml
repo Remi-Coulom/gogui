@@ -247,9 +247,10 @@ Display help and exit.
 <term><option>-komi</option> <replaceable>komi</replaceable></term>
 <listitem>
 <para>
-Komi. If this option is not used, the komi can be set with
-the <command>komi</command> command, or a default komi of 6.5 will be
-used.
+Komi. If this option is not used, a default komi of 6.5 will be used.
+The komi cannot be changed at runtime. The <command>komi</command> GTP
+command will succeed, if the argument has the same value as the configured
+komi and fail otherwise.
 </para>
 </listitem>
 </varlistentry>
