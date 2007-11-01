@@ -193,6 +193,7 @@ Comment out the exec svnversion for releases.
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
  src/net/sf/gogui/gui/analyze-commands
+ src/net/sf/gogui/tools/*/*.java
  test/findbugs/gogui.fb
  test/checkstyle/checkstyle_checks.xml
  test/junit/src/net/sf/gogui/*/*.java
