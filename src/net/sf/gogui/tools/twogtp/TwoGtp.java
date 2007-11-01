@@ -47,6 +47,9 @@ import net.sf.gogui.xml.XmlWriter;
 public class TwoGtp
     extends GtpEngine
 {
+    /** Constructor.
+        @param komi The fixed komi. See TwoGtp documentation for option -komi
+    */
     public TwoGtp(String black, String white, String referee, String observer,
                   int size, Komi komi, int numberGames, boolean alternate,
                   String filePrefix, boolean force, boolean verbose,
@@ -57,6 +60,7 @@ public class TwoGtp
         super(null);
         assert size > 0;
         assert size <= GoPoint.MAX_SIZE;
+        assert komi != null;
         if (black.equals(""))
             throw new ErrorMessage("No black program set");
         if (white.equals(""))
@@ -511,10 +515,7 @@ public class TwoGtp
 
     private final int m_size;
 
-    /** Enforced komi.
-        Contains komi if komi is enforced by command line option, null
-        otherwise.
-    */
+    /** Fixed komi. */
     private final Komi m_komi;
 
     private Game m_game;
@@ -882,10 +883,7 @@ public class TwoGtp
         {
             Komi komi = Komi.parseKomi(arg);
             if (! ObjectUtil.equals(komi, m_komi))
-                throw new GtpError("Komi " + m_komi
-                                   + " is fixed by command line option");
-            m_game.setKomi(komi);
-            sendIfSupported("komi", "komi " + komi);
+                throw new GtpError("komi is fixed at " + m_komi);
         }
         catch (InvalidKomiException e)
         {
@@ -899,7 +897,6 @@ public class TwoGtp
         m_white.getAndClearCpuTime();
         initGame(size);
         m_gameSaved = false;
-        sendIfSupported("komi", "komi " + m_komi);
         if (m_timeSettings != null)
             sendIfSupported("time_settings",
                             GtpUtil.getTimeSettingsCommand(m_timeSettings));
