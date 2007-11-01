@@ -1357,26 +1357,8 @@ public class GoGui
             resetBoard();
             m_setupMode = true;
             m_setupColor = color;
-            // Update views with setup enabled before the following dialog,
-            // otherwise toggle buttons and menus will stay selected, if
-            // entering setup mode was cancelled
-            updateViews(false);
-            boolean needsNewNode =
-                (node.getMove() != null || node.hasChildren());
-            if (needsNewNode)
-            {
-                String message = "Create new setup node?";
-                if (! showOptionalQuestion("create-setup-node", message,
-                                           "A new node for setup stones " +
-                                           "will be created in the game tree.",
-                                           "Create Node", false))
-                {
-                    m_setupMode = false;
-                    updateViews(false);
-                    return;
-                }
-            }
-            if (needsNewNode)
+            m_setupNodeCreated = (node.getMove() != null || node.hasChildren());
+            if (m_setupNodeCreated)
             {
                 m_game.createNewChild();
                 currentNodeChanged();
@@ -2104,6 +2086,8 @@ public class GoGui
     private boolean m_showToolbar;
 
     private boolean m_showVariations;
+
+    private boolean m_setupNodeCreated;
 
     private final boolean m_verbose;
 
@@ -3907,8 +3891,12 @@ public class GoGui
         if (! m_setupMode)
             return;
         m_setupMode = false;
-        if (getCurrentNode().hasSetup() || m_setupColor != getToMove())
+        ConstNode currentNode = getCurrentNode();
+        if (currentNode.hasSetup() || m_setupColor != getToMove())
             m_game.setToMove(m_setupColor);
+        else if (m_setupNodeCreated && currentNode.isEmpty()
+                 && currentNode.hasFather())
+            m_game.truncate();
         currentNodeChanged();
     }
 
