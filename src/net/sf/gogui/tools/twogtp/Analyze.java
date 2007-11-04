@@ -406,7 +406,7 @@ public class Analyze
     {
         PrintStream out = new PrintStream(file);
         NumberFormat format1 = StringUtil.getNumberFormat(1);
-        NumberFormat format2 = StringUtil.getNumberFormat(2);
+        NumberFormat format2 = StringUtil.getNumberFormat(3);
         Histogram histoBlack = m_statisticsBlack.m_histo;
         Histogram histoWhite = m_statisticsWhite.m_histo;
         Histogram histoReferee = m_statisticsReferee.m_histo;
