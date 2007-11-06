@@ -2981,7 +2981,7 @@ public class GoGui
     private boolean endLengthyCommand(boolean isCritical,
                                       boolean showError)
     {
-        setBoardCursor(Cursor.DEFAULT_CURSOR);
+        restoreBoardCursor();
         clearStatus();
         if (m_shell != null)
             m_shell.setCommandInProgess(false);
@@ -3504,6 +3504,16 @@ public class GoGui
         m_guiBoard.clearAll();
         updateFromGoBoard();
         updateGuiBoard();
+    }
+
+    private void restoreBoardCursor()
+    {
+        if (m_analyzeCommand != null
+            && (m_analyzeCommand.needsPointArg()
+                || m_analyzeCommand.needsPointListArg()))
+            setBoardCursor(Cursor.HAND_CURSOR);
+        else
+            setBoardCursorDefault();
     }
 
     private void restoreLocation(JDialog dialog, String name)
