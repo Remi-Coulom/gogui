@@ -148,12 +148,12 @@ public final class Program
     public boolean updateInfo(String name, String version)
     {
         boolean changed = false;
-        if (! ObjectUtil.equals(m_name, name))
+        if (name != null && ! ObjectUtil.equals(m_name, name))
         {
             m_name = name;
             changed = true;
         }
-        if (! ObjectUtil.equals(m_version, version))
+        if (version != null && ! ObjectUtil.equals(m_version, version))
         {
             m_version = version;
             changed = true;
