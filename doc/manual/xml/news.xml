@@ -16,6 +16,12 @@ Bugfix in View / Variation Labels
 </listitem>
 <listitem>
 <simpara>
+Fix crash if existing program entry was changed and the program did
+not startup.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Minor fixes and improvements.
 </simpara>
 </listitem>
