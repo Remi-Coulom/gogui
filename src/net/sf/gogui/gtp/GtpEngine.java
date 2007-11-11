@@ -153,7 +153,7 @@ public class GtpEngine
             }
             String sanitizedResponse = response.replaceAll("\\n\\n", "\n \n");
             respond(status, cmd.hasId(), cmd.getId(), sanitizedResponse);
-            // TODO: Use only quit flaf not GtpCommand.isQuit once all
+            // TODO: Use only quit flag not GtpCommand.isQuit once all
             // subclasses use the new registered quit command
             if (m_quit || cmd.isQuit())
                 return;
