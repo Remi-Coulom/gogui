@@ -432,9 +432,12 @@ public class GoGui
             return;
         if (! NodeUtil.isInMainVariation(getCurrentNode()))
             return;
-        if (! showQuestion("Delete variations?",
-                           "All variations but the main variation will be " +
-                           "deleted.", "Delete", false))
+        String disableKey = "net.sf.gogui.gogui.GoGui.delete-side-variations";
+        String optionalMessage =
+            "All variations but the main variation will be deleted.";
+        if (! m_messageDialogs.showQuestion(disableKey, this,
+                                            "Delete variations?",
+                                            optionalMessage, "Delete", false))
             return;
         m_game.keepOnlyMainVariation();
         boardChangedBegin(false, true);
@@ -903,9 +906,13 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showQuestion("Make current to main variation?",
-                           "The variations in the tree will be reordered.",
-                           "Make Main Variation", false))
+        String disableKey = "net.sf.gogui.gogui.GoGui.make-main-variation";
+        String optionalMessage =
+            "The variations in the tree will be reordered.";
+        if (! m_messageDialogs.showQuestion(disableKey, this,
+                                            "Make current to main variation?",
+                                            optionalMessage,
+                                            "Make Main Variation", false))
             return;
         m_game.makeMainVariation();
         boardChangedBegin(false, true);
@@ -933,7 +940,7 @@ public class GoGui
         actionNewGame(getBoardSize());
     }
 
-    private void actionNewGame(int size)
+    public void actionNewGame(int size)
     {
         if (! checkStateChangePossible())
             return;
@@ -1578,10 +1585,14 @@ public class GoGui
             return;
         if (! getCurrentNode().hasFather())
             return;
-        if (! showQuestion("Truncate current?",
-                           "The current node and all children nodes " +
-                           " will be deleted from the game tree.",
-                           "Truncate", false))
+        String disableKey = "net.sf.gogui.gogui.GoGui.truncate";
+        String optionalMessage =
+            "The current node and all children nodes " +
+            " will be deleted from the game tree.";
+        if (! m_messageDialogs.showQuestion(disableKey, this,
+                                            "Truncate current?",
+                                            optionalMessage,
+                                            "Truncate", false))
             return;
         m_game.truncate();
         boardChangedBegin(false, true);
@@ -1594,10 +1605,14 @@ public class GoGui
         int numberChildren = getCurrentNode().getNumberChildren();
         if (numberChildren == 0)
             return;
-        if (! showQuestion("Truncate children?",
-                           "All children nodes of this position" +
-                           " will be deleted from the game tree.",
-                           "Truncate", false))
+        String disableKey = "net.sf.gogui.gogui.GoGui.truncate-children";
+        String optionalMessage =
+            "All children nodes of this position" +
+            " will be deleted from the game tree.";
+        if (! m_messageDialogs.showQuestion(disableKey, this,
+                                            "Truncate children?",
+                                            optionalMessage,
+                                            "Truncate", false))
             return;
         m_game.truncateChildren();
         boardChangedBegin(false, true);
