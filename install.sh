@@ -31,7 +31,7 @@ fi
 
 if [ -z "$JAVA_HOME" ]; then
     echo "Use option -j to specify the installation directory of a" >&2
-    echo "Java 1.4 compatible virtual machine" >&2
+    echo "Java 1.5 compatible virtual machine" >&2
     exit -1
 fi
 if [ ! -x "$JAVA_HOME/bin/java" ]; then
