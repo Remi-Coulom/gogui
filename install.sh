@@ -103,9 +103,9 @@ cat config/gogui.schemas \
 # Install scrollkeeper entry
 
 install -d $PREFIX/share/omf/gogui
-cat config/gogui.omf \
+cat config/gogui-C.omf \
 | sed "s;file:/usr/;file:$PREFIX/;" \
-> $PREFIX/share/omf/gogui/gogui.omf
+> $PREFIX/share/omf/gogui/gogui-C.omf
 
 #-----------------------------------------------------------------------------
 # Post installation

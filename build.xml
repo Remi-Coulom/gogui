@@ -156,8 +156,8 @@ Comment out the exec svnversion for releases.
  config/gogui-gogui.desktop
  config/gogui-gogui.png
  config/application-x-go-sgf.png
- config/gogui.omf
- config/gogui.omf.in
+ config/gogui-C.omf
+ config/gogui-C.omf.in
  config/gogui.schemas
  config/gogui-mime.xml
  config/x-go-sgf.desktop
@@ -768,8 +768,8 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
  tofile="mac/packaging/Info.plist" overwrite="true"/>
 <replace file="mac/packaging/Info.plist" token="@VERSION@" value="${version}"/>
 <copy
- file="config/gogui.omf.in" tofile="config/gogui.omf" overwrite="true"/>
-<replace file="config/gogui.omf" token="@DATE@" value="${DSTAMP}"/>
+ file="config/gogui-C.omf.in" tofile="config/gogui-C.omf" overwrite="true"/>
+<replace file="config/gogui-C.omf" token="@DATE@" value="${DSTAMP}"/>
 </target>
 
 <target name="version-check-uptodate">
