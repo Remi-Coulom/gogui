@@ -194,7 +194,7 @@ public final class StringUtil
     public static String[] splitArguments(String string)
     {
         assert string != null;
-        ArrayList<String> vector = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<String>();
         boolean escape = false;
         boolean inString = false;
         StringBuilder token = new StringBuilder();
@@ -205,8 +205,8 @@ public final class StringUtil
             {
                 if (inString)
                 {
-                    vector.add(token.toString());
-                    token = new StringBuilder();
+                    result.add(token.toString());
+                    token.setLength(0);
                 }
                 inString = ! inString;
             }
@@ -214,8 +214,8 @@ public final class StringUtil
             {
                 if (token.length() > 0)
                 {
-                    vector.add(token.toString());
-                    token = new StringBuilder();
+                    result.add(token.toString());
+                    token.setLength(0);
                 }
             }
             else
@@ -223,12 +223,8 @@ public final class StringUtil
             escape = (c == '\\' && ! escape);
         }
         if (token.length() > 0)
-            vector.add(token.toString());
-        int size = vector.size();
-        String result[] = new String[size];
-        for (int i = 0; i < size; ++i)
-            result[i] = vector.get(i);
-        return result;
+            result.add(token.toString());
+        return result.toArray(new String[result.size()]);
     }
 
     /** Trim trailing whitespaces. */
