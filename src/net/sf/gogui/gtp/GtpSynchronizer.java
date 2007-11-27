@@ -3,6 +3,7 @@
 package net.sf.gogui.gtp;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
@@ -11,6 +12,7 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE;
+import static net.sf.gogui.go.GoColor.WHITE_BLACK;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
@@ -195,7 +197,15 @@ public class GtpSynchronizer
             else
             {
                 // Translate setup into moves
-                for (GoColor c : BLACK_WHITE)
+                // Send moves of color to move first, such that the right color
+                // is to move after the setup (works only if there are setup
+                // stones by both colors)
+                List<GoColor> colors;
+                if (setupPlayer == BLACK)
+                    colors = BLACK_WHITE;
+                else
+                    colors = WHITE_BLACK;
+                for (GoColor c : colors)
                 {
                     for (GoPoint p : board.getSetup(c))
                     {

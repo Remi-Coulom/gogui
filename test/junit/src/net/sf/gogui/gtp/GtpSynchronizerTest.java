@@ -233,7 +233,7 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
     }
 
-    public void testSetupWithMoves() throws GtpError
+    public void testSetupWithMoves1() throws GtpError
     {
         createSynchronizer();
         assertExpectQueueEmpty();
@@ -249,11 +249,43 @@ public final class GtpSynchronizerTest
         expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
-        black = new PointList();
+    }
+
+    public void testSetupWithMoves2() throws GtpError
+    {
+        createSynchronizer();
+        assertExpectQueueEmpty();
+        // synchronizer should send moves of color to move first, such
+        // that the right color is to move after the moves (works only
+        // if there are setup stones by both colors)
+        PointList black = new PointList();
         black.add(GoPoint.get(4, 4));
-        setup(black, null, BLACK);
+        PointList white = new PointList();
+        white.add(GoPoint.get(5, 5));
+        setup(black, white, BLACK);
         expect("boardsize 19", "");
         expect("clear_board", "");
+        expect("play B E5", "");
+        expect("play W F6", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
+    public void testSetupWithMoves3() throws GtpError
+    {
+        createSynchronizer();
+        assertExpectQueueEmpty();
+        // synchronizer should send moves of color to move first, such
+        // that the right color is to move after the moves (works only
+        // if there are setup stones by both colors)
+        PointList black = new PointList();
+        black.add(GoPoint.get(4, 4));
+        PointList white = new PointList();
+        white.add(GoPoint.get(5, 5));
+        setup(black, white, WHITE);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("play W F6", "");
         expect("play B E5", "");
         synchronize();
         assertExpectQueueEmpty();
