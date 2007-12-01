@@ -226,6 +226,17 @@ public final class MessageDialogs
                                    destructiveOption, isCritical);
     }
 
+    public boolean showWarningQuestion(String disableKey, Component parent,
+                                       String mainMessage,
+                                       String optionalMessage,
+                                       String destructiveOption,
+                                       boolean isCritical)
+    {
+        return showWarningQuestion(disableKey, parent, mainMessage,
+                                       optionalMessage, destructiveOption,
+                                   "Cancel", isCritical);
+    }
+
     /** Show warning message to confirm destructive actions.
         @return true, if destructive was chosen; false if cancel was chosen.
     */
@@ -233,23 +244,23 @@ public final class MessageDialogs
                                        String mainMessage,
                                        String optionalMessage,
                                        String destructiveOption,
+                                       String nonDestructiveOption,
                                        boolean isCritical)
     {
         if (checkDisabled(disableKey))
             return true;
         Object[] options = new Object[2];
-        String cancelOption = "Cancel";
         if (Platform.isMac())
         {
-            options[0] = cancelOption;
+            options[0] = nonDestructiveOption;
             options[1] = destructiveOption;
         }
         else
         {
             options[0] = destructiveOption;
-            options[1] = cancelOption;
+            options[1] = nonDestructiveOption;
         }
-        Object defaultOption = cancelOption;
+        Object defaultOption = nonDestructiveOption;
         int type;
         if (isCritical)
             type = JOptionPane.WARNING_MESSAGE;
