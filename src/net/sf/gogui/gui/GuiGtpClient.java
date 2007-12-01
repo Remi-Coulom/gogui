@@ -222,23 +222,32 @@ public class GuiGtpClient
 
         public boolean askContinue()
         {
-            String mainMessage = "Terminate Go program?";
+            String mainMessage = "The Go program is not responding.";
             String optionalMessage;
+            String destructiveOption;
             if (m_command == null)
+            {
                 optionalMessage =
-                    "The Go program did not quit after the command" +
-                    " stream was closed.";
+                    "The Go program did not terminate after the command" +
+                    " stream was closed. You may choose to wait for a short" +
+                    " while for it to terminate or force it to quit now.";
+                destructiveOption = "Force Quit";
+            }
             else
+            {
                 optionalMessage =
-                    "The Go program did not respond to the command \""
-                    + m_command + "\".";
-            optionalMessage = optionalMessage +
-                " Would you like to terminate the Go program now" +
-                " or wait?";
-            return ! m_messageDialogs.showQuestion(null, m_owner, mainMessage,
-                                                   optionalMessage,
-                                                   "Terminate Program", "Wait",
-                                                   true);
+                    "The Go program is not responding to the command \""
+                    + m_command + "\". You may choose to wait for a short" +
+                    " while for it to respond or terminate and detach" +
+                    " the Go program.";
+                destructiveOption = "Terminate";
+            }
+            return ! m_messageDialogs.showWarningQuestion(null, m_owner,
+                                                          mainMessage,
+                                                          optionalMessage,
+                                                          destructiveOption,
+                                                          "Wait",
+                                                          true);
         }
 
         private final String m_command;
