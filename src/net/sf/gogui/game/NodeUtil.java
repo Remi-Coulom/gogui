@@ -363,7 +363,11 @@ public final class NodeUtil
         return nodesLeft;
     }
 
-    /** Get nodes in path from a given node to the root node. */
+    /** Get nodes in path from a given node to the root node.
+        @param node The node
+        @param result The resulting path. Passed as an argument to allow
+        reusing an array list. It will be cleared before it is used.
+    */
     public static void getPathToRoot(ConstNode node,
                                      ArrayList<ConstNode> result)
     {
