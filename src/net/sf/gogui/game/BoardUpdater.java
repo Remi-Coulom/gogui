@@ -26,7 +26,6 @@ public class BoardUpdater
         ConstGameInfo info = tree.getGameInfoConst(currentNode);
         int size = tree.getBoardSize();
         int handicap = info.getHandicap();
-        m_nodes.clear();
         NodeUtil.getPathToRoot(currentNode, m_nodes);
         board.init(size);
         boolean isFirstPlacement = true;
