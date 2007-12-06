@@ -52,7 +52,7 @@ public class Platform
         }
         try
         {
-            if (new File("/proc/cpuinfo").exists())
+            if (existsProcCpuinfo())
             {
                 String[] cmdArray = { "/bin/sh", "-c",
                                       "grep '^model name' /proc/cpuinfo" };
@@ -209,6 +209,11 @@ public class Platform
         {
             return false;
         }
+    }
+
+    private static boolean existsProcCpuinfo()
+    {
+        return new File("/proc/cpuinfo").exists();
     }
 
     private static boolean runProcess(String[] cmd)

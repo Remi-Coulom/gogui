@@ -59,7 +59,10 @@ public final class Session
         }
         if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE)
         {
-            window.setLocationByPlatform(true);
+            if (! window.isVisible())
+                // use a platform-dependent default (setLocationByPlatform can
+                // only be used, if window not already visible)
+                window.setLocationByPlatform(true);
             return;
         }
         Point ownerLocation = owner.getLocation();
