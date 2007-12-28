@@ -2345,7 +2345,7 @@ public class GoGui
                     if (SwingUtilities.isEventDispatchThread())
                         runnable.run();
                     else
-                        invokeAndWait(runnable);
+                        GuiUtil.invokeAndWait(runnable);
                 }
             };
         GtpClient.IOCallback ioCallback = new GtpClient.IOCallback()
@@ -3351,22 +3351,6 @@ public class GoGui
         m_scoreDialog.showScore(m_countScore, komi);
         m_scoreDialog.setVisible(true);
         showStatus("Please mark dead groups");
-    }
-
-    private void invokeAndWait(Runnable runnable)
-    {
-        try
-        {
-            SwingUtilities.invokeAndWait(runnable);
-        }
-        catch (InterruptedException e)
-        {
-            System.err.println("Thread interrupted");
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-            System.err.println("InvocationTargetException");
-        }
     }
 
     private boolean isComputerBoth()

@@ -117,7 +117,7 @@ public class Display
             m_gtp.close();
             m_gtp.waitForExit();
         }
-        invokeAndWait(new Runnable()
+        GuiUtil.invokeAndWait(new Runnable()
             {
                 public void run()
                 {
@@ -259,7 +259,7 @@ public class Display
             send(command);
         }
         m_size = size;
-        invokeAndWait(new Runnable()
+        GuiUtil.invokeAndWait(new Runnable()
             {
                 public void run()
                 {
@@ -282,7 +282,7 @@ public class Display
             String command = m_gtp.getCommandClearBoard(m_size);
             send(command);
         }
-        invokeAndWait(new Runnable()
+        GuiUtil.invokeAndWait(new Runnable()
             {
                 public void run()
                 {
@@ -335,7 +335,7 @@ public class Display
             }
         }
         m_move = Move.get(color, point);
-        invokeAndWait(new Runnable()
+        GuiUtil.invokeAndWait(new Runnable()
             {
                 public void run()
                 {
@@ -391,22 +391,6 @@ public class Display
         undo();
     }
 
-    private void invokeAndWait(Runnable runnable)
-    {
-        try
-        {
-            SwingUtilities.invokeAndWait(runnable);
-        }
-        catch (InterruptedException e)
-        {
-            System.err.println("InterruptedException");
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-            System.err.println("InvocationTargetException");
-        }
-    }
-
     private void play(GoColor color, GoPoint point) throws GtpError
     {
         if (m_gtp != null)
@@ -415,7 +399,7 @@ public class Display
             send(command);
         }
         m_move = Move.get(color, point);
-        invokeAndWait(new Runnable()
+        GuiUtil.invokeAndWait(new Runnable()
             {
                 public void run()
                 {
@@ -503,14 +487,14 @@ public class Display
         if (SwingUtilities.isEventDispatchThread())
             runnable.run();
         else
-            invokeAndWait(runnable);
+            GuiUtil.invokeAndWait(runnable);
     }
 
     private void undo() throws GtpError
     {
         if (m_gtp != null)
             send("undo");
-        invokeAndWait(new Runnable()
+        GuiUtil.invokeAndWait(new Runnable()
             {
                 public void run()
                 {

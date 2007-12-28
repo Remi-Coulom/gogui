@@ -116,7 +116,7 @@ public class GtpShell
             if (invokeLater)
                 SwingUtilities.invokeLater(r);
             else
-                invokeAndWait(r);
+                GuiUtil.invokeAndWait(r);
         }
     }
 
@@ -134,7 +134,7 @@ public class GtpShell
             if (invokeLater)
                 SwingUtilities.invokeLater(r);
             else
-                invokeAndWait(r);
+                GuiUtil.invokeAndWait(r);
         }
     }
 
@@ -151,7 +151,7 @@ public class GtpShell
             if (invokeLater)
                 SwingUtilities.invokeLater(r);
             else
-                invokeAndWait(r);
+                GuiUtil.invokeAndWait(r);
         }
     }
 
@@ -198,7 +198,7 @@ public class GtpShell
         if (SwingUtilities.isEventDispatchThread())
             appendSentCommand(command);
         else
-            invokeAndWait(new Runnable() {
+            GuiUtil.invokeAndWait(new Runnable() {
                     public void run() {
                         appendSentCommand(command);
                     } });
@@ -486,22 +486,6 @@ public class GtpShell
         }
         if (bestCompletion != null)
             m_textField.setText(bestCompletion);
-    }
-
-    private void invokeAndWait(Runnable runnable)
-    {
-        try
-        {
-            SwingUtilities.invokeAndWait(runnable);
-        }
-        catch (InterruptedException e)
-        {
-            System.err.println("Thread interrupted");
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-            System.err.println("InvocationTargetException");
-        }
     }
 
     private void popupCompletions()

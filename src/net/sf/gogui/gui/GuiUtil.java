@@ -262,6 +262,26 @@ public class GuiUtil
         }
     }
 
+    /** Call SwingUtilities.invokeAndWait.
+        Ignores possible exceptions (apart from printing a warning to
+        System.err
+    */
+    public static void invokeAndWait(Runnable runnable)
+    {
+        try
+        {
+            SwingUtilities.invokeAndWait(runnable);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println("Thread interrupted");
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+            System.err.println("InvocationTargetException");
+        }
+    }
+
     public static boolean isActiveWindow(Window window)
     {
         KeyboardFocusManager manager =
