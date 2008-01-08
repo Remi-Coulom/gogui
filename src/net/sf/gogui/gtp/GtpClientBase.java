@@ -166,6 +166,14 @@ public abstract class GtpClientBase
         return result;
     }
 
+    /** Is the program in a state, that all subsequent commands will fail.
+        Returns false, but can be reimplemented in a subclass.
+    */
+    public boolean isProgramDead()
+    {
+        return false;
+    }
+
     /** Check if a command is supported.
         Note: call querySupportedCommands() first.
     */
