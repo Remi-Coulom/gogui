@@ -131,6 +131,9 @@ public final class GtpClientUtil
                         out.print("# ? ");
                         out.println(e.getMessage());
                         out.println();
+                        if (gtp.isProgramDead())
+                            throw new ErrorMessage("The Go program has" +
+                                                   " terminated.");
                         continue;
                     }
                     BufferedReader reader
