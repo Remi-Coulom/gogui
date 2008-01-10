@@ -15,6 +15,11 @@ Fix a bug, that made the setup of stones on occupied points not work in some
 cases.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Mac: update Quaqua Look and Feel to version 4.1
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
