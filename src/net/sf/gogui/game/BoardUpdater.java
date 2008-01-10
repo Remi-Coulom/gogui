@@ -54,15 +54,24 @@ public class BoardUpdater
                             white.add(p);
                     }
                     for (int j = 0; j < addBlack.size(); ++j)
-                        if (! black.contains(addBlack.get(j)))
-                            black.add(addBlack.get(j));
+                    {
+                        GoPoint p = addBlack.get(j);
+                        white.remove(p);
+                        if (! black.contains(p))
+                            black.add(p);
+                    }
                     for (int j = 0; j < addWhite.size(); ++j)
-                        if (! white.contains(addWhite.get(j)))
-                            white.add(addWhite.get(j));
+                    {
+                        GoPoint p = addWhite.get(j);
+                        black.remove(p);
+                        if (! white.contains(p))
+                            white.add(p);
+                    }
                     for (int j = 0; j < addEmpty.size(); ++j)
                     {
-                        black.remove(addEmpty.get(j));
-                        white.remove(addEmpty.get(j));
+                        GoPoint p = addEmpty.get(j);
+                        black.remove(p);
+                        white.remove(p);
                     }
                     board.setup(black, white, player);
                 }

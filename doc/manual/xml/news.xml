@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fix a bug, that made the setup of stones on occupied points not work in some
+cases.
 </simpara>
 </listitem>
 </itemizedlist>
