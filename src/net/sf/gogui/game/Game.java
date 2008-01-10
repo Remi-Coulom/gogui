@@ -309,6 +309,10 @@ public class Game
         updateBoard();
     }
 
+    /** Set a stone on the board or remove a stone.
+        @param p The location.
+        @param c The color of the stone (EMPTY for removal).
+    */
     public void setup(GoPoint p, GoColor c)
     {
         assert p != null;

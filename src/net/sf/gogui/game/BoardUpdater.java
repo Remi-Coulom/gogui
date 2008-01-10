@@ -53,11 +53,17 @@ public class BoardUpdater
                             white.add(p);
                     }
                     for (GoPoint p : setupBlack)
+                    {
+                        white.remove(p);
                         if (! black.contains(p))
                             black.add(p);
+                    }
                     for (GoPoint p : setupWhite)
+                    {
+                        black.remove(p);
                         if (! white.contains(p))
                             white.add(p);
+                    }
                     for (GoPoint p : setupEmpty)
                     {
                         black.remove(p);
