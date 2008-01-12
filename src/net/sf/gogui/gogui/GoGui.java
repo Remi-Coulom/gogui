@@ -2841,6 +2841,7 @@ public class GoGui
                 }
             });
         m_analyzeDialog.setBoardSize(getBoardSize());
+        m_analyzeDialog.setSelectedColor(getToMove());
         restoreSize(m_analyzeDialog, "analyze");
         m_analyzeDialog.setVisible(true);
     }
