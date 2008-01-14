@@ -4,8 +4,8 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>1.1pre1</revnumber>
+<date>14 Jan 2008</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -86,6 +86,58 @@ tools from other packages.
 <simpara>
 Replace sgftotex by gogui-convert, which can read SGF or XML files and
 supports several output formats
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.4</revnumber>
+<date>10 Jan 2008</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fix a bug, that made the setup of stones on occupied points not work in some
+cases.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac: update Quaqua Look and Feel to version 4.1
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.3</revnumber>
+<date>09 Nov 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Bugfix in View / Variation Labels
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix crash if existing program entry was changed and the program did
+not startup.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac: update Quaqua Look and Feel to version 4.0 (Leopard support)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and improvements.
 </simpara>
 </listitem>
 </itemizedlist>
