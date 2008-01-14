@@ -14,8 +14,8 @@ Comment out the exec svnversion for releases.
 -->
 <!--
 <exec executable="svnversion" outputproperty="svnversion"/>
-<property name="version" value="1.1pre1"/>
 -->
+<property name="version" value="1.1pre1"/>
 
 <tstamp><format property="DSTAMP" pattern="yyyy-MM-dd" timezone="UCT"/>
 <format property="TSTAMP" pattern="hh:mm" timezone="UCT"/></tstamp>
