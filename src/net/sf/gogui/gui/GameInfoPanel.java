@@ -5,6 +5,7 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -20,7 +21,9 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.StringInfoColor;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
@@ -83,11 +86,6 @@ public class GameInfoPanel
                                 c.getCapitalizedName());
             m_prisoners.get(c).setCount(board.getCaptured(c));
         }
-        // Usually time left information is stored in a node only for the
-        // player who moved, so we check the father node too
-        ConstNode father = node.getFatherConst();
-        if (father != null)
-            updateTimeFromNode(father);
         updateTimeFromNode(node);
     }
 
@@ -149,15 +147,41 @@ public class GameInfoPanel
 
     private void updateTimeFromNode(ConstNode node)
     {
+        BlackWhiteSet<Integer> movesLeft = new BlackWhiteSet<Integer>(-1, -1);
+        BlackWhiteSet<Double> timeLeft = new BlackWhiteSet<Double>(0., 0.);
+        ArrayList<ConstNode> path = new ArrayList<ConstNode>();
+        NodeUtil.getPathToRoot(node, path);
+        for (int i = path.size() - 1; i >= 0; --i)
+        {
+            ConstNode pathNode = path.get(i);
+            ConstGameInfo gameInfo = pathNode.getGameInfoConst();
+            if (gameInfo != null)
+            {
+                TimeSettings timeSettings = gameInfo.getTimeSettings();
+                if (timeSettings != null)
+                {
+                    long preByoyomi = timeSettings.getPreByoyomi();
+                    if (preByoyomi != 0)
+                        for (GoColor c : BLACK_WHITE)
+                            timeLeft.set(c, preByoyomi / 1000.);
+                }
+            }
+            for (GoColor c : BLACK_WHITE)
+            {
+                double time = pathNode.getTimeLeft(c);
+                int moves = pathNode.getMovesLeft(c);
+                if (! Double.isNaN(time))
+                {
+                    timeLeft.set(c, time);
+                    movesLeft.set(c, moves);
+                }
+            }
+        }
         for (GoColor c : BLACK_WHITE)
         {
-            double timeLeft = node.getTimeLeft(c);
-            if (! Double.isNaN(timeLeft))
-            {
-                int movesLeft = node.getMovesLeft(c);
-                String text = Clock.getTimeString(timeLeft, movesLeft);
-                m_clock.get(c).setText(text);
-            }
+            String text =
+                Clock.getTimeString(timeLeft.get(c), movesLeft.get(c));
+            m_clock.get(c).setText(text);
         }
     }
 }

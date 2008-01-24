@@ -855,5 +855,4 @@ public final class NodeUtil
         if (! Double.isNaN(timeLeft))
             clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
     }
-
 }
