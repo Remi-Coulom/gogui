@@ -86,7 +86,6 @@ public class GameInfoPanel
                                 c.getCapitalizedName());
             m_prisoners.get(c).setCount(board.getCaptured(c));
         }
-        updateTimeFromNode(node);
     }
 
     public void updateTimeFromClock(ConstClock clock)
@@ -143,46 +142,6 @@ public class GameInfoPanel
         assert c.isBlackWhite();
         String text = clock.getTimeString(c);
         m_clock.get(c).setText(text);
-    }
-
-    private void updateTimeFromNode(ConstNode node)
-    {
-        BlackWhiteSet<Integer> movesLeft = new BlackWhiteSet<Integer>(-1, -1);
-        BlackWhiteSet<Double> timeLeft = new BlackWhiteSet<Double>(0., 0.);
-        ArrayList<ConstNode> path = new ArrayList<ConstNode>();
-        NodeUtil.getPathToRoot(node, path);
-        for (int i = path.size() - 1; i >= 0; --i)
-        {
-            ConstNode pathNode = path.get(i);
-            ConstGameInfo gameInfo = pathNode.getGameInfoConst();
-            if (gameInfo != null)
-            {
-                TimeSettings timeSettings = gameInfo.getTimeSettings();
-                if (timeSettings != null)
-                {
-                    long preByoyomi = timeSettings.getPreByoyomi();
-                    if (preByoyomi != 0)
-                        for (GoColor c : BLACK_WHITE)
-                            timeLeft.set(c, preByoyomi / 1000.);
-                }
-            }
-            for (GoColor c : BLACK_WHITE)
-            {
-                double time = pathNode.getTimeLeft(c);
-                int moves = pathNode.getMovesLeft(c);
-                if (! Double.isNaN(time))
-                {
-                    timeLeft.set(c, time);
-                    movesLeft.set(c, moves);
-                }
-            }
-        }
-        for (GoColor c : BLACK_WHITE)
-        {
-            String text =
-                Clock.getTimeString(timeLeft.get(c), movesLeft.get(c));
-            m_clock.get(c).setText(text);
-        }
     }
 }
 

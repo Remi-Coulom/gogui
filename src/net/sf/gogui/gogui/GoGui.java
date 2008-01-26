@@ -3124,6 +3124,9 @@ public class GoGui
         if (m_scoreMode)
             return;
         m_game.gotoNode(node);
+        // If the clock was never running, we restore it without asking
+        if (m_game.getClockNode() == null)
+            m_game.restoreClock();
         currentNodeChanged();
     }
 

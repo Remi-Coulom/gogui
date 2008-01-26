@@ -11,7 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Fixes for showing remaining time in a loaded game.
+Automatically restore clock to current node, if it was never running.
 </simpara>
 </listitem>
 </itemizedlist>

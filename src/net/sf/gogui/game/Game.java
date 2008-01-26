@@ -18,9 +18,7 @@ public class Game
 {
     public Game(int boardSize)
     {
-        m_board = new Board(boardSize);
-        m_clock = new Clock();
-        init(boardSize, null, null, "", null);
+        this(boardSize, null, null, "", null);
     }
 
     public Game(int boardSize, Komi komi, ConstPointList handicap,
@@ -130,16 +128,18 @@ public class Game
         m_clock.halt();
     }
 
+    /** Return last node when startClock() was called.
+        @return The last such node or null, if the clock was never running.
+    */
+    public ConstNode getClockNode()
+    {
+        return m_clockNode;
+    }
+
     public final void init(int boardSize, Komi komi, ConstPointList handicap,
                            String rules, TimeSettings timeSettings)
     {
-        m_tree = new GameTree(boardSize, komi, handicap, rules, timeSettings);
-        m_current = m_tree.getRoot();
-        updateBoard();
-        updateClock();
-        m_clock.reset();
-        m_clock.halt();
-        m_modified = false;
+        init(new GameTree(boardSize, komi, handicap, rules, timeSettings));
     }
 
     public final void init(GameTree tree)
@@ -151,6 +151,7 @@ public class Game
         m_clock.reset();
         m_clock.halt();
         m_modified = false;
+        m_clockNode = null;
     }
 
     /** Check if game was modified.
@@ -337,6 +338,7 @@ public class Game
     public void startClock()
     {
         m_clock.startMove(getToMove());
+        m_clockNode = m_current;
     }
 
     /** Truncate current node and subtree.
@@ -369,6 +371,9 @@ public class Game
     private GameTree m_tree;
 
     private Node m_current;
+
+    /** See getClockNode() */
+    private ConstNode m_clockNode;
 
     private final Clock m_clock;
 
