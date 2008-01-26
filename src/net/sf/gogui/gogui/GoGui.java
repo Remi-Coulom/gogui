@@ -403,7 +403,6 @@ public class GoGui
         if (! getClock().isInitialized())
             return;
         m_game.restoreClock();
-        m_gameInfoPanel.updateTimeFromClock(getClock());
         updateViews(false);
     }
 
@@ -744,7 +743,6 @@ public class GoGui
             m_timeSettings = info.getTimeSettings();
         setTitle();
         updateViews(false);
-        m_gameInfoPanel.updateTimeFromClock(getClock());
     }
 
     public void actionGoto()
@@ -948,7 +946,6 @@ public class GoGui
             return;
         setFile(null);
         newGame(size);
-        m_gameInfoPanel.updateTimeFromClock(getClock());
         if (m_gtp != null && ! m_gtp.isGenmoveSupported())
         {
             m_computerBlack = false;
@@ -4180,18 +4177,17 @@ public class GoGui
     */
     private void updateViews(boolean gameTreeChanged, boolean sync)
     {
-        ConstGame game = getGame();
         m_actions.update();
         m_toolBar.update();
         m_menuBar.update(isProgramAttached(), isTreeShown(), isShellShown());
-        m_gameInfoPanel.update(game);
+        m_gameInfoPanel.update();
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();
         updateGuiBoard();
         getRootPane().putClientProperty("windowModified",
                                         Boolean.valueOf(isModified()));
         setTitle();
-        GoGuiUtil.updateMoveText(m_statusBar, game);
+        GoGuiUtil.updateMoveText(m_statusBar, getGame());
         m_statusBar.setSetupMode(m_setupMode);
         if (m_setupMode)
             m_statusBar.setToPlay(m_setupColor);

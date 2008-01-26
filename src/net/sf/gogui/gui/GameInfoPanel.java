@@ -72,11 +72,11 @@ public class GameInfoPanel
         game.setClockListener(listener);
     }
 
-    public void update(ConstGame game)
+    public void update()
     {
-        ConstBoard board = game.getBoard();
-        ConstNode node = game.getCurrentNode();
-        ConstGameTree tree = game.getTree();
+        ConstBoard board = m_game.getBoard();
+        ConstNode node = m_game.getCurrentNode();
+        ConstGameTree tree = m_game.getTree();
         ConstGameInfo info = tree.getGameInfoConst(node);
         for (GoColor c : BLACK_WHITE)
         {
@@ -85,13 +85,8 @@ public class GameInfoPanel
             updatePlayerToolTip(m_icon.get(c), name, rank,
                                 c.getCapitalizedName());
             m_prisoners.get(c).setCount(board.getCaptured(c));
+            updateTimeFromClock(m_game.getClock(), c);
         }
-    }
-
-    public void updateTimeFromClock(ConstClock clock)
-    {
-        for (GoColor c : BLACK_WHITE)
-            updateTimeFromClock(clock, c);
     }
 
     private class UpdateTimeRunnable
@@ -99,7 +94,8 @@ public class GameInfoPanel
     {
         public void run()
         {
-            updateTimeFromClock(m_game.getClock());
+            for (GoColor c : BLACK_WHITE)
+                updateTimeFromClock(m_game.getClock(), c);
         }
     }
 
