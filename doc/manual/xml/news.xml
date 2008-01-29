@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+TwoGtp: also measure real time used by programs.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Automatically restore clock to current node, if it was never running.
 </simpara>
 </listitem>

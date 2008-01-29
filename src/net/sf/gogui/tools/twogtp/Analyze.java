@@ -75,6 +75,10 @@ public class Analyze
 
     private final Statistics m_cpuWhite = new Statistics();
 
+    private final Statistics m_timeBlack = new Statistics();
+
+    private final Statistics m_timeWhite = new Statistics();
+
     private Table m_table;
 
     private void calcStatistics()
@@ -96,6 +100,8 @@ public class Analyze
             parseResult(e.m_resultBlack, m_statisticsBlack);
             parseResult(e.m_resultWhite, m_statisticsWhite);
             parseResult(e.m_resultReferee, m_statisticsReferee);
+            m_timeBlack.add(e.m_timeBlack);
+            m_timeWhite.add(e.m_timeWhite);
             m_cpuBlack.add(e.m_cpuBlack);
             m_cpuWhite.add(e.m_cpuWhite);
             m_length.add(e.m_length);
@@ -173,13 +179,16 @@ public class Analyze
                 boolean alternated = (m_table.getInt("ALT", i) != 0);
                 String duplicate = m_table.get("DUP", i);
                 int length = m_table.getInt("LEN", i);
+                double timeBlack = m_table.getDouble("TIME_B", i);
+                double timeWhite = m_table.getDouble("TIME_W", i);
                 double cpuBlack = m_table.getDouble("CPU_B", i);
                 double cpuWhite = m_table.getDouble("CPU_W", i);
                 boolean error = (m_table.getInt("ERR", i) != 0);
                 String errorMessage = m_table.get("ERR_MSG", i);
                 m_entries.add(new Entry(gameIndex, resultBlack, resultWhite,
                                         resultReferee, alternated, duplicate,
-                                        length, cpuBlack, cpuWhite, error,
+                                        length, timeBlack, timeWhite,
+                                        cpuBlack, cpuWhite, error,
                                         errorMessage));
             }
         }
@@ -263,6 +272,8 @@ public class Analyze
         writeHtmlRow(out, "Duplicates", m_duplicates);
         writeHtmlRow(out, "Games used", m_gamesUsed);
         writeHtmlRow(out, "Game length", m_length, format);
+        writeHtmlRow(out, "Time Black", m_timeBlack, format);
+        writeHtmlRow(out, "Time White", m_timeWhite, format);
         writeHtmlRow(out, "CPU Time Black", m_cpuBlack, format);
         writeHtmlRow(out, "CPU Time White", m_cpuWhite, format);
         out.print("</table>\n" +
@@ -288,6 +299,8 @@ public class Analyze
         out.print("<th>Colors Exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
+                  "<th>Time " + black + "</th>\n" +
+                  "<th>Time " + white + "</th>\n" +
                   "<th>CPU Time " + black + "</th>\n" +
                   "<th>CPU Time " + white + "</th>\n" +
                   "<th>Error</th>\n" +
@@ -308,6 +321,8 @@ public class Analyze
             out.print("<td>" + (e.m_alternated ? "1" : "0") + "</td>" +
                       "<td>" + e.m_duplicate + "</td>" +
                       "<td>" + e.m_length + "</td>" +
+                      "<td>" + e.m_timeBlack + "</td>" +
+                      "<td>" + e.m_timeWhite + "</td>" +
                       "<td>" + e.m_cpuBlack + "</td>" +
                       "<td>" + e.m_cpuWhite + "</td>" +
                       "<td>" + (e.m_error ? "1" : "") + "</td>" +
@@ -457,6 +472,10 @@ final class Entry
 
     public int m_length;
 
+    public double m_timeBlack;
+
+    public double m_timeWhite;
+
     public double m_cpuBlack;
 
     public double m_cpuWhite;
@@ -467,7 +486,8 @@ final class Entry
 
     public Entry(int gameIndex, String resultBlack, String resultWhite,
                  String resultReferee, boolean alternated, String duplicate,
-                 int length, double cpuBlack, double cpuWhite, boolean error,
+                 int length, double timeBlack, double timeWhite,
+                 double cpuBlack, double cpuWhite, boolean error,
                  String errorMessage)
     {
         m_gameIndex = gameIndex;
@@ -477,6 +497,8 @@ final class Entry
         m_alternated = alternated;
         m_duplicate = (duplicate.equals("-") ? "" : duplicate);
         m_length = length;
+        m_timeBlack = timeBlack;
+        m_timeWhite = timeWhite;
         m_cpuBlack = cpuBlack;
         m_cpuWhite = cpuWhite;
         m_error = error;

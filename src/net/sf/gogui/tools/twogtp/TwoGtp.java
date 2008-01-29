@@ -15,6 +15,7 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.go.BlackWhiteSet;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -296,6 +297,9 @@ public class TwoGtp
 
     private final ArrayList<Program> m_allPrograms;
 
+    private final BlackWhiteSet<Double> m_realTime =
+        new BlackWhiteSet<Double>(0., 0.);
+
     private String m_openingFile;
 
     private final String m_filePrefix;
@@ -423,6 +427,8 @@ public class TwoGtp
         columns.add("ALT");
         columns.add("DUP");
         columns.add("LEN");
+        columns.add("TIME_B");
+        columns.add("TIME_W");
         columns.add("CPU_B");
         columns.add("CPU_W");
         columns.add("ERR");
@@ -566,7 +572,8 @@ public class TwoGtp
             int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moveNumber, error,
-                       errorMessage, cpuTimeBlack, cpuTimeWhite);
+                       errorMessage, m_realTime.get(BLACK),
+                       m_realTime.get(WHITE), cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite, resultReferee);
             ++m_gameIndex;
             m_games.add(moves);
@@ -580,6 +587,8 @@ public class TwoGtp
     private void initGame(int size) throws GtpError
     {
         m_game = new Game(size, m_komi, null, null, null);
+        m_realTime.set(BLACK, 0.);
+        m_realTime.set(WHITE, 0.);
         // Clock is not needed
         m_game.haltClock();
         m_resigned = false;
@@ -772,7 +781,8 @@ public class TwoGtp
     private void saveResult(String resultBlack, String resultWhite,
                             String resultReferee, boolean alternated,
                             String duplicate, int numberMoves, boolean error,
-                            String errorMessage, double cpuTimeBlack,
+                            String errorMessage, double timeBlack,
+                            double timeWhite, double cpuTimeBlack,
                             double cpuTimeWhite)
         throws ErrorMessage
     {
@@ -787,6 +797,8 @@ public class TwoGtp
         m_table.set("ALT", alternated ? "1" : "0");
         m_table.set("DUP", duplicate);
         m_table.set("LEN", numberMoves);
+        m_table.set("TIME_B", format.format(timeBlack));
+        m_table.set("TIME_W", format.format(timeWhite));
         m_table.set("CPU_B", format.format(cpuTimeBlack));
         m_table.set("CPU_W", format.format(cpuTimeWhite));
         m_table.set("ERR", error ? "1" : "0");
@@ -827,7 +839,10 @@ public class TwoGtp
             program = m_white;
         else
             program = m_black;
+        long timeMillis = System.currentTimeMillis();
         String responseGenmove = program.sendCommandGenmove(color);
+        double time = (System.currentTimeMillis() - timeMillis) / 1000.;
+        m_realTime.set(color, m_realTime.get(color) + time);
         if (responseGenmove.equalsIgnoreCase("resign"))
         {
             response.append("resign");
