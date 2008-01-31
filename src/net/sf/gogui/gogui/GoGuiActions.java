@@ -309,20 +309,20 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGameInfo(); } };
 
-    public final Action m_actionShellSave =
+    public final Action m_actionSaveLog =
         new Action("Save Log...") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionShellSave(); } };
+                m_goGui.actionSaveLog(); } };
 
-    public final Action m_actionShellSaveCommands =
+    public final Action m_actionSaveCommands =
         new Action("Save Commands...") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionShellSaveCommands(); } };
+                m_goGui.actionSaveCommands(); } };
 
-    public final Action m_actionShellSendFile =
+    public final Action m_actionSendFile =
         new Action("Send File...") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionShellSendFile(); } };
+                m_goGui.actionSendFile(); } };
 
     public final Action m_actionHandicapNone =
         new Action("None") {
@@ -749,9 +749,9 @@ public class GoGuiActions
                                        && setupColor == BLACK);
         m_actionSetupWhite.setSelected(setupMode
                                        && setupColor == WHITE);
-        m_actionShellSave.setEnabled(isProgramAttached);
-        m_actionShellSaveCommands.setEnabled(isProgramAttached);
-        m_actionShellSendFile.setEnabled(isProgramAttached);
+        m_actionSaveLog.setEnabled(isProgramAttached);
+        m_actionSaveCommands.setEnabled(isProgramAttached);
+        m_actionSendFile.setEnabled(isProgramAttached);
         m_actionShowAnalyzeDialog.setEnabled(isProgramAttached);
         m_actionShowShell.setEnabled(isProgramAttached);
         m_actionToggleAutoNumber.setSelected(m_goGui.getAutoNumber());

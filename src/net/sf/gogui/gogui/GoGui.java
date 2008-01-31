@@ -224,7 +224,7 @@ public class GoGui
             };
         RecentFileMenu.Listener recentGtp = new RecentFileMenu.Listener() {
                 public void fileSelected(String label, File file) {
-                    actionShellSendFile(file);
+                    actionSendFile(file);
                 }
             };
         m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
@@ -1218,6 +1218,20 @@ public class GoGui
         updateViews(false);
     }
 
+    public void actionSaveCommands()
+    {
+        if (m_shell == null)
+            return;
+        m_shell.saveCommands(this);
+    }
+
+    public void actionSaveLog()
+    {
+        if (m_shell == null)
+            return;
+        m_shell.saveLog(this);
+    }
+
     public void actionSaveParameters()
     {
         if (! checkHasParameterCommands())
@@ -1303,6 +1317,31 @@ public class GoGui
         beginLengthyCommand();
     }
 
+    public void actionSendFile()
+    {
+        if (! checkStateChangePossible())
+            return;
+        if (m_shell == null)
+            return;
+        File file = FileDialogs.showOpen(this, "Choose GTP file");
+        if (file == null)
+            return;
+        actionSendFile(file);
+    }
+
+    public void actionSendFile(File file)
+    {
+        if (file == null)
+            return;
+        if (! checkStateChangePossible())
+            return;
+        if (m_shell == null)
+            return;
+        sendGtpFile(file);
+        m_menuBar.addRecentGtp(file);
+        updateViews(false);
+    }
+
     public void actionSetAnalyzeCommand(AnalyzeCommand command)
     {
         actionSetAnalyzeCommand(command, false, true, true);
@@ -1378,45 +1417,6 @@ public class GoGui
             else
                 showStatus("Setup white stones");
         }
-    }
-
-    public void actionShellSave()
-    {
-        if (m_shell == null)
-            return;
-        m_shell.saveLog(this);
-    }
-
-    public void actionShellSaveCommands()
-    {
-        if (m_shell == null)
-            return;
-        m_shell.saveCommands(this);
-    }
-
-    public void actionShellSendFile()
-    {
-        if (! checkStateChangePossible())
-            return;
-        if (m_shell == null)
-            return;
-        File file = FileDialogs.showOpen(this, "Choose GTP file");
-        if (file == null)
-            return;
-        actionShellSendFile(file);
-    }
-
-    public void actionShellSendFile(File file)
-    {
-        if (file == null)
-            return;
-        if (! checkStateChangePossible())
-            return;
-        if (m_shell == null)
-            return;
-        sendGtpFile(file);
-        m_menuBar.addRecentGtp(file);
-        updateViews(false);
     }
 
     public void actionShowAnalyzeDialog()
