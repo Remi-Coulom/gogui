@@ -57,7 +57,8 @@ the engine does not support. For instance, if the engine does not support
 <command>undo</command>, the adapter will send a clear board command followed
 by a sequence of moves up to the previous position.
 The command <command>loadsgf</command> is always handled by the adapter
-and translated into a sequence of play or gogui-setup commands.
+and translated into a sequence of <command>play</command> commands
+(or <command>gogui-setup</command>, if supported by the program).
 The command is also registered as <command>loadxml</command> and is able to
 handle file arguments that are in Jago's XML format.
 </para>
