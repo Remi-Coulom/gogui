@@ -544,11 +544,15 @@ public class TwoGtp
             }
             double cpuTimeBlack = m_black.getAndClearCpuTime();
             double cpuTimeWhite = m_white.getAndClearCpuTime();
+            double realTimeBlack = m_realTime.get(BLACK);
+            double realTimeWhite = m_realTime.get(WHITE);
             if (isAlternated())
             {
                 resultBlack = inverseResult(resultBlack);
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
+                realTimeBlack = m_realTime.get(WHITE);
+                realTimeWhite = m_realTime.get(BLACK);
             }
             ArrayList<Compare.Placement> moves
                 = Compare.getPlacements(getTree().getRootConst());
@@ -572,8 +576,8 @@ public class TwoGtp
             int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moveNumber, error,
-                       errorMessage, m_realTime.get(BLACK),
-                       m_realTime.get(WHITE), cpuTimeBlack, cpuTimeWhite);
+                       errorMessage, realTimeBlack, realTimeWhite,
+                       cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite, resultReferee);
             ++m_gameIndex;
             m_games.add(moves);
