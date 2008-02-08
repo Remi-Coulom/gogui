@@ -1881,12 +1881,6 @@ public class GoGui
         return m_setupMode;
     }
 
-    public void sendGtpCommandContinue(boolean isCritical,
-                                       boolean showError)
-    {
-        endLengthyCommand(isCritical, showError);
-    }
-
     /** Callback for selected text.
         This is a callback for text selection exents in different components.
         It parses the text for valid points and marks them on the board.
@@ -3750,6 +3744,11 @@ public class GoGui
             {
             }
         }
+    }
+
+    private void sendGtpCommandContinue(boolean isCritical, boolean showError)
+    {
+        endLengthyCommand(isCritical, showError);
     }
 
     private void sendGtpFile(File file)
