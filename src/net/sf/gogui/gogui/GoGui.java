@@ -1310,7 +1310,7 @@ public class GoGui
             return;
         Runnable callback = new Runnable() {
                 public void run() {
-                    sendGtpCommandContinue(isCritical, showError);
+                    endLengthyCommand(isCritical, showError);
                 }
             };
         m_gtp.send(command, callback);
@@ -3744,11 +3744,6 @@ public class GoGui
             {
             }
         }
-    }
-
-    private void sendGtpCommandContinue(boolean isCritical, boolean showError)
-    {
-        endLengthyCommand(isCritical, showError);
     }
 
     private void sendGtpFile(File file)
