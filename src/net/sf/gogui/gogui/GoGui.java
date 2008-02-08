@@ -1881,14 +1881,6 @@ public class GoGui
         return m_setupMode;
     }
 
-    public boolean sendGtpCommandSync(String command) throws GtpError
-    {
-        if (! checkProgramReady())
-            return false;
-        m_gtp.send(command);
-        return true;
-    }
-
     public void sendGtpCommandContinue(boolean isCritical,
                                        boolean showError)
     {
@@ -3728,17 +3720,22 @@ public class GoGui
                                   "");
                         break;
                     }
-                    if (! sendGtpCommandSync(line))
-                        break;
+                    try
+                    {
+                        m_gtp.send(line);
+                    }
+                    catch (GtpError e)
+                    {
+                        showError(e);
+                        if (m_gtp.isProgramDead()
+                            || ! showQuestion("Continue sending commands?",
+                                              "", "Continue", false))
+                            break;
+                    }
                 }
                 catch (IOException e)
                 {
                     showError("Error reading file", e);
-                    break;
-                }
-                catch (GtpError e)
-                {
-                    showError(e);
                     break;
                 }
             }
