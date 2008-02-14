@@ -119,6 +119,7 @@ import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.ObjectUtil;
+import net.sf.gogui.util.LineReader;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
 import net.sf.gogui.util.StringUtil;
@@ -2353,9 +2354,19 @@ public class GoGui
                 {
                     if (m_shell == null)
                         return;
-                    boolean invokeLater = true;
-                    m_shell.receivedStdErr(s, invokeLater);
-                    m_liveGfx.receivedStdErr(s);
+                    m_lineReader.add(s);
+                    while (m_lineReader.hasLines())
+                    {
+                        String line = m_lineReader.getLine();
+                        boolean isLiveGfx = m_liveGfx.handleLine(line);
+                        boolean isWarning =
+                            line.startsWith("warning:")
+                            || line.startsWith("Warning:")
+                            || line.startsWith("WARNING:");
+                        boolean invokeLater = true;
+                        m_shell.receivedStdErr(line, invokeLater, isLiveGfx,
+                                               isWarning);
+                    }
                 }
 
                 public void sentCommand(String s)
@@ -2363,6 +2374,8 @@ public class GoGui
                     if (m_shell != null)
                         m_shell.sentCommand(s);
                 }
+
+                private final LineReader m_lineReader = new LineReader();
 
                 private LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
             };

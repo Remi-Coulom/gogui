@@ -138,15 +138,17 @@ public class GtpShell
         }
     }
 
-    public void receivedStdErr(final String s, boolean invokeLater)
+    public void receivedStdErr(final String s, boolean invokeLater,
+                               final boolean isLiveGfx,
+                               final boolean isWarning)
     {
         if (SwingUtilities.isEventDispatchThread())
-            appendLog(s);
+            appendLog(s, isLiveGfx, isWarning);
         else
         {
             Runnable r = new Runnable() {
                     public void run() {
-                        appendLog(s);
+                        appendLog(s, isLiveGfx, isWarning);
                     } };
             if (invokeLater)
                 SwingUtilities.invokeLater(r);
@@ -295,10 +297,10 @@ public class GtpShell
         m_gtpShellText.appendInvalidResponse(response);
     }
 
-    private void appendLog(String line)
+    private void appendLog(String line, boolean isLiveGfx, boolean isWarning)
     {
         assert SwingUtilities.isEventDispatchThread();
-        m_gtpShellText.appendLog(line);
+        m_gtpShellText.appendLog(line, isLiveGfx, isWarning);
     }
 
     private void appendResponse(boolean error, String response)

@@ -25,6 +25,12 @@ program to standard error), it will automatically parsed for valid points,
 which will be marked on the board while the text is selected.
 </para>
 
+<para>
+Text lines that are written by the program to standard error and start
+with the string "WARNING:", "Warning:", or "warning:" will be displayed
+with an orange color.
+</para>
+
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 <section>

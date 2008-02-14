@@ -21,8 +21,10 @@ class GtpShellText
         m_historyMin = historyMin;
         m_historyMax = historyMax;
         GuiUtil.addStyle(this, "error", Color.red);
+        GuiUtil.addStyle(this, "warning", Color.decode("#ff8000"));
         GuiUtil.addStyle(this, "output", null, null, true);
         GuiUtil.addStyle(this, "log", new Color(0.5f, 0.5f, 0.5f));
+        GuiUtil.addStyle(this, "livegfx", new Color(0.5f, 0.5f, 0.5f));
         GuiUtil.addStyle(this, "time", new Color(0, 0, 0.5f));
         GuiUtil.addStyle(this, "invalid", new Color(1.0f, 0.58f, 0.25f));
         setEditable(false);
@@ -54,10 +56,15 @@ class GtpShellText
         appendText(text, "invalid");
     }
 
-    public void appendLog(String text)
+    public void appendLog(String text, boolean isLiveGfx, boolean isWarning)
     {
         m_isLastTextNonGTP = true;
-        appendText(text, "log");
+        if (isLiveGfx)
+            appendText(text, "livegfx");
+        else if (isWarning)
+            appendText(text, "warning");
+        else
+            appendText(text, "log");
     }
 
     public void appendOutput(String text)

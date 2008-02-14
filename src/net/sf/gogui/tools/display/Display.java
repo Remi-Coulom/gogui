@@ -32,6 +32,7 @@ import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.LiveGfx;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.gui.StatusBar;
+import net.sf.gogui.util.LineReader;
 import net.sf.gogui.util.StringUtil;
 
 /** GTP adapter showing the current board in a window. */
@@ -81,11 +82,15 @@ public class Display
                     }
 
                     public void receivedStdErr(String s) {
-                        m_liveGfx.receivedStdErr(s);
+                        m_lineReader.add(s);
+                        while (m_lineReader.hasLines())
+                            m_liveGfx.handleLine(m_lineReader.getLine());
                     }
 
                     public void sentCommand(String s) {
                     }
+
+                    private final LineReader m_lineReader = new LineReader();
 
                     private LiveGfx m_liveGfx = new LiveGfx(Display.this);
                 };

@@ -25,6 +25,12 @@ Ask use whether to continue, if a command in a file sent with "Send File"
 fails.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Use orange color for standard error lines in GTP Shell that start with
+"warning:"
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

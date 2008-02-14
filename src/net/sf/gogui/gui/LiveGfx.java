@@ -20,34 +20,14 @@ public class LiveGfx
         m_duringMultiLineResponse = false;
     }
 
-    /** Parse the next sequence of characters.
+    /** Parse line.
         This function can be called from a different thread than the Swing
-        event disapatch thread.
+        event dispatch thread.
+        @param s The line received from standard error (may or may not be
+        a live gfx line).
+        @return true, if the line was a live gfx line
     */
-    public void receivedStdErr(String s)
-    {
-        for (int i = 0; i < s.length(); ++i)
-        {
-            char c = s.charAt(i);
-            if (c == '\r' || c == '\n')
-            {
-                handleLine(m_buffer.toString());
-                m_buffer.setLength(0);
-            }
-            else
-                m_buffer.append(c);
-        }
-    }
-
-    private boolean m_duringMultiLineResponse;
-
-    Listener m_listener;
-
-    private final StringBuilder m_buffer = new StringBuilder(1024);
-
-    private final StringBuilder m_response = new StringBuilder(1024);
-
-    private void handleLine(String s)
+    public boolean handleLine(String s)
     {
         if (m_duringMultiLineResponse)
         {
@@ -61,7 +41,7 @@ public class LiveGfx
                 m_response.append(s);
                 m_response.append('\n');
             }
-            return;
+            return true;
         }
         s = s.trim();
         if (s.startsWith("gogui-gfx:"))
@@ -75,8 +55,16 @@ public class LiveGfx
             }
             else
                 showGfx(response);
+            return true;
         }
+        return false;
     }
+
+    private boolean m_duringMultiLineResponse;
+
+    Listener m_listener;
+
+    private final StringBuilder m_response = new StringBuilder(1024);
 
     private void showGfx(final String text)
     {
