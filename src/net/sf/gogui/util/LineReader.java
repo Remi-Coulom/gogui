@@ -9,13 +9,12 @@ public class LineReader
     public void add(String s)
     {
         m_buffer.append(s);
-        m_hasLines = s.contains("\n");
     }
 
     /** Check if the buffer contains at least one line. */
     public boolean hasLines()
     {
-        return m_hasLines;
+        return m_buffer.toString().contains("\n");
     }
 
     public String getLine()
@@ -26,11 +25,8 @@ public class LineReader
             return "";
         String result = s.substring(0, pos + 1);
         m_buffer.delete(0, pos + 1);
-        m_hasLines = false;
         return result;
     }
-
-    private boolean m_hasLines;
 
     private final StringBuilder m_buffer = new StringBuilder(1024);
 }
