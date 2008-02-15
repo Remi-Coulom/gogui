@@ -21,7 +21,7 @@ class GtpShellText
         m_historyMin = historyMin;
         m_historyMax = historyMax;
         GuiUtil.addStyle(this, "error", Color.red);
-        GuiUtil.addStyle(this, "warning", Color.decode("#ff8000"));
+        GuiUtil.addStyle(this, "warning", Color.decode("#ff7000"));
         GuiUtil.addStyle(this, "output", null, null, true);
         GuiUtil.addStyle(this, "log", new Color(0.5f, 0.5f, 0.5f));
         GuiUtil.addStyle(this, "livegfx", new Color(0.5f, 0.5f, 0.5f));
