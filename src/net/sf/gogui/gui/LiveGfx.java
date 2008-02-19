@@ -29,6 +29,7 @@ public class LiveGfx
     */
     public boolean handleLine(String s)
     {
+        s = s.trim();
         if (m_duringMultiLineResponse)
         {
             if (s.equals(""))
