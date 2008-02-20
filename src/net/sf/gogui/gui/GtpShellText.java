@@ -24,7 +24,7 @@ class GtpShellText
         GuiUtil.addStyle(this, "warning", Color.decode("#ff7000"));
         GuiUtil.addStyle(this, "output", null, null, true);
         GuiUtil.addStyle(this, "log", new Color(0.5f, 0.5f, 0.5f));
-        GuiUtil.addStyle(this, "livegfx", new Color(0.5f, 0.5f, 0.5f));
+        GuiUtil.addStyle(this, "livegfx", Color.decode("#5498B0"));
         GuiUtil.addStyle(this, "time", new Color(0, 0, 0.5f));
         GuiUtil.addStyle(this, "invalid", new Color(1.0f, 0.58f, 0.25f));
         setEditable(false);
