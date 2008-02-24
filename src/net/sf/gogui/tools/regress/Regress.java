@@ -562,7 +562,9 @@ public class Regress
         m_outFile = new File(m_prefix + m_outFileRelativeName);
         File parent = m_outFile.getParentFile();
         if (parent != null && ! parent.exists())
-            parent.mkdir();
+            if (! parent.mkdir())
+                throw new ErrorMessage("Could not create directory '"
+                                       + parent + "'");
         m_currentStyle = null;
         m_out = new PrintStream(m_outFile);
         m_out.print("<html>\n" +
