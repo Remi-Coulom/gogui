@@ -50,7 +50,9 @@ public class Regress
         {
             File file = new File(output);
             if (! file.exists())
-                file.mkdir();
+                if (! file.mkdir())
+                    throw new ErrorMessage("Could not create output directory '"
+                                           + output + "'");
             m_prefix = output + File.separator;
         }
         initOutNames(tests);
