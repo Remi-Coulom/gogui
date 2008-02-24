@@ -72,7 +72,8 @@ public final class ThumbnailUtil
             else
             {
                 System.err.println("  Expiring");
-                file.delete();
+                if (! file.delete())
+                    System.err.println("  Could not delete file");
             }
         }
         else
