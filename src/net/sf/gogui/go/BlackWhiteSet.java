@@ -39,6 +39,16 @@ public class BlackWhiteSet<T>
         }
     }
 
+    public int hashCode()
+    {
+        int hashCode = 0;
+        if (m_elementBlack != null)
+            hashCode |= m_elementBlack.hashCode();
+        if (m_elementWhite != null)
+            hashCode |= m_elementWhite.hashCode();
+        return hashCode;
+    }
+
     public void set(GoColor c, T element)
     {
         if (c == BLACK)
