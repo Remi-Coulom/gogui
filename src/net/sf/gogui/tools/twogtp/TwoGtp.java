@@ -64,8 +64,11 @@ public class TwoGtp
             throw new ErrorMessage("No white program set");
         m_filePrefix = filePrefix;
         m_useXml = useXml;
-        if (force)
-            getResultFile().delete();
+        File resultFile = getResultFile();
+        if (force && resultFile.exists())
+            if (! resultFile.delete())
+                throw new ErrorMessage("Could not delete file '" + resultFile
+                                       + "'");
         m_allPrograms = new ArrayList<Program>();
         m_black = new Program(black, "Black", "B", verbose);
         m_allPrograms.add(m_black);
