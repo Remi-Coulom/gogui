@@ -27,7 +27,7 @@ Automatically restore clock to current node, if it was never running.
 </listitem>
 <listitem>
 <simpara>
-Ask use whether to continue, if a command in a file sent with "Send File"
+Ask user whether to continue, if a command in a file sent with "Send File"
 fails.
 </simpara>
 </listitem>
