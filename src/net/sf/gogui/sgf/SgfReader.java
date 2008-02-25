@@ -51,6 +51,7 @@ public final class SgfReader
         The charset property is only respected if the stream is a
         FileInputStream, because it has to be reopened with a different
         encoding.
+        The stream is closed after reading.
         @param in Stream to read from.
         @param file File name if input stream is a FileInputStream to allow
         reopening the stream after a charset change
@@ -77,6 +78,7 @@ public final class SgfReader
         {
             try
             {
+                in.close();
                 in = new FileInputStream(file);
             }
             catch (IOException e2)
@@ -91,6 +93,17 @@ public final class SgfReader
             catch (SgfCharsetChanged e3)
             {
                 assert false;
+            }
+        }
+        finally
+        {
+            try
+            {
+                in.close();
+            }
+            catch (IOException e)
+            {
+                System.err.println("Could not close SGF stream");
             }
         }
     }

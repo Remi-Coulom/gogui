@@ -692,10 +692,9 @@ public class TwoGtp
             }
             if (! file.exists())
                 return;
-            FileInputStream fileStream = null;
             try
             {
-                fileStream = new FileInputStream(file);
+                FileInputStream fileStream = new FileInputStream(file);
                 SgfReader reader =
                     new SgfReader(fileStream, file, null, 0);
                 ConstNode root = reader.getTree().getRoot();
@@ -710,21 +709,6 @@ public class TwoGtp
             {
                 System.err.println("Error reading " + file + ": " +
                                    e.getMessage());
-            }
-            finally
-            {
-                if (fileStream != null)
-                {
-                    try
-                    {
-                        fileStream.close();
-                    }
-                    catch (IOException e)
-                    {
-                        System.err.println("Error closing " + file + ": " +
-                                           e.getMessage());
-                    }
-                }
             }
         }
     }
