@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.Random;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
@@ -212,8 +213,8 @@ public final class NodeUtil
         return moves;
     }
 
-    /** Get child node containg a certain move.
-        @return null if no such child existst.
+    /** Get child node containing a certain move.
+        @return null if no such child exists.
     */
     public static ConstNode getChildWithMove(ConstNode node, Move move)
     {
@@ -690,6 +691,30 @@ public final class NodeUtil
         }
     }
 
+    /** Select a random node in the main variation within a certain depth
+        interval.
+        @param root The root node
+        @param minDepth The minimum depth of the interval (inclusive)
+        @param maxDepth The maximum depth of the interval (inclusive)
+        @return A random node in the given depth interval, null, if there is
+        none.
+    */
+    public static ConstNode selectRandom(ConstNode root, int minDepth,
+                                         int maxDepth)
+    {
+        ConstNode last = getLast(root);
+        int depth = getDepth(last);
+        if (depth < minDepth)
+            return null;
+        if (depth < maxDepth)
+            maxDepth = depth;
+        int idx = minDepth + s_random.nextInt(maxDepth - minDepth + 1);
+        ConstNode node = last;
+        for (int i = depth; i != idx; --i)
+            node = node.getFatherConst();
+        return node;
+    }
+
     /** Check if the number of nodes in the subtree of a node is greater
         than a given limit.
     */
@@ -788,6 +813,8 @@ public final class NodeUtil
             node.removeChild(child);
         }
     }
+
+    private static Random s_random = new Random();
 
     /** Make constructor unavailable; class is for namespace only. */
     private NodeUtil()
