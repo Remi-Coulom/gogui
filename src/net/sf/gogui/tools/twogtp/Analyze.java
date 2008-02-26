@@ -246,7 +246,7 @@ public class Analyze
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + COLOR_INFO
                   + "\">\n");
-        String referee = m_table.getProperty("Referee", null);
+        String referee = m_table.getProperty("Referee", "");
         if (referee.equals("-") || referee.equals(""))
             referee = null;
         writePropertyHtmlRow(out, "Black", "Black");
