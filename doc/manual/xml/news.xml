@@ -11,13 +11,18 @@
 <itemizedlist>
 <listitem>
 <simpara>
-TwoGtp: fix "too many open files" error, if TwoGtp is restarted and a large
-number of games was already played
+gogui-twogtp: fix "too many open files" error, if TwoGtp is restarted and a
+large number of games was already played
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: also measure real time used by programs.
+gogui-twogtp: also measure real time used by programs.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-statistics: new option -random
 </simpara>
 </listitem>
 <listitem>

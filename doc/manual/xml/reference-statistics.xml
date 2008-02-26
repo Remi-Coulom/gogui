@@ -27,6 +27,7 @@ Runs GTP commands on all positions of game collections.
 <arg><option>-max</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
 <arg><option>-quiet</option></arg>
+<arg><option>-random</option></arg>
 <arg><option>-setup</option> <replaceable>n</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -261,6 +262,17 @@ Command line for running Go program.
 <listitem>
 <para>
 Don't write information about progress to standard error stream.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-random</option>
+</term>
+<listitem>
+<para>
+Only select one random position per game.
 </para>
 </listitem>
 </varlistentry>

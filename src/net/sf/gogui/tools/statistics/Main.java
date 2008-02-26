@@ -33,6 +33,7 @@ public final class Main
                 "precision:",
                 "program:",
                 "quiet",
+                "random",
                 "setup",
                 "size:",
                 "verbose",
@@ -52,6 +53,7 @@ public final class Main
             boolean analyze = opt.contains("analyze");
             boolean allowSetup = opt.contains("setup");
             boolean backward = opt.contains("backward");
+            boolean random = opt.contains("random");
             String program = "";
             if (! analyze)
             {
@@ -107,7 +109,7 @@ public final class Main
                 statistics.setQuiet(quiet);
                 statistics.run(program, arguments, boardSize, commands,
                                beginCommands, finalCommands, verbose,
-                               allowSetup, backward);
+                               allowSetup, backward, random);
                 statistics.saveTable(output);
             }
         }

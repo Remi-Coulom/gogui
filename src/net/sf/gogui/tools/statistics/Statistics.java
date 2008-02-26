@@ -40,12 +40,12 @@ public class Statistics
                     ArrayList<String> commands,
                     ArrayList<String> beginCommands,
                     ArrayList<String> finalCommands, boolean verbose,
-                    boolean allowSetup, boolean backward)
+                    boolean allowSetup, boolean backward, boolean random)
         throws ErrorMessage, GtpError, IOException
     {
         run(new GtpClient(program, null, verbose, null), program, sgfFiles,
             size, commands, beginCommands, finalCommands, allowSetup,
-            backward);
+            backward, random);
     }
 
     /** Construct with existing GTP engine.
@@ -64,19 +64,22 @@ public class Statistics
         should not generate en error
         @param backward true, if games should be iterated backwards (counting
         the moves starting with one at the last move)
+        @param random true, if only one random position should be selected
+        from each game
     */
     public void run(GtpClientBase gtp, String program,
                     ArrayList<String> sgfFiles, int size,
                     ArrayList<String> commands,
                     ArrayList<String> beginCommands,
                     ArrayList<String> finalCommands, boolean allowSetup,
-                    boolean backward)
+                    boolean backward, boolean random)
         throws ErrorMessage, IOException
     {
         new FileCheck(sgfFiles, size, allowSetup);
         m_size = size;
         m_allowSetup = allowSetup;
         m_backward = backward;
+        m_random = random;
         initCommands(commands, beginCommands, finalCommands);
         ArrayList<String> columnHeaders = new ArrayList<String>();
         columnHeaders.add("File");
@@ -103,6 +106,7 @@ public class Statistics
         m_gtp.waitForExit();
         m_table.setProperty("Games", Integer.toString(m_numberGames));
         m_table.setProperty("Backward", backward ? "yes" : "no");
+        m_table.setProperty("Random", random ? "yes" : "no");
     }
 
     /** Set maximum move number for positions to run the commands on.
@@ -157,6 +161,8 @@ public class Statistics
     private boolean m_allowSetup;
 
     private boolean m_backward;
+
+    private boolean m_random;
 
     private boolean m_quiet;
 
@@ -361,7 +367,9 @@ public class Statistics
         ++m_numberGames;
         Game game = new Game(reader.getTree());
         checkGame(game.getTree(), name);
-        if (m_backward)
+        if (m_random)
+            iteratePositionsRandom(game, name);
+        else if (m_backward)
             iteratePositionsBackward(game, name);
         else
             iteratePositions(game, name);
@@ -457,6 +465,39 @@ public class Statistics
                                beginCommands, regularCommands, finalCommands);
             ++number;
         }
+    }
+
+    private void iteratePositionsRandom(Game game, String name)
+        throws GtpError
+    {
+        int minDepth;
+        int maxDepth;
+        if (m_backward)
+        {
+            int depth = NodeUtil.getDepth(NodeUtil.getLast(game.getRoot()));
+            minDepth = depth - m_max;
+            maxDepth = depth - m_min;
+        }
+        else
+        {
+            minDepth = m_min;
+            maxDepth = m_max;
+        }
+        ConstNode node = NodeUtil.selectRandom(game.getRoot(), minDepth,
+                                               maxDepth);
+        if (node == null)
+            return;
+        int number = NodeUtil.getDepth(node);
+        game.gotoNode(node);
+        synchronize(game);
+        Move move = node.getMove();
+        boolean beginCommands = ! node.hasChildren();
+        boolean regularCommands =
+            (move != null || node.hasSetup() || ! node.hasFather());
+        boolean finalCommands = ! node.hasFather();
+        if (beginCommands || regularCommands || finalCommands)
+            handlePosition(name, node.getToMove(), move, number,
+                           beginCommands, regularCommands, finalCommands);
     }
 
     private String send(String command, GoColor toMove, Move move)
