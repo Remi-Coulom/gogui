@@ -40,7 +40,7 @@ public class StatusBar
             outerPanel.add(filler, BorderLayout.EAST);
         }
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createLineBorder(Color.gray));
+        //panel.setBorder(BorderFactory.createLineBorder(Color.gray));
         outerPanel.add(panel, BorderLayout.CENTER);
         m_iconBox = Box.createHorizontalBox();
         panel.add(m_iconBox, BorderLayout.WEST);
