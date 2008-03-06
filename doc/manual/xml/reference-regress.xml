@@ -103,7 +103,7 @@ Read command line options and arguments from the given file.
 <listitem>
 <para>
 File with GTP commands to execute before each test. This file can be used
-to configure engine parameters. If a command from the file fails, GtpRegress
+to configure engine parameters. If a command from the file fails, the program
 will exit with an error message.
 </para>
 </listitem>
