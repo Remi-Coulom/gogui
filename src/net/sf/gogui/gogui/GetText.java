@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 class GetText
 {
-    public static String get(String key)
+    public static String getText(String key)
     {
         return m_bundle.getString(key);
     }

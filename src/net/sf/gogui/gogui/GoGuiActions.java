@@ -72,7 +72,7 @@ public class GoGuiActions
         public Action(String name, String desc, Integer accel, int modifier,
                       String icon)
         {
-            putValue(AbstractAction.NAME, getText(name));
+            putValue(AbstractAction.NAME, GetText.getText(name));
             if (desc != null)
                 setDescription(desc);
             if (accel != null)
@@ -80,7 +80,7 @@ public class GoGuiActions
                          getKeyStroke(accel.intValue(), modifier));
             if (icon != null)
                 putValue(AbstractAction.SMALL_ICON,
-                         GuiUtil.getIcon(icon, getText(name)));
+                         GuiUtil.getIcon(icon, GetText.getText(name)));
             m_allActions.add(this);
         }
 
@@ -811,11 +811,6 @@ public class GoGuiActions
     private static KeyStroke getKeyStroke(int keyCode, int modifier)
     {
         return KeyStroke.getKeyStroke(keyCode, modifier);
-    }
-
-    private static String getText(String key)
-    {
-        return GetText.get(key);
     }
 
     private void updateClockRestore(ConstNode node, ConstClock clock)
