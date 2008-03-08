@@ -15,8 +15,8 @@ public final class MainWrapper
 {
     public static void main(String[] args) throws Exception
     {
-        // GoGui is not localized, avoid a mix between English and local
-        // language in Swing dialogs
+        // GoGui is not fully localized yet, avoid a mix between English and
+        // local language in Swing dialogs
         Locale.setDefault(Locale.ENGLISH);
         System.setProperty("apple.awt.brushMetalLook", "true");
         System.setProperty("apple.laf.useScreenMenuBar", "true");

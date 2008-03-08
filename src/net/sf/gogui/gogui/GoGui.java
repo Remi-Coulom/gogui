@@ -492,7 +492,7 @@ public class GoGui
         }
     }
 
-    public void actionDocumentation()
+    public void actionHelp()
     {
         ClassLoader classLoader = getClass().getClassLoader();
         URL url = classLoader.getResource("net/sf/gogui/doc/index.html");
@@ -746,7 +746,7 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionGoto()
+    public void actionGotoMove()
     {
         if (! checkStateChangePossible())
             return;

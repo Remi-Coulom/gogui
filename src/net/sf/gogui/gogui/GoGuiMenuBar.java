@@ -47,7 +47,7 @@ public class GoGuiMenuBar
         add(createMenuGo(actions));
         add(createMenuEdit(actions));
         add(createMenuView(actions));
-        m_menuBookmarks = createMenuBookMarks(actions);
+        m_menuBookmarks = createMenuBookmarks(actions);
         add(m_menuBookmarks);
         add(createMenuTools(actions, recentGtpListener));
         add(createMenuHelp(actions));
@@ -269,9 +269,10 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private MenuChecked createMenuBookMarks(GoGuiActions actions)
+    private MenuChecked createMenuBookmarks(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("Bookmarks", KeyEvent.VK_B);
+        MenuChecked menu =
+            createMenu(getText("MENU_BOOKMARKS"), KeyEvent.VK_B);
         menu.addItem(actions.m_actionAddBookmark, KeyEvent.VK_A);
         menu.addItem(actions.m_actionEditBookmarks, KeyEvent.VK_E);
         return menu;
@@ -325,7 +326,7 @@ public class GoGuiMenuBar
 
     private MenuChecked createMenuEdit(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("Edit", KeyEvent.VK_E);
+        MenuChecked menu = createMenu(getText("MENU_EDIT"), KeyEvent.VK_E);
         menu.addItem(actions.m_actionFind, KeyEvent.VK_F);
         menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
         menu.addSeparator();
@@ -359,9 +360,9 @@ public class GoGuiMenuBar
     }
 
     private MenuChecked createMenuFile(GoGuiActions actions,
-                                        RecentFileMenu.Listener listener)
+                                       RecentFileMenu.Listener listener)
     {
-        MenuChecked menu = createMenu("File", KeyEvent.VK_F);
+        MenuChecked menu = createMenu(getText("MENU_FILE"), KeyEvent.VK_F);
         menu.addItem(actions.m_actionOpen, KeyEvent.VK_O);
         menu.add(createRecentMenu(listener));
         menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
@@ -381,7 +382,7 @@ public class GoGuiMenuBar
 
     private MenuChecked createMenuGame(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("Game", KeyEvent.VK_A);
+        MenuChecked menu = createMenu(getText("MENU_GAME"), KeyEvent.VK_A);
         menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
         menu.addSeparator();
         menu.add(createBoardSizeMenu(actions));
@@ -399,14 +400,14 @@ public class GoGuiMenuBar
 
     private MenuChecked createMenuGo(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("Go", KeyEvent.VK_G);
+        MenuChecked menu = createMenu(getText("MENU_GO"), KeyEvent.VK_G);
         menu.addItem(actions.m_actionBeginning, KeyEvent.VK_B);
         menu.addItem(actions.m_actionBackwardTen, KeyEvent.VK_W);
         menu.addItem(actions.m_actionBackward, KeyEvent.VK_K);
         menu.addItem(actions.m_actionForward, KeyEvent.VK_F);
         menu.addItem(actions.m_actionForwardTen, KeyEvent.VK_R);
         menu.addItem(actions.m_actionEnd, KeyEvent.VK_E);
-        menu.addItem(actions.m_actionGoto, KeyEvent.VK_O);
+        menu.addItem(actions.m_actionGotoMove, KeyEvent.VK_O);
         menu.addSeparator();
         menu.addItem(actions.m_actionNextVariation, KeyEvent.VK_N);
         menu.addItem(actions.m_actionPreviousVariation, KeyEvent.VK_P);
@@ -419,8 +420,8 @@ public class GoGuiMenuBar
 
     private MenuChecked createMenuHelp(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("Help", KeyEvent.VK_H);
-        menu.addItem(actions.m_actionDocumentation, KeyEvent.VK_G);
+        MenuChecked menu = createMenu(getText("MENU_HELP"), KeyEvent.VK_H);
+        menu.addItem(actions.m_actionHelp, KeyEvent.VK_G);
         menu.addItem(actions.m_actionAbout, KeyEvent.VK_A);
         return menu;
     }
@@ -437,7 +438,7 @@ public class GoGuiMenuBar
 
     private MenuChecked createMenuProgram(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("Program", KeyEvent.VK_P);
+        MenuChecked menu = createMenu(getText("MENU_PROGRAM"), KeyEvent.VK_P);
         m_menuAttach = createMenu("Attach", KeyEvent.VK_A);
         m_menuAttach.setEnabled(false);
         menu.add(m_menuAttach);
@@ -454,7 +455,7 @@ public class GoGuiMenuBar
     private MenuChecked createMenuTools(GoGuiActions actions,
                                         RecentFileMenu.Listener listener)
     {
-        MenuChecked menu = createMenu("Tools", KeyEvent.VK_T);
+        MenuChecked menu = createMenu(getText("MENU_TOOLS"), KeyEvent.VK_T);
         menu.addItem(actions.m_actionShowTree, KeyEvent.VK_T);
         menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
         menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
@@ -476,7 +477,7 @@ public class GoGuiMenuBar
 
     private MenuChecked createMenuView(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("View", KeyEvent.VK_V);
+        MenuChecked menu = createMenu(getText("MENU_VIEW"), KeyEvent.VK_V);
         GoGuiCheckBoxMenuItem itemToggleShowToolbar =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowToolbar);
         menu.addItem(itemToggleShowToolbar, KeyEvent.VK_T);
@@ -516,6 +517,11 @@ public class GoGuiMenuBar
         JMenu menu = m_recent.getMenu();
         menu.setMnemonic(KeyEvent.VK_R);
         return menu;
+    }
+
+    private static String getText(String key)
+    {
+        return GetText.get(key);
     }
 }
 

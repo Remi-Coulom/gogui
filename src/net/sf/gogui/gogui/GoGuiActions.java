@@ -72,7 +72,7 @@ public class GoGuiActions
         public Action(String name, String desc, Integer accel, int modifier,
                       String icon)
         {
-            putValue(AbstractAction.NAME, name);
+            putValue(AbstractAction.NAME, getText(name));
             if (desc != null)
                 setDescription(desc);
             if (accel != null)
@@ -80,7 +80,7 @@ public class GoGuiActions
                          getKeyStroke(accel.intValue(), modifier));
             if (icon != null)
                 putValue(AbstractAction.SMALL_ICON,
-                         GuiUtil.getIcon(icon, name));
+                         GuiUtil.getIcon(icon, getText(name)));
             m_allActions.add(this);
         }
 
@@ -104,530 +104,541 @@ public class GoGuiActions
         = new ArrayList<Action>();
 
     public final Action m_actionAbout =
-        new Action("About") {
+        new Action("ACTION_ABOUT") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionAbout(); } };
 
     public final Action m_actionAddBookmark =
-        new Action("Add Bookmark", null, KeyEvent.VK_B) {
+        new Action("ACTION_ADD_BOOKMARK", null, KeyEvent.VK_B) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionAddBookmark(); } };
 
     public final Action m_actionBackToMainVariation =
-        new Action("Back to Main Variation", null, KeyEvent.VK_M) {
+        new Action("ACTION_BACK_TO_MAIN_VARIATION", null,
+                   KeyEvent.VK_M) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackToMainVariation(); } };
 
     public final Action m_actionBackward =
-        new Action("Backward", "Go one move backward", KeyEvent.VK_LEFT,
-                   "gogui-previous") {
+        new Action("ACTION_BACKWARD", "Go one move backward",
+                   KeyEvent.VK_LEFT, "gogui-previous") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(1); } };
 
     public final Action m_actionBackwardTen =
-        new Action("Backward 10", "Go ten moves backward", KeyEvent.VK_LEFT,
+        new Action("ACTION_BACKWARD_TEN", "Go ten moves backward",
+                   KeyEvent.VK_LEFT,
                    SHORTCUT | ActionEvent.SHIFT_MASK, "gogui-previous-10") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(10); } };
 
     public final Action m_actionBeginning =
-        new Action("Beginning", "Go to beginning of game", KeyEvent.VK_HOME,
-                   "gogui-first") {
+        new Action("ACTION_BEGINNING", "Go to beginning of game",
+                   KeyEvent.VK_HOME, "gogui-first") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBeginning(); } };
 
     public final Action m_actionBoardSize9 =
-        new Action("9") {
+        new Action("ACTION_BOARDSIZE_9") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(9); } };
 
     public final Action m_actionBoardSize11 =
-        new Action("11") {
+        new Action("ACTION_BOARDSIZE_11") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(11); } };
 
     public final Action m_actionBoardSize13 =
-        new Action("13") {
+        new Action("ACTION_BOARDSIZE_13") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(13); } };
 
     public final Action m_actionBoardSize15 =
-        new Action("15") {
+        new Action("ACTION_BOARDSIZE_15") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(15); } };
 
     public final Action m_actionBoardSize17 =
-        new Action("17") {
+        new Action("ACTION_BOARDSIZE_17") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(17); } };
 
     public final Action m_actionBoardSize19 =
-        new Action("19") {
+        new Action("ACTION_BOARDSIZE_19") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSize(19); } };
 
     public final Action m_actionBoardSizeOther =
-        new Action("Other") {
+        new Action("ACTION_BOARDSIZE_OTHER") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBoardSizeOther(); } };
 
     public final Action m_actionClockHalt =
-        new Action("Halt") {
+        new Action("ACTION_CLOCK_HALT") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockHalt(); } };
 
     public final Action m_actionClockResume =
-        new Action("Resume") {
+        new Action("ACTION_CLOCK_RESUME") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockResume(); } };
 
     public final Action m_actionClockRestore =
-        new Action("Restore") {
+        new Action("ACTION_CLOCK_RESTORE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockRestore(); } };
 
     public final Action m_actionClockStart =
-        new Action("Start") {
+        new Action("ACTION_CLOCK_START") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockStart(); } };
 
     public final Action m_actionComputerBlack =
-        new Action("Black") {
+        new Action("ACTION_COMPUTER_BLACK") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(true, false); } };
 
     public final Action m_actionComputerBoth =
-        new Action("Both") {
+        new Action("ACTION_COMPUTER_BOTH") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(true, true); } };
 
     public final Action m_actionComputerNone =
-        new Action("None") {
+        new Action("ACTION_COMPUTER_NONE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(false, false); } };
 
     public final Action m_actionComputerWhite =
-        new Action("White") {
+        new Action("ACTION_COMPUTER_WHITE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(false, true); } };
 
     public final Action m_actionEditBookmarks =
-        new Action("Edit Bookmarks...") {
+        new Action("ACTION_EDIT_BOOKMARKS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEditBookmarks(); } };
 
     public final Action m_actionEditPrograms =
-        new Action("Edit Programs...") {
+        new Action("ACTION_EDIT_PROGRAMS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEditPrograms(); } };
 
-    public final Action m_actionGoto =
-        new Action("Go to Move...", null, KeyEvent.VK_G) {
+    public final Action m_actionGotoMove =
+        new Action("ACTION_GOTO_MOVE", null, KeyEvent.VK_G) {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionGoto(); } };
+                m_goGui.actionGotoMove(); } };
 
     public final Action m_actionGotoVariation =
-        new Action("Go to Variation...") {
+        new Action("ACTION_GOTO_VARIATION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGotoVariation(); } };
 
     public final Action m_actionDeleteSideVariations =
-        new Action("Delete Side Variations") {
+        new Action("ACTION_DELETE_SIDE_VARIATIONS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDeleteSideVariations(); } };
 
     public final Action m_actionDetachProgram =
-        new Action("Detach Program")
+        new Action("ACTION_DETACH_PROGRAM")
         {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDetachProgram(); } };
 
-    public final Action m_actionDocumentation =
-        new Action("GoGui Help", null, KeyEvent.VK_F1, FUNCTION_KEY) {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionDocumentation(); } };
-
     public final Action m_actionEnd =
-        new Action("End", "Go to end of game", KeyEvent.VK_END, "gogui-last") {
+        new Action("ACTION_END", "Go to end of game",
+                   KeyEvent.VK_END, "gogui-last") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEnd(); } };
 
     public final Action m_actionExportSgfPosition =
-        new Action("SGF Position...") {
+        new Action("ACTION_EXPORT_SGF_POSITION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportSgfPosition(); } };
 
     public final Action m_actionExportLatexMainVariation =
-        new Action("LaTeX Main Variation...") {
+        new Action("ACTION_EXPORT_LATEX_MAIN_VARIATION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportLatexMainVariation(); } };
 
     public final Action m_actionExportLatexPosition =
-        new Action("LaTeX Position...") {
+        new Action("ACTION_EXPORT_LATEX_POSITION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportLatexPosition(); } };
 
     public final Action m_actionExportPng =
-        new Action("PNG Image...") {
+        new Action("ACTION_EXPORT_PNG") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportPng(); } };
 
     public final Action m_actionExportTextPosition =
-        new Action("Text Position...") {
+        new Action("ACTION_EXPORT_TEXT_POSITION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportTextPosition(); } };
 
     public final Action m_actionExportTextPositionToClipboard =
-        new Action("Text Position to Clipboard") {
+        new Action("ACTION_EXPORT_TEXT_POSITION_TO_CLIPBOARD") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportTextPositionToClipboard(); } };
 
     public final Action m_actionFind =
-        new Action("Find in Comments...", null, KeyEvent.VK_F) {
+        new Action("ACTION_FIND", null, KeyEvent.VK_F) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFind(); } };
 
     public final Action m_actionFindNext =
-        new Action("Find Next", null, KeyEvent.VK_F3, FUNCTION_KEY) {
+        new Action("ACTION_FIND_NEXT", null, KeyEvent.VK_F3,
+                   FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFindNext(); } };
 
     public final Action m_actionForward =
-        new Action("Forward", "Go one move forward", KeyEvent.VK_RIGHT,
-                   "gogui-next") {
+        new Action("ACTION_FORWARD", "Go one move forward",
+                   KeyEvent.VK_RIGHT, "gogui-next") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionForward(1); } };
 
     public final Action m_actionForwardTen =
-        new Action("Forward 10", "Go ten moves forward", KeyEvent.VK_RIGHT,
-                   SHORTCUT | ActionEvent.SHIFT_MASK, "gogui-next-10") {
+        new Action("ACTION_FORWARD_TEN", "Go ten moves forward",
+                   KeyEvent.VK_RIGHT, SHORTCUT | ActionEvent.SHIFT_MASK,
+                   "gogui-next-10") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionForward(10); } };
 
     public final Action m_actionGameInfo =
-        new Action("Game Info", null, KeyEvent.VK_I) {
+        new Action("ACTION_GAME_INFO", null, KeyEvent.VK_I) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGameInfo(); } };
 
     public final Action m_actionSaveLog =
-        new Action("Save Log...") {
+        new Action("ACTION_SAVE_LOG") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveLog(); } };
 
     public final Action m_actionSaveCommands =
-        new Action("Save Commands...") {
+        new Action("ACTION_SAVE_COMMANDS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveCommands(); } };
 
     public final Action m_actionSendFile =
-        new Action("Send File...") {
+        new Action("ACTION_SEND_FILE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSendFile(); } };
 
     public final Action m_actionHandicapNone =
-        new Action("None") {
+        new Action("ACTION_HANDICAP_NONE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(0); } };
 
     public final Action m_actionHandicap2 =
-        new Action("2") {
+        new Action("ACTION_HANDICAP_2") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(2); } };
 
     public final Action m_actionHandicap3 =
-        new Action("3") {
+        new Action("ACTION_HANDICAP_3") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(3); } };
 
     public final Action m_actionHandicap4 =
-        new Action("4") {
+        new Action("ACTION_HANDICAP_4") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(4); } };
 
     public final Action m_actionHandicap5 =
-        new Action("5") {
+        new Action("ACTION_HANDICAP_5") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(5); } };
 
     public final Action m_actionHandicap6 =
-        new Action("6") {
+        new Action("ACTION_HANDICAP_6") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(6); } };
 
     public final Action m_actionHandicap7 =
-        new Action("7") {
+        new Action("ACTION_HANDICAP_7") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(7); } };
 
     public final Action m_actionHandicap8 =
-        new Action("8") {
+        new Action("ACTION_HANDICAP_8") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(8); } };
 
     public final Action m_actionHandicap9 =
-        new Action("9") {
+        new Action("ACTION_HANDICAP_9") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHandicap(9); } };
 
+    public final Action m_actionHelp =
+        new Action("ACTION_HELP", null, KeyEvent.VK_F1,
+                   FUNCTION_KEY) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionHelp(); } };
+
     public final Action m_actionImportTextPosition =
-        new Action("Text Position...") {
+        new Action("ACTION_IMPORT_TEXT_POSITION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPosition(); } };
 
     public final Action m_actionImportTextPositionFromClipboard =
-        new Action("Text Position from Clipboard") {
+        new Action("ACTION_IMPORT_TEXT_POSITION_FROM_CLIPBOARD") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPositionFromClipboard(); } };
 
     public final Action m_actionInterrupt =
-        new Action("Interrupt", null, KeyEvent.VK_ESCAPE,
+        new Action("ACTION_INTERRUPT", null, KeyEvent.VK_ESCAPE,
                    (Platform.isMac() ? SHORTCUT : 0), "gogui-interrupt") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionInterrupt(); } };
 
     public final Action m_actionKeepOnlyPosition =
-        new Action("Keep Only Position") {
+        new Action("ACTION_KEEP_ONLY_POSITION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionKeepOnlyPosition(); } };
 
     public final Action m_actionMainWindowActivate =
-        new Action("Main Window", null, KeyEvent.VK_F6, FUNCTION_KEY) {
+        new Action("ACTION_MAIN_WINDOW_ACTIVATE", null,
+                   KeyEvent.VK_F6, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionMainWindowActivate(); } };
 
     public final Action m_actionMakeMainVariation =
-        new Action("Make Main Variation") {
+        new Action("ACTION_MAKE_MAIN_VARIATION") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionMakeMainVariation(); } };
 
     public final Action m_actionNextEarlierVariation =
-        new Action("Next Earlier Variation", null, KeyEvent.VK_DOWN,
-                   SHORTCUT | ActionEvent.SHIFT_MASK) {
+        new Action("ACTION_NEXT_EARLIER_VARIATION", null,
+                   KeyEvent.VK_DOWN, SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNextEarlierVariation(); } };
 
     public final Action m_actionNextVariation =
-        new Action("Next Variation", "Go to next variation", KeyEvent.VK_DOWN,
-                   "gogui-down") {
+        new Action("ACTION_NEXT_VARIATION", "Go to next variation",
+                   KeyEvent.VK_DOWN, "gogui-down") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNextVariation(); } };
 
     public final Action m_actionNewGame =
-        new Action("New Game", "Clear board and start new game",
-                   "gogui-newgame") {
+        new Action("ACTION_NEW_GAME",
+                   "Clear board and start new game", "gogui-newgame") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNewGame(); } };
 
     public final Action m_actionNewProgram =
-        new Action("New Program...") {
+        new Action("ACTION_NEW_PROGRAM") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNewProgram(); } };
 
     public final Action m_actionOpen =
-        new Action("Open...", "Open", KeyEvent.VK_O, "document-open") {
+        new Action("ACTION_OPEN", "Open", KeyEvent.VK_O,
+                   "document-open") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionOpen(); } };
 
     public final Action m_actionPass =
-        new Action("Pass", "Play a pass", KeyEvent.VK_F2, FUNCTION_KEY,
-                   "gogui-pass") {
+        new Action("ACTION_PASS", "Play a pass",
+                   KeyEvent.VK_F2, FUNCTION_KEY, "gogui-pass") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPass(); } };
 
     public final Action m_actionPlay =
-        new Action("Computer Play", "Make computer play", KeyEvent.VK_F5,
-                   FUNCTION_KEY, "gogui-play") {
+        new Action("ACTION_PLAY", "Make computer play",
+                   KeyEvent.VK_F5, FUNCTION_KEY, "gogui-play") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPlay(false); } };
 
     public final Action m_actionPlaySingleMove =
-        new Action("Play Single Move", null, KeyEvent.VK_F5,
+        new Action("ACTION_PLAY_SINGLE_MOVE", null, KeyEvent.VK_F5,
                    FUNCTION_KEY | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPlay(true); } };
 
     public final Action m_actionPreviousEarlierVariation =
-        new Action("Previous Earlier Variation", null, KeyEvent.VK_UP,
-                   SHORTCUT | ActionEvent.SHIFT_MASK) {
+        new Action("ACTION_PREVIOUS_EARLIER_VARIATION", null,
+                   KeyEvent.VK_UP, SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPreviousEarlierVariation(); } };
 
     public final Action m_actionPreviousVariation =
-        new Action("Previous Variation", "Go to previous variation",
+        new Action("ACTION_PREVIOUS_VARIATION", "Go to previous variation",
                    KeyEvent.VK_UP, "gogui-up") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPreviousVariation(); } };
 
     public final Action m_actionPrint =
-        new Action("Print...", null, KeyEvent.VK_P, null) {
+        new Action("ACTION_PRINT", null, KeyEvent.VK_P, null) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPrint(); } };
 
     public final Action m_actionReattachProgram =
-        new Action("Reattach Program", null, KeyEvent.VK_T) {
+        new Action("ACTION_REATTACH_PROGRAM", null, KeyEvent.VK_T) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachProgram(); } };
 
     public final Action m_actionReattachWithParameters =
-        new Action("Reattach With Parameters", null, KeyEvent.VK_T,
+        new Action("ACTION_REATTACH_WITH_PARAMETERS", null, KeyEvent.VK_T,
                    SHORTCUT | ActionEvent.SHIFT_MASK) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachWithParameters(); } };
 
     public final Action m_actionSave =
-        new Action("Save", "Save", KeyEvent.VK_S, "document-save") {
+        new Action("ACTION_SAVE", "Save", KeyEvent.VK_S, "document-save") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSave(); } };
 
     public final Action m_actionSaveAs =
-        new Action("Save As...", "Save As", "document-save-as") {
+        new Action("ACTION_SAVE_AS", "Save As", "document-save-as") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveAs(); } };
 
     public final Action m_actionSaveParameters =
-        new Action("Save Parameters...") {
+        new Action("ACTION_SAVE_PARAMETERS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveParameters(); } };
 
     public final Action m_actionScore =
-        new Action("Score") {
+        new Action("ACTION_SCORE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionScore(); } };
 
     public final Action m_actionSetupBlack =
-        new Action("Setup Black", "Add black stones and set Black to play",
+        new Action("ACTION_SETUP_BLACK",
+                   "Add black stones and set Black to play",
                    "gogui-setup-black") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSetup(BLACK); } };
 
     public final Action m_actionSetupWhite =
-        new Action("Setup White", "Add white stones and set White to play",
+        new Action("ACTION_SETUP_WHITE",
+                   "Add white stones and set White to play",
                    "gogui-setup-white") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSetup(WHITE); } };
 
     public final Action m_actionShowAnalyzeDialog =
-        new Action("Analyze Commands", null, KeyEvent.VK_F8, FUNCTION_KEY) {
+        new Action("ACTION_ANALYZE_COMMANDS", null, KeyEvent.VK_F8,
+                   FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowAnalyzeDialog(); } };
 
     public final Action m_actionShowShell =
-        new Action("GTP Shell", null, KeyEvent.VK_F9, FUNCTION_KEY) {
+        new Action("ACTION_GTP_SHELL", null, KeyEvent.VK_F9, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowShell(); } };
 
     public final Action m_actionShowTree =
-        new Action("Tree Viewer", null, KeyEvent.VK_F7, FUNCTION_KEY) {
+        new Action("ACTION_TREE_VIEWER", null, KeyEvent.VK_F7, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowTree(); } };
 
     public final Action m_actionToggleAutoNumber =
-        new Action("Auto Number") {
+        new Action("ACTION_AUTO_NUMBER") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleAutoNumber(); } };
 
     public final Action m_actionToggleBeepAfterMove =
-        new Action("Play Sound") {
+        new Action("ACTION_PLAY_SOUND") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleBeepAfterMove(); } };
 
     public final Action m_actionToggleCompletion =
-        new Action("Popup Completions") {
+        new Action("ACTION_POPUP_COMPLETIONS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleCompletion(); } };
 
     public final Action m_actionToggleCommentMonoFont =
-        new Action("Monospace Comment Font") {
+        new Action("ACTION_MONOSPACE_COMMENT_FONT") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleCommentMonoFont(); } };
 
     public final Action m_actionToggleShowCursor =
-        new Action("Cursor") {
+        new Action("ACTION_CURSOR") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowCursor(); } };
 
     public final Action m_actionToggleShowGrid =
-        new Action("Grid Labels") {
+        new Action("ACTION_GRID_LABELS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowGrid(); } };
 
     public final Action m_actionToggleShowInfoPanel =
-        new Action("Info Panel") {
+        new Action("ACTION_INFO_PANEL") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowInfoPanel(); } };
 
     public final Action m_actionToggleShowLastMove =
-        new Action("Last Move") {
+        new Action("ACTION_LAST_MOVE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowLastMove(); } };
 
     public final Action m_actionToggleShowSubtreeSizes =
-        new Action("Subtree Sizes") {
+        new Action("ACTION_SUBTREE_SIZES") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowSubtreeSizes(); } };
 
     public final Action m_actionToggleShowToolbar =
-        new Action("Toolbar") {
+        new Action("ACTION_TOOLBAR") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowToolbar(); } };
 
     public final Action m_actionToggleShowVariations =
-        new Action("Variation Labels") {
+        new Action("ACTION_VARIATION_LABELS") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowVariations(); } };
 
     public final Action m_actionToggleTimeStamp =
-        new Action("Timestamp") {
+        new Action("ACTION_TIMESTAMP") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleTimeStamp(); } };
 
     public final Action m_actionTreeLabelsNumber =
-        new Action("Move Number") {
+        new Action("ACTION_TREE_LABELS_MOVE_NUMBER") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeLabels(GameTreePanel.LABEL_NUMBER); } };
 
     public final Action m_actionTreeLabelsMove =
-        new Action("Move") {
+        new Action("ACTION_TREE_LABELS_MOVE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeLabels(GameTreePanel.LABEL_MOVE); } };
 
     public final Action m_actionTreeLabelsNone =
-        new Action("None") {
+        new Action("ACTION_TREE_LABELS_NONE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeLabels(GameTreePanel.LABEL_NONE); } };
 
     public final Action m_actionTreeSizeLarge =
-        new Action("Large") {
+        new Action("ACTION_TREE_SIZE_LARGE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_LARGE); } };
 
     public final Action m_actionTreeSizeNormal =
-        new Action("Normal") {
+        new Action("ACTION_TREE_SIZE_NORMAL") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_NORMAL); } };
 
     public final Action m_actionTreeSizeSmall =
-        new Action("Small") {
+        new Action("ACTION_TREE_SIZE_SMALL") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_SMALL); } };
 
     public final Action m_actionTreeSizeTiny =
-        new Action("Tiny") {
+        new Action("ACTION_TREE_SIZE_TINY") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTreeSize(GameTreePanel.SIZE_TINY); } };
 
     public final Action m_actionTruncate =
-        new Action("Truncate") {
+        new Action("ACTION_TRUNCATE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTruncate(); } };
 
     public final Action m_actionTruncateChildren =
-        new Action("Truncate Children") {
+        new Action("ACTION_TRUNCATE_CHILDREN") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionTruncateChildren(); } };
 
     public final Action m_actionQuit =
-        new Action("Quit", null, KeyEvent.VK_Q, null) {
+        new Action("ACTION_QUIT", null, KeyEvent.VK_Q, null) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionQuit(); } };
 
@@ -720,7 +731,7 @@ public class GoGuiActions
         m_actionFindNext.setEnabled(hasPattern);
         m_actionForward.setEnabled(hasChildren);
         m_actionForwardTen.setEnabled(hasChildren);
-        m_actionGoto.setEnabled(hasFather || hasChildren);
+        m_actionGotoMove.setEnabled(hasFather || hasChildren);
         m_actionGotoVariation.setEnabled(hasFather || hasChildren);
         m_actionHandicapNone.setSelected(handicap == 0);
         m_actionHandicap2.setSelected(handicap == 2);
@@ -800,6 +811,11 @@ public class GoGuiActions
     private static KeyStroke getKeyStroke(int keyCode, int modifier)
     {
         return KeyStroke.getKeyStroke(keyCode, modifier);
+    }
+
+    private static String getText(String key)
+    {
+        return GetText.get(key);
     }
 
     private void updateClockRestore(ConstNode node, ConstClock clock)

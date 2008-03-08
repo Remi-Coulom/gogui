@@ -130,6 +130,7 @@ Comment out the exec svnversion for releases.
 <copy todir="build">
 <fileset dir="src"
  includes="
+  net/sf/gogui/*/*.properties
   net/sf/gogui/images/*.png
   net/sf/gogui/gui/analyze-commands
   net/sf/gogui/gui/*.png
@@ -190,6 +191,7 @@ Comment out the exec svnversion for releases.
  src/net/sf/gogui/images/*.svg
  src/net/sf/gogui/overview.html
  src/net/sf/gogui/*/package.html
+ src/net/sf/gogui/*/*.properties
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
  src/net/sf/gogui/gui/analyze-commands
