@@ -32,6 +32,12 @@ Automatically restore clock to current node, if it was never running.
 </listitem>
 <listitem>
 <simpara>
+Partial translation of the user interface into German. New menu item
+Help/Switch Language to select the default language.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Ask user whether to continue, if a command in a file sent with "Send File"
 fails.
 </simpara>

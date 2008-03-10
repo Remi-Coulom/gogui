@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
@@ -109,6 +110,7 @@ import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.StatusBar;
+import net.sf.gogui.gui.SwitchLanguageDialog;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
@@ -1444,6 +1446,16 @@ public class GoGui
         }
         else
             m_gameTreeViewer.toFront();
+    }
+
+    public void actionSwitchLanguage()
+    {
+        SwitchLanguageDialog dialog =
+            new SwitchLanguageDialog(this, m_messageDialogs, m_prefs,
+                                     "language");
+        dialog.addLanguage(Locale.ENGLISH, true);
+        dialog.addLanguage(Locale.GERMAN, false);
+        dialog.run();
     }
 
     public void actionToggleBeepAfterMove()

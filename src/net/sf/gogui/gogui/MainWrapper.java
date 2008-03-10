@@ -5,6 +5,7 @@ package net.sf.gogui.gogui;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 import net.sf.gogui.util.ErrorMessage;
 
 /** Wrapper for starting GoGui.
@@ -15,9 +16,7 @@ public final class MainWrapper
 {
     public static void main(String[] args) throws Exception
     {
-        // GoGui is not fully localized yet, avoid a mix between English and
-        // local language in Swing dialogs
-        Locale.setDefault(Locale.ENGLISH);
+        setLocale();
         System.setProperty("apple.awt.brushMetalLook", "true");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
@@ -53,5 +52,16 @@ public final class MainWrapper
     /** Make constructor unavailable; class is for namespace only. */
     private MainWrapper()
     {
+    }
+
+    private static void setLocale()
+    {
+        // Language preference as stored by GoGui.actionSwitchLanguage()
+        Preferences prefs = Preferences.userNodeForPackage(MainWrapper.class);
+        // Default is "en", not Locale.getDefault().getLanguage(), to avoid a
+        // mix between English and local language in Swing dialogs for
+        // languages not supported by GoGui
+        String language = prefs.get("language", "en");
+        Locale.setDefault(new Locale(language));
     }
 }

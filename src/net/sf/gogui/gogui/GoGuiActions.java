@@ -327,21 +327,6 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionGameInfo(); } };
 
-    public final Action m_actionSaveLog =
-        new Action("ACTION_SAVE_LOG") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionSaveLog(); } };
-
-    public final Action m_actionSaveCommands =
-        new Action("ACTION_SAVE_COMMANDS") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionSaveCommands(); } };
-
-    public final Action m_actionSendFile =
-        new Action("ACTION_SEND_FILE") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionSendFile(); } };
-
     public final Action m_actionHandicapNone =
         new Action("ACTION_HANDICAP_NONE") {
             public void actionPerformed(ActionEvent e) {
@@ -510,6 +495,16 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveAs(); } };
 
+    public final Action m_actionSaveCommands =
+        new Action("ACTION_SAVE_COMMANDS") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSaveCommands(); } };
+
+    public final Action m_actionSaveLog =
+        new Action("ACTION_SAVE_LOG") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSaveLog(); } };
+
     public final Action m_actionSaveParameters =
         new Action("ACTION_SAVE_PARAMETERS") {
             public void actionPerformed(ActionEvent e) {
@@ -519,6 +514,11 @@ public class GoGuiActions
         new Action("ACTION_SCORE") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionScore(); } };
+
+    public final Action m_actionSendFile =
+        new Action("ACTION_SEND_FILE") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSendFile(); } };
 
     public final Action m_actionSetupBlack =
         new Action("ACTION_SETUP_BLACK", "TOOLTIP_SETUP_BLACK",
@@ -547,6 +547,11 @@ public class GoGuiActions
         new Action("ACTION_TREE_VIEWER", null, KeyEvent.VK_F7, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowTree(); } };
+
+    public final Action m_actionSwitchLanguage =
+        new Action("ACTION_SWITCH_LANGUAGE") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSwitchLanguage(); } };
 
     public final Action m_actionToggleAutoNumber =
         new Action("ACTION_AUTO_NUMBER") {
