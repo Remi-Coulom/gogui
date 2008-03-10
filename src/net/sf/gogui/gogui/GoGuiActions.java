@@ -75,7 +75,8 @@ public class GoGuiActions
         {
             putValue(AbstractAction.NAME, GetText.getText(name));
             if (desc != null)
-                setDescription(desc);
+                putValue(AbstractAction.SHORT_DESCRIPTION,
+                         GetText.getText(desc));
             if (accel != null)
                 putValue(AbstractAction.ACCELERATOR_KEY,
                          getKeyStroke(accel.intValue(), modifier));
@@ -87,7 +88,17 @@ public class GoGuiActions
 
         public final void setDescription(String desc)
         {
-            putValue(AbstractAction.SHORT_DESCRIPTION, desc);
+            if (desc == null)
+                putValue(AbstractAction.SHORT_DESCRIPTION, null);
+            else
+                putValue(AbstractAction.SHORT_DESCRIPTION,
+                         GetText.getText(desc));
+        }
+
+        public void setDescription(String desc, Object... args)
+        {
+            putValue(AbstractAction.SHORT_DESCRIPTION,
+                     MessageFormat.format(GetText.getText(desc), args));
         }
 
         public void setName(String name)
@@ -127,20 +138,20 @@ public class GoGuiActions
                 m_goGui.actionBackToMainVariation(); } };
 
     public final Action m_actionBackward =
-        new Action("ACTION_BACKWARD", "Go one move backward",
+        new Action("ACTION_BACKWARD", "TOOLTIP_BACKWARD",
                    KeyEvent.VK_LEFT, "gogui-previous") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(1); } };
 
     public final Action m_actionBackwardTen =
-        new Action("ACTION_BACKWARD_TEN", "Go ten moves backward",
+        new Action("ACTION_BACKWARD_TEN", "TOOLTIP_BACKWARD_TEN",
                    KeyEvent.VK_LEFT,
                    SHORTCUT | ActionEvent.SHIFT_MASK, "gogui-previous-10") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBackward(10); } };
 
     public final Action m_actionBeginning =
-        new Action("ACTION_BEGINNING", "Go to beginning of game",
+        new Action("ACTION_BEGINNING", "TOOLTIP_BEGINNING",
                    KeyEvent.VK_HOME, "gogui-first") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionBeginning(); } };
@@ -252,7 +263,7 @@ public class GoGuiActions
                 m_goGui.actionDetachProgram(); } };
 
     public final Action m_actionEnd =
-        new Action("ACTION_END", "Go to end of game",
+        new Action("ACTION_END", "TOOLTIP_END",
                    KeyEvent.VK_END, "gogui-last") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionEnd(); } };
@@ -299,13 +310,13 @@ public class GoGuiActions
                 m_goGui.actionFindNext(); } };
 
     public final Action m_actionForward =
-        new Action("ACTION_FORWARD", "Go one move forward",
+        new Action("ACTION_FORWARD", "TOOLTIP_FORWARD",
                    KeyEvent.VK_RIGHT, "gogui-next") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionForward(1); } };
 
     public final Action m_actionForwardTen =
-        new Action("ACTION_FORWARD_TEN", "Go ten moves forward",
+        new Action("ACTION_FORWARD_TEN", "TOOLTIP_FORWARD_TEN",
                    KeyEvent.VK_RIGHT, SHORTCUT | ActionEvent.SHIFT_MASK,
                    "gogui-next-10") {
             public void actionPerformed(ActionEvent e) {
@@ -421,14 +432,13 @@ public class GoGuiActions
                 m_goGui.actionNextEarlierVariation(); } };
 
     public final Action m_actionNextVariation =
-        new Action("ACTION_NEXT_VARIATION", "Go to next variation",
+        new Action("ACTION_NEXT_VARIATION", "TOOLTIP_NEXT_VARIATION",
                    KeyEvent.VK_DOWN, "gogui-down") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNextVariation(); } };
 
     public final Action m_actionNewGame =
-        new Action("ACTION_NEW_GAME",
-                   "Clear board and start new game", "gogui-newgame") {
+        new Action("ACTION_NEW_GAME", "TOOLTIP_NEW_GAME", "gogui-newgame") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNewGame(); } };
 
@@ -438,19 +448,19 @@ public class GoGuiActions
                 m_goGui.actionNewProgram(); } };
 
     public final Action m_actionOpen =
-        new Action("ACTION_OPEN", "Open", KeyEvent.VK_O,
+        new Action("ACTION_OPEN", "TOOLTIP_OPEN", KeyEvent.VK_O,
                    "document-open") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionOpen(); } };
 
     public final Action m_actionPass =
-        new Action("ACTION_PASS", "Play a pass",
+        new Action("ACTION_PASS", "TOOLTIP_PASS",
                    KeyEvent.VK_F2, FUNCTION_KEY, "gogui-pass") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPass(); } };
 
     public final Action m_actionPlay =
-        new Action("ACTION_PLAY", "Make computer play",
+        new Action("ACTION_PLAY", "TOOLTIP_PLAY",
                    KeyEvent.VK_F5, FUNCTION_KEY, "gogui-play") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPlay(false); } };
@@ -468,7 +478,7 @@ public class GoGuiActions
                 m_goGui.actionPreviousEarlierVariation(); } };
 
     public final Action m_actionPreviousVariation =
-        new Action("ACTION_PREVIOUS_VARIATION", "Go to previous variation",
+        new Action("ACTION_PREVIOUS_VARIATION", "TOOLTIP_PREVIOUS_VARIATION",
                    KeyEvent.VK_UP, "gogui-up") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionPreviousVariation(); } };
@@ -490,12 +500,13 @@ public class GoGuiActions
                 m_goGui.actionReattachWithParameters(); } };
 
     public final Action m_actionSave =
-        new Action("ACTION_SAVE", "Save", KeyEvent.VK_S, "document-save") {
+        new Action("ACTION_SAVE", "TOOLTIP_SAVE", KeyEvent.VK_S,
+                   "document-save") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSave(); } };
 
     public final Action m_actionSaveAs =
-        new Action("ACTION_SAVE_AS", "Save As", "document-save-as") {
+        new Action("ACTION_SAVE_AS", "TOOLTIP_SAVE_AS", "document-save-as") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveAs(); } };
 
@@ -510,15 +521,13 @@ public class GoGuiActions
                 m_goGui.actionScore(); } };
 
     public final Action m_actionSetupBlack =
-        new Action("ACTION_SETUP_BLACK",
-                   "Add black stones and set Black to play",
+        new Action("ACTION_SETUP_BLACK", "TOOLTIP_SETUP_BLACK",
                    "gogui-setup-black") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSetup(BLACK); } };
 
     public final Action m_actionSetupWhite =
-        new Action("ACTION_SETUP_WHITE",
-                   "Add white stones and set White to play",
+        new Action("ACTION_SETUP_WHITE", "TOOLTIP_SETUP_WHITE",
                    "gogui-setup-white") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSetup(WHITE); } };
@@ -822,24 +831,21 @@ public class GoGuiActions
 
     private void updateClockRestore(ConstNode node, ConstClock clock)
     {
-        boolean enabled = false;
-        String desc = null;
-        if (clock.isInitialized())
+        if (! clock.isInitialized())
         {
-            enabled = true;
+            m_actionClockRestore.setEnabled(false);
+            m_actionClockRestore.setDescription(null);
+        }
+        else
+        {
             Clock tempClock = new Clock();
             tempClock.setTimeSettings(clock.getTimeSettings());
             NodeUtil.restoreClock(node, tempClock);
-            StringBuilder buffer = new StringBuilder();
-            buffer.append("Restore saved time (B ");
-            buffer.append(tempClock.getTimeString(BLACK));
-            buffer.append(", W ");
-            buffer.append(tempClock.getTimeString(WHITE));
-            buffer.append(')');
-            desc = buffer.toString();
+            m_actionClockRestore.setEnabled(true);
+            m_actionClockRestore.setDescription("TOOLTIP_CLOCK_RESTORE",
+                                                tempClock.getTimeString(BLACK),
+                                                tempClock.getTimeString(WHITE));
         }
-        m_actionClockRestore.setEnabled(enabled);
-        m_actionClockRestore.setDescription(desc);
     }
 
     private void updateClockResume(ConstClock clock)
@@ -848,36 +854,32 @@ public class GoGuiActions
         String desc = null;
         if (! clock.isRunning() && clock.getToMove() != null)
         {
-            enabled = true;
-            StringBuilder buffer = new StringBuilder();
-            buffer.append("Resume clock (B ");
-            buffer.append(clock.getTimeString(BLACK));
-            buffer.append(", W ");
-            buffer.append(clock.getTimeString(WHITE));
-            buffer.append(')');
-            desc = buffer.toString();
+            m_actionClockResume.setEnabled(true);
+            m_actionClockResume.setDescription("TOOLTIP_CLOCK_RESUME",
+                                               clock.getTimeString(BLACK),
+                                               clock.getTimeString(WHITE));
         }
-        m_actionClockResume.setEnabled(enabled);
-        m_actionClockResume.setDescription(desc);
+        else
+        {
+            m_actionClockResume.setEnabled(false);
+            m_actionClockResume.setDescription(null);
+        }
     }
 
     private void updateClockStart(ConstClock clock)
     {
-        boolean enabled = false;
-        String desc = null;
         if (! clock.isRunning() && clock.getToMove() == null)
         {
-            enabled = true;
-            StringBuilder buffer = new StringBuilder();
-            buffer.append("Start clock (B ");
-            buffer.append(clock.getTimeString(BLACK));
-            buffer.append(", W ");
-            buffer.append(clock.getTimeString(WHITE));
-            buffer.append(')');
-            desc = buffer.toString();
+            m_actionClockStart.setEnabled(true);
+            m_actionClockStart.setDescription("TOOLTIP_CLOCK_START",
+                                               clock.getTimeString(BLACK),
+                                               clock.getTimeString(WHITE));
         }
-        m_actionClockStart.setEnabled(enabled);
-        m_actionClockStart.setDescription(desc);
+        else
+        {
+            m_actionClockStart.setEnabled(false);
+            m_actionClockStart.setDescription(null);
+        }
     }
 
     private void updateDetachProgram(boolean isProgramAttached, String name)
@@ -886,7 +888,7 @@ public class GoGuiActions
         if (! isProgramAttached || name == null)
             m_actionDetachProgram.setName("ACTION_DETACH_PROGRAM");
         else
-            m_actionDetachProgram.setName("ACTION_DETACH_PROGRAM_2", name);
+            m_actionDetachProgram.setName("ACTION_DETACH_PROGRAM_NAME", name);
     }
 
     private void updateInterrupt(boolean isProgramAttached,
@@ -896,18 +898,33 @@ public class GoGuiActions
         String desc;
         if (isProgramAttached)
         {
-            if (name == null)
-                name = "program";
             if (! isInterruptSupported)
-                desc = "Interrupt (not supported by " + name + ")";
+            {
+                if (name == null)
+                    m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_UNSUPPORTED_UNKNOWN");
+                else
+                    m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_UNSUPPORTED_NAME",
+                                                     name);
+            }
             else if (! isCommandInProgress)
-                desc = "Interrupt " + name + " (no command running)";
+            {
+                if (name == null)
+                    m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_NOCOMMAND_UNKNOWN");
+                else
+                    m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_NOCOMMAND_NAME",
+                                                     name);
+            }
             else
-                desc = "Interrupt " + name;
+            {
+                if (name == null)
+                    m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_UNKNOWN");
+                else
+                    m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_NAME",
+                                                     name);
+            }
         }
         else
-            desc = "Interrupt (no program attached)";
-        m_actionInterrupt.setDescription(desc);
+            m_actionInterrupt.setDescription("TOOLTIP_INTERRUPT_NOPROGRAM");
         m_actionInterrupt.setEnabled(isProgramAttached
                                      && isInterruptSupported);
     }
@@ -915,37 +932,57 @@ public class GoGuiActions
     private void updatePass(GoColor toMove)
     {
         assert toMove.isBlackWhite();
-        m_actionPass.setDescription("Play a pass for "
-                                    + toMove.getCapitalizedName());
+        if (toMove == BLACK)
+            m_actionPass.setDescription("TOOLTIP_PASS_BLACK");
+        else
+            m_actionPass.setDescription("TOOLTIP_PASS_WHITE");
     }
 
     private void updatePlay(GoColor toMove, boolean isProgramAttached,
                             boolean computerBoth, String name)
     {
         m_actionPlay.setEnabled(isProgramAttached);
-        String desc;
-        if (name == null)
-            name = "computer";
-        if (computerBoth)
-            desc = "Continue play (" + name + " both)";
+        if (! isProgramAttached)
+            m_actionPlay.setDescription("TOOLTIP_PLAY_NOPROGRAM");
+        else if (computerBoth)
+        {
+            if (name == null)
+                m_actionPlay.setDescription("TOOLTIP_PLAY_BOTH_UNKNOWN");
+            else
+                m_actionPlay.setDescription("TOOLTIP_PLAY_BOTH_NAME", name);
+        }
         else
         {
-            desc = "Make " + name + " play " + toMove.getCapitalizedName();
-            if (! isProgramAttached)
-                desc = desc + " (no program attached)";
+            if (name == null)
+            {
+                if (toMove == BLACK)
+                    m_actionPlay.setDescription("TOOLTIP_PLAY_BLACK_UNKNOWN");
+                else
+                    m_actionPlay.setDescription("TOOLTIP_PLAY_WHITE_UNKNOWN");
+            }
+            else
+            {
+                if (toMove == BLACK)
+                    m_actionPlay.setDescription("TOOLTIP_PLAY_BLACK_NAME",
+                                                name);
+                else
+                    m_actionPlay.setDescription("TOOLTIP_PLAY_WHITE_NAME",
+                                                name);
+            }
         }
-        m_actionPlay.setDescription(desc);
     }
 
     private void updateSave(File file, boolean isModified)
     {
-        String desc = "Save";
-        if (file != null)
+        if (file == null)
+            m_actionSave.setDescription("ACTION_SAVE");
+        else
         {
-            desc = desc + " (" + file + ")";
-            if (! isModified)
-                desc = desc + " (not modified)";
+            if (isModified)
+                m_actionSave.setDescription("TOOLTIP_SAVE_FILE", file);
+            else
+                m_actionSave.setDescription("TOOLTIP_SAVE_FILE_NOTMODIFIED",
+                                            file);
         }
-        m_actionSave.setDescription(desc);
     }
 }
