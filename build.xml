@@ -637,6 +637,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/gogui/*.properties
  net/sf/gogui/gui/*.class
  net/sf/gogui/gui/*.png
+ net/sf/gogui/gui/*.properties
  net/sf/gogui/gui/analyze-commands
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class

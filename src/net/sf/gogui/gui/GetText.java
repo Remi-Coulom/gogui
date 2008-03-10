@@ -1,6 +1,6 @@
 // GetText.java
 
-package net.sf.gogui.gogui;
+package net.sf.gogui.gui;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -13,7 +13,7 @@ class GetText
     }
 
     private static ResourceBundle m_bundle =
-        ResourceBundle.getBundle("net.sf.gogui.gogui.text",
+        ResourceBundle.getBundle("net.sf.gogui.gui.text",
                                  Locale.getDefault());
 
     /** Make constructor unavailable; class is for namespace only. */

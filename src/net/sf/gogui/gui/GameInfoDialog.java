@@ -32,7 +32,9 @@ public final class GameInfoDialog
                             MessageDialogs messageDialogs)
     {
         GameInfoDialog gameInfo = new GameInfoDialog(info);
-        JDialog dialog = gameInfo.createDialog(parent, "Game Info");
+        JDialog dialog =
+            gameInfo.createDialog(parent,
+                                  GetText.getText("TITLE_GAMEINFO"));
         boolean done = false;
         while (! done)
         {
@@ -98,21 +100,22 @@ public final class GameInfoDialog
         JPanel values =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-        m_result = createEntry("Result", 12, info.get(StringInfo.RESULT),
-                               "Result of the game", labels, values);
-        m_date = createEntry("Date", 12, info.get(StringInfo.DATE),
-                             "Date when the game was played", labels, values);
-        m_rules = createEntry("Rules", 12, info.get(StringInfo.RULES),
-                              "Rules used for the game", labels, values);
+        m_result = createEntry("LABEL_GAMEINGO_RESULT", 12,
+                               info.get(StringInfo.RESULT),
+                               "TOOLTIP_GAMEINGO_RESULT", labels, values);
+        m_date = createEntry("LABEL_GAMEINGO_DATE", 12,
+                             info.get(StringInfo.DATE),
+                             "TOOLTIP_GAMEINGO_DATE", labels, values);
+        m_rules = createEntry("LABEL_GAMEINGO_RULES", 12,
+                              info.get(StringInfo.RULES),
+                              "TOOLTIP_GAMEINGO_RULES", labels, values);
         String komi = "";
         if (info.getKomi() != null)
             komi = info.getKomi().toString();
-        m_komi = createEntry("Komi", 12, komi,
-                             "Komi value (compensation for Black's first " +
-                             "move advantage)",
+        m_komi = createEntry("LABEL_GAMEINGO_KOMI", 12, komi,
+                             "TOOLTIP_GAMEINGO_KOMI",
                              labels, values);
         createTime(info.getTimeSettings(), labels, values);
-
         setMessage(outerBox);
         setOptionType(OK_CANCEL_OPTION);
     }
@@ -123,14 +126,14 @@ public final class GameInfoDialog
     {
         Box boxLabel = Box.createHorizontalBox();
         boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(labelText + ":");
+        JLabel label = new JLabel(GetText.getText(labelText));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         boxLabel.add(label);
         labels.add(boxLabel);
         JPanel fieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JTextField field = new JTextField(cols);
         field.setHorizontalAlignment(JTextField.CENTER);
-        field.setToolTipText(toolTipText);
+        field.setToolTipText(GetText.getText(toolTipText));
         field.setText(text);
         fieldPanel.add(field);
         values.add(fieldPanel);
@@ -142,7 +145,7 @@ public final class GameInfoDialog
     {
         Box boxLabel = Box.createHorizontalBox();
         boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel("Time:");
+        JLabel label = new JLabel(GetText.getText("LABEL_GAMEINGO_TIME"));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         boxLabel.add(label);
         labels.add(boxLabel);
@@ -151,18 +154,18 @@ public final class GameInfoDialog
         boxValue.add(Box.createVerticalGlue());
         boxValue.add(panel);
         boxValue.add(Box.createVerticalGlue());
-        m_preByoyomi = new TimeField(3, "Main time");
+        m_preByoyomi = new TimeField(3, "TOOLTIP_GAMEINGO_TIME_MAIN");
         if (timeSettings != null)
             m_preByoyomi.setTime(timeSettings.getPreByoyomi());
         panel.add(m_preByoyomi);
         panel.add(new JLabel(" + "));
-        m_byoyomi = new TimeField(2, "Byoyomi (overtime) period");
+        m_byoyomi = new TimeField(2, "TOOLTIP_GAMEINGO_TIME_BYOYOMI");
         if (timeSettings != null && timeSettings.getUseByoyomi())
             m_byoyomi.setTime(timeSettings.getByoyomi());
         panel.add(m_byoyomi);
         panel.add(new JLabel(" / "));
         m_byoyomiMoves = new JTextField(2);
-        m_byoyomiMoves.setToolTipText("Moves per byoyomi (overtime) period");
+        m_byoyomiMoves.setToolTipText(GetText.getText("TOOLTIP_GAMEINGO_TIME_BYOYOMI_MOVES"));
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
         {
@@ -170,7 +173,8 @@ public final class GameInfoDialog
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
         panel.add(m_byoyomiMoves);
-        panel.add(new JLabel(" moves"));
+        panel.add(new JLabel(" "
+                             + GetText.getText("LABEL_GAMEINGO_TIME_MOVES")));
         values.add(boxValue);
     }
 
@@ -342,7 +346,7 @@ class TimeField
         add(Box.createVerticalGlue());
         m_textField = new JTextField(cols);
         m_textField.setHorizontalAlignment(JTextField.RIGHT);
-        m_textField.setToolTipText(toolTipText);
+        m_textField.setToolTipText(GetText.getText(toolTipText));
         panel.add(m_textField);
         panel.add(GuiUtil.createSmallFiller());
         String[] units = { "min", "sec" };
