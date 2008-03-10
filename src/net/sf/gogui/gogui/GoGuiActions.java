@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.InputMap;
@@ -91,7 +92,13 @@ public class GoGuiActions
 
         public void setName(String name)
         {
-            putValue(AbstractAction.NAME, name);
+            putValue(AbstractAction.NAME, GetText.getText(name));
+        }
+
+        public void setName(String name, Object... args)
+        {
+            putValue(AbstractAction.NAME,
+                     MessageFormat.format(GetText.getText(name), args));
         }
 
         public void setSelected(boolean selected)
@@ -877,9 +884,9 @@ public class GoGuiActions
     {
         m_actionDetachProgram.setEnabled(isProgramAttached);
         if (! isProgramAttached || name == null)
-            m_actionDetachProgram.setName("Detach Program");
+            m_actionDetachProgram.setName("ACTION_DETACH_PROGRAM");
         else
-            m_actionDetachProgram.setName("Detach " + name);
+            m_actionDetachProgram.setName("ACTION_DETACH_PROGRAM_2", name);
     }
 
     private void updateInterrupt(boolean isProgramAttached,
