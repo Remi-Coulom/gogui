@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.StringUtil;
@@ -40,9 +41,9 @@ public final class MessageDialogs
             type = JOptionPane.ERROR_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object[] options = { "Close" };
+        Object[] options = { i18n("LABEL_CLOSE") };
         Object defaultOption = options[0];
-        String title = "Error - " + m_applicationName;
+        String title = i18n("LABEL_ERROR") + " - " + m_applicationName;
         show(null, frame, title, mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
@@ -75,9 +76,9 @@ public final class MessageDialogs
             type = JOptionPane.INFORMATION_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object[] options = { "Close" };
+        Object[] options = { i18n("LABEL_CLOSE") };
         Object defaultOption = options[0];
-        String title = "Information - " + m_applicationName;
+        String title = i18n("LABEL_INFORMATION") + " - " + m_applicationName;
         show(disableKey, frame, title, mainMessage, optionalMessage,
              type, JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
@@ -109,7 +110,7 @@ public final class MessageDialogs
         if (Platform.isMac())
         {
             options[0] = nonDestructiveOption;
-            options[1] = "Cancel";
+            options[1] = i18n("LABEL_CANCEL");
             options[2] = destructiveOption;
             destructiveIndex = 2;
         }
@@ -117,12 +118,12 @@ public final class MessageDialogs
         {
             options[0] = nonDestructiveOption;
             options[1] = destructiveOption;
-            options[2] = "Cancel";
+            options[2] = i18n("LABEL_CANCEL");
             destructiveIndex = -1;
         }
         Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
-        String title = "Question - " + m_applicationName;
+        String title = i18n("LABEL_QUESTION") + " - " + m_applicationName;
         Object value = show(disableKey, parent, title, mainMessage,
                             optionalMessage, type,
                             JOptionPane.YES_NO_CANCEL_OPTION, options,
@@ -154,9 +155,9 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object[] options = { "Close" };
+        Object[] options = { i18n("LABEL_CLOSE") };
         Object defaultOption = options[0];
-        String title = "Warning - " + m_applicationName;
+        String title = i18n("LABEL_WARNING") + " - " + m_applicationName;
         show(disableKey, parent, title, mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
@@ -176,7 +177,8 @@ public final class MessageDialogs
                                 boolean isCritical)
     {
         return showQuestion(disableKey, parent, mainMessage, optionalMessage,
-                            destructiveOption, "Cancel", isCritical);
+                            destructiveOption, i18n("LABEL_CANCEL"),
+                            isCritical);
     }
 
     /** Show warning message to confirm destructive actions.
@@ -210,7 +212,7 @@ public final class MessageDialogs
             type = JOptionPane.QUESTION_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        String title = "Question - " + m_applicationName;
+        String title = i18n("LABEL_QUESTION") + " - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption, -1);
@@ -233,8 +235,8 @@ public final class MessageDialogs
                                        boolean isCritical)
     {
         return showWarningQuestion(disableKey, parent, mainMessage,
-                                       optionalMessage, destructiveOption,
-                                   "Cancel", isCritical);
+                                   optionalMessage, destructiveOption,
+                                   i18n("LABEL_CANCEL"), isCritical);
     }
 
     /** Show warning message to confirm destructive actions.
@@ -266,7 +268,7 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        String title = "Warning - " + m_applicationName;
+        String title = i18n("LABEL_WARNING") + " - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption, -1);
@@ -340,16 +342,14 @@ public final class MessageDialogs
         if (disableKey != null)
         {
             if (messageType == JOptionPane.QUESTION_MESSAGE)
-                disableCheckBox = new JCheckBox("Do not ask again");
+                disableCheckBox = new JCheckBox(i18n("LABEL_DO_NOT_ASK_AGAIN"));
             else if (messageType == JOptionPane.WARNING_MESSAGE)
                 disableCheckBox =
-                    new JCheckBox("Do not show this warning again");
+                    new JCheckBox(i18n("LABEL_DO_NOT_WARN_AGAIN"));
             else
                 disableCheckBox =
-                    new JCheckBox("Do not show this message again");
-            String toolTipText =
-                "Disable this kind of messages for the current session";
-            disableCheckBox.setToolTipText(toolTipText);
+                    new JCheckBox(i18n("LABEL_DO_NOT_SHOW_AGAIN"));
+            disableCheckBox.setToolTipText(i18n("TOOLTIP_DO_NOT_SHOW_AGAIN"));
             disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
             GuiUtil.setMacDialogInfoMessageFont(disableCheckBox);
             box.add(disableCheckBox);
