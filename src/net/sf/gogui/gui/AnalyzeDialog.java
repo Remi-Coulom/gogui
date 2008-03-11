@@ -51,6 +51,7 @@ import net.sf.gogui.gtp.AnalyzeType;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 
@@ -72,7 +73,7 @@ public final class AnalyzeDialog
                          ArrayList<AnalyzeDefinition> commands,
                          GuiGtpClient gtp, MessageDialogs messageDialogs)
     {
-        super(owner, GetText.getText("TITLE_ANALYZE"));
+        super(owner, i18n("TITLE_ANALYZE"));
         m_messageDialogs = messageDialogs;
         m_gtp = gtp;
         m_commands = commands;
@@ -231,16 +232,16 @@ public final class AnalyzeDialog
     private JPanel createButtons()
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
-        m_runButton = new JButton(GetText.getText("LABEL_ANALYZE_RUN"));
-        m_runButton.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_RUN"));
+        m_runButton = new JButton(i18n("LABEL_ANALYZE_RUN"));
+        m_runButton.setToolTipText(i18n("TOOLTIP_ANALYZE_RUN"));
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
         m_runButton.setEnabled(false);
         GuiUtil.setMacBevelButton(m_runButton);
         innerPanel.add(m_runButton);
-        m_clearButton = new JButton(GetText.getText("LABEL_ANALYZE_CLEAR"));
-        m_clearButton.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_CLEAR"));
+        m_clearButton = new JButton(i18n("LABEL_ANALYZE_CLEAR"));
+        m_clearButton.setToolTipText(i18n("TOOLTIP_ANALYZE_CLEAR"));
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
         m_clearButton.setMnemonic(KeyEvent.VK_C);
@@ -255,13 +256,13 @@ public final class AnalyzeDialog
     {
         m_colorBox = Box.createVerticalBox();
         ButtonGroup group = new ButtonGroup();
-        m_black = new JRadioButton(GetText.getText("LABEL_BLACK"));
-        m_black.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_BLACK"));
+        m_black = new JRadioButton(i18n("LABEL_BLACK"));
+        m_black.setToolTipText(i18n("TOOLTIP_ANALYZE_BLACK"));
         m_black.setEnabled(false);
         group.add(m_black);
         m_colorBox.add(m_black);
-        m_white = new JRadioButton(GetText.getText("LABEL_WHITE"));
-        m_white.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_WHITE"));
+        m_white = new JRadioButton(i18n("LABEL_WHITE"));
+        m_white.setToolTipText(i18n("TOOLTIP_ANALYZE_WHITE"));
         m_white.setEnabled(false);
         group.add(m_white);
         m_colorBox.add(m_white);
@@ -328,18 +329,18 @@ public final class AnalyzeDialog
         optionsPanel.add(leftPanel);
         Box leftBox = Box.createVerticalBox();
         leftPanel.add(leftBox);
-        m_autoRun = new JCheckBox(GetText.getText("LABEL_ANALYZE_AUTORUN"));
+        m_autoRun = new JCheckBox(i18n("LABEL_ANALYZE_AUTORUN"));
         m_autoRun.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if (! m_autoRun.isSelected())
                         m_listener.actionClearAnalyzeCommand();
                 }
             });
-        m_autoRun.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_AUTORUN"));
+        m_autoRun.setToolTipText(i18n("TOOLTIP_ANALYZE_AUTORUN"));
         m_autoRun.setEnabled(false);
         leftBox.add(m_autoRun);
-        m_clearBoard = new JCheckBox(GetText.getText("LABEL_ANALYZE_CLEARBOARD"));
-        m_clearBoard.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_CLEARBOARD"));
+        m_clearBoard = new JCheckBox(i18n("LABEL_ANALYZE_CLEARBOARD"));
+        m_clearBoard.setToolTipText(i18n("TOOLTIP_ANALYZE_CLEARBOARD"));
         m_clearBoard.setEnabled(false);
         leftBox.add(m_clearBoard);
         m_clearBoard.setSelected(true);
@@ -432,7 +433,7 @@ public final class AnalyzeDialog
         {
             String stringArg =
                 JOptionPane.showInputDialog(this, label,
-                                            GetText.getText("LABEL_ANALYZE_INPUT"),
+                                            i18n("LABEL_ANALYZE_INPUT"),
                                             JOptionPane.PLAIN_MESSAGE);
             if (stringArg == null)
                 return;
@@ -448,7 +449,7 @@ public final class AnalyzeDialog
                 String value = m_gtp.send(commandWithoutArg);
                 Object optStringArg =
                     JOptionPane.showInputDialog(this, label,
-                                                GetText.getText("LABEL_ANALYZE_INPUT"),
+                                                i18n("LABEL_ANALYZE_INPUT"),
                                                 JOptionPane.PLAIN_MESSAGE,
                                                 null, null, value);
                 if (optStringArg == null || optStringArg.equals(value))
@@ -545,8 +546,8 @@ public final class AnalyzeDialog
     private void showError(String mainMessage, String optionalMessage,
                            boolean isCritical)
     {
-        m_messageDialogs.showError(this, GetText.getText(mainMessage),
-                                   GetText.getText(optionalMessage),
+        m_messageDialogs.showError(this, i18n(mainMessage),
+                                   i18n(optionalMessage),
                                    isCritical);
     }
 
@@ -554,8 +555,8 @@ public final class AnalyzeDialog
                            boolean isCritical, Object... args)
     {
         optionalMessage =
-            MessageFormat.format(GetText.getText(optionalMessage), args);
-        m_messageDialogs.showError(this, GetText.getText(mainMessage),
+            MessageFormat.format(i18n(optionalMessage), args);
+        m_messageDialogs.showError(this, i18n(mainMessage),
                                    optionalMessage, isCritical);
     }
 

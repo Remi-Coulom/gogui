@@ -18,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
+import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.RecentFileMenu;
@@ -469,7 +470,7 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionSaveCommands, KeyEvent.VK_C);
         menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_M);
         menu.addItem(actions.m_actionSendFile, KeyEvent.VK_F);
-        m_recentGtp = new RecentFileMenu(GetText.getText("MENU_SEND_RECENT"),
+        m_recentGtp = new RecentFileMenu(i18n("MENU_SEND_RECENT"),
                                          "net/sf/gogui/recentgtpfiles",
                                          listener);
         m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
@@ -513,7 +514,7 @@ public class GoGuiMenuBar
 
     private JMenu createRecentMenu(RecentFileMenu.Listener listener)
     {
-        m_recent = new RecentFileMenu(GetText.getText("MENU_OPEN_RECENT"),
+        m_recent = new RecentFileMenu(i18n("MENU_OPEN_RECENT"),
                                       "net/sf/gogui/recentfiles",
                                       listener);
         JMenu menu = m_recent.getMenu();
@@ -528,7 +529,7 @@ class MenuChecked
 {
     public MenuChecked(String text)
     {
-        super(GetText.getText(text));
+        super(I18n.i18n(text));
     }
 
     public JMenuItem addItem(JMenuItem item, int mnemonic)

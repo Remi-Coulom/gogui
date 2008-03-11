@@ -21,6 +21,7 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GuiUtil;
@@ -73,16 +74,16 @@ public class GoGuiActions
         public Action(String name, String desc, Integer accel, int modifier,
                       String icon)
         {
-            putValue(AbstractAction.NAME, GetText.getText(name));
+            putValue(AbstractAction.NAME, i18n(name));
             if (desc != null)
                 putValue(AbstractAction.SHORT_DESCRIPTION,
-                         GetText.getText(desc));
+                         i18n(desc));
             if (accel != null)
                 putValue(AbstractAction.ACCELERATOR_KEY,
                          getKeyStroke(accel.intValue(), modifier));
             if (icon != null)
                 putValue(AbstractAction.SMALL_ICON,
-                         GuiUtil.getIcon(icon, GetText.getText(name)));
+                         GuiUtil.getIcon(icon, i18n(name)));
             m_allActions.add(this);
         }
 
@@ -91,25 +92,24 @@ public class GoGuiActions
             if (desc == null)
                 putValue(AbstractAction.SHORT_DESCRIPTION, null);
             else
-                putValue(AbstractAction.SHORT_DESCRIPTION,
-                         GetText.getText(desc));
+                putValue(AbstractAction.SHORT_DESCRIPTION, i18n(desc));
         }
 
         public void setDescription(String desc, Object... args)
         {
             putValue(AbstractAction.SHORT_DESCRIPTION,
-                     MessageFormat.format(GetText.getText(desc), args));
+                     MessageFormat.format(i18n(desc), args));
         }
 
         public void setName(String name)
         {
-            putValue(AbstractAction.NAME, GetText.getText(name));
+            putValue(AbstractAction.NAME, i18n(name));
         }
 
         public void setName(String name, Object... args)
         {
             putValue(AbstractAction.NAME,
-                     MessageFormat.format(GetText.getText(name), args));
+                     MessageFormat.format(i18n(name), args));
         }
 
         public void setSelected(boolean selected)
