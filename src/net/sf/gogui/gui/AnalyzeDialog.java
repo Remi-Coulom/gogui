@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -71,7 +72,7 @@ public final class AnalyzeDialog
                          ArrayList<AnalyzeDefinition> commands,
                          GuiGtpClient gtp, MessageDialogs messageDialogs)
     {
-        super(owner, "Analyze");
+        super(owner, GetText.getText("TITLE_ANALYZE"));
         m_messageDialogs = messageDialogs;
         m_gtp = gtp;
         m_commands = commands;
@@ -230,16 +231,16 @@ public final class AnalyzeDialog
     private JPanel createButtons()
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
-        m_runButton = new JButton("Run");
-        m_runButton.setToolTipText("Run command");
+        m_runButton = new JButton(GetText.getText("LABEL_ANALYZE_RUN"));
+        m_runButton.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_RUN"));
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
         m_runButton.setEnabled(false);
         GuiUtil.setMacBevelButton(m_runButton);
         innerPanel.add(m_runButton);
-        m_clearButton = new JButton("Clear");
-        m_clearButton.setToolTipText("Clear board and cancel auto run");
+        m_clearButton = new JButton(GetText.getText("LABEL_ANALYZE_CLEAR"));
+        m_clearButton.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_CLEAR"));
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
         m_clearButton.setMnemonic(KeyEvent.VK_C);
@@ -254,13 +255,13 @@ public final class AnalyzeDialog
     {
         m_colorBox = Box.createVerticalBox();
         ButtonGroup group = new ButtonGroup();
-        m_black = new JRadioButton("Black");
-        m_black.setToolTipText("Run selected command for color Black");
+        m_black = new JRadioButton(GetText.getText("LABEL_BLACK"));
+        m_black.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_BLACK"));
         m_black.setEnabled(false);
         group.add(m_black);
         m_colorBox.add(m_black);
-        m_white = new JRadioButton("White");
-        m_white.setToolTipText("Run selected command for color White");
+        m_white = new JRadioButton(GetText.getText("LABEL_WHITE"));
+        m_white.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_WHITE"));
         m_white.setEnabled(false);
         group.add(m_white);
         m_colorBox.add(m_white);
@@ -327,18 +328,18 @@ public final class AnalyzeDialog
         optionsPanel.add(leftPanel);
         Box leftBox = Box.createVerticalBox();
         leftPanel.add(leftBox);
-        m_autoRun = new JCheckBox("Auto run");
+        m_autoRun = new JCheckBox(GetText.getText("LABEL_ANALYZE_AUTORUN"));
         m_autoRun.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if (! m_autoRun.isSelected())
                         m_listener.actionClearAnalyzeCommand();
                 }
             });
-        m_autoRun.setToolTipText("Automatically run after changes on board");
+        m_autoRun.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_AUTORUN"));
         m_autoRun.setEnabled(false);
         leftBox.add(m_autoRun);
-        m_clearBoard = new JCheckBox("Clear board");
-        m_clearBoard.setToolTipText("Clear board before displaying result");
+        m_clearBoard = new JCheckBox(GetText.getText("LABEL_ANALYZE_CLEARBOARD"));
+        m_clearBoard.setToolTipText(GetText.getText("TOOLTIP_ANALYZE_CLEARBOARD"));
         m_clearBoard.setEnabled(false);
         leftBox.add(m_clearBoard);
         m_clearBoard.setSelected(true);
@@ -405,9 +406,8 @@ public final class AnalyzeDialog
     {
         if (m_gtp.isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking",
-                      "You need to wait until the command in "
-                      + " progress is finished.",
+            showError("MESSAGE_ANALYZE_CANNOT_EXECUTE",
+                      "MESSAGE_ANALYZE_CANNOT_EXECUTE_2",
                       false);
             return;
         }
@@ -416,9 +416,11 @@ public final class AnalyzeDialog
         {
             String name = m_gtp.getName();
             if (name == null)
-                name = "The current Go program";
-            showError("Command not supported",
-                      name + " does not support this command.", false);
+                showError("MESSAGE_ANALYZE_NOT_SUPPORTED",
+                          "MESSAGE_ANALYZE_NOT_SUPPORTED_2", false);
+            else
+                showError("MESSAGE_ANALYZE_NOT_SUPPORTED",
+                          "MESSAGE_ANALYZE_NOT_SUPPORTED_3", false, name);
             return;
         }
         updateRecent(index);
@@ -429,7 +431,8 @@ public final class AnalyzeDialog
         if (command.needsStringArg())
         {
             String stringArg =
-                JOptionPane.showInputDialog(this, label, "Input",
+                JOptionPane.showInputDialog(this, label,
+                                            GetText.getText("LABEL_ANALYZE_INPUT"),
                                             JOptionPane.PLAIN_MESSAGE);
             if (stringArg == null)
                 return;
@@ -444,7 +447,8 @@ public final class AnalyzeDialog
             {
                 String value = m_gtp.send(commandWithoutArg);
                 Object optStringArg =
-                    JOptionPane.showInputDialog(this, label, "Input",
+                    JOptionPane.showInputDialog(this, label,
+                                                GetText.getText("LABEL_ANALYZE_INPUT"),
                                                 JOptionPane.PLAIN_MESSAGE,
                                                 null, null, value);
                 if (optStringArg == null || optStringArg.equals(value))
@@ -453,8 +457,8 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError("Command \"" + commandWithoutArg + "\" failed",
-                          e.getMessage(), false);
+                showError("MESSAGE_ANALYZE_COMMAND_FAILED",
+                          e.getMessage(), false, commandWithoutArg);
                 return;
             }
         }
@@ -472,16 +476,15 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError("Command \"" + commandWithoutArg + "\" failed",
-                          e.getMessage(), true);
+                showError("MESSAGE_ANALYZE_COMMAND_FAILED",
+                          e.getMessage(), false, commandWithoutArg);
                 return;
             }
             catch (GtpResponseFormatError e)
             {
-                showError("Invalid response to command \""
-                          + commandWithoutArg + "\"",
-                          "The response had an unexpected format ("
-                          + e.getMessage() + ").", true);
+                showError("MESSAGE_ANALYZE_INVALID_RESPONSE",
+                          "MESSAGE_ANALYZE_INVALID_RESPONSE_2", true,
+                          commandWithoutArg, e.getMessage());
                 return;
             }
         }
@@ -542,8 +545,18 @@ public final class AnalyzeDialog
     private void showError(String mainMessage, String optionalMessage,
                            boolean isCritical)
     {
-        m_messageDialogs.showError(this, mainMessage, optionalMessage,
+        m_messageDialogs.showError(this, GetText.getText(mainMessage),
+                                   GetText.getText(optionalMessage),
                                    isCritical);
+    }
+
+    private void showError(String mainMessage, String optionalMessage,
+                           boolean isCritical, Object... args)
+    {
+        optionalMessage =
+            MessageFormat.format(GetText.getText(optionalMessage), args);
+        m_messageDialogs.showError(this, GetText.getText(mainMessage),
+                                   optionalMessage, isCritical);
     }
 
     private void updateOptions(String label)
