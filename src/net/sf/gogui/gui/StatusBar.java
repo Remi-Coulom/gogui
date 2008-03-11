@@ -19,6 +19,7 @@ import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 
 /** Status bar. */
@@ -50,15 +51,17 @@ public class StatusBar
         setToPlay(BLACK);
         m_iconBox.add(m_toPlayLabel);
         m_labelScore
-            = new JLabel(GuiUtil.getIcon("gogui-score", "Score"));
-        m_labelScore.setToolTipText("Score mode");
+            = new JLabel(GuiUtil.getIcon("gogui-score",
+                                         i18n("LABEL_STATUS_SCORE")));
+        m_labelScore.setToolTipText(i18n("TOOLTIP_STATUS_SCORE"));
         m_labelScore.setVisible(false);
         m_iconBox.add(m_labelScore);
 
         m_labelSetup
-            = new JLabel(GuiUtil.getIcon("gogui-setup-16x16", "Setup"));
+            = new JLabel(GuiUtil.getIcon("gogui-setup-16x16",
+                                         i18n("LABEL_STATUS_SETUP")));
         m_labelSetup.setVisible(false);
-        m_labelSetup.setToolTipText("Setup mode");
+        m_labelSetup.setToolTipText(i18n("TOOLTIP_STATUS_SETUP"));
         m_iconBox.add(m_labelSetup);
 
         m_iconBox.add(GuiUtil.createSmallFiller());
@@ -141,13 +144,13 @@ public class StatusBar
         if (color == BLACK)
         {
             m_toPlayLabel.setIcon(ICON_BLACK);
-            m_toPlayLabel.setToolTipText("Black to play");
+            m_toPlayLabel.setToolTipText(i18n("LABEL_STATUS_TO_PLAY_BLACK"));
         }
         else
         {
             assert color == WHITE;
             m_toPlayLabel.setIcon(ICON_WHITE);
-            m_toPlayLabel.setToolTipText("White to play");
+            m_toPlayLabel.setToolTipText(i18n("LABEL_STATUS_TO_PLAY_WHITE"));
         }
     }
 
@@ -161,10 +164,10 @@ public class StatusBar
     }
 
     private static final Icon ICON_BLACK =
-        GuiUtil.getIcon("gogui-black-16x16", "Black");
+        GuiUtil.getIcon("gogui-black-16x16", i18n("LABEL_BLACK"));
 
     private static final Icon ICON_WHITE =
-        GuiUtil.getIcon("gogui-white-16x16", "White");
+        GuiUtil.getIcon("gogui-white-16x16", i18n("LABEL_WHITE"));
 
     private final Box m_iconBox;
 
