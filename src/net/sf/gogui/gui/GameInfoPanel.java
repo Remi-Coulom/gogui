@@ -5,6 +5,7 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.Icon;
@@ -30,6 +31,7 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 import static net.sf.gogui.go.GoColor.WHITE_BLACK;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.StringUtil;
 
 /** Panel displaying information about the current position. */
@@ -49,9 +51,11 @@ public class GameInfoPanel
             panel.add(box);
             ImageIcon icon;
             if (c == BLACK)
-                icon = GuiUtil.getIcon("gogui-black-32x32", "Black");
+                icon = GuiUtil.getIcon("gogui-black-32x32",
+                                       i18n("LABEL_BLACK"));
             else
-                icon = GuiUtil.getIcon("gogui-white-32x32", "White");
+                icon = GuiUtil.getIcon("gogui-white-32x32",
+                                       i18n("LABEL_WHITE"));
             m_icon.set(c, new JLabel(icon));
             m_icon.get(c).setAlignmentX(Component.CENTER_ALIGNMENT);
             box.add(m_icon.get(c));
@@ -82,8 +86,7 @@ public class GameInfoPanel
         {
             String name = info.get(StringInfoColor.NAME, c);
             String rank = info.get(StringInfoColor.RANK, c);
-            updatePlayerToolTip(m_icon.get(c), name, rank,
-                                c.getCapitalizedName());
+            updatePlayerToolTip(m_icon.get(c), name, rank, c);
             m_prisoners.get(c).setCount(board.getCaptured(c));
             updateTimeFromClock(m_game.getClock(), c);
         }
@@ -113,13 +116,17 @@ public class GameInfoPanel
     private final UpdateTimeRunnable m_updateTime = new UpdateTimeRunnable();
 
     private void updatePlayerToolTip(JLabel label, String player, String rank,
-                                     String color)
+                                     GoColor color)
     {
+        assert color.isBlackWhite();
         StringBuilder buffer = new StringBuilder(128);
-        buffer.append(color);
-        buffer.append(" player (");
+        if (color == BLACK)
+            buffer.append(i18n("TOOLTIP_INFOPANEL_PLAYER_BLACK"));
+        else
+            buffer.append(i18n("TOOLTIP_INFOPANEL_PLAYER_WHITE"));
+        buffer.append(" (");
         if (StringUtil.isEmpty(player))
-            buffer.append("unknown");
+            buffer.append(i18n("TOOLTIP_INFOPANEL_UNKNOWN_NAME"));
         else
         {
             buffer.append(player);
@@ -159,9 +166,9 @@ class GuiClock
         super.setText(text);
         String toolTip;
         if (m_color == BLACK)
-            toolTip = "Time for Black";
+            toolTip = i18n("TOOLTIP_INFOPANEL_TIME_BLACK");
         else
-            toolTip = "Time for White";
+            toolTip = i18n("TOOLTIP_INFOPANEL_TIME_WHITE");
         if (text.length() > COLUMNS)
             toolTip = toolTip + " (" + text + ")";
         setToolTipText(toolTip);
@@ -180,9 +187,9 @@ class Prisoners
         m_color = color;
         Icon icon;
         if (color == BLACK)
-            icon = GuiUtil.getIcon("gogui-black-16x16", "Black");
+            icon = GuiUtil.getIcon("gogui-black-16x16", i18n("LABEL_BLACK"));
         else
-            icon = GuiUtil.getIcon("gogui-white-16x16", "White");
+            icon = GuiUtil.getIcon("gogui-white-16x16", i18n("LABEL_WHITE"));
         JLabel labelStone = new JLabel(icon);
         add(labelStone, BorderLayout.WEST);
         m_text = new JLabel();
@@ -193,17 +200,22 @@ class Prisoners
     public final void setCount(int n)
     {
         m_text.setText(Integer.toString(n));
-        StringBuilder buffer = new StringBuilder(64);
-        buffer.append(n);
+        String tip;
         if (m_color == BLACK)
-            buffer.append(" black");
+        {
+            if (n == 1)
+                tip = i18n("TOOLTIP_INFOPANEL_PRISONER_BLACK_ONE");
+            else
+                tip = MessageFormat.format(i18n("TOOLTIP_INFOPANEL_PRISONER_BLACK"), n);
+        }
         else
-            buffer.append(" white");
-        if (n == 1)
-            buffer.append(" stone captured");
-        else
-            buffer.append(" stones captured");
-        setToolTipText(buffer.toString());
+        {
+            if (n == 1)
+                tip = i18n("TOOLTIP_INFOPANEL_PRISONER_WHITE_ONE");
+            else
+                tip = MessageFormat.format(i18n("TOOLTIP_INFOPANEL_PRISONER_WHITE"), n);
+        }
+        setToolTipText(tip);
     }
 
     private final JLabel m_text;
