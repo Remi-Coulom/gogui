@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Dialog for displaying and editing a list of objects. */
 public class ObjectListEditor<OBJECT>
@@ -149,11 +151,13 @@ public class ObjectListEditor<OBJECT>
         OBJECT object = getObject(index);
         String name = m_editor.getItemLabel(object);
         String disableKey = "net.sf.gogui.gui.ObjectListEditor.remove";
-        String mainMessage = "Really remove " + name + "?";
-        String optionalMessage =
-            "Removing an entry from the list will delete the entry.";
+        String mainMessage =
+            MessageFormat.format(i18n("MESSAGE_LISTEDITOR_REALLY_REMOVE"),
+                                 name);
+        String optionalMessage = i18n("MESSAGE_LISTEDITOR_REALLY_REMOVE_2");
         if (! m_messageDialogs.showQuestion(disableKey, m_dialog, mainMessage,
-                                            optionalMessage, "Remove", false))
+                                            optionalMessage,
+                                            i18n("LABEL_REMOVE"), false))
             return;
         m_objects.remove(object);
         if (index >= m_objects.size())
@@ -170,7 +174,7 @@ public class ObjectListEditor<OBJECT>
 
     private JButton createButton(String label, String command)
     {
-        JButton button = new JButton(label);
+        JButton button = new JButton(i18n(label));
         button.setEnabled(false);
         button.setActionCommand(command);
         button.addActionListener(m_actionListener);
@@ -181,16 +185,16 @@ public class ObjectListEditor<OBJECT>
     {
         JPanel buttonPanel
             = new JPanel(new GridLayout(0, 1, GuiUtil.PAD, GuiUtil.PAD));
-        m_moveUp = createButton("Move Up", "move-up");
+        m_moveUp = createButton("LABEL_LISTEDITOR_MOVE_UP", "move-up");
         GuiUtil.setMacBevelButton(m_moveUp);
         buttonPanel.add(m_moveUp);
-        m_moveDown = createButton("Move Down", "move-down");
+        m_moveDown = createButton("LABEL_LISTEDITOR_MOVE_DOWN", "move-down");
         GuiUtil.setMacBevelButton(m_moveDown);
         buttonPanel.add(m_moveDown);
-        m_edit = createButton("Edit", "edit");
+        m_edit = createButton("LABEL_EDIT", "edit");
         GuiUtil.setMacBevelButton(m_edit);
         buttonPanel.add(m_edit);
-        m_remove = createButton("Remove", "remove");
+        m_remove = createButton("LABEL_REMOVE", "remove");
         GuiUtil.setMacBevelButton(m_remove);
         buttonPanel.add(m_remove);
         JPanel panel = new JPanel(new BorderLayout());
