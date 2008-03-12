@@ -232,7 +232,7 @@ public final class AnalyzeDialog
     private JPanel createButtons()
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
-        m_runButton = new JButton(i18n("LB_ANALYZE_RUN"));
+        m_runButton = new JButton(i18n("LB_RUN"));
         m_runButton.setToolTipText(i18n("TT_ANALYZE_RUN"));
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);

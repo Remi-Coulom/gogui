@@ -34,6 +34,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpUtil;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 
@@ -55,7 +56,7 @@ public class GtpShell
     public GtpShell(Frame owner, Listener listener,
                     MessageDialogs messageDialogs)
     {
-        super(owner, "Shell");
+        super(owner, i18n("TIT_SHELL"));
         m_messageDialogs = messageDialogs;
         m_listener = listener;
         Preferences prefs = Preferences.userNodeForPackage(getClass());
@@ -354,18 +355,14 @@ public class GtpShell
         {
             if (GtpUtil.isStateChangingCommand(command))
             {
-                showError("Cannot send board changing command from GTP shell",
-                          "Use the graphical board to start new games, "
-                          + "play moves, and for all other actions that "
-                          + " change the state of the board.", false);
+                showError(i18n("MSG_SHELL_BOARDCHANGING"),
+                          i18n("MSG_SHELL_BOARDCHANGING_2"), false);
                 return;
             }
             if (m_commandInProgress)
             {
-                showError("Cannot execute while computer is thinking",
-                          "You need to wait until the command in "
-                          + " progress is finished.",
-                          false);
+                showError(i18n("MSG_SHELL_CMD_IN_PROGRESS"),
+                          i18n("MSG_SHELL_CMD_IN_PROGRESS_2"), false);
                 return;
             }
             m_listener.actionSendCommand(command, false, false);
@@ -431,10 +428,10 @@ public class GtpShell
             });
         panel.add(m_comboBox, BorderLayout.CENTER);
         m_runButton = new JButton();
-        m_runButton.setIcon(GuiUtil.getIcon("gogui-key_enter", "Run"));
+        m_runButton.setIcon(GuiUtil.getIcon("gogui-key_enter", i18n("LB_RUN")));
         m_runButton.setActionCommand("run");
         m_runButton.setFocusable(false);
-        m_runButton.setToolTipText("Send command line");
+        m_runButton.setToolTipText(i18n("TT_SHELL_RUN"));
         m_runButton.addActionListener(this);
         GuiUtil.setMacBevelButton(m_runButton);
         JPanel buttonPanel =
@@ -529,7 +526,8 @@ public class GtpShell
         }
         catch (FileNotFoundException e)
         {
-            m_messageDialogs.showError(parent, "Could not save to file.", "");
+            m_messageDialogs.showError(parent, i18n("MSG_SHELL_SAVE_FAILURE"),
+                                       "");
         }
     }
 
