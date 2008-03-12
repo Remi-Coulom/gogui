@@ -433,7 +433,7 @@ public final class AnalyzeDialog
         {
             String stringArg =
                 JOptionPane.showInputDialog(this, label,
-                                            i18n("LABEL_ANALYZE_INPUT"),
+                                            i18n("TITLE_INPUT"),
                                             JOptionPane.PLAIN_MESSAGE);
             if (stringArg == null)
                 return;

@@ -3,8 +3,10 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import java.text.MessageFormat;
 import javax.swing.JOptionPane;
 import net.sf.gogui.go.GoPoint;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Dialog for entering a board size. */
 public final class BoardSizeDialog
@@ -15,7 +17,8 @@ public final class BoardSizeDialog
                            MessageDialogs messageDialogs)
     {
         Object value =
-            JOptionPane.showInputDialog(parent, "Board size", "Input",
+            JOptionPane.showInputDialog(parent, i18n("LABEL_BOARDSIZE_DIALOG"),
+                                        i18n("TITLE_INPUT"),
                                         JOptionPane.PLAIN_MESSAGE, null, null,
                                         Integer.toString(size));
         if (value == null)
@@ -32,12 +35,12 @@ public final class BoardSizeDialog
         }
         if (size == -1)
         {
-            String mainMessage = "Invalid size";
             String optionalMessage =
-                "Valid board sizes are numbers between 1 and "
-                + GoPoint.MAX_SIZE + ".";
-            messageDialogs.showError(parent, mainMessage, optionalMessage,
-                                     false);
+                MessageFormat.format(i18n("MESSAGE_BOARDSIZE_DIALOG_INVALID_2"),
+                                     GoPoint.MAX_SIZE);
+            messageDialogs.showError(parent,
+                                     i18n("MESSAGE_BOARDSIZE_DIALOG_INVALID"),
+                                     optionalMessage, false);
         }
         return size;
     }
