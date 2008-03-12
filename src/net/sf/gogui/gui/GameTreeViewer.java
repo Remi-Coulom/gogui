@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 
 /** Dialog for displaying the game tree. */
@@ -32,7 +33,7 @@ public class GameTreeViewer
     public GameTreeViewer(Frame owner, Listener listener,
                           MessageDialogs messageDialogs)
     {
-        super(owner, "Tree");
+        super(owner, i18n("TIT_TREE"));
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.LABEL_NUMBER,
