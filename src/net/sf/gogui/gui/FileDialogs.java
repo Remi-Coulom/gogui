@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 import javax.swing.Box;
@@ -35,6 +36,7 @@ import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** File dialogs. */
 public final class FileDialogs
@@ -160,13 +162,12 @@ public final class FileDialogs
             if (file.exists())
             {
                 String mainMessage =
-                    "Replace file \"" + file.getName() + "\"?";
-                String optionalMessage =
-                    "If you overwrite the file, the previous " +
-                    "version will be lost.";
+                    MessageFormat.format(i18n("MSG_REPLACE_FILE"),
+                                         file.getName());
+                String optionalMessage = i18n("MSG_REPLACE_FILE_2");
                 if (! messageDialogs.showQuestion(parent, mainMessage,
                                                   optionalMessage,
-                                                  "Replace", true))
+                                                  i18n("LB_REPLACE"), true))
                 {
                     file = showFileChooser(parent, Type.FILE_SAVE, lastFile,
                                            setSgfFilter, title);
@@ -187,13 +188,13 @@ public final class FileDialogs
             switch (type)
             {
             case FILE_OPEN:
-                title = "Open";
+                title = i18n("TIT_OPEN");
                 break;
             case DIR_OPEN:
-                title = "Select Directory";
+                title = i18n("TIT_SELECT_DIRECTORY");
                 break;
             case FILE_SAVE:
-                title = "Save";
+                title = i18n("TIT_SAVE");
                 break;
             default:
                 assert false;
@@ -280,7 +281,7 @@ public final class FileDialogs
             ret = chooser.showOpenDialog(parent);
             break;
         default:
-            ret = chooser.showDialog(parent, "Select");
+            ret = chooser.showDialog(parent, i18n("TIT_SELECT"));
             break;
         }
         if (ret != JFileChooser.APPROVE_OPTION)
@@ -310,7 +311,7 @@ class SgfPreview
         previewPanel.add(Box.createVerticalGlue());
         JPanel buttonPanel = new JPanel();
         add(buttonPanel, BorderLayout.SOUTH);
-        m_auto = new JCheckBox("Automatic preview");
+        m_auto = new JCheckBox(i18n("LB_AUTOMATIC_PREVIEW"));
         m_auto.setSelected(m_prefs.getBoolean("auto-preview", false));
         m_auto.addChangeListener(new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
@@ -320,7 +321,7 @@ class SgfPreview
                         preview();
                 } });
         buttonPanel.add(m_auto);
-        m_preview = new JButton("Preview");
+        m_preview = new JButton(i18n("LB_PREVIEW"));
         m_preview.setActionCommand("preview");
         m_preview.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
@@ -405,7 +406,7 @@ class SgfPreview
         Preferences.userNodeForPackage(getClass());
 
     private static final Image MISSING_IMAGE =
-        GuiUtil.getIcon("image-missing", "No preview").getImage();
+        GuiUtil.getIcon("image-missing", i18n("LB_NO_PREVIEW")).getImage();
 
     public void preview()
     {
@@ -424,7 +425,7 @@ class SgfPreview
             try
             {
                 if (m_file.length() > 500000)
-                    throw new ThumbnailCreator.Error("File too large for preview");
+                    throw new ThumbnailCreator.Error(i18n("MSG_TOO_LARGE_FOR_PREVIEW"));
                 m_thumbnailCreator.create(m_file);
                 File thumbnail = m_thumbnailCreator.getLastThumbnail();
                 m_image = loadImage(thumbnail);
