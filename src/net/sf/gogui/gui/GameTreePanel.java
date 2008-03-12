@@ -31,6 +31,7 @@ import javax.swing.SwingConstants;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Panel displaying a game tree. */
 public class GameTreePanel
@@ -322,8 +323,8 @@ public class GameTreePanel
             m_isExpanded.clear();
             removeAll();
             m_messageDialogs.showError(m_owner,
-                                       "Could not show game tree",
-                                       "Out of memory");
+                                       i18n("MSG_TREE_OUTOFMEM"),
+                                       i18n("MSG_TREE_OUTOFMEM_2"));
             update(tree, currentNode, minWidth, minHeight);
         }
         setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + MARGIN,
@@ -600,47 +601,47 @@ public class GameTreePanel
                 }
             };
         JMenuItem item;
-        item = new JMenuItem("Go To");
+        item = new JMenuItem(i18n("MN_TREE_GOTO"));
         item.setActionCommand("goto");
         item.addActionListener(listener);
         m_popup.add(item);
         m_itemGoto = item;
-        item = new JMenuItem("Scroll to Current");
+        item = new JMenuItem(i18n("MN_TREE_SCROLL_TO_CURRENT"));
         item.setActionCommand("scroll-to-current");
         item.addActionListener(listener);
         m_popup.add(item);
         m_itemScrollToCurrent = item;
         m_popup.addSeparator();
-        item = new JMenuItem("Hide Subtree");
+        item = new JMenuItem(i18n("MN_TREE_HIDE_SUBTREE"));
         m_itemHideSubtree = item;
         item.setActionCommand("hide-subtree");
         item.addActionListener(listener);
         m_popup.add(item);
-        item = new JMenuItem("Hide Others");
+        item = new JMenuItem(i18n("MN_TREE_HIDE_OTHERS"));
         item.setActionCommand("hide-others");
         item.addActionListener(listener);
         m_popup.add(item);
-        item = new JMenuItem("Show Children");
+        item = new JMenuItem(i18n("MN_TREE_SHOW_CHILDREN"));
         m_itemShowChildren = item;
         item.setActionCommand("show-variations");
         item.addActionListener(listener);
         m_popup.add(item);
-        item = new JMenuItem("Show Subtree");
+        item = new JMenuItem(i18n("MN_TREE_SHOW_SUBTREE"));
         m_itemShowSubtree = item;
         item.setActionCommand("show-subtree");
         item.addActionListener(listener);
         m_popup.add(item);
         m_popup.addSeparator();
-        item = new JMenuItem("Node Info");
+        item = new JMenuItem(i18n("MN_TREE_NODE_INFO"));
         item.setActionCommand("node-info");
         item.addActionListener(listener);
         m_popup.add(item);
-        item = new JMenuItem("Subtree Statistics");
+        item = new JMenuItem(i18n("MN_TREE_SUBTREE_STATISTICS"));
         item.setActionCommand("tree-info");
         item.addActionListener(listener);
         m_popup.add(item);
         m_popup.addSeparator();
-        item = new JMenuItem("Cancel");
+        item = new JMenuItem(i18n("LB_CANCEL"));
         item.setActionCommand("cancel");
         item.addActionListener(listener);
         m_popup.add(item);
@@ -707,7 +708,7 @@ public class GameTreePanel
     private void nodeInfo(Point location, ConstNode node)
     {
         String nodeInfo = NodeUtil.nodeInfo(node);
-        String title = "Node Info";
+        String title = i18n("TIT_NODE_INFO");
         TextViewer textViewer = new TextViewer(m_owner, title, nodeInfo, true,
                                                null);
         textViewer.setLocation(location);
@@ -758,14 +759,12 @@ public class GameTreePanel
     {
         if (NodeUtil.subtreeGreaterThan(root, 10000))
         {
-            String mainMessage = "Expand large subtree?";
-            String optionalMessage =
-                "The user interface can become unresponsive, if large " +
-                "trees are shown. Showing the tree will fail completely " +
-                "if not enough memory is available.";
+            String mainMessage = i18n("MSG_TREE_EXPAND_LARGE");
+            String optionalMessage = i18n("MSG_TREE_EXPAND_LARGE_2");
             if (! m_messageDialogs.showWarningQuestion(m_owner, mainMessage,
                                                        optionalMessage,
-                                                       "Expand", true))
+                                                       i18n("LB_TREE_EXPAND"),
+                                                       true))
                 return;
         }
         boolean changed = false;
@@ -803,7 +802,7 @@ public class GameTreePanel
     private void treeInfo(Point location, ConstNode node)
     {
         String treeInfo = NodeUtil.treeInfo(node);
-        String title = "Subtree Info";
+        String title = i18n("TIT_SUBTREE_INFO");
         TextViewer textViewer = new TextViewer(m_owner, title, treeInfo, true,
                                                null);
         textViewer.setLocation(location);
