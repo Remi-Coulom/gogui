@@ -27,6 +27,7 @@ import net.sf.gogui.go.Score;
 import net.sf.gogui.go.Score.ScoringMethod;
 import static net.sf.gogui.go.Score.ScoringMethod.AREA;
 import static net.sf.gogui.go.Score.ScoringMethod.TERRITORY;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Dialog for displaying the game score and result. */
 public class ScoreDialog
@@ -41,7 +42,7 @@ public class ScoreDialog
     public ScoreDialog(Frame owner, final Listener listener,
                        ScoringMethod initialRules)
     {
-        super(owner, "Score");
+        super(owner, i18n("TITLE_SCORE"));
         m_initialRules = initialRules;
         WindowAdapter windowAdapter = new WindowAdapter() {
                 public void windowClosing(WindowEvent event) {
@@ -62,35 +63,33 @@ public class ScoreDialog
         box.add(GuiUtil.createSmallFiller());
         JPanel values = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-
-        String toolTipArea =
-            "Points owned by %c (surrounded points and border stones)";
-        m_area = createColorEntry("Area", 3, toolTipArea, labels, values);
-        String toolTipTerritory = "Points surrounded by %c";
-        m_territory = createColorEntry("Territory", 3, toolTipTerritory,
-                                       labels, values);
-        String toolTypPrisoners =
-            "Stones captured by %c (including dead stones on board)";
-        m_prisoners = createColorEntry("Prisoners", 3, toolTypPrisoners,
-                                       labels, values);
+        m_area = createColorEntry("LABEL_SCORE_AREA", 3,
+                                  "TOOLTIP_SCORE_AREA_BLACK",
+                                  "TOOLTIP_SCORE_AREA_WHITE", labels, values);
+        m_territory = createColorEntry("LABEL_SCORE_TERRITORY", 3,
+                                       "TOOLTIP_SCORE_TERRITORY_BLACK",
+                                       "TOOLTIP_SCORE_TERRITORY_WHITE", labels,
+                                       values);
+        m_prisoners = createColorEntry("LABEL_SCORE_PRISONERS", 3,
+                                       "TOOLTIP_SCORE_PRISONERS_BLACK",
+                                       "TOOLTIP_SCORE_PRISONERS_WHITE", labels,
+                                       values);
         m_komi = createKomiEntry(3, labels, values);
-        m_resultArea = createEntry("Result Area", 8,
-                                      "Area score (area and komi)",
-                                      labels, values);
-        m_resultTerritory = createEntry("Result Territory", 8,
-                                       "Territory score " +
-                                       "(territory, prisoners, and komi)",
-                                       labels, values);
+        m_resultArea = createEntry("LABEL_SCORE_RESULT_AREA", 8,
+                                   "TOOLTIP_SCORE_RESULT_AREA", labels, values);
+        m_resultTerritory = createEntry("LABEL_SCORE_RESULT_TERRITORY", 8,
+                                        "TOOLTIP_SCORE_RESULT_TERRITORY",
+                                        labels, values);
         createRulesEntry(labels, values);
-        m_result = createEntry("Result", 8, "Score used for game result",
-                               labels, values);
+        m_result = createEntry("LABEL_SCORE_RESULT", 8,
+                               "TOOLTIP_SCORE_RESULT", labels, values);
 
-        JButton okButton = new JButton("Ok");
+        JButton okButton = new JButton(i18n("LABEL_OK"));
         okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     listener.actionScoreDone(m_score);
             } });
-        m_cancelButton = new JButton("Cancel");
+        m_cancelButton = new JButton(i18n("LABEL_CANCEL"));
         m_cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     listener.actionScoreDone(null);
@@ -145,16 +144,16 @@ public class ScoreDialog
     private Score m_score;
 
     private static final ImageIcon ICON_BLACK =
-        GuiUtil.getIcon("gogui-black-16x16", "Black");
+        GuiUtil.getIcon("gogui-black-16x16", i18n("LABEL_BLACK"));
 
     private static final ImageIcon ICON_WHITE =
-        GuiUtil.getIcon("gogui-white-16x16", "White");
+        GuiUtil.getIcon("gogui-white-16x16", i18n("LABEL_WHITE"));
 
     private JComponent createEntryLabel(String text)
     {
         Box box = Box.createHorizontalBox();
         box.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(text + ":");
+        JLabel label = new JLabel(i18n(text));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         box.add(label);
         return box;
@@ -168,14 +167,15 @@ public class ScoreDialog
         JTextField field = new JTextField(cols);
         GuiUtil.setEditableFalse(field);
         field.setHorizontalAlignment(JTextField.CENTER);
-        field.setToolTipText(toolTip);
+        field.setToolTipText(i18n(toolTip));
         panel.add(field);
         values.add(panel);
         return field;
     }
 
     private ColorFields createColorEntry(String labelText, int cols,
-                                         String toolTip,
+                                         String toolTipBlack,
+                                         String toolTipWhite,
                                          JComponent labels,
                                          JComponent values)
     {
@@ -188,8 +188,8 @@ public class ScoreDialog
         black.setHorizontalAlignment(JTextField.CENTER);
         colorFields.m_black = black;
         GuiUtil.setEditableFalse(black);
-        if (toolTip != null)
-            black.setToolTipText(toolTip.replaceAll("%c", "Black"));
+        if (toolTipBlack != null)
+            black.setToolTipText(i18n(toolTipBlack));
         panel.add(black);
         panel.add(GuiUtil.createFiller());
         panel.add(new JLabel(ICON_WHITE));
@@ -198,8 +198,8 @@ public class ScoreDialog
         white.setHorizontalAlignment(JTextField.CENTER);
         colorFields.m_white = white;
         GuiUtil.setEditableFalse(white);
-        if (toolTip != null)
-            white.setToolTipText(toolTip.replaceAll("%c", "White"));
+        if (toolTipWhite != null)
+            white.setToolTipText(i18n(toolTipWhite));
         panel.add(white);
         values.add(panel);
         return colorFields;
@@ -208,15 +208,14 @@ public class ScoreDialog
     private JTextField createKomiEntry(int cols, JComponent labels,
                                        JComponent values)
     {
-        labels.add(createEntryLabel("Komi"));
+        labels.add(createEntryLabel("LABEL_SCORE_KOMI"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         panel.add(new JLabel(ICON_WHITE));
         panel.add(GuiUtil.createSmallFiller());
         JTextField field = new JTextField(cols);
         field.setHorizontalAlignment(JTextField.CENTER);
         GuiUtil.setEditableFalse(field);
-        field.setToolTipText("Komi value (compensation for Black's first " +
-                             "move advantage)");
+        field.setToolTipText(i18n("TOOLTIP_SCORE_KOMI"));
         panel.add(field);
         values.add(panel);
         return field;
@@ -224,11 +223,11 @@ public class ScoreDialog
 
     private void createRulesEntry(JComponent labels, JComponent values)
     {
-        labels.add(createEntryLabel("Scoring method"));
+        labels.add(createEntryLabel("LABEL_SCORE_METHOD"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
         ButtonGroup group = new ButtonGroup();
-        m_useArea = new JRadioButton("Area");
+        m_useArea = new JRadioButton(i18n("LABEL_SCORE_METHOD_AREA"));
         m_useArea.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
@@ -238,11 +237,11 @@ public class ScoreDialog
                     }
                 }
             });
-        m_useArea.setToolTipText("Use area score for game result");
+        m_useArea.setToolTipText(i18n("TOOLTIP_SCORE_METHOD_AREA"));
         group.add(m_useArea);
         panel.add(m_useArea);
         panel.add(GuiUtil.createFiller());
-        m_useTerritory = new JRadioButton("Territory");
+        m_useTerritory = new JRadioButton(i18n("LABEL_SCORE_METHOD_TERRITORY"));
         m_useTerritory.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
@@ -252,7 +251,7 @@ public class ScoreDialog
                     }
                 }
             });
-        m_useTerritory.setToolTipText("Use territory score for game result");
+        m_useTerritory.setToolTipText(i18n("TOOLTIP_SCORE_METHOD_TERRITORY"));
         group.add(m_useTerritory);
         panel.add(m_useTerritory);
         values.add(panel);
