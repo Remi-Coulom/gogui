@@ -781,8 +781,9 @@ public class GoGuiActions
                                        && setupColor == BLACK);
         m_actionSetupWhite.setSelected(setupMode
                                        && setupColor == WHITE);
-        m_actionSaveLog.setEnabled(isProgramAttached);
         m_actionSaveCommands.setEnabled(isProgramAttached);
+        m_actionSaveLog.setEnabled(isProgramAttached);
+        m_actionSaveParameters.setEnabled(isProgramAttached);
         m_actionSendFile.setEnabled(isProgramAttached);
         m_actionShowAnalyzeDialog.setEnabled(isProgramAttached);
         m_actionShowShell.setEnabled(isProgramAttached);
