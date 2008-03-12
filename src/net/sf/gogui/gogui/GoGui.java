@@ -1237,6 +1237,8 @@ public class GoGui
 
     public void actionSaveParameters()
     {
+        if (m_gtp == null)
+            return;
         if (! checkHasParameterCommands())
             return;
         File file = showSave("Save Parameters");
