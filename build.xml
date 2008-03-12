@@ -630,7 +630,9 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/doc/*.png
  net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
+ net/sf/gogui/game/*.properties
  net/sf/gogui/gamefile/*.class
+ net/sf/gogui/gamefile/*.properties
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gogui/*.class

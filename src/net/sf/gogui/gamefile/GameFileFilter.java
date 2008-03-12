@@ -4,6 +4,7 @@ package net.sf.gogui.gamefile;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
+import static net.sf.gogui.gamefile.I18n.i18n;
 import net.sf.gogui.util.FileUtil;
 
 /** Swing file filter for SGF or Jago XML files. */
@@ -26,6 +27,6 @@ public class GameFileFilter
 
     public String getDescription()
     {
-        return "Go Games (*.sgf,*.xml)";
+        return i18n("LB_GOGAME");
     }
 }
