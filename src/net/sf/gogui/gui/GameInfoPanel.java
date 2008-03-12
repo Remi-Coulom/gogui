@@ -51,11 +51,9 @@ public class GameInfoPanel
             panel.add(box);
             ImageIcon icon;
             if (c == BLACK)
-                icon = GuiUtil.getIcon("gogui-black-32x32",
-                                       i18n("LABEL_BLACK"));
+                icon = GuiUtil.getIcon("gogui-black-32x32", i18n("LBL_BLACK"));
             else
-                icon = GuiUtil.getIcon("gogui-white-32x32",
-                                       i18n("LABEL_WHITE"));
+                icon = GuiUtil.getIcon("gogui-white-32x32", i18n("LBL_WHITE"));
             m_icon.set(c, new JLabel(icon));
             m_icon.get(c).setAlignmentX(Component.CENTER_ALIGNMENT);
             box.add(m_icon.get(c));
@@ -121,12 +119,12 @@ public class GameInfoPanel
         assert color.isBlackWhite();
         StringBuilder buffer = new StringBuilder(128);
         if (color == BLACK)
-            buffer.append(i18n("TOOLTIP_INFOPANEL_PLAYER_BLACK"));
+            buffer.append(i18n("TT_INFOPANEL_PLAYER_BLACK"));
         else
-            buffer.append(i18n("TOOLTIP_INFOPANEL_PLAYER_WHITE"));
+            buffer.append(i18n("TT_INFOPANEL_PLAYER_WHITE"));
         buffer.append(" (");
         if (StringUtil.isEmpty(player))
-            buffer.append(i18n("TOOLTIP_INFOPANEL_UNKNOWN_NAME"));
+            buffer.append(i18n("TT_INFOPANEL_UNKNOWN_NAME"));
         else
         {
             buffer.append(player);
@@ -166,9 +164,9 @@ class GuiClock
         super.setText(text);
         String toolTip;
         if (m_color == BLACK)
-            toolTip = i18n("TOOLTIP_INFOPANEL_TIME_BLACK");
+            toolTip = i18n("TT_INFOPANEL_TIME_BLACK");
         else
-            toolTip = i18n("TOOLTIP_INFOPANEL_TIME_WHITE");
+            toolTip = i18n("TT_INFOPANEL_TIME_WHITE");
         if (text.length() > COLUMNS)
             toolTip = toolTip + " (" + text + ")";
         setToolTipText(toolTip);
@@ -187,9 +185,9 @@ class Prisoners
         m_color = color;
         Icon icon;
         if (color == BLACK)
-            icon = GuiUtil.getIcon("gogui-black-16x16", i18n("LABEL_BLACK"));
+            icon = GuiUtil.getIcon("gogui-black-16x16", i18n("LBL_BLACK"));
         else
-            icon = GuiUtil.getIcon("gogui-white-16x16", i18n("LABEL_WHITE"));
+            icon = GuiUtil.getIcon("gogui-white-16x16", i18n("LBL_WHITE"));
         JLabel labelStone = new JLabel(icon);
         add(labelStone, BorderLayout.WEST);
         m_text = new JLabel();
@@ -204,16 +202,16 @@ class Prisoners
         if (m_color == BLACK)
         {
             if (n == 1)
-                tip = i18n("TOOLTIP_INFOPANEL_PRISONER_BLACK_ONE");
+                tip = i18n("TT_INFOPANEL_PRISONER_BLACK_ONE");
             else
-                tip = MessageFormat.format(i18n("TOOLTIP_INFOPANEL_PRISONER_BLACK"), n);
+                tip = MessageFormat.format(i18n("TT_INFOPANEL_PRISONER_BLACK"), n);
         }
         else
         {
             if (n == 1)
-                tip = i18n("TOOLTIP_INFOPANEL_PRISONER_WHITE_ONE");
+                tip = i18n("TT_INFOPANEL_PRISONER_WHITE_ONE");
             else
-                tip = MessageFormat.format(i18n("TOOLTIP_INFOPANEL_PRISONER_WHITE"), n);
+                tip = MessageFormat.format(i18n("TT_INFOPANEL_PRISONER_WHITE"), n);
         }
         setToolTipText(tip);
     }

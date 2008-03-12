@@ -17,8 +17,8 @@ public final class BoardSizeDialog
                            MessageDialogs messageDialogs)
     {
         Object value =
-            JOptionPane.showInputDialog(parent, i18n("LABEL_BOARDSIZE_DIALOG"),
-                                        i18n("TITLE_INPUT"),
+            JOptionPane.showInputDialog(parent, i18n("LBL_BOARDSIZE_DIALOG"),
+                                        i18n("TIT_INPUT"),
                                         JOptionPane.PLAIN_MESSAGE, null, null,
                                         Integer.toString(size));
         if (value == null)
@@ -36,10 +36,10 @@ public final class BoardSizeDialog
         if (size == -1)
         {
             String optionalMessage =
-                MessageFormat.format(i18n("MESSAGE_BOARDSIZE_DIALOG_INVALID_2"),
+                MessageFormat.format(i18n("MSG_BOARDSIZE_DIALOG_INVALID_2"),
                                      GoPoint.MAX_SIZE);
             messageDialogs.showError(parent,
-                                     i18n("MESSAGE_BOARDSIZE_DIALOG_INVALID"),
+                                     i18n("MSG_BOARDSIZE_DIALOG_INVALID"),
                                      optionalMessage, false);
         }
         return size;

@@ -24,7 +24,7 @@ public class BookmarkEditor
     public Bookmark editItem(Component parent, Bookmark object,
                              MessageDialogs messageDialogs)
     {
-        return editItem(parent, i18n("TITLE_BOOKMARKEDITOR"),
+        return editItem(parent, i18n("TIT_BOOKMARKEDITOR"),
                         (Bookmark)object, false, messageDialogs);
     }
 
@@ -38,16 +38,16 @@ public class BookmarkEditor
         m_panelRight =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("LABEL_BOOKMARKEDITOR_NAME", 25, bookmark.m_name);
+        m_name = createEntry("LBL_BOOKMARKEDITOR_NAME", 25, bookmark.m_name);
         String file = "";
         if (bookmark.m_file != null)
             file = bookmark.m_file.toString();
-        m_file = createEntry("LABEL_BOOKMARKEDITOR_FILE", 25, file);
+        m_file = createEntry("LBL_BOOKMARKEDITOR_FILE", 25, file);
         String move = "";
         if (bookmark.m_move > 0)
             move = Integer.toString(bookmark.m_move);
-        m_move = createEntry("LABEL_BOOKMARKEDITOR_MOVE", 10, move);
-        m_variation = createEntry("LABEL_BOOKMARKEDITOR_VARIATION", 10,
+        m_move = createEntry("LBL_BOOKMARKEDITOR_MOVE", 10, move);
+        m_variation = createEntry("LBL_BOOKMARKEDITOR_VARIATION", 10,
                                   bookmark.m_variation);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
@@ -138,16 +138,16 @@ public class BookmarkEditor
         if (m_name.getText().trim().equals(""))
         {
             messageDialogs.showError(parent,
-                                     i18n("MESSAGE_BOOKMARKEDITOR_EMPTYNAME"),
-                                     i18n("MESSAGE_BOOKMARKEDITOR_EMPTYNAME_2"),
+                                     i18n("MSG_BOOKMARKEDITOR_EMPTYNAME"),
+                                     i18n("MSG_BOOKMARKEDITOR_EMPTYNAME_2"),
                                      false);
             return false;
         }
         if (getMove() < 0)
         {
             messageDialogs.showError(parent,
-                                     i18n("MESSAGE_BOOKMARKEDITOR_INVALIDMOVE"),
-                                     i18n("MESSAGE_BOOKMARKEDITOR_INVALIDMOVE_2"),
+                                     i18n("MSG_BOOKMARKEDITOR_INVALIDMOVE"),
+                                     i18n("MSG_BOOKMARKEDITOR_INVALIDMOVE_2"),
                                      false);
             return false;
         }
@@ -155,8 +155,8 @@ public class BookmarkEditor
         if (! file.exists())
         {
             messageDialogs.showError(parent,
-                                     i18n("MESSAGE_BOOKMARKEDITOR_FILENOTEXIST"),
-                                     i18n("MESSAGE_BOOKMARKEDITOR_FILENOTEXIST_2"),
+                                     i18n("MSG_BOOKMARKEDITOR_FILENOTEXIST"),
+                                     i18n("MSG_BOOKMARKEDITOR_FILENOTEXIST_2"),
                                      false);
             return false;
         }

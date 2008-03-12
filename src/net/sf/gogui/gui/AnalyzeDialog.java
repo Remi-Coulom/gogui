@@ -73,7 +73,7 @@ public final class AnalyzeDialog
                          ArrayList<AnalyzeDefinition> commands,
                          GuiGtpClient gtp, MessageDialogs messageDialogs)
     {
-        super(owner, i18n("TITLE_ANALYZE"));
+        super(owner, i18n("TIT_ANALYZE"));
         m_messageDialogs = messageDialogs;
         m_gtp = gtp;
         m_commands = commands;
@@ -232,16 +232,16 @@ public final class AnalyzeDialog
     private JPanel createButtons()
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
-        m_runButton = new JButton(i18n("LABEL_ANALYZE_RUN"));
-        m_runButton.setToolTipText(i18n("TOOLTIP_ANALYZE_RUN"));
+        m_runButton = new JButton(i18n("LBL_ANALYZE_RUN"));
+        m_runButton.setToolTipText(i18n("TT_ANALYZE_RUN"));
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
         m_runButton.setEnabled(false);
         GuiUtil.setMacBevelButton(m_runButton);
         innerPanel.add(m_runButton);
-        m_clearButton = new JButton(i18n("LABEL_ANALYZE_CLEAR"));
-        m_clearButton.setToolTipText(i18n("TOOLTIP_ANALYZE_CLEAR"));
+        m_clearButton = new JButton(i18n("LBL_ANALYZE_CLEAR"));
+        m_clearButton.setToolTipText(i18n("TT_ANALYZE_CLEAR"));
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
         m_clearButton.setMnemonic(KeyEvent.VK_C);
@@ -256,13 +256,13 @@ public final class AnalyzeDialog
     {
         m_colorBox = Box.createVerticalBox();
         ButtonGroup group = new ButtonGroup();
-        m_black = new JRadioButton(i18n("LABEL_BLACK"));
-        m_black.setToolTipText(i18n("TOOLTIP_ANALYZE_BLACK"));
+        m_black = new JRadioButton(i18n("LBL_BLACK"));
+        m_black.setToolTipText(i18n("TT_ANALYZE_BLACK"));
         m_black.setEnabled(false);
         group.add(m_black);
         m_colorBox.add(m_black);
-        m_white = new JRadioButton(i18n("LABEL_WHITE"));
-        m_white.setToolTipText(i18n("TOOLTIP_ANALYZE_WHITE"));
+        m_white = new JRadioButton(i18n("LBL_WHITE"));
+        m_white.setToolTipText(i18n("TT_ANALYZE_WHITE"));
         m_white.setEnabled(false);
         group.add(m_white);
         m_colorBox.add(m_white);
@@ -329,18 +329,18 @@ public final class AnalyzeDialog
         optionsPanel.add(leftPanel);
         Box leftBox = Box.createVerticalBox();
         leftPanel.add(leftBox);
-        m_autoRun = new JCheckBox(i18n("LABEL_ANALYZE_AUTORUN"));
+        m_autoRun = new JCheckBox(i18n("LBL_ANALYZE_AUTORUN"));
         m_autoRun.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if (! m_autoRun.isSelected())
                         m_listener.actionClearAnalyzeCommand();
                 }
             });
-        m_autoRun.setToolTipText(i18n("TOOLTIP_ANALYZE_AUTORUN"));
+        m_autoRun.setToolTipText(i18n("TT_ANALYZE_AUTORUN"));
         m_autoRun.setEnabled(false);
         leftBox.add(m_autoRun);
-        m_clearBoard = new JCheckBox(i18n("LABEL_ANALYZE_CLEARBOARD"));
-        m_clearBoard.setToolTipText(i18n("TOOLTIP_ANALYZE_CLEARBOARD"));
+        m_clearBoard = new JCheckBox(i18n("LBL_ANALYZE_CLEARBOARD"));
+        m_clearBoard.setToolTipText(i18n("TT_ANALYZE_CLEARBOARD"));
         m_clearBoard.setEnabled(false);
         leftBox.add(m_clearBoard);
         m_clearBoard.setSelected(true);
@@ -407,8 +407,8 @@ public final class AnalyzeDialog
     {
         if (m_gtp.isCommandInProgress())
         {
-            showError("MESSAGE_ANALYZE_CANNOT_EXECUTE",
-                      "MESSAGE_ANALYZE_CANNOT_EXECUTE_2",
+            showError("MSG_ANALYZE_CANNOT_EXECUTE",
+                      "MSG_ANALYZE_CANNOT_EXECUTE_2",
                       false);
             return;
         }
@@ -417,11 +417,11 @@ public final class AnalyzeDialog
         {
             String name = m_gtp.getName();
             if (name == null)
-                showError("MESSAGE_ANALYZE_NOT_SUPPORTED",
-                          "MESSAGE_ANALYZE_NOT_SUPPORTED_2", false);
+                showError("MSG_ANALYZE_NOT_SUPPORTED",
+                          "MSG_ANALYZE_NOT_SUPPORTED_2", false);
             else
-                showError("MESSAGE_ANALYZE_NOT_SUPPORTED",
-                          "MESSAGE_ANALYZE_NOT_SUPPORTED_3", false, name);
+                showError("MSG_ANALYZE_NOT_SUPPORTED",
+                          "MSG_ANALYZE_NOT_SUPPORTED_3", false, name);
             return;
         }
         updateRecent(index);
@@ -433,7 +433,7 @@ public final class AnalyzeDialog
         {
             String stringArg =
                 JOptionPane.showInputDialog(this, label,
-                                            i18n("TITLE_INPUT"),
+                                            i18n("TIT_INPUT"),
                                             JOptionPane.PLAIN_MESSAGE);
             if (stringArg == null)
                 return;
@@ -449,7 +449,7 @@ public final class AnalyzeDialog
                 String value = m_gtp.send(commandWithoutArg);
                 Object optStringArg =
                     JOptionPane.showInputDialog(this, label,
-                                                i18n("LABEL_ANALYZE_INPUT"),
+                                                i18n("LBL_ANALYZE_INPUT"),
                                                 JOptionPane.PLAIN_MESSAGE,
                                                 null, null, value);
                 if (optStringArg == null || optStringArg.equals(value))
@@ -458,7 +458,7 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError("MESSAGE_ANALYZE_COMMAND_FAILED",
+                showError("MSG_ANALYZE_COMMAND_FAILED",
                           e.getMessage(), false, commandWithoutArg);
                 return;
             }
@@ -477,14 +477,14 @@ public final class AnalyzeDialog
             }
             catch (GtpError e)
             {
-                showError("MESSAGE_ANALYZE_COMMAND_FAILED",
+                showError("MSG_ANALYZE_COMMAND_FAILED",
                           e.getMessage(), false, commandWithoutArg);
                 return;
             }
             catch (GtpResponseFormatError e)
             {
-                showError("MESSAGE_ANALYZE_INVALID_RESPONSE",
-                          "MESSAGE_ANALYZE_INVALID_RESPONSE_2", true,
+                showError("MSG_ANALYZE_INVALID_RESPONSE",
+                          "MSG_ANALYZE_INVALID_RESPONSE_2", true,
                           commandWithoutArg, e.getMessage());
                 return;
             }

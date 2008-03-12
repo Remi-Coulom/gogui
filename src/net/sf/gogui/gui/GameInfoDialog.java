@@ -33,7 +33,7 @@ public final class GameInfoDialog
                             MessageDialogs messageDialogs)
     {
         GameInfoDialog gameInfo = new GameInfoDialog(info);
-        JDialog dialog = gameInfo.createDialog(parent, i18n("TITLE_GAMEINFO"));
+        JDialog dialog = gameInfo.createDialog(parent, i18n("TIT_GAMEINFO"));
         boolean done = false;
         while (! done)
         {
@@ -97,20 +97,20 @@ public final class GameInfoDialog
         JPanel values =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-        m_result = createEntry("LABEL_GAMEINFO_RESULT", 12,
+        m_result = createEntry("LBL_GAMEINFO_RESULT", 12,
                                info.get(StringInfo.RESULT),
-                               "TOOLTIP_GAMEINFO_RESULT", labels, values);
-        m_date = createEntry("LABEL_GAMEINFO_DATE", 12,
+                               "TT_GAMEINFO_RESULT", labels, values);
+        m_date = createEntry("LBL_GAMEINFO_DATE", 12,
                              info.get(StringInfo.DATE),
-                             "TOOLTIP_GAMEINFO_DATE", labels, values);
-        m_rules = createEntry("LABEL_GAMEINFO_RULES", 12,
+                             "TT_GAMEINFO_DATE", labels, values);
+        m_rules = createEntry("LBL_GAMEINFO_RULES", 12,
                               info.get(StringInfo.RULES),
-                              "TOOLTIP_GAMEINFO_RULES", labels, values);
+                              "TT_GAMEINFO_RULES", labels, values);
         String komi = "";
         if (info.getKomi() != null)
             komi = info.getKomi().toString();
-        m_komi = createEntry("LABEL_GAMEINFO_KOMI", 12, komi,
-                             "TOOLTIP_GAMEINFO_KOMI",
+        m_komi = createEntry("LBL_GAMEINFO_KOMI", 12, komi,
+                             "TT_GAMEINFO_KOMI",
                              labels, values);
         createTime(info.getTimeSettings(), labels, values);
         setMessage(outerBox);
@@ -142,7 +142,7 @@ public final class GameInfoDialog
     {
         Box boxLabel = Box.createHorizontalBox();
         boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(i18n("LABEL_GAMEINFO_TIME"));
+        JLabel label = new JLabel(i18n("LBL_GAMEINFO_TIME"));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         boxLabel.add(label);
         labels.add(boxLabel);
@@ -151,18 +151,18 @@ public final class GameInfoDialog
         boxValue.add(Box.createVerticalGlue());
         boxValue.add(panel);
         boxValue.add(Box.createVerticalGlue());
-        m_preByoyomi = new TimeField(3, "TOOLTIP_GAMEINFO_TIME_MAIN");
+        m_preByoyomi = new TimeField(3, "TT_GAMEINFO_TIME_MAIN");
         if (timeSettings != null)
             m_preByoyomi.setTime(timeSettings.getPreByoyomi());
         panel.add(m_preByoyomi);
         panel.add(new JLabel(" + "));
-        m_byoyomi = new TimeField(2, "TOOLTIP_GAMEINFO_TIME_BYOYOMI");
+        m_byoyomi = new TimeField(2, "TT_GAMEINFO_TIME_BYOYOMI");
         if (timeSettings != null && timeSettings.getUseByoyomi())
             m_byoyomi.setTime(timeSettings.getByoyomi());
         panel.add(m_byoyomi);
         panel.add(new JLabel(" / "));
         m_byoyomiMoves = new JTextField(2);
-        m_byoyomiMoves.setToolTipText(i18n("TOOLTIP_GAMEINFO_TIME_BYOYOMI_MOVES"));
+        m_byoyomiMoves.setToolTipText(i18n("TT_GAMEINFO_TIME_BYOYOMI_MOVES"));
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
         {
@@ -170,7 +170,7 @@ public final class GameInfoDialog
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
         panel.add(m_byoyomiMoves);
-        panel.add(new JLabel(" " + i18n("LABEL_GAMEINFO_TIME_MOVES")));
+        panel.add(new JLabel(" " + i18n("LBL_GAMEINFO_TIME_MOVES")));
         values.add(boxValue);
     }
 
@@ -182,10 +182,10 @@ public final class GameInfoDialog
         JLabel label;
         if (c == BLACK)
             label = new JLabel(GuiUtil.getIcon("gogui-black-16x16",
-                                               i18n("LABEL_BLACK")));
+                                               i18n("LBL_BLACK")));
         else
             label = new JLabel(GuiUtil.getIcon("gogui-white-16x16",
-                                               i18n("LABEL_WHITE")));
+                                               i18n("LBL_WHITE")));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         box.add(label);
         box.add(GuiUtil.createFiller());
@@ -195,16 +195,16 @@ public final class GameInfoDialog
         box.add(playerInfo.m_name);
         playerInfo.m_name.setHorizontalAlignment(JTextField.CENTER);
         if (c == BLACK)
-            playerInfo.m_name.setToolTipText(i18n("TOOLTIP_GAMEINFO_NAME_BLACK"));
+            playerInfo.m_name.setToolTipText(i18n("TT_GAMEINFO_NAME_BLACK"));
         else
-            playerInfo.m_name.setToolTipText(i18n("TOOLTIP_GAMEINFO_NAME_WHITE"));
+            playerInfo.m_name.setToolTipText(i18n("TT_GAMEINFO_NAME_WHITE"));
         box.add(GuiUtil.createFiller());
         playerInfo.m_rank = new JTextField(5);
         playerInfo.m_rank.setHorizontalAlignment(JTextField.CENTER);
         if (c == BLACK)
-            playerInfo.m_rank.setToolTipText(i18n("TOOLTIP_GAMEINFO_RANK_BLACK"));
+            playerInfo.m_rank.setToolTipText(i18n("TT_GAMEINFO_RANK_BLACK"));
         else
-            playerInfo.m_rank.setToolTipText(i18n("TOOLTIP_GAMEINFO_RANK_WHITE"));
+            playerInfo.m_rank.setToolTipText(i18n("TT_GAMEINFO_RANK_WHITE"));
         box.add(playerInfo.m_rank);
         playerInfo.m_rank.setText(info.get(StringInfoColor.RANK, c));
         box.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -280,14 +280,14 @@ public final class GameInfoDialog
         if (! m_byoyomi.validateTime(parent, messageDialogs))
             return false;
         if (! validatePosIntOrEmpty(parent, m_byoyomiMoves,
-                                    "MESSAGE_GAMEINFO_INVALID_TIME",
+                                    "MSG_GAMEINFO_INVALID_TIME",
                                     messageDialogs))
             return false;
         if (m_byoyomi.isEmpty() != isEmpty(m_byoyomiMoves))
         {
             messageDialogs.showError(parent,
-                                     i18n("MESSAGE_GAMEINFO_INVALID_BYOYOMI"),
-                                     i18n("MESSAGE_GAMEINFO_INVALID_BYOYOMI_2"),
+                                     i18n("MSG_GAMEINFO_INVALID_BYOYOMI"),
+                                     i18n("MSG_GAMEINFO_INVALID_BYOYOMI_2"),
                                      false);
             return false;
         }
@@ -305,8 +305,8 @@ public final class GameInfoDialog
         catch (InvalidKomiException e)
         {
             messageDialogs.showError(parent,
-                                     i18n("MESSAGE_GAMEINFO_INVALID_KOMI"),
-                                     i18n("MESSAGE_GAMEINFO_INVALID_KOMI_2"),
+                                     i18n("MSG_GAMEINFO_INVALID_KOMI"),
+                                     i18n("MSG_GAMEINFO_INVALID_KOMI_2"),
                                      false);
             return false;
         }
@@ -327,7 +327,7 @@ public final class GameInfoDialog
             if (value <= 0)
             {
                 messageDialogs.showError(parent, i18n(errorMessage),
-                    i18n("MESSAGE_GAMEINFO_NO_POSITIVE_NUMBER"),
+                    i18n("MSG_GAMEINFO_NO_POSITIVE_NUMBER"),
                     false);
                 return false;
             }
@@ -335,7 +335,7 @@ public final class GameInfoDialog
         catch (NumberFormatException e)
         {
             messageDialogs.showError(parent, i18n(errorMessage),
-                                     i18n("MESSAGE_GAMEINFO_NO_NUMBER"),
+                                     i18n("MSG_GAMEINFO_NO_NUMBER"),
                                      false);
             return false;
         }
@@ -358,8 +358,8 @@ class TimeField
         m_textField.setToolTipText(i18n(toolTipText));
         panel.add(m_textField);
         panel.add(GuiUtil.createSmallFiller());
-        String[] units = { i18n("LABEL_GAMEINFO_MIN"),
-                           i18n("LABEL_GAMEINFO_SEC") };
+        String[] units = { i18n("LBL_GAMEINFO_MIN"),
+                           i18n("LBL_GAMEINFO_SEC") };
         m_comboBox = new JComboBox(units);
         panel.add(m_comboBox);
     }
@@ -412,16 +412,16 @@ class TimeField
             if (value <= 0)
             {
                 messageDialogs.showError(parent,
-                                         i18n("MESSAGE_GAMEINFO_INVALID_TIME"),
-                                         i18n("MESSAGE_GAMEINFO_NO_POSITIVE_NUMBER"), false);
+                                         i18n("MSG_GAMEINFO_INVALID_TIME"),
+                                         i18n("MSG_GAMEINFO_NO_POSITIVE_NUMBER"), false);
                 return false;
             }
         }
         catch (NumberFormatException e)
         {
                 messageDialogs.showError(parent,
-                                         i18n("MESSAGE_GAMEINFO_INVALID_TIME"),
-                                         i18n("MESSAGE_GAMEINFO_NO_NUMBER"), false);
+                                         i18n("MSG_GAMEINFO_INVALID_TIME"),
+                                         i18n("MSG_GAMEINFO_NO_NUMBER"), false);
             return false;
         }
         return true;
