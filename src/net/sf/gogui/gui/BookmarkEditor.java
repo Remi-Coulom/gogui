@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Dialog for displaying and editing a bookmark. */
 public class BookmarkEditor
@@ -23,8 +24,8 @@ public class BookmarkEditor
     public Bookmark editItem(Component parent, Bookmark object,
                              MessageDialogs messageDialogs)
     {
-        return editItem(parent, "Edit Bookmark", (Bookmark)object, false,
-                        messageDialogs);
+        return editItem(parent, i18n("TITLE_BOOKMARKEDITOR"),
+                        (Bookmark)object, false, messageDialogs);
     }
 
     public Bookmark editItem(Component parent, String title,
@@ -37,16 +38,17 @@ public class BookmarkEditor
         m_panelRight =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("Name", 25, bookmark.m_name);
+        m_name = createEntry("LABEL_BOOKMARKEDITOR_NAME", 25, bookmark.m_name);
         String file = "";
         if (bookmark.m_file != null)
             file = bookmark.m_file.toString();
-        m_file = createEntry("File", 25, file);
+        m_file = createEntry("LABEL_BOOKMARKEDITOR_FILE", 25, file);
         String move = "";
         if (bookmark.m_move > 0)
             move = Integer.toString(bookmark.m_move);
-        m_move = createEntry("Move", 10, move);
-        m_variation = createEntry("Variation", 10, bookmark.m_variation);
+        m_move = createEntry("LABEL_BOOKMARKEDITOR_MOVE", 10, move);
+        m_variation = createEntry("LABEL_BOOKMARKEDITOR_VARIATION", 10,
+                                  bookmark.m_variation);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
                                                  JOptionPane.OK_CANCEL_OPTION);
@@ -104,7 +106,7 @@ public class BookmarkEditor
     {
         Box boxLabel = Box.createHorizontalBox();
         boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(labelText + ":");
+        JLabel label = new JLabel(i18n(labelText));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         boxLabel.add(label);
         m_panelLeft.add(boxLabel);
@@ -135,25 +137,26 @@ public class BookmarkEditor
     {
         if (m_name.getText().trim().equals(""))
         {
-            messageDialogs.showError(parent, "Name cannot be empty",
-                                     "You need to enter a name for the "
-                                     + " item in the Bookmarks menu. ",
+            messageDialogs.showError(parent,
+                                     i18n("MESSAGE_BOOKMARKEDITOR_EMPTYNAME"),
+                                     i18n("MESSAGE_BOOKMARKEDITOR_EMPTYNAME_2"),
                                      false);
             return false;
         }
         if (getMove() < 0)
         {
-            messageDialogs.showError(parent, "Invalid move number",
-                                     "Only positive move numbers are valid.",
+            messageDialogs.showError(parent,
+                                     i18n("MESSAGE_BOOKMARKEDITOR_INVALIDMOVE"),
+                                     i18n("MESSAGE_BOOKMARKEDITOR_INVALIDMOVE_2"),
                                      false);
             return false;
         }
         File file = new File(m_file.getText().trim());
         if (! file.exists())
         {
-            messageDialogs.showError(parent, "File does not exist",
-                                     "You need to enter the name of an "
-                                     + "existing file.",
+            messageDialogs.showError(parent,
+                                     i18n("MESSAGE_BOOKMARKEDITOR_FILENOTEXIST"),
+                                     i18n("MESSAGE_BOOKMARKEDITOR_FILENOTEXIST_2"),
                                      false);
             return false;
         }
