@@ -4,6 +4,7 @@ package net.sf.gogui.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -15,6 +16,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.AnalyzeCommand;
 import net.sf.gogui.gtp.AnalyzeDefinition;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 
 /** Context menu for fields on board. */
@@ -91,24 +93,28 @@ public class ContextMenu
                     }
                 }
             };
-        setLabel("Point " + point);
-        m_mark = createCheckBox("Mark", "mark");
+        setLabel(MessageFormat.format(i18n("LB_CONTEXTMENU_POINT"), point));
+        m_mark = createCheckBox("MN_CONTEXTMENU_MARK", "mark");
         m_mark.setSelected(mark);
         add(m_mark);
-        m_markCircle = createCheckBox("Mark Circle", "mark-circle");
+        m_markCircle = createCheckBox("MN_CONTEXTMENU_MARK_CIRCLE",
+                                      "mark-circle");
         m_markCircle.setSelected(markCircle);
         add(m_markCircle);
-        m_markSquare = createCheckBox("Mark Square", "mark-square");
+        m_markSquare = createCheckBox("MN_CONTEXTMENU_MARK_SQUARE",
+                                      "mark-square");
         m_markSquare.setSelected(markSquare);
         add(m_markSquare);
-        m_markTriangle = createCheckBox("Mark Triangle", "mark-triangle");
+        m_markTriangle = createCheckBox("MN_CONTEXTMENU_MARK_TRIANGLE",
+                                        "mark-triangle");
         m_markTriangle.setSelected(markTriangle);
         add(m_markTriangle);
-        add(createItem("Edit Label", "edit-label"));
+        add(createItem("MN_CONTEXTMENU_EDIT_LABEL", "edit-label"));
         addSeparator();
         if (! noProgram && commands != null && ! commands.isEmpty())
         {
-            String analyzeMenuLabel = "Analyze at " + point;
+            String analyzeMenuLabel =
+                MessageFormat.format(i18n("MN_CONTEXTMENU_ANALYZE_AT"), point);
             if (Platform.isMac())
                 // Workaround: Quaqua 3.7.6 computes size wrong, the arrow
                 // for the submenu overlaps the label
@@ -126,7 +132,7 @@ public class ContextMenu
                     addColorCommand(command);
             }
             JMenuItem analyzeClear =
-                createItem("Analyze Clear", "analyze-clear");
+                createItem("MN_CONTEXTMENU_ANALYZE_CLEAR", "analyze-clear");
             add(analyzeClear);
             if (m_analyzeMenu.getMenuComponentCount() == 0)
             {
@@ -137,10 +143,7 @@ public class ContextMenu
         }
         else
             m_analyzeMenu = null;
-        JMenuItem item = new JMenuItem("Cancel");
-        item.addActionListener(m_actionListener);
-        item.setActionCommand("cancel");
-        add(item);
+        add(createItem("LB_CANCEL", "cancel"));
     }
 
     public GoPoint getPointArg()
@@ -179,11 +182,11 @@ public class ContextMenu
         menu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
         AnalyzeCommand commandBlack = new AnalyzeCommand(definition);
         commandBlack.setColorArg(BLACK);
-        JMenuItem item = createItem(commandBlack, "Black");
+        JMenuItem item = createItem(commandBlack, "LB_BLACK");
         menu.add(item);
         AnalyzeCommand commandWhite = new AnalyzeCommand(definition);
         commandWhite.setColorArg(WHITE);
-        item = createItem(commandWhite, "White");
+        item = createItem(commandWhite, "LB_WHITE");
         menu.add(item);
         m_analyzeMenu.add(menu);
     }
@@ -195,25 +198,28 @@ public class ContextMenu
         m_analyzeMenu.add(item);
     }
 
-    private JMenuItem createItem(AnalyzeCommand command, String label)
-    {
-        assert ! m_commands.contains(command);
-        m_commands.add(command);
-        return createItem(label, Integer.toString(m_commands.size() - 1));
-    }
-
     private JCheckBoxMenuItem createCheckBox(String label,
                                              String actionCommand)
     {
-        JCheckBoxMenuItem item = new JCheckBoxMenuItem(label);
+        JCheckBoxMenuItem item = new JCheckBoxMenuItem(i18n(label));
         item.addActionListener(m_actionListener);
         item.setActionCommand(actionCommand);
         return item;
     }
 
+    private JMenuItem createItem(AnalyzeCommand command, String label)
+    {
+        assert ! m_commands.contains(command);
+        m_commands.add(command);
+        JMenuItem item = new JMenuItem(label);
+        item.addActionListener(m_actionListener);
+        item.setActionCommand(Integer.toString(m_commands.size() - 1));
+        return item;
+    }
+
     private JMenuItem createItem(String label, String actionCommand)
     {
-        JMenuItem item = new JMenuItem(label);
+        JMenuItem item = new JMenuItem(i18n(label));
         item.addActionListener(m_actionListener);
         item.setActionCommand(actionCommand);
         return item;

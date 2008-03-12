@@ -157,7 +157,7 @@ public class ObjectListEditor<OBJECT>
         String optionalMessage = i18n("MSG_LISTEDITOR_REALLY_REMOVE_2");
         if (! m_messageDialogs.showQuestion(disableKey, m_dialog, mainMessage,
                                             optionalMessage,
-                                            i18n("LBL_REMOVE"), false))
+                                            i18n("LB_REMOVE"), false))
             return;
         m_objects.remove(object);
         if (index >= m_objects.size())
@@ -185,16 +185,16 @@ public class ObjectListEditor<OBJECT>
     {
         JPanel buttonPanel
             = new JPanel(new GridLayout(0, 1, GuiUtil.PAD, GuiUtil.PAD));
-        m_moveUp = createButton("LBL_LISTEDITOR_MOVE_UP", "move-up");
+        m_moveUp = createButton("LB_LISTEDITOR_MOVE_UP", "move-up");
         GuiUtil.setMacBevelButton(m_moveUp);
         buttonPanel.add(m_moveUp);
-        m_moveDown = createButton("LBL_LISTEDITOR_MOVE_DOWN", "move-down");
+        m_moveDown = createButton("LB_LISTEDITOR_MOVE_DOWN", "move-down");
         GuiUtil.setMacBevelButton(m_moveDown);
         buttonPanel.add(m_moveDown);
-        m_edit = createButton("LBL_EDIT", "edit");
+        m_edit = createButton("LB_EDIT", "edit");
         GuiUtil.setMacBevelButton(m_edit);
         buttonPanel.add(m_edit);
-        m_remove = createButton("LBL_REMOVE", "remove");
+        m_remove = createButton("LB_REMOVE", "remove");
         GuiUtil.setMacBevelButton(m_remove);
         buttonPanel.add(m_remove);
         JPanel panel = new JPanel(new BorderLayout());

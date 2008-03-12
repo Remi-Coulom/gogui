@@ -97,19 +97,19 @@ public final class GameInfoDialog
         JPanel values =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-        m_result = createEntry("LBL_GAMEINFO_RESULT", 12,
+        m_result = createEntry("LB_GAMEINFO_RESULT", 12,
                                info.get(StringInfo.RESULT),
                                "TT_GAMEINFO_RESULT", labels, values);
-        m_date = createEntry("LBL_GAMEINFO_DATE", 12,
+        m_date = createEntry("LB_GAMEINFO_DATE", 12,
                              info.get(StringInfo.DATE),
                              "TT_GAMEINFO_DATE", labels, values);
-        m_rules = createEntry("LBL_GAMEINFO_RULES", 12,
+        m_rules = createEntry("LB_GAMEINFO_RULES", 12,
                               info.get(StringInfo.RULES),
                               "TT_GAMEINFO_RULES", labels, values);
         String komi = "";
         if (info.getKomi() != null)
             komi = info.getKomi().toString();
-        m_komi = createEntry("LBL_GAMEINFO_KOMI", 12, komi,
+        m_komi = createEntry("LB_GAMEINFO_KOMI", 12, komi,
                              "TT_GAMEINFO_KOMI",
                              labels, values);
         createTime(info.getTimeSettings(), labels, values);
@@ -142,7 +142,7 @@ public final class GameInfoDialog
     {
         Box boxLabel = Box.createHorizontalBox();
         boxLabel.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(i18n("LBL_GAMEINFO_TIME"));
+        JLabel label = new JLabel(i18n("LB_GAMEINFO_TIME"));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         boxLabel.add(label);
         labels.add(boxLabel);
@@ -170,7 +170,7 @@ public final class GameInfoDialog
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
         panel.add(m_byoyomiMoves);
-        panel.add(new JLabel(" " + i18n("LBL_GAMEINFO_TIME_MOVES")));
+        panel.add(new JLabel(" " + i18n("LB_GAMEINFO_TIME_MOVES")));
         values.add(boxValue);
     }
 
@@ -182,10 +182,10 @@ public final class GameInfoDialog
         JLabel label;
         if (c == BLACK)
             label = new JLabel(GuiUtil.getIcon("gogui-black-16x16",
-                                               i18n("LBL_BLACK")));
+                                               i18n("LB_BLACK")));
         else
             label = new JLabel(GuiUtil.getIcon("gogui-white-16x16",
-                                               i18n("LBL_WHITE")));
+                                               i18n("LB_WHITE")));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         box.add(label);
         box.add(GuiUtil.createFiller());
@@ -358,8 +358,8 @@ class TimeField
         m_textField.setToolTipText(i18n(toolTipText));
         panel.add(m_textField);
         panel.add(GuiUtil.createSmallFiller());
-        String[] units = { i18n("LBL_GAMEINFO_MIN"),
-                           i18n("LBL_GAMEINFO_SEC") };
+        String[] units = { i18n("LB_GAMEINFO_MIN"),
+                           i18n("LB_GAMEINFO_SEC") };
         m_comboBox = new JComboBox(units);
         panel.add(m_comboBox);
     }

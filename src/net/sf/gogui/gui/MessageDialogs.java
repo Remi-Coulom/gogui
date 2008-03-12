@@ -41,9 +41,9 @@ public final class MessageDialogs
             type = JOptionPane.ERROR_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object[] options = { i18n("LBL_CLOSE") };
+        Object[] options = { i18n("LB_CLOSE") };
         Object defaultOption = options[0];
-        String title = i18n("LBL_ERROR") + " - " + m_applicationName;
+        String title = i18n("LB_ERROR") + " - " + m_applicationName;
         show(null, frame, title, mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
@@ -76,9 +76,9 @@ public final class MessageDialogs
             type = JOptionPane.INFORMATION_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object[] options = { i18n("LBL_CLOSE") };
+        Object[] options = { i18n("LB_CLOSE") };
         Object defaultOption = options[0];
-        String title = i18n("LBL_INFORMATION") + " - " + m_applicationName;
+        String title = i18n("LB_INFORMATION") + " - " + m_applicationName;
         show(disableKey, frame, title, mainMessage, optionalMessage,
              type, JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
@@ -110,7 +110,7 @@ public final class MessageDialogs
         if (Platform.isMac())
         {
             options[0] = nonDestructiveOption;
-            options[1] = i18n("LBL_CANCEL");
+            options[1] = i18n("LB_CANCEL");
             options[2] = destructiveOption;
             destructiveIndex = 2;
         }
@@ -118,12 +118,12 @@ public final class MessageDialogs
         {
             options[0] = nonDestructiveOption;
             options[1] = destructiveOption;
-            options[2] = i18n("LBL_CANCEL");
+            options[2] = i18n("LB_CANCEL");
             destructiveIndex = -1;
         }
         Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
-        String title = i18n("LBL_QUESTION") + " - " + m_applicationName;
+        String title = i18n("LB_QUESTION") + " - " + m_applicationName;
         Object value = show(disableKey, parent, title, mainMessage,
                             optionalMessage, type,
                             JOptionPane.YES_NO_CANCEL_OPTION, options,
@@ -155,9 +155,9 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        Object[] options = { i18n("LBL_CLOSE") };
+        Object[] options = { i18n("LB_CLOSE") };
         Object defaultOption = options[0];
-        String title = i18n("LBL_WARNING") + " - " + m_applicationName;
+        String title = i18n("LB_WARNING") + " - " + m_applicationName;
         show(disableKey, parent, title, mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
@@ -177,7 +177,7 @@ public final class MessageDialogs
                                 boolean isCritical)
     {
         return showQuestion(disableKey, parent, mainMessage, optionalMessage,
-                            destructiveOption, i18n("LBL_CANCEL"),
+                            destructiveOption, i18n("LB_CANCEL"),
                             isCritical);
     }
 
@@ -212,7 +212,7 @@ public final class MessageDialogs
             type = JOptionPane.QUESTION_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        String title = i18n("LBL_QUESTION") + " - " + m_applicationName;
+        String title = i18n("LB_QUESTION") + " - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption, -1);
@@ -236,7 +236,7 @@ public final class MessageDialogs
     {
         return showWarningQuestion(disableKey, parent, mainMessage,
                                    optionalMessage, destructiveOption,
-                                   i18n("LBL_CANCEL"), isCritical);
+                                   i18n("LB_CANCEL"), isCritical);
     }
 
     /** Show warning message to confirm destructive actions.
@@ -268,7 +268,7 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        String title = i18n("LBL_WARNING") + " - " + m_applicationName;
+        String title = i18n("LB_WARNING") + " - " + m_applicationName;
         Object result = show(disableKey, parent, title, mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption, -1);
@@ -342,13 +342,13 @@ public final class MessageDialogs
         if (disableKey != null)
         {
             if (messageType == JOptionPane.QUESTION_MESSAGE)
-                disableCheckBox = new JCheckBox(i18n("LBL_DO_NOT_ASK_AGAIN"));
+                disableCheckBox = new JCheckBox(i18n("LB_DO_NOT_ASK_AGAIN"));
             else if (messageType == JOptionPane.WARNING_MESSAGE)
                 disableCheckBox =
-                    new JCheckBox(i18n("LBL_DO_NOT_WARN_AGAIN"));
+                    new JCheckBox(i18n("LB_DO_NOT_WARN_AGAIN"));
             else
                 disableCheckBox =
-                    new JCheckBox(i18n("LBL_DO_NOT_SHOW_AGAIN"));
+                    new JCheckBox(i18n("LB_DO_NOT_SHOW_AGAIN"));
             disableCheckBox.setToolTipText(i18n("TT_DO_NOT_SHOW_AGAIN"));
             disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
             GuiUtil.setMacDialogInfoMessageFont(disableCheckBox);

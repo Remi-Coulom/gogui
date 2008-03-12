@@ -63,33 +63,33 @@ public class ScoreDialog
         box.add(GuiUtil.createSmallFiller());
         JPanel values = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         box.add(values);
-        m_area = createColorEntry("LBL_SCORE_AREA", 3,
+        m_area = createColorEntry("LB_SCORE_AREA", 3,
                                   "TT_SCORE_AREA_BLACK",
                                   "TT_SCORE_AREA_WHITE", labels, values);
-        m_territory = createColorEntry("LBL_SCORE_TERRITORY", 3,
+        m_territory = createColorEntry("LB_SCORE_TERRITORY", 3,
                                        "TT_SCORE_TERRITORY_BLACK",
                                        "TT_SCORE_TERRITORY_WHITE", labels,
                                        values);
-        m_prisoners = createColorEntry("LBL_SCORE_PRISONERS", 3,
+        m_prisoners = createColorEntry("LB_SCORE_PRISONERS", 3,
                                        "TT_SCORE_PRISONERS_BLACK",
                                        "TT_SCORE_PRISONERS_WHITE", labels,
                                        values);
         m_komi = createKomiEntry(3, labels, values);
-        m_resultArea = createEntry("LBL_SCORE_RESULT_AREA", 8,
+        m_resultArea = createEntry("LB_SCORE_RESULT_AREA", 8,
                                    "TT_SCORE_RESULT_AREA", labels, values);
-        m_resultTerritory = createEntry("LBL_SCORE_RESULT_TERRITORY", 8,
+        m_resultTerritory = createEntry("LB_SCORE_RESULT_TERRITORY", 8,
                                         "TT_SCORE_RESULT_TERRITORY",
                                         labels, values);
         createRulesEntry(labels, values);
-        m_result = createEntry("LBL_SCORE_RESULT", 8,
+        m_result = createEntry("LB_SCORE_RESULT", 8,
                                "TT_SCORE_RESULT", labels, values);
 
-        JButton okButton = new JButton(i18n("LBL_OK"));
+        JButton okButton = new JButton(i18n("LB_OK"));
         okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     listener.actionScoreDone(m_score);
             } });
-        m_cancelButton = new JButton(i18n("LBL_CANCEL"));
+        m_cancelButton = new JButton(i18n("LB_CANCEL"));
         m_cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     listener.actionScoreDone(null);
@@ -144,10 +144,10 @@ public class ScoreDialog
     private Score m_score;
 
     private static final ImageIcon ICON_BLACK =
-        GuiUtil.getIcon("gogui-black-16x16", i18n("LBL_BLACK"));
+        GuiUtil.getIcon("gogui-black-16x16", i18n("LB_BLACK"));
 
     private static final ImageIcon ICON_WHITE =
-        GuiUtil.getIcon("gogui-white-16x16", i18n("LBL_WHITE"));
+        GuiUtil.getIcon("gogui-white-16x16", i18n("LB_WHITE"));
 
     private JComponent createEntryLabel(String text)
     {
@@ -208,7 +208,7 @@ public class ScoreDialog
     private JTextField createKomiEntry(int cols, JComponent labels,
                                        JComponent values)
     {
-        labels.add(createEntryLabel("LBL_SCORE_KOMI"));
+        labels.add(createEntryLabel("LB_SCORE_KOMI"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         panel.add(new JLabel(ICON_WHITE));
         panel.add(GuiUtil.createSmallFiller());
@@ -223,11 +223,11 @@ public class ScoreDialog
 
     private void createRulesEntry(JComponent labels, JComponent values)
     {
-        labels.add(createEntryLabel("LBL_SCORE_METHOD"));
+        labels.add(createEntryLabel("LB_SCORE_METHOD"));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
         ButtonGroup group = new ButtonGroup();
-        m_useArea = new JRadioButton(i18n("LBL_SCORE_METHOD_AREA"));
+        m_useArea = new JRadioButton(i18n("LB_SCORE_METHOD_AREA"));
         m_useArea.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)
@@ -241,7 +241,7 @@ public class ScoreDialog
         group.add(m_useArea);
         panel.add(m_useArea);
         panel.add(GuiUtil.createFiller());
-        m_useTerritory = new JRadioButton(i18n("LBL_SCORE_METHOD_TERRITORY"));
+        m_useTerritory = new JRadioButton(i18n("LB_SCORE_METHOD_TERRITORY"));
         m_useTerritory.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (m_score != null)

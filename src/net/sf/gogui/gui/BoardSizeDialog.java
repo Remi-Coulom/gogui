@@ -17,7 +17,7 @@ public final class BoardSizeDialog
                            MessageDialogs messageDialogs)
     {
         Object value =
-            JOptionPane.showInputDialog(parent, i18n("LBL_BOARDSIZE_DIALOG"),
+            JOptionPane.showInputDialog(parent, i18n("LB_BOARDSIZE_DIALOG"),
                                         i18n("TIT_INPUT"),
                                         JOptionPane.PLAIN_MESSAGE, null, null,
                                         Integer.toString(size));

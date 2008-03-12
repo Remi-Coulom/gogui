@@ -38,16 +38,16 @@ public class BookmarkEditor
         m_panelRight =
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_name = createEntry("LBL_BOOKMARKEDITOR_NAME", 25, bookmark.m_name);
+        m_name = createEntry("LB_BOOKMARKEDITOR_NAME", 25, bookmark.m_name);
         String file = "";
         if (bookmark.m_file != null)
             file = bookmark.m_file.toString();
-        m_file = createEntry("LBL_BOOKMARKEDITOR_FILE", 25, file);
+        m_file = createEntry("LB_BOOKMARKEDITOR_FILE", 25, file);
         String move = "";
         if (bookmark.m_move > 0)
             move = Integer.toString(bookmark.m_move);
-        m_move = createEntry("LBL_BOOKMARKEDITOR_MOVE", 10, move);
-        m_variation = createEntry("LBL_BOOKMARKEDITOR_VARIATION", 10,
+        m_move = createEntry("LB_BOOKMARKEDITOR_MOVE", 10, move);
+        m_variation = createEntry("LB_BOOKMARKEDITOR_VARIATION", 10,
                                   bookmark.m_variation);
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,

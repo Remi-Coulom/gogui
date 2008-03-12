@@ -52,14 +52,14 @@ public class StatusBar
         m_iconBox.add(m_toPlayLabel);
         m_labelScore
             = new JLabel(GuiUtil.getIcon("gogui-score",
-                                         i18n("LBL_STATUS_SCORE")));
+                                         i18n("LB_STATUS_SCORE")));
         m_labelScore.setToolTipText(i18n("TT_STATUS_SCORE"));
         m_labelScore.setVisible(false);
         m_iconBox.add(m_labelScore);
 
         m_labelSetup
             = new JLabel(GuiUtil.getIcon("gogui-setup-16x16",
-                                         i18n("LBL_STATUS_SETUP")));
+                                         i18n("LB_STATUS_SETUP")));
         m_labelSetup.setVisible(false);
         m_labelSetup.setToolTipText(i18n("TT_STATUS_SETUP"));
         m_iconBox.add(m_labelSetup);
@@ -144,13 +144,13 @@ public class StatusBar
         if (color == BLACK)
         {
             m_toPlayLabel.setIcon(ICON_BLACK);
-            m_toPlayLabel.setToolTipText(i18n("LBL_STATUS_TO_PLAY_BLACK"));
+            m_toPlayLabel.setToolTipText(i18n("LB_STATUS_TO_PLAY_BLACK"));
         }
         else
         {
             assert color == WHITE;
             m_toPlayLabel.setIcon(ICON_WHITE);
-            m_toPlayLabel.setToolTipText(i18n("LBL_STATUS_TO_PLAY_WHITE"));
+            m_toPlayLabel.setToolTipText(i18n("LB_STATUS_TO_PLAY_WHITE"));
         }
     }
 
@@ -164,10 +164,10 @@ public class StatusBar
     }
 
     private static final Icon ICON_BLACK =
-        GuiUtil.getIcon("gogui-black-16x16", i18n("LBL_BLACK"));
+        GuiUtil.getIcon("gogui-black-16x16", i18n("LB_BLACK"));
 
     private static final Icon ICON_WHITE =
-        GuiUtil.getIcon("gogui-white-16x16", i18n("LBL_WHITE"));
+        GuiUtil.getIcon("gogui-white-16x16", i18n("LB_WHITE"));
 
     private final Box m_iconBox;
 

@@ -51,9 +51,9 @@ public class GameInfoPanel
             panel.add(box);
             ImageIcon icon;
             if (c == BLACK)
-                icon = GuiUtil.getIcon("gogui-black-32x32", i18n("LBL_BLACK"));
+                icon = GuiUtil.getIcon("gogui-black-32x32", i18n("LB_BLACK"));
             else
-                icon = GuiUtil.getIcon("gogui-white-32x32", i18n("LBL_WHITE"));
+                icon = GuiUtil.getIcon("gogui-white-32x32", i18n("LB_WHITE"));
             m_icon.set(c, new JLabel(icon));
             m_icon.get(c).setAlignmentX(Component.CENTER_ALIGNMENT);
             box.add(m_icon.get(c));
@@ -185,9 +185,9 @@ class Prisoners
         m_color = color;
         Icon icon;
         if (color == BLACK)
-            icon = GuiUtil.getIcon("gogui-black-16x16", i18n("LBL_BLACK"));
+            icon = GuiUtil.getIcon("gogui-black-16x16", i18n("LB_BLACK"));
         else
-            icon = GuiUtil.getIcon("gogui-white-16x16", i18n("LBL_WHITE"));
+            icon = GuiUtil.getIcon("gogui-white-16x16", i18n("LB_WHITE"));
         JLabel labelStone = new JLabel(icon);
         add(labelStone, BorderLayout.WEST);
         m_text = new JLabel();

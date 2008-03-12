@@ -232,7 +232,7 @@ public final class AnalyzeDialog
     private JPanel createButtons()
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
-        m_runButton = new JButton(i18n("LBL_ANALYZE_RUN"));
+        m_runButton = new JButton(i18n("LB_ANALYZE_RUN"));
         m_runButton.setToolTipText(i18n("TT_ANALYZE_RUN"));
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
@@ -240,7 +240,7 @@ public final class AnalyzeDialog
         m_runButton.setEnabled(false);
         GuiUtil.setMacBevelButton(m_runButton);
         innerPanel.add(m_runButton);
-        m_clearButton = new JButton(i18n("LBL_ANALYZE_CLEAR"));
+        m_clearButton = new JButton(i18n("LB_ANALYZE_CLEAR"));
         m_clearButton.setToolTipText(i18n("TT_ANALYZE_CLEAR"));
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
@@ -256,12 +256,12 @@ public final class AnalyzeDialog
     {
         m_colorBox = Box.createVerticalBox();
         ButtonGroup group = new ButtonGroup();
-        m_black = new JRadioButton(i18n("LBL_BLACK"));
+        m_black = new JRadioButton(i18n("LB_BLACK"));
         m_black.setToolTipText(i18n("TT_ANALYZE_BLACK"));
         m_black.setEnabled(false);
         group.add(m_black);
         m_colorBox.add(m_black);
-        m_white = new JRadioButton(i18n("LBL_WHITE"));
+        m_white = new JRadioButton(i18n("LB_WHITE"));
         m_white.setToolTipText(i18n("TT_ANALYZE_WHITE"));
         m_white.setEnabled(false);
         group.add(m_white);
@@ -329,7 +329,7 @@ public final class AnalyzeDialog
         optionsPanel.add(leftPanel);
         Box leftBox = Box.createVerticalBox();
         leftPanel.add(leftBox);
-        m_autoRun = new JCheckBox(i18n("LBL_ANALYZE_AUTORUN"));
+        m_autoRun = new JCheckBox(i18n("LB_ANALYZE_AUTORUN"));
         m_autoRun.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     if (! m_autoRun.isSelected())
@@ -339,7 +339,7 @@ public final class AnalyzeDialog
         m_autoRun.setToolTipText(i18n("TT_ANALYZE_AUTORUN"));
         m_autoRun.setEnabled(false);
         leftBox.add(m_autoRun);
-        m_clearBoard = new JCheckBox(i18n("LBL_ANALYZE_CLEARBOARD"));
+        m_clearBoard = new JCheckBox(i18n("LB_ANALYZE_CLEARBOARD"));
         m_clearBoard.setToolTipText(i18n("TT_ANALYZE_CLEARBOARD"));
         m_clearBoard.setEnabled(false);
         leftBox.add(m_clearBoard);
@@ -449,7 +449,7 @@ public final class AnalyzeDialog
                 String value = m_gtp.send(commandWithoutArg);
                 Object optStringArg =
                     JOptionPane.showInputDialog(this, label,
-                                                i18n("LBL_ANALYZE_INPUT"),
+                                                i18n("LB_ANALYZE_INPUT"),
                                                 JOptionPane.PLAIN_MESSAGE,
                                                 null, null, value);
                 if (optStringArg == null || optStringArg.equals(value))
