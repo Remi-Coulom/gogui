@@ -449,7 +449,7 @@ public final class AnalyzeDialog
                 String value = m_gtp.send(commandWithoutArg);
                 Object optStringArg =
                     JOptionPane.showInputDialog(this, label,
-                                                i18n("LB_ANALYZE_INPUT"),
+                                                i18n("TIT_INPUT"),
                                                 JOptionPane.PLAIN_MESSAGE,
                                                 null, null, value);
                 if (optStringArg == null || optStringArg.equals(value))

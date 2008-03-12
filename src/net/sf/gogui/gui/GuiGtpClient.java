@@ -3,6 +3,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import java.text.MessageFormat;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
@@ -12,6 +13,7 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Wrapper around gtp.GtpClient to be used in a GUI environment.
     Allows to send fast commands with the GtpClientBase.send() function
@@ -222,31 +224,26 @@ public class GuiGtpClient
 
         public boolean askContinue()
         {
-            String mainMessage = "The Go program is not responding.";
+            String mainMessage = i18n("MSG_PROGRAM_NOT_RESPONDING");
             String optionalMessage;
             String destructiveOption;
             if (m_command == null)
             {
-                optionalMessage =
-                    "The Go program did not terminate after the command" +
-                    " stream was closed. You may choose to wait for a short" +
-                    " while for it to terminate or force it to quit now.";
-                destructiveOption = "Force Quit";
+                optionalMessage = i18n("MSG_PROGRAM_NOT_RESPONDING_2");
+                destructiveOption = i18n("LB_FORCE_QUIT_PROGRAM");
             }
             else
             {
                 optionalMessage =
-                    "The Go program is not responding to the command \""
-                    + m_command + "\". You may choose to wait for a short" +
-                    " while for it to respond or terminate and detach" +
-                    " the Go program.";
-                destructiveOption = "Terminate";
+                    MessageFormat.format(i18n("MSG_PROGRAM_NOT_RESPONDING_3"),
+                                         m_command);
+                destructiveOption = i18n("LB_TERMINATE_PROGRAM");
             }
             return ! m_messageDialogs.showWarningQuestion(null, m_owner,
                                                           mainMessage,
                                                           optionalMessage,
                                                           destructiveOption,
-                                                          "Wait",
+                                                          i18n("LB_WAIT"),
                                                           true);
         }
 
