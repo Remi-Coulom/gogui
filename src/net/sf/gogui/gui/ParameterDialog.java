@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import static java.lang.Math.max;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JDialog;
@@ -34,6 +35,7 @@ import net.sf.gogui.gtp.AnalyzeUtil;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.ParameterType;
 import static net.sf.gogui.gui.GuiUtil.SMALL_PAD;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
@@ -49,7 +51,7 @@ public class ParameterDialog
     {
         final ArrayList<Parameter> parameters = parseResponse(response);
         Component mainComponent = createMainComponent(parameters);
-        final Object options[] = { "Ok", "Cancel" };
+        final Object options[] = { i18n("LB_OK"), i18n("LB_CANCEL") };
         final JOptionPane optionPane =
             new JOptionPane(mainComponent, PLAIN_MESSAGE, OK_CANCEL_OPTION,
                             null, options, options[0]);
@@ -406,7 +408,8 @@ public class ParameterDialog
                                   Parameter parameter, GtpError e)
     {
         String mainMessage =
-            "Could not change parameter \"" + parameter.getLabel() + "\"";
+            MessageFormat.format(i18n("MSG_PARAMDIALOG_COULD_NOT_CHANGE"),
+                                 parameter.getLabel());
         String optionalMessage = StringUtil.capitalize(e.getMessage());
         messageDialogs.showError(owner, mainMessage, optionalMessage);
     }
