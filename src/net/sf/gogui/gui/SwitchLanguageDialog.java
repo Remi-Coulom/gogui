@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
+import static net.sf.gogui.gui.I18n.i18n;
 
 /** Show a dialog to switch the application language. */
 public class SwitchLanguageDialog
@@ -50,9 +51,8 @@ public class SwitchLanguageDialog
                 initialSelectionValue = options[i];
         Object result =
             JOptionPane.showInputDialog(m_owner,
-                                        "Please choose a language which should"
-                                        +" be used for this application",
-                                        "Switch Language",
+                                        i18n("MSG_SWITCHLANG_INPUT"),
+                                        i18n("TIT_SWITCHLANG_INPUT"),
                                         JOptionPane.PLAIN_MESSAGE,
                                         null, options, initialSelectionValue);
         if (result == null)
@@ -63,17 +63,12 @@ public class SwitchLanguageDialog
             return;
         if (! entry.m_isFullyLocalized)
             m_messageDialogs.showInfo(m_owner,
-                                      "Language is not fully supported",
-                                      "This program is not fully translated"
-                                      + " into the selected language. Some"
-                                      + " text will remain in English.",
+                                      i18n("MSG_SWITCHLANG_NOT_FULL_SUPPORT"),
+                                      i18n("MSG_SWITCHLANG_NOT_FULL_SUPPORT_2"),
                                       false);
         m_messageDialogs.showInfo(m_owner,
-                                  "Language will be changed upon next start",
-                                  "The language setting for this application"
-                                  + " has been changed. The change will take"
-                                  + " effect upon the next start of the"
-                                  + " application.",
+                                  i18n("MSG_SWITCHLANG_NEXT_START"),
+                                  i18n("MSG_SWITCHLANG_NEXT_START_2"),
                                   false);
 
     }
