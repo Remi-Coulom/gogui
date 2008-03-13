@@ -505,7 +505,7 @@ public class GoGui
         }
         if (m_help == null)
         {
-            m_help = new Help(url, m_messageDialogs);
+            m_help = new Help(url, m_messageDialogs, "Documentation - GoGui");
             m_session.restoreSize(m_help.getWindow(), "help");
         }
         m_help.getWindow().setVisible(true);

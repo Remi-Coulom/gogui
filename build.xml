@@ -634,6 +634,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/gamefile/*.class
  net/sf/gogui/gamefile/*.properties
  net/sf/gogui/go/*.class
+ net/sf/gogui/go/*.properties
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gogui/*.class
  net/sf/gogui/gogui/*.properties

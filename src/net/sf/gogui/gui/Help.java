@@ -43,11 +43,11 @@ class AntialiasingEditorPane
 public class Help
     implements ActionListener, HyperlinkListener
 {
-    public Help(URL contents, MessageDialogs messageDialogs)
+    public Help(URL contents, MessageDialogs messageDialogs,
+                String title)
     {
         m_messageDialogs = messageDialogs;
         m_contents = contents;
-        String title = "Documentation - GoGui";
         Container contentPane;
         if (Platform.isMac())
         {

@@ -21,6 +21,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -44,6 +45,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
 
@@ -561,11 +563,9 @@ public class GuiUtil
             return;
         MessageDialogs messageDialogs = new MessageDialogs("GoGui");
         messageDialogs.showWarning(null,
-                                   "Look and Feel not found",
-                                   "The look and feel\n\""
-                                   + laf + "\"\n"
-                                   + "was not found.\n" +
-                                   "Using default Look and Feel instead\n",
+                                   i18n("MSG_LAF_ERROR"),
+                                   MessageFormat.format(i18n("MSG_LAF_ERROR_2"),
+                                                        laf),
                                    false);
     }
 }
