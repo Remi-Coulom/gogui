@@ -45,7 +45,7 @@ public class TextViewer
         super(owner, title);
         initialize(text, highlight, listener);
     }
-
+    
     public TextViewer(Dialog owner, String title, String text,
                       boolean highlight, Listener listener)
     {
