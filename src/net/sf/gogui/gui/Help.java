@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -23,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 
 class AntialiasingEditorPane
@@ -167,11 +169,12 @@ public class Help
     private JComponent createButtons()
     {
         JToolBar toolBar = new JToolBar();
-        toolBar.add(createToolBarButton("go-home", "contents",
-                                        "Table of Contents"));
-        m_buttonBack = createToolBarButton("go-previous", "back", "Back");
+        toolBar.add(createToolBarButton("go-home", "contents", "TT_HELP_TOC"));
+        m_buttonBack = createToolBarButton("go-previous", "back",
+                                           "TT_HELP_BACK");
         toolBar.add(m_buttonBack);
-        m_buttonForward = createToolBarButton("go-next", "forward", "Forward");
+        m_buttonForward = createToolBarButton("go-next", "forward",
+                                              "TT_HELP_FORWARD");
         toolBar.add(m_buttonForward);
         if (! Platform.isMac())
             toolBar.setRollover(true);
@@ -186,7 +189,7 @@ public class Help
     {
         JButton button = new JButton();
         button.setActionCommand(command);
-        button.setToolTipText(toolTip);
+        button.setToolTipText(i18n(toolTip));
         button.addActionListener(this);
         button.setIcon(GuiUtil.getIcon(icon, command));
         button.setFocusable(false);
@@ -229,9 +232,10 @@ public class Help
         }
         catch (IOException e)
         {
-            m_messageDialogs.showError(m_window,
-                                       "Could not load page\n" +
-                                       url.toString(), e.getMessage(), false);
+            String mainMessage =
+                MessageFormat.format("MSG_HELP_LOAD_FAILURE", url.toString());
+            m_messageDialogs.showError(m_window, mainMessage, e.getMessage(),
+                                       false);
         }
     }
 
