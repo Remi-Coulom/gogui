@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.StringUtil;
 
@@ -33,7 +34,7 @@ public class FindDialog
 {
     public FindDialog(Frame owner, String initialValue)
     {
-        super(owner, "Find", true);
+        super(owner, i18n("TIT_FIND"), true);
         m_initialValue = initialValue;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
@@ -87,13 +88,13 @@ public class FindDialog
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
         innerPanel.setBorder(GuiUtil.createEmptyBorder());
-        JButton findButton = new JButton("Find");
+        JButton findButton = new JButton(i18n("LB_FIND"));
         findButton.setActionCommand("find");
         findButton.addActionListener(this);
         findButton.setMnemonic(KeyEvent.VK_F);
         getRootPane().setDefaultButton(findButton);
         innerPanel.add(findButton);
-        JButton cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton(i18n("LB_CANCEL"));
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
         cancelButton.setMnemonic(KeyEvent.VK_C);
@@ -107,7 +108,7 @@ public class FindDialog
     {
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.setBorder(GuiUtil.createEmptyBorder());
-        JLabel label = new JLabel("Search Pattern");
+        JLabel label = new JLabel(i18n("LB_FIND_SEARCH_PATTERN"));
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
         panel.add(createInputPanel());

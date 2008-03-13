@@ -17,6 +17,7 @@ import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 import net.sf.gogui.go.Move;
+import static net.sf.gogui.gui.I18n.i18n;
 
 class GameTreeNode
     extends JComponent
@@ -105,7 +106,8 @@ class GameTreeNode
         }
         else if (m_node.hasSetup() || player != null)
         {
-            toolTip.append("Setup (");
+            toolTip.append(i18n("TT_NODE_SETUP"));
+            toolTip.append(" (");
             boolean anyStones = false;
             for (GoColor c : BLACK_WHITE_EMPTY)
             {
@@ -123,7 +125,8 @@ class GameTreeNode
             {
                 if (anyStones)
                     toolTip.append(", ");
-                toolTip.append("Player ");
+                toolTip.append(i18n("TT_NODE_PLAYER"));
+                toolTip.append(' ');
                 toolTip.append(player.getUppercaseLetter());
             }
             toolTip.append(')');
