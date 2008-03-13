@@ -4,6 +4,7 @@ package net.sf.gogui.gui;
 
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
@@ -90,7 +91,7 @@ public final class Program
     {
         String label = m_name;
         if (StringUtil.isEmpty(label))
-            label = "Unknown Program";
+            label = i18n("LB_UNKNOWN_PROGRAM");
         String tryLabel = label;
         boolean alreadyExists = false;
         for (int i = 0; i < programs.size(); ++i)

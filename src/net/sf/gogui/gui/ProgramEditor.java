@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
@@ -31,8 +32,8 @@ public class ProgramEditor
     public Program editItem(Component parent, Program object,
                            MessageDialogs messageDialogs)
     {
-        return editItem(parent, "Edit Program", (Program)object, false, false,
-                        messageDialogs);
+        return editItem(parent, i18n("TIT_PROGRAMEDIT"),
+                        (Program)object, false, false, messageDialogs);
     }
 
     /** Edit an instance of Program.
@@ -62,23 +63,13 @@ public class ProgramEditor
             String optionalMessage;
             if (editOnlyCommand)
             {
-                mainMessage = "Enter the command for the Go program";
-                optionalMessage =
-                    "Often the command is simply the name of an executable " +
-                    "file, but some programs need options to start in " +
-                    "Go Text Protocol mode (e.g. \"gnugo --mode gtp\"). " +
-                    "Check the documentation of the Go program what command " +
-                    "should be used. " +
-                    "The working directory can be left blank if the program " +
-                    "does not need a special working directory.";
+                mainMessage = i18n("MSG_PROGRAMEDIT_EDIT_COMMAND");
+                optionalMessage = i18n("MSG_PROGRAMEDIT_EDIT_COMMAND_2");
             }
             else
             {
-                mainMessage = "Edit the menu label";
-                optionalMessage =
-                    "The label will be used to create a menu item for " +
-                    "the Go program.";
-
+                mainMessage = i18n("MSG_PROGRAMEDIT_EDIT_LABEL");
+                optionalMessage = i18n("MSG_PROGRAMEDIT_EDIT_LABEL_2");
             }
             boolean isMac = Platform.isMac();
             JLabel label;
@@ -116,20 +107,23 @@ public class ProgramEditor
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, GuiUtil.PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         if (! editOnlyCommand)
-            m_label = createEntry("Label", 20, program.m_label);
-        m_command = createFileEntry("Command", program.m_command,
-                                    "Browse for Go program",
-                                    "Select Go Program", false, true,
+            m_label = createEntry("LB_PROGRAMEDIT_LABEL", 20, program.m_label);
+        m_command = createFileEntry("LB_PROGRAMEDIT_COMMAND",
+                                    program.m_command,
+                                    "TT_PROGRAMEDIT_COMMAND",
+                                    "TIT_PROGRAMEDIT_COMMAND", false, true,
                                     ! m_editOnlyLabel);
-        m_workingDirectory = createFileEntry("Working directory",
+        m_workingDirectory = createFileEntry("LB_PROGRAMEDIT_DIR",
                                              program.m_workingDirectory,
-                                             "Browse for working directory",
-                                             "Select Working Directory",
+                                             "TT_PROGRAMEDIT_DIR",
+                                             "TIT_PROGRAMEDIT_DIR",
                                              true, false, ! m_editOnlyLabel);
         if (! editOnlyCommand)
         {
-            m_name = createEntry("Name", 20, program.m_name, false);
-            m_version = createEntry("Version", 20, program.m_version, false);
+            m_name = createEntry("LB_PROGRAMEDIT_NAME", 20, program.m_name,
+                                 false);
+            m_version = createEntry("LB_PROGRAMEDIT_VERSION", 20,
+                                    program.m_version, false);
         }
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
@@ -242,7 +236,7 @@ public class ProgramEditor
     {
         Box box = Box.createHorizontalBox();
         box.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel(text + ":");
+        JLabel label = new JLabel(i18n(text));
         label.setAlignmentY(Component.CENTER_ALIGNMENT);
         box.add(label);
         return box;
@@ -268,16 +262,18 @@ public class ProgramEditor
             panel.add(GuiUtil.createSmallFiller());
             JButton button = new JButton();
             panel.add(button);
-            button.setIcon(GuiUtil.getIcon("document-open-16x16", "Browse"));
+            button.setIcon(GuiUtil.getIcon("document-open-16x16",
+                                           i18n("LB_BROWSE")));
             GuiUtil.setMacBevelButton(button);
-            button.setToolTipText(browseToolTip);
+            button.setToolTipText(i18n(browseToolTip));
             button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         File file;
                         if (isDirectory)
-                            file = FileDialogs.showOpenDir(m_dialog, title);
+                            file = FileDialogs.showOpenDir(m_dialog,
+                                                           i18n(title));
                         else
-                            file = FileDialogs.showOpen(m_dialog, title);
+                            file = FileDialogs.showOpen(m_dialog, i18n(title));
                         if (file == null)
                             return;
                         String text = file.toString();
@@ -301,10 +297,8 @@ public class ProgramEditor
         {
             if (StringUtil.isEmpty(m_label.getText()))
             {
-                String mainMessage = "Label cannot be empty";
-                String optionalMessage =
-                    "You need to enter a label that will be used for "
-                    + "the menu item for the Go program.";
+                String mainMessage = i18n("MSG_PROGRAMEDIT_EMPTY_LABEL");
+                String optionalMessage = i18n("MSG_PROGRAMEDIT_EMPTY_LABEL_2");
                 messageDialogs.showError(parent, mainMessage, optionalMessage,
                                          false);
                 return false;
@@ -312,10 +306,8 @@ public class ProgramEditor
         }
         if (m_command.getText().trim().equals(""))
         {
-            String mainMessage = "Command cannot be empty";
-            String optionalMessage =
-                "You need to specify the command line for invoking the Go " +
-                "program.";
+            String mainMessage = i18n("MSG_PROGRAMEDIT_EMPTY_COMMAND");
+            String optionalMessage = i18n("MSG_PROGRAMEDIT_EMPTY_COMMAND_2");
             messageDialogs.showError(parent, mainMessage, optionalMessage,
                                      false);
             return false;
@@ -324,10 +316,8 @@ public class ProgramEditor
         if (! workingDirectory.equals("")
             && ! new File(workingDirectory).isDirectory())
         {
-            String mainMessage = "Invalid working directory";
-            String optionalMessage =
-                "The specified working directory does not exist or " +
-                "is not a directory.";
+            String mainMessage = i18n("MSG_PROGRAMEDIT_INVALID_DIR");
+            String optionalMessage = i18n("MSG_PROGRAMEDIT_INVALID_DIR_2");
             messageDialogs.showError(parent, mainMessage, optionalMessage,
                                      false);
             return false;
