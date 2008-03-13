@@ -12,6 +12,7 @@ import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.ConstField;
 import net.sf.gogui.go.GoPoint;
+import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.FileDialogs;
 import net.sf.gogui.gui.MessageDialogs;
@@ -27,8 +28,9 @@ public final class ExportPng
         while (! done)
         {
             value =
-                (String)JOptionPane.showInputDialog(parent, "Image Width",
-                                                    "Image Width",
+                (String)JOptionPane.showInputDialog(parent,
+                                                    i18n("TIT_EXPORTPNG_WIDTH"),
+                                                    i18n("LB_EXPORTPNG_WIDTH"),
                                                     JOptionPane.PLAIN_MESSAGE,
                                                     null, null, value);
             if (value == null)
@@ -44,15 +46,15 @@ public final class ExportPng
             }
             if (! done)
             {
-                messageDialogs.showError(parent, "Invalid value",
-                                         "The image width needs to be a number"
-                                         +" greater than zero.",
+                messageDialogs.showError(parent,
+                                         i18n("MSG_EXPORTPNG_INVALID_WIDTH"),
+                                         i18n("MSG_EXPORTPNG_INVALID_WIDTH_2"),
                                          false);
                 continue;
             }
         }
-        File file
-            = FileDialogs.showSave(parent, "Export PNG Image", messageDialogs);
+        File file = FileDialogs.showSave(parent, i18n("TIT_EXPORTPNG_FILE"),
+                                         messageDialogs);
         if (file == null)
             return;
         BoardPainter painter = new BoardPainter();
@@ -69,7 +71,7 @@ public final class ExportPng
         }
         catch (IOException e)
         {
-            messageDialogs.showError(parent, "Writing image failed",
+            messageDialogs.showError(parent, i18n("MSG_EXPORTPNG_WRITE_FAIL"),
                                      e.getMessage());
         }
     }
