@@ -8,6 +8,7 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.gui.MessageDialogs;
+import static net.sf.gogui.gogui.I18n.i18n;
 
 /** Ask for a variation. */
 public final class GotoVariationDialog
@@ -18,7 +19,8 @@ public final class GotoVariationDialog
     {
         String variation = NodeUtil.getVariationString(currentNode);
         Object value =
-            JOptionPane.showInputDialog(parent, "Variation", "Input",
+            JOptionPane.showInputDialog(parent, i18n("LB_VARIATION"),
+                                        i18n("TIT_INPUT"),
                                         JOptionPane.PLAIN_MESSAGE, null, null,
                                         variation);
         if (value == null || value.equals(""))
@@ -26,8 +28,8 @@ public final class GotoVariationDialog
         ConstNode root = tree.getRootConst();
         ConstNode node = NodeUtil.findByVariation(root, (String)value);
         if (node == null)
-            messageDialogs.showError(parent, "Invalid variation",
-                                     "You need to specify a valid variation.",
+            messageDialogs.showError(parent, i18n("MSG_VARIATION_INVALID"),
+                                     i18n("MSG_VARIATION_INVALID_2"),
                                      false);
         return node;
     }
