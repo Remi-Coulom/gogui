@@ -5,6 +5,7 @@ package net.sf.gogui.gogui;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.gtp.GtpError;
+import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.util.Platform;
@@ -22,12 +23,14 @@ public final class Interrupt
     {
         if (! gtp.isInterruptSupported())
         {
-            Object[] options = { "Terminate Program", "Cancel" };
-            Object message = "Program does not support interrupt";
+            Object[] options =
+                { i18n("LB_INTERRUPT_TERMINATE"), i18n("LB_CANCEL") };
+            Object message = i18n("MSG_INTERRUPT_NO_SUPPORT");
             int type = JOptionPane.WARNING_MESSAGE;
             if (Platform.isMac())
                 type = JOptionPane.PLAIN_MESSAGE;
-            int n = JOptionPane.showOptionDialog(parent, message, "Question",
+            int n = JOptionPane.showOptionDialog(parent, message,
+                                                 i18n("TIT_QUESTION"),
                                                  JOptionPane.YES_NO_OPTION,
                                                  type, null, options,
                                                  options[1]);
@@ -43,7 +46,7 @@ public final class Interrupt
         }
         catch (GtpError e)
         {
-            messageDialogs.showError(parent, "Interrupting failed", e);
+            messageDialogs.showError(parent, i18n("MSG_INTERRUPT_FAILED"), e);
             return false;
         }
         return true;
