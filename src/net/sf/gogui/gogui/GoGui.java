@@ -848,7 +848,7 @@ public class GoGui
             return;
         if (! checkSaveGame())
             return;
-        File file = FileDialogs.showOpen(this, "Import Text Position");
+        File file = FileDialogs.showOpen(this, i18n("TIT_IMPORT_TEXT"));
         if (file == null)
             return;
         try
@@ -857,7 +857,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found", "", false);
+            showError(i18n("MSG_FILE_NOT_FOUND"), "", false);
         }
     }
 
@@ -869,7 +869,7 @@ public class GoGui
             return;
         String text = GuiUtil.getClipboardText();
         if (text == null)
-            showError("No text selection in clipboard", "", false);
+            showError(i18n("MSG_NO_TEXT_IN_CLIPBOARD"), "", false);
         else
             importTextPosition(new StringReader(text));
     }
@@ -879,16 +879,16 @@ public class GoGui
         if (m_gtp == null || m_gtp.isProgramDead() || ! isCommandInProgress())
             return;
         if (m_interrupt.run(this, m_gtp, m_messageDialogs))
-            showStatus("Interrupting...");
+            showStatus(i18n("STAT_INTERRUPT"));
     }
 
     public void actionKeepOnlyPosition()
     {
         if (! checkStateChangePossible())
             return;
-        if (! showQuestion("Delete all moves?",
-                           "All moves and variations will be deleted.",
-                           "Delete", true))
+        if (! showQuestion(i18n("MSG_KEEP_ONLY_POSITION"),
+                           i18n("MSG_KEEP_ONLY_POSITION_2"),
+                           i18n("LB_DELETE"), true))
             return;
         m_game.keepOnlyPosition();
         initGtp();
@@ -905,12 +905,10 @@ public class GoGui
         if (! checkStateChangePossible())
             return;
         String disableKey = "net.sf.gogui.gogui.GoGui.make-main-variation";
-        String optionalMessage =
-            "The variations in the tree will be reordered.";
         if (! m_messageDialogs.showQuestion(disableKey, this,
-                                            "Make current to main variation?",
-                                            optionalMessage,
-                                            "Make Main Variation", false))
+                                            i18n("MSG_MAKE_MAIN_VAR"),
+                                            i18n("MSG_MAKE_MAIN_VAR_2"),
+                                            i18n("LB_MAKE_MAIN_VAR"), false))
             return;
         m_game.makeMainVariation();
         boardChangedBegin(false, true);
@@ -974,8 +972,8 @@ public class GoGui
         m_newProgram = new Program("", "", "", "", "");
         final ProgramEditor editor = new ProgramEditor();
         m_newProgram =
-            editor.editItem(this, "New Program", m_newProgram, true, false,
-                            m_messageDialogs);
+            editor.editItem(this, i18n("TIT_NEW_PROGRAM"), m_newProgram, true,
+                            false, m_messageDialogs);
         if (m_newProgram == null)
             return;
         protectGui();
@@ -986,7 +984,7 @@ public class GoGui
                     if (m_gtp == null || m_gtp.isProgramDead())
                     {
                         m_newProgram = editor.editItem(GoGui.this,
-                                                       "New Program",
+                                                       i18n("TIT_NEW_PROGRAM"),
                                                        m_newProgram, true,
                                                        false,
                                                        m_messageDialogs);
@@ -998,7 +996,8 @@ public class GoGui
                     m_newProgram.m_name = m_gtp.getLabel();
                     m_newProgram.m_version = m_version;
                     m_newProgram.setUniqueLabel(m_programs);
-                    m_newProgram = editor.editItem(GoGui.this, "New Program",
+                    m_newProgram = editor.editItem(GoGui.this,
+                                                   i18n("TIT_NEW_PROGRAM"),
                                                    m_newProgram, false, true,
                                                    m_messageDialogs);
                     if (m_newProgram == null)
@@ -1071,10 +1070,8 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        String optionalMessage =
-            "After a pass, it will be the opponent's turn.";
-        if (! showOptionalQuestion("pass", "Play a pass?", optionalMessage,
-                                   "Pass", false))
+        if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
+                                   i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
             return;
         humanMoved(Move.getPass(getToMove()));
     }
