@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Update board position correctly after Edit/Truncate
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 gogui-twogtp: fix "too many open files" error, if TwoGtp is restarted and a
 large number of games was already played
 </simpara>

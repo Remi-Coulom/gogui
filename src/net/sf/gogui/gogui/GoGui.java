@@ -746,17 +746,6 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionGotoMove()
-    {
-        if (! checkStateChangePossible())
-            return;
-        ConstNode node = MoveNumberDialog.show(this, getCurrentNode(),
-                                               m_messageDialogs);
-        if (node == null)
-            return;
-        actionGotoNode(node);
-    }
-
     public void actionGotoBookmark(int i)
     {
         if (! checkStateChangePossible())
@@ -788,6 +777,17 @@ public class GoGui
             showError(i18n("MSG_BOOKMARK_INVALID_MOVE_NUMBER"), "");
             return;
         }
+        actionGotoNode(node);
+    }
+
+    public void actionGotoMove()
+    {
+        if (! checkStateChangePossible())
+            return;
+        ConstNode node = MoveNumberDialog.show(this, getCurrentNode(),
+                                               m_messageDialogs);
+        if (node == null)
+            return;
         actionGotoNode(node);
     }
 
@@ -1604,6 +1604,7 @@ public class GoGui
                                             "Truncate", false))
             return;
         m_game.truncate();
+        actionGotoNode(getCurrentNode());
         boardChangedBegin(false, true);
     }
 
