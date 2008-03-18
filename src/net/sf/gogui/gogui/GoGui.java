@@ -531,12 +531,11 @@ public class GoGui
     public void actionEditLabel(GoPoint point)
     {
         String value = getCurrentNode().getLabel(point);
-        Object message = "Label " + point;
-        String title = "Edit Label";
-        int messageType = JOptionPane.PLAIN_MESSAGE;
-        value = (String)JOptionPane.showInputDialog(this, message, title,
-                                                    messageType, null, null,
-                                                    value);
+        Object message = format(i18n("MSG_EDIT_LABEL"), point);
+        value = (String)JOptionPane.showInputDialog(this, message,
+                                                    i18n("TIT_EDIT_LABEL"),
+                                                    JOptionPane.PLAIN_MESSAGE,
+                                                    null, null, value);
         if (value == null)
             return;
         m_game.setLabel(point, value);
@@ -548,8 +547,8 @@ public class GoGui
     {
         ProgramEditor editor = new ProgramEditor();
         ObjectListEditor<Program> listEditor = new ObjectListEditor<Program>();
-        if (! listEditor.edit(this, "Edit Programs", m_programs, editor,
-                              m_messageDialogs))
+        if (! listEditor.edit(this, i18n("TIT_EDIT_PROGRAMS"), m_programs,
+                              editor, m_messageDialogs))
             return;
         m_menuBar.setPrograms(m_programs);
         m_prefs.putInt("program", -1);
@@ -563,7 +562,7 @@ public class GoGui
 
     public void actionExportLatexMainVariation()
     {
-        File file = showSave("Export LaTeX");
+        File file = showSave(i18n("TIT_EXPORT_LATEX"));
         if (file == null)
             return;
         try
@@ -575,13 +574,13 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e);
+            showError(i18n("MSG_EXPORT_FAILED"), e);
         }
     }
 
     public void actionExportLatexPosition()
     {
-        File file = showSave("Export LaTeX Position");
+        File file = showSave(i18n("TIT_EXPORT_LATEX_POSITION"));
         if (file == null)
             return;
         try
@@ -599,7 +598,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e);
+            showError(i18n("MSG_EXPORT_FAILED"), e);
         }
     }
 
@@ -614,13 +613,13 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Could not save position", e);
+            showError(i18n("MSG_EXPORT_FAILED"), e);
         }
     }
 
     public void actionExportTextPosition()
     {
-        File file = showSave("Export Text Position");
+        File file = showSave(i18n("MSG_EXPORT_TEXT"));
         if (file == null)
             return;
         try
@@ -632,7 +631,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("Export failed", e);
+            showError(i18n("MSG_EXPORT_FAILED"), e);
         }
     }
 
