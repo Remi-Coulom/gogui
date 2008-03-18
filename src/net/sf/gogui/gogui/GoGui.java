@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import static java.text.MessageFormat.format;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.prefs.Preferences;
@@ -69,6 +70,7 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.Score;
 import net.sf.gogui.go.Score.ScoringMethod;
+import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gtp.AnalyzeCommand;
 import net.sf.gogui.gtp.AnalyzeDefinition;
 import net.sf.gogui.gtp.AnalyzeType;
@@ -275,33 +277,32 @@ public class GoGui
     {
         if (m_gameFile == null)
         {
-            showError("Cannot set bookmark if no file is loaded",
-                      "Bookmarks can only be set in loaded files.",
+            showError(i18n("MSG_CANNOT_SET_BOOKMARK_NO_FILE"),
+                      i18n("MSG_CANNOT_SET_BOOKMARK_NO_FILE_2"),
                       false);
             return;
         }
         if (isModified())
         {
-            showError("Cannot set bookmark in modified file",
-                      "Bookmarks cannot be set in modified files.\n" +
-                      "Save the file before setting a bookmark.",
+            showError(i18n("MSG_CANNOT_SET_BOOKMARK_MODIFIED"),
+                      i18n("MSG_CANNOT_SET_BOOKMARK_MODIFIED_2"),
                       false);
             return;
         }
         if (getCurrentNode().getFatherConst() != null
             && getCurrentNode().getMove() == null)
         {
-            showError("Cannot set bookmark at this node.",
-                      "Bookmarks can only be set at non-root nodes without "
-                      + "moves", false);
+            showError(i18n("MSG_CANNOT_SET_BOOKMARK_NODE"),
+                      i18n("MSG_CANNOT_SET_BOOKMARK_NODE_2"),
+                      false);
             return;
         }
         String variation = NodeUtil.getVariationString(getCurrentNode());
         int move = NodeUtil.getMoveNumber(getCurrentNode());
         Bookmark bookmark = new Bookmark(m_gameFile.m_file, move, variation);
         BookmarkEditor editor = new BookmarkEditor();
-        bookmark = editor.editItem(this, "Add Bookmark", bookmark, true,
-                                   m_messageDialogs);
+        bookmark = editor.editItem(this, i18n("TIT_ADD_BOOKMARK"), bookmark,
+                                   true, m_messageDialogs);
         if (bookmark == null)
             return;
         m_bookmarks.add(bookmark);
@@ -435,11 +436,11 @@ public class GoGui
         if (! NodeUtil.isInMainVariation(getCurrentNode()))
             return;
         String disableKey = "net.sf.gogui.gogui.GoGui.delete-side-variations";
-        String optionalMessage =
-            "All variations but the main variation will be deleted.";
         if (! m_messageDialogs.showQuestion(disableKey, this,
-                                            "Delete variations?",
-                                            optionalMessage, "Delete", false))
+                                            i18n("MSG_DELETE_VARIATIONS"),
+                                            i18n("MSG_DELETE_VARIATIONS_2"),
+                                            i18n("LB_DELETE"),
+                                            false))
             return;
         m_game.keepOnlyMainVariation();
         boardChangedBegin(false, true);
@@ -450,9 +451,11 @@ public class GoGui
         if (m_gtp == null)
             return;
         if (isCommandInProgress()
-            && ! showQuestion("Terminate " + getProgramLabel() + "?",
-                              "A command is in progress.", "Terminate", true))
-                return;
+            && ! showQuestion(format(i18n("MSG_TERMINATE_COMMAND_IN_PROGRESS"),
+                                     getProgramLabel()),
+                              i18n("MSG_TERMINATE_COMMAND_IN_PROGRESS_2"),
+                              i18n("LB_TERMINATE"), true))
+            return;
         m_prefs.putInt("program", -1);
         protectGui();
         Runnable runnable = new Runnable() {
@@ -500,12 +503,13 @@ public class GoGui
         URL url = classLoader.getResource("net/sf/gogui/doc/index.html");
         if (url == null)
         {
-            showError("Help not found", "");
+            showError(i18n("MSG_HELP_NOT_FOUND"), "");
             return;
         }
         if (m_help == null)
         {
-            m_help = new Help(url, m_messageDialogs, "Documentation - GoGui");
+            m_help = new Help(url, m_messageDialogs,
+                              i18n("TIT_HELP") + " - " + i18n("LB_GOGUI"));
             m_session.restoreSize(m_help.getWindow(), "help");
         }
         m_help.getWindow().setVisible(true);
@@ -517,8 +521,8 @@ public class GoGui
         BookmarkEditor editor = new BookmarkEditor();
         ObjectListEditor<Bookmark> listEditor =
             new ObjectListEditor<Bookmark>();
-        if (! listEditor.edit(this, "Edit Bookmarks", m_bookmarks, editor,
-                              m_messageDialogs))
+        if (! listEditor.edit(this, i18n("TIT_EDIT_BOOKMARKS"), m_bookmarks,
+                              editor, m_messageDialogs))
             return;
         m_menuBar.setBookmarks(m_bookmarks);
         Bookmark.save(m_bookmarks);
