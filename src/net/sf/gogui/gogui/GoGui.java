@@ -666,7 +666,7 @@ public class GoGui
         if (m_pattern == null)
             return;
         protectGui();
-        showStatus("Searching pattern...");
+        showStatus(i18n("STAT_FIND_SEARCHING"));
         Runnable runnable = new Runnable() {
                 public void run() {
                     try
@@ -678,13 +678,9 @@ public class GoGui
                         if (node == null && getCurrentNode() != root)
                         {
                             unprotectGui();
-                            String optionalMessage =
-                                "The end of the tree was reached. " +
-                                "Continue the search from the start of " +
-                                "the tree?";
-                            if (showQuestion("Continue from start?",
-                                             optionalMessage, "Continue",
-                                             false))
+                            if (showQuestion(i18n("MSG_FIND_CONTINUE"),
+                                             i18n("MSG_FIND_CONTINUE_2"),
+                                             i18n("LB_FIND_CONTINUE"), false))
                             {
                                 protectGui();
                                 node = root;
@@ -698,10 +694,9 @@ public class GoGui
                         if (node == null)
                         {
                             unprotectGui();
-                            String optionalMessage =
-                                "The search pattern \"" + m_pattern +
-                                "\" was not found.";
-                            showInfo("Pattern not found", optionalMessage,
+                            showInfo(i18n("MSG_FIND_NOT_FOUND"),
+                                     format(i18n("MSG_FIND_NOT_FOUND_2"),
+                                            m_pattern),
                                      false);
                             m_pattern = null;
                         }
@@ -783,14 +778,14 @@ public class GoGui
             node = NodeUtil.findByVariation(node, variation);
             if (node == null)
             {
-                showError("Bookmark has invalid variation", "");
+                showError(i18n("MSG_BOOKMARK_INVALID_VARIATION"), "");
                 return;
             }
         }
         node = NodeUtil.findByMoveNumber(node, bookmark.m_move);
         if (node == null)
         {
-            showError("Bookmark has invalid move number", "");
+            showError(i18n("MSG_BOOKMARK_INVALID_MOVE_NUMBER"), "");
             return;
         }
         actionGotoNode(node);
@@ -836,9 +831,8 @@ public class GoGui
             return;
         m_handicap = handicap;
         if (isModified())
-            showInfo("Handicap will take effect on next game",
-                     "You can change the handicap settings for a game only " +
-                     "before any moves were played.", true);
+            showInfo(i18n("MSG_HANDICAP_NEXT_GAME"),
+                     i18n("MSG_HANDICAP_NEXT_GAME_2"), true);
         else
         {
             m_computerBlack = false;
