@@ -58,4 +58,14 @@ for parsing the SGF stream.
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
+<section>
+<title>Cannot enter text in some dialogs</title>
+<para>
+This seems to be a bug in the focus handling after showing modal dialogs
+that occurs with Java 1.6 on Linux. The only known workaround for the text
+field to gain focus again is to switch to another window and back.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
 </appendix>
