@@ -1162,8 +1162,7 @@ public class GoGui
                         }
                         catch (IOException e)
                         {
-                            showError("Could not create temporary file with"
-                                      + " current parameters", e);
+                            showError(i18n("MSG_PARAM_TMP_FILE_ERROR"), e);
                             return;
                         }
                         if (! saveParameters(file))
@@ -1192,16 +1191,15 @@ public class GoGui
             File file = m_gameFile.m_file;
             if (file.exists())
             {
-                String mainMessage = "Replace file \"" + file.getName()
-                    + "\"?";
-                String optionalMessage =
-                    "If you overwrite the file with your changed version, " +
-                    "the previous version will be lost.";
+                String mainMessage = format(i18n("MSG_REPLACE_FILE"),
+                                            file.getName());
+                String optionalMessage = i18n("MSG_REPLACE_FILE_2");
                 String disableKey = "net.sf.gogui.GoGui.overwrite";
                 if (! m_messageDialogs.showQuestion(disableKey, this,
                                                     mainMessage,
                                                     optionalMessage,
-                                                    "Replace", true))
+                                                    i18n("LB_REPLACE_FILE"),
+                                                    true))
                     return;
             }
             save(m_gameFile);
