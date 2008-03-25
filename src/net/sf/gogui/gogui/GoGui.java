@@ -1233,7 +1233,7 @@ public class GoGui
             return;
         if (! checkHasParameterCommands())
             return;
-        File file = showSave("Save Parameters");
+        File file = showSave(i18n("TIT_SAVE_PARAM"));
         if (file == null)
             return;
         saveParameters(file);
@@ -1251,12 +1251,12 @@ public class GoGui
             String disableKey = "net.sf.gogui.gogui.GoGui.score-no-program";
             String optionalMessage;
             if (m_gtp == null)
-                optionalMessage = "No program is attached.";
+                optionalMessage = "MSG_SCORE_NO_PROGRAM";
             else
-                optionalMessage = "Program cannot be used for scoring.";
+                optionalMessage = "MSG_SCORE_CANNOT_USE_PROGRAM";
             m_messageDialogs.showInfo(disableKey, this,
-                                      "Please mark dead groups manually",
-                                      optionalMessage, true);
+                                      i18n("MSG_SCORE_MANUAL"),
+                                      i18n(optionalMessage), true);
             updateViews(false);
             initScore(null);
             return;
@@ -1268,20 +1268,22 @@ public class GoGui
                         scoreContinue();
                     }
                 };
-            showStatus("Scoring...");
             runLengthyCommand("final_status_list dead", callback);
         }
         else
         {
             String disableKey =
                 "net.sf.gogui.gogui.GoGui.score-not-supported";
+            String optionalMessage;
             String name = getProgramName();
             if (name == null)
-                name = "The attached Go program";
+                optionalMessage = i18n("MSG_SCORE_NO_SUPPORT");
+            else
+                optionalMessage = format(i18n("MSG_SCORE_NO_SUPPORT_NAME"),
+                                         name);
             m_messageDialogs.showInfo(disableKey, this,
-                                      "Please mark dead groups manually",
-                                      name + " does not support scoring.",
-                                      true);
+                                      i18n("MSG_SCORE_MANUAL"),
+                                      optionalMessage, true);
             updateViews(false);
             initScore(null);
         }
