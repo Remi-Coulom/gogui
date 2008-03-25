@@ -1302,7 +1302,7 @@ public class GoGui
     {
         if (GtpUtil.isStateChangingCommand(command))
         {
-            showError("Cannot send board changing command", "", false);
+            showError(i18n("MSG_BOARD_CHANGING_COMMAND"), "", false);
             return;
         }
         if (! checkProgramReady())
@@ -1322,7 +1322,7 @@ public class GoGui
             return;
         if (m_shell == null)
             return;
-        File file = FileDialogs.showOpen(this, "Choose GTP file");
+        File file = FileDialogs.showOpen(this, i18n("TIT_CHOOSE_GTP_FILE"));
         if (file == null)
             return;
         actionSendFile(file);
@@ -1412,9 +1412,9 @@ public class GoGui
         if (m_setupMode)
         {
             if (m_setupColor == BLACK)
-                showStatus("Setup black stones");
+                showStatus(i18n("STAT_SETUP_BLACK"));
             else
-                showStatus("Setup white stones");
+                showStatus(i18n("STAT_SETUP_WHITE"));
         }
     }
 
@@ -1592,13 +1592,10 @@ public class GoGui
         if (! getCurrentNode().hasFather())
             return;
         String disableKey = "net.sf.gogui.gogui.GoGui.truncate";
-        String optionalMessage =
-            "The current node and all children nodes " +
-            " will be deleted from the game tree.";
         if (! m_messageDialogs.showQuestion(disableKey, this,
-                                            "Truncate current?",
-                                            optionalMessage,
-                                            "Truncate", false))
+                                            i18n("MSG_TRUNCATE"),
+                                            i18n("MSG_TRUNCATE_2"),
+                                            i18n("LB_TRUNCATE"), false))
             return;
         m_game.truncate();
         actionGotoNode(getCurrentNode());
@@ -1613,13 +1610,10 @@ public class GoGui
         if (numberChildren == 0)
             return;
         String disableKey = "net.sf.gogui.gogui.GoGui.truncate-children";
-        String optionalMessage =
-            "All children nodes of this position" +
-            " will be deleted from the game tree.";
         if (! m_messageDialogs.showQuestion(disableKey, this,
-                                            "Truncate children?",
-                                            optionalMessage,
-                                            "Truncate", false))
+                                            i18n("MSG_TRUNCATE_CHILDREN"),
+                                            i18n("MSG_TRUNCATE_CHILDREN_2"),
+                                            i18n("LB_TRUNCATE"), false))
             return;
         m_game.truncateChildren();
         boardChangedBegin(false, true);
