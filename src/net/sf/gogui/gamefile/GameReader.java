@@ -86,12 +86,15 @@ public class GameReader
 
     private static GameFile.Format detectFormat(File file)
     {
-        String extension =
-            FileUtil.getExtension(file).toLowerCase(Locale.ENGLISH);
-        if (extension.equals("sgf"))
-            return GameFile.Format.SGF;
-        if (extension.equals("xml"))
-            return GameFile.Format.XML;
+        String extension = FileUtil.getExtension(file);
+        if (extension != null)
+        {
+            extension = extension.toLowerCase(Locale.ENGLISH);
+            if (extension.equals("sgf"))
+                return GameFile.Format.SGF;
+            if (extension.equals("xml"))
+                return GameFile.Format.XML;
+        }
         FileReader reader = null;
         try
         {
