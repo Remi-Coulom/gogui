@@ -2496,10 +2496,8 @@ public class GoGui
     {
         if (isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking",
-                      "You need to wait until the command in "
-                      + " progress is finished.",
-                      false);
+            showError(i18n("MSG_CANNOT_EXECUTE_WHILE_THINKING"),
+                      i18n("MSG_CANNOT_EXECUTE_WHILE_THINKING_2"), false);
             return false;
         }
         return true;
@@ -2547,11 +2545,13 @@ public class GoGui
         if (! AnalyzeUtil.hasParameterCommands(m_analyzeCommands))
         {
             String name = getProgramName();
+            String optionalMessage;
             if (name == null)
-                name = "The attached Go program";
-            showError("No parameter commands supported",
-                      name + " does not support any analyze commands of"
-                      + " type \"param\".");
+                optionalMessage = i18n("MSG_NO_PARAM_COMMANDS_2");
+            else
+                optionalMessage = format(i18n("MSG_NO_PARAM_COMMANDS_2_NAME"),
+                                         name);
+            showError(i18n("MSG_NO_PARAM_COMMANDS"), optionalMessage);
             return false;
         }
         return true;
@@ -2563,12 +2563,21 @@ public class GoGui
             && ! getClock().lostOnTime(color.otherColor())
             && ! m_lostOnTimeShown)
         {
-            String name = color.getCapitalizedName();
             String result = color.otherColor().getUppercaseLetter() + "+Time";
-            String mainMessage = name + " lost on time";
-            String optionalMessage =
-                name + " run out of time. The result \"" + result +
-                "\" was added to the game information.";
+            String mainMessage;
+            String optionalMessage;
+            if (color == BLACK)
+            {
+                mainMessage = i18n("MSG_LOST_ON_TIME_BLACK");
+                optionalMessage = format(i18n("MSG_LOST_ON_TIME_BLACK_2"),
+                                         result);
+            }
+            else
+            {
+                mainMessage = i18n("MSG_LOST_ON_TIME_WHITE");
+                optionalMessage = format(i18n("MSG_LOST_ON_TIME_WHITE_2"),
+                                         result);
+            }
             showInfo(mainMessage, optionalMessage, false);
             setResult(result);
             m_lostOnTimeShown = true;
@@ -2580,47 +2589,59 @@ public class GoGui
     {
         if (m_gtp == null)
         {
-            showError("No Go program is attached.", "", false);
+            showError(i18n("MSG_NO_PROGRAM_ATTACHED"), "", false);
             return false;
         }
         if (! checkCommandInProgress())
             return false;
-        String nameCapitalized = getProgramName();
-        String nameNotCapitalized = getProgramName();
-        if (nameCapitalized == null)
-        {
-            nameCapitalized = "The Go program";
-            nameNotCapitalized = "the Go program";
-        }
+        String name = getProgramName();
         if (m_gtp.isProgramDead())
         {
-            String mainMessage = nameCapitalized + " has terminated";
+            String mainMessage;
+            if (name == null)
+                mainMessage = i18n("MSG_PROGRAM_TERMINATED");
+            else
+                mainMessage = format(i18n("MSG_PROGRAM_TERMINATED_NAME"), name);
             String optionalMessage = "";
             if (m_shell.isLastTextNonGTP())
             {
                 showShell();
-                optionalMessage = optionalMessage +
-                    "Check the GTP shell window for error messages of " +
-                    nameNotCapitalized +
-                    ", which could be helpful to find the reason for" +
-                    " this unexpected failure. ";
+                if (name == null)
+                    optionalMessage = i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP");
+                else
+                    optionalMessage =
+                        format(i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP_NAME"),
+                               name);
             }
-            optionalMessage = optionalMessage +
-                "You can reattach " + nameNotCapitalized +
-                " from the Program menu.";
+            else
+            {
+                showShell();
+                if (name == null)
+                    optionalMessage = i18n("MSG_PROGRAM_TERMINATED_REATTACH");
+                else
+                    optionalMessage =
+                        format(i18n("MSG_PROGRAM_TERMINATED_REATTACH_NAME"),
+                               name);
+            }
             showError(mainMessage, optionalMessage, false);
             return false;
         }
         if (isOutOfSync())
         {
-            showError(nameCapitalized +
-                      " is not in sync with current position",
-                      "A previous command to synchronize " + nameNotCapitalized
-                      + " with the current position failed. " +
-                      "You won't be able to use " + nameNotCapitalized +
-                      " until you go to a position " +
-                      "that can be synchronized again.",
-                      false);
+            String mainMessage;
+            String optionalMessage;
+            if (name == null)
+            {
+                mainMessage = i18n("MSG_OUT_OF_SYNC");
+                optionalMessage = i18n("MSG_OUT_OF_SYNC_2");
+            }
+            else
+            {
+                mainMessage = format(i18n("MSG_OUT_OF_SYNC_NAME"), name);
+                optionalMessage = format(i18n("MSG_OUT_OF_SYNC_NAME_2"), name);
+            }
+
+            showError(mainMessage, optionalMessage, false);
             return false;
         }
         return true;
@@ -2639,9 +2660,8 @@ public class GoGui
     {
         if (! isModified())
             return true;
-        String mainMessage = "Save current game?";
-        String optionalMessage =
-            "Your changes will be lost if you don't save them.";
+        String mainMessage = i18n("MSG_SAVE_CURRENT");
+        String optionalMessage = i18n("MSG_SAVE_CURRENT_2");
         int result;
         String disableKey = null;
         if (! isProgramTerminating)
@@ -2649,8 +2669,8 @@ public class GoGui
         result = m_messageDialogs.showYesNoCancelQuestion(disableKey, this,
                                                           mainMessage,
                                                           optionalMessage,
-                                                          "Don't Save",
-                                                          "Save");
+                                                          i18n("LB_DONT_SAVE"),
+                                                          i18n("LB_SAVE"));
         switch (result)
         {
         case 0:
