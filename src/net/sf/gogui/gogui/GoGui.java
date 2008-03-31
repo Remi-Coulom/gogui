@@ -2238,8 +2238,9 @@ public class GoGui
                 if (response.indexOf("\n") < 0)
                 {
                     if (response.trim().equals(""))
-                        response = "(empty response)";
-                    showStatus(title + ": " + response);
+                        response = i18n("STAT_ANALYZE_TEXT_EMPTY_RESPONSE");
+                    showStatus(format(i18n("STAT_ANALYZE_TEXT_RESPONSE"),
+                                      title, response));
                 }
                 else
                     GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
@@ -2384,7 +2385,7 @@ public class GoGui
             };
         try
         {
-            showStatusImmediately("Attaching program...");
+            showStatusImmediately(i18n("STAT_ATTACHING_PROGRAM"));
             File workingDirectory = null;
             if (program != null
                 && ! StringUtil.isEmpty(program.m_workingDirectory))
@@ -2425,7 +2426,7 @@ public class GoGui
             }
             catch (ErrorMessage e)
             {
-                showError("Could not read analyze configuration file", e);
+                showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
             }
             restoreSize(m_shell, "shell");
             m_shell.setProgramName(getProgramLabel());
@@ -2463,8 +2464,9 @@ public class GoGui
         m_shell.setCommandInProgess(true);
         String name = getProgramName();
         if (name == null)
-            name = "The Go Program";
-        showStatus(name + " is thinking...");
+            showStatus(i18n("STAT_THINKING"));
+        else
+            showStatus(format(i18n("STAT_THINKING_NAME"), name));
         updateViews(false);
     }
 
