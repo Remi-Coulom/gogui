@@ -1823,19 +1823,13 @@ public class GoGui
             if (! checkCommandInProgress())
                 return;
             if (getBoard().isSuicide(getToMove(), p)
-                && ! showQuestion("Play suicide?",
-                                  "Playing at this point will leave the " +
-                                  "stone without liberties and it will be " +
-                                  "immediately captured. Suicide is not " +
-                                  "allowed under all Go rule sets.",
-                                  "Play Suicide", false))
+                && ! showQuestion(i18n("MSG_SUICIDE"), i18n("MSG_SUICIDE_2"),
+                                  i18n("LB_SUICIDE"),false))
                 return;
             else if (getBoard().isKo(p)
-                && ! showQuestion("Play illegal Ko move?",
-                                  "This move violates the Ko rule, because " +
-                                  "it repeats the previous position for " +
-                                  "the color to play.",
-                                  "Play Illegal Ko", false))
+                     && ! showQuestion(i18n("MSG_ILLEGAL_KO"),
+                                       i18n("MSG_ILLEGAL_KO_2"),
+                                       i18n("LB_ILLEGAL_KO"), false))
                 return;
             Move move = Move.get(getToMove(), p);
             humanMoved(move);
@@ -1971,22 +1965,21 @@ public class GoGui
         public void run()
         {
             String name = getProgramName();
-            String mainMessage =
-                (name == null ? "The Go program" : name) +
-                " sent a malformed response";
+            String mainMessage;
+            if (name == null)
+                mainMessage = i18n("MSG_INVALID_RESPONSE");
+            else
+                mainMessage = format(i18n("MSG_INVALID_RESPONSE_NAME"), name);
             if (m_line.trim().equals(""))
             {
                 String disableKey =
                     "net.sf.gogui.gogui.GoGui.invalid-empty-response";
-                String optionalMessage =
-                    "Empty lines before the response are not allowed" +
-                    " by the GTP standard. This error can also occur if the" +
-                    " program ended the last response with three newlines" +
-                    " instead of two. This error can probably be" +
-                    " ignored, but could indicate a more serious problem" +
-                    " with the Go program. You should inform the author of " +
-                    (name == null ? "the Go program" : name) +
-                    ".";
+                String optionalMessage;
+                if (name == null)
+                    optionalMessage = i18n("MSG_INVALID_EMPTY_RESPONSE");
+                else
+                    optionalMessage =
+                        format(i18n("MSG_INVALID_EMPTY_RESPONSE_NAME"), name);
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage,
                                              true);
@@ -1995,14 +1988,13 @@ public class GoGui
             {
                 String disableKey =
                     "net.sf.gogui.gogui.GoGui.invalid-response";
-                String optionalMessage =
-                    "Text lines before the status character of the first" +
-                    " response line are not allowed by the GTP standard." +
-                    " This error can probably be ignored, but could indicate" +
-                    " a more serious problem with the Go program. You " +
-                    " should inform the author of " +
-                    (name == null ? "the Go program" : name) +
-                    ".";
+                String optionalMessage;
+                if (name == null)
+                    optionalMessage = i18n("MSG_INVALID_NOSTATUS_RESPONSE");
+                else
+                    optionalMessage =
+                        format(i18n("MSG_INVALID_NOSTATUS_RESPONSE_NAME"),
+                               name);
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage,
                                              true);
@@ -2135,7 +2127,7 @@ public class GoGui
     private GoColor m_setupColor;
 
     private final MessageDialogs m_messageDialogs =
-        new MessageDialogs("GoGui");
+        new MessageDialogs(i18n("LB_GOGUI"));
 
     private Pattern m_pattern;
 
@@ -2203,7 +2195,8 @@ public class GoGui
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
                           new AnalyzeContinue(checkComputerMove));
-        showStatus("Running " + m_analyzeCommand.getResultTitle() + "...");
+        showStatus(format(i18n("STAT_RUNNING"),
+                          m_analyzeCommand.getResultTitle()));
     }
 
     private void analyzeContinue(boolean checkComputerMove)
