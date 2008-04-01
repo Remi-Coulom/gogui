@@ -2756,20 +2756,22 @@ public class GoGui
             String response = m_gtp.getResponse();
             checkLostOnTime(toMove);
             boolean gameTreeChanged = false;
-            String nameCapitalized = getProgramName();
-            if (nameCapitalized == null)
-                nameCapitalized = "The Go program";
-            String nameNotCapitalized = getProgramName();
-            if (nameNotCapitalized == null)
-                nameNotCapitalized = "the Go program";
+            String name = getProgramName();
             if (response.equalsIgnoreCase("resign"))
             {
                 String result =
                     toMove.otherColor().getUppercaseLetter() + "+Resign";
                 if (! isComputerBoth())
-                    showInfo(nameCapitalized + " resigns",
-                             "The result \"" + result
-                             + "\" was added to the game information.", false);
+                {
+                    String mainMessage;
+                    if (name == null)
+                        mainMessage = i18n("MSG_RESIGN");
+                    else
+                        mainMessage = format(i18n("MSG_RESIGN_NAME"), name);
+                    String optionalMessage =
+                        format(i18n("MSG_RESIGN_2"), result);
+                    showInfo(mainMessage, optionalMessage, false);
+                }
                 m_resigned = true;
                 setResult(result);
             }
@@ -2781,19 +2783,33 @@ public class GoGui
                 {
                     if (board.getColor(point) != EMPTY)
                     {
-                        showWarning(nameCapitalized +
-                                    " played on a non-empty point",
-                                    "Playing on occupied points is illegal." +
-                                    "You should inform the author of " +
-                                    nameNotCapitalized + ".", true);
+                        String mainMessage;
+                        String optionalMessage;
+                        if (name == null)
+                        {
+                            mainMessage = i18n("MSG_NONEMPTY");
+                            optionalMessage = i18n("MSG_NONEMPTY_2");
+                        }
+                        else
+                        {
+                            mainMessage =
+                                format(i18n("MSG_NONEMPTY_NAME"), name);
+                            optionalMessage =
+                                format(i18n("MSG_NONEMPTY_NAME_2"), name);
+                        }
+                        showWarning(mainMessage, optionalMessage, true);
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
                     else if (board.isKo(point))
                     {
-                        showWarning(nameCapitalized + " violated the Ko rule",
-                                    "The move is not legal in normal Go " +
-                                    "games.",
+                        String mainMessage;
+                        if (name == null)
+                            mainMessage = i18n("MSG_VIOLATE_KO");
+                        else
+                            mainMessage =
+                                format(i18n("MSG_VIOLATE_KO_NAME"), name);
+                        showWarning(mainMessage, i18n("MSG_VIOLATE_KO_2"),
                                     true);
                         m_computerBlack = false;
                         m_computerWhite = false;
@@ -2806,13 +2822,22 @@ public class GoGui
                 {
                     String disableKey =
                         "net.sf.gogui.gogui.GoGui.computer-passed";
-                    m_messageDialogs.showInfo(disableKey, this,
-                                              nameCapitalized + " passes",
-                                              nameCapitalized +
-                                              " played a pass. " +
-                                              "When both players pass in "
-                                              + "succession, the game ends.",
-                                              false);
+                    String mainMessage;
+                    String optionalMessage;
+                    if (name == null)
+                    {
+                        mainMessage = i18n("MSG_PROGRAM_PASS");
+                        optionalMessage = i18n("MSG_PROGRAM_PASS_2");
+                    }
+                    else
+                    {
+                        mainMessage =
+                            format(i18n("MSG_PROGRAM_PASS_NAME"), name);
+                        optionalMessage =
+                            format(i18n("MSG_PROGRAM_PASS_NAME_2"), name);
+                    }
+                    m_messageDialogs.showInfo(disableKey, this, mainMessage,
+                                              optionalMessage, false);
                 }
                 m_resigned = false;
                 gameTreeChanged = true;
