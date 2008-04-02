@@ -3901,7 +3901,7 @@ public class GoGui
             setTitle(m_titleFromProgram);
             return;
         }
-        String appName = "GoGui";
+        String appName = i18n("LB_GOGUI");
         if (m_gtp != null)
             appName = getProgramLabel();
         String filename = null;
@@ -3909,10 +3909,10 @@ public class GoGui
         {
             filename = m_gameFile.m_file.getName();
             if (isModified() && ! Platform.isMac())
-                filename = filename + " [modified]";
+                filename = filename + " " + i18n("TIT_MODIFIED");
         }
         else if (isModified() && ! Platform.isMac())
-            filename = "[modified]";
+            filename = i18n("TIT_MODIFIED");
         ConstGameInfo info = getGameInfo();
         String gameName = info.suggestGameName();
         if (gameName != null)
@@ -3929,7 +3929,7 @@ public class GoGui
             String name = getProgramLabel();
             String nameBlack = info.get(StringInfoColor.NAME, BLACK);
             String nameWhite = info.get(StringInfoColor.NAME, WHITE);
-            if (! appName.equals("GoGui")
+            if (! appName.equals(i18n("LB_GOGUI"))
                 && (ObjectUtil.equals(nameBlack, name)
                     || ObjectUtil.equals(nameWhite, name)))
                 setTitle(gameName);
@@ -3987,12 +3987,14 @@ public class GoGui
     {
         String mainMessage = "Invalid response";
         String name = getProgramName();
+        String optionalMessage;
         if (name == null)
-            name = "The Go program";
-        String optionalMessage =
-            name + " sent a response in an unexpected format ("
-            + e.getMessage() + ").";
-        showError(mainMessage, optionalMessage, true);
+            optionalMessage = format(i18n("MSG_INVALID_RESPONSE_2"),
+                                     e.getMessage());
+        else
+            optionalMessage = format(i18n("MSG_INVALID_RESPONSE_2_NAME"),
+                                     name, e.getMessage());
+        showError(i18n("MSG_INVALID_RESPONSE"), optionalMessage, true);
     }
 
     private void showError(GtpError e, boolean isCritical)
