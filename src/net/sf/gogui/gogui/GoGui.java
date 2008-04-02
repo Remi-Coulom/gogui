@@ -2947,34 +2947,54 @@ public class GoGui
             if (! wasOutOfSync)
             {
                 String name = getProgramName();
+                String mainMessage;
                 if (name == null)
-                    name = "the Go program";
-                String mainMessage =
-                    "Could not synchronize position with " + name;
+                    mainMessage = i18n("MSG_NOSYNC");
+                else
+                    mainMessage = format(i18n("MSG_NOSYNC_NAME"),
+                                         name);
+                String command = null;
+                if (e.getCommand() != null)
+                    command = formatCommand(e.getCommand());
+                String message = e.getMessage();
+                String response = null;
+                if (! message.trim().equals(""))
+                    response = message;
                 String optionalMessage;
-                if (e.getCommand() == null)
+                if (name == null)
                 {
-                    optionalMessage =
-                        "The current position could not be synchronized" +
-                        " with " + name + " (" + e.getMessage() + ").\n";
+                    if (command == null)
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_ERROR"), message);
+                    else if (command == null)
+                        optionalMessage = i18n("MSG_NOSYNC_FAILURE");
+                    else if (response == null)
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_FAILURE_COMMAND"),
+                                   command);
+                    else
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_FAILURE_RESPONSE"),
+                                   command, response);
                 }
                 else
                 {
-                    optionalMessage = formatCommand(e.getCommand());
-                    optionalMessage = optionalMessage + " sent to " + name
-                        + " failed.\n";
-                    if (! e.getMessage().trim().equals(""))
-                    {
-                        optionalMessage = optionalMessage +
-                            "The response was: \"" + e.getMessage() + "\"";
-                        if (! e.getMessage().endsWith("."))
-                            optionalMessage = optionalMessage + ".";
-                        optionalMessage = optionalMessage + "\n";
-                    }
+                    if (command == null)
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_ERROR_NAME"), name,
+                                   message);
+                    else if (command == null)
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_FAILURE_NAME"), name);
+                    else if (response == null)
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_FAILURE_COMMAND_NAME"),
+                                   command, name);
+                    else
+                        optionalMessage =
+                            format(i18n("MSG_NOSYNC_FAILURE_RESPONSE_NAME"),
+                                   command, name, response);
                 }
-                optionalMessage = optionalMessage
-                    + "You will not be able to use " + name +
-                    " in the current position.";
                 showWarning(mainMessage, optionalMessage, true);
             }
         }
@@ -2983,7 +3003,7 @@ public class GoGui
     private void detachProgram()
     {
         if (m_gtp != null)
-            showStatusImmediately("Detaching program...");
+            showStatusImmediately(i18n("STAT_DETACHING"));
         if (isCommandInProgress())
         {
             m_gtp.destroyGtp();
@@ -3055,12 +3075,10 @@ public class GoGui
 
     private String formatCommand(String command)
     {
-        if (command == null)
-            return "A command";
         if (command.length() < 20)
-            return "The command \"" + command + "\"";
+            return command;
         GtpCommand cmd = new GtpCommand(command);
-        return "The command \"" + cmd.getCommand() + " [...]\"";
+        return cmd.getCommand() + " [...]";
     }
 
     private void generateMove(boolean isSingleMove)
@@ -3233,7 +3251,7 @@ public class GoGui
         }
         catch (ParseError e)
         {
-            showError("Import failed", e);
+            showError(i18n("MSG_IMPORT_FAILED"), e);
         }
         m_guiBoard.initSize(getBoard().getSize());
         initGtp();
@@ -3260,16 +3278,9 @@ public class GoGui
         }
         ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
         if (handicap == null)
-        {
-            String optionalMessage =
-                "There is no standard definition for the location " +
-                "of " + m_handicap + " handicap stones on boards of size "
-                + size + ".\n" +
-                "You need to do a manual setup or make White " +
-                "play " + m_handicap + " passes instead.";
-            showWarning("Handicap stone locations not defined",
-                        optionalMessage, false);
-        }
+            showWarning(i18n("MSG_HANDICAP_UNDEFINED"),
+                        format(i18n("MSG_HANDICAP_UNDEFINED_2"), m_handicap,
+                               size), false);
         m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
                     m_timeSettings);
         if (size != oldSize)
@@ -3393,7 +3404,7 @@ public class GoGui
         Komi komi = getGameInfo().getKomi();
         m_scoreDialog.showScore(m_countScore, komi);
         m_scoreDialog.setVisible(true);
-        showStatus("Please mark dead groups");
+        showStatus(i18n("STAT_SCORE"));
     }
 
     private boolean isComputerBoth()
@@ -3414,7 +3425,7 @@ public class GoGui
             if (file.length() > 500000)
             {
                 newGame(getBoardSize()); // Frees space if already large tree
-                GuiUtil.runProgress(this, "Loading...", runnable);
+                GuiUtil.runProgress(this, i18n("LB_LOADING"), runnable);
             }
             else
                 runnable.run(null);
@@ -3436,12 +3447,12 @@ public class GoGui
             if (warnings != null)
             {
                 String optionalMessage =
-                    "There were file format warnings when reading this file." +
-                    " Some information might have been not read correctly " +
-                    "or will be lost when modifying and saving the file.\n" +
-                    "(" +
-                    warnings.replaceAll("\n\\z", ")").replaceAll("\n", ")\n(");
-                showWarning("File format warnings", optionalMessage, true);
+                    i18n("MSG_FILE_FORMAT_WARNING_2")
+                    + "\n(" +
+                    warnings.replaceAll("\n\\z", ")").replaceAll("\n", ")\n(")
+                    + ")";
+                showWarning(i18n("MSG_FILE_FORMAT_WARNING"), optionalMessage,
+                            true);
             }
             m_computerBlack = false;
             m_computerWhite = false;
@@ -3449,17 +3460,17 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found", e);
+            showError(i18n("MSG_FILE_NOT_FOUND"), e);
             return false;
         }
         catch (SgfError e)
         {
-            showError("Could not read file", e);
+            showError(i18n("MSG_COULD_NOT_READ_FILE"), e);
             return false;
         }
         catch (ErrorMessage e)
         {
-            showError("Could not read file", e);
+            showError(i18n("MSG_COULD_NOT_READ_FILE"), e);
             return false;
         }
         catch (Throwable t)
@@ -3617,11 +3628,12 @@ public class GoGui
     {
         try
         {
-            new GameWriter(gameFile, getTree(), "GoGui", Version.get());
+            new GameWriter(gameFile, getTree(), i18n("LB_GOGUI"),
+                           Version.get());
         }
         catch (ErrorMessage e)
         {
-            showError("Saving file failed", e);
+            showError(i18n("MSG_SAVING_FAILED"), e);
             return false;
         }
         m_menuBar.addRecent(gameFile.m_file);
@@ -3654,7 +3666,7 @@ public class GoGui
         }
         catch (ErrorMessage e)
         {
-            showError("Could not save parameters", e);
+            showError(i18n("MSG_COULD_NOT_SAVE_PARAMETERS"), e);
             return false;
         }
         return true;
@@ -3663,7 +3675,7 @@ public class GoGui
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, getBoard(), "GoGui", Version.get());
+        new SgfWriter(out, getBoard(), i18n("LB_GOGUI"), Version.get());
         m_menuBar.addRecent(file);
         updateViews(false);
     }
@@ -3766,8 +3778,7 @@ public class GoGui
                         continue;
                     if (GtpUtil.isStateChangingCommand(line))
                     {
-                        showError("Board changing commands not allowed",
-                                  "");
+                        showError(i18n("MSG_BOARD_CHANGING_COMMAND"), "");
                         break;
                     }
                     try
@@ -3778,14 +3789,14 @@ public class GoGui
                     {
                         showError(e);
                         if (m_gtp.isProgramDead()
-                            || ! showQuestion("Continue sending commands?",
-                                              "", "Continue", false))
+                            || ! showQuestion(i18n("MSG_CONTINUE_SEND"), "",
+                                              i18n("LB_CONTINUE_SEND"), false))
                             break;
                     }
                 }
                 catch (IOException e)
                 {
-                    showError("Error reading file", e);
+                    showError(i18n("MSG_COULD_NOT_READ_FILE"), e);
                     break;
                 }
             }
@@ -3810,7 +3821,7 @@ public class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError("File not found", e);
+            showError(i18n("MSG_FILE_NOT_FOUND"), e);
         }
     }
 
@@ -3875,10 +3886,10 @@ public class GoGui
         String oldResult = getGameInfo().get(StringInfo.RESULT);
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
-            && ! showQuestion("Replace old result " + oldResult + "\n" +
-                              "with " + result + "?",
-                              "The old result in the game information will " +
-                              "be overwritten.", "Replace", false))
+            && ! showQuestion(format(i18n("MSG_REPLACE_RESULT"), oldResult,
+                                     result),
+                              i18n("MSG_REPLACE_RESULT_2"),
+                              i18n("LB_REPLACE_RESULT"), false))
             return;
         m_game.setResult(result);
     }
