@@ -1276,11 +1276,7 @@ public class GoGui
                 "net.sf.gogui.gogui.GoGui.score-not-supported";
             String optionalMessage;
             String name = getProgramName();
-            if (name == null)
-                optionalMessage = i18n("MSG_SCORE_NO_SUPPORT");
-            else
-                optionalMessage = format(i18n("MSG_SCORE_NO_SUPPORT_NAME"),
-                                         name);
+            optionalMessage = format(i18n("MSG_SCORE_NO_SUPPORT"), name);
             m_messageDialogs.showInfo(disableKey, this,
                                       i18n("MSG_SCORE_MANUAL"),
                                       optionalMessage, true);
@@ -1649,9 +1645,12 @@ public class GoGui
     */
     public String getProgramName()
     {
-        if (m_gtp == null)
-            return null;
-        return m_gtp.getName();
+        String name = null;
+        if (m_gtp != null)
+            name = m_gtp.getName();
+        if (name == null)
+            name = i18n("MSG_UNKNOWN_PROGRAM_NAME");
+        return name;
     }
 
     public int getNumberPrograms()
@@ -1965,21 +1964,13 @@ public class GoGui
         public void run()
         {
             String name = getProgramName();
-            String mainMessage;
-            if (name == null)
-                mainMessage = i18n("MSG_INVALID_RESPONSE");
-            else
-                mainMessage = format(i18n("MSG_INVALID_RESPONSE_NAME"), name);
+            String mainMessage = format(i18n("MSG_INVALID_RESPONSE"), name);
             if (m_line.trim().equals(""))
             {
                 String disableKey =
                     "net.sf.gogui.gogui.GoGui.invalid-empty-response";
-                String optionalMessage;
-                if (name == null)
-                    optionalMessage = i18n("MSG_INVALID_EMPTY_RESPONSE");
-                else
-                    optionalMessage =
-                        format(i18n("MSG_INVALID_EMPTY_RESPONSE_NAME"), name);
+                String optionalMessage =
+                    format(i18n("MSG_INVALID_EMPTY_RESPONSE"), name);
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage,
                                              true);
@@ -1988,13 +1979,8 @@ public class GoGui
             {
                 String disableKey =
                     "net.sf.gogui.gogui.GoGui.invalid-response";
-                String optionalMessage;
-                if (name == null)
-                    optionalMessage = i18n("MSG_INVALID_NOSTATUS_RESPONSE");
-                else
-                    optionalMessage =
-                        format(i18n("MSG_INVALID_NOSTATUS_RESPONSE_NAME"),
-                               name);
+                String optionalMessage =
+                    format(i18n("MSG_INVALID_NOSTATUS_RESPONSE"), name);
                 m_messageDialogs.showWarning(disableKey, GoGui.this,
                                              mainMessage, optionalMessage,
                                              true);
@@ -2462,11 +2448,7 @@ public class GoGui
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
         m_shell.setCommandInProgess(true);
-        String name = getProgramName();
-        if (name == null)
-            showStatus(i18n("STAT_THINKING"));
-        else
-            showStatus(format(i18n("STAT_THINKING_NAME"), name));
+        showStatus(format(i18n("STAT_THINKING"), getProgramName()));
         updateViews(false);
     }
 
@@ -2544,13 +2526,8 @@ public class GoGui
     {
         if (! AnalyzeUtil.hasParameterCommands(m_analyzeCommands))
         {
-            String name = getProgramName();
-            String optionalMessage;
-            if (name == null)
-                optionalMessage = i18n("MSG_NO_PARAM_COMMANDS_2");
-            else
-                optionalMessage = format(i18n("MSG_NO_PARAM_COMMANDS_2_NAME"),
-                                         name);
+            String optionalMessage =
+                format(i18n("MSG_NO_PARAM_COMMANDS_2"), getProgramName());
             showError(i18n("MSG_NO_PARAM_COMMANDS"), optionalMessage);
             return false;
         }
@@ -2597,50 +2574,27 @@ public class GoGui
         String name = getProgramName();
         if (m_gtp.isProgramDead())
         {
-            String mainMessage;
-            if (name == null)
-                mainMessage = i18n("MSG_PROGRAM_TERMINATED");
-            else
-                mainMessage = format(i18n("MSG_PROGRAM_TERMINATED_NAME"), name);
+            String mainMessage = format(i18n("MSG_PROGRAM_TERMINATED"), name);
             String optionalMessage = "";
             if (m_shell.isLastTextNonGTP())
             {
                 showShell();
-                if (name == null)
-                    optionalMessage = i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP");
-                else
-                    optionalMessage =
-                        format(i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP_NAME"),
-                               name);
+                optionalMessage =
+                    format(i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP"), name);
             }
             else
             {
                 showShell();
-                if (name == null)
-                    optionalMessage = i18n("MSG_PROGRAM_TERMINATED_REATTACH");
-                else
-                    optionalMessage =
-                        format(i18n("MSG_PROGRAM_TERMINATED_REATTACH_NAME"),
-                               name);
+                optionalMessage =
+                    format(i18n("MSG_PROGRAM_TERMINATED_REATTACH"), name);
             }
             showError(mainMessage, optionalMessage, false);
             return false;
         }
         if (isOutOfSync())
         {
-            String mainMessage;
-            String optionalMessage;
-            if (name == null)
-            {
-                mainMessage = i18n("MSG_OUT_OF_SYNC");
-                optionalMessage = i18n("MSG_OUT_OF_SYNC_2");
-            }
-            else
-            {
-                mainMessage = format(i18n("MSG_OUT_OF_SYNC_NAME"), name);
-                optionalMessage = format(i18n("MSG_OUT_OF_SYNC_NAME_2"), name);
-            }
-
+            String mainMessage = format(i18n("MSG_OUT_OF_SYNC"), name);
+            String optionalMessage = format(i18n("MSG_OUT_OF_SYNC_2"), name);
             showError(mainMessage, optionalMessage, false);
             return false;
         }
@@ -2763,11 +2717,7 @@ public class GoGui
                     toMove.otherColor().getUppercaseLetter() + "+Resign";
                 if (! isComputerBoth())
                 {
-                    String mainMessage;
-                    if (name == null)
-                        mainMessage = i18n("MSG_RESIGN");
-                    else
-                        mainMessage = format(i18n("MSG_RESIGN_NAME"), name);
+                    String mainMessage = format(i18n("MSG_RESIGN"), name);
                     String optionalMessage =
                         format(i18n("MSG_RESIGN_2"), result);
                     showInfo(mainMessage, optionalMessage, false);
@@ -2783,32 +2733,18 @@ public class GoGui
                 {
                     if (board.getColor(point) != EMPTY)
                     {
-                        String mainMessage;
-                        String optionalMessage;
-                        if (name == null)
-                        {
-                            mainMessage = i18n("MSG_NONEMPTY");
-                            optionalMessage = i18n("MSG_NONEMPTY_2");
-                        }
-                        else
-                        {
-                            mainMessage =
-                                format(i18n("MSG_NONEMPTY_NAME"), name);
-                            optionalMessage =
-                                format(i18n("MSG_NONEMPTY_NAME_2"), name);
-                        }
+                        String mainMessage =
+                            format(i18n("MSG_NONEMPTY"), name);
+                        String optionalMessage =
+                            format(i18n("MSG_NONEMPTY_2"), name);
                         showWarning(mainMessage, optionalMessage, true);
                         m_computerBlack = false;
                         m_computerWhite = false;
                     }
                     else if (board.isKo(point))
                     {
-                        String mainMessage;
-                        if (name == null)
-                            mainMessage = i18n("MSG_VIOLATE_KO");
-                        else
-                            mainMessage =
-                                format(i18n("MSG_VIOLATE_KO_NAME"), name);
+                        String mainMessage =
+                            format(i18n("MSG_VIOLATE_KO"), name);
                         showWarning(mainMessage, i18n("MSG_VIOLATE_KO_2"),
                                     true);
                         m_computerBlack = false;
@@ -2822,20 +2758,10 @@ public class GoGui
                 {
                     String disableKey =
                         "net.sf.gogui.gogui.GoGui.computer-passed";
-                    String mainMessage;
-                    String optionalMessage;
-                    if (name == null)
-                    {
-                        mainMessage = i18n("MSG_PROGRAM_PASS");
-                        optionalMessage = i18n("MSG_PROGRAM_PASS_2");
-                    }
-                    else
-                    {
-                        mainMessage =
-                            format(i18n("MSG_PROGRAM_PASS_NAME"), name);
-                        optionalMessage =
-                            format(i18n("MSG_PROGRAM_PASS_NAME_2"), name);
-                    }
+                    String mainMessage =
+                        format(i18n("MSG_PROGRAM_PASS"), name);
+                    String optionalMessage =
+                        format(i18n("MSG_PROGRAM_PASS_2"), name);
                     m_messageDialogs.showInfo(disableKey, this, mainMessage,
                                               optionalMessage, false);
                 }
@@ -2947,12 +2873,7 @@ public class GoGui
             if (! wasOutOfSync)
             {
                 String name = getProgramName();
-                String mainMessage;
-                if (name == null)
-                    mainMessage = i18n("MSG_NOSYNC");
-                else
-                    mainMessage = format(i18n("MSG_NOSYNC_NAME"),
-                                         name);
+                String mainMessage = format(i18n("MSG_NOSYNC"), name);
                 String command = null;
                 if (e.getCommand() != null)
                     command = formatCommand(e.getCommand());
@@ -2961,40 +2882,20 @@ public class GoGui
                 if (! message.trim().equals(""))
                     response = message;
                 String optionalMessage;
-                if (name == null)
-                {
-                    if (command == null)
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_ERROR"), message);
-                    else if (command == null)
-                        optionalMessage = i18n("MSG_NOSYNC_FAILURE");
-                    else if (response == null)
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_FAILURE_COMMAND"),
-                                   command);
-                    else
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_FAILURE_RESPONSE"),
-                                   command, response);
-                }
+                if (command == null)
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_ERROR"), name, message);
+                else if (command == null)
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_FAILURE"), name);
+                else if (response == null)
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_FAILURE_COMMAND"),
+                               command, name);
                 else
-                {
-                    if (command == null)
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_ERROR_NAME"), name,
-                                   message);
-                    else if (command == null)
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_FAILURE_NAME"), name);
-                    else if (response == null)
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_FAILURE_COMMAND_NAME"),
-                                   command, name);
-                    else
-                        optionalMessage =
-                            format(i18n("MSG_NOSYNC_FAILURE_RESPONSE_NAME"),
-                                   command, name, response);
-                }
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_FAILURE_RESPONSE"),
+                               command, name, response);
                 showWarning(mainMessage, optionalMessage, true);
             }
         }
@@ -3985,16 +3886,11 @@ public class GoGui
 
     private void showError(GtpResponseFormatError e)
     {
-        String mainMessage = "Invalid response";
         String name = getProgramName();
-        String optionalMessage;
-        if (name == null)
-            optionalMessage = format(i18n("MSG_INVALID_RESPONSE_2"),
-                                     e.getMessage());
-        else
-            optionalMessage = format(i18n("MSG_INVALID_RESPONSE_2_NAME"),
-                                     name, e.getMessage());
-        showError(i18n("MSG_INVALID_RESPONSE"), optionalMessage, true);
+        String mainMessage = format(i18n("MSG_INVALID_RESPONSE"), name);
+        String optionalMessage =
+            format(i18n("MSG_INVALID_RESPONSE_2"), name, e.getMessage());
+        showError(mainMessage, optionalMessage, true);
     }
 
     private void showError(GtpError e, boolean isCritical)
