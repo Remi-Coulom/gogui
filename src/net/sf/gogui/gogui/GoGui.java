@@ -3895,42 +3895,26 @@ public class GoGui
 
     private void showError(GtpError e, boolean isCritical)
     {
-        String nameCapitalized = getProgramName();
-        String nameNotCapitalized = getProgramName();
-        if (nameCapitalized == null)
-        {
-            nameCapitalized = "The Go program";
-            nameNotCapitalized = "the Go program";
-        }
+        String name = getProgramName();
         String mainMessage;
         String optionalMessage;
         if (m_gtp != null && m_gtp.isProgramDead())
         {
-            mainMessage = nameCapitalized + " terminated";
-            if (! m_gtp.wasKilled())
-                mainMessage = mainMessage + " unexpectedly";
-            optionalMessage = "";
-            if (m_shell.isLastTextNonGTP())
-                optionalMessage = optionalMessage +
-                    "Check the GTP shell window for error messages of " +
-                    nameNotCapitalized +
-                    ", which could be helpful to find the reason for" +
-                    " this unexpected failure.";
-            if (m_gtp.getAnyCommandsResponded())
-            {
-                if (optionalMessage.length() > 0)
-                    optionalMessage = optionalMessage + " ";
-                optionalMessage = optionalMessage +
-                    "You can reattach " + nameNotCapitalized +
-                    " from the Program menu.";
-            }
-            else if (optionalMessage.equals(""))
-            {
+            if (m_gtp.wasKilled())
+                mainMessage = format(i18n("MSG_PROGRAM_TERMINATED"), name);
+            else
+                mainMessage =
+                    format(i18n("MSG_PROGRAM_TERMINATED_UNEXPECTEDLY"), name);
+            boolean hasErrorOutput = m_shell.isLastTextNonGTP();
+            boolean anyResponses = m_gtp.getAnyCommandsResponded();
+            if (hasErrorOutput && ! anyResponses)
                 optionalMessage =
-                    "The Go program did not respond to any commands. " +
-                    "One possible reason is that the command for executing " +
-                    "the program in GTP mode was not correct.";
-            }
+                    format(i18n("MSG_PROGRAM_TERMINATED_2"), name);
+            else if (hasErrorOutput && anyResponses)
+                optionalMessage =
+                    format(i18n("MSG_PROGRAM_TERMINATED_3"), name);
+            else
+                optionalMessage = i18n("MSG_PROGRAM_TERMINATED_4");
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
@@ -3948,7 +3932,7 @@ public class GoGui
             mainMessage = "Command failed";
             optionalMessage = formatCommand(e.getCommand());
             optionalMessage = optionalMessage + " sent to " +
-                nameNotCapitalized + " failed.";
+                name + " failed.";
             if (! e.getMessage().trim().equals(""))
             {
                 optionalMessage = optionalMessage + " The response was: \""
