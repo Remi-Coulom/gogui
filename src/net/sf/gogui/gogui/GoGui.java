@@ -3903,8 +3903,7 @@ public class GoGui
             if (m_gtp.wasKilled())
                 mainMessage = format(i18n("MSG_PROGRAM_TERMINATED"), name);
             else
-                mainMessage =
-                    format(i18n("MSG_PROGRAM_TERMINATED_UNEXPECTEDLY"), name);
+                mainMessage = i18n("MSG_PROGRAM_TERMINATED_UNEXPECTEDLY");
             boolean hasErrorOutput = m_shell.isLastTextNonGTP();
             boolean anyResponses = m_gtp.getAnyCommandsResponded();
             if (hasErrorOutput && ! anyResponses)
@@ -3918,28 +3917,23 @@ public class GoGui
         }
         else if (e instanceof GtpClient.ExecFailed)
         {
-            //String program = ((GtpClient.ExecFailed)e).m_program;
-            mainMessage = "Could not execute Go program";
-            optionalMessage = "The Go program could not be executed";
-            if (! StringUtil.isEmpty(e.getMessage()))
-                optionalMessage = optionalMessage +
-                    " (" + e.getMessage() + ")";
-            optionalMessage = optionalMessage
-                + ". Please correct the command for executing the program.";
+            mainMessage = i18n("MSG_COULD_NOT_EXECUTE");
+            if (StringUtil.isEmpty(e.getMessage()))
+                optionalMessage = i18n("MSG_COULD_NOT_EXECUTE_2");
+            else
+                optionalMessage =
+                    format(i18n("MSG_COULD_NOT_EXECUTE_3"), e.getMessage());
         }
         else
         {
-            mainMessage = "Command failed";
-            optionalMessage = formatCommand(e.getCommand());
-            optionalMessage = optionalMessage + " sent to " +
-                name + " failed.";
-            if (! e.getMessage().trim().equals(""))
-            {
-                optionalMessage = optionalMessage + " The response was: \""
-                    + e.getMessage() + "\"";
-                if (! e.getMessage().endsWith("."))
-                    optionalMessage = optionalMessage + ".";
-            }
+            mainMessage = i18n("MSG_COMMAND_FAILED");
+            if (e.getMessage().trim().equals(""))
+                optionalMessage =
+                    format(i18n("MSG_COMMAND_FAILED_2"), e.getCommand());
+            else
+                optionalMessage =
+                    format(i18n("MSG_COMMAND_FAILED_3"), e.getCommand(),
+                           e.getMessage());
         }
         showError(mainMessage, optionalMessage, isCritical);
     }
@@ -3961,12 +3955,9 @@ public class GoGui
         if (m_resigned)
             return;
         String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
-        String optionalMessage =
-            "The game is finished because both players passed. " +
-            "Use Score from the Game menu to count the score " +
-            "in final positions.";
-        m_messageDialogs.showInfo(disableKey, this, "Game finished",
-                                  optionalMessage, false);
+        m_messageDialogs.showInfo(disableKey, this,
+                                  i18n("MSG_GAME_FINISHED"),
+                                  i18n("MSG_GAME_FINISHED_2"), false);
     }
 
     private void showInfo(String mainMessage, String optionalMessage,
@@ -4047,14 +4038,14 @@ public class GoGui
 
     private void showStatusSelectPointList()
     {
-        showStatus("Select points for " + m_analyzeCommand.getLabel()
-                   + " (last point with right button or modifier key down)");
+        showStatus(format(i18n("STAT_SELECT_POINTLIST"),
+                          m_analyzeCommand.getLabel()));
     }
 
     private void showStatusSelectTarget()
     {
-        showStatus("Select a target for "
-                   + m_analyzeCommand.getResultTitle());
+        showStatus(format(i18n("STAT_SELECT_TARGET"),
+                          m_analyzeCommand.getResultTitle()));
     }
 
     private void showToolbar(boolean enable)
@@ -4141,7 +4132,7 @@ public class GoGui
                 else
                 {
                     protectGui();
-                    showStatus("Updating game tree window...");
+                    showStatus(i18n("STAT_UPDATING_TREE"));
                     Runnable runnable = new Runnable() {
                             public void run() {
                                 try
