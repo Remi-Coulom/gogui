@@ -126,8 +126,10 @@ public final class SgfReaderTest
     /** Test that OT property in unknown format is preserved if not changed. */
     public void testTimeSettingsPreserveOvertime() throws Exception
     {
-        SgfReader reader = getReader("time-settings-unknown-ot.sgf");
-        ConstGameTree tree = reader.getTree();
+        // Unknown OT context should not generate a warning, since there is
+        // no format requirement defined in SGF
+        ConstGameTree tree =
+            readSgfFile("time-settings-unknown-ot.sgf", false, false);
         ConstNode root = tree.getRootConst();
         ConstGameInfo info = root.getGameInfoConst();
         TimeSettings settings = info.getTimeSettings();
@@ -319,22 +321,24 @@ public final class SgfReaderTest
         return new SgfReader(in, null, null, 0);
     }
 
-    private void readSgfFile(String name, boolean expectFailure,
-                             boolean expectWarnings) throws Exception
+    private ConstGameTree readSgfFile(String name, boolean expectFailure,
+                                      boolean expectWarnings) throws Exception
     {
+        SgfReader reader;
         try
         {
-            SgfReader reader = getReader(name);
+            reader = getReader(name);
             readSgfFile(reader, expectFailure, expectWarnings);
         }
         catch (SgfError error)
         {
             if (! expectFailure)
                 fail(error.getMessage());
-            return;
+            return null;
         }
         if (expectFailure)
             fail("Reading should result in a failure");
+        return reader.getTree();
     }
 
     private void readSgfFile(SgfReader reader, boolean expectFailure,
