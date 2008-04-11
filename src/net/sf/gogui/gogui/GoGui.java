@@ -2885,12 +2885,9 @@ public class GoGui
                 if (command == null)
                     optionalMessage =
                         format(i18n("MSG_NOSYNC_ERROR"), name, message);
-                else if (command == null)
-                    optionalMessage =
-                        format(i18n("MSG_NOSYNC_FAILURE"), name);
                 else if (response == null)
                     optionalMessage =
-                        format(i18n("MSG_NOSYNC_FAILURE_COMMAND"),
+                        format(i18n("MSG_NOSYNC_FAILURE"),
                                command, name);
                 else
                     optionalMessage =
