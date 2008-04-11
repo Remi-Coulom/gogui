@@ -48,7 +48,7 @@ public final class StatisticsTest
         Statistics statistics = new Statistics();
         statistics.setQuiet(true);
         statistics.run(gtp, program, sgfFiles, size, commands, null, null,
-                       allowSetup, backward);
+                       allowSetup, backward, false);
         assertTrue(expect.isExpectQueueEmpty());
     }
 }
