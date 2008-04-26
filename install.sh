@@ -7,7 +7,7 @@ PREFIX=/usr
 SYSCONFDIR=/etc
 JAVA_HOME=
 
-function usage() {
+usage() {
     printf "Usage: %s [-p prefix] [-j javahome]\n" $0
 }
 
@@ -65,7 +65,8 @@ done
 # Install files to $PREFIX/share/doc/gogui
 
 install -d $PREFIX/share/doc/gogui
-install -m 644 doc/manual/html/*.{html,png} $PREFIX/share/doc/gogui
+install -m 644 doc/manual/html/*.html $PREFIX/share/doc/gogui
+install -m 644 doc/manual/html/*.png $PREFIX/share/doc/gogui
 
 # Install files to $PREFIX/share/man
 
