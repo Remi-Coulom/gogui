@@ -5,14 +5,15 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Insets;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -66,19 +67,25 @@ public class StatusBar
 
         m_iconBox.add(GuiUtil.createSmallFiller());
 
-        m_text = new TextFieldWithToolTip();
-        m_text.setBorder(null);
+        m_text = new JLabel() {
+                /** Use tool tip if text is truncated. */
+                protected void paintComponent(Graphics g)
+                {
+                    super.paintComponent(g);
+                    String text = getText();
+                    if (text == null
+                        || g.getFontMetrics().stringWidth(text) < getWidth())
+                        setToolTipText(null);
+                    else
+                        setToolTipText(text);
+                }
+            };
+        setPreferredLabelSize(m_text, 10);
         panel.add(m_text, BorderLayout.CENTER);
         Box moveTextBox = Box.createHorizontalBox();
         panel.add(moveTextBox, BorderLayout.EAST);
-        m_moveText = new JTextField(12);
-        GuiUtil.setEditableFalse(m_moveText);
-        if (Platform.isMac())
-        {
-            m_moveText.setForeground(UIManager.getColor("Label.foreground"));
-            m_moveText.setBackground(UIManager.getColor("Label.background"));
-        }
-        m_moveText.setBorder(null);
+        m_moveText = new JLabel();
+        setPreferredLabelSize(m_moveText, 12);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
         m_moveTextSeparator = new JSeparator(SwingConstants.VERTICAL);
         moveTextBox.add(m_moveTextSeparator);
@@ -177,34 +184,23 @@ public class StatusBar
 
     private final JLabel m_labelScore;
 
-    private final JTextField m_moveText;
+    private final JLabel m_moveText;
 
-    private final JTextField m_text;
+    private final JLabel m_text;
 
     private final JSeparator m_moveTextSeparator;
-}
 
-/** Non-editable text field with tool tip if text is truncated. */
-class TextFieldWithToolTip
-    extends JTextField
-{
-    public TextFieldWithToolTip()
+    /** Set a preferred size, such that the layout does not change,
+        if a text label on the status bar is empty.
+        The preferred size is derived from the font.
+    */
+    private static void setPreferredLabelSize(JLabel label, int columns)
     {
-        GuiUtil.setEditableFalse(this);
-        if (Platform.isMac())
-        {
-            setForeground(UIManager.getColor("Label.foreground"));
-            setBackground(UIManager.getColor("Label.background"));
-        }
-    }
-
-    protected void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        String text = getText();
-        if (text == null || g.getFontMetrics().stringWidth(text) < getWidth())
-            setToolTipText(null);
-        else
-            setToolTipText(text);
+        Font font = label.getFont();
+        Insets insets = label.getInsets();
+        int height = font.getSize() + insets.top + insets.bottom;
+        int width =
+            columns * font.getSize() + insets.left + insets.right;
+        label.setPreferredSize(new Dimension(width, height));
     }
 }
