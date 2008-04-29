@@ -141,7 +141,7 @@ public final class AboutDialog
         URL imageUrl = getImage("project-support.png");
         String projectUrl = "http://gogui.sf.net";
         String supportUrl =
-            "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=enz%40users%2esourceforge%2enet&item_name=GoGui%20donation&no_shipping=1&no_note=1&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8";
+            "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=enz%40users%2esourceforge%2enet&item_name=GoGui_donation&no_shipping=1&no_note=1&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8";
         return createPanel("<p align=\"center\"><img src=\""
                            + getImage("gogui-48x48.png") + "\"></p>" +
                            "<p align=\"center\"><b>" +
