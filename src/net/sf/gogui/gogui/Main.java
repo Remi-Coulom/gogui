@@ -25,6 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtil;
+import static net.sf.gogui.gui.GuiUtil.insertLineBreaks;
 import net.sf.gogui.gui.MessageDialogs;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
@@ -161,28 +162,16 @@ public final class Main
         JPanel panel = new JPanel(new BorderLayout());
         Box box = Box.createVerticalBox();
         panel.add(box, BorderLayout.NORTH);
-        boolean isMac = Platform.isMac();
-        JLabel label;
-        if (isMac)
-        {
-            label = new JLabel("The application GoGui has quit unexpectedly");
-            GuiUtil.setMacDialogMainMessageFont(label);
-        }
-        else
-            label =
-                new JLabel("<html><b>The application GoGui has quit unexpectedly</b></html>");
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        box.add(label);
+
+        String css = GuiUtil.getMessageCss();
+
+        JLabel mainMessageLabel =
+            new JLabel("<html>" + css +
+                       "<b>The application GoGui has quit unexpectedly</b>");
+        mainMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        box.add(mainMessageLabel);
         addFiller(box);
-        JTextArea optionalMessageArea = new JTextArea();
-        box.add(optionalMessageArea);
-        optionalMessageArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-        optionalMessageArea.setForeground(UIManager.getColor("Label.foreground"));
-        optionalMessageArea.setBackground(UIManager.getColor("Label.background"));
-        if (isMac)
-            GuiUtil.setMacDialogInfoMessageFont(optionalMessageArea);
-        else
-            optionalMessageArea.setFont(UIManager.getFont("Label.font"));
+
         String optionalMessage;
         if (Version.get().indexOf("SVN") >= 0)
             optionalMessage =
@@ -193,7 +182,12 @@ public final class Main
                 "Please take a moment to submit a bug report at the GoGui bug tracker.\n";
         optionalMessage = optionalMessage +
                 "Include a short summary of the problem together with the following information:";
-        optionalMessageArea.setText(optionalMessage);
+        JLabel optionalMessageLabel =
+            new JLabel("<html>" + css + "<p>"
+                       + insertLineBreaks(optionalMessage) + "</p>");
+        optionalMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        box.add(optionalMessageLabel);
+
         box.add(GuiUtil.createSmallFiller());
         JTextArea textArea = new JTextArea();
         textArea.setForeground(Color.black);
