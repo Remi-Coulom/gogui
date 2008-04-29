@@ -3,6 +3,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -301,6 +302,40 @@ public final class MessageDialogs
         return m_disabled.contains(disableKey);
     }
 
+    /** Manually break message into multiple lines.
+        Needed, because pack() on JOptionPane does not compute the option
+        pane size correctly, if a maximum width is set and the label text is
+        automatically broken into multiple lines. The workaround with
+        calling invalidate() and pack() a second time does not work either
+        in this case. See also Sun Bug ID 4545951 (still in Linux JDK
+        1.5.0_04-b05 or Mac 1.4.2_12)
+    */
+    private static String insertLineBreaks(String message)
+    {
+        StringBuilder buffer = new StringBuilder();
+        int startLine = 0;
+        int lastWhiteSpace = -1;
+        for (int pos = 0; pos < message.length(); ++pos)
+        {
+            char c = message.charAt(pos);
+            if (pos - startLine > 60)
+            {
+                int endLine =
+                    (lastWhiteSpace > startLine ? lastWhiteSpace : pos);
+                if (buffer.length() > 0)
+                    buffer.append("<br>");
+                buffer.append(message.substring(startLine, endLine));
+                startLine = endLine;
+            }
+            if (Character.isWhitespace(c))
+                lastWhiteSpace = pos;
+        }
+        if (buffer.length() > 0)
+            buffer.append("<br>");
+        buffer.append(message.substring(startLine));
+        return buffer.toString();
+    }
+
     private Object show(String disableKey, Component parent, String title,
                         String mainMessage, String optionalMessage,
                         int messageType, int optionType, Object[] options,
@@ -310,32 +345,28 @@ public final class MessageDialogs
             optionalMessage = "";
         boolean isMac = Platform.isMac();
         Box box = Box.createVerticalBox();
-        JLabel label;
-        if (isMac)
-        {
-            label = new JLabel(mainMessage);
-            GuiUtil.setMacDialogMainMessageFont(label);
-        }
-        else
-            label = new JLabel("<html><b>" + mainMessage + "</b></html>");
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        String css = "";
+        if (Platform.isMac())
+            css =
+                "<head><style type=\"text/css\">" +
+                "b { font: 13pt \"Lucida Grande\" }" +
+                "p { font: 11pt \"Lucida Grande\"; margin-top: 8px }" +
+                "</style></head>";
+
+        JLabel mainMessageLabel =
+            new JLabel("<html>" + css + "<b>" + mainMessage + "</b>");
+        mainMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         addFiller(box);
-        box.add(label);
-        int columns = Math.min(30, optionalMessage.length());
-        JTextArea textArea = new JTextArea(optionalMessage, 0, columns);
-        textArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-        textArea.setEditable(false);
-        textArea.setFocusable(false);
-        textArea.setForeground(UIManager.getColor("Label.foreground"));
-        textArea.setBackground(UIManager.getColor("Label.background"));
-        if (isMac)
-            GuiUtil.setMacDialogInfoMessageFont(textArea);
-        else
-            textArea.setFont(UIManager.getFont("Label.font"));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
+        box.add(mainMessageLabel);
+
+        JLabel optionalMessageLabel =
+            new JLabel("<html>" + css + "<p>"
+                       + insertLineBreaks(optionalMessage) + "</p>");
+        optionalMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         addFiller(box);
-        box.add(textArea);
+        box.add(optionalMessageLabel);
+
         addFiller(box);
         addFiller(box);
         JCheckBox disableCheckBox = null;
@@ -351,7 +382,6 @@ public final class MessageDialogs
                     new JCheckBox(i18n("LB_DO_NOT_SHOW_AGAIN"));
             disableCheckBox.setToolTipText(i18n("TT_DO_NOT_SHOW_AGAIN"));
             disableCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-            GuiUtil.setMacDialogInfoMessageFont(disableCheckBox);
             box.add(disableCheckBox);
         }
         if (isMac)
@@ -371,12 +401,6 @@ public final class MessageDialogs
             // Dialogs don't have titles on the Mac
             title = null;
         JDialog dialog = optionPane.createDialog(parent, title);
-
-        // Workaround for Sun Bug ID 4545951 (still in Linux JDK
-        // 1.5.0_04-b05 or Mac 1.4.2_12)
-        box.invalidate();
-        dialog.pack();
-
         dialog.setVisible(true);
         dialog.dispose();
         if (disableKey != null && disableCheckBox.isSelected())
