@@ -264,6 +264,44 @@ public class GuiUtil
         }
     }
 
+    /** Manually break message into multiple lines for multi-line labels.
+        Needed for multi-line messages in option panes, because pack() on
+        JOptionPane does not compute the option pane size correctly, if a
+        maximum width is set and the label text is automatically broken into
+        multiple lines. The workaround with calling invalidate() and pack() a
+        second time does not work either in this case. See also Sun Bug ID
+        4545951 (still in Linux JDK 1.5.0_04-b05 or Mac 1.4.2_12)
+    */
+    public static String insertLineBreaks(String message)
+    {
+        final int MAX_CHAR_PER_LINE = 72;
+        int length = message.length();
+        if (length < MAX_CHAR_PER_LINE)
+            return message;
+        StringBuilder buffer = new StringBuilder();
+        int startLine = 0;
+        int lastWhiteSpace = -1;
+        for (int pos = 0; pos < length; ++pos)
+        {
+            char c = message.charAt(pos);
+            if (pos - startLine > 72)
+            {
+                int endLine =
+                    (lastWhiteSpace > startLine ? lastWhiteSpace : pos);
+                if (buffer.length() > 0)
+                    buffer.append("<br>");
+                buffer.append(message.substring(startLine, endLine));
+                startLine = endLine;
+            }
+            if (Character.isWhitespace(c))
+                lastWhiteSpace = pos;
+        }
+        if (buffer.length() > 0)
+            buffer.append("<br>");
+        buffer.append(message.substring(startLine));
+        return buffer.toString();
+    }
+
     /** Call SwingUtilities.invokeAndWait.
         Ignores possible exceptions (apart from printing a warning to
         System.err
