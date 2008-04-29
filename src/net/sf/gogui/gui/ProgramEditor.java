@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import static net.sf.gogui.gui.GuiUtil.insertLineBreaks;
 import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
@@ -71,33 +72,21 @@ public class ProgramEditor
                 mainMessage = i18n("MSG_PROGRAMEDIT_EDIT_LABEL");
                 optionalMessage = i18n("MSG_PROGRAMEDIT_EDIT_LABEL_2");
             }
-            boolean isMac = Platform.isMac();
-            JLabel label;
-            if (isMac)
-            {
-                label = new JLabel(mainMessage);
-                GuiUtil.setMacDialogMainMessageFont(label);
-            }
-            else
-                label = new JLabel("<html><b>" + mainMessage + "</b></html>");
-            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            String css = GuiUtil.getMessageCss();
+            JLabel mainMessageLabel =
+                new JLabel("<html>" + css + "<b>"
+                           + insertLineBreaks(mainMessage) + "</b>");
+            mainMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             addFiller(box);
-            box.add(label);
-            int columns = Math.min(30, optionalMessage.length());
-            JTextArea textArea = new JTextArea(optionalMessage, 0, columns);
-            textArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-            textArea.setEditable(false);
-            textArea.setFocusable(false);
-            textArea.setForeground(UIManager.getColor("Label.foreground"));
-            textArea.setBackground(UIManager.getColor("Label.background"));
-            if (isMac)
-                GuiUtil.setMacDialogInfoMessageFont(textArea);
-            else
-                textArea.setFont(UIManager.getFont("Label.font"));
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
+            box.add(mainMessageLabel);
+
+            JLabel optionalMessageLabel =
+                new JLabel("<html>" + css + "<p>"
+                           + insertLineBreaks(optionalMessage) + "</p>");
+            optionalMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             addFiller(box);
-            box.add(textArea);
+            box.add(optionalMessageLabel);
+
             addFiller(box);
             addFiller(box);
             addFiller(box);
