@@ -313,13 +313,7 @@ public final class MessageDialogs
         boolean isMac = Platform.isMac();
         Box box = Box.createVerticalBox();
 
-        String css = "";
-        if (Platform.isMac())
-            css =
-                "<head><style type=\"text/css\">" +
-                "b { font: 13pt \"Lucida Grande\" }" +
-                "p { font: 11pt \"Lucida Grande\"; margin-top: 8px }" +
-                "</style></head>";
+        String css = GuiUtil.getMessageCss();
 
         JLabel mainMessageLabel =
             new JLabel("<html>" + css + "<b>" + insertLineBreaks(mainMessage)

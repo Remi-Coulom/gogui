@@ -160,6 +160,22 @@ public class GuiUtil
         }
     }
 
+    /** Return a style sheet for message labels using HTML.
+        @return A string with a HTML-head tag containing a style tag
+        with formatting options or an empty string.
+    */
+    public static String getMessageCss()
+    {
+        if (Platform.isMac())
+            return
+                "<head><style type=\"text/css\">" +
+                "b { font: 13pt \"Lucida Grande\" }" +
+                "p { font: 11pt \"Lucida Grande\"; margin-top: 8px }" +
+                "</style></head>";
+        else
+            return "";
+    }
+
     /** Get size of default monspaced font.
         Can be used for setting the initial size of some GUI elements.
     */
