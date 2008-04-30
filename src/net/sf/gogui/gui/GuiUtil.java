@@ -173,7 +173,10 @@ public class GuiUtil
                 "p { font: 11pt \"Lucida Grande\"; margin-top: 8px }" +
                 "</style></head>";
         else
-            return "";
+            return
+                "<head><style type=\"text/css\">" +
+                "p { margin-top: 8px }" +
+                "</style></head>";
     }
 
     /** Get size of default monspaced font.

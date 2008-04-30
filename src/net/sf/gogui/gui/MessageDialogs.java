@@ -315,19 +315,12 @@ public final class MessageDialogs
 
         String css = GuiUtil.getMessageCss();
 
-        JLabel mainMessageLabel =
+        JLabel label =
             new JLabel("<html>" + css + "<b>" + insertLineBreaks(mainMessage)
-                       + "</b>");
-        mainMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        addFiller(box);
-        box.add(mainMessageLabel);
-
-        JLabel optionalMessageLabel =
-            new JLabel("<html>" + css + "<p>"
+                       + "</b><p>"
                        + insertLineBreaks(optionalMessage) + "</p>");
-        optionalMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        addFiller(box);
-        box.add(optionalMessageLabel);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        box.add(label);
 
         addFiller(box);
         addFiller(box);

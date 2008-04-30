@@ -73,19 +73,12 @@ public class ProgramEditor
                 optionalMessage = i18n("MSG_PROGRAMEDIT_EDIT_LABEL_2");
             }
             String css = GuiUtil.getMessageCss();
-            JLabel mainMessageLabel =
+            JLabel label =
                 new JLabel("<html>" + css + "<b>"
-                           + insertLineBreaks(mainMessage) + "</b>");
-            mainMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            addFiller(box);
-            box.add(mainMessageLabel);
-
-            JLabel optionalMessageLabel =
-                new JLabel("<html>" + css + "<p>"
+                           + insertLineBreaks(mainMessage) + "</b><p>"
                            + insertLineBreaks(optionalMessage) + "</p>");
-            optionalMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            addFiller(box);
-            box.add(optionalMessageLabel);
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            box.add(label);
 
             addFiller(box);
             addFiller(box);
