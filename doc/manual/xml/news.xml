@@ -55,7 +55,12 @@ Use orange color for standard error lines in GTP Shell that start with
 </listitem>
 <listitem>
 <simpara>
-Update to Quaqua 4.2.3 on Mac OS X
+Update to Quaqua 4.4.3 on Mac OS X
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other minor fixes
 </simpara>
 </listitem>
 </itemizedlist>
