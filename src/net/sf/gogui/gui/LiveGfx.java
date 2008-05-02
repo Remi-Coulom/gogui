@@ -63,7 +63,7 @@ public class LiveGfx
 
     private boolean m_duringMultiLineResponse;
 
-    Listener m_listener;
+    private Listener m_listener;
 
     private final StringBuilder m_response = new StringBuilder(1024);
 
