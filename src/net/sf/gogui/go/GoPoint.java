@@ -24,7 +24,7 @@ public final class GoPoint
     /** Default board size. */
     public static final int DEFAULT_SIZE = 19;
 
-    /** Upper limit (exclusive) for one-dimensional point index
+    /** Upper limit (exclusive) for one-dimensional point index.
         @see #getIndex
     */
     public static final int NUMBER_INDEXES = MAX_SIZE * MAX_SIZE;
@@ -84,7 +84,7 @@ public final class GoPoint
         return m_index;
     }
 
-    /** See getIndex() */
+    /** See getIndex(). */
     public static int getIndex(int x, int y)
     {
         return y * MAX_SIZE + x;

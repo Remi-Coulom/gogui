@@ -8,7 +8,7 @@ import net.sf.gogui.game.TimeSettings;
 
 public final class SgfUtil
 {
-    /** Result of parseOvertime() */
+    /** Result of parseOvertime(). */
     public static final class Overtime
     {
         public long m_byoyomi;
