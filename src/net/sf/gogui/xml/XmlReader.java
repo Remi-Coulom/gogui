@@ -1081,7 +1081,7 @@ public final class XmlReader
         format = format.trim().toLowerCase(Locale.ENGLISH);
         if (! format.equals("sgf"))
             setWarning("Unknown format attribute \"" + format
-                       + "\" for element \"" + m_element +"\"");
+                       + "\" for element \"" + m_element + "\"");
     }
 
     private void startInfoElemWithoutFormat() throws SAXException

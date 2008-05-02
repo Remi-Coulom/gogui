@@ -780,7 +780,7 @@ public class TwoGtp
             System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
         if (m_useXml)
-            new XmlWriter(out, getTree(), "GoGuiTwoGtp:" +Version.get());
+            new XmlWriter(out, getTree(), "GoGuiTwoGtp:" + Version.get());
         else
             new SgfWriter(out, getTree(), "GoGuiTwoGtp", Version.get());
     }
