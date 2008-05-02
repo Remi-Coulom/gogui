@@ -21,7 +21,7 @@ import net.sf.gogui.sgf.SgfReader;
 /** Find duplicates in games. */
 public final class Compare
 {
-    public final static class Placement
+    public static final class Placement
     {
         public boolean m_isSetup;
 
