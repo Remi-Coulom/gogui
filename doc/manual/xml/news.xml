@@ -65,6 +65,11 @@ Fix white background of status bar and part of message dialogs, if GTK look and 
 </listitem>
 <listitem>
 <simpara>
+Fix crash when readind some XML files containing variations.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other minor fixes
 </simpara>
 </listitem>

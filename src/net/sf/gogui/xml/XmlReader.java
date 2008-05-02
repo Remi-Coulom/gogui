@@ -75,6 +75,7 @@ public final class XmlReader
         try
         {
             m_isFirstElement = true;
+            m_isFirstNode = true;
             m_gameInfoPreByoyomi = -1;
             m_root = new Node();
             // Don't create game info yet, because implicit empty root
@@ -384,6 +385,8 @@ public final class XmlReader
     private static final int DEFAULT_BOARDSIZE = 19;
 
     private boolean m_isFirstElement;
+
+    private boolean m_isFirstNode;
 
     private boolean m_isBoardSizeKnown;
 
@@ -1187,8 +1190,9 @@ public final class XmlReader
         // root node to handle cases like Comment being the first child of
         // Nodes (example on Jago's webpage) without creating an unnecessary
         // node if the first child of Nodes is a Node
-        if (m_node != m_root || ! m_node.isEmpty())
+        if (! m_isFirstNode || ! m_node.isEmpty())
             createNode();
+        m_isFirstNode = false;
         String name = m_atts.getValue("name");
         if (name != null)
             // Not supported in game.Node, put it in SGF properties
