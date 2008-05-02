@@ -60,6 +60,11 @@ Update to Quaqua 4.4.3 on Mac OS X
 </listitem>
 <listitem>
 <simpara>
+Fix white background of status bar and part of message dialogs, if GTK look and feel is used.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other minor fixes
 </simpara>
 </listitem>
