@@ -32,7 +32,6 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpUtil;
 import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;

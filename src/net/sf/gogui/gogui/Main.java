@@ -22,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtil;
 import static net.sf.gogui.gui.GuiUtil.insertLineBreaks;

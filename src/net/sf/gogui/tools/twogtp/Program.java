@@ -6,18 +6,12 @@ import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstGameInfo;
-import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
-import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.util.ObjectUtil;
-import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
-import net.sf.gogui.version.Version;
 
 public class Program
 {
