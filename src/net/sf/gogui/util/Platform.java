@@ -84,19 +84,19 @@ public class Platform
     /** Check if the platform is Mac OS X. */
     public static boolean isMac()
     {
-        return m_isMac;
+        return s_isMac;
     }
 
     /** Check if the platform is Unix. */
     public static boolean isUnix()
     {
-        return m_isUnix;
+        return s_isUnix;
     }
 
     /** Check if the platform is Windows. */
     public static boolean isWindows()
     {
-        return m_isWindows;
+        return s_isWindows;
     }
 
     /** Try to open a URL in en external browser.
@@ -182,19 +182,19 @@ public class Platform
         }
     }
 
-    private static boolean m_isMac;
+    private static boolean s_isMac;
 
-    private static boolean m_isUnix;
+    private static boolean s_isUnix;
 
-    private static boolean m_isWindows;
+    private static boolean s_isWindows;
 
     static
     {
         // See http://developer.apple.com/technotes/tn2002/tn2110.html
         String name = System.getProperty("os.name");
-        m_isMac = name.toLowerCase(Locale.getDefault()).startsWith("mac os x");
-        m_isUnix = (name.indexOf("nix") >= 0 || name.indexOf("nux") >= 0);
-        m_isWindows = name.startsWith("Windows");
+        s_isMac = name.toLowerCase(Locale.getDefault()).startsWith("mac os x");
+        s_isUnix = (name.indexOf("nix") >= 0 || name.indexOf("nux") >= 0);
+        s_isWindows = name.startsWith("Windows");
     }
 
     private static boolean checkKDERunning()

@@ -92,7 +92,7 @@ public final class Main
         event dispatch thread can still be handled and cause more exceptions
         while the first crash dialog is shown.
     */
-    private static boolean m_duringShowCrashDialog;
+    private static boolean s_duringShowCrashDialog;
 
     /** Make constructor unavailable; class is for namespace only. */
     private Main()
@@ -113,7 +113,7 @@ public final class Main
         // Create thread group to catch errors from Swing event thread
         ThreadGroup group = new ThreadGroup("catch-runtime-exceptions") {
                 public void uncaughtException(Thread t, Throwable e) {
-                    if (m_duringShowCrashDialog)
+                    if (s_duringShowCrashDialog)
                         return;
                     StringUtil.printException(e);
                     if (e instanceof RuntimeException
@@ -149,7 +149,7 @@ public final class Main
 
     private static void showCrashDialog(Throwable e)
     {
-        m_duringShowCrashDialog = true;
+        s_duringShowCrashDialog = true;
         if ("GNU libgcj".equals(System.getProperty("java.vm.name")))
         {
             System.err.print("--------------------------------------------\n" +

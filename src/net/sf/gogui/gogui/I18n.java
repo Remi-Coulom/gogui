@@ -10,10 +10,10 @@ final class I18n
 {
     public static String i18n(String key)
     {
-        return m_bundle.getString(key);
+        return s_bundle.getString(key);
     }
 
-    private static ResourceBundle m_bundle =
+    private static ResourceBundle s_bundle =
         ResourceBundle.getBundle("net.sf.gogui.gogui.text",
                                  Locale.getDefault());
 
