@@ -227,8 +227,7 @@ public class XmlWriter
         // Game name is not supported in game.GameInformation, but XmlReader
         // puts it into the SGF-Proprty "N"
         String nameAtt = "";
-        if (sgfProps != null && sgfProps.hasKey("N")
-            && sgfProps.getNumberValues("N") > 0)
+        if (sgfProps.hasKey("N") && sgfProps.getNumberValues("N") > 0)
         {
             nameAtt = " name=\""
                 + XmlUtil.escapeAttr(sgfProps.getValue("N", 0)) + "\"";
@@ -279,7 +278,7 @@ public class XmlWriter
         // Root is considered empty, even if it has game info, because
         // this is written in Information element
         boolean isEmptyButMoveOrComment
-            = ((sgfProps == null || sgfProps.isEmpty())
+            = (sgfProps.isEmpty()
                && ! hasSetup && ! hasMarkup && ! hasMovesLeft
                && !  hasNonRootGameInfo);
 
