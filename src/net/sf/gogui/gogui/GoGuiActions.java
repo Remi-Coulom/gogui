@@ -389,8 +389,11 @@ public class GoGuiActions
                 m_goGui.actionImportTextPositionFromClipboard(); } };
 
     public final Action m_actionInterrupt =
-        new Action("ACT_INTERRUPT", null, KeyEvent.VK_ESCAPE,
-                   (Platform.isMac() ? SHORTCUT : 0), "gogui-interrupt") {
+        new Action("ACT_INTERRUPT", null,
+                   (Platform.isMac() ? SHORTCUT : KeyEvent.VK_ESCAPE),
+                   /* Don't use escape shortcut on Mac, produces a wrong
+                      shortcut label in the menu. Tested with Java 1.5.0_13 */
+                   0, "gogui-interrupt") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionInterrupt(); } };
 
