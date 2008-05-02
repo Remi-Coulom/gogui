@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
 
-public class AnalyzeUtil
+public final class AnalyzeUtil
 {
     /** Result of AnalyzeUtil.parseParameterLine(). */
     public static final class Result

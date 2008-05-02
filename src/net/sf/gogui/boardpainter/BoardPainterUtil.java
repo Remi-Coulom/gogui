@@ -19,7 +19,7 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 
 /** Utility functions for users of class BoardPainter. */
-public class BoardPainterUtil
+public final class BoardPainterUtil
 {
     public static BufferedImage createImage(int width, int height)
     {

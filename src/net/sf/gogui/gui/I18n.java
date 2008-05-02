@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /** Internationalization for this package. */
-class I18n
+final class I18n
 {
     public static String i18n(String key)
     {
