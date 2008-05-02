@@ -69,7 +69,7 @@ public class StatusBar
                 protected void paintComponent(Graphics g)
                 {
                     super.paintComponent(g);
-                    String text = getText();
+                    String text = super.getText();
                     if (text == null
                         || g.getFontMetrics().stringWidth(text) < getWidth())
                         setToolTipText(null);
