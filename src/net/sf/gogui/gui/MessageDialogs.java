@@ -3,7 +3,6 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -13,8 +12,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
 import static net.sf.gogui.gui.I18n.i18n;
 import static net.sf.gogui.gui.GuiUtil.insertLineBreaks;
 import net.sf.gogui.util.Platform;
