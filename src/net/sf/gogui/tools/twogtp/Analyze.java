@@ -179,8 +179,19 @@ public class Analyze
                 boolean alternated = (m_table.getInt("ALT", i) != 0);
                 String duplicate = m_table.get("DUP", i);
                 int length = m_table.getInt("LEN", i);
-                double timeBlack = m_table.getDouble("TIME_B", i);
-                double timeWhite = m_table.getDouble("TIME_W", i);
+                double timeBlack = 0;
+                double timeWhite = 0;
+                try
+                {
+                    timeBlack = m_table.getDouble("TIME_B", i);
+                    timeWhite = m_table.getDouble("TIME_W", i);
+                }
+                catch (Table.InvalidLocation e)
+                {
+                    // twogtp versions before 1.1pre2 did not save TIME_B,
+                    // TIME_W, we still support analyzing such old tables for
+                    // a while
+                }
                 double cpuBlack = m_table.getDouble("CPU_B", i);
                 double cpuWhite = m_table.getDouble("CPU_W", i);
                 boolean error = (m_table.getInt("ERR", i) != 0);
