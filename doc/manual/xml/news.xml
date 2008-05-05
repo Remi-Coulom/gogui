@@ -5,12 +5,13 @@
 
 <revision>
 <revnumber>&version;</revnumber>
-<date></date>
+<date>05 May 2008</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
 <listitem>
 <simpara>
+Add missing text resources that caused the program to crash.
 </simpara>
 </listitem>
 </itemizedlist>
