@@ -19,6 +19,21 @@ Add missing text resources that caused the program to crash.
 </revision>
 
 <revision>
+<revnumber>1.1pre3</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Add missing text resources that caused the program to crash.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.1pre2</revnumber>
 <date>02 May 2008</date>
 <authorinitials>enz</authorinitials>
