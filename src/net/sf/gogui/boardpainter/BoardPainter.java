@@ -188,6 +188,14 @@ public class BoardPainter
         if (m_fieldSize < 2)
             return;
         graphics.setColor(Color.darkGray);
+        if (graphics instanceof Graphics2D)
+        {
+            // Temporarily disable antialiasing, which causes lines to
+            // appear too thick with OpenJDK (version 6b09)
+            Graphics2D graphics2D = (Graphics2D)graphics;
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
         for (int y = 0; y < m_size; ++y)
         {
             if (y == 0 || y == m_size - 1)
@@ -207,6 +215,12 @@ public class BoardPainter
             Point top = getCenter(x, 0);
             Point bottom = getCenter(x, m_size - 1);
             graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
+        }
+        if (graphics instanceof Graphics2D)
+        {
+            Graphics2D graphics2D = (Graphics2D)graphics;
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
         }
         int r;
         if (m_fieldSize <= 7)
