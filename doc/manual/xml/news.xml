@@ -11,7 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
-gogui-display: add missing text resources
+gogui-display: add missing text resources (bug #1973003)
 </simpara>
 </listitem>
 </itemizedlist>
