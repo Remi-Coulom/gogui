@@ -20,23 +20,23 @@ while getopts hj:p: OPTION; do
         h) usage; exit 0;;
         j) JAVA_HOME="$OPTARG";;
         p) PREFIX="$OPTARG";;
-        ?) usage; exit -1;;
+        ?) usage; exit 1;;
     esac
 done
 shift `expr $OPTIND - 1`
 if  [ ! -z "$*" ]; then
     usage
-    exit -1;
+    exit 1;
 fi
 
 if [ -z "$JAVA_HOME" ]; then
     echo "Use option -j to specify the installation directory of a" >&2
     echo "Java 1.5 compatible virtual machine" >&2
-    exit -1
+    exit 1
 fi
 if [ ! -x "$JAVA_HOME/bin/java" ]; then
     echo "$JAVA_HOME/bin/java does not exist or is not executable" >&2
-    exit -1
+    exit 1
 fi
 
 #-----------------------------------------------------------------------------
