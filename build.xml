@@ -297,9 +297,12 @@ Comment out the exec svnversion for releases.
 <fileset dir="build" includes="
  net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
+ net/sf/gogui/game/*.properties
  net/sf/gogui/go/*.class
+ net/sf/gogui/go/*.properties
  net/sf/gogui/gui/*.class
  net/sf/gogui/gui/*.png
+ net/sf/gogui/gui/*.properties
  net/sf/gogui/gtp/*.class
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class

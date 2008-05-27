@@ -5,13 +5,13 @@
 
 <revision>
 <revnumber>&version;</revnumber>
-<date>05 May 2008</date>
+<date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
 <listitem>
 <simpara>
-Add missing text resources that caused the program to crash.
+gogui-display: add missing text resources
 </simpara>
 </listitem>
 </itemizedlist>
@@ -20,7 +20,7 @@ Add missing text resources that caused the program to crash.
 
 <revision>
 <revnumber>1.1pre3</revnumber>
-<date></date>
+<date>05 May 2008</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
