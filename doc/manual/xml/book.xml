@@ -63,12 +63,12 @@ GoGui is a graphical interface to programs that play the game of Go.
 &tools;
 <appendix id="appendix-reference">
 <title>Reference</title>
+&reference-gogui;
 &reference-adapter;
 &reference-client;
 &reference-convert;
 &reference-display;
 &reference-dummy;
-&reference-gogui;
 &reference-regress;
 &reference-server;
 &reference-statistics;
