@@ -77,6 +77,23 @@ BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 </section>
 
 <section>
+<title>Fuego</title>
+<indexterm>
+<primary>Fuego</primary>
+</indexterm>
+<para>
+<ulink url="http://fuego.sf.net"/>
+</para>
+<para>
+Operating systems: Macintosh
+</para>
+<para>
+Command: <userinput>fuego</userinput>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
 <title>GNU Go</title>
 <indexterm>
 <primary>GNU Go</primary>
