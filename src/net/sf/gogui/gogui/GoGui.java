@@ -1925,6 +1925,11 @@ public class GoGui
         return (m_gtp != null);
     }
 
+    public boolean isProgramDead()
+    {
+        return (m_gtp != null && m_gtp.isProgramDead());
+    }
+
     public void showLiveGfx(String text)
     {
         assert SwingUtilities.isEventDispatchThread();
@@ -2589,6 +2594,8 @@ public class GoGui
                     format(i18n("MSG_PROGRAM_TERMINATED_REATTACH"), name);
             }
             showError(mainMessage, optionalMessage, false);
+            // If program died, menu items need to be updated
+            updateViews(false);
             return false;
         }
         if (isOutOfSync())
@@ -3933,6 +3940,7 @@ public class GoGui
                            e.getMessage());
         }
         showError(mainMessage, optionalMessage, isCritical);
+        updateViews(false); // If program died, menu items need to be updated
     }
 
     private void showError(String mainMessage, String optionalMessage)

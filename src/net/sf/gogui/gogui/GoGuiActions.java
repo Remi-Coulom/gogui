@@ -715,6 +715,7 @@ public class GoGuiActions
         boolean treeHasVariations = game.getTree().hasVariations();
         boolean isCommandInProgress = m_goGui.isCommandInProgress();
         boolean isProgramAttached = m_goGui.isProgramAttached();
+        boolean isProgramDead = m_goGui.isProgramDead();
         boolean isInterruptSupported = m_goGui.isInterruptSupported();
         boolean computerBlack = m_goGui.isComputerColor(BLACK);
         boolean computerWhite = m_goGui.isComputerColor(WHITE);
@@ -778,7 +779,8 @@ public class GoGuiActions
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
         m_actionReattachProgram.setEnabled(isProgramAttached);
-        m_actionReattachWithParameters.setEnabled(isProgramAttached);
+        m_actionReattachWithParameters.setEnabled(isProgramAttached
+                                                  && ! isProgramDead);
         updateSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == BLACK);
