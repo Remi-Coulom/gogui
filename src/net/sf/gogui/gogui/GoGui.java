@@ -755,10 +755,8 @@ public class GoGui
         if (i < 0 || i >= m_bookmarks.size())
             return;
         Bookmark bookmark = m_bookmarks.get(i);
-        File file = bookmark.m_file;
-        if (m_gameFile == null || ! file.equals(m_gameFile.m_file))
-            if (! loadFile(file, -1))
-                return;
+        if (! loadFile(bookmark.m_file, -1))
+            return;
         updateViews(true);
         String variation = bookmark.m_variation;
         ConstNode node = getTree().getRootConst();
