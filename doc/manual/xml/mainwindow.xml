@@ -24,7 +24,8 @@ cursor to the next handicap line or to the edge of the board.
 </para>
 <para>
 The mouse wheel can be used to go forward and backward in the game,
-if the mouse pointer is located within the Go board.
+if the mouse pointer is located within the Go board. If the shift key is pressed
+while the mouse wheel is used, the step size is increased to 10 moves.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

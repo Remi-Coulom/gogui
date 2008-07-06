@@ -14,6 +14,16 @@
 gogui-display: add missing text resources (bug #1973003)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fast forward or backward if shift key is pressed while the mouse wheel is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and improvements
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

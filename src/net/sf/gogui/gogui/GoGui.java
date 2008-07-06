@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
@@ -3232,10 +3233,12 @@ public class GoGui
         m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
                 public void mouseWheelMoved(MouseWheelEvent e) {
                     int n = e.getWheelRotation();
+                    int mod = e.getModifiers();
+                    int scale = (mod == ActionEvent.SHIFT_MASK ? 10 : 1);
                     if (n > 0)
-                        actionForward(n);
+                        actionForward(scale * n);
                     else
-                        actionBackward(-n);
+                        actionBackward(-scale * n);
                 }
             });
 
