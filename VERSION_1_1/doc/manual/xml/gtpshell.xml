@@ -1,0 +1,90 @@
+<chapter id="gtpshell">
+<title>GTP Shell</title>
+
+<para>
+The GTP shell is a window that allows to trace the
+stream of GTP commands and responses, which are sent to and
+received from the Go program.
+Also, it allows to enter commands and send it to the Go program.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+<warning>
+<title>Commands Altering the Board State</title>
+<para>
+GoGui supports to send GTP commands directly from a file or entered in the
+GTP shell. However, this is only allowed for commands that don't change the
+board state, for instance for sending configuration commands from a file or
+for querying the state with commands that are not configured as analyze
+commands yet.
+</para>
+</warning>
+
+<para>
+If text is selected in the text area of the shell (e.g. text written by the
+program to standard error), it will automatically parsed for valid points,
+which will be marked on the board while the text is selected.
+</para>
+
+<para>
+Text lines that are written by the program to standard error and start
+with the string "WARNING:", "Warning:", or "warning:" will be displayed
+with an orange color.
+</para>
+
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+
+<section>
+<title>Saving the History</title>
+<para>
+From the <guimenu>Tools</guimenu> menu, it is possible to save the GTP
+commands and responses, or only the commands to a file.
+The history of the GTP streams will be truncated if it becomes too long.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Special Keys</title>
+<variablelist>
+<varlistentry>
+<term><keycap>Tab</keycap></term>
+<listitem>
+<simpara>
+Complete command line as far as possible from the history and from
+the commands supported by the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><keycap>Down</keycap></term>
+<listitem>
+<simpara>
+Pop up window with the command history.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><keycombo><keycap>Shift</keycap><keycap>Up</keycap></keycombo></term>
+<listitem>
+<simpara>
+Scroll up.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><keycombo><keycap>Shift</keycap><keycap>Down</keycap></keycombo></term>
+<listitem>
+<simpara>
+Scroll down.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</section>
+
+</chapter>

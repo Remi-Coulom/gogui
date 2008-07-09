@@ -1,0 +1,360 @@
+<refentry id="reference-statistics">
+<refmeta>
+<refentrytitle>gogui-statistics</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-statistics</refname>
+<refpurpose>
+Runs GTP commands on all positions of game collections.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-statistics</command>
+<arg><option>-backward</option></arg>
+<arg><option>-begin</option> <replaceable>commands</replaceable></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-commands</option> <replaceable>commands</replaceable></arg>
+<arg><option>-final</option> <replaceable>commands</replaceable></arg>
+<arg><option>-force</option></arg>
+<arg><option>-min</option> <replaceable>n</replaceable></arg>
+<arg><option>-max</option> <replaceable>n</replaceable></arg>
+<arg><option>-program</option> <replaceable>program</replaceable></arg>
+<arg><option>-quiet</option></arg>
+<arg><option>-random</option></arg>
+<arg><option>-setup</option> <replaceable>n</replaceable></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg choice="plain" rep="repeat">
+<replaceable>file.sgf</replaceable>
+</arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-statistics</command> <arg><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-statistics</command> <arg><option>-version</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-statistics</command>
+<arg><option>-analyze</option> <replaceable>file</replaceable></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-output</option> <replaceable>file</replaceable></arg>
+<arg><option>-precision</option> <replaceable>n</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+gogui-statistics runs a a set of commands for a Go program supporting the
+Go Text Protocol on each position of Go game collections.
+The results are stored in the text file "gtpstatistics.dat" in table format.
+If gogui-statistics is run with the option <option>-analyze</option>, a HTML
+file is produced from the file statistics.dat. The HTML file contains
+summary statistics for this file.
+</para>
+<para>
+All GTP commands that return a single number can be used with gogui-statistics.
+For the following standard and commonly used commands, an automatic conversion
+of the result to a number is done:
+<variablelist>
+<varlistentry>
+<term><command>cputime</command></term>
+<listitem>
+<para>
+The result is the difference to the last invocation of cputime.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>estimate_score</command></term>
+<listitem>
+<para>
+The result is parsed for a score string as the first word
+(like GNU Go's response)
+The score string is converted into a score number, Black counting
+positive, White negative.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>final_score</command></term>
+<listitem>
+<para>
+The result is parsed for a score string.
+The score string is converted into a score number, Black counting
+positive, White negative.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>reg_genmove</command></term>
+<listitem>
+<para>
+The color of the move in the game is appended.
+The result is "1", if the result is the same move as played in the game,
+"0" otherwise.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-analyze</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Analyze the result table
+<filename><replaceable>file.dat</replaceable></filename>.
+Creates a HTML report files.
+The files will be placed in the same directory as
+<filename><replaceable>file.dat</replaceable></filename> and use
+<filename><replaceable>file</replaceable></filename> as a filename prefix.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-backward</option>
+</term>
+<listitem>
+<para>
+Iterate backward over positions, starting with end position as number one.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-commands</option> <replaceable>commands</replaceable>
+</term>
+<listitem>
+<para>
+Comma separated list of GTP commands to run on each position
+(before each move).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-final</option> <replaceable>commands</replaceable>
+</term>
+<listitem>
+<para>
+Comma separated list of GTP commands to run only on final positions
+(after the last move).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-force</option>
+</term>
+<listitem>
+<para>
+Overwrite existing result table.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-help</option>
+</term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-max</option>
+</term>
+<listitem>
+<para>
+Only run commands on positions at less or equal this move number.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-min</option>
+</term>
+<listitem>
+<para>
+Only run commands on positions at greater or equal this move number.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-output</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Filename for result table.
+Default is <filename>statistics.dat</filename>.
+If option <option>-analyze</option> is used, the output is a directory
+or directory and file name prefix for the generated report files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-precision</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Maximum number of fraction digits for floating point numbers in the output
+file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-program</option> <replaceable>command</replaceable>
+</term>
+<listitem>
+<para>
+Command line for running Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-quiet</option>
+</term>
+<listitem>
+<para>
+Don't write information about progress to standard error stream.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-random</option>
+</term>
+<listitem>
+<para>
+Only select one random position per game.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-setup</option>
+</term>
+<listitem>
+<para>
+Allow setup stones in the root position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Board size allowed for games (default 19).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream to the Go program to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-version</option>
+</term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>Examples</title>
+
+<refsection>
+<title>Run gogui-statistics</title>
+<para>
+<programlisting>
+<userinput>
+gogui-statistics -program "gnugo --mode gtp" \
+  -commands "reg_genmove,estimate_score,cputime" \
+  -final "final_score" \
+  regression/games/olympiad2004/19x19/*.sgf
+</userinput>
+</programlisting>
+</para>
+
+</refsection>
+<refsection>
+<title>Generate HTML Reports</title>
+<para>
+<programlisting>
+<userinput>
+gogui-statistics -analyze statistics.dat -output statistics/olympiad2004
+</userinput>
+</programlisting>
+</para>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refsection>
+
+</refentry>

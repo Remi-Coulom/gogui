@@ -1,0 +1,460 @@
+<chapter id="analyze">
+<title>Analyze Commands</title>
+
+<para>
+GoGui allows to define analyze commands.
+An analyze command corresponds to a GTP command and describes its parameters
+and response type in a way that they can be invoked from the user interface
+and the response be displayed graphically on the board.
+</para>
+
+<para>
+Analyze commands can be run from the analyze dialog or (if they have a
+single point and an optional color argument) from the context menu of a field
+on the board.
+In the analyze dialog, you can also select if the command should
+automatically run after each change on the board, and if the board should
+be cleared from results of previous commands before displaying the new
+result.
+</para>
+
+<para>
+It is recommended that the Go program implements the extension command
+<command>gogui-analyze_commands</command>, which allows GoGui to query
+what analyze commands are supported when a new program is attached.
+Otherwise a default configuration is used, which knows some standard GTP
+and GNU Go extension commands. It is also possible to provide
+a configuration file by using the <option>-analyze-commands</option> command
+line option when invoking GoGui.
+</para>
+
+<para>
+An example configuration is the default configuration file
+<filename>src/net/sf/gogui/gui/analyze-commands</filename> in the GoGui
+package.
+The format consists of one line per command:
+</para>
+
+<programlisting>
+<userinput>
+type/label/command
+</userinput>
+</programlisting>
+
+<section>
+<title>Types</title>
+<para>
+The command type determines in what format the response is expected to be and
+how it is interpreted and displayed.
+It can be one of the following:
+
+<variablelist>
+
+<varlistentry>
+<term><userinput>bwboard</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a board of strings.
+Strings "b" or "black" will be displayed as black territory,
+"w" or "white" as white territory, all other strings are not displayed.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>cboard</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a board of strings with color names.
+They will be displayed as background colors for the fields.
+Valid color names are black, blue, cyan, green, gray, magenta,
+pink, red, white, and yellow or #rrggbb.
+Unknown names or the special string "" are ignored.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>dboard</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a board of floating point
+numbers that represent influence data.
+They will be displayed as black (positive) and white (negative)
+squares on the board.
+The maximum size of a square is such that the corner would touch
+the edge of a stone on that field; the edge length of the
+square is proportional to the floating point number.
+The numbers are expected to be between -1 and 1.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>eplist</userinput></term>
+<listitem>
+<simpara>
+Editable point list command.
+The command is used to set a list of points.
+It needs the following syntax:
+the current point list is set, if the argument is a point list (or empty);
+the current point list is returned, if the argument is
+<userinput>show</userinput>.
+GoGui always queries the current point list first, selects the points on the
+board and allows the user to edit them, then it sends the command with the
+selected points as the argument.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gfx</userinput></term>
+<listitem>
+<simpara>
+General graphical display command.
+The response contains one graphics command per line.
+Graphics commands are: BLACK, CIRCLE, COLOR, INFLUENCE, LABEL, MARK, SQUARE,
+TEXT, TRIANGLE, VAR, WHITE.
+TEXT is followed by a text displayed on the status bar;
+LABEL arguments are point text pairs;
+INFLUENCE arguments are point double pairs;
+COLOR arguments are a color (like in cboard) and a point list;
+VAR arguments are moves (b|w point|PASS);
+all other commands take a point list.
+See the <userinput>gogui-dummy-gfx</userinput> command in
+<xref linkend="reference-dummy"/> for an example.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>hstring</userinput></term>
+<listitem>
+<simpara>
+The response is a multi-line text.
+It will be displayed in a window using syntax highlighting.
+Lines beginning with a word followed by a colon are displayed in bold,
+points and moves in blue, the strings "black" and "white" in purple,
+numbers in green, and words that are completely uppercase in red.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>hpstring</userinput></term>
+<listitem>
+<simpara>
+Combines <userinput>pstring</userinput> and <userinput>hstring</userinput>.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>none</userinput></term>
+<listitem>
+<simpara>
+The response is not displayed.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>param</userinput></term>
+<listitem>
+<para>
+The response to the command is a list of program parameters.
+A dialog will be shown to edit the parameters.
+Each line of the response must contain a key and value.
+It must be possible to change a value using the same command, with the
+key and new value as arguments.
+No whitespaces are allowed in the keys, but underscores will be
+replaced by spaces in the labels of the dialog and lowercase keys
+will be capitalized.
+Optionally, a line can have a type identifier for the value before the key.
+Currently, the following types are supported:
+<variablelist>
+<varlistentry>
+<term><userinput>[string]</userinput></term>
+<listitem>
+<simpara>
+The value is displayed by an editable text field.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>[bool]</userinput></term>
+<listitem>
+<simpara>
+The value is a boolean parameter (using "1" for
+true and "0" for false) and displayed by a checkbox.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>[list/item1/item2/...]</userinput></term>
+<listitem>
+<simpara>
+The value is selected from a list of valid items and displayed by
+a combobox. No whitespaces are allowed in the items, but underscores will be
+replaced by spaces in the labels of the combobox and lowercase items
+will be capitalized.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+If no type or an unknown type is given, "string" is assumed by default.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>plist</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a list of points.
+All points will be marked on the board.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>pspairs</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a list of point string pairs.
+The strings are displayed as labels on the points.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>pstring</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a text, which also contains points.
+Valid points contained in the text will be marked on the board.
+If the text has only a single line, it will be displayed in the status line.
+If it has multiple lines, a window will pop up.
+If text in the window is selected, only the valid points contained in
+the selected text are marked on the board.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>sboard</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a board of strings.
+The strings will be displayed as labels for the points on the board.
+Strings containing whitespaces have to be put in quotation marks.
+The special string "" is used for no string on a point.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>string</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a text.
+If the text has only a single line, it will be displayed in the status line.
+If it has multiple lines, a window will pop up.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>var</userinput></term>
+<listitem>
+<simpara>
+The response of the command is a variation of moves
+containing points or passes.
+The moves do not include the player color and are expected to be of alternating
+color.
+Text not containing points is ignored.
+They will be displayed as numbered semi-transparent stones on the board.
+The current color to move is assumed to move first.
+Additionally the response is displayed as a string.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varb</userinput></term>
+<listitem>
+<simpara>
+Like <userinput>var</userinput>, but Black is assumed to move first.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varc</userinput></term>
+<listitem>
+<simpara>
+Like <userinput>var</userinput>, but the wildcard color in the command is
+assumed to move first (see below).
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varp</userinput></term>
+<listitem>
+<simpara>
+Like <userinput>var</userinput>, but the command needs a point argument;
+the color at that point is assumed to move first.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varpo</userinput></term>
+<listitem>
+<simpara>
+Like <userinput>var</userinput>, but the command needs a point argument
+and the other color than the color at that point is assumed to move first.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varw</userinput></term>
+<listitem>
+<simpara>
+Like <userinput>var</userinput>, but White is assumed to move first.
+</simpara>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</section>
+
+<section>
+<title>Label</title>
+<para>
+The label to use for this command in the menu.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Command</title>
+<para>
+The command to send to the Go program.
+It can contain one of the following wildcards:
+<variablelist>
+
+<varlistentry>
+<term><userinput>%c</userinput></term>
+<listitem>
+<simpara>
+Will be replaced by a color, which can be selected in the analyze window;
+the default is the color to play.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%f</userinput></term>
+<listitem>
+<para>
+Will be replaced by a file name entered by the user.
+<note>
+<simpara>
+This wildcard is deprecated and might not be supported in the future.
+It has been superseded by the more specific wildcards
+<userinput>%r</userinput> and <userinput>%w</userinput>.
+</simpara>
+</note>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%m</userinput></term>
+<listitem>
+<simpara>
+Will be replaced by the color to play.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%o</userinput></term>
+<listitem>
+<simpara>
+This wildcard is for commands that take an optional string argument and can
+be used for querying or setting a parameter of the Go program.
+The command should return the current value of the parameter, if no argument
+is given, and set the parameter to the argument otherwise.
+The command will be run first without an argument to retrieve the current
+value, which is used as default value in an input box presented to the
+user.
+If the user changes the value, the command will be run with the new value
+as an argument to set the parameter.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%p</userinput></term>
+<listitem>
+<simpara>
+Will be replaced by the a point selected by the user.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%P</userinput></term>
+<listitem>
+<simpara>
+Will be replaced by a list of points selected by the user.
+The points are selected by clicking on the board.
+The last point of the list is selected either by clicking with the
+<keycap>Ctrl</keycap> key pressed, double-clicking, or using the right
+mouse button.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%r</userinput></term>
+<listitem>
+<para>
+Will be replaced by a file name for opening a file selected by the user.
+If the path to the file contains spaces, it will be quoted with double quotes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%s</userinput></term>
+<listitem>
+<simpara>
+Will be replaced by an argument entered by the user.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%w</userinput></term>
+<listitem>
+<para>
+Will be replaced by a file name for saving selected by the user.
+If the path to the file contains spaces, it will be quoted with double quotes.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+</section>
+
+</chapter>

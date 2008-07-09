@@ -1,0 +1,535 @@
+<refentry id="reference-twogtp">
+
+<refmeta>
+<refentrytitle>gogui-twogtp</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-twogtp</refname>
+<refpurpose>
+Go Text Protocol adapter for playing games between two Go programs.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-twogtp</command>
+<arg choice="plain"><option>-black</option> <replaceable>command</replaceable>
+  </arg>
+<arg choice="plain"><option>-white</option> <replaceable>command</replaceable>
+  </arg>
+<arg><option>-alternate</option></arg>
+<arg><option>-auto</option></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-force</option></arg>
+<arg><option>-games</option> <replaceable>n</replaceable></arg>
+<arg><option>-komi</option> <replaceable>komi</replaceable></arg>
+<arg><option>-maxmoves</option> <replaceable>n</replaceable></arg>
+<arg><option>-observer</option> <replaceable>command</replaceable></arg>
+<arg><option>-openings</option> <replaceable>dir</replaceable></arg>
+<arg><option>-referee</option> <replaceable>command</replaceable></arg>
+<arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-time</option> <replaceable>timespec</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg><option>-xml</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-twogtp</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-twogtp</command>
+<arg choice="plain"><option>-analyze</option></arg>
+<arg choice="plain"><replaceable>file.dat</replaceable></arg>
+<arg><option>-force</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-twogtp</command>
+<arg choice="plain"><option>-compare</option></arg>
+<arg choice="plain" rep="repeat"><replaceable>file.sgf</replaceable></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-twogtp</command>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Adapter program for playing games between two Go programs
+supporting GTP (Go Text Protocol).
+</para>
+
+<para>
+Optional observer and referee GTP Go programs can be used for observing the
+game and answering commands related to the final game score.
+<application>TwoGtp</application> forwards the following commands to all
+programs (command translation is done for protocol version 1 programs):
+
+<itemizedlist>
+<listitem>
+<simpara><command>boardsize</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>clear_board</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>komi</command> (if supported)</simpara>
+</listitem>
+<listitem>
+<simpara><command>play</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>quit</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>scoring_system</command> (if supported)</simpara>
+</listitem>
+<listitem>
+<simpara><command>time_settings</command> (if supported)</simpara>
+</listitem>
+<listitem>
+<simpara><command>undo</command></simpara>
+</listitem>
+</itemizedlist>
+
+The following commands are forwarded to the referee program, if existing,
+otherwise to first player program that implements them
+(Black is tried first):
+
+<itemizedlist>
+<listitem>
+<simpara><command>final_score</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>final_status</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>final_status_list</command></simpara>
+</listitem>
+</itemizedlist>
+
+The command <command>genmove</command> is forwarded only to the program of the
+corresponding color, the other programs are informed about the
+move with a <command>play</command> command.
+GTP extension commands implemented by exactly one of the programs are
+forwarded to the program.
+The special comment line <command>#&#160;interrupt</command>, used by
+<application>GoGui</application> to interrupt commands, is forwarded to all
+programs.
+</para>
+
+<para>
+If the option <option>-sgffile</option> is used, the games are
+saved after they are finished and a result text file in table format
+is created with some statistics.
+If the program(s) support the GTP command <command>cputime</command>,
+these statistics include CPU times.
+The errors in the statistics are the standard errors
+(confidence interval 68%). They are computed by the standard deviation of the
+results, divided by the square root of the number of unique games, which is
+correct only for a sufficiently large number of games (especially if the
+percentage of wins is close to 0% or 100%).
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term><option>-alternate</option></term>
+<listitem>
+<para>
+Alternate colors. Black and White are exchanged every odd game;
+the scores saved in the results table <option>-sgffile</option>
+are still using the name Black and White, as given with
+<option>-black</option> and <option>-white</option>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-analyze</option> <replaceable>file.dat</replaceable></term>
+<listitem>
+<para>
+Analyze the result file
+<filename><replaceable>file.dat</replaceable></filename>.
+Creates a HTML file <filename><replaceable>file.html</replaceable></filename>
+with links to the games and summary statistics.
+Also creates a text file
+<filename><replaceable>file.summary.dat</replaceable></filename>,
+with a table row containing the most important summary statistics.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-auto</option></term>
+<listitem>
+<para>
+Automatically play games.
+Use this option if you want to run <application>TwoGtp</application> as a
+standalone program, without a program like <application>GoGui</application>
+which controls the move generation with <command>genmove</command> commands.
+If a result file already exists (as specified with <option>-sgffile</option>),
+and contains less games than specified with <option>-games</option>,
+the remaining games will be played.
+Use <option>-force</option> to overwrite existing result files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-black</option> <replaceable>command</replaceable></term>
+<listitem>
+<para>
+Command for the black program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-compare</option></term>
+<listitem>
+<para>
+Compare a list of SGF files given as arguments an exit.
+Works only with SGF files with alternating moves and without setup stones.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-force</option></term>
+<listitem>
+<para>
+Overwrite existing files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-games</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+Number of games to play (0 means no limit).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-komi</option> <replaceable>komi</replaceable></term>
+<listitem>
+<para>
+Komi. If this option is not used, a default komi of 6.5 will be used.
+The komi cannot be changed at runtime. The <command>komi</command> GTP
+command will succeed, if the argument has the same value as the configured
+komi and fail otherwise.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-maxmoves</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+Limit the maximum number of moves. Can be useful if some games would not
+terminate otherwise. Default is 1000. -1 means no limit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-observer</option> <replaceable>command</replaceable></term>
+<listitem>
+<para>
+Command for the observer program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-openings</option> <replaceable>directory</replaceable></term>
+<listitem>
+<para>
+Use openings from SGF files in the given directory.
+The openings will be cycled through in alphabetical order.
+If option <option>-alternate</option> is set, each opening is played twice
+with colors exchanged.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-referee</option> <replaceable>command</replaceable></term>
+<listitem>
+<para>
+Command for the referee program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-sgffile</option> <replaceable>prefix</replaceable></term>
+<listitem>
+<para>
+Save games after they are finished with filename
+<filename>
+<replaceable>prefix</replaceable>-<replaceable>n</replaceable>.sgf
+</filename>
+(<replaceable>n</replaceable> is the game number).
+The results are appended to the file
+<filename><replaceable>prefix</replaceable>.dat</filename>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-size</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+Board size for games. If this option is not used, the size will
+be set with the <command>boardsize</command> command, or the
+default size 19 will be used when option <option>-auto</option> is set.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-time</option> <replaceable>timespec</replaceable>
+</term>
+<listitem>
+<para>
+Set time limits (basetime[+overtime/moves]).
+The base time and overtime (byoyomi) can have an optional unit specifier
+(m or min for minutes; s or sec for seconds; default is minutes).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print debugging messages.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-white</option> <replaceable>command</replaceable></term>
+<listitem>
+<para>
+Command for the white program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-xml</option></term>
+<listitem>
+<para>
+Save games in XML format.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>GTP Extensions</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><command>gogui-interrupt</command></term>
+<listitem>
+<para>
+Indicate interrupt ability for GoGui.
+<application>TwoGtp</application> will forward the interrupt to both
+programs, with the appropriate method, if they implement either
+<command>gogui-interrupt</command> or <command>gogui-sigint</command>.
+See the chapter "Interrupting Commands" in the <application>GoGui</application>
+documentation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>gogui-title</command></term>
+<listitem>
+<para>
+Return a title for the current game, consisting of the game number (if option
+<option>-sgffile</option> was used) and the player names.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-twogtp-black <replaceable>command</replaceable></command>
+</term>
+<listitem>
+<para>
+Send command to the black player.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-twogtp-observer <replaceable>command</replaceable></command>
+</term>
+<listitem>
+<para>
+Send command to the observer program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-twogtp-referee <replaceable>command</replaceable></command>
+</term>
+<listitem>
+<para>
+Send command to the referee program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-twogtp-white <replaceable>command</replaceable></command>
+</term>
+<listitem>
+<para>
+Send command to the white player.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</refsection>
+
+<refsection>
+<title>Examples</title>
+
+<refsection>
+<title>Play games</title>
+<simpara>
+Play 100 games between GNU Go, default level, and GNU Go, level 5,
+on a 9x9 board, with alternating colors;
+save games and results to files with filename prefix gnugo5:
+</simpara>
+<para>
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gnugo --mode gtp --level 5"
+gogui-twogtp -black "$BLACK" -white "$WHITE" -games 100 \
+  -size 9 -alternate -sgffile gnugo5 -auto
+</userinput>
+</programlisting>
+</para>
+</refsection>
+
+<refsection>
+<title>Analyze results</title>
+<simpara>
+Create a HTML formatted result page of the games played in the previous
+section:
+</simpara>
+<para>
+<programlisting>
+<userinput>
+gogui-twogtp -analyze gnugo5.dat
+</userinput>
+</programlisting>
+</para>
+</refsection>
+
+<refsection>
+<title>Play one game with graphical display</title>
+<simpara>
+Play one game between GNU Go, default level, and GNU Go, level 5, using GoGui
+as a graphical display
+(to start play, select Computer Color/Both from the Game menu in GoGui):
+</simpara>
+<para>
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gnugo --mode gtp --level 5"
+gogui -program "gogui-twogtp -black \"$BLACK\" -white \"$WHITE\""
+</userinput>
+</programlisting>
+</para>
+</refsection>
+
+<refsection>
+<title>Play games with graphical display</title>
+<simpara>
+Play 100 games with same settings as in the first example, with GoGui
+as a graphical display (start games automatically):
+</simpara>
+<para>
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gnugo --mode gtp --level 5"
+TWOGTP="gogui-twogtp -black \"$BLACK\" -white \"$WHITE\" -games 100 \
+  -size 9 -alternate -sgffile gnugo5"
+gogui -size 9 -program "$TWOGTP" -computer-both -auto
+</userinput>
+</programlisting>
+</para>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refsection>
+
+
+</refentry>

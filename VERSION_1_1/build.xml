@@ -1,0 +1,793 @@
+<?xml version="1.0"?>
+<!--
+Build file for Apache Ant (http://ant.apache.org/)
+-->
+
+<project name="GoGui" default="all">
+
+<!--
+Use 123.SVN${svnversion} for unreleased versions if the last released
+version in the branch was 123. The crash dialog in gogui/Main.java assumes
+that unreleased versions contain the string SVN.
+Comment out the exec svnversion for releases.
+-->
+<!--
+<exec executable="svnversion" outputproperty="svnversion"/>
+<property name="version" value="1.1.SVN${svnversion}"/>
+-->
+<property name="version" value="1.1"/>
+
+<tstamp><format property="DSTAMP" pattern="yyyy-MM-dd" timezone="UCT"/>
+<format property="TSTAMP" pattern="hh:mm" timezone="UCT"/></tstamp>
+
+<property environment="env"/>
+
+<property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
+
+<property name="pmd.home" value="${env.PMD_HOME}"/>
+
+<property name="docbook.name" value="docbook-xsl-1.68.1"/>
+
+<property name="looks.zipfile" value="external/jgoodies/looks-2_1_4.zip"/>
+<property name="looks.dir" value="looks-2.1.4"/>
+<property name="looks.jarfile" value="looks-2.1.4.jar"/>
+
+<property name="quaqua.nestedzipfile"
+ value="external/quaqua/quaqua-4.4.3.nested.zip"/>
+<property name="quaqua.zipfile" value="Quaqua 4.4.3.zip"/>
+<property name="quaqua.dir" value="Quaqua 4.4.3/lib"/>
+<property name="quaqua.jarfile" value="quaqua.jar"/>
+
+<property name="docbook.path" value="external/docbook/${docbook.name}"/>
+
+<property name="scripts" value="
+ gogui
+ gogui-adapter
+ gogui-client
+ gogui-convert
+ gogui-display
+ gogui-dummy
+ gogui-regress
+ gogui-server
+ gogui-statistics
+ gogui-terminal
+ gogui-thumbnailer
+ gogui-twogtp
+"/>
+
+<available property="docbook.available"
+ file="${docbook.path}/html/chunk.xsl"/>
+
+<available property="looks.available"
+ file="external/jgoodies/${looks.dir}/${looks.jarfile}"/>
+
+<available property="looks.zip-available" file="${looks.zipfile}"/>
+
+<available property="quaqua.available"
+ file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
+
+<available property="quaqua.zip-available" file="${quaqua.nestedzipfile}"/>
+
+<target name="all"
+ description="Compile all programs (default target)"
+ depends="
+  gogui.jar,
+  gogui-adapter.jar,
+  gogui-client.jar,
+  gogui-convert.jar,
+  gogui-display.jar,
+  gogui-dummy.jar,
+  gogui-regress.jar,
+  gogui-statistics.jar,
+  gogui-server.jar,
+  gogui-terminal.jar,
+  gogui-thumbnailer.jar,
+  gogui-twogtp.jar
+"/>
+
+<target name="clean" depends="clean-build-dir"
+ description="Delete class and jar files built by target all">
+<delete failonerror="false" includeEmptyDirs="true">
+<fileset dir="lib"
+ includes="
+   gogui.jar,
+   gogui-adapter.jar,
+   gogui-client.jar,
+   gogui-convert.jar,
+   gogui-display.jar,
+   gogui-dummy.jar,
+   gogui-regress.jar,
+   gogui-server.jar,
+   gogui-statistics.jar,
+   gogui-terminal.jar,
+   gogui-thumbnailer.jar,
+   gogui-twogtp.jar,
+   ${looks.jarfile},
+   ${quaqua.jarfile},
+  "
+/>
+</delete>
+</target>
+
+<target name="clean-build-dir">
+<delete failonerror="false" includeEmptyDirs="true">
+<fileset dir="build/depcache"/>
+<fileset dir="build/depcache-test"/>
+<fileset dir="build/net"/>
+<fileset dir="build/test"/>
+<fileset dir="build/GoGui.app"/>
+<fileset dir="build" includes="GoGui*.dmg"/>
+</delete>
+</target>
+
+<target name="check" depends="docvalidate,junit"
+ description="Run all tests"/>
+
+<target name="compile" depends="depend,version,doc">
+<mkdir dir="build"/>
+<javac srcdir="src" destdir="build" source="1.5" target="1.5"
+ deprecation="true" debug="true" listfiles="yes">
+<compilerarg value="-Xlint:unchecked"/>
+</javac>
+<copy todir="build">
+<fileset dir="src"
+ includes="
+  net/sf/gogui/*/*.properties
+  net/sf/gogui/images/*.png
+  net/sf/gogui/gui/analyze-commands
+  net/sf/gogui/gui/*.png
+"/>
+</copy>
+<copy todir="build/net/sf/gogui/doc">
+<fileset dir="doc/manual/html" includes="*.html *.png"/>
+</copy>
+</target>
+
+<target name="depend">
+<depend srcdir="src" destdir="build" cache="build/depcache"/>
+</target>
+
+<target name="dist" depends="all,check">
+<zip destfile="gogui-${version}.zip">
+<zipfileset prefix="gogui-${version}" dir="." includes="
+ README
+ CONTRIBUTE
+ COPYING
+ INSTALL
+ build.xml
+ config/go.dtd
+ config/gogui-gogui.desktop
+ config/gogui-gogui.png
+ config/application-x-go-sgf.png
+ config/gogui-C.omf
+ config/gogui-C.omf.in
+ config/gogui.schemas
+ config/gogui-mime.xml
+ config/x-go-sgf.desktop
+ doc/README
+ doc/manual/html/*.html
+ doc/manual/html/*.png
+ doc/manual/man/*.1
+ doc/manual/xml/*.xml
+ doc/manual/xml/*.xml.in
+ doc/manual/xml/*.xsl
+ doc/doxygen/Doxyfile
+ doc/doxygen/footer.html
+ doc/doxygen/README
+ ${docbook.path}.zip
+ ${looks.zipfile}
+ ${quaqua.nestedzipfile}
+ lib/*.jar
+ mac/packaging/GoGui.icns
+ mac/packaging/Info.plist
+ mac/packaging/Info.plist.in
+ mac/packaging/PkgInfo
+ mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
+ mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.class
+ mac/src/net/sf/gogui/specialmac/Listener.class
+ sgf/openings/9x9/README
+ sgf/openings/9x9/*.sgf
+ sgf/openings/19x19/README
+ sgf/openings/19x19/*.sgf
+ src/net/sf/gogui/images/*.png
+ src/net/sf/gogui/images/*.svg
+ src/net/sf/gogui/overview.html
+ src/net/sf/gogui/*/package.html
+ src/net/sf/gogui/*/*.properties
+ src/net/sf/gogui/*/*.java
+ src/net/sf/gogui/*/*.java.in
+ src/net/sf/gogui/gui/analyze-commands
+ src/net/sf/gogui/tools/*/*.java
+ test/findbugs/gogui.fb
+ test/checkstyle/checkstyle_checks.xml
+ test/junit/src/net/sf/gogui/*/*.java
+ test/junit/src/net/sf/gogui/*/*.sgf
+ test/junit/src/net/sf/gogui/*/*.png
+ test/pmd/ruleset.xml
+" />
+<zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
+ install.sh,
+ bin/gogui,
+ bin/gogui-adapter,
+ bin/gogui-client,
+ bin/gogui-convert,
+ bin/gogui-display,
+ bin/gogui-dummy,
+ bin/gogui-regress,
+ bin/gogui-server,
+ bin/gogui-statistics,
+ bin/gogui-terminal,
+ bin/gogui-thumbnailer,
+ bin/gogui-twogtp,
+" />
+</zip>
+</target>
+
+<target name="gogui-adapter.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-adapter.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/adapter/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-client.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-client.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/client/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-convert.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-convert.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/convert/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-display.jar"
+ depends="compile,extract-looks,extract-quaqua">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-display.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/boardpainter/*.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/go/*.properties
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/gui/*.png
+ net/sf/gogui/gui/*.properties
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/images/*.png
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/display/*.class
+"/>
+</jar>
+<copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
+<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
+</target>
+
+<target name="gogui-dummy.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-dummy.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/tools/dummy/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-regress.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-regress.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/regress/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-server.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-server.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/ProcessUtil*.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/server/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-statistics.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-statistics.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/tools/statistics/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-terminal.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-terminal.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/FileUtil.class
+ net/sf/gogui/util/MessageQueue.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/ProcessUtil*.class
+ net/sf/gogui/util/ProgressShow*.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/terminal/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-thumbnailer.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-thumbnailer.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/boardpainter/*.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/thumbnail/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/thumbnailer/*.class
+"/>
+</jar>
+</target>
+
+<target name="gogui-twogtp.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui-twogtp.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/twogtp/*.class
+"/>
+</jar>
+</target>
+
+<target name="doc" depends="extract-docbook,doc-check-uptodate"
+ unless="doc-uptodate"
+ description="Generate documentation using xsltproc">
+<echo message="Running xsltproc"/>
+<exec executable="xsltproc">
+<arg line="--path ${docbook.path}/html"/>
+<arg line="-o doc/manual/html/"/>
+<arg line="doc/manual/xml/custom.xsl"/>
+<arg line="doc/manual/xml/book.xml"/>
+</exec>
+<!-- Remove empty div sections that create unwanted space in JEditorPane -->
+<replace dir="doc/manual/html" includes="*.html"
+ token="&lt;div&gt;&lt;/div&gt;" encoding="UTF-8"/>
+<exec executable="xsltproc">
+<arg line="--param chunk.quietly 1"/>
+<arg line="-o doc/manual/man/"/>
+<arg line="${docbook.path}/manpages/docbook.xsl"/>
+<arg line="doc/manual/xml/manpages.xml"/>
+</exec>
+</target>
+
+<!--
+Generate documentation using ant style target.
+Not used at present due to problems with mdash in output (not understood
+by JEditorPane, slow speed and errors with old versions of Xalan)
+-->
+<target name="doc-style" depends="extract-docbook,doc-check-uptodate"
+ unless="doc-uptodate">
+<style basedir="doc/manual/xml" includes="book.xml" destdir="doc/manual/html"
+ style="${docbook.path}/html/chunk.xsl" force="true">
+<xmlcatalog>
+<dtd
+ publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
+ location="${docbook.path}/html/chunk.xsl"/>
+</xmlcatalog>
+</style>
+</target>
+
+<target name="docvalidate">
+<xmlvalidate file="doc/manual/xml/book.xml"/>
+</target>
+
+<target name="doc-check-uptodate">
+<uptodate property="doc-uptodate" targetfile="doc/manual/html/index.html">
+<srcfiles dir= "doc/manual/xml" includes="*.xml"/>
+<srcfiles dir= "doc/manual/xml" includes="*.xsl"/>
+</uptodate>
+</target>
+
+<target name="doxygen"
+ description="Generate source code documentation using doxygen">
+<exec executable="doxygen" dir="doc/doxygen"/>
+</target>
+
+<target name="extract-docbook" unless="docbook.available">
+<unzip src="${docbook.path}.zip" dest="external/docbook">
+<patternset>
+<include name="${docbook.name}/VERSION"/>
+<include name="${docbook.name}/common/*"/>
+<include name="${docbook.name}/html/*"/>
+<include name="${docbook.name}/lib/*"/>
+<include name="${docbook.name}/manpages/*"/>
+</patternset>
+</unzip>
+</target>
+
+<target name="extract-looks" unless="looks.available">
+<fail unless="looks.zip-available">
+Please download JGoodies Looks from http://jgoodies.com and copy it to
+${looks.zipfile}
+</fail>
+<unzip src="${looks.zipfile}" dest="external/jgoodies">
+<patternset>
+<include name="${looks.dir}/${looks.jarfile}"/>
+</patternset>
+</unzip>
+</target>
+
+<target name="extract-quaqua" unless="quaqua.available">
+<fail unless="quaqua.zip-available">
+Please download the Quaqua Look and Feel from
+http://www.randelshofer.ch/quaqua/download.html and copy it to
+${quaqua.nestedzipfile}
+</fail>
+<unzip src="${quaqua.nestedzipfile}" dest="external/quaqua">
+<patternset>
+<include name="${quaqua.zipfile}"/>
+</patternset>
+</unzip>
+<unzip src="external/quaqua/${quaqua.zipfile}" dest="external/quaqua">
+<patternset>
+<include name="${quaqua.dir}/${quaqua.jarfile}"/>
+</patternset>
+</unzip>
+</target>
+
+<target name="findbugs" depends="compile"
+ description="Invoke FindBugs (with exec)">
+<mkdir dir="test/findbugs"/>
+<exec executable="${findbugs.home}/bin/findbugs"
+ output="test/findbugs/output.xml" logError="true">
+<arg line="-textui"/>
+<arg line="-project test/findbugs/gogui.fb"/>
+<arg line="-low"/>
+<arg line="-xml"/>
+</exec>
+</target>
+
+<target name="gogui.app" depends="specialmac,all"
+ description="Make Mac application bundle">
+<property name="appdir" value="build/GoGui.app"/>
+<mkdir dir="${appdir}"/>
+<mkdir dir="${appdir}/Contents"/>
+<mkdir dir="${appdir}/Contents/bin"/>
+<mkdir dir="${appdir}/Contents/MacOS"/>
+<mkdir dir="${appdir}/Contents/Resources"/>
+<mkdir dir="${appdir}/Contents/Resources/Java"/>
+<copy file="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS/JavaApplicationStub"
+  todir="${appdir}/Contents/MacOS"/>
+<exec executable="chmod">
+<arg line="755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
+</exec>
+<copy todir="${appdir}/Contents" overwrite="true">
+<fileset dir="mac/packaging" includes="Info.plist PkgInfo"/>
+</copy>
+<copy todir="${appdir}/Contents/Resources" overwrite="true">
+<fileset dir="mac/packaging" includes="GoGui.icns"/>
+</copy>
+<copy todir="${appdir}/Contents/Resources/GoGui Help" overwrite="true">
+<fileset dir="doc/manual/html" includes="*.html *.png"/>
+</copy>
+<replace file="${appdir}/Contents/Resources/GoGui Help/index.html"
+ token="&lt;head&gt;"
+ value="&lt;head&gt;&lt;meta name=&quot;AppleTitle&quot; content=&quot;GoGui Help&quot;&gt;"/>
+<copy todir="${appdir}/Contents/Resources/Java" overwrite="true">
+<fileset dir="lib" includes="*.jar" excludes="looks-*.jar"/>
+</copy>
+<copy todir="${appdir}/Contents/bin" overwrite="true">
+<fileset dir="bin" includes="${scripts}"/>
+</copy>
+<replace dir="${appdir}/Contents/bin" includes="${scripts}"
+ token="/../lib" value="/../Resources/Java"/>
+<chmod dir="${appdir}/Contents/bin" includes="${scripts}" perm="755"/>
+<exec executable="/Developer/Tools/SetFile">
+<arg line="-a B ${appdir}"/>
+</exec>
+</target>
+
+<target name="gogui.dmg" depends="gogui.app"
+ description="Make Mac compressed disk image">
+<exec executable="hdiutil">
+<arg line="create -fs HFS+ -format UDZO -volname GoGui-${version} -srcfolder build/GoGui.app build/GoGui-${version}.dmg"/>
+</exec>
+</target>
+
+<target name="gogui.jar" depends="compile,extract-looks,extract-quaqua">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/doc/*.html
+ net/sf/gogui/doc/*.png
+ net/sf/gogui/boardpainter/*.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/gamefile/*.properties
+ net/sf/gogui/go/*.class
+ net/sf/gogui/go/*.properties
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gogui/*.class
+ net/sf/gogui/gogui/*.properties
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/gui/*.png
+ net/sf/gogui/gui/*.properties
+ net/sf/gogui/gui/analyze-commands
+ net/sf/gogui/images/*.png
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/text/*.class
+ net/sf/gogui/thumbnail/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/xml/*.class
+"/>
+<fileset dir="mac/src" includes="
+ net/sf/gogui/specialmac/*.class
+"/>
+</jar>
+<copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
+<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
+</target>
+
+<target name="javadoc"
+ description="Create Javadoc documentation for public parts of packages">
+<javadoc sourcepath="src" destdir="doc/javadoc" source="1.5"
+ windowtitle="GoGui Source Documentation"
+ overview="src/net/sf/gogui/overview.html"
+ packagenames="
+  net/sf/gogui/boardpainter.*,
+  net/sf/gogui/game.*,
+  net/sf/gogui/go.*,
+  net/sf/gogui/gogui.*,
+  net/sf/gogui/gtp.*,
+  net/sf/gogui/gui.*,
+  net/sf/gogui/sgf.*,
+  net/sf/gogui/statistics.*,
+  net/sf/gogui/terminal.*,
+  net/sf/gogui/tex.*,
+  net/sf/gogui/thumbnail.*,
+  net/sf/gogui/util.*,
+  net/sf/gogui/version.*
+  net/sf/gogui/tools/adapter.*,
+  net/sf/gogui/tools/client.*,
+  net/sf/gogui/tools/convert.*,
+  net/sf/gogui/tools/display.*,
+  net/sf/gogui/tools/dummy.*,
+  net/sf/gogui/tools/regress.*,
+  net/sf/gogui/tools/server.*,
+  net/sf/gogui/tools/thumbnailer.*,
+  net/sf/gogui/tools/twogtp.*,
+">
+<tag name="bug" scope="all" description="Bugs:"/>
+<tag name="todo" scope="all" description="To do:"/>
+</javadoc>
+</target>
+
+<target name="junit" depends="compile,junit-compile"
+ description="Run JUnit tests (define property test for a single test)" >
+<junit printsummary="withOutAndErr" fork="true" timeout="60000"
+ haltonfailure="true">
+<assertions><enable/></assertions>
+<classpath>
+<pathelement location="build"/>
+<pathelement location="build/test"/>
+</classpath>
+<formatter type="brief" usefile="false"/>
+<test name="${test}" todir="build" if="test"/>
+<batchtest todir="build" unless="test">
+<fileset dir="build/test" includes="**/*Test.class"/>
+</batchtest>
+</junit>
+</target>
+
+<target name="junit-compile" depends="compile,test-depend"
+ description="Compile JUnit tests">
+<mkdir dir="build/test"/>
+<javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
+ deprecation="true" debug="true" listfiles="yes" classpath="build">
+<compilerarg value="-Xlint:unchecked"/>
+</javac>
+<copy todir="build/test">
+<fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/*/*.png"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/tools/*/*.sgf"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/tools/*/*.png"/>
+</copy>
+</target>
+
+<target name="pmd" depends="compile"
+ description="Run PMD (pmd.sourceforge.net)">
+<mkdir dir="test/pmd"/>
+<exec executable="${pmd.home}/bin/pmd.sh"
+ output="test/pmd/output.txt">
+<arg line="src"/>
+<arg line="emacs"/>
+<arg line="test/pmd/ruleset.xml"/>
+</exec>
+</target>
+
+<target name="run" depends="gogui.jar" description="Run GoGui">
+<java jar="lib/gogui.jar" fork="true"/>
+</target>
+
+<target name="specialmac" depends="compile"
+ description="Compile special MAC classes depending on com.apple">
+<javac srcdir="mac/src" source="1.5" deprecation="true" classpath="build"
+ listfiles="yes"
+ includes="net/sf/gogui/specialmac/RegisterSpecialMacHandler.java"/>
+</target>
+
+<target name="tags"
+ description="Build a TAGS file for Emacs" >
+<exec executable="sh">
+<arg line="-c 'etags `find src test/junit/src -name &quot;*.java&quot;`'" />
+</exec>
+</target>
+
+<target name="test-depend">
+<depend srcdir="test" destdir="build/test" cache="build/depcache-test"/>
+</target>
+
+<target name="version" depends="version-check-uptodate"
+ unless="version-uptodate">
+<copy
+file="src/net/sf/gogui/version/Version.java.in"
+tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
+<replace file="src/net/sf/gogui/version/Version.java" token="@VERSION@"
+ value="${version}"/>
+<copy
+ file="doc/manual/xml/version.xml.in"
+ tofile="doc/manual/xml/version.xml" overwrite="true"/>
+<replace file="doc/manual/xml/version.xml" token="@VERSION@"
+ value="${version}"/>
+<copy
+ file="mac/packaging/Info.plist.in"
+ tofile="mac/packaging/Info.plist" overwrite="true"/>
+<replace file="mac/packaging/Info.plist" token="@VERSION@" value="${version}"/>
+<copy
+ file="config/gogui-C.omf.in" tofile="config/gogui-C.omf" overwrite="true"/>
+<replace file="config/gogui-C.omf" token="@DATE@" value="${DSTAMP}"/>
+</target>
+
+<target name="version-check-uptodate">
+<loadfile property="version_java_contents" failonerror="false"
+ srcFile="src/net/sf/gogui/version/Version.java"/>
+<condition property="version-uptodate">
+<contains string="${version_java_contents}" substring="&quot;${version}&quot;"/>
+</condition>
+</target>
+
+</project>

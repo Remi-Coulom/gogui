@@ -1,0 +1,229 @@
+<refentry id="reference-adapter">
+
+<refmeta>
+<refentrytitle>gogui-adapter</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-adapter</refname>
+<refpurpose>
+Go Text Protocol adapter for logging or protocol translations.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-adapter</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-fillpasses</option></arg>
+<arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
+<arg><option>-log</option> <replaceable>file</replaceable></arg>
+<arg><option>-lowercase</option></arg>
+<arg><option>-name</option> <replaceable>name</replaceable></arg>
+<arg><option>-noscore</option></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg><option>-version1</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-adapter</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-adapter</command>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Go Text Protocol adapter for logging or protocol translations.
+The argument <replaceable>program</replaceable> is a command line
+for the Go program .
+</para>
+<para>
+The adapter keeps its own board state and handles all commands that change
+the board state by translating them into appropriate commands for the
+actual Go engine. This can be used to do GTP protocol translations between
+version 1 and version 2 controllers and engines, or for emulating commands that
+the engine does not support. For instance, if the engine does not support
+<command>undo</command>, the adapter will send a clear board command followed
+by a sequence of moves up to the previous position.
+The command <command>loadsgf</command> is always handled by the adapter
+and translated into a sequence of <command>play</command> commands
+(or <command>gogui-setup</command>, if supported by the program).
+The command is also registered as <command>loadxml</command> and is able to
+handle file arguments that are in Jago's XML format.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-fillpasses</option></term>
+<listitem>
+<para>
+Fill non-alternating moves with pass moves (for programs that
+can only handle move sequences with alternating color).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-gtpfile</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Send GTP commands from file to program at startup. The file may not contain
+commands that change the board state.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-log</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Log the GTP stream to a file
+(the stream of the adapter program,
+not the one from the adapter to the Go program).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-lowercase</option></term>
+<listitem>
+<para>
+Translate move commands to lower-case.
+The GTP standards requires case-insensitive parsing of moves,
+but some programs can handle only lower-case.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-name</option> <replaceable>name</replaceable>
+</term>
+<listitem>
+<para>
+Name used for answering the <command>name</command> command.
+If the name contains a colon, the part after the colon
+is interpreted as a version and used for answering the
+<command>version</command> command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-noscore</option>
+</term>
+<listitem>
+<para>
+Hide the <command>final_score</command> and
+<command>final_status_list</command> commands, even if the program supports
+them.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Board size at startup. Default is 19.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream from the adapter to the Go program to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version1</option></term>
+<listitem>
+<para>
+Sets, whether gogui-adapter reports protocol version 1 in response to the
+<command>protocol_version</command> command and implements version 1 commands.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>GTP Extensions</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><command>gogui-adapter-showboard</command></term>
+<listitem>
+<para>
+Show the internal Go board.
+This is different from the <command>showboard</command> command,
+which is forwarded to the Go program, if it supports it.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+</refsection>
+
+</refentry>

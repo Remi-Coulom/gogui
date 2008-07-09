@@ -1,0 +1,1771 @@
+<appendix id="news">
+<title>Release Notes</title>
+<para>
+<revhistory>
+
+<revision>
+<revnumber>1.1</revnumber>
+<date>09 Jul 2008</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+gogui-display: add missing text resources (bug #1973003)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fast forward or backward if shift key is pressed while the mouse wheel is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.1pre3</revnumber>
+<date>05 May 2008</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Add missing text resources that caused the program to crash.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.1pre2</revnumber>
+<date>02 May 2008</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Update board position correctly after Edit/Truncate
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-twogtp: fix "too many open files" error, if TwoGtp is restarted and a
+large number of games was already played
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-twogtp: also measure real time used by programs.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-statistics: new option -random
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Automatically restore clock to current node, if it was never running.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Partial translation of the user interface into German. New menu item
+Help/Switch Language to select the default language.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Ask user whether to continue, if a command in a file sent with "Send File"
+fails.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use orange color for standard error lines in GTP Shell that start with
+"warning:"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Update to Quaqua 4.4.3 on Mac OS X
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix white background of status bar and part of message dialogs, if GTK look and feel is used.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix crash when reading some XML files containing variations.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other minor fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.1pre1</revnumber>
+<date>14 Jan 2008</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Use Java 5 language features; older Java versions are no longer supported.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Remove the GmpToGtp adapter, because the Go Modem Protocol and usage of
+serial ports have become quite obsolete. Should there still be use cases, then
+a version of GmpToGtp from previous GoGui releases can still be used in
+combination with a newer version of the GoGui interface.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use uppercase letters for color arguments in GTP commands (like play or
+gogui-setup). This was changed for consistency with the convention in the user
+interface. It could break programs that do not treat colors in a
+case-insensitive way (in violation of the GTP specification). Such programs can
+still be used by wrapping their invocation with GtpAdapter with the option
+-lowercase.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Move menu item Reattach Program from Program to Tools menu.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu items Tools / Save Parameters and Reattach With Parameters.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Show stderr output of program in GTP shell, even if the engine is not
+processing a command (e.g. because it is pondering while waiting for the
+next command)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item File / Export / PNG Image.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: handle Go games in XML format. TwoGtp: new option -xml.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: mark points on board if text is selected in the GtpShell that
+contains points (like it is already done with text selection in comment
+or in text windows created by analyze commands)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: option -analyze is no longer supported
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: option -resign is no longer supported
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Rename command line tools using prefix gogui- to avoid conflict with
+tools from other packages.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Replace sgftotex by gogui-convert, which can read SGF or XML files and
+supports several output formats
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.4</revnumber>
+<date>10 Jan 2008</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fix a bug, that made the setup of stones on occupied points not work in some
+cases.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac: update Quaqua Look and Feel to version 4.1
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.3</revnumber>
+<date>09 Nov 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Bugfix in View / Variation Labels
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix crash if existing program entry was changed and the program did
+not startup.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac: update Quaqua Look and Feel to version 4.0 (Leopard support)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and improvements.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.2</revnumber>
+<date>24 Sep 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Use native file dialogs on Windows to avoid slow startup and directory
+reading of JFileChooser
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0.1</revnumber>
+<date>11 Sep 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Cut excessively long program version strings in about dialog.
+Ignore long version strings in TwoGtp.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and code cleanup.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0</revnumber>
+<date>29 Aug 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: send time settings and komi before setup stones and moves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New parameter type "list" for analyze commands of type "param".
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Keep parameter dialog open (for an analyze command of type param), if
+setting a new parameter value fails.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac: update to Quaqua Look and Feel 3.7.8
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0pre3</revnumber>
+<date>29 Jun 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: allow going forward/backward with the mouse wheel
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: make options -gtpfile and -command work again
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui, TwoGtp: support time specs using seconds in option -time
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: new option -gtpfile; support for test suites (files containing
+lists of test files)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Update documentation
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Update license to GPL version 3
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and enhancements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0pre2</revnumber>
+<date>03 May 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Handle SGF files with size property after point properties
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Update to Looks 2.1.4, Quaqua 3.7.7
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Make startup scripts work with Cygwin
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: automatically clear markup on the board at the start of a Live Graphics
+command. GtpDisplay: support Live Graphics.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and enhancements.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.0pre1</revnumber>
+<date>05 Apr 2007</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<simpara>
+The coming version 1.0 (and its bugfix releases) are the last versions that
+will be compatible with Java 1.4. Future versions are going to require
+Java 1.5.
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+New optional commands for setting up positions; see section Setup Commands
+in the manual
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The preferred way to configure analyze commands is now that the program
+implements the command gogui-analyze_commands, otherwise an internal list with
+some standard commands and GNU Go extensions is used.
+If gogui-analyze_commands is supported, only the response will be used to
+configure analyze commands, so that the Go engine has full control over what
+is shown in what order in the analyze dialog.
+Analyze command configuration files in the .gogui directory are no longer
+supported; the only way to use external configuration files is to invoke
+GoGui with the option -analyze-commands.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The following GoGui extension commands use the prefix gogui- now according to
+the GTP standard for extension commands: gogui-play_sequence,
+gogui-analyze_commands, gogui-interrupt, gogui-sigint, gogui-title.
+The old versions (play_sequence, gogui_analyze_commands, gogui_interrupt,
+gogui_sigint, gogui_title) are deprecated and may not be supported in the
+future.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use platform specific storage of preferences; don't use .gogui/config
+anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use set_free_handicap if supported by the Go engine
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Several changes in the organization of the user interface
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Remove menu item Configure Analyze / Only Supported Commands; this is the
+default and only behaviour now
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Remove menu item Game / Cleanup; GoGui will now always use kgs-genmove_cleanup
+commands if play is continued after game has ended and program supports
+kgs-genmove_cleanup
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The scoring_system command and GoGui option -rules are no longer supported
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Import Go positions in text format from files or clipboard
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Allow setup stones in non-root position
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Don't use default komi anymore if game is loaded with unknown komi
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Store lost on time information in game result
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Analyze command wildcard %f is deprecated; use new wildcards %r and %w instead
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Don't show error anymore for programs that don't support undo, automatically
+synchronize position from start instead
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use same handicap locations as in GTP specification
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item Export Text Position to Clipboard
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use Quaqua look and feel on Mac OS/X
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+LaTeX position export now exports all markup types
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: handle all state changing commands and automatically emulate them
+if not supported by the engine; always translate a loadsgf command into a
+sequence of play commands; don't use option -emuloadsgf and -emuhandicap
+anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpDummy: new option -resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpDisplay: support resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui, GtpDisplay: don't support option -fast anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: new option -maxmoves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: support for test files not in the current directory
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: option -loadsgf no longer exists; programs should implement
+gogui-play_sequence if the transmission of openings with many stones or moves
+is slow
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpServer: new option -timeout
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other changes, fixes and user interface re-organizations
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.9</revnumber>
+<date>15 May 2006</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Minor fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.9pre3</revnumber>
+<date>07 Apr 2006</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: allow to display graphical data while a command is in progress;
+see section Live Graphics in the documentation
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+SgfThumbnail: add missing configuration file to install as a GNOME
+thumbnailer
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpStatistics: add missing class files to gtpstatistics.jar; new options
+-min, -max, -backward
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: remove option -filecomments; use new tool GtpStatistics instead
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.9pre2</revnumber>
+<date>22 Mar 2006</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: fix clearing influence analyze command and analyze auto-run bug
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: use JGoodies WindowsLookAndFeel as default on Windows
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: enable preview in file dialog on Windows
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.9pre1</revnumber>
+<date>14 Mar 2006</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: new default look and feel PlasticXP from jgoodies.com on Linux
+and Windows; speed up board repaint; don't use DirectDraw on Windows anymore
+to avoid screen flicker
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: performance improvements in communication with the Go program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new extension command play_sequence is used if supported by the Go
+program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new menu items "Play Single Move",
+"Configure Board/Fixed Size Comment Font",
+"Configure Tree/Show Subtree Sizes"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new extension command gogui_analyze_commands to query analyze commands
+from the program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: use Swing file dialog on Mac for file name parameters of analyze
+commands again (native file dialogs need to know, if the file name is used
+for load or save)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: remove support for section and scale parameters of analyze commands
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: allow keyboard navigation in game tree window
+</simpara>
+</listitem>
+<listitem>
+<para>
+GtpStatistics: make it work with protocol version 2 programs; new option
+-setup
+</para>
+</listitem>
+<listitem>
+<para>
+TwoGtp: new option -time
+</para>
+</listitem>
+<listitem>
+<para>
+New tool sgfthumbnail; make GoGui create thumbnails for opened or saved files
+</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.8</revnumber>
+<date>26 Nov 2005</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<para>
+TwoGtp: fix game CPU time measurement
+</para>
+</listitem>
+<listitem>
+<para>
+TwoGtp, GtpRegress: avoid locale-dependent formatting of some numbers in
+output files which broke the HTML report generation.
+</para>
+</listitem>
+<listitem>
+<para>
+New menu item Export/Text Position
+</para>
+</listitem>
+<listitem>
+<para>
+Other small bug fixes
+</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.8pre2</revnumber>
+<date>21 Sep 2005</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: more reorganization of the menu bar
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: bugfixes in Truncate and Truncate Children
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpStatistics: fix some bugs
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: new option -lowercase
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: fix bug in genmove command
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.8pre1</revnumber>
+<date>17 Aug 2005</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Move all classes to the namespace net.sf.gogui;
+avoid using class names that are already used basic java packages,
+like Color or Point.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Include Sun's implementation of the Java Communications API and the
+Docbook XSL files in the distribution to make compilation easier.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: re-organize menu bar. New menu Bookmarks.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: use gg-undo, if available
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new menu item Game/Cleanup
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new analyze command types eplist (editable point lists) and gfx
+(graphics).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new board context menu for quickly running analyze commands that need
+one point and optionally one color argument.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: use dialogs for all secondary windows; they are always on top of the
+main window now
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: load and save SGF marks and labels; edit them from context menu
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new option Timestamp in GTP shell settings menu
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: return -1 if any unexpected fails occurred
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: include error response outputs in test summaries;
+fix NullPointerException, if test file contains response pattern without
+a command to test (simply ignore the pattern)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: fix missing clear_board commands if -emuloadsgf is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpDummy: new option -srand
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpTerminal: fix exception if empty line is entered
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+NetGtp: new option -timeout
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: remove option -estimate-score; use the new tool GtpStatistics instead
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: fix wrong cputimes
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New tool GtpStatistics
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Numerous other fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.7.1</revnumber>
+<date>7 Apr 2005</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+SgfToTex: fix NullPointerException if SGF file contains charset property
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.7</revnumber>
+<date>18 Jan 2005</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GtpRegress: parse special comments starting with '#>' only if enabled
+with option filecomments
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.7pre2</revnumber>
+<date>16 Dec 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Subtrees can now be hidden and expanded in the game tree window.
+New context menu for nodes.
+New Settings menu for node labels and sizes.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Change behaviour of "Next/Previous Variation".
+Add menu items "Next/Previous Earlier Variation"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item "Find in Comments", "Find Next", "Find Variation"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Improve restoring main window size
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: new option -observer
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of other fixes and enhancements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.7pre1</revnumber>
+<date>29 Nov 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GtpAdapter: fix some bugs with option -resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp, GtpAdapter: handle resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: fix bug in setting komi with GTP command komi
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: new options -openings and -loadsgf for using opening positions
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: command line argument is now interpreted as SGF file, programs can
+be attached with the option -program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: interrupt will offer to kill program for programs that don't support
+interrupting commands
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: speed up going to beginning or end in large games
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new menu item "Node Info" in Game Tree Window
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new menu items "Show Variations", "Show Info Panel", "Show Toolbar",
+"Show Grid"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: playing a move that is already a child of the current node will no
+longer create a new child
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: add special code for Mac OS to handle Quit events from the
+Application and Dock menu in a safe way
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new analyze command type "param"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new setting item "Auto Number" in Gtp shell menu
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: new option -fast for fast graphics
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Convert tools to GTP version 2
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New tool GtpDisplay
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use xsltproc for generating the documentation instead of the built-in
+ant target "Style"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6</revnumber>
+<date>9 Jul 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<simpara>
+New stable release
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+New wildcard %o for analyze commands
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Option -computer-both and -computer-black will automatically start the game
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix bug that sometimes caused assertion when scoring
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item "Back to Main Variation"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6pre4</revnumber>
+<date>9 May 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<simpara>
+This release fixes a lot of bugs (mainly in the tools) and introduces
+some enhancements in the analyze command dialog.
+If you upgrade from a previous version, you should overwrite
+the configuration file <filename>$HOME/.gogui/analyze-commands</filename>
+with the file <filename>config/analyze-commands</filename> from this
+package.
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+Allow colors black and white in analyze commands of type cboard
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: bugfixes, new option -emuloadsgf
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Color arguments to analyze commands can now be selected in the analyze window.
+New wildcard %c for commands and return type varc
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+If text is selected in the window opened by an analyze command of type
+pstring or hpstring, only the points contained in the selection
+will be marked on the board
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New Window menu item Bring All to Front
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of bugfixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6pre3</revnumber>
+<date>29 Apr 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Remember last Go program attached and automatically attach it on startup
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: new option -fillpasses
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of bugfixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6pre2</revnumber>
+<date>21 Apr 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+TwoGtp: fix NullPointerException if no komi option was used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: fix NullPointerException after leaving setup mode
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of other small fixes.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6pre1</revnumber>
+<date>16 Apr 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Support for game trees and navigation in variations
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Read, save and edit game information
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Detach current Go programs and attach new program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New tools: GtpAdapter and GtpTerminal
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpServer: port number is now given with option -port.
+New options -remote and -user to make outgoing connections (e.g. required by
+the
+<ulink url="http://www.lysator.liu.se/~gunnar/gtp/random_go_challenge.html">
+Random Go Challenge</ulink>)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: new option -estimate-score
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Nicer HTML output of GtpRegress, and TwoGtp
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: option -fillpasses is no longer supported
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Draw stones using highlights and shadows
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.5</revnumber>
+<date>23 Feb 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Use <ulink url="http://ant.apache.org">Apache Ant</ulink> instead of GNU make
+as a build system
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: support an optional third program as a referee
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+All programs have now the ability to read command line options and arguments
+from a file with the -config option
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+SgfToTex: improved output.
+New options -force, -title
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Allow to enter non-standard board sizes from menu Size
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.4</revnumber>
+<date>19 Nov 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+TwoGtp: new option -force;
+forward time_settings; fixes in format of result file
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New Game menu item Truncate.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New Settings menu item Show cursor
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GmpToGtp: new option -flow
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Minor fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.4pre2</revnumber>
+<date>29 Oct 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Improve export as LaTeX document.
+New option -pass for SgfToTex
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Add documentation for main menu bar
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: option -analyze
+also outputs a text file containing a table row with summary information
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other minor fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.4pre1</revnumber>
+<date>18 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+New menu items Open Recent and Goto
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: new option -analyze
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Analyze commands are now selected from a dialog.
+Lots of new analyze command wildcards and result types
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New tool GtpDummy.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Remove GoGui option -gtpshell.
+Instead remember size and visibility of windows with new Settings menu item
+Remember window sizes
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Support for multiple analyze-commands files
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of other fixes and enhancements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.3.3</revnumber>
+<date>3 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Minor bugfixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.3.2</revnumber>
+<date>1 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fix bug when truncating history in GTP shell
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix bug: marker was not cleared after running analyze command
+with point argument
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.3.1</revnumber>
+<date>29 Aug 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Bugfix release
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.3.0</revnumber>
+<date>25 Aug 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+TwoGtp: new options for playing a series of games and saving the results;
+forward GTP extension commands to program that implement them;
+handle GTP version 2 programs
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New Settings menu item Show last move
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui uses GTP extension command gogui_title if available
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix problem in GTP shell: caret was not redrawn after entering command
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use key accelerators more similar to existing UI style guides
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Games can be saved in LaTeX format using psgo.sty.
+Standalone converter SgfToTex
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui:
+Rename GoGui option -autoplay to -auto.
+Remove option -autofile.
+New option -command
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New tool GtpRegress
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Rename GtpNet to GtpServer
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Setup and score mode do no longer use their own the menu bar
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Go programs that can understand the special comment line
+#&#160;interrupt must indicate this by implementing the
+command gogui_interrupt
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of other fixes and enhancements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.2.2</revnumber>
+<date>2 Aug 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Use GTP command final_status_list if supported by the Go program for
+initializing dead stones when scoring
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Make Japanese rules default and store them in preferences
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+After setting up a position set last setup color as color to move
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Show file name in title bar if game is loaded and not modified
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Add option for beep after move
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use time_settings command if -time option is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New options -autofile, -computer-both, -computer-black
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Compile TwoGtp into its own jar file twogtp.jar
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix bug in GmpToGtp: Black should send NEWGAME if -simple option is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix potential deadlock if program writes to standard error
+before GUI is visible
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Add network tools GtpNet and NetGtp
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of other fixes and enhancements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.2.1</revnumber>
+<date>23 Jun 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fix cursor not positioned at last moves if handicap or setup stones exist
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix bug: handicap stones were played after setup done
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Clear old markups before showing an analyze command with a point list result
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Store komi in preferences
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Add command reference to documentation
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.2</revnumber>
+<date>23 Apr 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Board uses background image and anti-aliasing
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Cursor keys can be used to enter moves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Documentation in docbook format
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Improvements in GmpToGtp adapter
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Lots of other small fixes and improvements
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.1</revnumber>
+<date>4 Mar 2003</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Initial release
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+</revhistory>
+</para>
+</appendix>

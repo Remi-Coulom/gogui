@@ -1,0 +1,8 @@
+[Jar files]
+../../build
+[Source dirs]
+../../src
+../junit/src
+[Aux classpath entries]
+[Options]
+relative_paths=true

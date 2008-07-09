@@ -1,0 +1,317 @@
+<refentry id="reference-dummy">
+
+<refmeta>
+<refentrytitle>gogui-dummy</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-dummy</refname>
+<refpurpose>
+Dummy Go program for testing GTP controllers.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-dummy</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-log</option> <replaceable>file</replaceable></arg>
+<arg><option>-resign</option> <replaceable>n</replaceable></arg>
+<arg><option>-srand</option> <replaceable>seed</replaceable></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-dummy</command><arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-dummy</command><arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Dummy Go program supporting GTP (Go Text Protocol) for testing
+GTP controllers.
+Plays random moves.
+Never plays at a point at which already a move was made, even
+after the point becomes free again because of capture.
+Illegal moves sent to the program are not checked; they are always accepted.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Print help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-log</option> <replaceable>file</replaceable></term>
+<listitem>
+<para>
+Log GTP stream to file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-resign</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+Resign at the n<superscript>th</superscript> genmove command after the game
+started.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-srand</option> <replaceable>seed</replaceable></term>
+<listitem>
+<para>
+Set the random seed for random move generation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>GTP Extensions</title>
+
+<variablelist>
+
+<varlistentry>
+<term><command>gogui-dummy-bwboard</command></term>
+<listitem>
+<para>
+Output a board randomly filled with "B" and "W".
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>gogui-dummy-crash</command></term>
+<listitem>
+<para>
+Exit the program with return code -1.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-delay <replaceable>seconds</replaceable></command>
+</term>
+<listitem>
+<para>
+Delay the response to every command.
+An argument of 0 switches of the delay again.
+If no argument is given, the current delay value is returned.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-eplist</command>
+</term>
+<listitem>
+<para>
+Command according to the eplist analyze command type in GoGui.
+The arguments can be a point list, which is remembered.
+If the argument is "show", the current point list is shown.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-file_open</command>
+</term>
+<listitem>
+<para>
+For testing the file open analyze command wildcard.
+Takes a filename argument and returns some information about this file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-file_save</command>
+</term>
+<listitem>
+<para>
+For testing the file save analyze command wildcard.
+Takes a filename argument and writes a test string into the file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-gfx</command>
+</term>
+<listitem>
+<para>
+Command for testing the gfx analyze return type of GoGui.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>gogui-dummy-invalid</command></term>
+<listitem>
+<para>
+Print an invalid GTP response which does not start with a status character.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>gogui-dummy-invalid_empty</command></term>
+<listitem>
+<para>
+Print an invalid GTP response which has an addition empty line before
+the status character.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-live_gfx</command>
+</term>
+<listitem>
+<para>
+Command for testing live graphics in GoGui.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-long_response <replaceable>n</replaceable></command>
+</term>
+<listitem>
+<para>
+Print a GTP response with n lines.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-next_failure <replaceable>response</replaceable>
+</command>
+</term>
+<listitem>
+<para>
+Let the next command fail with the given response.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-next_success <replaceable>response</replaceable>
+</command>
+</term>
+<listitem>
+<para>
+Let the next command succeed with the given response.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>gogui-dummy-sboard</command></term>
+<listitem>
+<para>
+Command for testing GoGui's analyze command type 'sboard'.
+Returns a board of strings.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gogui-dummy-sleep <replaceable>seconds</replaceable>
+</command>
+</term>
+<listitem>
+<para>
+Sleep for a number of seconds (default 20).
+This command can be interrupted.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>echo</command></term>
+<listitem>
+<para>
+Print the argument as response.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>echo_err</command></term>
+<listitem>
+<para>
+Print the argument to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>gogui-interrupt</command></term>
+<listitem>
+<para>
+Indicate interrupt ability for GoGui.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refentry>

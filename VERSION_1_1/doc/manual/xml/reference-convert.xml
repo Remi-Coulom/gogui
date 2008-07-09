@@ -1,0 +1,149 @@
+<refentry id="reference-convert">
+
+<refmeta>
+<refentrytitle>gogui-convert</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-convert</refname>
+<refpurpose>
+Convert SGF and Jago XML Go game files to other formats.
+</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+
+<cmdsynopsis>
+<command>gogui-convert</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg>
+  <option>-format</option>
+  <group choice="plain">
+    <arg choice="plain">sgf</arg>
+    <arg choice="plain">tex</arg>
+    <arg choice="plain">xml</arg>
+  </group>
+</arg>
+<arg><option>-werror</option></arg>
+<arg><option>-force</option></arg>
+<arg><option>-title</option> <replaceable>s</replaceable></arg>
+<arg choice="plain"><replaceable>infile</replaceable></arg>
+<arg choice="plain"><replaceable>outfile</replaceable></arg>
+
+<command>gogui-convert</command>
+<arg choice="plain"><option>-check</option></arg>
+<arg><option>-werror</option></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg choice="plain"><replaceable>infile</replaceable></arg>
+
+<command>gogui-convert</command>
+<arg choice="plain"><option>-help</option></arg>
+
+<command>gogui-convert</command>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Convert SGF and Jago XML Go game files to other formats.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-check</option>
+</term>
+<listitem>
+<para>
+Do not convert but only check if reading and parsing the input file succeeds.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-force</option></term>
+<listitem>
+<para>
+Overwrite existing files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-format</option></term>
+<listitem>
+<para>
+Specify the output format. If this option is not used, the output format
+will be derived from the file extension of the output file name.
+Supported formats are sgf, xml, tex (LaTeX files using PSGO style).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-title</option> <replaceable>s</replaceable>
+</term>
+<listitem>
+<para>
+Specify section title to be used in the LaTeX document before the Go diagram.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-werror</option></term>
+<listitem>
+<para>
+Handle warnings when reading the input files as an error.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refentry>

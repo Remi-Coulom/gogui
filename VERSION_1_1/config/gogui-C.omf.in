@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE omf PUBLIC "-//OMF//DTD Scrollkeeper OMF Variant V1.0//EN" "http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd">
+<omf>
+<resource>
+<creator>Markus Enzenberger</creator>
+<maintainer>Markus Enzenberger</maintainer>
+<title>GoGui Manual</title>
+<date>@DATE@</date>
+<subject category="Applications|Games|Board"/>
+<description>User manual for the GoGui application.</description>
+<type>user's guide</type>
+<format mime="text/html"/>
+<identifier url="file:/usr/share/doc/gogui/index.html"/>
+<language code="C"/>
+<relation seriesid="6421a24e-3db7-11d9-9f5d-abd36726f293"/>
+<rights type="GNU GPL" license.version="3" holder="Markus Enzenberger"/>
+</resource>
+</omf>

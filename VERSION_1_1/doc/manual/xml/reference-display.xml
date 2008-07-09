@@ -1,0 +1,113 @@
+<refentry id="reference-display">
+
+<refmeta>
+<refentrytitle>gogui-display</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-display</refname>
+<refpurpose>
+Go Text Protocol adapter showing the current board in a window.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-display</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-laf</option> <replaceable>name</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg><replaceable>program</replaceable></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-display</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-display</command>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Go Text Protocol adapter showing the current board in a window.
+If no program argument is given, the adapter generates answers to
+genmove commands by waiting for input on the graphical board.
+</para>
+<para>
+The program also tracks the standard error stream of the Go program
+for GoGui Live Graphics commands (see GoGui documentation).
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-laf</option> <replaceable>name</replaceable>
+</term>
+<listitem>
+<para>
+Set Swing look and feel.
+See <xref linkend="reference-gogui"/> for allowed arguments.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream from the adapter to the Go program to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refentry>

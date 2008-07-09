@@ -1,0 +1,6 @@
+This directory contains the Quaqua Look And Feel from
+http://www.randelshofer.ch/quaqua/download.html.
+Due to its size, a copy is not included in the GoGui SVN repository
+(however it is included in the GoGui releases).
+If you checked out the GoGui sources from SVN, download the Quaqua zip-file
+with the version used in build.xml and copy it here.

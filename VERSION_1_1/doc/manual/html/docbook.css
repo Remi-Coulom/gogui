@@ -1,0 +1,218 @@
+/* Similar to kde-default.css */
+
+body
+{
+  background-color: white;
+  font-family: sans-serif;
+  color: black;
+  padding: 0;
+  margin: 0; 
+}
+
+.legalnotice, .copyright {
+  padding: 0;
+  margin: 0; 
+}
+
+.abstract {
+  font-weight: bolder;
+  padding-right: 1em; 
+}
+
+.toc, .list-of-tables {
+  padding-left: 1em;
+}
+
+.sect1, .chapter, .synopsis, .appendix, .preface, .article, .refsect1, .index, .glossary, .section, .refentry {
+  padding: 1em;
+}
+
+.author {
+  color: rgb(82,80,82);
+  font-weight: bolder;
+  padding: 0;
+  margin: 0;
+}
+
+.othercredit {
+  line-height: 1em;
+}
+
+.chapter .sect1, .chapter .titlepage, .sect1 .titlepage, .article .titlepage, .appendix .titlepage, .index .titlepage {
+  padding: 0em;
+}
+
+.titlepage {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+a
+{
+  color: #41597A;
+  text-decoration: underline;
+}
+
+:link
+{
+  color: #41597A;
+  text-decoration: underline;
+}
+
+:visited
+{
+  color: #597ba8;
+  text-decoration: underline;
+}
+
+:active
+{
+  color: #41597A;
+  text-decoration: underline;
+}
+
+.navheader, .navfooter
+{
+  background: rgb(62,145,235);
+  font-weight: bold;
+}
+
+DIV.navheader TD, DIV.navfooter TD,
+DIV.navheader TH, DIV.navfooter TH
+{
+  color: white;
+  font-size: small;
+}
+
+.navheader :link, .navfooter :link, .navheader :visited, .navfooter :visited,
+.navheader :active, .navfooter :active
+{
+  color: white;
+  text-decoration: none;
+}
+
+DIV.navheader A
+{
+  color: white;
+  text-decoration: none;
+  font-size: small;
+  height: 1.7em;
+}
+
+DIV.navfooter A
+{
+  color: white;
+  text-decoration: none;
+  font-size: small;
+  height: 1.7em;
+}
+
+IMG
+{
+  border: 0;
+}
+
+TABLE
+{
+  padding: 5px;
+}
+
+DT
+{
+  margin-top: 1em;
+}
+
+DIV.toc DT
+{
+  margin-top: 0px;
+}
+
+DIV.SCREENSHOT
+{
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+DIV.INFORMALEXAMPLE
+{
+  border-style: dotted;
+  padding: 10px;
+}
+
+TABLE.programlisting
+TABLE.screen
+{
+   border-style: none;
+   background-color: rgb(224,224,224);
+   table-layout: auto; /* 100%? */
+   color: rgb(0,0,0); /* should be inherit */
+}
+
+/* Visual cues for GUI elements etc in the text */
+
+.guimenu, .guimenuitem, .guisubmenu
+{
+   background-color: rgb(240,240,240);
+}
+
+.guilabel, .interface, .guibutton
+{
+  background-color: rgb(240,240,240);
+}
+
+.shortcut
+{
+  background-color: rgb(240,240,240);
+}
+
+.shortcut .keycap
+{
+   background-color: rgb(240,240,240);
+}
+
+.question
+{
+   font-weight: bolder;
+}
+
+.abstract
+{
+    font-weight: bolder;
+}
+
+.accel
+{
+  background-color: rgb(240,240,240);
+  color: rgb(0,0,0); 
+  text-decoration: underline;
+}
+
+.option, .command
+{
+  color: rgb(0,96,160);
+  font-weight: bold;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  color: rgb(82,80,82);
+}
+
+.arg, .parameter, .replaceable
+{
+  background-color: rgb(255,255,255);
+  color: black;
+  font-style: italic;
+}
+
+.caption
+{
+  margin: 0em 2em 3em 2em;
+}
+
+DIV.note,
+DIV.warning
+{
+  background-color: rgb(240,240,240);
+}
+

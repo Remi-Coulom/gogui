@@ -1,0 +1,93 @@
+<refentry id="reference-client">
+
+<refmeta>
+<refentrytitle>gogui-client</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-client</refname>
+<refpurpose>
+Connects to a remote Go program supporting the Go Text Protocol.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-client</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-help</option></arg>
+<arg><option>-timeout</option> <replaceable>sec</replaceable></arg>
+<arg><option>-version</option></arg>
+<arg choice="plain"><replaceable>hostname</replaceable></arg>
+<arg choice="plain"><replaceable>port</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Connects to a Go program supporting Go Text Protocol on a remote
+computer, with host name <replaceable>hostname</replaceable>
+on port <replaceable>port</replaceable>, and connects the network output
+and input stream to standard input and output.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-timeout</option> <replaceable>seconds</replaceable></term>
+<listitem>
+<para>
+Timeout for stopping trying to connect.
+Connection is tried every 5 seconds after connection failures until the
+timeout is reached.
+Default is 10 seconds.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refentry>

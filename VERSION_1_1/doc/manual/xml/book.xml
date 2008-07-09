@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+ "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY analyze SYSTEM "analyze.xml">
+<!ENTITY bugs SYSTEM "bugs.xml">
+<!ENTITY compatibility SYSTEM "compatibility.xml">
+<!ENTITY donations SYSTEM "donations.xml">
+<!ENTITY gametree SYSTEM "gametree.xml">
+<!ENTITY gpl SYSTEM "gpl.xml">
+<!ENTITY gtpshell SYSTEM "gtpshell.xml">
+<!ENTITY interrupt SYSTEM "interrupt.xml">
+<!ENTITY invocation SYSTEM "invocation.xml">
+<!ENTITY live-gfx SYSTEM "live-gfx.xml">
+<!ENTITY mainwindow SYSTEM "mainwindow.xml">
+<!ENTITY news SYSTEM "news.xml">
+<!ENTITY programs SYSTEM "programs.xml">
+<!ENTITY readme SYSTEM "readme.xml">
+<!ENTITY reference-adapter SYSTEM "reference-adapter.xml">
+<!ENTITY reference-client SYSTEM "reference-client.xml">
+<!ENTITY reference-convert SYSTEM "reference-convert.xml">
+<!ENTITY reference-display SYSTEM "reference-display.xml">
+<!ENTITY reference-dummy SYSTEM "reference-dummy.xml">
+<!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
+<!ENTITY reference-regress SYSTEM "reference-regress.xml">
+<!ENTITY reference-server SYSTEM "reference-server.xml">
+<!ENTITY reference-statistics SYSTEM "reference-statistics.xml">
+<!ENTITY reference-terminal SYSTEM "reference-terminal.xml">
+<!ENTITY reference-thumbnailer SYSTEM "reference-thumbnailer.xml">
+<!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
+<!ENTITY setup SYSTEM "setup.xml">
+<!ENTITY tools SYSTEM "tools.xml">
+<!ENTITY version SYSTEM "version.xml">
+<!ENTITY xmlformat SYSTEM "xmlformat.xml">
+]>
+
+<book>
+<title>GoGui Documentation</title>
+
+<bookinfo>
+<author>
+<firstname>Markus</firstname><surname>Enzenberger</surname>
+</author>
+<releaseinfo>Revision &version;</releaseinfo>
+<copyright><year>2008</year><holder>Markus Enzenberger</holder></copyright>
+<abstract>
+<para>
+GoGui is a graphical interface to programs that play the game of Go.
+</para>
+</abstract>
+</bookinfo>
+
+&readme;
+&invocation;
+&programs;
+&compatibility;
+&mainwindow;
+&gametree;
+&gtpshell;
+&analyze;
+&live-gfx;
+&setup;
+&interrupt;
+&tools;
+<appendix id="appendix-reference">
+<title>Reference</title>
+&reference-gogui;
+&reference-adapter;
+&reference-client;
+&reference-convert;
+&reference-display;
+&reference-dummy;
+&reference-regress;
+&reference-server;
+&reference-statistics;
+&reference-terminal;
+&reference-thumbnailer;
+&reference-twogtp;
+</appendix>
+&xmlformat;
+&news;
+&bugs;
+&donations;
+&gpl;
+<index id="appendix-index"></index>
+
+</book>

@@ -1,0 +1,174 @@
+<refentry id="reference-terminal">
+
+<refmeta>
+<refentrytitle>gogui-terminal</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>gogui-terminal</refname>
+<refpurpose>
+Simple text based interface to Go programs supporting GTP.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui-terminal</command>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-terminal</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gogui-terminal</command>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Simple text based interface to Go programs supporting the
+Go Text Protocol.
+It keeps track of the board and prints it after each change on the board.
+If a move (coordinate on the board or pass) is entered, it is played
+on the board for the color to move, followed by a
+<command>genmove</command> command sent to the program.
+Other supported commands are:
+</para>
+<variablelist>
+<varlistentry>
+<term><command>genmove</command></term>
+<listitem>
+<simpara>
+Send a <command>genmove</command> command for the color to move to the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>help</command></term>
+<listitem>
+<simpara>
+Print help.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>list</command></term>
+<listitem>
+<simpara>
+Send a <command>list_commands</command> command to the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>load</command></term>
+<listitem>
+<simpara>
+Load game from a SGF file.
+Moves are translated into <command>play</command> commands
+for the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>newgame [size]</command></term>
+<listitem>
+<simpara>
+Start a new game with a given board size.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>save</command></term>
+<listitem>
+<simpara>
+Save game to file in SGF format.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>undo</command></term>
+<listitem>
+<simpara>
+Send a <command>undo</command> command to the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>quit</command></term>
+<listitem>
+<simpara>
+Terminate program and exit.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<para>
+GTP commands that change the board state are not allowed.
+Other GTP commands are forwarded to the program.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Board size.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-verbose</option>
+</term>
+<listitem>
+<para>
+Log GTP stream to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refentry>
