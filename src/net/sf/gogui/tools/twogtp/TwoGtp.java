@@ -810,13 +810,16 @@ public class TwoGtp
         m_table.set("CPU_W", format.format(cpuTimeWhite));
         m_table.set("ERR", error ? "1" : "0");
         m_table.set("ERR_MSG", errorMessage);
+        File resultFile = getResultFile();
+        File tmpFile = new File(resultFile.getAbsolutePath() + ".new");
         try
         {
-            m_table.save(getResultFile());
+            m_table.save(tmpFile);
+            tmpFile.renameTo(resultFile);
         }
         catch (IOException e)
         {
-            throw new ErrorMessage("Could not write to: " + getResultFile());
+            throw new ErrorMessage("Could not write to: " + resultFile);
         }
     }
 
