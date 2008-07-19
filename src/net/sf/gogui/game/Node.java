@@ -181,7 +181,7 @@ public final class Node
         SGF properties, so that the old value is preserved if no new value
         is set in GameInfo.
         @param label The name of the property
-        @param value The valuee of the property
+        @param values The values of the property
     */
     public void addSgfProperty(String label, ArrayList<String> values)
     {
