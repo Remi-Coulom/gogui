@@ -11,7 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Fix typo in German tooltip.
+Move startup script with wrong old name (gogui-netgtp) to gogui-client
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix typo in German tooltip
 </simpara>
 </listitem>
 </itemizedlist>
