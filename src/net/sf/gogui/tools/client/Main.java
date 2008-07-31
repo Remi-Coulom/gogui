@@ -31,7 +31,7 @@ public final class Main
             {
                 if (totalTime >= timeout)
                     throw connectException;
-                String text = "netgtp: Connect failed; retrying in 5 sec...";
+                String text = "Connect failed; retrying in 5 sec...";
                 System.err.println(text);
                 try
                 {
@@ -64,7 +64,7 @@ public final class Main
         // use java.nio and have System.in as a interruptible channel. So
         // System.exit() is called to kill this thread. If you find a cleaner
         // solution to terminate both threads, please tell me.
-        // The two possible reasons for termination of NetGtp are:
+        // The two possible reasons for termination of gogui-client are:
         // - System.in reaches EOF (no more GTP input)
         // - socket input stream reaches EOF (server closes connection
         //   after response to a quit command)
@@ -89,7 +89,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("NetGtp " + Version.get());
+                System.out.println("GoGuiClient " + Version.get());
                 System.exit(0);
             }
             int timeout = opt.getInteger("timeout", 10, 0);
