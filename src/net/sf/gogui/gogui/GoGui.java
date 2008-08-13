@@ -1295,6 +1295,8 @@ public class GoGui
     public void actionSendCommand(String command, final boolean isCritical,
                                   final boolean showError)
     {
+        if (! checkCommandInProgress())
+            return;
         if (GtpUtil.isStateChangingCommand(command))
         {
             showError(i18n("MSG_BOARD_CHANGING_COMMAND"), "", false);
