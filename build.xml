@@ -25,9 +25,9 @@ Comment out the exec svnversion for releases.
 
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
 
-<property name="looks.zipfile" value="external/jgoodies/looks-2_1_4.zip"/>
-<property name="looks.dir" value="looks-2.1.4"/>
-<property name="looks.jarfile" value="looks-2.1.4.jar"/>
+<property name="looks.zipfile" value="external/jgoodies/looks-2_2_0.zip"/>
+<property name="looks.dir" value="looks-2.2.0"/>
+<property name="looks.jarfile" value="looks-2.2.0.jar"/>
 
 <property name="quaqua.nestedzipfile"
  value="external/quaqua/quaqua-4.4.3.nested.zip"/>
