@@ -19,6 +19,11 @@ Move startup script with wrong old name (gogui-netgtp) to gogui-client
 Fix typo in German tooltip
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Update to JGoodies Looks 2.2.0
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
