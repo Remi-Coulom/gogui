@@ -66,7 +66,6 @@ done
 
 install -d $PREFIX/share/doc/gogui
 install -m 644 doc/manual/html/*.html $PREFIX/share/doc/gogui
-install -m 644 doc/manual/html/*.png $PREFIX/share/doc/gogui
 
 # Install files to $PREFIX/share/man
 
@@ -81,7 +80,8 @@ xdg-icon-resource install --size 48 --context mimetypes \
 
 # Install desktop entry
 
-xdg-desktop-menu install config/gogui-gogui.desktop
+xdg-desktop-menu install config/gogui-
+		 gogui.desktop
 
 # Install shared mime info
 
