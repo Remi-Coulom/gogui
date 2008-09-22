@@ -21,6 +21,7 @@ Create thumbnails for Go game files in SGF or Jago XML format.
 <arg><option>-verbose</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg choice="plain">
+<arg><option>-scale</option></arg>
 <replaceable>input.sgf</replaceable>
 </arg>
 <arg><replaceable>output.png</replaceable></arg>
@@ -78,6 +79,16 @@ Read command line options and arguments from the given file.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-scale</option></term>
+<listitem>
+<para>
+Assume that the given image size is for 19x19 and use a corresponding fraction
+of the size for other board sizes.
 </para>
 </listitem>
 </varlistentry>

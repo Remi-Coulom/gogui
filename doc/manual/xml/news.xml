@@ -35,6 +35,11 @@ Fast forward or backward if shift key is pressed while the mouse wheel is used
 </listitem>
 <listitem>
 <simpara>
+gogui-thumbnail: new option -scale
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Minor fixes and improvements
 </simpara>
 </listitem>

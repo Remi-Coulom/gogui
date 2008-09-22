@@ -23,6 +23,7 @@ public final class Main
                 "config:",
                 //"expire:", // experimental; needs more testing
                 "help",
+                "scale",
                 "size:",
                 "verbose",
                 "version"
@@ -53,6 +54,7 @@ public final class Main
             }
             */
             boolean verbose = opt.contains("verbose");
+            boolean scale = opt.contains("scale");
             ArrayList<String> arguments = opt.getArguments();
             if (arguments.isEmpty() || arguments.size() > 2)
             {
@@ -67,7 +69,7 @@ public final class Main
             ThumbnailCreator thumbnailCreator = new ThumbnailCreator(verbose);
             try
             {
-                thumbnailCreator.create(input, output, size, false);
+                thumbnailCreator.create(input, output, size, scale);
             }
             catch (ThumbnailCreator.Error e)
             {
@@ -94,6 +96,7 @@ public final class Main
             "Options:\n" +
             "-config    config file\n" +
             "-help      Print help and exit\n" +
+            "-scale     Scale size for board sizes other than 19x19\n" +
             "-size      Thumbnail size in pixels\n" +
             "-verbose   Print logging messages to stderr\n" +
             "-version   Print version and exit\n";
