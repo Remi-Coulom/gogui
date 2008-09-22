@@ -67,7 +67,7 @@ public final class Main
             ThumbnailCreator thumbnailCreator = new ThumbnailCreator(verbose);
             try
             {
-                thumbnailCreator.create(input, output, size, true);
+                thumbnailCreator.create(input, output, size, false);
             }
             catch (ThumbnailCreator.Error e)
             {
@@ -94,7 +94,7 @@ public final class Main
             "Options:\n" +
             "-config    config file\n" +
             "-help      Print help and exit\n" +
-            "-size      Thumbnail size in pixels (for 19x19)\n" +
+            "-size      Thumbnail size in pixels\n" +
             "-verbose   Print logging messages to stderr\n" +
             "-version   Print version and exit\n";
         out.print(helpText);
