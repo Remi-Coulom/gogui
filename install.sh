@@ -80,8 +80,7 @@ xdg-icon-resource install --size 48 --context mimetypes \
 
 # Install desktop entry
 
-xdg-desktop-menu install config/gogui-
-		 gogui.desktop
+xdg-desktop-menu install config/gogui-gogui.desktop
 
 # Install shared mime info
 
