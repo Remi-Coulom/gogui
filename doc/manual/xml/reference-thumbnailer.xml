@@ -87,7 +87,6 @@ Display help and exit.
 <listitem>
 <para>
 This option sets the maximum Thumbnail size.
-Board sizes smaller than 19 will use a proportional fraction of this size.
 Default is 128.
 </para>
 </listitem>

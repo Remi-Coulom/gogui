@@ -21,6 +21,12 @@ Fix typo in German tooltip
 </listitem>
 <listitem>
 <simpara>
+Don't automatically scale down thumbnail size for board sizes less than 19
+anymore.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Update to JGoodies Looks 2.2.0 and Quaqua 4.4.7
 </simpara>
 </listitem>
