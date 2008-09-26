@@ -134,7 +134,7 @@ public final class Clock
         TimeRecord record = getRecord(m_toMove);
         long time = currentTimeMillis() - m_startMoveTime;
         record.m_time += time;
-        m_toMove = null;
+        m_isRunning = false;
         updateListener();
         stopTimer();
     }
@@ -151,7 +151,7 @@ public final class Clock
 
     public boolean isRunning()
     {
-        return (m_toMove != null);
+        return m_isRunning;
     }
 
     public boolean lostOnTime(GoColor color)
@@ -248,6 +248,7 @@ public final class Clock
     {
         assert color.isBlackWhite();
         m_toMove = color;
+        m_isRunning = true;
         m_startMoveTime = currentTimeMillis();
         startTimer();
     }
@@ -289,6 +290,7 @@ public final class Clock
             }
         }
         m_toMove = null;
+        m_isRunning = false;
         updateListener();
     }
 
@@ -302,6 +304,8 @@ public final class Clock
 
         public long m_time;
     }
+
+    private boolean m_isRunning = false;
 
     private long m_startMoveTime;
 
