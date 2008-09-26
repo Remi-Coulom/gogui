@@ -336,8 +336,7 @@ Play a pass move.
 <para>
 Halt or resume the clock.
 If time settings were used, the remaining time for the players
-is stored in the tree nodes and can be restored with the Restore
-item.
+is stored in the tree nodes and will be restored when going to a node.
 </para>
 </listitem>
 </varlistentry>

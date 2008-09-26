@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidPointException;
 import net.sf.gogui.go.Move;
@@ -270,6 +272,32 @@ public final class GtpUtil
         for (int i = 0; i < result.length; ++i)
             result[i] = (Move)list.get(i);
         return result;
+    }
+
+    /** Inform a GTP engine about the clock state.
+        Sends the clock state to the engine, if the clock is initialized and
+        the engine supports the time_left standard GTP command. Otherwise,
+        does nothing.
+    */
+    public static void sendTimeLeft(GtpClientBase gtp, ConstClock clock,
+                                    GoColor c)
+    {
+        if (! clock.isInitialized() || ! gtp.isSupported("time_left"))
+            return;
+        String color = (c == BLACK ? "b" : "w");
+        long timeLeft = clock.getTimeLeft(c) / 1000;
+        long movesLeft = 0;
+        if (clock.getTimeSettings().getUseByoyomi()
+            && clock.isInByoyomi(c))
+            movesLeft = clock.getMovesLeft(c);
+        try
+        {
+            gtp.send("time_left " + color + " " + timeLeft + " "
+                     + movesLeft);
+        }
+        catch (GtpError e)
+        {
+        }
     }
 
     /** Make constructor unavailable; class is for namespace only. */

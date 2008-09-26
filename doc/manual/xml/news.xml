@@ -14,6 +14,12 @@
 Fix crash if invalid pattern is entered in find dialog
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Always automatically restore the clock when going to a node and send the
+time_left command before each move generation.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
