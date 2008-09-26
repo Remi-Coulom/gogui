@@ -129,7 +129,7 @@ public final class Clock
 
     public void halt()
     {
-        if (m_toMove == null)
+        if (! m_isRunning)
             return;
         TimeRecord record = getRecord(m_toMove);
         long time = currentTimeMillis() - m_startMoveTime;
@@ -171,6 +171,7 @@ public final class Clock
         reset(BLACK);
         reset(WHITE);
         m_toMove = null;
+        m_isRunning = false;
         updateListener();
     }
 
@@ -189,6 +190,7 @@ public final class Clock
     {
         if (m_toMove == null)
             return;
+        m_isRunning = true;
         startTimer();
     }
 
@@ -260,7 +262,7 @@ public final class Clock
     */
     public void stopMove()
     {
-        if (m_toMove == null)
+        if (! m_isRunning)
             return;
         TimeRecord record = getRecord(m_toMove);
         long time = currentTimeMillis() - m_startMoveTime;
