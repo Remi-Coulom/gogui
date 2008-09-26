@@ -12,8 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import static java.text.MessageFormat.format;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -64,16 +66,33 @@ public class FindDialog
             dispose();
     }
 
-    public static Pattern run(Frame owner, String initialValue)
+    public static Pattern run(Frame owner, String initialValue,
+                              MessageDialogs messageDialogs)
     {
-        FindDialog dialog = new FindDialog(owner, initialValue);
-        dialog.setLocationByPlatform(true);
-        dialog.setVisible(true);
-        String regex = dialog.m_pattern;
-        if (StringUtil.isEmpty(regex))
-            return null;
-        int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
-        return Pattern.compile(regex, flags);
+        while (true)
+        {
+            FindDialog dialog = new FindDialog(owner, initialValue);
+            dialog.setLocationByPlatform(true);
+            dialog.setVisible(true);
+            String regex = dialog.m_pattern;
+            if (StringUtil.isEmpty(regex))
+                return null;
+            int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
+            try
+            {
+                return Pattern.compile(regex, flags);
+            }
+            catch (PatternSyntaxException e)
+            {
+                String mainMessage = i18n("MSG_FINDDIALOG_INVALID_PATTERN");
+                String optionalMessage =
+                    format(i18n("MSG_FINDDIALOG_INVALID_PATTERN_2"),
+                           e.getDescription());
+                messageDialogs.showError(owner, mainMessage, optionalMessage,
+                                         false);
+                initialValue = regex;
+            }
+        }
     }
 
     private JComboBox m_comboBox;

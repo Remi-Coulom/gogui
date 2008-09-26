@@ -650,7 +650,8 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        Pattern pattern = FindDialog.run(this, m_comment.getSelectedText());
+        Pattern pattern = FindDialog.run(this, m_comment.getSelectedText(),
+                                         m_messageDialogs);
         if (pattern == null)
             return;
         m_pattern = pattern;
