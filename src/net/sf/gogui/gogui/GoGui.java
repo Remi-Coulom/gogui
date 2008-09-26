@@ -403,14 +403,6 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionClockRestore()
-    {
-        if (! getClock().isInitialized())
-            return;
-        m_game.restoreClock();
-        updateViews(false);
-    }
-
     public void actionClockStart()
     {
         if (getClock().isRunning())
@@ -3030,6 +3022,7 @@ public class GoGui
                     computerMoved();
                 }
             };
+        GtpUtil.sendTimeLeft(m_gtp, getClock(), toMove);
         m_game.startClock();
         runLengthyCommand(command, callback);
     }
@@ -3088,9 +3081,7 @@ public class GoGui
         if (m_scoreMode)
             return;
         m_game.gotoNode(node);
-        // If the clock was never running, we restore it without asking
-        if (m_game.getClockNode() == null)
-            m_game.restoreClock();
+        m_game.restoreClock();
         currentNodeChanged();
     }
 

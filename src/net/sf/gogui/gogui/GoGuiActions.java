@@ -201,11 +201,6 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionClockResume(); } };
 
-    public final Action m_actionClockRestore =
-        new Action("ACT_CLOCK_RESTORE") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionClockRestore(); } };
-
     public final Action m_actionClockStart =
         new Action("ACT_CLOCK_START") {
             public void actionPerformed(ActionEvent e) {
@@ -739,7 +734,6 @@ public class GoGuiActions
                                            || boardSize % 2 == 0);
         m_actionClockHalt.setEnabled(clock.isRunning());
         updateClockResume(clock);
-        updateClockRestore(node, clock);
         updateClockStart(clock);
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
@@ -838,25 +832,6 @@ public class GoGuiActions
     private static KeyStroke getKeyStroke(int keyCode, int modifier)
     {
         return KeyStroke.getKeyStroke(keyCode, modifier);
-    }
-
-    private void updateClockRestore(ConstNode node, ConstClock clock)
-    {
-        if (! clock.isInitialized())
-        {
-            m_actionClockRestore.setEnabled(false);
-            m_actionClockRestore.setDescription(null);
-        }
-        else
-        {
-            Clock tempClock = new Clock();
-            tempClock.setTimeSettings(clock.getTimeSettings());
-            NodeUtil.restoreClock(node, tempClock);
-            m_actionClockRestore.setEnabled(true);
-            m_actionClockRestore.setDescription("TT_CLOCK_RESTORE",
-                                                tempClock.getTimeString(BLACK),
-                                                tempClock.getTimeString(WHITE));
-        }
     }
 
     private void updateClockResume(ConstClock clock)

@@ -232,7 +232,6 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionClockStart, KeyEvent.VK_S);
         menu.addItem(actions.m_actionClockHalt, KeyEvent.VK_H);
         menu.addItem(actions.m_actionClockResume, KeyEvent.VK_R);
-        menu.addItem(actions.m_actionClockRestore, KeyEvent.VK_E);
         return menu;
     }
 
