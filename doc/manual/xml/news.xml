@@ -11,6 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fix crash if invalid pattern is entered in find dialog
 </simpara>
 </listitem>
 </itemizedlist>
