@@ -221,7 +221,7 @@ public class Game
 
     public void restoreClock()
     {
-        if (! getClock().isInitialized())
+        if (! m_clock.isInitialized())
             return;
         NodeUtil.restoreClock(getCurrentNode(), m_clock);
     }
