@@ -3,6 +3,7 @@
 package net.sf.gogui.game;
 
 import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 
 public final class ClockTest
     extends junit.framework.TestCase
@@ -22,6 +23,18 @@ public final class ClockTest
         m_timeSource = new TestTimeSource();
         m_clock = new Clock(m_timeSource);
         setTime(0);
+    }
+
+    public void testInitWithoutPreByoyomi()
+    {
+        m_clock.setTimeSettings(new TimeSettings(0, 10000, 5));
+        m_clock.reset();
+        assertTrue(m_clock.isInByoyomi(BLACK));
+        assertTrue(m_clock.isInByoyomi(WHITE));
+        assertEquals(10000, m_clock.getTimeLeft(BLACK));
+        assertEquals(10000, m_clock.getTimeLeft(WHITE));
+        assertEquals(5, m_clock.getMovesLeft(BLACK));
+        assertEquals(5, m_clock.getMovesLeft(WHITE));
     }
 
     public void testResume()

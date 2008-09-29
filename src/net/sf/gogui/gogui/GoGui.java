@@ -735,7 +735,11 @@ public class GoGui
             m_prefs.put("komi", komi.toString());
         if (info.getTimeSettings() != null
             && ! info.getTimeSettings().equals(m_timeSettings))
-            m_timeSettings = info.getTimeSettings();
+        {
+            TimeSettings timeSettings = info.getTimeSettings();
+            m_game.setTimeSettings(timeSettings);
+            m_timeSettings = timeSettings;
+        }
         setTitle();
         updateViews(false);
     }

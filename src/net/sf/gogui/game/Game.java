@@ -310,6 +310,20 @@ public class Game
         updateBoard();
     }
 
+    /** Change the time settings.
+        If the current node is the root node, the clock will also be reset.
+    */
+    public void setTimeSettings(TimeSettings timeSettings)
+    {
+        Node node = m_tree.getGameInfoNode(m_current);
+        GameInfo info = node.getGameInfo();
+        info.setTimeSettings(timeSettings);
+        setGameInfo(info, node); // updates m_modified
+        m_clock.setTimeSettings(timeSettings);
+        if (m_current == node)
+            m_clock.reset();
+    }
+
     /** Set a stone on the board or remove a stone.
         @param p The location.
         @param c The color of the stone (EMPTY for removal).
