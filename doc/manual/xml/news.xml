@@ -11,13 +11,18 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Fix crash if invalid pattern is entered in find dialog
+Fix crash if invalid pattern is entered in find dialog.
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Always automatically restore the clock when going to a node and send the
 time_left command before each move generation.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Display time of first move correctly if no pre-byoyomi time is used.
 </simpara>
 </listitem>
 </itemizedlist>

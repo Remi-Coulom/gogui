@@ -184,6 +184,12 @@ public final class Clock
         timeRecord.m_movesLeft = 0;
         timeRecord.m_isInByoyomi = false;
         timeRecord.m_byoyomiExceeded = false;
+        if (isInitialized() && getPreByoyomi() == 0)
+        {
+            assert getByoyomiMoves() > 0;
+            timeRecord.m_movesLeft = getByoyomiMoves();
+            timeRecord.m_isInByoyomi = true;
+        }
         updateListener();
     }
 
