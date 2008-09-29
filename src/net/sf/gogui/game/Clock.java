@@ -88,7 +88,7 @@ public final class Clock
         TimeRecord record = getRecord(color);
         long time = record.m_time;
         if (color.equals(m_toMove))
-            time += currentTimeMillis() - m_startMoveTime;
+            time += currentTimeMillis() - m_startTime;
         if (isInitialized())
         {
             if (record.m_isInByoyomi)
@@ -132,7 +132,9 @@ public final class Clock
         if (! m_isRunning)
             return;
         TimeRecord record = getRecord(m_toMove);
-        long time = currentTimeMillis() - m_startMoveTime;
+        long currentTime = currentTimeMillis();
+        long time = currentTime - m_startTime;
+        m_startTime = currentTime;
         record.m_time += time;
         m_isRunning = false;
         updateListener();
@@ -188,8 +190,10 @@ public final class Clock
     /** Resume clock, if it was halted during a player's move time. */
     public void resume()
     {
-        if (m_toMove == null)
+        if (m_isRunning)
             return;
+        assert m_toMove != null;
+        m_startTime = currentTimeMillis();
         m_isRunning = true;
         startTimer();
     }
@@ -251,7 +255,7 @@ public final class Clock
         assert color.isBlackWhite();
         m_toMove = color;
         m_isRunning = true;
-        m_startMoveTime = currentTimeMillis();
+        m_startTime = currentTimeMillis();
         startTimer();
     }
 
@@ -265,7 +269,7 @@ public final class Clock
         if (! m_isRunning)
             return;
         TimeRecord record = getRecord(m_toMove);
-        long time = currentTimeMillis() - m_startMoveTime;
+        long time = currentTimeMillis() - m_startTime;
         record.m_time += time;
         if (isInitialized() && getUseByoyomi())
         {
@@ -309,7 +313,7 @@ public final class Clock
 
     private boolean m_isRunning = false;
 
-    private long m_startMoveTime;
+    private long m_startTime;
 
     private GoColor m_toMove;
 

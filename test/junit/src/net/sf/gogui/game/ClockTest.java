@@ -24,6 +24,19 @@ public final class ClockTest
         setTime(0);
     }
 
+    public void testResume()
+    {
+        m_clock.setTimeSettings(new TimeSettings(10000));
+        m_clock.startMove(BLACK);
+        setTime(1000);
+        m_clock.halt();
+        setTime(2000);
+        m_clock.resume();
+        setTime(2500);
+        m_clock.stopMove();
+        assertEquals(8500, m_clock.getTimeLeft(BLACK));
+    }
+
     /** Test that move time is discarded if move is started twice.
         According to the specification of Clock#startMove, the time for
         the current move should be discarded is startMove is called and clock
