@@ -508,6 +508,28 @@ public final class NodeUtil
         return (! node.hasFather() && ! node.hasChildren());
     }
 
+    /** Check that the time left for a color at a node is known.
+        Returns true, if the last node (including the given one) containing a
+        move of the given color also contains information about the time left
+        after the move for the color. If a previous node with a game info
+        containing time settings exists and no move of the given color was
+        played since then, the function also returns true.
+    */
+    public static boolean isTimeLeftKnown(ConstNode node, GoColor color)
+    {
+        while (node != null)
+        {
+            Move move = node.getMove();
+            if (move != null && move.getColor() == color)
+                return ! Double.isNaN(node.getTimeLeft(color));
+            ConstGameInfo info = node.getGameInfoConst();
+            if (info != null && info.getTimeSettings() != null)
+                return true;
+            node = node.getFatherConst();
+        }
+        return false;
+    }
+
     /** Make the variation of the current node to be the main variation
         of the tree.
         Changes the children order of all nodes in the sequence from the root
