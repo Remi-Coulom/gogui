@@ -190,10 +190,12 @@ public class Game
     {
         m_clock.stopMove();
         Node node = new Node(move);
-        if (m_clock.isInitialized())
+        GoColor color = move.getColor();
+        // Only save time left information, if it also was known before the move
+        if (m_clock.isInitialized()
+            && NodeUtil.isTimeLeftKnown(m_current, color))
         {
             assert ! m_clock.isRunning();
-            GoColor color = move.getColor();
             // Round time to seconds
             long timeLeft = m_clock.getTimeLeft(color) / 1000L;
             node.setTimeLeft(color, (double)timeLeft);

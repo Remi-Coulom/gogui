@@ -3024,7 +3024,9 @@ public class GoGui
                     computerMoved();
                 }
             };
-        GtpUtil.sendTimeLeft(m_gtp, getClock(), toMove);
+        if (getClock().isInitialized()
+            && NodeUtil.isTimeLeftKnown(getCurrentNode(), toMove))
+            GtpUtil.sendTimeLeft(m_gtp, getClock(), toMove);
         m_game.startClock();
         runLengthyCommand(command, callback);
     }
