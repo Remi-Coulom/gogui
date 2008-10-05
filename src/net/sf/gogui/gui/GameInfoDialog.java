@@ -78,13 +78,13 @@ public final class GameInfoDialog
     private GameInfoDialog(GameInfo info)
     {
         Box outerBox = Box.createVerticalBox();
-        m_black = createPlayerInfo(BLACK, info);
-        m_black.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
-        outerBox.add(m_black.m_box);
-        outerBox.add(GuiUtil.createFiller());
         m_white = createPlayerInfo(WHITE, info);
         m_white.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
         outerBox.add(m_white.m_box);
+        outerBox.add(GuiUtil.createFiller());
+        m_black = createPlayerInfo(BLACK, info);
+        m_black.m_box.setAlignmentX(Component.LEFT_ALIGNMENT);
+        outerBox.add(m_black.m_box);
         outerBox.add(GuiUtil.createFiller());
         outerBox.add(GuiUtil.createFiller());
         Box box = Box.createHorizontalBox();
