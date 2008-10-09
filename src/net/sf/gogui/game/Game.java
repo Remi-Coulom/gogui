@@ -326,6 +326,26 @@ public class Game
             m_clock.reset();
     }
 
+    public void setTimeLeft(GoColor c, double seconds)
+    {
+        setTimeLeft(getCurrentNode(), c, seconds);
+    }
+
+    public void setTimeLeft(ConstNode node, GoColor c, double seconds)
+    {
+        ((Node)node).setTimeLeft(c, seconds);
+    }
+
+    public void setMovesLeft(GoColor c, int moves)
+    {
+        setMovesLeft(getCurrentNode(), c, moves);
+    }
+
+    public void setMovesLeft(ConstNode node, GoColor c, int moves)
+    {
+        ((Node)node).setMovesLeft(c, moves);
+    }
+
     /** Set a stone on the board or remove a stone.
         @param p The location.
         @param c The color of the stone (EMPTY for removal).

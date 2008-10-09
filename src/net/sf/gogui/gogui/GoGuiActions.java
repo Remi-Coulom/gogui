@@ -518,6 +518,11 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSendFile(); } };
 
+    public final Action m_actionSetTimeLeft =
+        new Action("ACT_SET_TIME_LEFT", null) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetTimeLeft(); } };
+
     public final Action m_actionSetupBlack =
         new Action("ACT_SETUP_BLACK", "TT_SETUP_BLACK",
                    "gogui-setup-black") {
@@ -735,6 +740,7 @@ public class GoGuiActions
         m_actionClockHalt.setEnabled(clock.isRunning());
         updateClockResume(clock);
         updateClockStart(clock);
+        updateSetTimeLeft(clock);
         m_actionComputerBlack.setEnabled(isProgramAttached);
         m_actionComputerBlack.setSelected(computerBlack && ! computerWhite);
         m_actionComputerBoth.setEnabled(isProgramAttached);
@@ -970,5 +976,10 @@ public class GoGuiActions
                 m_actionSave.setDescription("TT_SAVE_FILE_NOTMODIFIED",
                                             file);
         }
+    }
+
+    private void updateSetTimeLeft(ConstClock clock)
+    {
+        m_actionSetTimeLeft.setEnabled(clock.isInitialized());
     }
 }

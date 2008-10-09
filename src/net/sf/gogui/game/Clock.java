@@ -106,7 +106,11 @@ public final class Clock
         return getTimeString((double)time, movesLeft);
     }
 
-    /** If not in byoyomi movesLeft &lt; 0. */
+    /** Format time left to a string.
+        If movesLeft &lt; 0, only the time will be returned, otherwise
+        after the time string, a slash and the number of moves left will be
+        appended.
+    */
     public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuilder buffer = new StringBuilder(8);
@@ -125,6 +129,11 @@ public final class Clock
     public GoColor getToMove()
     {
         return m_toMove;
+    }
+
+    public boolean getUseByoyomi()
+    {
+        return m_timeSettings.getUseByoyomi();
     }
 
     public void halt()
@@ -166,6 +175,47 @@ public final class Clock
             return record.m_byoyomiExceeded;
         else
             return (time > getPreByoyomi());
+    }
+
+    /** Parses a time string.
+        The expected format is <tt>[[H:]MM:]SS</tt>.
+        @return The time in milliseconds or -1, if the time string is not
+        valid.
+    */
+    public static long parseTimeString(String s)
+    {
+        String a[] = s.split(":");
+        if (a.length == 0 || a.length > 3)
+            return -1;
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
+        try
+        {
+            if (a.length == 3)
+            {
+                hours = Integer.parseInt(a[0]);
+                minutes = Integer.parseInt(a[1]);
+                seconds = Integer.parseInt(a[2]);
+            }
+            else if (a.length == 2)
+            {
+                minutes = Integer.parseInt(a[0]);
+                seconds = Integer.parseInt(a[1]);
+            }
+            else
+            {
+                assert a.length == 1;
+                seconds = Integer.parseInt(a[0]);
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            return -1;
+        }
+        if (minutes < 0 || minutes > 60 || seconds < 0 ||seconds > 60)
+            return -1;
+        return 1000L * (seconds + minutes * 60L + hours * 3600L);
     }
 
     public void reset()
@@ -357,11 +407,6 @@ public final class Clock
     private long getPreByoyomi()
     {
         return m_timeSettings.getPreByoyomi();
-    }
-
-    private boolean getUseByoyomi()
-    {
-        return m_timeSettings.getUseByoyomi();
     }
 
     private void startTimer()

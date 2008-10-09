@@ -19,6 +19,8 @@ public interface ConstClock
 
     GoColor getToMove();
 
+    boolean getUseByoyomi();
+
     boolean isInitialized();
 
     boolean isInByoyomi(GoColor color);
