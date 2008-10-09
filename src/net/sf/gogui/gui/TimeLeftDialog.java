@@ -27,7 +27,7 @@ public final class TimeLeftDialog
     public static void show(Component parent, Game game, ConstNode node,
                             MessageDialogs messageDialogs)
     {
-        ConstGameInfo info = node.getGameInfoConst();
+        ConstGameInfo info = game.getGameInfoNode(node).getGameInfoConst();
         Clock clock = null;
         TimeSettings timeSettings = info.getTimeSettings();
         if (timeSettings != null)
