@@ -114,6 +114,7 @@ import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.gui.SwitchLanguageDialog;
+import net.sf.gogui.gui.TimeLeftDialog;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
@@ -1359,12 +1360,18 @@ public class GoGui
             m_guiBoard.clearAllSelect();
             if (m_analyzeCommand.getType() == AnalyzeType.EPLIST)
                 GuiBoardUtil.setSelect(m_guiBoard,
-                                        m_analyzeCommand.getPointListArg(),
-                                        true);
+                                       m_analyzeCommand.getPointListArg(),
+                                       true);
             toFront();
             return;
         }
         analyzeBegin(false);
+    }
+
+    public void actionSetTimeLeft()
+    {
+        TimeLeftDialog.show(this, m_game, getCurrentNode(), m_messageDialogs);
+        m_gameInfoPanel.update();
     }
 
     public void actionSetup(GoColor color)

@@ -37,6 +37,18 @@ public final class ClockTest
         assertEquals(5, m_clock.getMovesLeft(WHITE));
     }
 
+    public void testParseTimeString()
+    {
+        assertEquals(24000L, Clock.parseTimeString("24"));
+        assertEquals(144000L, Clock.parseTimeString("02:24"));
+        assertEquals(3744000L, Clock.parseTimeString("1:02:24"));
+        assertEquals(3603744000L, Clock.parseTimeString("1001:02:24"));
+        assertEquals(-1L, Clock.parseTimeString(""));
+        assertEquals(-1L, Clock.parseTimeString("foo"));
+        assertEquals(-1L, Clock.parseTimeString("-1"));
+        assertEquals(-1L, Clock.parseTimeString("02.24"));
+    }
+
     public void testResume()
     {
         m_clock.setTimeSettings(new TimeSettings(10000));
