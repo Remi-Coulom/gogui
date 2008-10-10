@@ -3088,13 +3088,20 @@ public class GoGui
         return m_game.getTree();
     }
 
+    /** Change current node.
+        Automatically restores the clock, or halts it, if no time settings
+        are known.
+    */
     private void gotoNode(ConstNode node)
     {
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
         m_game.gotoNode(node);
-        m_game.restoreClock();
+        if (getClock().isInitialized())
+            m_game.restoreClock();
+        else
+            m_game.haltClock();
         currentNodeChanged();
     }
 
