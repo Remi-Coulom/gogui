@@ -6,10 +6,10 @@ import net.sf.gogui.util.ErrorMessage;
 
 /** Time settings.
     Time settings consist of a base time for the game and an optional
-    overtime (byoyomi) for overtime periods. Overtime periods also have a
-    number of moves assigned, which need to be played during an overtime
-    period. The base time can be zero. If no overtime periods are used,
-    the whole game must be finished in the base time.
+    overtime (Canadian byoyomi) for overtime periods. Overtime periods also
+    have a number of moves assigned, which need to be played during an
+    overtime period. The base time can be zero. If no overtime periods are
+    used, the whole game must be finished in the base time.
     This class is immutable.
 */
 public final class TimeSettings
