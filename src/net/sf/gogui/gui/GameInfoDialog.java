@@ -256,7 +256,8 @@ public final class GameInfoDialog
             if (! m_byoyomi.isEmpty())
                 byoyomi = m_byoyomi.getTime();
             if (! isEmpty(m_byoyomiMoves))
-                byoyomiMoves = Integer.parseInt(m_byoyomiMoves.getText());
+                byoyomiMoves =
+                    Integer.parseInt(getTextFieldContent(m_byoyomiMoves));
             if (byoyomi > 0 && byoyomiMoves > 0)
             {
                 TimeSettings settings =
@@ -378,7 +379,7 @@ class TimeField
                 units = 60000;
             else
                 units = 1000;
-            return units * Long.parseLong(m_textField.getText());
+            return units * Long.parseLong(m_textField.getText().trim());
         }
         catch (NumberFormatException e)
         {
@@ -408,7 +409,7 @@ class TimeField
         {
             if (isEmpty())
                 return true;
-            int value = Integer.parseInt(m_textField.getText());
+            int value = Integer.parseInt(m_textField.getText().trim());
             if (value <= 0)
             {
                 messageDialogs.showError(parent,
