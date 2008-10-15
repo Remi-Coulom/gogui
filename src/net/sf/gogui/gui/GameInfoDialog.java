@@ -410,11 +410,12 @@ class TimeField
             if (isEmpty())
                 return true;
             int value = Integer.parseInt(m_textField.getText().trim());
-            if (value <= 0)
+            if (value < 0)
             {
                 messageDialogs.showError(parent,
-                                         i18n("MSG_GAMEINFO_INVALID_TIME"),
-                                         i18n("MSG_GAMEINFO_NO_POSITIVE_NUMBER"), false);
+                                      i18n("MSG_GAMEINFO_INVALID_TIME"),
+                                      i18n("MSG_GAMEINFO_NO_POSITIVE_NUMBER"),
+                                      false);
                 return false;
             }
         }
@@ -422,7 +423,8 @@ class TimeField
         {
                 messageDialogs.showError(parent,
                                          i18n("MSG_GAMEINFO_INVALID_TIME"),
-                                         i18n("MSG_GAMEINFO_NO_NUMBER"), false);
+                                         i18n("MSG_GAMEINFO_NO_NUMBER"),
+                                         false);
             return false;
         }
         return true;
