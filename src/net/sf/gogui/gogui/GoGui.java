@@ -1373,7 +1373,7 @@ public class GoGui
     public void actionSetTimeLeft()
     {
         TimeLeftDialog.show(this, m_game, getCurrentNode(), m_messageDialogs);
-        m_gameInfoPanel.update();
+        updateViews(false);
     }
 
     public void actionSetup(GoColor color)
