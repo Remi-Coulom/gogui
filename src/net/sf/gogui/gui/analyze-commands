@@ -42,10 +42,8 @@ hpstring/Eye Data/eye_data %c %p
 string/Final Score/final_score
 string/Final Status/final_status %p
 plist/Final Status List Alive/final_status_list alive
-plist/Final Status List Dame/final_status_list dame
 plist/Final Status List Dead/final_status_list dead
 plist/Final Status List Seki/final_status_list seki
-plist/Final Status List Territory/final_status_list %c_territory
 plist/FindLib/findlib %p
 none/Finish SgfTrace/finish_sgftrace %w
 string/Get Connection Node Counter/get_connection_node_counter
