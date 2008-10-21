@@ -304,7 +304,7 @@ public class Analyze
                   "<tr bgcolor=\"" + COLOR_HEADER + "\">\n" +
                   "<th>Game</th>\n");
         if (referee != null)
-            out.print("<th>Result [" + referee + "]</th>\n");
+            out.print("<th>Result " + referee + "</th>\n");
         out.print("<th>Result " + black + "</th>\n" +
                   "<th>Result " + white + "</th>\n");
         out.print("<th>Colors Exchanged</th>\n" +
@@ -353,7 +353,7 @@ public class Analyze
     {
         NumberFormat format = StringUtil.getNumberFormat(1);
         out.print("<div style=\"margin:1em\">\n" +
-                  "<h2>Result [" + name + "]</h2>\n" +
+                  "<h2>Result " + name + "</h2>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n");
         if (statistics.m_histo.getCount() > 0)
