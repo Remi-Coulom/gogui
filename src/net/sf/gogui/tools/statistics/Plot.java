@@ -572,7 +572,7 @@ public class Plot
         if (m_minX > 0 && m_minX < 0.3 * m_maxX)
             m_minX = 0;
         // Avoid empty ranges
-        if (m_minX == m_maxX)
+        if (m_maxX - m_minX < Double.MIN_VALUE)
         {
             m_minX -= 1.1;
             m_maxX += 1.1;
@@ -612,7 +612,7 @@ public class Plot
         if (m_autoYMin && m_minY > 0 && m_minY < 0.3 * m_maxY)
             m_minY = 0;
         // Avoid empty ranges
-        if (m_minY == m_maxY)
+        if (m_maxY - m_minY < Double.MIN_VALUE)
         {
             m_minY -= 1.1;
             m_maxY += 1.1;
