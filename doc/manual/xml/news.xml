@@ -11,7 +11,13 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Enable Clock Start menu after clock was halted when changing the time left with Set Time Left
+Enable Clock Start menu after clock was halted when changing the time left
+with Set Time Left
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Update to JGoodies Looks 2.2.1 and Quaqua 5.0
 </simpara>
 </listitem>
 </itemizedlist>
