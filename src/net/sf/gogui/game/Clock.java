@@ -71,7 +71,7 @@ public final class Clock
         assert isInitialized();
         TimeRecord record = getRecord(color);
         long time = record.m_time;
-        if (getUseByoyomi())
+        if (getUseByoyomi() && isInByoyomi(color))
             return (getByoyomi() - time);
         else
             return (getPreByoyomi() - time);
