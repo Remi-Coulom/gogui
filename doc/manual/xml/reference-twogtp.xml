@@ -200,7 +200,6 @@ Command for the black program.
 <listitem>
 <para>
 Compare a list of SGF files given as arguments an exit.
-Works only with SGF files with alternating moves and without setup stones.
 </para>
 </listitem>
 </varlistentry>
