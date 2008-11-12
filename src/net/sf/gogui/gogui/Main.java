@@ -150,14 +150,6 @@ public final class Main
     private static void showCrashDialog(Throwable e)
     {
         s_duringShowCrashDialog = true;
-        if ("GNU libgcj".equals(System.getProperty("java.vm.name")))
-        {
-            System.err.print("--------------------------------------------\n" +
-                             "GNU libgcj is not supported !\n" +
-                             "--------------------------------------------\n");
-            showError("GNU libgcj is not supported", "");
-            return;
-        }
         JPanel panel = new JPanel(new BorderLayout());
         Box box = Box.createVerticalBox();
         panel.add(box, BorderLayout.NORTH);
