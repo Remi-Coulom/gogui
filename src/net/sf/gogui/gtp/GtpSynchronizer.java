@@ -20,9 +20,9 @@ import net.sf.gogui.util.ObjectUtil;
 
 /** Synchronizes a GTP engine with a Go board.
     Handles different capabilities of different engines.
-    If GtpSynchronizer is used, no position changing GTP commands (like
-    clear_board, play, undo) should be sent to this engine outside this
-    class.
+    If GtpSynchronizer is used, no game state changing GTP commands (like
+    clear_board, play, undo, komi, time_settings) should be sent to this
+    engine outside this class.
 */
 public class GtpSynchronizer
 {
@@ -48,6 +48,8 @@ public class GtpSynchronizer
         m_gtp = gtp;
         m_listener = listener;
         m_isOutOfSync = true;
+        m_komi = null;
+        m_timeSettings = null;
     }
 
     /** Did the last GtpSynchronizer.synchronize() fail? */
@@ -66,8 +68,6 @@ public class GtpSynchronizer
         m_gtp.sendBoardsize(size);
         m_engineState = new Board(size);
         m_gtp.sendClearBoard(size);
-        m_komi = null;
-        m_timeSettings = null;
         sendGameInfo(komi, timeSettings);
         ConstBoard targetState = computeTargetState(board);
         setup(targetState);
@@ -334,14 +334,6 @@ public class GtpSynchronizer
         }
         if (! ObjectUtil.equals(timeSettings, m_timeSettings))
         {
-            if (timeSettings == null && m_timeSettings == null)
-            {
-                // Avoid sending "no time limit" settings, if not necessary
-                // because it could confuse some programs
-                // (see GtpUtil.getTimeSettingsCommand())
-                m_timeSettings = null;
-                return;
-            }
             m_timeSettings = timeSettings;
             if (m_gtp.isSupported("time_settings"))
             {
