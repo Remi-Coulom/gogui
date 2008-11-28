@@ -3,6 +3,7 @@
 package net.sf.gogui.gtp;
 
 import java.io.IOException;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
@@ -309,6 +310,28 @@ public final class GtpSynchronizerTest
         expect("gogui-setup B B2", "");
         expect("gogui-setup_player W", "");
         synchronize();
+        assertExpectQueueEmpty();
+    }
+
+    public void testTimeSettings() throws GtpError
+    {
+        createSynchronizer();
+        expect("list_commands",
+               "time_settings\n");
+        m_gtp.querySupportedCommands();
+        assertExpectQueueEmpty();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        expect("time_settings 1800 0 0", "");
+        m_synchronizer.synchronize(m_board, null, new TimeSettings(1800000));
+        assertExpectQueueEmpty();
+        expect("time_settings 800 0 0", "");
+        m_synchronizer.synchronize(m_board, null, new TimeSettings(800000));
+        assertExpectQueueEmpty();
+        expect("time_settings 0 1 0", "");
+        m_synchronizer.synchronize(m_board, null, null);
         assertExpectQueueEmpty();
     }
 
