@@ -203,11 +203,16 @@ public class GuiUtil
     */
     public static void initLookAndFeel(String laf)
     {
-        // Disables renaming mode in Sun Java 1.5, which makes using the
-        // JFileChooser a pain and is also enabled for open dialogs
-        // for no good reason. Unfortunately that sacrifices the new directory
-        // button, which is useful for save dialogs
-        UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+        if (laf == null
+            || (! laf.equals("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
+                && ! laf.equals("gtk")))
+        {
+            // Disables renaming mode in Sun Java 1.5, which makes using the
+            // JFileChooser a pain and is also enabled for open dialogs for no
+            // good reason. Unfortunately that sacrifices the new directory
+            // button, which is useful for save dialogs
+            UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+        }
         if ("".equals(laf))
             return;
         boolean showError = true;
