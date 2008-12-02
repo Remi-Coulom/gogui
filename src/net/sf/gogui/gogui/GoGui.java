@@ -2725,7 +2725,7 @@ public class GoGui
             {
                 String result =
                     toMove.otherColor().getUppercaseLetter() + "+Resign";
-                if (! isComputerBoth())
+                if (! m_auto)
                 {
                     String mainMessage = format(i18n("MSG_RESIGN"), name);
                     String optionalMessage =

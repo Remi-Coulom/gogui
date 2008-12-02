@@ -11,6 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Also show resign message dialog if computer plays both sides
 </simpara>
 </listitem>
 </itemizedlist>
