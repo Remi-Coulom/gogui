@@ -14,6 +14,12 @@
 Also show resign message dialog if computer plays both sides
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix alignment problem for list parameters in dialog for analyze commands of
+type "param"
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
