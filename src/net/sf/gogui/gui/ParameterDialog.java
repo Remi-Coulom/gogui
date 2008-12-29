@@ -304,6 +304,7 @@ public class ParameterDialog
             constraints.gridy = gridy;
             constraints.weightx = 1.0;
             constraints.insets = new Insets(SMALL_PAD, 0, 0, 0);
+            constraints.anchor = GridBagConstraints.WEST;
             gridbag.setConstraints(m_textField, constraints);
             panel.add(m_textField);
         }
