@@ -89,6 +89,10 @@ public final class KomiTest
 
     public void testToString() throws InvalidKomiException
     {
+        assertEquals("-5", (new Komi(-5)).toString());
+        assertEquals("-5.5", (new Komi(-5.5)).toString());
+        assertEquals("-1", (new Komi(-1)).toString());
+        assertEquals("-0.5", (new Komi(-0.5)).toString());
         assertEquals("0", (new Komi(0)).toString());
         assertEquals("5", (new Komi(5)).toString());
         assertEquals("0.5", (new Komi(0.5)).toString());

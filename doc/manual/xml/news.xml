@@ -11,6 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fix wrong komi GTP command if komi is set to -0.5
 </simpara>
 </listitem>
 </itemizedlist>
