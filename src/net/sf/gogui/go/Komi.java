@@ -60,6 +60,8 @@ public final class Komi
     {
         if (m_value % 2 == 0)
             return Integer.toString(m_value / 2);
+        else if (m_value == -1)
+            return "-0.5";
         else
             return (m_value / 2) + ".5";
     }
