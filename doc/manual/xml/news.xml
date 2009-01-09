@@ -14,6 +14,11 @@
 Fix wrong komi GTP command if komi is set to -0.5
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix disabling of shortcut for Program/Interrupt on Mac
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
