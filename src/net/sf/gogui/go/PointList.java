@@ -5,7 +5,7 @@ package net.sf.gogui.go;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/** List containing a points. */
+/** List containing points. */
 public final class PointList
     extends ArrayList<GoPoint>
     implements ConstPointList
