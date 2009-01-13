@@ -120,4 +120,4 @@ scrollkeeper-update >/dev/null 2>&1
 
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
-    /$SYSCONFDIR/gconf/schemas/gogui.schemas >/dev/null 2>&1
+    $SYSCONFDIR/gconf/schemas/gogui.schemas >/dev/null 2>&1

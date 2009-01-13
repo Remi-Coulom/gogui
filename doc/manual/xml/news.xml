@@ -19,6 +19,11 @@ Fix wrong komi GTP command if komi is set to -0.5
 Fix disabling of shortcut for Program/Interrupt on Mac
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+install.sh: Remove unnecessary leading slash in target path for gogui.schemas
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
