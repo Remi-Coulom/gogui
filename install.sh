@@ -66,7 +66,6 @@ done
 
 install -d $PREFIX/share/doc/gogui
 install -m 644 doc/manual/html/*.html $PREFIX/share/doc/gogui
-install -m 644 doc/manual/html/*.png $PREFIX/share/doc/gogui
 
 # Install files to $PREFIX/share/man
 
