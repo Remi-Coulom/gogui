@@ -90,13 +90,11 @@ public class ProgramEditor
         m_command = createFileEntry("LB_PROGRAMEDIT_COMMAND",
                                     program.m_command,
                                     "TT_PROGRAMEDIT_COMMAND",
-                                    "TIT_PROGRAMEDIT_COMMAND", false, true,
+                                    "TIT_PROGRAMEDIT_COMMAND",
                                     ! m_editOnlyLabel);
-        m_workingDirectory = createFileEntry("LB_PROGRAMEDIT_DIR",
-                                             program.m_workingDirectory,
-                                             "TT_PROGRAMEDIT_DIR",
-                                             "TIT_PROGRAMEDIT_DIR",
-                                             true, false, ! m_editOnlyLabel);
+        m_workingDirectory = createEntry("LB_PROGRAMEDIT_DIR",
+                                         30, program.m_workingDirectory,
+                                         ! m_editOnlyLabel);
         if (! editOnlyCommand)
         {
             m_name = createEntry("LB_PROGRAMEDIT_NAME", 20, program.m_name,
@@ -220,11 +218,10 @@ public class ProgramEditor
         box.add(label);
         return box;
     }
+
     private JTextField createFileEntry(String label, String text,
                                        String browseToolTip,
                                        final String title,
-                                       final boolean isDirectory,
-                                       final boolean isCommand,
                                        boolean editable)
     {
         m_panelLeft.add(createEntryLabel(label));
@@ -247,16 +244,12 @@ public class ProgramEditor
             button.setToolTipText(i18n(browseToolTip));
             button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        File file;
-                        if (isDirectory)
-                            file = FileDialogs.showOpenDir(m_dialog,
-                                                           i18n(title));
-                        else
-                            file = FileDialogs.showOpen(m_dialog, i18n(title));
+                        File file =
+                            FileDialogs.showOpen(m_dialog, i18n(title));
                         if (file == null)
                             return;
                         String text = file.toString();
-                        if (isCommand && text.indexOf(' ') >= 0)
+                        if (text.indexOf(' ') >= 0)
                             text = "\"" + text + "\"";
                         field.setText(text);
                         field.setCaretPosition(text.length());
