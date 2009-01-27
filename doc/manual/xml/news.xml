@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Remove browse button for working directory in New Program dialog; selecting a
+directory did not work with native file dialogs on Windows
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Fix wrong komi GTP command if komi is set to -0.5
 </simpara>
 </listitem>
