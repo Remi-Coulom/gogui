@@ -28,6 +28,8 @@ string/CpuTime/cputime
 varp/Defend/defend %p
 string/Defend Both/defend_both %P
 varpo/Disconnect/disconnect %P
+string/Does Attack/does_attack %P
+string/Does Defend/does_defend %P
 string/Does Surround/does_surround %P
 hpstring/Dragon Data/dragon_data %p
 hpstring/Dragon Status/dragon_status
@@ -42,10 +44,8 @@ hpstring/Eye Data/eye_data %c %p
 string/Final Score/final_score
 string/Final Status/final_status %p
 plist/Final Status List Alive/final_status_list alive
-plist/Final Status List Dame/final_status_list dame
 plist/Final Status List Dead/final_status_list dead
 plist/Final Status List Seki/final_status_list seki
-plist/Final Status List Territory/final_status_list %c_territory
 plist/FindLib/findlib %p
 none/Finish SgfTrace/finish_sgftrace %w
 string/Get Connection Node Counter/get_connection_node_counter
@@ -59,6 +59,8 @@ string/Get TryMove Counter/get_trymove_counter
 string/GoGui SigInt/gogui_sigint
 hpstring/Half Eye Data/half_eye_data %p
 string/Help/help
+string/Invariant Hash/invariant_hash
+pspairs/Invariant Hash For Moves/invariant_hash_for_moves %c
 string/Is Legal/is_legal %c %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
@@ -101,7 +103,6 @@ string/Surround Map/surround_map %P
 pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
 none/Test EyeShape/test_eyeshape %P
 none/Time Left/time_left %c %s
-none/Time Settings/time_settings %s
 pspairs/Top Moves/top_moves %c
 pspairs/Top Moves Black/top_moves_black
 pspairs/Top Moves White/top_moves_white

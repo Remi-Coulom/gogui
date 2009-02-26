@@ -36,6 +36,11 @@ Fix erroneous clearing of autorun checkbox in analyze dialog after a new
 command was selected and run with autorun for the first time
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Add some commands new in GNU Go 3.8 to built-in list of analyze commands
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
