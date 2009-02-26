@@ -794,20 +794,24 @@ public class GoGui
         actionGotoNode(node, protectGui);
     }
 
-    public void actionGotoNode(final ConstNode node, final boolean protectGui)
+    private void actionGotoNode(final ConstNode node, final boolean protectGui)
     {
         if (! checkStateChangePossible())
             return;
         if (protectGui)
             protectGui();
-        SwingUtilities.invokeLater(new Runnable() {
+        Runnable runnable = new Runnable() {
                 public void run() {
                     gotoNode(node);
                     boardChangedBegin(false, false);
                     if (protectGui)
                         unprotectGui();
                 }
-            });
+            };
+        if (protectGui)
+            SwingUtilities.invokeLater(runnable);
+        else
+            runnable.run();
     }
 
     public void actionGotoVariation()
