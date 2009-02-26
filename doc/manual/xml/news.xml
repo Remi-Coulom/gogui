@@ -30,6 +30,12 @@ Fix disabling of shortcut for Program/Interrupt on Mac
 install.sh: Remove unnecessary leading slash in target path for gogui.schemas
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix erroneous clearing of autorun checkbox in analyze dialog after a new
+command was selected and run with autorun for the first time
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

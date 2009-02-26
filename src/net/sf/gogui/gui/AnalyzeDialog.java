@@ -583,10 +583,10 @@ public final class AnalyzeDialog
     {
         String label = m_commands.get(index).getLabel();
         insertComboBoxItem(label, 0);
+        m_comboBoxHistory.setSelectedIndex(0);
         for (int i = 1; i < getComboBoxItemCount(); ++i)
             if (getComboBoxItem(i).equals(label))
                 m_comboBoxHistory.removeItemAt(i);
-        m_comboBoxHistory.setSelectedIndex(0);
         m_firstIsTemp = false;
     }
 }
