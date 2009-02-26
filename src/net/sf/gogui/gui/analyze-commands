@@ -28,6 +28,8 @@ string/CpuTime/cputime
 varp/Defend/defend %p
 string/Defend Both/defend_both %P
 varpo/Disconnect/disconnect %P
+string/Does Attack/does_attack %P
+string/Does Defend/does_defend %P
 string/Does Surround/does_surround %P
 hpstring/Dragon Data/dragon_data %p
 hpstring/Dragon Status/dragon_status
@@ -57,6 +59,8 @@ string/Get TryMove Counter/get_trymove_counter
 string/GoGui SigInt/gogui_sigint
 hpstring/Half Eye Data/half_eye_data %p
 string/Help/help
+string/Invariant Hash/invariant_hash
+pspairs/Invariant Hash For Moves/invariant_hash_for_moves %c
 string/Is Legal/is_legal %c %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
