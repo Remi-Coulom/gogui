@@ -4,6 +4,20 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.1.5</revnumber>
 <date>26 Feb 2009</date>
 <authorinitials>enz</authorinitials>
@@ -44,7 +58,7 @@ Add some commands new in GNU Go 3.8 to built-in list of analyze commands
 <listitem>
 <simpara>
 Make a change that hopefully fixes an unreproducible crash that may have been
-occured if the user changes to a new node and manages to click on an analyze
+occurred if the user changes to a new node and manages to click on an analyze
 command before the Go program is synchronized with the new position
 </simpara>
 </listitem>
