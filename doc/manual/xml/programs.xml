@@ -85,7 +85,7 @@ BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 <ulink url="http://fuego.sf.net"/>
 </para>
 <para>
-Operating systems: Macintosh
+Operating systems: Unix, Windows/Cygwin, Mac OS X
 </para>
 <para>
 Command: <userinput>fuego</userinput>
@@ -102,7 +102,7 @@ Command: <userinput>fuego</userinput>
 <ulink url="http://www.gnu.org/software/gnugo/gnugo.html"/>
 </para>
 <para>
-Operating systems: Unix, Windows, Macintosh
+Operating systems: Unix, Windows, Mac OS X
 </para>
 <para>
 Command: <userinput>gnugo --mode gtp</userinput>
