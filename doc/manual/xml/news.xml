@@ -15,11 +15,15 @@ Make substitution of analyze command arguments work that contain backslashes
 (e.g. file name arguments on Windows)
 </simpara>
 </listitem>
-</itemizedlist>
 <listitem>
 <simpara>
 Don't automatically continue play if Computer Color is Both and current
 move generation was interrupted.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mac OS X: update to Quaqua 5.0.1
 </simpara>
 </listitem>
 </itemizedlist>

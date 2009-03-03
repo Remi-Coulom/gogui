@@ -30,9 +30,9 @@ Comment out the exec svnversion for releases.
 <property name="looks.jarfile" value="looks-2.2.1.jar"/>
 
 <property name="quaqua.nestedzipfile"
- value="external/quaqua/quaqua-5.0.nested.zip"/>
-<property name="quaqua.zipfile" value="Quaqua 5.0.zip"/>
-<property name="quaqua.dir" value="Quaqua 5.0/dist"/>
+ value="external/quaqua/quaqua-5.0.1.nested.zip"/>
+<property name="quaqua.zipfile" value="Quaqua 5.0.1.zip"/>
+<property name="quaqua.dir" value="Quaqua 5.0.1/dist"/>
 <property name="quaqua.jarfile" value="quaqua.jar"/>
 
 <property name="docbook.path" value="external/docbook/${docbook.name}"/>
