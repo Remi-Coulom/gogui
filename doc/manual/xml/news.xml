@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Make substitution of analyze command arguments work that contain backslashes
+(e.g. file name arguments on Windows)
 </simpara>
 </listitem>
 </itemizedlist>
