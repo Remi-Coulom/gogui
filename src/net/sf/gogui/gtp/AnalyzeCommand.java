@@ -146,9 +146,9 @@ public class AnalyzeCommand
     public String replaceWildCards(GoColor toMove)
     {
         String command = m_definition.getCommand();
-        String result = command.replaceAll("%m", toMove.toString());
+        String result = command.replace("%m", toMove.toString());
         if (needsPointArg() && m_pointArg != null)
-            result = result.replaceAll("%p", m_pointArg.toString());
+            result = result.replace("%p", m_pointArg.toString());
         if (needsPointListArg())
         {
             String pointList = GoPoint.toString(m_pointListArg);
@@ -156,38 +156,38 @@ public class AnalyzeCommand
                 && m_pointListArg.size() > 0)
                 result = result + ' ' + pointList;
             else
-                result = result.replaceAll("%P", pointList);
+                result = result.replace("%P", pointList);
         }
         if (needsFileArg())
         {
             String fileArg = m_fileArg.toString();
             if (fileArg.indexOf(' ') >= 0)
                 fileArg = "\"" + fileArg + "\"";
-            result = result.replaceAll("%f", fileArg);
+            result = result.replace("%f", fileArg);
         }
         if (needsFileOpenArg())
         {
             String fileOpenArg = m_fileOpenArg.toString();
             if (fileOpenArg.indexOf(' ') >= 0)
                 fileOpenArg = "\"" + fileOpenArg + "\"";
-            result = result.replaceAll("%r", fileOpenArg);
+            result = result.replace("%r", fileOpenArg);
         }
         if (needsFileSaveArg())
         {
             String fileSaveArg = m_fileSaveArg.toString();
             if (fileSaveArg.indexOf(' ') >= 0)
                 fileSaveArg = "\"" + fileSaveArg + "\"";
-            result = result.replaceAll("%w", fileSaveArg);
+            result = result.replace("%w", fileSaveArg);
         }
         if (needsStringArg())
         {
             assert m_stringArg != null;
-            result = result.replaceAll("%s", m_stringArg);
+            result = result.replace("%s", m_stringArg);
         }
         if (needsOptStringArg())
         {
             assert m_optStringArg != null;
-            result = result.replaceAll("%o", m_optStringArg);
+            result = result.replace("%o", m_optStringArg);
         }
         if (needsColorArg())
         {
@@ -196,7 +196,7 @@ public class AnalyzeCommand
                 colorString = "b";
             else if (m_colorArg == WHITE)
                 colorString = "w";
-            result = result.replaceAll("%c", colorString);
+            result = result.replace("%c", colorString);
         }
         return result;
     }
