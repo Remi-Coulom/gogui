@@ -880,7 +880,10 @@ public class GoGui
         if (m_gtp == null || m_gtp.isProgramDead() || ! isCommandInProgress())
             return;
         if (m_interrupt.run(this, m_gtp, m_messageDialogs))
+        {
             showStatus(i18n("STAT_INTERRUPT"));
+            m_interruptComputerBoth = true;
+        }
     }
 
     public void actionKeepOnlyPosition()
@@ -1092,7 +1095,6 @@ public class GoGui
             else
                 m_computerWhite = true;
         }
-        m_interruptComputerBoth = false;
         generateMove(isSingleMove);
         m_game.startClock();
     }
@@ -2055,7 +2057,9 @@ public class GoGui
 
     private boolean m_computerWhite;
 
-    /** State variable used between cbInterrupt and computerMoved. */
+    /** State variable used between generateMove and computerMoved.
+        Flag is set in actionInterrupt.
+    */
     private boolean m_interruptComputerBoth;
 
     /** State variable used between generateMove and computerMoved. */
@@ -3028,6 +3032,7 @@ public class GoGui
             command = m_gtp.getCommandGenmove(toMove);
         }
         m_isSingleMove = isSingleMove;
+        m_interruptComputerBoth = false;
         Runnable callback = new Runnable()
             {
                 public void run()

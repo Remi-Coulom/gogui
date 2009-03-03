@@ -16,6 +16,13 @@ Make substitution of analyze command arguments work that contain backslashes
 </simpara>
 </listitem>
 </itemizedlist>
+<listitem>
+<simpara>
+Don't automatically continue play if Computer Color is Both and current
+move generation was interrupted.
+</simpara>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
 
