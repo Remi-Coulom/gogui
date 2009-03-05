@@ -3050,6 +3050,8 @@ public class GoGui
         GoPoint p = move.getPoint();
         if (p != null)
             paintImmediately(p, move.getColor(), true);
+        if (m_gtp != null)
+            synchronizeProgram();
         if (m_gtp != null && ! isOutOfSync() && ! m_gtp.isProgramDead())
         {
             try
