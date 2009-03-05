@@ -12,8 +12,14 @@
 <listitem>
 <simpara>
 Don't synchronize the program with GTP commands immediately after navigation
-in the game tree but only when needed. This speeds up naviagation and keeps
+in the game tree but only when needed. This speeds up navigation and keeps
 the GTP log shorter.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Simplify context menu of a point on the board by removing analyze commands
+with point argument.
 </simpara>
 </listitem>
 </itemizedlist>
