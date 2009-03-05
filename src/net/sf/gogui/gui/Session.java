@@ -81,13 +81,15 @@ public final class Session
         if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE
             || width == Integer.MIN_VALUE || height == Integer.MIN_VALUE)
             return;
-        setLocationChecked(window, x, y);
         setSizeChecked(window, width, height);
+        // Restore location after size, because some window managers move a
+        // window, if the size changes in a way that it would not be fully
+        // visible
+        setLocationChecked(window, x, y);
     }
 
     public void restoreSize(Window window, Window owner, String name)
     {
-        restoreLocation(window, owner, name);
         int width = Integer.MIN_VALUE;
         int height = Integer.MIN_VALUE;
         Preferences prefs = getNode(name);
@@ -99,6 +101,10 @@ public final class Session
         if (width == Integer.MIN_VALUE || height == Integer.MIN_VALUE)
             return;
         setSizeChecked(window, width, height);
+        // Restore location after size, because some window managers move a
+        // window, if the size changes in a way that it would not be fully
+        // visible
+        restoreLocation(window, owner, name);
     }
 
     public void saveLocation(Window window, String name)
