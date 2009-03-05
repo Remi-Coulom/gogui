@@ -1084,7 +1084,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! checkProgramReady())
+        if (! synchronizeProgram())
             return;
         if (! isSingleMove && ! isComputerBoth())
         {
@@ -1248,7 +1248,7 @@ public class GoGui
             return;
         if (! checkStateChangePossible())
             return;
-        boolean programReady = (m_gtp != null && checkProgramReady());
+        boolean programReady = (m_gtp != null && synchronizeProgram());
         if (m_gtp == null || ! programReady)
         {
             String disableKey = "net.sf.gogui.gogui.GoGui.score-no-program";
@@ -1306,7 +1306,7 @@ public class GoGui
             showError(i18n("MSG_BOARD_CHANGING_COMMAND"), "", false);
             return;
         }
-        if (! checkProgramReady())
+        if (! synchronizeProgram())
             return;
         Runnable callback = new Runnable() {
                 public void run() {
@@ -1351,7 +1351,7 @@ public class GoGui
                                         boolean autoRun, boolean clearBoard,
                                         boolean oneRunOnly)
     {
-        if (! checkProgramReady())
+        if (! synchronizeProgram())
             return;
         if (! checkStateChangePossible())
             return;
@@ -1904,7 +1904,7 @@ public class GoGui
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                    boolean clearBoard)
     {
-        if (! checkProgramReady())
+        if (! synchronizeProgram())
             return;
         m_analyzeCommand = command;
         m_analyzeAutoRun = autoRun;
@@ -2193,7 +2193,8 @@ public class GoGui
     private void analyzeBegin(boolean checkComputerMove)
     {
         if (m_gtp == null || m_analyzeCommand == null
-            || m_analyzeCommand.isPointArgMissing())
+            || m_analyzeCommand.isPointArgMissing()
+            || ! synchronizeProgram())
             return;
         GoColor toMove = getToMove();
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
@@ -2579,48 +2580,6 @@ public class GoGui
         }
     }
 
-    /** Check if program is attached and ready to receive commands. */
-    private boolean checkProgramReady()
-    {
-        if (m_gtp == null)
-        {
-            showError(i18n("MSG_NO_PROGRAM_ATTACHED"), "", false);
-            return false;
-        }
-        if (! checkCommandInProgress())
-            return false;
-        String name = getProgramName();
-        if (m_gtp.isProgramDead())
-        {
-            String mainMessage = format(i18n("MSG_PROGRAM_TERMINATED"), name);
-            String optionalMessage = "";
-            if (m_shell.isLastTextNonGTP())
-            {
-                showShell();
-                optionalMessage =
-                    format(i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP"), name);
-            }
-            else
-            {
-                showShell();
-                optionalMessage =
-                    format(i18n("MSG_PROGRAM_TERMINATED_REATTACH"), name);
-            }
-            showError(mainMessage, optionalMessage, false);
-            // If program died, menu items need to be updated
-            updateViews(false);
-            return false;
-        }
-        if (isOutOfSync())
-        {
-            String mainMessage = format(i18n("MSG_OUT_OF_SYNC"), name);
-            String optionalMessage = format(i18n("MSG_OUT_OF_SYNC_2"), name);
-            showError(mainMessage, optionalMessage, false);
-            return false;
-        }
-        return true;
-    }
-
     private boolean checkSaveGame()
     {
         return checkSaveGame(false);
@@ -2879,43 +2838,6 @@ public class GoGui
     private void currentNodeChanged()
     {
         updateFromGoBoard();
-        if (m_gtp == null)
-            return;
-        boolean wasOutOfSync = isOutOfSync();
-        try
-        {
-            ConstGameInfo info = getGameInfo();
-            m_gtp.synchronize(getBoard(), info.getKomi(),
-                              info.getTimeSettings());
-        }
-        catch (GtpError e)
-        {
-            if (! wasOutOfSync)
-            {
-                String name = getProgramName();
-                String mainMessage = format(i18n("MSG_NOSYNC"), name);
-                String command = null;
-                if (e.getCommand() != null)
-                    command = formatCommand(e.getCommand());
-                String message = e.getMessage();
-                String response = null;
-                if (! message.trim().equals(""))
-                    response = message;
-                String optionalMessage;
-                if (command == null)
-                    optionalMessage =
-                        format(i18n("MSG_NOSYNC_ERROR"), name, message);
-                else if (response == null)
-                    optionalMessage =
-                        format(i18n("MSG_NOSYNC_FAILURE"),
-                               command, name);
-                else
-                    optionalMessage =
-                        format(i18n("MSG_NOSYNC_FAILURE_RESPONSE"),
-                               command, name, response);
-                showWarning(mainMessage, optionalMessage, true);
-            }
-        }
     }
 
     private void detachProgram()
@@ -3001,6 +2923,8 @@ public class GoGui
 
     private void generateMove(boolean isSingleMove)
     {
+        if (! synchronizeProgram())
+            return;
         GoColor toMove = getToMove();
         ConstNode node = getCurrentNode();
         ConstNode father = node.getFatherConst();
@@ -4103,6 +4027,82 @@ public class GoGui
     {
         m_messageDialogs.showWarning(this, mainMessage, optionalMessage,
                                      isCritical);
+    }
+
+    private boolean synchronizeProgram()
+    {
+        if (m_gtp == null)
+        {
+            showError(i18n("MSG_NO_PROGRAM_ATTACHED"), "", false);
+            return false;
+        }
+        if (! checkCommandInProgress())
+            return false;
+        String name = getProgramName();
+        if (m_gtp.isProgramDead())
+        {
+            String mainMessage = format(i18n("MSG_PROGRAM_TERMINATED"), name);
+            String optionalMessage = "";
+            if (m_shell.isLastTextNonGTP())
+            {
+                showShell();
+                optionalMessage =
+                    format(i18n("MSG_PROGRAM_TERMINATED_CHECK_GTP"), name);
+            }
+            else
+            {
+                showShell();
+                optionalMessage =
+                    format(i18n("MSG_PROGRAM_TERMINATED_REATTACH"), name);
+            }
+            showError(mainMessage, optionalMessage, false);
+            // If program died, menu items need to be updated
+            updateViews(false);
+            return false;
+        }
+        boolean wasOutOfSync = isOutOfSync();
+        try
+        {
+            ConstGameInfo info = getGameInfo();
+            m_gtp.synchronize(getBoard(), info.getKomi(),
+                              info.getTimeSettings());
+        }
+        catch (GtpError e)
+        {
+            if (wasOutOfSync)
+            {
+                String mainMessage = format(i18n("MSG_OUT_OF_SYNC"), name);
+                String optionalMessage = format(i18n("MSG_OUT_OF_SYNC_2"),
+                                                name);
+                showError(mainMessage, optionalMessage, false);
+                return false;
+            }
+            else
+            {
+                String mainMessage = format(i18n("MSG_NOSYNC"), name);
+                String command = null;
+                if (e.getCommand() != null)
+                    command = formatCommand(e.getCommand());
+                String message = e.getMessage();
+                String response = null;
+                if (! message.trim().equals(""))
+                    response = message;
+                String optionalMessage;
+                if (command == null)
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_ERROR"), name, message);
+                else if (response == null)
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_FAILURE"),
+                               command, name);
+                else
+                    optionalMessage =
+                        format(i18n("MSG_NOSYNC_FAILURE_RESPONSE"),
+                               command, name, response);
+                showWarning(mainMessage, optionalMessage, true);
+            }
+        }
+        return true;
     }
 
     private void toFrontLater()

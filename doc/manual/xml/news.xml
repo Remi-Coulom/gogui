@@ -11,6 +11,9 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Don't synchronize the program with GTP commands immediately after navigation
+in the game tree but only when needed. This speeds up naviagation and keeps
+the GTP log shorter.
 </simpara>
 </listitem>
 </itemizedlist>
