@@ -1337,6 +1337,8 @@ public class GoGui
             return;
         if (m_shell == null)
             return;
+        if (! synchronizeProgram())
+            return;
         sendGtpFile(file);
         m_menuBar.addRecentGtp(file);
         updateViews(false);
