@@ -18,6 +18,7 @@ import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.gamefile.GameFile;
@@ -25,6 +26,8 @@ import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.util.ErrorMessage;
@@ -197,6 +200,11 @@ public final class ThumbnailCreator
 
     private GameFile m_gameFile;
 
+    /** Read a file and return a position to use for the thumbnail.
+        The position is the first position in the main variation that contains
+        setup stones (unless they are handicap stones) or, if no such position
+        exists, the last position.
+    */
     private ConstBoard readFile(File file) throws ErrorMessage
     {
         GameReader reader = new GameReader(file);
@@ -209,7 +217,8 @@ public final class ThumbnailCreator
             m_description = "";
         Board board = new Board(size);
         net.sf.gogui.game.ConstNode node = tree.getRoot();
-        while (node.hasChildren() && ! node.hasSetup())
+        while (node.hasChildren()
+               && ! (node.hasSetup() && ! hasHandicapSetup(node)))
             node = node.getChildConst();
         new BoardUpdater().update(tree, node, board);
         //System.err.print(net.sf.gogui.go.BoardUtil.toString(board));
@@ -261,6 +270,12 @@ public final class ThumbnailCreator
         if (uri == null)
             throw new Error("Invalid file name");
         return uri;
+    }
+
+    private boolean hasHandicapSetup(ConstNode node)
+    {
+        return (! node.hasFather() && node.getSetup(WHITE).size() == 0
+                && node.getSetup(BLACK).size() > 0);
     }
 
     private void log(String line)
