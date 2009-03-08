@@ -81,7 +81,7 @@ public final class ThumbnailCreator
             {
             }
         }
-        create(input, null, 128, true);
+        create(input, null, 128, false);
     }
 
     /** Create thumbnail.
