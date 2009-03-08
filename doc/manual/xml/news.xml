@@ -11,6 +11,9 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Create thumbnails in GoGui's file dialog in the same way as created by
+gogui-thumbnailer (don't use smaller thumbnail size for board sizes smaller
+than 19)
 </simpara>
 </listitem>
 </itemizedlist>
