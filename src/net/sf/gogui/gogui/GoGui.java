@@ -4078,7 +4078,6 @@ public class GoGui
                 String optionalMessage = format(i18n("MSG_OUT_OF_SYNC_2"),
                                                 name);
                 showError(mainMessage, optionalMessage, false);
-                return false;
             }
             else
             {
@@ -4104,6 +4103,7 @@ public class GoGui
                                command, name, response);
                 showWarning(mainMessage, optionalMessage, true);
             }
+            return false;
         }
         return true;
     }
