@@ -17,17 +17,13 @@ import java.security.NoSuchAlgorithmException;
 import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.Field;
-import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.GameInfo;
-import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.gamefile.GameFile;
 import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.go.ConstBoard;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
-import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.util.ErrorMessage;
@@ -209,20 +205,12 @@ public final class ThumbnailCreator
     {
         GameReader reader = new GameReader(file);
         m_gameFile = reader.getFile();
-        GameTree tree = reader.getTree();
-        GameInfo info = tree.getGameInfo(tree.getRoot());
-        int size = tree.getBoardSize();
+        ConstGameTree tree = reader.getTree();
+        ConstGameInfo info = tree.getGameInfoConst(tree.getRootConst());
         m_description = info.suggestGameName();
         if (m_description == null)
             m_description = "";
-        Board board = new Board(size);
-        net.sf.gogui.game.ConstNode node = tree.getRoot();
-        while (node.hasChildren()
-               && ! (node.hasSetup() && ! hasHandicapSetup(node)))
-            node = node.getChildConst();
-        new BoardUpdater().update(tree, node, board);
-        //System.err.print(net.sf.gogui.go.BoardUtil.toString(board));
-        return board;
+        return ThumbnailUtil.getPosition(tree);
     }
 
     private long getLastModified(File file) throws Error
@@ -270,12 +258,6 @@ public final class ThumbnailCreator
         if (uri == null)
             throw new Error("Invalid file name");
         return uri;
-    }
-
-    private boolean hasHandicapSetup(ConstNode node)
-    {
-        return (! node.hasFather() && node.getSetup(WHITE).size() == 0
-                && node.getSetup(BLACK).size() > 0);
     }
 
     private void log(String line)

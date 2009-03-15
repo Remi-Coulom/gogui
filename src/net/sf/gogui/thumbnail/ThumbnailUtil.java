@@ -4,6 +4,13 @@ package net.sf.gogui.thumbnail;
 
 import java.io.File;
 import java.io.IOException;
+import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.Board;
+import static net.sf.gogui.go.GoColor.BLACK;
+import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.util.FileUtil;
 
 /** Untility functions for managing the thumbnail directory. */
@@ -79,6 +86,34 @@ public final class ThumbnailUtil
         else
             System.err.println("  Not expiring");
         System.err.println();
+    }
+
+    /** Get a node from the tree to be used for the thumbnail.
+        The position selected is the last position in the main variation or the
+        first position in the main variation that contains both black and
+        white setup stones. The rationale for this is that one usually wants
+        to see the last position of a game, which may contain black handicap
+        setup stones before the moves, but the thumbnail shouldn't show the
+        solution of files containing Go problems.
+    */
+    public static ConstNode getNode(ConstGameTree tree)
+    {
+        ConstNode node = tree.getRootConst();
+        while (node.hasChildren()
+               && ! (node.getSetup(BLACK).size() > 0
+                     && node.getSetup(WHITE).size() > 0))
+            node = node.getChildConst();
+        return node;
+    }
+
+    /** Get a position from the tree to be used for the thumbnail.
+        @see #getPosition()
+    */
+    public static ConstBoard getPosition(ConstGameTree tree)
+    {
+        Board board = new Board(tree.getBoardSize());
+        new BoardUpdater().update(tree, getNode(tree), board);
+        return board;
     }
 
     /** Make constructor unavailable; class is for namespace only. */

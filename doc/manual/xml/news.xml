@@ -16,6 +16,11 @@ gogui-thumbnailer (don't use smaller thumbnail size for board sizes smaller
 than 19)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Make selection of position for thumbnails work as documented
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

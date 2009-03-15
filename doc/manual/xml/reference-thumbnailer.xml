@@ -50,8 +50,15 @@ Nautilus</ulink>.
 The installation script <filename>install.sh</filename> in the GoGui package
 will install this program as a thumbnailer for the
 <ulink url="http://www.gnome.org">GNOME</ulink> desktop environment.
+</para>
+<para>
 The thumbnails will show the final position of the main variation, or the
 first position that contains both black and white setup stones.
+The rationale for this is that one usually wants to see the last position of a
+game, which may contain black handicap setup stones before the moves, but the
+thumbnail should not show the solution of files containing Go problems.
+</para>
+<para>
 If the thumbnailer is invoked without output filename, the thumbnails will be
 created in the directory <userinput>.thumbnails/normal</userinput> in the
 user home directory.
