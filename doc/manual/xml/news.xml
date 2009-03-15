@@ -21,6 +21,12 @@ than 19)
 Make selection of position for thumbnails work as documented
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Avoid showing old thumbnails in open dialog if a file was modified, saved and
+opened in the same session of GoGui
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
