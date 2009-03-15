@@ -443,7 +443,10 @@ class SgfPreview
             assert false; // Cannot happen
             return null;
         }
-        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        // Don't use Toolkit.getImage(). It caches images, which would cause old
+        // thumbnails to be shown, if a file was modified, saved and opened in
+        // the same session of GoGui
+        Image image = Toolkit.getDefaultToolkit().createImage(url);
         MediaTracker mediaTracker = new MediaTracker(new Container());
         mediaTracker.addImage(image, 0);
         try
