@@ -185,12 +185,13 @@ public class TexWriter
         for (int i = 0; i < needsComment.size(); ++i)
         {
             node = needsComment.get(i);
+            int moveNumber = NodeUtil.getMoveNumber(node);
             Move move = node.getMove();
             GoPoint point = move.getPoint();
             GoColor color = move.getColor();
             if (comment.length() > 0)
                 comment.append(" \\enspace\n");
-            comment.append(getStoneInTextString(i + 1, color));
+            comment.append(getStoneInTextString(moveNumber, color));
             if (point == null)
                 comment.append("~pass");
             else
