@@ -11,6 +11,9 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Export LaTeX Main Variation: fix wrong move number in comments after diagram
+for moves that are not shown in the diagram (pass or multiple moves on same
+point). Fixes bug #2699540.
 </simpara>
 </listitem>
 </itemizedlist>
