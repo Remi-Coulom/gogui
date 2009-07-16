@@ -29,9 +29,13 @@ Export LaTeX Main Variation: fix wrong move number in comments after diagram
 for moves that are not shown in the diagram (pass or multiple moves on same
 point). Fixes bug #2699540.
 </simpara>
+</listitem>
+<listitem>
 <simpara>
 Update to Quaqua 5.2.1. See also patch #2814945.
 </simpara>
+</listitem>
+<listitem>
 <simpara>
 Update to JGoodies Looks 2.2.2.
 </simpara>
