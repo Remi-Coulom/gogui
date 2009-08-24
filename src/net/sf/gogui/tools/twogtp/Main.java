@@ -43,6 +43,7 @@ public final class Main
                 "xml"
             };
             Options opt = Options.parse(args, options);
+            opt.checkNoArguments();
             if (opt.contains("help"))
             {
                 String helpText =
