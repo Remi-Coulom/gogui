@@ -50,6 +50,44 @@ public final class OptionsTest
         assertEquals(arguments.get(1), "arg2");
     }
 
+    public void testCheckNoArguments() throws ErrorMessage
+    {
+        String specs[] = {
+            "option:"
+        };
+        {
+            String args[] = {
+                "-option", "value",
+                "arg"
+            };
+            Options opt = new Options(args, specs);
+            boolean errorThrown = false;
+            try
+            {
+                opt.checkNoArguments();
+            }
+            catch (ErrorMessage e)
+            {
+                errorThrown = true;
+            }
+            assertTrue(errorThrown);
+        }
+        {
+            String args[] = {
+                "-option", "value"
+            };
+            Options opt = new Options(args, specs);
+            try
+            {
+                opt.checkNoArguments();
+            }
+            catch (ErrorMessage e)
+            {
+                fail();
+            }
+        }
+    }
+
     public void testStopParsing() throws ErrorMessage
     {
         String specs[] = { "flag1", "value1:", "value2:", "flag2" };

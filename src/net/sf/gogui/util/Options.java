@@ -74,6 +74,16 @@ public class Options
         return m_args;
     }
 
+    /** Check that the number of non-option arguments is zero.
+        @throws ErrorMessage If there are any non-option arguments.
+    */
+    public void checkNoArguments() throws ErrorMessage
+    {
+        if (! m_args.isEmpty())
+            throw new ErrorMessage(
+                      "Command does not allow arguments that are not options");
+    }
+
     /** Parse double option.
         @param option The option key.
         @return The option value or 0, if option is not present.
