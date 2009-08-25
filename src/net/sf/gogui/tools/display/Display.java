@@ -185,7 +185,7 @@ public class Display
         assert SwingUtilities.isEventDispatchThread();
         m_guiBoard.clearAll();
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
-        AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
+        AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar, null);
     }
 
     /** Only accept this board size.

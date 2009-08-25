@@ -1952,7 +1952,7 @@ public class GoGui
             return;
         m_guiBoard.clearAll();
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), false);
-        AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
+        AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar, null);
     }
 
     private class AnalyzeContinue
@@ -2224,8 +2224,9 @@ public class GoGui
         try
         {
             String response = m_gtp.getResponse();
+            StringBuilder showTextBuffer = new StringBuilder(256);
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_statusBar,
-                             getBoard(), response);
+                             getBoard(), response, showTextBuffer);
             AnalyzeType type = m_analyzeCommand.getType();
             GoPoint pointArg = null;
             if (m_analyzeCommand.needsPointArg())
@@ -2240,18 +2241,24 @@ public class GoGui
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
                                                title, response, m_gtp,
                                                m_messageDialogs);
-            if (m_analyzeCommand.isTextType())
+            boolean isTextType = m_analyzeCommand.isTextType();
+            String showText = null;
+            if (showTextBuffer.length() > 0)
+                showText = showTextBuffer.toString();
+            else if (isTextType)
+                showText = response;
+            if (showText != null)
             {
-                if (response.indexOf("\n") < 0)
+                if (showText.indexOf("\n") < 0)
                 {
-                    if (response.trim().equals(""))
-                        response = i18n("STAT_ANALYZE_TEXT_EMPTY_RESPONSE");
+                    if (isTextType && showText.trim().equals(""))
+                        showText = i18n("STAT_ANALYZE_TEXT_EMPTY_RESPONSE");
                     showStatus(format(i18n("STAT_ANALYZE_TEXT_RESPONSE"),
-                                      title, response));
+                                      title, showText));
                 }
                 else
                     GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
-                                                    pointArg, title, response);
+                                                    pointArg, title, showText);
             }
             if ("".equals(m_statusBar.getText()) && type != AnalyzeType.PARAM)
                 showStatus(title);

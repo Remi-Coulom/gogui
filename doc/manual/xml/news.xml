@@ -22,6 +22,11 @@ Simplify context menu of a point on the board by removing analyze commands
 with point argument.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Support multi-line text in analyze commands of type gfx.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

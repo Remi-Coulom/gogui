@@ -118,6 +118,9 @@ INFLUENCE arguments are point double pairs;
 COLOR arguments are a color (like in cboard) and a point list;
 VAR arguments are moves (b|w point|PASS);
 all other commands take a point list.
+If more than one TEXT commands exist, the text will not be displayes in the
+status bar, but the lines will be merged to a multi-line text and displayed in
+a window.
 See the <userinput>gogui-dummy-gfx</userinput> command in
 <xref linkend="reference-dummy"/> for an example.
 </simpara>

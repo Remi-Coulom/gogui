@@ -27,10 +27,15 @@ import net.sf.gogui.util.StringUtil;
 /** Show response to an AnalyzeCommand in the GUI. */
 public final class AnalyzeShow
 {
-    /** Parse analyze command response and display it on the board. */
+    /** Parse analyze command response and display it on the board.
+        @param showTextBuffer If not null, text lines from AnalyzeType.GFX
+        commands will not be shown immediately in the status bar, but appended
+        to the text buffer. This is for allowing multiline text in gfx commands
+        that will be shown in a separate window later.
+    */
     public static void show(AnalyzeCommand command, GuiBoard guiBoard,
                             StatusBar statusBar, ConstBoard board,
-                            String response)
+                            String response, StringBuilder showTextBuffer)
         throws GtpResponseFormatError
     {
         GoPoint pointArg = command.getPointArg();
@@ -63,7 +68,7 @@ public final class AnalyzeShow
             break;
         case GFX:
             {
-                showGfx(response, guiBoard, statusBar);
+                showGfx(response, guiBoard, statusBar, showTextBuffer);
             }
             break;
         case PLIST:
@@ -134,9 +139,12 @@ public final class AnalyzeShow
         }
     }
 
-    /** Parse gfx analyze command response and display it on the board. */
+    /** Parse gfx analyze command response and display it on the board.
+        @param showTextBuffer See AnalyzeShow.show()
+    */
     public static void showGfx(String response, GuiBoard guiBoard,
-                               StatusBar statusBar)
+                               StatusBar statusBar,
+                               StringBuilder showTextBuffer)
     {
         BufferedReader reader
             = new BufferedReader(new StringReader(response));
@@ -154,7 +162,7 @@ public final class AnalyzeShow
             }
             if (line == null)
                 break;
-            showGfxLine(line, guiBoard, statusBar);
+            showGfxLine(line, guiBoard, statusBar, showTextBuffer);
         }
     }
 
@@ -241,9 +249,12 @@ public final class AnalyzeShow
         }
     }
 
-    /** Parse gfx analyze command response line and display it on the board. */
+    /** Parse gfx analyze command response line and display it on the board.
+        @param showTextBuffer See AnalyzeShow.show()
+    */
     public static void showGfxLine(String line, GuiBoard guiBoard,
-                                   StatusBar statusBar)
+                                   StatusBar statusBar,
+                                   StringBuilder showTextBuffer)
     {
         String[] args = StringUtil.splitArguments(line);
         if (args.length == 0)
@@ -269,8 +280,17 @@ public final class AnalyzeShow
         {
             line = line.trim();
             int pos = line.indexOf(' ');
+            String text = "";
             if (pos > 0)
-                statusBar.setText(line.substring(pos + 1));
+                text = line.substring(pos + 1);
+            if (showTextBuffer == null)
+                statusBar.setText(text);
+            else
+            {
+                if (showTextBuffer.length() > 0)
+                    showTextBuffer.append('\n');
+                showTextBuffer.append(text);
+            }
         }
         else if (cmd.equals("TRIANGLE"))
             showGfxTriangle(args, guiBoard);
