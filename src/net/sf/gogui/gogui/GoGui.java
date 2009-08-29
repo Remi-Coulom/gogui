@@ -183,6 +183,7 @@ public class GoGui
         m_gameInfoPanel.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfoPanel, BorderLayout.NORTH);
         m_guiBoard = new GuiBoard(boardSize);
+        m_showAnalyzeText = new ShowAnalyzeText(this, m_guiBoard);
 
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
@@ -1346,18 +1347,19 @@ public class GoGui
 
     public void actionSetAnalyzeCommand(AnalyzeCommand command)
     {
-        actionSetAnalyzeCommand(command, false, true, true);
+        actionSetAnalyzeCommand(command, false, true, true, false);
     }
 
     public void actionSetAnalyzeCommand(AnalyzeCommand command,
                                         boolean autoRun, boolean clearBoard,
-                                        boolean oneRunOnly)
+                                        boolean oneRunOnly,
+                                        boolean reuseTextWindow)
     {
         if (! synchronizeProgram())
             return;
         if (! checkStateChangePossible())
             return;
-        initAnalyzeCommand(command, autoRun, clearBoard);
+        initAnalyzeCommand(command, autoRun, clearBoard, reuseTextWindow);
         m_analyzeOneRunOnly = oneRunOnly;
         boolean needsPointArg = m_analyzeCommand.needsPointArg();
         if (needsPointArg && ! m_analyzeCommand.isPointArgMissing())
@@ -1904,13 +1906,14 @@ public class GoGui
     }
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
-                                   boolean clearBoard)
+                                   boolean clearBoard, boolean reuseTextWindow)
     {
         if (! synchronizeProgram())
             return;
         m_analyzeCommand = command;
         m_analyzeAutoRun = autoRun;
         m_analyzeClearBoard = clearBoard;
+        m_analyzeReuseTextWindow = reuseTextWindow;
         if (command.needsPointArg())
         {
             setBoardCursor(Cursor.HAND_CURSOR);
@@ -2046,6 +2049,8 @@ public class GoGui
     private boolean m_analyzeClearBoard;
 
     private boolean m_analyzeOneRunOnly;
+
+    private boolean m_analyzeReuseTextWindow;
 
     private boolean m_autoNumber;
 
@@ -2192,6 +2197,8 @@ public class GoGui
 
     private ArrayList<Program> m_programs;
 
+    private ShowAnalyzeText m_showAnalyzeText;
+
     private void analyzeBegin(boolean checkComputerMove)
     {
         if (m_gtp == null || m_analyzeCommand == null
@@ -2257,8 +2264,10 @@ public class GoGui
                                       title, showText));
                 }
                 else
-                    GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
-                                                    pointArg, title, showText);
+                {
+                    m_showAnalyzeText.show(type, pointArg, title, showText,
+                                           m_analyzeReuseTextWindow);
+                }
             }
             if ("".equals(m_statusBar.getText()) && type != AnalyzeType.PARAM)
                 showStatus(title);

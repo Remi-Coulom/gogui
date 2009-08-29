@@ -3,6 +3,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,7 +24,6 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -66,7 +66,8 @@ public final class AnalyzeDialog
         void actionClearAnalyzeCommand();
 
         void actionSetAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
-                                     boolean clearBoard, boolean oneRunOnly);
+                                     boolean clearBoard, boolean oneRunOnly,
+                                     boolean reuseTextWindow);
     }
 
     public AnalyzeDialog(Frame owner, Listener listener,
@@ -192,6 +193,8 @@ public final class AnalyzeDialog
 
     private JCheckBox m_clearBoard;
 
+    private JCheckBox m_reuseWindow;
+
     private JComboBox m_comboBoxHistory;
 
     private JList m_list;
@@ -311,19 +314,16 @@ public final class AnalyzeDialog
         return panel;
     }
 
-    private JPanel createLowerPanel()
+    private JComponent createLowerPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        Box panel = Box.createVerticalBox();
         panel.add(GuiUtil.createFiller());
         m_comboBoxHistory = new JComboBox();
         panel.add(m_comboBoxHistory);
-        JPanel lowerPanel = new JPanel();
-        lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
+        Box lowerPanel = Box.createVerticalBox();
         lowerPanel.setBorder(GuiUtil.createEmptyBorder());
         panel.add(lowerPanel);
-        JPanel optionsPanel
-            = new JPanel(new GridLayout(0, 2, GuiUtil.PAD, 0));
+        Box optionsPanel = Box.createHorizontalBox();
         lowerPanel.add(optionsPanel);
         JPanel leftPanel = new JPanel();
         optionsPanel.add(leftPanel);
@@ -344,9 +344,26 @@ public final class AnalyzeDialog
         m_clearBoard.setEnabled(false);
         leftBox.add(m_clearBoard);
         m_clearBoard.setSelected(true);
+        m_reuseWindow = new JCheckBox(i18n("LB_ANALYZE_REUSE_TEXT_WINDOW"));
+        m_reuseWindow.setToolTipText(i18n("TT_ANALYZE_REUSE_TEXT_WINDOW"));
+        leftBox.add(m_reuseWindow);
         JPanel rightPanel = new JPanel();
         rightPanel.add(createColorPanel());
         optionsPanel.add(rightPanel);
+
+        // TODO: The following horizontal glue does not really work as expected
+        // (tested on Linux/Sun Java 1.6.0_14) and the left two components in
+        // the box are not aligned to the left.
+        optionsPanel.add(Box.createHorizontalGlue());
+
+        // TODO: If JGoodies Looks L&F (2.2.2) is used on
+        // Linux/Sun Java 1.6.0_14 or OpenJDK 6b14-1.4.1-0ubuntu11, then the
+        // text of the checkbox items can be truncated a bit on the left
+        // (wrong minimum size calculation?). The two fillers are a workaround
+        // for this.
+        optionsPanel.add(GuiUtil.createFiller());
+        optionsPanel.add(GuiUtil.createFiller());
+
         lowerPanel.add(createButtons());
         m_comboBoxHistory.addActionListener(this);
         return panel;
@@ -515,8 +532,10 @@ public final class AnalyzeDialog
         boolean autoRun = m_autoRun.isEnabled() && m_autoRun.isSelected();
         boolean clearBoard =
             ! m_clearBoard.isEnabled() || m_clearBoard.isSelected();
+        boolean reuseWindow =
+            m_reuseWindow.isEnabled() && m_reuseWindow.isSelected();
         m_listener.actionSetAnalyzeCommand(command, autoRun, clearBoard,
-                                           false);
+                                           false, reuseWindow);
     }
 
     private void selectCommand(int index)

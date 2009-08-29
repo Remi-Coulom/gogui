@@ -19,12 +19,17 @@ the GTP log shorter.
 <listitem>
 <simpara>
 Simplify context menu of a point on the board by removing analyze commands
-with point argument.
+with point argument
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Support multi-line text in analyze commands of type gfx.
+Support multi-line text in analyze commands of type gfx
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New checkbox Reuse text window in analyze dialog
 </simpara>
 </listitem>
 </itemizedlist>

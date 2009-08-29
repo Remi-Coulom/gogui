@@ -2,52 +2,17 @@
 
 package net.sf.gogui.gogui;
 
-import java.awt.Frame;
-import java.awt.Point;
 import static java.text.MessageFormat.format;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
 import static net.sf.gogui.gogui.I18n.i18n;
-import net.sf.gogui.gtp.AnalyzeType;
-import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.gui.GuiBoard;
-import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.gui.TextViewer;
 
 /** Utility functions for class GoGui. */
 public final class GoGuiUtil
 {
-    public static void showAnalyzeTextOutput(Frame owner, GuiBoard guiBoard,
-                                             AnalyzeType type,
-                                             GoPoint pointArg, String title,
-                                             String response)
-    {
-        boolean highlight = (type == AnalyzeType.HSTRING
-                             || type == AnalyzeType.HPSTRING);
-        TextViewer.Listener listener = null;
-        if (type == AnalyzeType.PSTRING || type == AnalyzeType.HPSTRING)
-            listener = new PointSelectionMarker(guiBoard);
-        // Remove first line, if empty (formatted responses frequently start
-        // with an empty line to avoid text on the line with the status
-        // character)
-        response = response.replaceAll("\\A *\n", "");
-        TextViewer textViewer = new TextViewer(owner, title, response,
-                                               highlight, listener);
-        if (pointArg == null)
-            textViewer.setLocationByPlatform(true);
-        else
-        {
-            Point location = guiBoard.getLocationOnScreen(pointArg);
-            textViewer.setLocation(location);
-        }
-        textViewer.setVisible(true);
-    }
-
     public static void updateMoveText(StatusBar statusBar, ConstGame game)
     {
         statusBar.setToPlay(game.getToMove());
@@ -128,25 +93,6 @@ public final class GoGuiUtil
             tip = format(i18n("TT_MOVETEXT_18"), moveNumber, move, totalMoves,
                          variation);
         statusBar.setMoveText(moveText.toString(), tip);
-    }
-
-    private static class PointSelectionMarker
-        implements TextViewer.Listener
-    {
-        public PointSelectionMarker(GuiBoard guiBoard)
-        {
-            m_guiBoard = guiBoard;
-        }
-
-        public void textSelected(String text)
-        {
-            if (! m_guiBoard.isShowing())
-                return;
-            PointList points = GtpUtil.parsePointString(text);
-            GuiBoardUtil.showPointList(m_guiBoard, points);
-        }
-
-        private final GuiBoard m_guiBoard;
     }
 
     /** Make constructor unavailable; class is for namespace only. */
