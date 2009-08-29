@@ -17,11 +17,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -118,6 +120,7 @@ import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.gui.SwitchLanguageDialog;
 import net.sf.gogui.gui.TimeLeftDialog;
 import net.sf.gogui.sgf.SgfError;
+import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.text.TextParser;
@@ -854,24 +857,24 @@ public class GoGui
             return;
         String text = GuiUtil.getClipboardText();
         if (text == null)
-            showError(i18n("MSG_NO_TEXT_IN_CLIPBOARD"), "", false);
-        else
         {
-            // Use temporary file for now. It would be nicer to change the
-            // loadFile function to work with a (String)Reader in the future
-            try
-            {
-                File file = File.createTempFile("gogui-", ".sgf");
-                file.deleteOnExit();
-                BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                out.write(text);
-                out.close();
-                actionOpenFile(file);
-            }
-            catch (IOException e)
-            {
-            }
+            showError(i18n("MSG_NO_TEXT_IN_CLIPBOARD"), "", false);
+            return;
         }
+        ByteArrayInputStream in = new ByteArrayInputStream(text.getBytes());
+        try
+        {
+            SgfReader reader = new SgfReader(in, null, null, 0);
+            GameTree tree = reader.getTree();
+            m_game.init(tree);
+        }
+        catch (SgfError e)
+        {
+            showError(i18n("MSG_IMPORT_FAILED"), e);
+        }
+        m_guiBoard.initSize(getBoard().getSize());
+        initGtp();
+        boardChangedBegin(false, true);
     }
 
     public void actionImportTextPosition()
