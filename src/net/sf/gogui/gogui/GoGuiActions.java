@@ -383,6 +383,11 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportTextPositionFromClipboard(); } };
 
+    public final Action m_actionImportSgfFromClipboard =
+        new Action("ACT_IMPORT_SGF_FROM_CLIPBOARD") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionImportSgfFromClipboard(); } };
+
     public final Action m_actionInterrupt =
         (Platform.isMac() ?
          /* Don't use escape shortcut on Mac, produces a wrong

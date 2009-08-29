@@ -16,10 +16,12 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -841,6 +843,34 @@ public class GoGui
             m_computerWhite = false;
             newGame(getBoardSize());
             updateViews(true);
+        }
+    }
+
+    public void actionImportSgfFromClipboard()
+    {
+        if (! checkStateChangePossible())
+            return;
+        if (! checkSaveGame())
+            return;
+        String text = GuiUtil.getClipboardText();
+        if (text == null)
+            showError(i18n("MSG_NO_TEXT_IN_CLIPBOARD"), "", false);
+        else
+        {
+            // Use temporary file for now. It would be nicer to change the
+            // loadFile function to work with a (String)Reader in the future
+            try
+            {
+                File file = File.createTempFile("gogui-", ".sgf");
+                file.deleteOnExit();
+                BufferedWriter out = new BufferedWriter(new FileWriter(file));
+                out.write(text);
+                out.close();
+                actionOpenFile(file);
+            }
+            catch (IOException e)
+            {
+            }
         }
     }
 

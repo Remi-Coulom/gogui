@@ -32,6 +32,11 @@ Support multi-line text in analyze commands of type gfx
 New checkbox Reuse text window in analyze dialog
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Import SGF from clipboard
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
