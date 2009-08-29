@@ -115,6 +115,11 @@ public final class AnalyzeDialog
         super.dispose();
     }
 
+    public boolean getReuseTextWindow()
+    {
+        return m_reuseWindow.isSelected();
+    }
+
     public GoColor getSelectedColor()
     {
         if (m_black.isSelected())
@@ -152,6 +157,11 @@ public final class AnalyzeDialog
     public void setBoardSize(int boardSize)
     {
         m_boardSize = boardSize;
+    }
+
+    public void setReuseTextWindow(boolean enable)
+    {
+        m_reuseWindow.setSelected(enable);
     }
 
     public void setSelectedColor(GoColor color)

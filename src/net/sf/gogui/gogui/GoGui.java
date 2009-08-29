@@ -2829,6 +2829,8 @@ public class GoGui
     {
         m_analyzeDialog = new AnalyzeDialog(this, this, m_analyzeCommands,
                                             m_gtp, m_messageDialogs);
+        m_analyzeDialog.setReuseTextWindow(
+                        m_prefs.getBoolean("analyze-reuse-text-window", false));
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -3590,7 +3592,11 @@ public class GoGui
         if (m_shell != null)
             m_shell.saveHistory();
         if (m_analyzeDialog != null)
+        {
             m_analyzeDialog.saveRecent();
+            m_prefs.putBoolean("analyze-reuse-text-window",
+                               m_analyzeDialog.getReuseTextWindow());
+        }
         if (! isVisible()) // can that happen?
             return;
         if (m_help != null)
