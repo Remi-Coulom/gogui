@@ -94,6 +94,35 @@ Command: <userinput>fuego</userinput>
 </section>
 
 <section>
+<title>FusekiLibrary</title>
+<indexterm>
+<primary>FusekiLibrary</primary>
+</indexterm>
+<para>
+<ulink url="http://fusekilibrary.sourceforge.net"/>
+</para>
+<para>
+Operating systems: Windows
+</para>
+<para>
+Command: <userinput>FusekiBot.exe</userinput>
+</para>
+<para>
+<note>
+<para>
+FusekiLibrary also works on GNU/Linux in the
+<ulink url="http://www.mono-project.com">Mono</ulink> runtime using the
+command:
+</para>
+<para>
+<userinput>mono FusekiBot.exe</userinput>
+</para>
+</note>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
 <title>GNU Go</title>
 <indexterm>
 <primary>GNU Go</primary>
