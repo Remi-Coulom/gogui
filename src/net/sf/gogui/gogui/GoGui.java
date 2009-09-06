@@ -3103,10 +3103,10 @@ public class GoGui
         GoPoint p = move.getPoint();
         if (p != null)
             paintImmediately(p, move.getColor(), true);
-        if (m_gtp != null)
-            synchronizeProgram();
-        if (m_gtp != null && ! isOutOfSync() && ! m_gtp.isProgramDead())
+        if (m_gtp != null && ! isComputerNone() && ! isOutOfSync()
+            && ! m_gtp.isProgramDead())
         {
+            synchronizeProgram();
             try
             {
                 m_gtp.updateHumanMove(getBoard(), move);
@@ -3317,6 +3317,11 @@ public class GoGui
     private boolean isComputerBoth()
     {
         return (m_computerBlack && m_computerWhite);
+    }
+
+    private boolean isComputerNone()
+    {
+        return ! (m_computerBlack || m_computerWhite);
     }
 
     private boolean isOutOfSync()
