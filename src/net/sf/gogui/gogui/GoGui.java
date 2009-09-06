@@ -874,6 +874,8 @@ public class GoGui
         }
         m_guiBoard.initSize(getBoard().getSize());
         initGtp();
+        m_computerBlack = false;
+        m_computerWhite = false;
         boardChangedBegin(false, true);
     }
 
@@ -3160,6 +3162,8 @@ public class GoGui
         }
         m_guiBoard.initSize(getBoard().getSize());
         initGtp();
+        m_computerBlack = false;
+        m_computerWhite = false;
         boardChangedBegin(false, true);
     }
 
