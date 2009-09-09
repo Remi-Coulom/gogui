@@ -366,11 +366,10 @@ public final class AnalyzeDialog
         // the box are not aligned to the left.
         optionsPanel.add(Box.createHorizontalGlue());
 
-        // TODO: If JGoodies Looks L&F (2.2.2) is used on
-        // Linux/Sun Java 1.6.0_14 or OpenJDK 6b14-1.4.1-0ubuntu11, then the
-        // text of the checkbox items can be truncated a bit on the left
-        // (wrong minimum size calculation?). The two fillers are a workaround
-        // for this.
+        // TODO: If GTK Looks L&F is used on Linux/Sun Java 1.6.0_14 or OpenJDK
+        // 6b14-1.4.1-0ubuntu11, then the text of the checkbox items can be
+        // truncated a bit on the left (wrong minimum size calculation?). The
+        // two fillers are a workaround for this.
         optionsPanel.add(GuiUtil.createFiller());
         optionsPanel.add(GuiUtil.createFiller());
 

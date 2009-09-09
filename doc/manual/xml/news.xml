@@ -34,7 +34,14 @@ New checkbox Reuse text window in analyze dialog
 </listitem>
 <listitem>
 <simpara>
-Import SGF from clipboard
+New menu item: Import SGF from clipboard
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+System look and feel is now used by default on Linux, since the GTK-based
+system look and feel in newer versions on the JRE has good usability now;
+the JGoodies Looks look and feel is no longer used
 </simpara>
 </listitem>
 </itemizedlist>

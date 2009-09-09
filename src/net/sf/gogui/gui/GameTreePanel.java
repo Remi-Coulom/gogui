@@ -645,8 +645,6 @@ public class GameTreePanel
         item.setActionCommand("cancel");
         item.addActionListener(listener);
         m_popup.add(item);
-        // For com.jgoodies.looks
-        m_popup.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
     }
 
     private GameTreeNode getGameTreeNode(ConstNode node)

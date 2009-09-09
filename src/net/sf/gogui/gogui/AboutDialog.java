@@ -51,9 +51,6 @@ public final class AboutDialog
     {
         m_messageDialogs = messageDialogs;
         m_tabbedPane = new JTabbedPane();
-        if (! Platform.isMac())
-            m_tabbedPane.putClientProperty("jgoodies.noContentBorder",
-                                           Boolean.TRUE);
         boolean isProgramAvailable = (name != null && ! name.equals(""));
         int tabIndex = 0;
         m_tabbedPane.add(i18n("LB_GOGUI"), createPanelGoGui());

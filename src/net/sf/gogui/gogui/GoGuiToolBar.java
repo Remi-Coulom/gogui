@@ -45,8 +45,6 @@ public class GoGuiToolBar
         if (! Platform.isMac())
             setRollover(true);
         setFloatable(false);
-        // For com.jgoodies.looks
-        putClientProperty("jgoodies.headerStyle", "Both");
     }
 
     public void update()

@@ -52,7 +52,6 @@ public class GoGuiMenuBar
         add(m_menuBookmarks);
         add(createMenuTools(actions, recentGtpListener));
         add(createMenuHelp(actions));
-        setHeaderStyleSingle(true);
     }
 
     public void addRecent(File file)
@@ -165,14 +164,6 @@ public class GoGuiMenuBar
             m_menuAttach.add(item);
             m_programItems.add(item);
         }
-    }
-
-    /** Is it a single menu bar or does a tool bar exist? */
-    public final void setHeaderStyleSingle(boolean isSingle)
-    {
-        // For com.jgoodies.looks
-        putClientProperty("jgoodies.headerStyle",
-                          isSingle ? "Single" : "Both");
     }
 
     public void update(boolean isProgramAttached, boolean isTreeShown,

@@ -179,8 +179,6 @@ public class Help
         if (! Platform.isMac())
             toolBar.setRollover(true);
         toolBar.setFloatable(false);
-        // For com.jgoodies.looks
-        toolBar.putClientProperty("jgoodies.headerStyle", "Single");
         return toolBar;
     }
 

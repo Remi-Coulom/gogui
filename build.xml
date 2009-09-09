@@ -25,10 +25,6 @@ Comment out the exec svnversion for releases.
 
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
 
-<property name="looks.zipfile" value="external/jgoodies/looks-2_2_2.zip"/>
-<property name="looks.dir" value="looks-2.2.2"/>
-<property name="looks.jarfile" value="looks-2.2.2.jar"/>
-
 <property name="quaqua.nestedzipfile"
  value="external/quaqua/quaqua-5.2.1.nested.zip"/>
 <property name="quaqua.zipfile" value="quaqua-5.2.1.zip"/>
@@ -54,11 +50,6 @@ Comment out the exec svnversion for releases.
 
 <available property="docbook.available"
  file="${docbook.path}/html/chunk.xsl"/>
-
-<available property="looks.available"
- file="external/jgoodies/${looks.dir}/${looks.jarfile}"/>
-
-<available property="looks.zip-available" file="${looks.zipfile}"/>
 
 <available property="quaqua.available"
  file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
@@ -99,7 +90,6 @@ Comment out the exec svnversion for releases.
    gogui-terminal.jar,
    gogui-thumbnailer.jar,
    gogui-twogtp.jar,
-   ${looks.jarfile},
    ${quaqua.jarfile},
   "
 />
@@ -172,7 +162,6 @@ Comment out the exec svnversion for releases.
  doc/doxygen/footer.html
  doc/doxygen/README
  ${docbook.path}.zip
- ${looks.zipfile}
  ${quaqua.nestedzipfile}
  lib/*.jar
  mac/packaging/GoGui.icns
@@ -284,14 +273,14 @@ Comment out the exec svnversion for releases.
 </target>
 
 <target name="gogui-display.jar"
- depends="compile,extract-looks,extract-quaqua">
+ depends="compile,extract-quaqua">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui-display.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
+<attribute name="Class-Path" value="${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/boardpainter/*.class
@@ -310,7 +299,6 @@ Comment out the exec svnversion for releases.
  net/sf/gogui/tools/display/*.class
 "/>
 </jar>
-<copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
 <copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
@@ -528,18 +516,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </unzip>
 </target>
 
-<target name="extract-looks" unless="looks.available">
-<fail unless="looks.zip-available">
-Please download JGoodies Looks from http://jgoodies.com and copy it to
-${looks.zipfile}
-</fail>
-<unzip src="${looks.zipfile}" dest="external/jgoodies">
-<patternset>
-<include name="${looks.dir}/${looks.jarfile}"/>
-</patternset>
-</unzip>
-</target>
-
 <target name="extract-quaqua" unless="quaqua.available">
 <fail unless="quaqua.zip-available">
 Please download the Quaqua Look and Feel from
@@ -597,7 +573,7 @@ ${quaqua.nestedzipfile}
  token="&lt;head&gt;"
  value="&lt;head&gt;&lt;meta name=&quot;AppleTitle&quot; content=&quot;GoGui Help&quot;&gt;"/>
 <copy todir="${appdir}/Contents/Resources/Java" overwrite="true">
-<fileset dir="lib" includes="*.jar" excludes="looks-*.jar"/>
+<fileset dir="lib" includes="*.jar"/>
 </copy>
 <copy todir="${appdir}/Contents/bin" overwrite="true">
 <fileset dir="bin" includes="${scripts}"/>
@@ -617,14 +593,14 @@ ${quaqua.nestedzipfile}
 </exec>
 </target>
 
-<target name="gogui.jar" depends="compile,extract-looks,extract-quaqua">
+<target name="gogui.jar" depends="compile,extract-quaqua">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${looks.jarfile} ${quaqua.jarfile}"/>
+<attribute name="Class-Path" value="${quaqua.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/doc/*.html
@@ -655,7 +631,6 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/specialmac/*.class
 "/>
 </jar>
-<copy file="external/jgoodies/${looks.dir}/${looks.jarfile}" todir="lib"/>
 <copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 

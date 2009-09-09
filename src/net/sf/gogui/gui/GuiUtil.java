@@ -213,7 +213,7 @@ public class GuiUtil
             // button, which is useful for save dialogs
             UIManager.put("FileChooser.readOnly", Boolean.TRUE);
         }
-        if ("".equals(laf))
+        if ("".equals(laf) || "default".equals(laf))
             return;
         boolean showError = true;
         if (laf == null)
@@ -224,7 +224,7 @@ public class GuiUtil
             else if (Platform.isMac())
                 laf = "quaqua";
             else if (Platform.isUnix())
-                laf = "plasticxp";
+                laf = "system";
             else
                 return;
         }
@@ -234,21 +234,12 @@ public class GuiUtil
             laf = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
         else if ("motif".equals(laf))
             laf = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-        else if ("jwindows".equals(laf))
-            laf = "com.jgoodies.looks.windows.WindowsLookAndFeel";
-        else if ("plasticxp".equals(laf))
-            laf = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
         else if ("quaqua".equals(laf))
             laf = "ch.randelshofer.quaqua.QuaquaLookAndFeel";
         else if ("system".equals(laf))
             laf = UIManager.getSystemLookAndFeelClassName();
         else if ("windows".equals(laf))
             laf = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-        if (laf.equals("com.jgoodies.looks.plastic.PlasticXPLookAndFeel"))
-        {
-            UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
-            UIManager.put("ScrollBar.maxBumpsWidth", Integer.valueOf(19));
-        }
         try
         {
             UIManager.setLookAndFeel(laf);

@@ -4075,15 +4075,9 @@ public class GoGui
         m_prefs.putBoolean("show-toolbar", enable);
         m_showToolbar = enable;
         if (enable)
-        {
             getContentPane().add(m_toolBar, BorderLayout.NORTH);
-            m_menuBar.setHeaderStyleSingle(false);
-        }
         else
-        {
             getContentPane().remove(m_toolBar);
-            m_menuBar.setHeaderStyleSingle(true);
-        }
         m_splitPane.resetToPreferredSizes();
         setMinimumSize();
         pack();
