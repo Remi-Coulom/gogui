@@ -622,6 +622,8 @@ public class TwoGtp
             m_game.init(m_openings.getTree());
             m_game.setKomi(m_komi);
             m_lastOpeningNode = NodeUtil.getLast(getTree().getRootConst());
+            // TODO: Check that root node contains no setup stones, if
+            // TwoGtp is run as a GTP engine, see also comment in sendGenmove()
         }
         else
             m_lastOpeningNode = null;
@@ -832,6 +834,12 @@ public class TwoGtp
             throw new GtpError("move limit exceeded");
         if (isInOpening())
         {
+            // TODO: Check that node contains no setup stones or fully support
+            // openings with setup stones and non-alternating moves in GTP
+            // engine mode again (by transforming the opening file into a
+            // sequence of alternating moves, replacing setup stones by moves
+            // and filling in passes). See also comment in initGame() and
+            // doc/manual/xml/reference-twogtp.xml
             ConstNode child = getCurrentNode().getChildConst();
             Move move = child.getMove();
             if (move.getColor() != color)
