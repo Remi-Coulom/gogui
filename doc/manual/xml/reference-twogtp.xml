@@ -281,6 +281,13 @@ Use openings from SGF files in the given directory.
 The openings will be cycled through in alphabetical order.
 If option <option>-alternate</option> is set, each opening is played twice
 with colors exchanged.
+If <application>TwoGtp</application> is used as a GTP engine, the opening
+moves will be returned to the controller as responses to the first
+<command>genmove</command> GTP commands.
+Note that in this case opening files with non-alternating moves or setup stones
+are not supported (this is currently not checked and will result in undefined
+behavior).
+In automatic mode (see <option>-auto</option>), there is no such restriction.
 </para>
 </listitem>
 </varlistentry>
