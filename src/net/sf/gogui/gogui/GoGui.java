@@ -738,7 +738,7 @@ public class GoGui
         currentNodeChanged(); // updates komi, time settings
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
-        if (komi != null && ! komi.equals(prefsKomi))
+        if (komi != null && ! komi.equals(prefsKomi) && info.getHandicap() == 0)
             m_prefs.put("komi", komi.toString());
         if (info.getTimeSettings() != null
             && ! info.getTimeSettings().equals(m_timeSettings))
@@ -3185,12 +3185,13 @@ public class GoGui
                 GuiUtil.paintImmediately(layeredPane);
             }
         }
+        Komi komi = (m_handicap == 0 ? getPrefsKomi() : new Komi(0));
         ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
         if (handicap == null)
             showWarning(i18n("MSG_HANDICAP_UNDEFINED"),
                         format(i18n("MSG_HANDICAP_UNDEFINED_2"), m_handicap,
                                size), false);
-        m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
+        m_game.init(size, komi, handicap, m_prefs.get("rules", ""),
                     m_timeSettings);
         if (size != oldSize)
         {

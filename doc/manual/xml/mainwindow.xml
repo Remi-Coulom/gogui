@@ -309,6 +309,7 @@ Change the board size and start a new game.
 <listitem>
 <para>
 Set the number of handicap stones.
+If handicap stones are used, the komi will be set to zero.
 </para>
 </listitem>
 </varlistentry>
