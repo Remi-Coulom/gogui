@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Set komi to zero, if handicap stones are used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Document that TwoGtp does not work in GTP engine mode with openings
 containing non-alternating moves or setup stones.
 </simpara>
