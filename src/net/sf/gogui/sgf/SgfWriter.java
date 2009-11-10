@@ -220,7 +220,7 @@ public class SgfWriter
         Komi komi = info.getKomi();
         if (handicap > 0)
             print("HA[" + handicap + "]");
-        else if (komi != null)
+        if (komi != null && ! (handicap > 0 && komi.equals(new Komi(0))))
             print("KM[" + komi + "]");
         TimeSettings timeSettings = info.getTimeSettings();
         if (timeSettings != null)

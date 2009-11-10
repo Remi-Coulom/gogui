@@ -20,6 +20,11 @@ Document that TwoGtp does not work in GTP engine mode with openings
 containing non-alternating moves or setup stones.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Write komi to SGF files if both handicap and komi are used.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
