@@ -5,8 +5,10 @@ package net.sf.gogui.sgf;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.go.Komi;
 
 public final class SgfWriterTest
     extends junit.framework.TestCase
@@ -19,6 +21,30 @@ public final class SgfWriterTest
     public static junit.framework.Test suite()
     {
         return new junit.framework.TestSuite(SgfWriterTest.class);
+    }
+
+    /** Test that komi property is written. */
+    public void testKomi() throws Exception
+    {
+        GameTree tree = new GameTree();
+        GameInfo info = tree.getRoot().getGameInfo();
+        info.setKomi(new Komi(6.5));
+        String s = writeToString(tree);
+        assertTrue(s.indexOf("KM[6.5]") >= 0);
+    }
+
+    /** Test that komi property is written if both handicap and komi are
+        used.
+    */
+    public void testKomiWithHandicap() throws Exception
+    {
+        GameTree tree = new GameTree();
+        GameInfo info = tree.getRoot().getGameInfo();
+        info.setKomi(new Komi(4));
+        info.setHandicap(4);
+        String s = writeToString(tree);
+        assertTrue(s.indexOf("HA[4]") >= 0);
+        assertTrue(s.indexOf("KM[4]") >= 0);
     }
 
     public void testWriteTimeSettings() throws Exception
