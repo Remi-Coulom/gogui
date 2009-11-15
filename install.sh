@@ -86,13 +86,6 @@ xdg-desktop-menu install config/gogui-gogui.desktop
 
 xdg-mime install config/gogui-mime.xml
 
-# Install KDE mime entry
-# Could create a conflict with other packages.
-# Remove when KDE supports the standard shared MIME database
-
-install -d $PREFIX/share/mimelnk/application
-install -m 644 config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
-
 # Install Gnome thumbnailer
 
 install -d $SYSCONFDIR/gconf/schemas

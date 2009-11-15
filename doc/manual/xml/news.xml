@@ -44,6 +44,13 @@ system look and feel in newer versions on the JRE has good usability now;
 the JGoodies Looks look and feel is no longer used
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+No longer install MIME type definition for KDE 3 in installation script on
+Unix; new version of KDE now support the standard shared MIME database from
+freedesktop.org
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
