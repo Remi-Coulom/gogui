@@ -1,9 +1,6 @@
 #!/bin/sh
 
-# Default prefix should be /usr/local, but some desktop
-# environments have problems finding resources there
-
-PREFIX=/usr
+PREFIX=/usr/local
 SYSCONFDIR=/etc
 JAVA_HOME=
 

@@ -51,6 +51,11 @@ Unix; new version of KDE now support the standard shared MIME database from
 freedesktop.org
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Default installation directory in install.sh is now /usr/local
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
