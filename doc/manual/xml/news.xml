@@ -25,6 +25,11 @@ containing non-alternating moves or setup stones.
 Write komi to SGF files if both handicap and komi are used.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Formatting fixes in man pages.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

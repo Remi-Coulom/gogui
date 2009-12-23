@@ -16,15 +16,25 @@ Connects to a remote Go program supporting the Go Text Protocol.
 </refnamediv>
 
 <refsynopsisdiv>
+
 <cmdsynopsis>
 <command>gogui-client</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-help</option></arg>
 <arg><option>-timeout</option> <replaceable>sec</replaceable></arg>
-<arg><option>-version</option></arg>
 <arg choice="plain"><replaceable>hostname</replaceable></arg>
 <arg choice="plain"><replaceable>port</replaceable></arg>
 </cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-client</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-client</command>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+
 </refsynopsisdiv>
 
 <refsection>
