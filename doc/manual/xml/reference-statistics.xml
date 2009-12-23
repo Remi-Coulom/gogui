@@ -15,6 +15,7 @@ Runs GTP commands on all positions of game collections.
 </refnamediv>
 
 <refsynopsisdiv>
+
 <cmdsynopsis>
 <command>gogui-statistics</command>
 <arg><option>-backward</option></arg>
@@ -35,19 +36,25 @@ Runs GTP commands on all positions of game collections.
 <replaceable>file.sgf</replaceable>
 </arg>
 </cmdsynopsis>
+
 <cmdsynopsis>
-<command>gogui-statistics</command> <arg><option>-help</option></arg>
-</cmdsynopsis>
-<cmdsynopsis>
-<command>gogui-statistics</command> <arg><option>-version</option></arg>
+<command>gogui-statistics</command>
+<arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
 <command>gogui-statistics</command>
-<arg><option>-analyze</option> <replaceable>file</replaceable></arg>
+<arg choice="plain"><option>-version</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gogui-statistics</command>
+<arg choice="plain"><option>-analyze</option>
+  <replaceable>file</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-output</option> <replaceable>file</replaceable></arg>
 <arg><option>-precision</option> <replaceable>n</replaceable></arg>
 </cmdsynopsis>
+
 </refsynopsisdiv>
 
 <refsection>
