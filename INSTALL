@@ -24,6 +24,12 @@ GoGui into the system directories and integrates it into the desktop
 environment. This script needs to be run as root and requires the option -j
 with the location of a Java 5 compatible virtual machine.
 
+On Ubuntu 9.10, it is recommended to install the package sun-java6-jre
+in the Synaptic package manager, and install GoGui by running the command:
+
+  sudo ./install.sh -j /usr/lib/jvm/java-6-sun
+
+
 Installation on Mac OS
 ======================
 
