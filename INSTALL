@@ -1,12 +1,15 @@
 Basics
 ======
 
-GoGui requires at least Java version 5.
-GCJ with GNU Classpath (last tested with GCC 4.1) does not work yet.
+GoGui requires at least Java version 5. The recommended Java runtime
+environment is Sun's Java SE 6. GoGui will also work in OpenJDK, but at
+the time of this writing there were still minor rendering issues if GoGui is
+used with OpenJDK (e.g. the stones on the board are not completely round;
+the last tested version was OpenJDK 14.0-b16).
 
 GoGui comes with precompiled Java jar files for GoGui and the GTP tools
 in the lib directory. GoGui does not necessarily need to be installed on the
-system, it can be run from the directory, where the distribution file was
+system, it can be run from the directory where the distribution file was
 extracted to.
 
 For Unix systems there are launcher scripts in the bin directory.
