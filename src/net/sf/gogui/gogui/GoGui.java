@@ -1792,6 +1792,14 @@ public class GoGui
         return m_treeSize;
     }
 
+    /** Return whether the currently attached program has analyze commands of
+        type "param".
+    */
+    public boolean hasParameterCommands()
+    {
+        return AnalyzeUtil.hasParameterCommands(m_analyzeCommands);
+    }
+
     public boolean hasParameterSnapshot()
     {
         return m_parameterSnapshot != null;

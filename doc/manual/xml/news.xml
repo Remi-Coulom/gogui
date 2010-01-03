@@ -44,6 +44,12 @@ New menu items: Snapshot Parameters, Restore Parameters
 </listitem>
 <listitem>
 <simpara>
+Enable parameter commands in menu only if the currently attached program
+has analyze commands of type "param"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 System look and feel is now used by default on Linux, since the GTK-based
 system look and feel in newer versions on the JRE has good usability now;
 the JGoodies Looks look and feel is no longer used

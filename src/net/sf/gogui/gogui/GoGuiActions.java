@@ -740,6 +740,7 @@ public class GoGuiActions
         boolean computerBoth = (computerBlack && computerWhite);
         boolean hasPattern = (m_goGui.getPattern() != null);
         int numberPrograms = m_goGui.getNumberPrograms();
+        boolean hasParameterCommands = m_goGui.hasParameterCommands();
         ConstClock clock = game.getClock();
         int boardSize = game.getSize();
         GoColor toMove = game.getToMove();
@@ -798,11 +799,14 @@ public class GoGuiActions
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
         m_actionReattachProgram.setEnabled(isProgramAttached);
         m_actionReattachWithParameters.setEnabled(isProgramAttached
-                                                  && ! isProgramDead);
+                                                  && ! isProgramDead
+                                                  && hasParameterCommands);
         m_actionSnapshotParameters.setEnabled(isProgramAttached
-                                              && ! isProgramDead);
+                                              && ! isProgramDead
+                                              && hasParameterCommands);
         m_actionRestoreParameters.setEnabled(isProgramAttached
                                             && ! isProgramDead
+                                            && hasParameterCommands
                                             && m_goGui.hasParameterSnapshot());
         updateSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
@@ -811,7 +815,9 @@ public class GoGuiActions
                                        && setupColor == WHITE);
         m_actionSaveCommands.setEnabled(isProgramAttached);
         m_actionSaveLog.setEnabled(isProgramAttached);
-        m_actionSaveParameters.setEnabled(isProgramAttached);
+        m_actionSaveParameters.setEnabled(isProgramAttached
+                                          && ! isProgramDead
+                                          && hasParameterCommands);
         m_actionSendFile.setEnabled(isProgramAttached);
         m_actionShowAnalyzeDialog.setEnabled(isProgramAttached);
         m_actionShowShell.setEnabled(isProgramAttached);
