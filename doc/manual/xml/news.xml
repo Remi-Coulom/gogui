@@ -39,6 +39,11 @@ New menu item: Import SGF from clipboard
 </listitem>
 <listitem>
 <simpara>
+New menu items: Snapshot Parameters, Restore Parameters
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 System look and feel is now used by default on Linux, since the GTK-based
 system look and feel in newer versions on the JRE has good usability now;
 the JGoodies Looks look and feel is no longer used

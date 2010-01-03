@@ -905,13 +905,48 @@ the current position again.
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="reattachwithparameters">
 <term><guimenuitem>Reattach With Parameters</guimenuitem></term>
 <listitem>
 <para>
 Like <xref linkend="reattachprogram"/>, but saves the current program
 parameters to a temporary GTP file and restores them after the program
 was reattached. See <xref linkend="saveparameters"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="snapshotparameters">
+<term><guimenuitem>Snapshot Parameters</guimenuitem></term>
+<listitem>
+<para>
+Like <xref linkend="saveparameters"/>, but automatically saves to a temporary
+file that can be restored during the current session with
+<xref linkend="restoreparameters"/>. This command is useful for developers
+who want to debug a crash of the program (which does not allow to use
+<xref linkend="reattachwithparameters"/>, because the program must still be
+alive when running this command).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="restoreparameters">
+<term><guimenuitem>Restore Parameters</guimenuitem></term>
+<listitem>
+<para>
+See <xref linkend="snapshotparameters"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="saveparameters">
+<term><guimenuitem>Save Parameters</guimenuitem></term>
+<listitem>
+<para>
+Saves a GTP file for restoring the current state of all parameters from all
+analyze commands of type "param" (see <xref linkend="analyze"/>). To restore
+the parameters, use the <xref linkend="sendfile"/> or
+<xref linkend="sendrecent"/> menu items.
 </para>
 </listitem>
 </varlistentry>
@@ -930,18 +965,6 @@ Save the GTP streams to a log file.
 <listitem>
 <para>
 Save the sent GTP commands to a file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="saveparameters">
-<term><guimenuitem>Save Parameters</guimenuitem></term>
-<listitem>
-<para>
-Saves a GTP file for restoring the current state of all parameters from all
-analyze commands of type "param" (see <xref linkend="analyze"/>). To restore
-the parameters, use the <xref linkend="sendfile"/> or
-<xref linkend="sendrecent"/> menu items.
 </para>
 </listitem>
 </varlistentry>

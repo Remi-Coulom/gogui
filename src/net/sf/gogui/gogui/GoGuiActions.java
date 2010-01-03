@@ -490,6 +490,11 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionReattachWithParameters(); } };
 
+    public final Action m_actionRestoreParameters =
+        new Action("ACT_RESTORE_PARAMETERS") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionRestoreParameters(); } };
+
     public final Action m_actionSave =
         new Action("ACT_SAVE", "TT_SAVE", KeyEvent.VK_S,
                    "document-save") {
@@ -558,6 +563,11 @@ public class GoGuiActions
         new Action("ACT_TREE_VIEWER", null, KeyEvent.VK_F7, FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowTree(); } };
+
+    public final Action m_actionSnapshotParameters =
+        new Action("ACT_SNAPSHOT_PARAMETERS") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSnapshotParameters(); } };
 
     public final Action m_actionSwitchLanguage =
         new Action("ACT_SWITCH_LANGUAGE") {
@@ -789,6 +799,11 @@ public class GoGuiActions
         m_actionReattachProgram.setEnabled(isProgramAttached);
         m_actionReattachWithParameters.setEnabled(isProgramAttached
                                                   && ! isProgramDead);
+        m_actionSnapshotParameters.setEnabled(isProgramAttached
+                                              && ! isProgramDead);
+        m_actionRestoreParameters.setEnabled(isProgramAttached
+                                            && ! isProgramDead
+                                            && m_goGui.hasParameterSnapshot());
         updateSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == BLACK);

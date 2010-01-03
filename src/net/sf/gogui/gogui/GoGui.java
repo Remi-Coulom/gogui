@@ -1219,6 +1219,17 @@ public class GoGui
         SwingUtilities.invokeLater(runnable);
     }
 
+    public void actionRestoreParameters()
+    {
+        if (m_gtp == null)
+            return;
+        if (! checkCommandInProgress())
+            return;
+        if (m_parameterSnapshot == null)
+            return;
+        sendGtpFile(m_parameterSnapshot);
+    }
+
     public void actionSave()
     {
         if (! isModified())
@@ -1276,6 +1287,29 @@ public class GoGui
         if (file == null)
             return;
         saveParameters(file);
+    }
+
+    public void actionSnapshotParameters()
+    {
+        if (m_gtp == null)
+            return;
+        if (! checkCommandInProgress())
+            return;
+        if (! checkHasParameterCommands())
+            return;
+        if (m_parameterSnapshot == null)
+            try
+            {
+                m_parameterSnapshot =
+                    File.createTempFile("gogui-param", ".gtp");
+            }
+            catch (IOException e)
+            {
+                showError(i18n("MSG_PARAM_TMP_FILE_ERROR"), e);
+                return;
+            }
+        saveParameters(m_parameterSnapshot);
+        updateViews(false);
     }
 
     public void actionScore()
@@ -1758,6 +1792,11 @@ public class GoGui
         return m_treeSize;
     }
 
+    public boolean hasParameterSnapshot()
+    {
+        return m_parameterSnapshot != null;
+    }
+
     public boolean isAnalyzeDialogShown()
     {
         return (m_analyzeDialog != null);
@@ -2233,6 +2272,10 @@ public class GoGui
     private ArrayList<Program> m_programs;
 
     private ShowAnalyzeText m_showAnalyzeText;
+
+    /** Snapshot used in actionSnapshotParameters and actionRestoreParameters.
+     */
+    private File m_parameterSnapshot;
 
     private void analyzeBegin(boolean checkComputerMove)
     {

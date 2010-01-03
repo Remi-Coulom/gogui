@@ -456,11 +456,14 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
         menu.addSeparator();
         menu.addItem(actions.m_actionReattachProgram, KeyEvent.VK_R);
+        menu.addSeparator();
         menu.addItem(actions.m_actionReattachWithParameters, KeyEvent.VK_P);
+        menu.addItem(actions.m_actionSnapshotParameters, KeyEvent.VK_N);
+        menu.addItem(actions.m_actionRestoreParameters, KeyEvent.VK_E);
+        menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_M);
         menu.addSeparator();
         menu.addItem(actions.m_actionSaveLog, KeyEvent.VK_L);
         menu.addItem(actions.m_actionSaveCommands, KeyEvent.VK_C);
-        menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_M);
         menu.addItem(actions.m_actionSendFile, KeyEvent.VK_F);
         m_recentGtp = new RecentFileMenu(i18n("MEN_SEND_RECENT"),
                                          "net/sf/gogui/recentgtpfiles",
