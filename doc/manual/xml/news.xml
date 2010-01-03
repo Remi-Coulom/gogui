@@ -4,11 +4,16 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
+<revnumber>1.2pre1</revnumber>
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
+<listitem>
+<simpara>
+Add notes about OpenJDK and Ubuntu 9.10 in the README file.
+</simpara>
+</listitem>
 <listitem>
 <simpara>
 Don't synchronize the program with GTP commands immediately after navigation
