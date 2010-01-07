@@ -53,30 +53,6 @@ command:
 </section>
 
 <section>
-<title>BadukiPlus</title>
-<indexterm>
-<primary>BadukiPlus</primary>
-</indexterm>
-<para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm"/>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>badukiplus -gtp</userinput>
-</para>
-<para>
-<note>
-<simpara>
-BadukiPlus 0.1.2 has several bugs in its GTP implementation.
-</simpara>
-</note>
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
 <title>Fuego</title>
 <indexterm>
 <primary>Fuego</primary>
@@ -229,30 +205,6 @@ set to the same directory as the mogo executable is in.
 MoGo's GTP implementation does not implement command IDs (as of MoGo release 3);
 <guimenu>View</guimenu> / <guisubmenu>Shell</guisubmenu>
 / <guimenuitem>Auto Number</guimenuitem> needs to be turned off.
-</simpara>
-</note>
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>WallyPlus</title>
-<indexterm>
-<primary>WallyPlus</primary>
-</indexterm>
-<para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm"/>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>wallyplus -gtp</userinput>
-</para>
-<para>
-<note>
-<simpara>
-WallyPlus 0.1.2 has several bugs in its GTP implementation.
 </simpara>
 </note>
 </para>
