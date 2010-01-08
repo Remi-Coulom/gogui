@@ -4,13 +4,15 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>1.2pre2</revnumber>
+<date>08 Jan 2010</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
 <listitem>
 <simpara>
+Fix bug in last release that made GoGui crash if it was started with no
+program attached
 </simpara>
 </listitem>
 </itemizedlist>

@@ -1797,6 +1797,8 @@ public class GoGui
     */
     public boolean hasParameterCommands()
     {
+        if (m_analyzeCommands == null)
+            return false;
         return AnalyzeUtil.hasParameterCommands(m_analyzeCommands);
     }
 
