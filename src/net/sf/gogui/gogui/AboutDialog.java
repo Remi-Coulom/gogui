@@ -164,7 +164,7 @@ public final class AboutDialog
     private JPanel createPanelJava()
     {
         StringBuilder buffer = new StringBuilder(256);
-        String name = System.getProperty("java.vm.name");
+        String name = Platform.getJavaRuntimeName();
         buffer.append("<p align=\"center\"><img src=\""
                       + getImage("java.png") + "\"></p>");
         if (name == null)
@@ -178,7 +178,7 @@ public final class AboutDialog
             buffer.append("<p align=\"center\"><b>");
             buffer.append(name);
             buffer.append("</b></p>");
-            String version = System.getProperty("java.vm.version");
+            String version = System.getProperty("java.version");
             if (version != null)
             {
                 buffer.append("<p align=\"center\">");

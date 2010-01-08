@@ -11,6 +11,9 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Use more meaningful system properties for displaying the Java runtime name
+and version in the about and crash dialog (java.runtime.name instead of
+java.vm.name, if existing, and java.version instead of java.vm.version)
 </simpara>
 </listitem>
 </itemizedlist>

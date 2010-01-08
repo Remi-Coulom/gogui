@@ -190,8 +190,8 @@ public final class Main
         JButton copyButton = new JButton("Copy Information");
         final String goguiVersion = "GoGui version: " + Version.get();
         final String javaVersion = "Java version: " +
-            System.getProperty("java.vm.name") + " " +
-            System.getProperty("java.vm.version");
+            Platform.getJavaRuntimeName() + " " +
+            System.getProperty("java.version");
         final String osVersion = "Operating system: " +
             System.getProperty("os.name");
         final StringWriter stackTrace = new StringWriter();

@@ -36,6 +36,15 @@ public class Platform
         boolean handleQuit();
     }
 
+    public static String getJavaRuntimeName()
+    {
+        // java.runtime.name is not a standard property
+        String name = System.getProperty("java.runtime.name");
+        if (name == null)
+            name = System.getProperty("java.vm.name");
+        return name;
+    }
+
     /** Return information on this computer.
         Returns host name and cpu information (if /proc/cpuinfo exists).
     */
@@ -74,11 +83,6 @@ public class Platform
         {
         }
         return info;
-    }
-
-    public static boolean isGnuClasspath()
-    {
-        return (System.getProperty("gnu.classpath.version") != null);
     }
 
     /** Check if the platform is Mac OS X. */
