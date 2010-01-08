@@ -26,7 +26,7 @@
 <listitem>
 <simpara>
 Fix bug in last release that made GoGui crash if it was started with no
-program attached
+program attached (bug #2928104)
 </simpara>
 </listitem>
 </itemizedlist>
@@ -69,7 +69,7 @@ New checkbox Reuse text window in analyze dialog
 </listitem>
 <listitem>
 <simpara>
-New menu item: Import SGF from clipboard
+New menu item: Import SGF from Clipboard
 </simpara>
 </listitem>
 <listitem>
