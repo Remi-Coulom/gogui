@@ -117,125 +117,6 @@ Default installation directory in install.sh is now /usr/local
 <itemizedlist>
 <listitem>
 <simpara>
-gogui-display: add missing text resources (bug #1973003)
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Fast forward or backward if shift key is pressed while the mouse wheel is used
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-gogui-thumbnail: new option -scale
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Minor fixes and improvements
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>1.1pre3</revnumber>
-<date>05 May 2008</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-Add missing text resources that caused the program to crash.
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>1.1pre2</revnumber>
-<date>02 May 2008</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-Update board position correctly after Edit/Truncate
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-gogui-twogtp: fix "too many open files" error, if TwoGtp is restarted and a
-large number of games was already played
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-gogui-twogtp: also measure real time used by programs.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-gogui-statistics: new option -random
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Automatically restore clock to current node, if it was never running.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Partial translation of the user interface into German. New menu item
-Help/Switch Language to select the default language.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Ask user whether to continue, if a command in a file sent with "Send File"
-fails.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Use orange color for standard error lines in GTP Shell that start with
-"warning:"
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Update to Quaqua 4.4.3 on Mac OS X
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Fix white background of status bar and part of message dialogs, if GTK look and feel is used.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Fix crash when reading some XML files containing variations.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Other minor fixes
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>1.1pre1</revnumber>
-<date>14 Jan 2008</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
 Use Java 5 language features; older Java versions are no longer supported.
 </simpara>
 </listitem>
@@ -313,6 +194,49 @@ Replace sgftotex by gogui-convert, which can read SGF or XML files and
 supports several output formats
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fast forward or backward if shift key is pressed while the mouse wheel is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-thumbnail: new option -scale
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-twogtp: also measure real time used by programs.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-statistics: new option -random
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Automatically restore clock to current node, if it was never running.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Partial translation of the user interface into German. New menu item
+Help/Switch Language to select the default language.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Ask user whether to continue, if a command in a file sent with "Send File"
+fails.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use orange color for standard error lines in GTP Shell that start with
+"warning:"
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
@@ -322,124 +246,6 @@ supports several output formats
 <date>29 Aug 2007</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-GoGui: send time settings and komi before setup stones and moves
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-New parameter type "list" for analyze commands of type "param".
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Keep parameter dialog open (for an analyze command of type param), if
-setting a new parameter value fails.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Mac: update to Quaqua Look and Feel 3.7.8
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>1.0pre3</revnumber>
-<date>29 Jun 2007</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-GoGui: allow going forward/backward with the mouse wheel
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GoGui: make options -gtpfile and -command work again
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GoGui, TwoGtp: support time specs using seconds in option -time
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpRegress: new option -gtpfile; support for test suites (files containing
-lists of test files)
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Update documentation
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Update license to GPL version 3
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Minor fixes and enhancements
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>1.0pre2</revnumber>
-<date>03 May 2007</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-Handle SGF files with size property after point properties
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Update to Looks 2.1.4, Quaqua 3.7.7
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Make startup scripts work with Cygwin
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GoGui: automatically clear markup on the board at the start of a Live Graphics
-command. GtpDisplay: support Live Graphics.
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Minor fixes and enhancements.
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>1.0pre1</revnumber>
-<date>05 Apr 2007</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<simpara>
-The coming version 1.0 (and its bugfix releases) are the last versions that
-will be compatible with Java 1.4. Future versions are going to require
-Java 1.5.
-</simpara>
 <itemizedlist>
 <listitem>
 <simpara>
@@ -605,6 +411,43 @@ GtpServer: new option -timeout
 Other changes, fixes and user interface re-organizations
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: automatically clear markup on the board at the start of a Live Graphics
+command. GtpDisplay: support Live Graphics.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: allow going forward/backward with the mouse wheel
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui, TwoGtp: support time specs using seconds in option -time
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: new option -gtpfile; support for test suites (files containing
+lists of test files)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Update license to GPL version 3
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: send time settings and komi before setup stones and moves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New parameter type "list" for analyze commands of type "param".
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
@@ -612,79 +455,6 @@ Other changes, fixes and user interface re-organizations
 <revision>
 <revnumber>0.9</revnumber>
 <date>15 May 2006</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-Minor fixes
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>0.9pre3</revnumber>
-<date>07 Apr 2006</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-GoGui: allow to display graphical data while a command is in progress;
-see section Live Graphics in the documentation
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-SgfThumbnail: add missing configuration file to install as a GNOME
-thumbnailer
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpStatistics: add missing class files to gtpstatistics.jar; new options
--min, -max, -backward
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpRegress: remove option -filecomments; use new tool GtpStatistics instead
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>0.9pre2</revnumber>
-<date>22 Mar 2006</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-GoGui: fix clearing influence analyze command and analyze auto-run bug
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GoGui: use JGoodies WindowsLookAndFeel as default on Windows
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GoGui: enable preview in file dialog on Windows
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>0.9pre1</revnumber>
-<date>14 Mar 2006</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -737,20 +507,46 @@ GoGui: allow keyboard navigation in game tree window
 </simpara>
 </listitem>
 <listitem>
-<para>
+<simpara>
 GtpStatistics: make it work with protocol version 2 programs; new option
 -setup
-</para>
+</simpara>
 </listitem>
 <listitem>
-<para>
+<simpara>
 TwoGtp: new option -time
-</para>
+</simpara>
 </listitem>
 <listitem>
-<para>
+<simpara>
 New tool sgfthumbnail; make GoGui create thumbnails for opened or saved files
-</para>
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: use JGoodies WindowsLookAndFeel as default on Windows
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: enable preview in file dialog on Windows
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: allow to display graphical data while a command is in progress;
+see section Live Graphics in the documentation
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpStatistics: new options -min, -max, -backward
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: remove option -filecomments; use new tool GtpStatistics instead
+</simpara>
 </listitem>
 </itemizedlist>
 </revdescription>
@@ -759,77 +555,6 @@ New tool sgfthumbnail; make GoGui create thumbnails for opened or saved files
 <revision>
 <revnumber>0.8</revnumber>
 <date>26 Nov 2005</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<para>
-TwoGtp: fix game CPU time measurement
-</para>
-</listitem>
-<listitem>
-<para>
-TwoGtp, GtpRegress: avoid locale-dependent formatting of some numbers in
-output files which broke the HTML report generation.
-</para>
-</listitem>
-<listitem>
-<para>
-New menu item Export/Text Position
-</para>
-</listitem>
-<listitem>
-<para>
-Other small bug fixes
-</para>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>0.8pre2</revnumber>
-<date>21 Sep 2005</date>
-<authorinitials>enz</authorinitials>
-<revdescription>
-<itemizedlist>
-<listitem>
-<simpara>
-GoGui: more reorganization of the menu bar
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GoGui: bugfixes in Truncate and Truncate Children
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpStatistics: fix some bugs
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpAdapter: new option -lowercase
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpAdapter: fix bug in genmove command
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Other small fixes
-</simpara>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>0.8pre1</revnumber>
-<date>17 Aug 2005</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -939,6 +664,27 @@ New tool GtpStatistics
 <listitem>
 <simpara>
 Numerous other fixes and improvements
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: more reorganization of the menu bar
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: new option -lowercase
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp, GtpRegress: avoid locale-dependent formatting of some numbers in
+output files which broke the HTML report generation.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+New menu item Export/Text Position
 </simpara>
 </listitem>
 </itemizedlist>
