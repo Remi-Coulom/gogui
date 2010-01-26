@@ -164,7 +164,7 @@ public final class Main
         addFiller(box);
 
         String optionalMessage;
-        if (Version.get().indexOf("SVN") >= 0)
+        if (Version.get().indexOf("GIT") >= 0)
             optionalMessage =
                 "You are running an unreleased version of GoGui. Please don't report this bug to\n" +
                 "the GoGui bug tracker, but email the author of GoGui directly instead.\n";
