@@ -167,6 +167,8 @@ Black stones can be represented by 'X', 'x', '@' or '#'; white stones by
 Space characters are allowed between the points; leading numbers (or '|'
 and '$' characters) are ignored, as well as single inserted invalid lines
 (to support appended text after the row that was wrapped).
+If a a line contains the string "b|black|w|white to play|move"
+(case-insensitive), it will be used to set the current player in the position.
 </para>
 </listitem>
 </varlistentry>

@@ -13,15 +13,16 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 
 /** Parse Go positions from ASCII text.
-    Can handle a variety of formats.
-    Black stones can be represented by 'X', 'x', '@' or '#'; white stones by
-    'O' or 'o' (however one representation must be used consistently); '.' and
-    '+' are interpreted as empty points.
+    Can handle a variety of formats. Black stones can be represented by 'X',
+    'x', '@' or '#'; white stones by 'O' or 'o' (however one representation
+    must be used consistently); '.' and '+' are interpreted as empty points.
     Space characters are allowed between the points; leading numbers (or '|'
     and '$' characters) are ignored, as well as single inserted invalid lines
-    (to support appended text after the row that was wrapped).
-    Non-rectangular positions will be read into the smallest containing square
-    board size at the top left position.
+    (to support appended text after the row that was wrapped). Non-rectangular
+    positions will be read into the smallest containing square board size at
+    the top left position. If a a line contains the string "b|black|w|white
+    to play|move" (case-insensitive), it will be used to set the current player
+    in the position.
 */
 public class TextParser
 {
@@ -54,6 +55,7 @@ public class TextParser
                     break;
             }
             m_board = new Board(m_width);
+            checkToPlay(line);
             parseBoardRow(line, m_board.getSize() - 1);
             int i = 2;
             while (true)
@@ -61,9 +63,14 @@ public class TextParser
                 line = readLine();
                 if (line == null)
                     break;
+                checkToPlay(line);
                 if (! isBoardRow(line, false))
+                {
                     // Allow one failure if long lines were wrapped
                     line = readLine();
+                    if (line != null)
+                        checkToPlay(line);
+                }
                 if (line == null || ! isBoardRow(line, false))
                     break;
                 if (m_board.getSize() - i < 0)
@@ -94,6 +101,17 @@ public class TextParser
     private Board m_board;
 
     private BufferedReader m_reader;
+
+    private void checkToPlay(String line)
+    {
+        line = line.toLowerCase();
+        if (line.contains("black to play") || line.contains("b to play")
+            || line.contains("black to move") || line.contains("b to move"))
+            m_board.setToMove(BLACK);
+        if (line.contains("white to play") || line.contains("w to play")
+            || line.contains("white to move") || line.contains("w to move"))
+            m_board.setToMove(WHITE);
+    }
 
     /** Ignore characters at beginning of line.
         Ignores characters that are sometimes left of the actual position.

@@ -16,6 +16,12 @@ and version in the about and crash dialog (java.runtime.name instead of
 java.vm.name, if existing, and java.version instead of java.vm.version)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Look for strings like "Black to play" when importing positions from text
+diagrams.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
