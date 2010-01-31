@@ -65,10 +65,25 @@ public class TwoGtp
         m_filePrefix = filePrefix;
         m_useXml = useXml;
         File resultFile = getResultFile();
-        if (force && resultFile.exists())
-            if (! resultFile.delete())
+        File lockFile = getLockFile();
+        // TODO: Make the lock file a real lock file
+        if (force)
+        {
+            if (resultFile.exists() && ! resultFile.delete())
                 throw new ErrorMessage("Could not delete file '" + resultFile
                                        + "'");
+            if (lockFile.exists() && ! lockFile.delete())
+                throw new ErrorMessage("Could not delete file '" + lockFile
+                                       + "'");
+        }
+        else if (lockFile.exists())
+            throw new ErrorMessage(
+              "Lock file '" + lockFile + "' already exists.\n" +
+              "Please delete it and rerun TwoGtp if you are sure that\n" +
+              "TwoGtp is not already running and want to continue the run\n" +
+              "using the existing result file.");
+        else
+            lockFile.createNewFile();
         m_allPrograms = new ArrayList<Program>();
         m_black = new Program(black, "Black", "B", verbose);
         m_allPrograms.add(m_black);
@@ -327,6 +342,9 @@ public class TwoGtp
     {
         for (Program program : m_allPrograms)
             program.close();
+        File lockFile = getLockFile();
+        if (! lockFile.delete())
+            System.err.println("Could not delete '" + lockFile + "'");
     }
 
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
@@ -480,6 +498,11 @@ public class TwoGtp
             return new File(m_filePrefix + "-" + gameIndex + ".xml");
         else
             return new File(m_filePrefix + "-" + gameIndex + ".sgf");
+    }
+
+    private File getLockFile()
+    {
+        return new File(m_filePrefix + ".lock");
     }
 
     private GoColor getToMove()

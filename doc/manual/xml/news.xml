@@ -22,6 +22,12 @@ Look for strings like "Black to play" when importing positions from text
 diagrams.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+TwoGtp: use a lock file to check that TwoGtp is not already running with the
+same result file.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
