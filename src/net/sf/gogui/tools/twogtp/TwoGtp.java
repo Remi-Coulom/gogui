@@ -696,6 +696,12 @@ public class TwoGtp
 
     private void newGame(int size) throws GtpError
     {
+        if (m_verbose)
+        {
+            System.err.println("============================================");
+            System.err.println("Game " + m_gameIndex);
+            System.err.println("============================================");
+        }
         m_black.getAndClearCpuTime();
         m_white.getAndClearCpuTime();
         initGame(size);
