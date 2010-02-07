@@ -39,6 +39,13 @@ Write game number to standard error at beginning of a game, if option
 New menu item Find Next Comment
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix parsing of OT property in SGF files that erroneously interpreted Japanese
+byoyomi as Canadian overtime (which is currently the only time system supported
+by GTP and GoGui)
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

@@ -62,28 +62,9 @@ public final class SgfUtil
         if (result != null)
             return result;
 
-        /* Used by Kiseido Game Server, CGoban 2 */
-        result =
-            parseOvertime(value, "(\\d+)x(\\d+)\\s*byo-yomi", true, 1000L);
-        if (result != null)
-            return result;
-
-        /* Used by ? */
-        result =
-            parseOvertime(value, "(\\d+)x(\\d+)", true, 1000L);
-        if (result != null)
-            return result;
-
         /* Used by Quarry, CGoban 2 */
         result =
             parseOvertime(value, "(\\d+)/(\\d+)\\s*canadian", true, 1000L);
-        if (result != null)
-            return result;
-
-        /* "60 sec/move byo-yomi" (found in a game from
-           http://homepages.cwi.nl/~aeb/go/games/index.html) */
-        result =
-            parseOvertime(value, "(\\d+)\\s*sec/move byo-yomi", 1000L);
         if (result != null)
             return result;
 

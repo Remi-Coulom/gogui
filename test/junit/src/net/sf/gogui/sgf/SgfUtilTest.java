@@ -24,17 +24,4 @@ public final class SgfUtilTest
         assertEquals(10L * 3600L * 1000L, SgfUtil.parseTime("10 hrs each"));
         assertEquals(70L * 60L * 1000L, SgfUtil.parseTime("70m"));
     }
-
-    public void testParseOvertime() throws Exception
-    {
-        checkParseOverTime("60 sec/move byo-yomi", 60000L, 1);
-    }
-
-    private void checkParseOverTime(String value, long byoyomi,
-                                    int byoyomiMoves)
-    {
-        SgfUtil.Overtime overtime = SgfUtil.parseOvertime(value);
-        assertEquals(byoyomi, overtime.m_byoyomi);
-        assertEquals(byoyomiMoves, overtime.m_byoyomiMoves);
-    }
 }
