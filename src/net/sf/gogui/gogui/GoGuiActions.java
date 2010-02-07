@@ -305,8 +305,8 @@ public class GoGuiActions
                 m_goGui.actionFindNext(); } };
 
     public final Action m_actionFindNextComment =
-        new Action("ACT_FIND_NEXT_COMMENT", null, KeyEvent.VK_F3,
-                   FUNCTION_KEY | ActionEvent.SHIFT_MASK) {
+        new Action("ACT_FIND_NEXT_COMMENT", null, KeyEvent.VK_F4,
+                   FUNCTION_KEY) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFindNextComment(); } };
 
