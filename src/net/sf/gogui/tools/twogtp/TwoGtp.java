@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
@@ -65,25 +68,13 @@ public class TwoGtp
         m_filePrefix = filePrefix;
         m_useXml = useXml;
         File resultFile = getResultFile();
-        File lockFile = getLockFile();
-        // TODO: Make the lock file a real lock file
+        aquireLock();
         if (force)
         {
             if (resultFile.exists() && ! resultFile.delete())
                 throw new ErrorMessage("Could not delete file '" + resultFile
                                        + "'");
-            if (lockFile.exists() && ! lockFile.delete())
-                throw new ErrorMessage("Could not delete file '" + lockFile
-                                       + "'");
         }
-        else if (lockFile.exists())
-            throw new ErrorMessage(
-              "Lock file '" + lockFile + "' already exists.\n" +
-              "Please delete it and rerun TwoGtp if you are sure that\n" +
-              "TwoGtp is not already running and want to continue the run\n" +
-              "using the existing result file.");
-        else
-            lockFile.createNewFile();
         m_allPrograms = new ArrayList<Program>();
         m_black = new Program(black, "Black", "B", verbose);
         m_allPrograms.add(m_black);
@@ -330,6 +321,28 @@ public class TwoGtp
     private final TimeSettings m_timeSettings;
 
     private ConstNode m_lastOpeningNode;
+
+    private void aquireLock() throws ErrorMessage
+    {
+        File file = getLockFile();
+        try
+        {
+            file.createNewFile();
+            FileChannel channel
+                = new RandomAccessFile(file, "rw").getChannel();
+            FileLock lock = channel.tryLock();
+            if (lock == null)
+                throw new ErrorMessage("Could not get lock on file '" + file
+                            + "': already used by another instance of TwoGtp");
+            // We keep the lock until the end of the process and rely on the
+            // operating system to release it
+        }
+        catch (IOException e)
+        {
+            throw new ErrorMessage("Could not lock file '" + file + "': "
+                                   + e.getMessage());
+        }
+    }
 
     private void checkInconsistentState() throws GtpError
     {
