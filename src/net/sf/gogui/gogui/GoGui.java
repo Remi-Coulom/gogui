@@ -4289,6 +4289,8 @@ public class GoGui
                         format(i18n("MSG_NOSYNC_FAILURE_RESPONSE"),
                                command, name, response);
                 showWarning(mainMessage, optionalMessage, true);
+                // If the program died, menu items need to be updated
+                updateViews(false);
             }
             return false;
         }

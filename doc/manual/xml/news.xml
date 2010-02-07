@@ -52,6 +52,11 @@ Allow to use Reattach Parameters if program is dead but parameter snapshot
 exists
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Small fixes
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
