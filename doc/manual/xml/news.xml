@@ -46,6 +46,12 @@ byoyomi as Canadian overtime (which is currently the only time system supported
 by GTP and GoGui)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Allow to use Reattach Parameters if program is dead but parameter snapshot
+exists
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

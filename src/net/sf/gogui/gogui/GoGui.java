@@ -1247,25 +1247,36 @@ public class GoGui
             return;
         if (! checkCommandInProgress())
             return;
-        if (! checkHasParameterCommands())
-            return;
+        final boolean fromSnapshot =
+            (isProgramDead() && m_parameterSnapshot != null);
+        if (! fromSnapshot)
+        {
+            if (! checkHasParameterCommands())
+                return;
+        }
         protectGui();
         Runnable runnable = new Runnable() {
                 public void run() {
                     try
                     {
                         File file;
-                        try
+                        if (fromSnapshot)
+                            file = m_parameterSnapshot;
+                        else
                         {
-                            file = File.createTempFile("gogui-param", ".gtp");
+                            try
+                            {
+                                file = File.createTempFile("gogui-param",
+                                                           ".gtp");
+                            }
+                            catch (IOException e)
+                            {
+                                showError(i18n("MSG_PARAM_TMP_FILE_ERROR"), e);
+                                return;
+                            }
+                            if (! saveParameters(file))
+                                return;
                         }
-                        catch (IOException e)
-                        {
-                            showError(i18n("MSG_PARAM_TMP_FILE_ERROR"), e);
-                            return;
-                        }
-                        if (! saveParameters(file))
-                            return;
                         if (! attachNewProgram(m_programCommand, m_program))
                             return;
                         sendGtpFile(file);
@@ -2080,6 +2091,10 @@ public class GoGui
         return m_game.isModified();
     }
 
+    /** Return if a program is currently attached.
+        Also returns true, if a program is attached but dead, which can be
+        checked with isProgramDead()
+    */
     public boolean isProgramAttached()
     {
         return (m_gtp != null);

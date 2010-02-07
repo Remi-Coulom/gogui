@@ -913,7 +913,9 @@ the current position again.
 <para>
 Like <xref linkend="reattachprogram"/>, but saves the current program
 parameters to a temporary GTP file and restores them after the program
-was reattached. See <xref linkend="saveparameters"/>.
+was reattached (see <xref linkend="saveparameters"/>). If the program is
+dead but a parameter snapshot exists, it will be reattached with the
+parameter snapshot.
 </para>
 </listitem>
 </varlistentry>

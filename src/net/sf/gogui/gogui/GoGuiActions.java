@@ -745,6 +745,7 @@ public class GoGuiActions
         boolean computerWhite = m_goGui.isComputerColor(WHITE);
         boolean computerBoth = (computerBlack && computerWhite);
         boolean hasPattern = (m_goGui.getPattern() != null);
+        boolean hasParameterSnapshot = m_goGui.hasParameterSnapshot();
         int numberPrograms = m_goGui.getNumberPrograms();
         boolean hasParameterCommands = m_goGui.hasParameterCommands();
         ConstClock clock = game.getClock();
@@ -805,15 +806,16 @@ public class GoGuiActions
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
         m_actionReattachProgram.setEnabled(isProgramAttached);
         m_actionReattachWithParameters.setEnabled(isProgramAttached
-                                                  && ! isProgramDead
-                                                  && hasParameterCommands);
+                                                  && hasParameterCommands
+                                                  && (! isProgramDead
+                                                     || hasParameterSnapshot));
         m_actionSnapshotParameters.setEnabled(isProgramAttached
                                               && ! isProgramDead
                                               && hasParameterCommands);
         m_actionRestoreParameters.setEnabled(isProgramAttached
                                             && ! isProgramDead
                                             && hasParameterCommands
-                                            && m_goGui.hasParameterSnapshot());
+                                            && hasParameterSnapshot);
         updateSave(file, isModified);
         m_actionSetupBlack.setSelected(setupMode
                                        && setupColor == BLACK);
