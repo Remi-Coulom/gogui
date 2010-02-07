@@ -320,12 +320,13 @@ public class GoGuiMenuBar
         MenuChecked menu = createMenu("MEN_EDIT", KeyEvent.VK_E);
         menu.addItem(actions.m_actionFind, KeyEvent.VK_F);
         menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
+        menu.addItem(actions.m_actionFindNextComment, KeyEvent.VK_C);
         menu.addSeparator();
         menu.addItem(actions.m_actionMakeMainVariation, KeyEvent.VK_M);
         menu.addItem(actions.m_actionDeleteSideVariations, KeyEvent.VK_D);
         menu.addItem(actions.m_actionKeepOnlyPosition, KeyEvent.VK_K);
         menu.addItem(actions.m_actionTruncate, KeyEvent.VK_T);
-        menu.addItem(actions.m_actionTruncateChildren, KeyEvent.VK_C);
+        menu.addItem(actions.m_actionTruncateChildren, KeyEvent.VK_R);
         menu.addSeparator();
         GoGuiCheckBoxMenuItem itemSetupBlack =
             new GoGuiCheckBoxMenuItem(actions.m_actionSetupBlack);

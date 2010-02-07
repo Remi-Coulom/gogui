@@ -34,6 +34,11 @@ Write game number to standard error at beginning of a game, if option
 -verbose is used.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+New menu item Find Next Comment
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

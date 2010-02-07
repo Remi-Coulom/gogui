@@ -667,7 +667,7 @@ public class GoGui
         if (m_pattern == null)
             return;
         protectGui();
-        showStatus(i18n("STAT_FIND_SEARCHING"));
+        showStatus(i18n("STAT_FIND_SEARCHING_COMMENTS"));
         Runnable runnable = new Runnable() {
                 public void run() {
                     try
@@ -676,6 +676,7 @@ public class GoGui
                         ConstNode currentNode = getCurrentNode();
                         ConstNode node =
                             NodeUtil.findInComments(currentNode, m_pattern);
+                        boolean cancel = false;
                         if (node == null && getCurrentNode() != root)
                         {
                             unprotectGui();
@@ -691,21 +692,80 @@ public class GoGui
                                         NodeUtil.findInComments(node,
                                                                 m_pattern);
                             }
+                            else
+                                cancel = true;
                         }
-                        if (node == null)
+                        if (! cancel)
+                        {
+                            if (node == null)
+                            {
+                                unprotectGui();
+                                showInfo(i18n("MSG_FIND_NOT_FOUND"),
+                                         format(i18n("MSG_FIND_NOT_FOUND_2"),
+                                                m_pattern),
+                                         false);
+                                m_pattern = null;
+                            }
+                            else
+                            {
+                                gotoNode(node);
+                                boardChangedBegin(false, false);
+                                m_comment.markAll(m_pattern);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        unprotectGui();
+                        clearStatus();
+                    }
+                }
+            };
+        SwingUtilities.invokeLater(runnable);
+    }
+
+    public void actionFindNextComment()
+    {
+        if (! checkStateChangePossible())
+            return;
+        protectGui();
+        showStatus(i18n("STAT_FIND_SEARCHING_COMMENTS"));
+        Runnable runnable = new Runnable() {
+                public void run() {
+                    try
+                    {
+                        ConstNode root = getTree().getRootConst();
+                        ConstNode currentNode = getCurrentNode();
+                        ConstNode node = NodeUtil.findNextComment(currentNode);
+                        boolean cancel = false;
+                        if (node == null && getCurrentNode() != root)
                         {
                             unprotectGui();
-                            showInfo(i18n("MSG_FIND_NOT_FOUND"),
-                                     format(i18n("MSG_FIND_NOT_FOUND_2"),
-                                            m_pattern),
-                                     false);
-                            m_pattern = null;
+                            if (showQuestion(i18n("MSG_FIND_CONTINUE"),
+                                             i18n("MSG_FIND_CONTINUE_2"),
+                                             i18n("LB_FIND_CONTINUE"), false))
+                            {
+                                protectGui();
+                                node = root;
+                                if (! node.hasComment())
+                                    node = NodeUtil.findNextComment(node);
+                            }
+                            else
+                                cancel = true;
                         }
-                        else
+                        if (! cancel)
                         {
-                            gotoNode(node);
-                            boardChangedBegin(false, false);
-                            m_comment.markAll(m_pattern);
+                            if (node == null)
+                            {
+                                unprotectGui();
+                                showInfo(i18n("MSG_FIND_NO_COMMENT_FOUND"),
+                                         null, false);
+                            }
+                            else
+                            {
+                                gotoNode(node);
+                                boardChangedBegin(false, false);
+                            }
                         }
                     }
                     finally

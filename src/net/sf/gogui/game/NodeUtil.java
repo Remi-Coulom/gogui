@@ -150,8 +150,8 @@ public final class NodeUtil
         return node;
     }
 
-    /** Find next node containing a pattern in the iteration through complete
-        tree.
+    /** Find next node with a comment containing a pattern in the iteration
+        through complete tree.
         @param node The current node in the iteration.
         @param pattern The pattern.
         @return The next node in the iteration through the complete tree
@@ -163,6 +163,23 @@ public final class NodeUtil
         while (node != null)
         {
             if (commentContains(node, pattern))
+                return node;
+            node = nextNode(node);
+        }
+        return null;
+    }
+
+    /** Find next node with a comment in the iteration through complete tree.
+        @param node The current node in the iteration.
+        @return The next node in the iteration through the complete tree
+        after the current node that has a comment.
+    */
+    public static ConstNode findNextComment(ConstNode node)
+    {
+        node = nextNode(node);
+        while (node != null)
+        {
+            if (node.hasComment())
                 return node;
             node = nextNode(node);
         }

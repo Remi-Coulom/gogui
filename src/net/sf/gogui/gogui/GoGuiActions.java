@@ -304,6 +304,12 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionFindNext(); } };
 
+    public final Action m_actionFindNextComment =
+        new Action("ACT_FIND_NEXT_COMMENT", null, KeyEvent.VK_F3,
+                   FUNCTION_KEY | ActionEvent.SHIFT_MASK) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionFindNextComment(); } };
+
     public final Action m_actionForward =
         new Action("ACT_FORWARD", "TT_FORWARD",
                    KeyEvent.VK_RIGHT, "gogui-next") {
