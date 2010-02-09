@@ -54,6 +54,11 @@ exists
 </listitem>
 <listitem>
 <simpara>
+GoGuiAdapter: forward kgs-genmove_cleanup to the program if it supports it
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Small fixes
 </simpara>
 </listitem>

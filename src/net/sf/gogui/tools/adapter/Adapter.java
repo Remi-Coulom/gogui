@@ -121,36 +121,24 @@ public class Adapter
 
     public void cmdGenmove(GtpCommand cmd) throws GtpError
     {
-        cmdGenmove(cmd.getColorArg(), cmd);
+        GoColor c = cmd.getColorArg();
+        cmdGenmove(c, cmd, m_gtp.getCommandGenmove(c));
+    }
+
+    public void cmdGenmoveCleanup(GtpCommand cmd) throws GtpError
+    {
+        GoColor c = cmd.getColorArg();
+        cmdGenmove(c, cmd, "kgs-genmove_cleanup " + c.getUppercaseLetter());
     }
 
     public void cmdGenmoveBlack(GtpCommand cmd) throws GtpError
     {
-        cmdGenmove(BLACK, cmd);
+        cmdGenmove(BLACK, cmd, m_gtp.getCommandGenmove(BLACK));
     }
 
     public void cmdGenmoveWhite(GtpCommand cmd) throws GtpError
     {
-        cmdGenmove(WHITE, cmd);
-    }
-
-    public void cmdGenmove(GoColor color, GtpCommand cmd) throws GtpError
-    {
-        String command = m_gtp.getCommandGenmove(color);
-        String response = send(command);
-        if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
-            return;
-        try
-        {
-            GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
-            m_board.play(color, point);
-            m_synchronizer.updateAfterGenmove(m_board);
-            cmd.setResponse(response);
-        }
-        catch (GtpResponseFormatError e)
-        {
-            throw new GtpError(e.getMessage());
-        }
+        cmdGenmove(WHITE, cmd, m_gtp.getCommandGenmove(WHITE));
     }
 
     public void cmdGGUndo(GtpCommand cmd) throws GtpError
@@ -363,6 +351,25 @@ public class Adapter
 
     private TimeSettings m_timeSettings;
 
+    private void cmdGenmove(GoColor color, GtpCommand cmd, String command)
+        throws GtpError
+    {
+        String response = send(command);
+        if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
+            return;
+        try
+        {
+            GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
+            m_board.play(color, point);
+            m_synchronizer.updateAfterGenmove(m_board);
+            cmd.setResponse(response);
+        }
+        catch (GtpResponseFormatError e)
+        {
+            throw new GtpError(e.getMessage());
+        }
+    }
+
     private GoPoint getPointArg(GtpCommand cmd, int i) throws GtpError
     {
         return cmd.getPointArg(i, m_board.getSize());
@@ -394,6 +401,10 @@ public class Adapter
             if (! GtpUtil.isStateChangingCommand(command))
                 register(command, m_callbackForward);
         }
+        if (m_gtp.isSupported("kgs-genmove_cleanup"))
+            register("kgs-genmove_cleanup", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdGenmoveCleanup(cmd); } });
         register("boardsize", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdBoardsize(cmd); } });
