@@ -26,8 +26,7 @@
 <listitem>
 <simpara>
 Use more meaningful system properties for displaying the Java runtime name
-and version in the about and crash dialog (java.runtime.name instead of
-java.vm.name, if existing, and java.version instead of java.vm.version)
+and version in the about and crash dialog
 </simpara>
 </listitem>
 <listitem>
@@ -69,11 +68,6 @@ exists
 <listitem>
 <simpara>
 GoGuiAdapter: forward kgs-genmove_cleanup to the program if it supports it
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Small fixes
 </simpara>
 </listitem>
 <listitem>
