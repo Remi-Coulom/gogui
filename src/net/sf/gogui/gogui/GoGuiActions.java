@@ -34,8 +34,7 @@ import net.sf.gogui.util.Platform;
     and accelerator key. There are also update functions that are used to
     enable actions or add additional information to their descriptions
     depending on the state of GoGui as far as it is accessible through public
-    functions.
-*/
+    functions. */
 public class GoGuiActions
 {
     abstract class Action
@@ -868,8 +867,7 @@ public class GoGuiActions
         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     /** Shortcut modifier for function keys.
-        0, unless platform is Mac.
-    */
+        0, unless platform is Mac. */
     private static final int FUNCTION_KEY = (Platform.isMac() ? SHORTCUT : 0);
 
     private static KeyStroke getKeyStroke(int keyCode, int modifier)

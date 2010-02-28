@@ -7,8 +7,7 @@ public final class XmlUtil
 {
     /** Escape XML special characters for attribute values.
         This assumes that the attribute will be quotes with ", it does
-        not escape '. Also strips invalid XML characters.
-    */
+        not escape '. Also strips invalid XML characters. */
     public static String escapeAttr(String text)
     {
         int len = text.length();
@@ -40,8 +39,7 @@ public final class XmlUtil
     }
 
     /** Escape XML special characters for text content.
-        Also strips invalid XML characters.
-    */
+        Also strips invalid XML characters. */
     public static String escapeText(String text)
     {
         int len = text.length();

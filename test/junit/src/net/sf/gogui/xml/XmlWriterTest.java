@@ -26,8 +26,7 @@ public final class XmlWriterTest
 
     /** Test linebreak-to-paragraph conversion in comments.
         See appendix "XML Format" in the GoGui documentation.
-        This should allow loss-less conversion from SGF to XML and back.
-    */
+        This should allow loss-less conversion from SGF to XML and back. */
     public void testCommentParagraphs() throws Exception
     {
         Node root = new Node();
@@ -73,8 +72,7 @@ public final class XmlWriterTest
 
     /** Test that a root node that is empty apart from game info and should
         be written, because the child has a move is written using a
-        self-closing tag.
-    */
+        self-closing tag. */
     public void testEmptyRootWithGameInfo() throws Exception
     {
         Node root = new Node();
@@ -121,8 +119,7 @@ public final class XmlWriterTest
         This happened when an SGF file was loaded that had the control
         character Unicode 0x13 in its comment, and then saved again as XML.
         Not all UTF-8 characters are valid in XML, see
-        http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char.
-    */
+        http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char. */
     public void testInvalidXml() throws Exception
     {
         Node root = new Node();
@@ -146,8 +143,7 @@ public final class XmlWriterTest
     }
 
     /** Test that a node containing only a move is not embedded in an
-        unnecessary Node element.
-    */
+        unnecessary Node element. */
     public void testMoveWithoutNode() throws Exception
     {
         Node root = new Node();
@@ -171,8 +167,7 @@ public final class XmlWriterTest
         The player should be written using the legacy SGF PL-property
         (BlackToPlay, WhiteToPlay are not usable, because they don't have a
         legal parent according to go.dtd 2007) and the this SGF property is
-        embedded in a Node element.
-    */
+        embedded in a Node element. */
     public void testSetupPlayer() throws Exception
     {
         Node root = new Node();
@@ -196,8 +191,7 @@ public final class XmlWriterTest
     /** Test that time left information in node without move is written.
         Since go.dtd 2007 allows timeleft attributes only for the elements
         Black and White, the timeleft information should be written using
-        legacy SGF BL/TL properties.
-    */
+        legacy SGF BL/TL properties. */
     public void testTimeLeftWithoutMove() throws Exception
     {
         Node root = new Node();

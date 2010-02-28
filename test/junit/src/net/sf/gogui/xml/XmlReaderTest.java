@@ -28,8 +28,7 @@ public final class XmlReaderTest
 
     /** Test that paragraphs containing only empty characters are preserved.
         See the appendix "XML Format" of the GoGui documentation that this is
-        how GoGui promises to handle paragraph content.
-    */
+        how GoGui promises to handle paragraph content. */
     public void testComment() throws Exception
     {
         ConstGameTree tree =
@@ -66,8 +65,7 @@ public final class XmlReaderTest
         the GoGame has a name attribute.
         This bug occured, because the reader stored a game name in a legacy
         SGF property GN, which caused the implicit root node no longer to be
-        empty.
-    */
+        empty. */
     public void testPruneEmptyRootIfGameName() throws Exception
     {
         // Here, comment needs to hava a Node parent according to the DTD,

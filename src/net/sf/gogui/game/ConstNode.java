@@ -9,8 +9,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
 /** Const functions of game.Node.
-    @see Node
-*/
+    @see Node */
 public interface ConstNode
 {
     String getComment();

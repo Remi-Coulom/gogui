@@ -16,8 +16,7 @@ public final class Interrupt
     /** Interrupt command.
         Confirm interrupt by user and send interrupt comment line if
         supported by the program, otherwise kill the program.
-        @return true if interrupt comment line was sent.
-    */
+        @return true if interrupt comment line was sent. */
     public boolean run(Component parent, GuiGtpClient gtp,
                        MessageDialogs messageDialogs)
     {

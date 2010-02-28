@@ -109,8 +109,7 @@ public final class GtpSynchronizerTest
     }
 
     /** Test that set_free_handicap command is used if supported by the
-        engine.
-    */
+        engine. */
     public void testSetupHandicap() throws GtpError
     {
         createSynchronizer();
@@ -143,8 +142,7 @@ public final class GtpSynchronizerTest
     }
 
     /** Test that handicap stones are transmitted as moves if neither
-        set_free_handicap nor gogui-setup is supported.
-    */
+        set_free_handicap nor gogui-setup is supported. */
     public void testSetupHandicapAsMoves() throws GtpError
     {
         createSynchronizer();
@@ -176,8 +174,7 @@ public final class GtpSynchronizerTest
     }
 
     /** Test that handicap stones are transmitted using gogui-setup if
-        set_free_handicap is not supported, but gogui-setup is supported.
-    */
+        set_free_handicap is not supported, but gogui-setup is supported. */
     public void testSetupHandicapAsSetup() throws GtpError
     {
         createSynchronizer();

@@ -189,8 +189,7 @@ public class Display
     }
 
     /** Only accept this board size.
-        A value of -1 means accept any size.
-    */
+        A value of -1 means accept any size. */
     private int m_size;
 
     private final Board m_board;

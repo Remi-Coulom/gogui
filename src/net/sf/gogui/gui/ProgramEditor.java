@@ -43,8 +43,7 @@ public class ProgramEditor
         set after querying the program)
         @param editOnlyLabel Edit only the label (show the other information
         non-editable)
-        @param messageDialogs Message dialog manager
-    */
+        @param messageDialogs Message dialog manager */
     public Program editItem(Component parent, String title, Program program,
                             boolean editOnlyCommand, boolean editOnlyLabel,
                             MessageDialogs messageDialogs)

@@ -38,16 +38,14 @@ public final class PointList
     }
 
     /** Construct empty point list with initial capacity.
-        @param initialCapacity The number of points to reserve memory for.
-    */
+        @param initialCapacity The number of points to reserve memory for. */
     public PointList(int initialCapacity)
     {
         super(initialCapacity);
     }
 
     /** Construct point list with a single element.
-        @param p The initial point element.
-    */
+        @param p The initial point element. */
     public PointList(GoPoint p)
     {
         this(1);
@@ -55,8 +53,7 @@ public final class PointList
     }
 
     /** Construct point list as a copy of another point list.
-        @param list The list to copy the points from.
-    */
+        @param list The list to copy the points from. */
     public PointList(ConstPointList list)
     {
         super((PointList)list);
@@ -70,8 +67,7 @@ public final class PointList
 
     /** Get an empty constant point list.
         Can be used at places where an empty temporary point list is needed
-        that is never modified to avoid memory allocation.
-    */
+        that is never modified to avoid memory allocation. */
     public static ConstPointList getEmptyList()
     {
         return EMPTY_LIST;
@@ -80,16 +76,14 @@ public final class PointList
     /** Returns an iterator over the points elements in this list.
         An iterator of type PointList.ConstIterator is returned, which
         does not support Iterator.remove(), to allow for-each-loops for
-        ConstPointList references.
-    */
+        ConstPointList references. */
     public Iterator<GoPoint> iterator()
     {
         return new ConstIterator();
     }
 
     /** Remove and return last element.
-        Requires that list is not empty.
-    */
+        Requires that list is not empty. */
     public GoPoint pop()
     {
         int index = size() - 1;
@@ -116,8 +110,7 @@ public final class PointList
     }
 
     /** Convert point list to string.
-        Null arguments will be converted to an empty string.
-    */
+        Null arguments will be converted to an empty string. */
     public static String toString(ConstPointList list)
     {
         if (list == null)

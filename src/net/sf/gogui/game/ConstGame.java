@@ -6,8 +6,7 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 
 /** Const functions of game.Game.
-    @see Game
-*/
+    @see Game */
 public interface ConstGame
 {
     ConstBoard getBoard();

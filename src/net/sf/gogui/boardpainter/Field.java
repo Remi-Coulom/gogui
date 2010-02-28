@@ -206,8 +206,7 @@ public class Field
         It can be used to display stones which are not part of the current
         board position (e.g. search variations)
         @param color The color of the shadow stone or null to remove a
-        shadow stone.
-    */
+        shadow stone. */
     public void setGhostStone(GoColor color)
     {
         m_ghostStone = color;

@@ -8,16 +8,14 @@ import static net.sf.gogui.go.GoColor.WHITE;
 /** Move containing a point and a color.
     The point can be <code>null</code> (for pass move).
     The color is black or white.
-    This class is immutable, references are unique.
-*/
+    This class is immutable, references are unique. */
 public final class Move
 {
     /** Factory method for constructing a move.
         @param color The color of the move
         @param x Column in <code>[0..GoPoint.MAX_SIZE - 1]</code>
         @param y Row in <code>[0..GoPoint.MAX_SIZE - 1]</code>
-        @return Reference to this move
-    */
+        @return Reference to this move */
     public static Move get(GoColor color, int x, int y)
     {
         return get(color, GoPoint.get(x, y));
@@ -28,8 +26,7 @@ public final class Move
         removing a stone on the board, but this will be deprecated in the
         future)
         @param point Location of the move (null for pass move)
-        @return Reference to this move
-    */
+        @return Reference to this move */
     public static Move get(GoColor color, GoPoint point)
     {
         assert color.isBlackWhite();
@@ -50,8 +47,7 @@ public final class Move
 
     /** Factory method for constructing a pass move.
         @param c The color of the move.
-        @return Reference to this move
-    */
+        @return Reference to this move */
     public static Move getPass(GoColor c)
     {
         assert c.isBlackWhite();
@@ -59,16 +55,14 @@ public final class Move
     }
 
     /** Get color of move.
-        @return Color of move
-    */
+        @return Color of move */
     public GoColor getColor()
     {
         return m_color;
     }
 
     /** Get stone location of move.
-        @return Location of move; null for pass move
-    */
+        @return Location of move; null for pass move */
     public GoPoint getPoint()
     {
         return m_point;
@@ -78,8 +72,7 @@ public final class Move
         @return String representation using an uppercase letter for the color
         and an uppercase string for the point (e.g. B C3, W PASS). This
         representation is also guaranteed to be compatible with the formats
-        used in the Go Text Protocol.
-    */
+        used in the Go Text Protocol. */
     public String toString()
     {
         return m_string;

@@ -22,8 +22,7 @@ public final class GtpClientUtil
         the new command).
         Note: call GtpClientBase.querySupportedCommands() first.
         @return The response to gogui-analyze_commands or null, if this
-        command is not supported or returns an error.
-    */
+        command is not supported or returns an error. */
     public static String getAnalyzeCommands(GtpClientBase gtp)
     {
         String command;
@@ -73,8 +72,7 @@ public final class GtpClientUtil
         command gogui_title.
         Note: call GtpClientBase.querySupportedCommands() first.
         @return The response to the command or null, if neither command
-        is supported or the command failed.
-    */
+        is supported or the command failed. */
     public static String getTitle(GtpClientBase gtp)
     {
         try
@@ -105,8 +103,7 @@ public final class GtpClientUtil
         @throws ErrorMessage If writing the file fails or none of the analyze
         commands have the type "param" (error responses from the program are
         written in comment lines in the resulting file).
-        See GoGui documentation, chapter "Analyze Commands"
-    */
+        See GoGui documentation, chapter "Analyze Commands" */
     public static void
         saveParameters(GtpClientBase gtp,
                        ArrayList<AnalyzeDefinition> analyzeCommands,

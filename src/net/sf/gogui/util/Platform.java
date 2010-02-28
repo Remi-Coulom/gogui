@@ -11,28 +11,24 @@ import java.net.URL;
 import java.util.Locale;
 
 /** Static utility functions for platform detection and platform-dependent
-    behavior.
-*/
+    behavior. */
 public class Platform
 {
     /** Handler for events from the Application Menu on MacOS. */
     public interface SpecialMacHandler
     {
         /** Handle about menu event.
-            @return true if event was handled successfully.
-        */
+            @return true if event was handled successfully. */
         boolean handleAbout();
 
         /** Handle open file event.
             @param filename name of file.
-            @return true if event was handled successfully.
-        */
+            @return true if event was handled successfully. */
         boolean handleOpenFile(String filename);
 
         /** Handle quit application event.
             @return true if event was handled successfully, false if quit
-            should be aborted.
-        */
+            should be aborted. */
         boolean handleQuit();
     }
 
@@ -46,8 +42,7 @@ public class Platform
     }
 
     /** Return information on this computer.
-        Returns host name and cpu information (if /proc/cpuinfo exists).
-    */
+        Returns host name and cpu information (if /proc/cpuinfo exists). */
     public static String getHostInfo()
     {
         String info;
@@ -113,8 +108,7 @@ public class Platform
         - mozilla
         - opera
         @param url URL to open.
-        @return false if everything failed.
-    */
+        @return false if everything failed. */
     public static boolean openInExternalBrowser(URL url)
     {
         if (isMac())
@@ -163,8 +157,7 @@ public class Platform
     }
 
     /** Register handler for events from the Application Menu on MacOS.
-        @param handler Handler to register.
-    */
+        @param handler Handler to register. */
     public static void registerSpecialMacHandler(SpecialMacHandler handler)
     {
         try

@@ -31,8 +31,7 @@ public final class AnalyzeShow
         @param showTextBuffer If not null, text lines from AnalyzeType.GFX
         commands will not be shown immediately in the status bar, but appended
         to the text buffer. This is for allowing multiline text in gfx commands
-        that will be shown in a separate window later.
-    */
+        that will be shown in a separate window later. */
     public static void show(AnalyzeCommand command, GuiBoard guiBoard,
                             StatusBar statusBar, ConstBoard board,
                             String response, StringBuilder showTextBuffer)
@@ -140,8 +139,7 @@ public final class AnalyzeShow
     }
 
     /** Parse gfx analyze command response and display it on the board.
-        @param showTextBuffer See AnalyzeShow.show()
-    */
+        @param showTextBuffer See AnalyzeShow.show() */
     public static void showGfx(String response, GuiBoard guiBoard,
                                StatusBar statusBar,
                                StringBuilder showTextBuffer)
@@ -250,8 +248,7 @@ public final class AnalyzeShow
     }
 
     /** Parse gfx analyze command response line and display it on the board.
-        @param showTextBuffer See AnalyzeShow.show()
-    */
+        @param showTextBuffer See AnalyzeShow.show() */
     public static void showGfxLine(String line, GuiBoard guiBoard,
                                    StatusBar statusBar,
                                    StringBuilder showTextBuffer)

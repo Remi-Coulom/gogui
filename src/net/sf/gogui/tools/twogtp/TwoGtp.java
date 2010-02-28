@@ -48,8 +48,8 @@ public class TwoGtp
     extends GtpEngine
 {
     /** Constructor.
-        @param komi The fixed komi. See TwoGtp documentation for option -komi
-    */
+        @param komi The fixed komi. See TwoGtp documentation for option
+        -komi */
     public TwoGtp(String black, String white, String referee, String observer,
                   int size, Komi komi, int numberGames, boolean alternate,
                   String filePrefix, boolean force, boolean verbose,
@@ -142,8 +142,7 @@ public class TwoGtp
     }
 
     /** Get games left to play.
-        @return number of games left of -1 if no maximum set.
-    */
+        @return number of games left of -1 if no maximum set. */
     public int gamesLeft()
     {
         if (m_numberGames <= 0)
@@ -262,8 +261,7 @@ public class TwoGtp
 
     /** Limit number of moves.
         @param maxMoves Maximum number of moves after which genmove will fail,
-        -1 for no limit.
-    */
+        -1 for no limit. */
     public void setMaxMoves(int maxMoves)
     {
         m_maxMoves = maxMoves;

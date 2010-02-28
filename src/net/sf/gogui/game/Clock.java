@@ -13,8 +13,7 @@ import net.sf.gogui.util.StringUtil;
 /** Time control for a Go game.
     If the clock is not initialized with Clock.setTimeSettings, the clock
     will count upwards, otherwise the time settings with main and/or
-    byoyomi time are used. The time unit is milliseconds.
-*/
+    byoyomi time are used. The time unit is milliseconds. */
 public final class Clock
     implements ConstClock
 {
@@ -36,8 +35,7 @@ public final class Clock
 
     /** Listener to clock changes.
         This function will be called from a different thread at regular
-        intervals.
-    */
+        intervals. */
     public interface Listener
     {
         void clockChanged();
@@ -55,8 +53,7 @@ public final class Clock
     }
 
     /** Get moves left.
-        Requires: getUseByoyomi() and isInByoyomi(color)
-    */
+        Requires: getUseByoyomi() and isInByoyomi(color) */
     public int getMovesLeft(GoColor color)
     {
         assert getUseByoyomi() && isInByoyomi(color);
@@ -64,8 +61,7 @@ public final class Clock
     }
 
     /** Get time left.
-        Requires: isInitialized()
-    */
+        Requires: isInitialized() */
     public long getTimeLeft(GoColor color)
     {
         assert isInitialized();
@@ -109,8 +105,7 @@ public final class Clock
     /** Format time left to a string.
         If movesLeft &lt; 0, only the time will be returned, otherwise
         after the time string, a slash and the number of moves left will be
-        appended.
-    */
+        appended. */
     public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuilder buffer = new StringBuilder(8);
@@ -124,8 +119,7 @@ public final class Clock
     }
 
     /** Return color the clock is currently measuring the time for.
-        Returns null, if clock is between a #stopMove and #startMove.
-    */
+        Returns null, if clock is between a #stopMove and #startMove. */
     public GoColor getToMove()
     {
         return m_toMove;
@@ -180,8 +174,7 @@ public final class Clock
     /** Parses a time string.
         The expected format is <tt>[[H:]MM:]SS</tt>.
         @return The time in milliseconds or -1, if the time string is not
-        valid.
-    */
+        valid. */
     public static long parseTimeString(String s)
     {
         String a[] = s.split(":");
@@ -258,8 +251,7 @@ public final class Clock
         Only one listener supported at the moment.
         If the clock has a listener, the clock should be stopped with halt()
         if it is no longer used, otherwise the timer thread can keep an
-        application from terminating.
-    */
+        application from terminating. */
     public void setListener(Listener listener)
     {
         m_listener = listener;
@@ -268,8 +260,7 @@ public final class Clock
     /** Set time settings.
         Changing the time settings does not change the current state of the
         clock. The time settings are only used when the clock is reset or
-        the next byoyomi period is initialized.
-    */
+        the next byoyomi period is initialized. */
     public void setTimeSettings(TimeSettings settings)
     {
         m_timeSettings = settings;
@@ -278,8 +269,7 @@ public final class Clock
     /** Set time left.
         @param color Color to set the time for.
         @param time New value for time left.
-        @param movesLeft -1, if not in byoyomi.
-    */
+        @param movesLeft -1, if not in byoyomi. */
     public void setTimeLeft(GoColor color, long time, int movesLeft)
     {
         halt();
@@ -304,8 +294,7 @@ public final class Clock
 
     /** Start time for a move.
         If the clock was already running, the passed time for the current move
-        is discarded.
-    */
+        is discarded. */
     public void startMove(GoColor color)
     {
         assert color.isBlackWhite();
@@ -318,8 +307,7 @@ public final class Clock
     /** Stop time for a move.
         If the clock was running, the time for the move is added to the
         total time for the color the clock was running for; otherwise
-        this function does nothing.
-    */
+        this function does nothing. */
     public void stopMove()
     {
         if (! m_isRunning)

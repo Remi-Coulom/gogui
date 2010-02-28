@@ -22,15 +22,13 @@ import net.sf.gogui.util.StringUtil;
 
 /** Extended info.
     Contains markups and value, because these are used in the large SGF
-    search traces of Explorer.
-*/
+    search traces of Explorer. */
 final class ExtraInfo
 {
     public Map<MarkType,PointList> m_marked;
 
     /** Node value.
-        Float instead of double for space efficiency.
-    */
+        Float instead of double for space efficiency. */
     public float m_value = Float.NaN;
 
     public MoreExtraInfo m_moreExtraInfo;
@@ -44,8 +42,7 @@ final class ExtraInfo
 }
 
 /** More extended info.
-    Contains all the information typically not in large SGF traces.
-*/
+    Contains all the information typically not in large SGF traces. */
 final class MoreExtraInfo
 {
     public SetupInfo m_setupInfo;
@@ -73,8 +70,7 @@ final class SetupInfo
     public GoColor m_player;
 
     /** Stones added or removed.
-        The array is indexed by Black, White, Empty.
-    */
+        The array is indexed by Black, White, Empty. */
     public BlackWhiteEmptySet<PointList> m_stones
         = new BlackWhiteEmptySet<PointList>(new PointList(), new PointList(),
                                             new PointList());
@@ -106,8 +102,7 @@ final class TimeInfo
 /** Node in a game tree.
     The memory requirement is optimized for nodes containing only a move and
     comment property (e.g. for GNU Go's large SGF traces).
-    The optimization also expects that most nodes have only one child.
-*/
+    The optimization also expects that most nodes have only one child. */
 public final class Node
     implements ConstNode
 {
@@ -117,16 +112,14 @@ public final class Node
     }
 
     /** Construct node containing a move.
-        @param move The move to store in this node.
-    */
+        @param move The move to store in this node. */
     public Node(Move move)
     {
         m_move = move;
     }
 
     /** Append a node as a child to this node.
-        @param node The node to append.
-    */
+        @param node The node to append. */
     @SuppressWarnings("unchecked")
     public void append(Node node)
     {
@@ -154,8 +147,7 @@ public final class Node
 
     /** Add a markup.
         @param point The location that should be marked.
-        @param type The type of the markup from Node.MARK_TYPES.
-    */
+        @param type The type of the markup from Node.MARK_TYPES. */
     public void addMarked(GoPoint point, MarkType type)
     {
         assert point != null;
@@ -181,8 +173,7 @@ public final class Node
         SGF properties, so that the old value is preserved if no new value
         is set in GameInfo.
         @param label The name of the property
-        @param values The values of the property
-    */
+        @param values The values of the property */
     public void addSgfProperty(String label, ArrayList<String> values)
     {
         createSgfProperties().add(label, values);
@@ -197,8 +188,7 @@ public final class Node
         It is not checked, if this stone is already in the list of added
         or removed stones.
         @param c The color of the stone (Black or White; Empty for removal).
-        @param p The location of the setup stone.
-    */
+        @param p The location of the setup stone. */
     public void addStone(GoColor c, GoPoint p)
     {
         assert p != null;
@@ -209,8 +199,7 @@ public final class Node
         It is not checked, if this stone is already in the list of added
         or removed stones.
         @param c The color of the stone (Black or White; Empty for removal).
-        @param list The locations of the setup stones.
-    */
+        @param list The locations of the setup stones. */
     public void addStones(GoColor c, ConstPointList list)
     {
         assert list != null;
@@ -227,8 +216,7 @@ public final class Node
     }
 
     /** Child of main variation or null if no child.
-        @return Node with index 0 or null, if no children.
-    */
+        @return Node with index 0 or null, if no children. */
     public Node getChild()
     {
         if (! hasChildren())
@@ -237,8 +225,7 @@ public final class Node
     }
 
     /** Child of main variation or null if no child (const).
-        @return Node with index 0 or null, if no children.
-    */
+        @return Node with index 0 or null, if no children. */
     public ConstNode getChildConst()
     {
         return getChild();
@@ -246,8 +233,7 @@ public final class Node
 
     /** Get child node.
         @param i Index of the child in [0...getNumberChildren() - 1]
-        @return The child node
-    */
+        @return The child node */
     public Node getChild(int i)
     {
         if (getNumberChildren() == 1)
@@ -257,8 +243,7 @@ public final class Node
 
     /** Get child node (const).
         @param i Index of the child in [0...getNumberChildren() - 1]
-        @return The child node
-    */
+        @return The child node */
     public ConstNode getChildConst(int i)
     {
         return getChild(i);
@@ -266,8 +251,7 @@ public final class Node
 
     /** Get index of child node.
         @param child The child.
-        @return Index of child or -1, if node is not a child of this node.
-    */
+        @return Index of child or -1, if node is not a child of this node. */
     public int getChildIndex(ConstNode child)
     {
         for (int i = 0; i < getNumberChildren(); ++i)
@@ -278,8 +262,7 @@ public final class Node
 
     /** Get comment.
         @return Comment stored in this node or null, if node contains no
-        comment.
-    */
+        comment. */
     public String getComment()
     {
         if (m_comment == null)
@@ -295,16 +278,14 @@ public final class Node
     }
 
     /** Get father node.
-        @return Father node of this node or null, if no father.
-    */
+        @return Father node of this node or null, if no father. */
     public Node getFather()
     {
         return m_father;
     }
 
     /** Get father node (const).
-        @return Father node of this node or null, if no father.
-    */
+        @return Father node of this node or null, if no father. */
     public ConstNode getFatherConst()
     {
         return m_father;
@@ -324,8 +305,7 @@ public final class Node
 
     /** Get label for a location on the board.
         @param point The location.
-        @return Label at location or null, if no label.
-    */
+        @return Label at location or null, if no label. */
     public String getLabel(GoPoint point)
     {
         Map<GoPoint,String> map = getLabels();
@@ -335,8 +315,7 @@ public final class Node
     }
 
     /** Get all labels on the board.
-        @return Map containing (Point,String) pairs.
-    */
+        @return Map containing (Point,String) pairs. */
     public Map<GoPoint,String> getLabels()
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
@@ -355,8 +334,7 @@ public final class Node
 
     /** Get all markups of a type.
         @param type Markup type from Node.MARK_TYPES.
-        @return Map containing (Point,String) pairs.
-    */
+        @return Map containing (Point,String) pairs. */
     public PointList getMarked(MarkType type)
     {
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
@@ -366,16 +344,14 @@ public final class Node
 
     /** Get all markups of a type (const).
         @param type Markup type from Node.MARK_TYPES.
-        @return Map containing (Point,String) pairs.
-    */
+        @return Map containing (Point,String) pairs. */
     public ConstPointList getMarkedConst(MarkType type)
     {
         return getMarked(type);
     }
 
     /** Get move contained in this node.
-        @return Move or null, if no move.
-    */
+        @return Move or null, if no move. */
     public Move getMove()
     {
         return m_move;
@@ -384,8 +360,7 @@ public final class Node
     /** Moves left in byoyomi.
         @param c The color.
         @return Moves left in byoyomi for that color or -1 if not in byoyomi or
-        unknown.
-    */
+        unknown. */
     public int getMovesLeft(GoColor c)
     {
         assert c.isBlackWhite();
@@ -396,8 +371,7 @@ public final class Node
     }
 
     /** Get number of children.
-        @return Number of children.
-    */
+        @return Number of children. */
     public int getNumberChildren()
     {
         if (m_children == null)
@@ -409,8 +383,7 @@ public final class Node
 
     /** Color to play if explicitely set.
         @see #getToMove for getting the color to play.
-        @return Color to play or null if color is not explicitely set.
-    */
+        @return Color to play or null if color is not explicitely set. */
     public GoColor getPlayer()
     {
         SetupInfo setupInfo = getSetupInfo();
@@ -421,8 +394,7 @@ public final class Node
 
     /** Get setup stones.
         @param c Color of the stones; EMPTY for removed stones.
-        @return The added or removed stones.
-    */
+        @return The added or removed stones. */
     public ConstPointList getSetup(GoColor c)
     {
         SetupInfo setupInfo = getSetupInfo();
@@ -434,8 +406,7 @@ public final class Node
     /** Get other unspecified SGF properties.
         @return The map with other SGF properties mapping String label
         to String value
-        @see #addSgfProperty
-    */
+        @see #addSgfProperty */
     public SgfProperties getSgfProperties()
     {
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
@@ -446,8 +417,7 @@ public final class Node
     /** Get other unspecified SGF properties (const).
         @return The map with other SGF properties mapping String label
         to String value
-        @see #addSgfProperty
-    */
+        @see #addSgfProperty */
     public ConstSgfProperties getSgfPropertiesConst()
     {
         return getSgfProperties();
@@ -455,8 +425,7 @@ public final class Node
 
     /** Time left for color after move was made.
         @param c The color
-        @return Time left in seconds for this color or Double.NaN if unknown
-    */
+        @return Time left in seconds for this color or Double.NaN if unknown */
     public double getTimeLeft(GoColor c)
     {
         assert c.isBlackWhite();
@@ -470,8 +439,7 @@ public final class Node
         If a player is explicitely set, it is returned, otherwise if the
         node contains a move, the color of the move is returned.
         @return The color to move or null if nothing is known about
-        the color to move
-    */
+        the color to move */
     public GoColor getToMove()
     {
         GoColor player = getPlayer();
@@ -484,8 +452,7 @@ public final class Node
 
     /** Return a value for the node.
         The meaning of a value is according to the SGF property V[]
-        @return The value, or Float.NaN, if node contains no value
-    */
+        @return The value, or Float.NaN, if node contains no value */
     public float getValue()
     {
         if (m_extraInfo == null)
@@ -501,8 +468,7 @@ public final class Node
     /** Check if node contains a comment.
         More efficient than #getComment(), because getComment decodes the
         comment into a String, if it exists.
-        @return true if node contains a comment
-    */
+        @return true if node contains a comment */
     public boolean hasComment()
     {
         return (m_comment != null);
@@ -514,8 +480,7 @@ public final class Node
     }
 
     /** Check if node has setup or delete stones.
-        @return true, if node has setup or delete stones.
-    */
+        @return true, if node has setup or delete stones. */
     public boolean hasSetup()
     {
         for (GoColor c : BLACK_WHITE_EMPTY)
@@ -526,8 +491,7 @@ public final class Node
 
     /** Check if node is child of this node.
         @param node The node to check.
-        @return true, if node is child node.
-    */
+        @return true, if node is child node. */
     public boolean isChildOf(Node node)
     {
         return (node.getChildIndex(this) != -1);
@@ -541,8 +505,7 @@ public final class Node
     }
 
     /** Make child the first child of this node.
-        @param child One of the child nodes of this node.
-    */
+        @param child One of the child nodes of this node. */
     @SuppressWarnings("unchecked")
     public void makeMainVariation(Node child)
     {
@@ -555,8 +518,7 @@ public final class Node
     }
 
     /** Remove child of this node.
-        @param child Child to remove.
-    */
+        @param child Child to remove. */
     public void removeChild(Node child)
     {
         assert child.isChildOf(this);
@@ -577,8 +539,7 @@ public final class Node
 
     /** Remove markup.
         @param point Location of the markup.
-        @param type Type of the markup from Node.MARK_TYPES.
-    */
+        @param type Type of the markup from Node.MARK_TYPES. */
     public void removeMarked(GoPoint point, MarkType type)
     {
         assert point != null;
@@ -590,8 +551,7 @@ public final class Node
 
     /** Remove setup at point.
         Remove any setup that was added with #addStone at a point.
-        @param p Location of the setup.
-    */
+        @param p Location of the setup. */
     public void removeSetup(GoPoint p)
     {
         assert p != null;
@@ -614,8 +574,7 @@ public final class Node
     /** Store comment in this node.
         @param comment The comment. If the parameter is null, empty or
         contains only whitespaces, then the comment will be deleted from this
-        node.
-    */
+        node. */
     public void setComment(String comment)
     {
         if (StringUtil.isEmpty(comment))
@@ -634,8 +593,7 @@ public final class Node
     }
 
     /** Set father of this node.
-        @param father The new father.
-    */
+        @param father The new father. */
     public void setFather(Node father)
     {
         m_father = father;
@@ -645,8 +603,7 @@ public final class Node
         Whitespaces will be trimmed.
         @param point The location.
         @param label The text of the label; empty string or null to delete
-        the label.
-    */
+        the label. */
     public void setLabel(GoPoint point, String label)
     {
         assert point != null;
@@ -661,8 +618,7 @@ public final class Node
     }
 
     /** Set move stored in this node.
-        @param move The move or null, if no move.
-    */
+        @param move The move or null, if no move. */
     public void setMove(Move move)
     {
         m_move = move;
@@ -670,8 +626,7 @@ public final class Node
 
     /** Set byoyomi moves left.
         @param c The player.
-        @param n Number of moves left.
-    */
+        @param n Number of moves left. */
     public void setMovesLeft(GoColor c, int n)
     {
         assert c.isBlackWhite();
@@ -680,8 +635,7 @@ public final class Node
 
     /** Set byoyomi time left.
         @param c The player.
-        @param seconds Time left in seconds.
-    */
+        @param seconds Time left in seconds. */
     public void setTimeLeft(GoColor c, double seconds)
     {
         assert c.isBlackWhite();
@@ -689,8 +643,7 @@ public final class Node
     }
 
     /** Explicitely set color to play.
-        @param color Color to play.
-    */
+        @param color Color to play. */
     public void setPlayer(GoColor color)
     {
         assert color.isBlackWhite();
@@ -699,8 +652,7 @@ public final class Node
 
     /** Set value for this node.
         @see #getValue()
-        @param value The value
-    */
+        @param value The value */
     public void setValue(float value)
     {
         createExtraInfo();
@@ -709,8 +661,7 @@ public final class Node
 
     /** Sort the lists of setup stones (add stones and remove stones.
         Sorted lists for setup stones make it easier to compare, if
-        two nodes have the same lists.
-    */
+        two nodes have the same lists. */
     public void sortSetup()
     {
         for (GoColor c : BLACK_WHITE_EMPTY)
@@ -720,8 +671,7 @@ public final class Node
 
     /** Return next child after a given child.
         @param child The child
-        @return The next child or null, if there is no next child
-    */
+        @return The next child or null, if there is no next child */
     public ConstNode variationAfter(ConstNode child)
     {
         int numberChildren = getNumberChildren();
@@ -738,8 +688,7 @@ public final class Node
 
     /** Return previous child before a given child.
         @param child The child
-        @return The previous child or null, if there is no previous child
-    */
+        @return The previous child or null, if there is no previous child */
     public ConstNode variationBefore(ConstNode child)
     {
         int numberChildren = getNumberChildren();
@@ -756,8 +705,7 @@ public final class Node
 
     /** Comment stored as bytes.
         Store comments in UTF-8, because that saves up to a factor of 2 in
-        size compared to a string.
-    */
+        size compared to a string. */
     private byte[] m_comment;
 
     private ExtraInfo m_extraInfo;

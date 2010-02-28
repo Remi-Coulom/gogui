@@ -52,14 +52,12 @@ import net.sf.gogui.util.ProgressShow;
     according to the go.dtd from the Jago webpage (10/2007) and also handles
     some deviations used by Jago or in the examples used on the Jago
     webpage, see also the appendix "XML Format" of the GoGui documentation.
-    The implementation uses SAX for memory efficient parsing of large files.
-*/
+    The implementation uses SAX for memory efficient parsing of large files. */
 public final class XmlReader
 {
     /** Construct reader and read.
         @param progressShow Callback to show progress, can be null
-        @param streamSize Size of stream if progressShow != null
-    */
+        @param streamSize Size of stream if progressShow != null */
     public XmlReader(InputStream in, ProgressShow progressShow,
                      long streamSize)
         throws ErrorMessage
@@ -342,8 +340,7 @@ public final class XmlReader
         /** Return a fake go.dtd, if go.dtd does not exist as file.
             GoGui does not validate the document anyway, but this avoids a
             missing entity error message, if an XML file references go.dtd,
-            but it is not found.
-        */
+            but it is not found. */
         public InputSource resolveEntity(String publicId, String systemId)
         {
             if (systemId == null)
@@ -396,8 +393,7 @@ public final class XmlReader
 
     /** Board size.
         If board size is not explicitely set, this variable is used to track
-        the maximum size necessary for all points seen.
-    */
+        the maximum size necessary for all points seen. */
     private int m_boardSize;
 
     private int m_lastPercent;
@@ -451,18 +447,15 @@ public final class XmlReader
     private final ProgressShow m_progressShow;
 
     /** Time settings information for current node from legacy SGF
-        properties.
-    */
+        properties. */
     private int m_byoyomiMoves;
 
     /** Time settings information for current node from legacy SGF
-        properties.
-    */
+        properties. */
     private long m_byoyomi;
 
     /** Time settings information for current node from legacy SGF
-        properties.
-    */
+        properties. */
     private long m_preByoyomi;
 
     private long m_gameInfoPreByoyomi;
@@ -832,8 +825,7 @@ public final class XmlReader
         information that cannot be stored in a timleft-attribute of a move,
         because the node has no move or not a move of the corresponding color.
         Jago's blacktime/whitetime Node-attribute is not defined in
-        go.dtd (2007)
-    */
+        go.dtd (2007) */
     private void endSgfTimeLeft(GoColor c)
     {
         if (m_sgfArgs.size() == 0)

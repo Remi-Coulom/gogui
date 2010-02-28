@@ -153,8 +153,7 @@ public final class NodeUtilTest
                      \ n9(B A1)
                      \ n10(B A2)
                      \ n11(B PASS)
-        </pre>
-    */
+        </pre> */
     protected void setUp() throws Exception
     {
         super.setUp();

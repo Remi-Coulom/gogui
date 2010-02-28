@@ -6,8 +6,7 @@ package net.sf.gogui.go;
 public class Marker
 {
     /** Constructor.
-        @param size Size of the board.
-    */
+        @param size Size of the board. */
     public Marker(int size)
     {
         m_size = size;
@@ -23,16 +22,14 @@ public class Marker
     }
 
     /** Clear a marked point.
-        @param p The point to clear.
-    */
+        @param p The point to clear. */
     public void clear(GoPoint p)
     {
         m_mark[p.getIndex()] = false;
     }
 
     /** Clear all points from a list.
-        @param points List of points.
-    */
+        @param points List of points. */
     public void clear(ConstPointList points)
     {
         int nuPoints = points.size();
@@ -43,16 +40,14 @@ public class Marker
 
     /** Check if a point is marked.
         @param p The point to check.
-        @return true, if point is marked, false otherwise.
-    */
+        @return true, if point is marked, false otherwise. */
     public boolean get(GoPoint p)
     {
         return m_mark[p.getIndex()];
     }
 
     /** Check if no point is marked.
-        @return true, if no point is marked, false otherwise.
-    */
+        @return true, if no point is marked, false otherwise. */
     public boolean isCleared()
     {
         for (int x = 0; x < m_size; ++x)
@@ -63,8 +58,7 @@ public class Marker
     }
 
     /** Mark a point.
-        @param p The point to mark.
-    */
+        @param p The point to mark. */
     public void set(GoPoint p)
     {
         m_mark[p.getIndex()] = true;
@@ -73,16 +67,14 @@ public class Marker
     /** Mark or clear a point.
         @param p The point to mark or clear.
         @param value true, if point should be marked; false, if point should
-        be cleared.
-    */
+        be cleared. */
     public void set(GoPoint p, boolean value)
     {
         m_mark[p.getIndex()] = value;
     }
 
     /** Mark all points from a list.
-        @param points List of points.
-    */
+        @param points List of points. */
     public void set(ConstPointList points)
     {
         int nuPoints = points.size();

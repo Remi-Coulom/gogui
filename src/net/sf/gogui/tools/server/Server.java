@@ -30,8 +30,7 @@ public final class Server
         @param port Port number at remote host
         @param userFile file containing login information that is sent to the
         @param timeout Timeout in seconds, zero for no timeout.
-        remote host. Only used if remoteHost is set.
-    */
+        remote host. Only used if remoteHost is set. */
     public Server(boolean verbose, boolean loop, String program,
                   String remoteHost, int port, String userFile,
                   int timeout)

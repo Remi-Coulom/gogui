@@ -13,8 +13,7 @@ import net.sf.gogui.version.Version;
 /** Parse command line options.
     Also modifies the persistent preferences if some command line options
     are set (e.g. komi) and handles some simple options that don't require
-    the graphical startup of GoGui (e.g. -help).
-*/
+    the graphical startup of GoGui (e.g. -help). */
 public final class GoGuiSettings
 {
     public boolean m_auto;
@@ -27,8 +26,7 @@ public final class GoGuiSettings
 
     /** True if no startup is required.
         This happens for the -help and -version options which are already
-        handled in the constructor.
-    */
+        handled in the constructor. */
     public boolean m_noStartup;
 
     public boolean m_verbose;

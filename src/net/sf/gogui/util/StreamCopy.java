@@ -14,8 +14,7 @@ public class StreamCopy
         @param verbose Also copy everything to stderr
         @param src Source stream
         @param dest Destination stream
-        @param close Close destination after eof in source
-    */
+        @param close Close destination after eof in source */
     public StreamCopy(boolean verbose, InputStream src, OutputStream dest,
                       boolean close)
     {
@@ -26,8 +25,7 @@ public class StreamCopy
     }
 
     /** Run method.
-        Exceptions caught are written to stderr.
-    */
+        Exceptions caught are written to stderr. */
     public void run()
     {
         try

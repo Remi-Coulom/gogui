@@ -5,8 +5,7 @@ package net.sf.gogui.game;
 import java.util.ArrayList;
 
 /** Const functions of game.SgfProperties.
-    @see SgfProperties
-*/
+    @see SgfProperties */
 public interface ConstSgfProperties
 {
     int getNumberValues(String key);

@@ -22,15 +22,13 @@ import net.sf.gogui.util.ObjectUtil;
     Handles different capabilities of different engines.
     If GtpSynchronizer is used, no game state changing GTP commands (like
     clear_board, play, undo, komi, time_settings) should be sent to this
-    engine outside this class.
-*/
+    engine outside this class. */
 public class GtpSynchronizer
 {
     /** Callback that is called after each change in the engine's move
         number.
         Necessary, because sending multiple undo or play commands can be
-        a slow operation.
-    */
+        a slow operation. */
     public interface Listener
     {
         void moveNumberChanged(int moveNumber);
@@ -108,8 +106,7 @@ public class GtpSynchronizer
     /** Send human move to engine.
         The move is not played on the board yet. This function is useful,
         if it should be first tested, if the engine accepts a move, before
-        playing it on the board, e.g. after a new human move was entered.
-    */
+        playing it on the board, e.g. after a new human move was entered. */
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
         ConstBoard targetState = computeTargetState(board);
@@ -129,8 +126,7 @@ public class GtpSynchronizer
         Needs to be called after each genmove (or kgs-genmove_cleanup)
         command. The computer move is expected to be already played on the
         board, but does not need to be transmitted to the program anymore,
-        because genmove already executes the move at the program's side.
-    */
+        because genmove already executes the move at the program's side. */
     public void updateAfterGenmove(ConstBoard board)
     {
         Move move = board.getLastMove();
@@ -177,8 +173,7 @@ public class GtpSynchronizer
 
     /** Computes all actions to execute.
         Replaces setup stones by moves, if setup is not supported.
-        Fills in passes between moves of same color if m_fillPasses.
-    */
+        Fills in passes between moves of same color if m_fillPasses. */
     private Board computeTargetState(ConstBoard board) throws GtpError
     {
         int size = board.getSize();
@@ -233,8 +228,7 @@ public class GtpSynchronizer
     }
 
     /** Compute number of moves to undo and moves to execute.
-        @return Number of moves to undo.
-    */
+        @return Number of moves to undo. */
     private int computeToPlay(ArrayList<Move> moves, ConstBoard targetState)
         throws GtpError
     {

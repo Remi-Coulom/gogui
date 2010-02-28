@@ -52,8 +52,7 @@ class ExitWaiter
     private final Process m_process;
 };
 
-/** Static utility functions and classes related to processes.
-*/
+/** Static utility functions and classes related to processes. */
 public class ProcessUtil
 {
     /** Copies standard error of a process to System.err. */
@@ -104,8 +103,7 @@ public class ProcessUtil
 
     /** Run a process.
         Forwards the stdout/stderr of the child process to stderr of the
-        calling process.
-    */
+        calling process. */
     public static void runProcess(String[] cmdArray) throws IOException
     {
         Runtime runtime = Runtime.getRuntime();

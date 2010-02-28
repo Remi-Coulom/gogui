@@ -107,8 +107,7 @@ public final class SgfReaderTest
 
     /** Test that spaces in size property value are ignored.
         I don't think they are allowed by the SGF standard, but there is
-        no reason to create an error in this case.
-    */
+        no reason to create an error in this case. */
     public void testSizeWithSpaces() throws Exception
     {
         ConstGameTree tree = readSgfFileString("(;FF[4]SZ[ 13 ])");
@@ -167,8 +166,7 @@ public final class SgfReaderTest
     }
 
     /** Test FF4 example after writing and reading again.
-        This is actually a test for SgfWriter.
-    */
+        This is actually a test for SgfWriter. */
     public void testWriter() throws Exception
     {
         SgfReader reader = getReader("ff4_ex.1.sgf");

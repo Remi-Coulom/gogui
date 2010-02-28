@@ -10,13 +10,11 @@ import net.sf.gogui.util.ErrorMessage;
     have a number of moves assigned, which need to be played during an
     overtime period. The base time can be zero. If no overtime periods are
     used, the whole game must be finished in the base time.
-    This class is immutable.
-*/
+    This class is immutable. */
 public final class TimeSettings
 {
     /** Construct with total time for game.
-        @param totalTime Total time for game in milliseconds.
-    */
+        @param totalTime Total time for game in milliseconds. */
     public TimeSettings(long totalTime)
     {
         assert totalTime > 0;
@@ -28,8 +26,7 @@ public final class TimeSettings
     /** Construct with base time and overtime.
         @param preByoyomi Base time for game in milliseconds.
         @param byoyomi Time for overtime period in milliseconds.
-        @param byoyomiMoves Number of moves per overtime period.
-    */
+        @param byoyomiMoves Number of moves per overtime period. */
     public TimeSettings(long preByoyomi, long byoyomi, int byoyomiMoves)
     {
         assert preByoyomi >= 0;
@@ -53,8 +50,7 @@ public final class TimeSettings
 
     /** Get time for overtime period.
         @return Time for overtime period in milliseconds; undefined if there
-        are no overtime periods in this time settings.
-    */
+        are no overtime periods in this time settings. */
     public long getByoyomi()
     {
         assert getUseByoyomi();
@@ -63,8 +59,7 @@ public final class TimeSettings
 
     /** Get number of moves per overtime period.
         @return Number of moves per overtime period; undefined if there are
-        no overtime periods in this time settings.
-    */
+        no overtime periods in this time settings. */
     public int getByoyomiMoves()
     {
         assert getUseByoyomi();
@@ -73,16 +68,14 @@ public final class TimeSettings
 
     /** Get base time for game.
         @return Base time for game in milliseconds; this corresponds to
-        the total time for the game, if there are no overtime periods.
-    */
+        the total time for the game, if there are no overtime periods. */
     public long getPreByoyomi()
     {
         return m_preByoyomi;
     }
 
     /** Check if overtime periods are used.
-        @return True, if overtime periods are used in this time settings.
-    */
+        @return True, if overtime periods are used in this time settings. */
     public boolean getUseByoyomi()
     {
         return (m_byoyomiMoves > 0);
@@ -90,8 +83,7 @@ public final class TimeSettings
 
     /** Hash code dummy function (don't use).
         This class is not desgined to be used in a HashMap/HashTable. The
-        function will trigger an assertion if assertions are enabled.
-    */
+        function will trigger an assertion if assertions are enabled. */
     public int hashCode()
     {
         assert false : "hashCode not designed";
@@ -106,8 +98,7 @@ public final class TimeSettings
         minutes).
         @param s The string.
         @return TimeSettings The time settings corresponding to this string.
-        @throws ErrorMessage On syntax error or invalid values.
-    */
+        @throws ErrorMessage On syntax error or invalid values. */
     public static TimeSettings parse(String s) throws ErrorMessage
     {
         boolean useByoyomi = false;

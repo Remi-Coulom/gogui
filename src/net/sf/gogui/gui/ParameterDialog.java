@@ -40,8 +40,7 @@ import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
 /** Dialog for editing parameters in response to an analyze command of type
-    <i>param</i>.
-*/
+    <i>param</i>. */
 public class ParameterDialog
 {
     public static void editParameters(final String paramCommand, Frame owner,

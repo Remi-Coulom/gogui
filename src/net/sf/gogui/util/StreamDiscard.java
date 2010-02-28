@@ -14,8 +14,7 @@ public class StreamDiscard
     }
 
     /** Run method.
-        Exceptions caught are written to stderr.
-    */
+        Exceptions caught are written to stderr. */
     public void run()
     {
         try

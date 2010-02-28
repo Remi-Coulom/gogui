@@ -16,13 +16,11 @@ import net.sf.gogui.util.StringUtil;
     Arguments containing whitespaces can be quoted with double quotes (").
     The responses are allowed to contain consecutive new lines.
     They will be replaced in GtpEngine.mainLoop() by lines containing a single
-    space to form a valid GTP response.
-*/
+    space to form a valid GTP response. */
 public class GtpCommand
 {
     /** Construct command from command line.
-        @param line The full command line including ID.
-    */
+        @param line The full command line including ID. */
     public GtpCommand(String line)
     {
         StringBuilder buffer = preprocessLine(line);
@@ -58,16 +56,14 @@ public class GtpCommand
     }
 
     /** Check that command has no arguments.
-        @throws GtpError If command has any arguments.
-    */
+        @throws GtpError If command has any arguments. */
     public void checkArgNone() throws GtpError
     {
         checkNuArg(0);
     }
 
     /** Check that command has n arguments.
-        @throws GtpError If command has not n arguments.
-    */
+        @throws GtpError If command has not n arguments. */
     public void checkNuArg(int n) throws GtpError
     {
         if (getNuArg() != n)
@@ -81,8 +77,7 @@ public class GtpCommand
     }
 
     /** Check that command has not more than n arguments.
-        @throws GtpError If command has more than n arguments.
-    */
+        @throws GtpError If command has more than n arguments. */
     public void checkNuArgLessEqual(int n) throws GtpError
     {
         if (getNuArg() > n)
@@ -90,8 +85,7 @@ public class GtpCommand
     }
 
     /** Check if command has an ID.
-        @return true, if command has an ID.
-    */
+        @return true, if command has an ID. */
     public boolean hasId()
     {
         return m_hasId;
@@ -106,8 +100,7 @@ public class GtpCommand
     /** Get argument.
         @param i The index of the argument (starting with zero).
         @return The argument.
-        @throws GtpError If command has not enough arguments.
-    */
+        @throws GtpError If command has not enough arguments. */
     public String getArg(int i) throws GtpError
     {
         if (i >= getNuArg())
@@ -118,8 +111,7 @@ public class GtpCommand
     /** Get argument line.
         Get a string containing all arguments (the command line without
         ID and command; leading and trailing whitespaces trimmed).
-        @return The argument line.
-    */
+        @return The argument line. */
     public String getArgLine()
     {
         int pos = m_line.indexOf(m_command) + m_command.length();
@@ -131,8 +123,7 @@ public class GtpCommand
         corresponding uppercase strings.
         @return The color.
         @throws GtpError If command has not exactly one argument or argument
-        is not a color.
-    */
+        is not a color. */
     public GoColor getColorArg() throws GtpError
     {
         checkNuArg(1);
@@ -145,8 +136,7 @@ public class GtpCommand
         @param i The index of the argument (starting with zero).
         @return The color.
         @throws GtpError If command has not enough arguments or argument is
-        not a color.
-    */
+        not a color. */
     public GoColor getColorArg(int i) throws GtpError
     {
         String arg = getArg(i).toLowerCase(Locale.ENGLISH);
@@ -159,8 +149,7 @@ public class GtpCommand
 
     /** Get command.
         @return The command string (command line without ID and arguments,
-        leading and trailing whitespaces trimmed).
-    */
+        leading and trailing whitespaces trimmed). */
     public String getCommand()
     {
         return m_command;
@@ -169,8 +158,7 @@ public class GtpCommand
     /** Get single floating point number argument.
         @return The color.
         @throws GtpError If command has not exactly one argument or argument
-        is not a floating point number.
-    */
+        is not a floating point number. */
     public double getDoubleArg() throws GtpError
     {
         checkNuArg(1);
@@ -181,8 +169,7 @@ public class GtpCommand
         @param i The index of the argument (starting with zero).
         @return The color.
         @throws GtpError If command has not enough arguments or argument is
-        not a floating point number.
-    */
+        not a floating point number. */
     public double getDoubleArg(int i) throws GtpError
     {
         String arg = getArg(i);
@@ -199,8 +186,7 @@ public class GtpCommand
     /** Get single integer argument.
         @return The color.
         @throws GtpError If command has not exactly one argument or argument
-        is not an integer.
-    */
+        is not an integer. */
     public int getIntArg() throws GtpError
     {
         checkNuArg(1);
@@ -211,8 +197,7 @@ public class GtpCommand
         @param i The index of the argument (starting with zero).
         @return The color.
         @throws GtpError If command has not enough arguments or argument is
-        not an integer.
-    */
+        not an integer. */
     public int getIntArg(int i) throws GtpError
     {
         String arg = getArg(i);
@@ -232,8 +217,7 @@ public class GtpCommand
         @param max Maximum allowed value.
         @return The color.
         @throws GtpError If command has not enough arguments or argument is
-        not an integer in the allowed range.
-    */
+        not an integer in the allowed range. */
     public int getIntArg(int i, int min, int max) throws GtpError
     {
         int n = getIntArg(i);
@@ -254,8 +238,7 @@ public class GtpCommand
         this board size).
         @return The point.
         @throws GtpError If command has not enough arguments or argument is
-        not a valid point.
-    */
+        not a valid point. */
     public GoPoint getPointArg(int i, int boardSize) throws GtpError
     {
         try
@@ -275,8 +258,7 @@ public class GtpCommand
         @param boardSize The board size (points will be checked to be within
         this board size).
         @return Point list containg the points.
-        @throws GtpError If at least one argument is not a valid point.
-    */
+        @throws GtpError If at least one argument is not a valid point. */
     public PointList getPointListArg(int boardSize) throws GtpError
     {
         PointList pointList = new PointList();
@@ -286,16 +268,14 @@ public class GtpCommand
     }
 
     /** Full command line without ID.
-        @return The command line without ID.
-    */
+        @return The command line without ID. */
     public String getLine()
     {
         return m_line;
     }
 
     /** Get number of arguments.
-        @return The number of arguments.
-    */
+        @return The number of arguments. */
     public int getNuArg()
     {
         return m_arg.length;
@@ -303,8 +283,7 @@ public class GtpCommand
 
     /** Get string buffer for construction the response.
         The response to the command can be constructed by appending to this
-        string buffer.
-    */
+        string buffer. */
     public StringBuilder getResponse()
     {
         return m_response;
@@ -313,8 +292,7 @@ public class GtpCommand
     /** Get command ID.
         It is allowed to call this function if command has no ID, but the
         returned value is undefined.
-        @return The command ID.
-    */
+        @return The command ID. */
     public int getId()
     {
         return m_id;
@@ -322,8 +300,7 @@ public class GtpCommand
 
     /** Check if command is quit command.
         DEPRECATED: Fix GtpEngine to use only GtpEngine.m_quit
-        @return true, if command name is "quit".
-    */
+        @return true, if command name is "quit". */
     public boolean isQuit()
     {
         return m_line.trim().equals("quit");
@@ -332,8 +309,7 @@ public class GtpCommand
     /** Set the response.
         Clears the string buffer containg the response and sets it to the
         given string.
-        @param response The string containing the new response.
-    */
+        @param response The string containing the new response. */
     public void setResponse(String response)
     {
         m_response.setLength(0);
@@ -354,8 +330,7 @@ public class GtpCommand
 
     /** Preprocess command line.
         Replaces control characters by spaces, removes redundant spaces
-        and appended comment.
-    */
+        and appended comment. */
     private static StringBuilder preprocessLine(String line)
     {
         int len = line.length();

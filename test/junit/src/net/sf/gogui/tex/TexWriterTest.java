@@ -42,8 +42,7 @@ public final class TexWriterTest
     }
 
     /** Test that a comment is appended for skipped second move on same
-        point.
-    */
+        point. */
     public void testTwoMovesOnPoint()
     {
         int size = 2;

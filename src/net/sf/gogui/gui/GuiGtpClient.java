@@ -25,8 +25,7 @@ import static net.sf.gogui.gui.I18n.i18n;
     prevent the GUI to hang, if the program does not respond.
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
-    This class also contains a GtpSynchronizer.
-*/
+    This class also contains a GtpSynchronizer. */
 public class GuiGtpClient
     extends GtpClientBase
 {
@@ -94,8 +93,7 @@ public class GuiGtpClient
     }
 
     /** Get exception of asynchronous command.
-        You must call this before you are allowed to send new a command.
-    */
+        You must call this before you are allowed to send new a command. */
     public GtpError getException()
     {
         synchronized (m_mutex)
@@ -113,8 +111,7 @@ public class GuiGtpClient
     }
 
     /** Get response to asynchronous command.
-        You must call getException() first.
-    */
+        You must call getException() first. */
     public String getResponse()
     {
         synchronized (m_mutex)
@@ -252,8 +249,7 @@ public class GuiGtpClient
 
     /** The timeout for commands that are expected to be fast.
         GoGui 0.9.4 used 8 sec, but this was not enough on some machines
-        when starting up engines like Aya in the Wine emulator.
-    */
+        when starting up engines like Aya in the Wine emulator. */
     private static final int TIMEOUT = 15000;
 
     private boolean m_commandInProgress;

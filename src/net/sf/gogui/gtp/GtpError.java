@@ -14,8 +14,7 @@ public class GtpError
     }
 
     /** The command that caused the error.
-        Can return null, if the command is not known.
-    */
+        Can return null, if the command is not known. */
     public String getCommand()
     {
         return m_command;

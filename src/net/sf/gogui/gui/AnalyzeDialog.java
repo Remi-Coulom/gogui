@@ -152,8 +152,7 @@ public final class AnalyzeDialog
 
     /** Set board size.
         Need for verifying responses to initial value for EPLIST commands.
-        Default is 19.
-    */
+        Default is 19. */
     public void setBoardSize(int boardSize)
     {
         m_boardSize = boardSize;
@@ -181,8 +180,7 @@ public final class AnalyzeDialog
 
     /** Is the first item in the history combo box a temporary item?
         Avoids that the first item in the history combo box is treated
-        as a real history command, if it was not run.
-    */
+        as a real history command, if it was not run. */
     private boolean m_firstIsTemp;
 
     private int m_boardSize = GoPoint.DEFAULT_SIZE;

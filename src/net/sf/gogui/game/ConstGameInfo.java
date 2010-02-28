@@ -7,8 +7,7 @@ import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Score.ScoringMethod;
 
 /** Const functions of game.GameInfo.
-    @see GameInfo
-*/
+    @see GameInfo */
 public interface ConstGameInfo
 {
     String get(StringInfo type);

@@ -6,8 +6,7 @@ package net.sf.gogui.util;
 public class Statistics
 {
     /** Add value.
-        @param value The value to add.
-    */
+        @param value The value to add. */
     public void add(double value)
     {
         m_min = Math.min(value, m_min);
@@ -18,16 +17,14 @@ public class Statistics
     }
 
     /** Get number of values added.
-        @return Number of values added.
-    */
+        @return Number of values added. */
     public int getCount()
     {
         return m_count;
     }
 
     /** Get standard deviation.
-        @return The standard deviation (square root of variance).
-    */
+        @return The standard deviation (square root of variance). */
     public double getDeviation()
     {
         return Math.sqrt(getVariance());
@@ -35,8 +32,7 @@ public class Statistics
 
     /** Get standard error.
         @return The standard error (standard deviation divided by square root
-        of the number of values).
-    */
+        of the number of values). */
     public double getError()
     {
         if (m_count == 0)
@@ -45,8 +41,7 @@ public class Statistics
     }
 
     /** Get mean value.
-        @return The mean of all values.
-    */
+        @return The mean of all values. */
     public double getMean()
     {
         if (m_count == 0)
@@ -56,8 +51,7 @@ public class Statistics
 
     /** Get maximum value.
         @return The maximum of the value or Double.NEGATIVE_INFINITY, if no
-        values.
-    */
+        values. */
     public double getMax()
     {
         return m_max;
@@ -69,8 +63,7 @@ public class Statistics
         @param n The number of values that are assumed to be 100 per cent
         correlated.
         @return The standard error for this assumption (standard deviation
-        divided by square root of number of values divided by n).
-    */
+        divided by square root of number of values divided by n). */
     public double getMaxError(int n)
     {
         if (m_count == 0)
@@ -80,16 +73,14 @@ public class Statistics
 
     /** Get minumum value.
         @return The minumum of the value or Double.POSITIVE_INFINITY, if no
-        values.
-    */
+        values. */
     public double getMin()
     {
         return m_min;
     }
 
     /** Get sum of values.
-        @return The sum of all values.
-    */
+        @return The sum of all values. */
     public double getSum()
     {
         return m_sum;
@@ -97,8 +88,7 @@ public class Statistics
 
     /** Get variance.
         @return The variance (sum of squares of differences between values
-        and mean).
-     */
+        and mean). */
     public double getVariance()
     {
         if (m_count == 0)

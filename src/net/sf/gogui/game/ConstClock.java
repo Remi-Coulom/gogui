@@ -5,8 +5,7 @@ package net.sf.gogui.game;
 import net.sf.gogui.go.GoColor;
 
 /** Const functions of game.Clock.
-    @see Clock
-*/
+    @see Clock */
 public interface ConstClock
 {
     int getMovesLeft(GoColor color);

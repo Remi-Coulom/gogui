@@ -156,8 +156,7 @@ public final class TextParserTest
 
     /** Test that parsing succeeds if non-breaking spaces are used.
         The clipboard can contain non-breaking spaces if the text is copied
-        from other programs.
-    */
+        from other programs. */
     public void testNonBreakingSpace()
     {
         parse(" + " + '\u00A0' + "+ O + O O # # + \n" +

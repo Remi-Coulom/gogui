@@ -3,8 +3,7 @@
 package net.sf.gogui.go;
 
 /** Some values that are constant for a given board size.
-    Instances of this class are immutable.
- */
+    Instances of this class are immutable. */
 public final class BoardConstants
 {
     /** Get board constants for a given board size.
@@ -13,8 +12,7 @@ public final class BoardConstants
         The creation is done in a thread-safe way.
         @param boardSize The new board size (number of points per
         row / column) in the range from one to GoPoint.MAX_SIZE
-        @return The board constants.
-    */
+        @return The board constants. */
     public static BoardConstants get(int boardSize)
     {
         synchronized (s_boardConstants)
@@ -39,8 +37,7 @@ public final class BoardConstants
         @return List of points (go.Point) corresponding to the handicap
         stone locations; null if handicap locations are not defined for
         this combination of number of handicap stones and board size; empty
-        list for zero handicap stones.
-    */
+        list for zero handicap stones. */
     public ConstPointList getHandicapStones(int n)
     {
         PointList result = new PointList(9);
@@ -94,8 +91,7 @@ public final class BoardConstants
         on the line.
         @return <code>true</code>, if the constant coordinate has the smallest
         or largest possible value (<code>0</code> or
-        <code>getSize() - 1</code>).
-    */
+        <code>getSize() - 1</code>). */
     public boolean isEdgeLine(int i)
     {
         return (i == 0 || i == m_size - 1);
@@ -105,8 +101,7 @@ public final class BoardConstants
         @param i The value of the constant coordinate shared by all points
         on the line.
         @return <code>true</code>, if the line contains handicap points.
-        @see #getHandicapStones
-    */
+        @see #getHandicapStones */
     public boolean isHandicapLine(int i)
     {
         return (i == m_handicapLine1 || i == m_handicapLine2
@@ -116,8 +111,7 @@ public final class BoardConstants
     /** Check if point is a potential location of a handicap stone.
         @param p The point to check.
         @return true, if point is a potential location of a handicap stone.
-        @see #getHandicapStones
-    */
+        @see #getHandicapStones */
     public boolean isHandicap(GoPoint p)
     {
         int x = p.getX();

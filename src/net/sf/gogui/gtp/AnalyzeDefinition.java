@@ -18,8 +18,7 @@ import net.sf.gogui.util.StringUtil;
 
 /** Definition of an analyze command.
     See GoGui documentation, chapter "Analyze Commands".
-    This class is immutable.
-*/
+    This class is immutable. */
 public class AnalyzeDefinition
 {
     public AnalyzeDefinition(String line)
@@ -95,8 +94,7 @@ public class AnalyzeDefinition
     /** Should the response be shown as text.
         Returns true for types that should be shown (not necessarily only)
         as text to the user.
-        That is string and variation commands.
-    */
+        That is string and variation commands. */
     public boolean isTextType()
     {
         return m_type == AnalyzeType.STRING

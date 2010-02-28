@@ -34,8 +34,7 @@ public final class SgfWriterTest
     }
 
     /** Test that komi property is written if both handicap and komi are
-        used.
-    */
+        used. */
     public void testKomiWithHandicap() throws Exception
     {
         GameTree tree = new GameTree();

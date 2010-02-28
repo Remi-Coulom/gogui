@@ -64,16 +64,14 @@ public class Plot
     }
 
     /** Set number format for x-axis.
-        @param format The format.
-    */
+        @param format The format. */
     public void setFormatX(DecimalFormat format)
     {
         m_formatX = format;
     }
 
     /** Set number format for y-axis.
-        @param format The format.
-    */
+        @param format The format. */
     public void setFormatY(DecimalFormat format)
     {
         m_formatY = format;
@@ -81,8 +79,7 @@ public class Plot
 
     /** Set plot style to bars.
         Default is plotting points connected by lines.
-        @param barWidth The width of each bar.
-    */
+        @param barWidth The width of each bar. */
     public void setPlotStyleBars(double barWidth)
     {
         m_withBars = true;
@@ -104,8 +101,7 @@ public class Plot
     /** Enable drawing of solid lines at certain x-intervals.
         NOTE: The new implementation does no longer use solid lines, but
         changes white and gray background color at the solid line interval.
-        @param solidLineInterval The interval for the solid lines.
-    */
+        @param solidLineInterval The interval for the solid lines. */
     public void setSolidLineInterval(double solidLineInterval)
     {
         m_solidLineInterval = solidLineInterval;
@@ -115,8 +111,7 @@ public class Plot
     /** Set x-label intervals.
         By default, every x-tic (grid line) gets an x-label.
         NOTE: Misleading name, should be tics per x-label.
-        @param xLabelPerTic The number of tics per x-label.
-    */
+        @param xLabelPerTic The number of tics per x-label. */
     public void setXLabelPerTic(int xLabelPerTic)
     {
         m_xLabelPerTic = xLabelPerTic;
@@ -132,8 +127,7 @@ public class Plot
     }
 
     /** Set maximum x value.
-        @param max The maximum.
-    */
+        @param max The maximum. */
     public void setXMax(double max)
     {
         m_maxX = max;
@@ -141,8 +135,7 @@ public class Plot
     }
 
     /** Set minimum x value.
-        @param min The minimum.
-    */
+        @param min The minimum. */
     public void setXMin(double min)
     {
         m_minX = min;
@@ -151,8 +144,7 @@ public class Plot
 
     /** Set x-tics.
         Sets the grid line distance for the x-axis.
-        @param tics The distance.
-    */
+        @param tics The distance. */
     public void setXTics(double tics)
     {
         m_xTics = tics;
@@ -160,8 +152,7 @@ public class Plot
     }
 
     /** Set maximum y value.
-        @param max The maximum.
-    */
+        @param max The maximum. */
     public void setYMax(double max)
     {
         m_maxY = max;
@@ -169,8 +160,7 @@ public class Plot
     }
 
     /** Set minimum x value.
-        @param min The minimum.
-    */
+        @param min The minimum. */
     public void setYMin(double min)
     {
         m_minY = min;
@@ -179,8 +169,7 @@ public class Plot
 
     /** Set y-tics.
         Sets the grid line distance for the y-axis.
-        @param tics The distance.
-    */
+        @param tics The distance. */
     public void setYTics(double tics)
     {
         m_yTics = tics;
@@ -188,8 +177,7 @@ public class Plot
     }
 
     /** Set plot title.
-        @param title The title.
-    */
+        @param title The title. */
     public void setTitle(String title)
     {
         m_title = title;
@@ -479,8 +467,7 @@ public class Plot
 
     /** Find tics interval.
         Tries to respect maxNumberTics, as long as there are at least two
-        visible tics.
-    */
+        visible tics. */
     private double getTics(double range, int maxNumberTics)
     {
         maxNumberTics = Math.max(maxNumberTics, 2);

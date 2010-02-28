@@ -27,8 +27,7 @@ public final class BoardPainterUtil
     }
 
     /** Use a painter to paint the board in a buffered image.
-        The image can be written to a file with writeImage().
-    */
+        The image can be written to a file with writeImage(). */
     public static BufferedImage getImage(BoardPainter painter,
                                          ConstField[][] field, int width,
                                          int height)
@@ -41,8 +40,7 @@ public final class BoardPainterUtil
     }
 
     /** Write an image in PNG format to a file.
-        @param metaData Optional PNG meta data (or null)
-    */
+        @param metaData Optional PNG meta data (or null) */
     public static void writeImage(BufferedImage image, File file,
                                   Map<String,String> metaData)
         throws IOException

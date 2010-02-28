@@ -37,8 +37,7 @@ public class BoardPainter
         @param graphics The graphics object.
         @param field The fields.
         @param width The width/height of the image.
-        @param showGrid Show grid coordinates.
-    */
+        @param showGrid Show grid coordinates. */
     public void draw(Graphics graphics, ConstField[][] field, int width,
                      boolean showGrid)
     {
@@ -108,8 +107,7 @@ public class BoardPainter
         If a preferred field size is known (e.g. from a different board size,
         or from the last settings), then using the board size returned by this
         function will draw the board such that the field size is exactly the
-        preferred one.
-    */
+        preferred one. */
     public static Dimension getPreferredSize(int preferredFieldSize,
                                              int boardSize, boolean showGrid)
     {

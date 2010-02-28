@@ -94,8 +94,7 @@ public final class MessageDialogs
 
     /** Show a question with two options and cancel.
         @return 0 for the destructive option; 1 for the non-destructive
-        option; 2 for cancel
-    */
+        option; 2 for cancel */
     public int showYesNoCancelQuestion(String disableKey, Component parent,
                                        String mainMessage,
                                        String optionalMessage,
@@ -181,8 +180,8 @@ public final class MessageDialogs
     }
 
     /** Show warning message to confirm destructive actions.
-        @return true, if destructive was chosen; false if cancel was chosen.
-    */
+        @return true, if destructive was chosen; false if cancel was
+        chosen. */
     public boolean showQuestion(String disableKey, Component parent,
                                 String mainMessage,
                                 String optionalMessage,
@@ -239,8 +238,7 @@ public final class MessageDialogs
     }
 
     /** Show warning message to confirm destructive actions.
-        @return true, if destructive was chosen; false if cancel was chosen.
-    */
+        @return true, if destructive was chosen; false if cancel was chosen. */
     public boolean showWarningQuestion(String disableKey, Component parent,
                                        String mainMessage,
                                        String optionalMessage,

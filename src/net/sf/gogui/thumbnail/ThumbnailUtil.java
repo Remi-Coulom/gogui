@@ -17,8 +17,7 @@ import net.sf.gogui.util.FileUtil;
 public final class ThumbnailUtil
 {
     /** Expire all thumbnails older than a certain age.
-        NOTE: This function is still experimental, it may not work yet
-    */
+        NOTE: This function is still experimental, it may not work yet */
     public static void expire(int seconds, boolean checkOnly)
     {
         if (! ThumbnailPlatform.checkThumbnailSupport())
@@ -35,8 +34,7 @@ public final class ThumbnailUtil
     }
 
     /** Expire thumbnails if older than a certain age.
-        NOTE: This function is still experimental, it may not work yet
-    */
+        NOTE: This function is still experimental, it may not work yet */
     public static void expire(File file, long currentTimeSeconds,
                               long seconds, boolean checkOnly)
     {
@@ -94,8 +92,7 @@ public final class ThumbnailUtil
         white setup stones. The rationale for this is that one usually wants
         to see the last position of a game, which may contain black handicap
         setup stones before the moves, but the thumbnail shouldn't show the
-        solution of files containing Go problems.
-    */
+        solution of files containing Go problems. */
     public static ConstNode getNode(ConstGameTree tree)
     {
         ConstNode node = tree.getRootConst();
@@ -107,8 +104,7 @@ public final class ThumbnailUtil
     }
 
     /** Get a position from the tree to be used for the thumbnail.
-        @see #getPosition()
-    */
+        @see #getPosition() */
     public static ConstBoard getPosition(ConstGameTree tree)
     {
         Board board = new Board(tree.getBoardSize());

@@ -9,8 +9,7 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 
 /** Layout manager for 1:1 aspect ratio.
-    Expects that the container to layout has only a single child component.
-*/
+    Expects that the container to layout has only a single child component. */
 public class SquareLayout
     implements LayoutManager
 {
@@ -18,8 +17,7 @@ public class SquareLayout
         Does nothing, because this class will automatically layout the single
         child component of a container.
         @param name Unused
-        @param comp Unused
-    */
+        @param comp Unused */
     public void addLayoutComponent(String name, Component comp)
     {
     }
@@ -28,8 +26,7 @@ public class SquareLayout
         Contains an assertion that the container has exactly one child.
         This child is layout in the center of the container with  the maximum
         square size that fits into the container.
-        @param parent The container to layout
-    */
+        @param parent The container to layout */
     public void layoutContainer(Container parent)
     {
         assert parent.getComponentCount() == 1;
@@ -47,8 +44,7 @@ public class SquareLayout
     /** Return minimum layout size.
         Contains an assertion that the container has exactly one child.
         @param parent The container to layout.
-        @return The minimum size of the child.
-    */
+        @return The minimum size of the child. */
     public Dimension minimumLayoutSize(Container parent)
     {
         assert parent.getComponentCount() == 1;
@@ -58,8 +54,7 @@ public class SquareLayout
     /** Return preferred layout size.
         Contains an assertion that the container has exactly one child.
         @param parent The container to layout.
-        @return The preferred size of the child.
-    */
+        @return The preferred size of the child. */
     public Dimension preferredLayoutSize(Container parent)
     {
         assert parent.getComponentCount() == 1;
@@ -69,8 +64,7 @@ public class SquareLayout
     /** Unused.
         Does nothing, because this class will automatically layout the single
         child component of a container.
-        @param comp Unused
-    */
+        @param comp Unused */
     public void removeLayoutComponent(Component comp)
     {
     }

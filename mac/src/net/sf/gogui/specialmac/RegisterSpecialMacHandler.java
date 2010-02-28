@@ -35,8 +35,7 @@ class Listener
 
 /** Registration of handler for events from Mac Application menu.
     This class depends on com.apple and should therefore only
-    loaded if the platform is Mac using reflection.
- */
+    loaded if the platform is Mac using reflection. */
 public class RegisterSpecialMacHandler
 {
     public RegisterSpecialMacHandler(Platform.SpecialMacHandler handler)

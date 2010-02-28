@@ -31,8 +31,7 @@ import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.version.Version;
 
 /** Thumbnail creator.
-    Creates thumbnails according to the freedesktop.org standard.
-*/
+    Creates thumbnails according to the freedesktop.org standard. */
 public final class ThumbnailCreator
 {
     /** Error thrown if thumbnail creation fails. */
@@ -53,8 +52,7 @@ public final class ThumbnailCreator
 
     /** Create thumbnail at standard location.
         Does not create the thumnbail if an up-to-date thumbnail already
-        exists.
-    */
+        exists. */
     public void create(File input) throws ErrorMessage
     {
         File file = getThumbnailFileNormalSize(input);
@@ -86,8 +84,7 @@ public final class ThumbnailCreator
         .thumbnails/normal
         @param thumbnailSize The image size of the thumbnail.
         @param scale If true thumbnailSize will be scaled down for boards
-        smaller than 19.
-    */
+        smaller than 19. */
     public void create(File input, File output, int thumbnailSize,
                        boolean scale) throws ErrorMessage
     {
@@ -199,8 +196,7 @@ public final class ThumbnailCreator
     /** Read a file and return a position to use for the thumbnail.
         The position is the first position in the main variation that contains
         setup stones (unless they are handicap stones) or, if no such position
-        exists, the last position.
-    */
+        exists, the last position. */
     private ConstBoard readFile(File file) throws ErrorMessage
     {
         GameReader reader = new GameReader(file);

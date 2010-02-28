@@ -5,8 +5,7 @@ package net.sf.gogui.go;
 /** Result of a game.
     Includes information about the score under Chinese and Japanese rules,
     the rules and komi used, territory, area (stones and territory) and
-    number of captured stones.
-*/
+    number of captured stones. */
 public class Score
 {
     public enum ScoringMethod

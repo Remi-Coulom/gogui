@@ -10,28 +10,24 @@ import net.sf.gogui.util.StringUtil;
     Instances can be created with GoPoint.get().
     Point coordinates start with 0, the point (0,0) corresponds to "A1"
     and is on the lower left corner of the board, if the board is drawn on
-    the screen.
-*/
+    the screen. */
 public final class GoPoint
     implements Comparable<GoPoint>
 {
     /** Maximum board size.
         Set such that all points can be converted to strings with one letter
-        and a number, i.e. the largest point is Z25.
-    */
+        and a number, i.e. the largest point is Z25. */
     public static final int MAX_SIZE = 25;
 
     /** Default board size. */
     public static final int DEFAULT_SIZE = 19;
 
     /** Upper limit (exclusive) for one-dimensional point index.
-        @see #getIndex
-    */
+        @see #getIndex */
     public static final int NUMBER_INDEXES = MAX_SIZE * MAX_SIZE;
 
     /** Compare two points.
-        The order of the points is: A1, B1, ..., A2, B2, ...
-    */
+        The order of the points is: A1, B1, ..., A2, B2, ... */
     public int compareTo(GoPoint p)
     {
         if (m_index < p.m_index)
@@ -45,8 +41,7 @@ public final class GoPoint
     /** Indicate if this object is equal to another object.
         Since point instances are unique, this function does the same as
         Object.equals and is only added explicitely to avoid warnings about
-        classes with a compareTo, but no equals-function.
-    */
+        classes with a compareTo, but no equals-function. */
     public boolean equals(Object obj)
     {
         return (this == obj);
@@ -61,8 +56,7 @@ public final class GoPoint
     /** Factory method for creating a point.
         @param x x-coordinate <code>[0...GoPoint.MAX_SIZE - 1]</code>
         @param y y-coordinate <code>[0...GoPoint.MAX_SIZE - 1]</code>
-        @return Unique reference to a point with these coordinates.
-    */
+        @return Unique reference to a point with these coordinates. */
     public static GoPoint get(int x, int y)
     {
         assert x >= 0;
@@ -77,8 +71,7 @@ public final class GoPoint
     /** Integer for using points as indices in an array.
         The index of A1 is zero and the indices count upwards from left
         to right and bottom to top over a board with the maximum size
-        GoPoint.MAX_SIZE.
-    */
+        GoPoint.MAX_SIZE. */
     public int getIndex()
     {
         return m_index;
@@ -96,8 +89,7 @@ public final class GoPoint
     }
 
     /** Return point below.
-        @return The point below this point (x, y - 1).
-    */
+        @return The point below this point (x, y - 1). */
     public GoPoint down()
     {
         if (m_y > 0)
@@ -126,8 +118,7 @@ public final class GoPoint
     }
 
     /** Return point left.
-        @return the point below this point (x - 1, y)
-    */
+        @return the point below this point (x - 1, y) */
     public GoPoint left()
     {
         if (m_x > 0)
@@ -139,8 +130,7 @@ public final class GoPoint
     /** Parse point or null (PASS).
         Parsing is case-insensitive, leading and trailing whitespace is
         ignored. "PASS" returns null, invalid strings throw an
-        InvalidPointException.
-    */
+        InvalidPointException. */
     public static GoPoint parsePoint(String string, int boardSize)
         throws InvalidPointException
     {
@@ -180,8 +170,7 @@ public final class GoPoint
     /** Return point right.
         @param max Current board size.
         @return The point to the right of this point (x, y + 1)
-        or this point if no such point exists.
-    */
+        or this point if no such point exists. */
     public GoPoint right(int max)
     {
         if (m_x < max - 1)
@@ -191,8 +180,7 @@ public final class GoPoint
     }
 
     /** Convert to a string.
-        @return String representation of this point.
-    */
+        @return String representation of this point. */
     public String toString()
     {
         return m_string;
@@ -200,8 +188,7 @@ public final class GoPoint
 
     /** Convert a point or null point (pass) to a string.
         @param point Point or null for pass moves
-        @return point.toString() or "PASS" if point is null
-    */
+        @return point.toString() or "PASS" if point is null */
     public static String toString(GoPoint point)
     {
         if (point == null)
@@ -211,8 +198,7 @@ public final class GoPoint
 
     /** Convert a list of points to a string.
         Points are separated by a single space.
-        If pointList is null, "(null)" is returned.
-    */
+        If pointList is null, "(null)" is returned. */
     public static String toString(ConstPointList pointList)
     {
         if (pointList == null)
@@ -231,8 +217,7 @@ public final class GoPoint
     /** Return point above.
         @param max Current board size.
         @return The point above this point (x, y + 1) or this point if no such
-        point exists.
-    */
+        point exists. */
     public GoPoint up(int max)
     {
         if (m_y < max - 1)

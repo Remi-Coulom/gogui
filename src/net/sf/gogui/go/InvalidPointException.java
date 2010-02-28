@@ -7,8 +7,7 @@ public class InvalidPointException
     extends Exception
 {
     /** Constructor.
-        @param text The text that could not be parsed as a point.
-    */
+        @param text The text that could not be parsed as a point. */
     public InvalidPointException(String text)
     {
         super("Invalid point \"" + text + "\"");

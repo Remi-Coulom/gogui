@@ -18,8 +18,7 @@ public final class GameFileUtil
         @return Position of main variation before that move number or last
         position if game has less moves (same convention as in the loadsgf GTP
         command).
-        @throws ErrorMessage If loading fails.
-    */
+        @throws ErrorMessage If loading fails. */
     public static ConstBoard load(File file, int maxMove) throws ErrorMessage
     {
         GameReader reader = new GameReader(file);

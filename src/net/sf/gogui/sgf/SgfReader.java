@@ -42,8 +42,7 @@ import net.sf.gogui.util.ProgressShow;
     @bug The error messages sometimes contain wrong line numbers, because of
     problems in StreamTokenizer.lineno(). Maybe the implementation should be
     replaced not using StreamTokenizer, because this class is a legacy class.
-    (Does this happen only on Windows?)
-*/
+    (Does this happen only on Windows?) */
 public final class SgfReader
 {
     /** Read SGF file from stream.
@@ -57,8 +56,7 @@ public final class SgfReader
         reopening the stream after a charset change
         @param progressShow Callback to show progress, can be null
         @param size Size of stream if progressShow != null
-        @throws SgfError If reading fails.
-    */
+        @throws SgfError If reading fails. */
     public SgfReader(InputStream in, File file, ProgressShow progressShow,
                      long size)
         throws SgfError
@@ -109,16 +107,14 @@ public final class SgfReader
     }
 
     /** Get game tree of loaded SGF file.
-        @return The game tree.
-    */
+        @return The game tree. */
     public GameTree getTree()
     {
         return m_tree;
     }
 
     /** Get warnings that occurred during loading SGF file.
-        @return String with warning messages or null if no warnings.
-    */
+        @return String with warning messages or null if no warnings. */
     public String getWarnings()
     {
         if (m_warnings.isEmpty())
@@ -234,8 +230,7 @@ public final class SgfReader
     /** Check for obsolete long names for standard properties.
         These are still used in asome old SGF files.
         @param property Property name
-        @return Short standard version of the property or original property
-    */
+        @return Short standard version of the property or original property */
     private String checkForObsoleteLongProps(String property)
     {
         if (property.length() <= 2)
@@ -661,8 +656,7 @@ public final class SgfReader
 
     /** Parse point value.
         @return Point or null, if pass move
-        @throw SgfError On invalid value
-    */
+        @throw SgfError On invalid value */
     private GoPoint parsePoint(String s) throws SgfError
     {
         s = s.trim().toLowerCase(Locale.ENGLISH);
@@ -740,8 +734,7 @@ public final class SgfReader
     /** TM property.
         According to FF4, TM needs to be a real value, but older SGF versions
         allow a string with unspecified content. We try to parse a few known
-        formats.
-    */
+        formats. */
     private void parseTime(Node node, String value)
     {
         value = value.trim();

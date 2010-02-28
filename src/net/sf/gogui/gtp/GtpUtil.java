@@ -29,8 +29,7 @@ public final class GtpUtil
         a GTP command for "no time limit" ("time_settings 0 1 0" with zero
         byoyomi stones), which could confuse some programs, so it should be
         only sent if necessary (when changing from a state with time settings
-        to a state with no time settings).
-    */
+        to a state with no time settings). */
     public static String getTimeSettingsCommand(TimeSettings settings)
     {
         if (settings == null)
@@ -49,8 +48,7 @@ public final class GtpUtil
 
     /** Check if command line contains a command.
         @return false if command line contains only whitespaces or only a
-        comment
-    */
+        comment */
     public static boolean isCommand(String line)
     {
         line = line.trim();
@@ -67,8 +65,7 @@ public final class GtpUtil
         <code>gogui-play_sequence</code> from GoGui). Does not include
         non-criticlal state changing commands like <code>komi</code>.
         @param line The command or complete command line
-        @return <code>true</code> if command is a state-changing command
-    */
+        @return <code>true</code> if command is a state-changing command */
     public static boolean isStateChangingCommand(String line)
     {
         GtpCommand cmd = new GtpCommand(line);
@@ -277,8 +274,7 @@ public final class GtpUtil
     /** Inform a GTP engine about the clock state.
         Sends the clock state to the engine, if the clock is initialized and
         the engine supports the time_left standard GTP command. Otherwise,
-        does nothing.
-    */
+        does nothing. */
     public static void sendTimeLeft(GtpClientBase gtp, ConstClock clock,
                                     GoColor c)
     {

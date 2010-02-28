@@ -31,8 +31,7 @@ public class Regress
 {
     /** Constructor.
         @param gtpFile File with GTP commands to send at startup or
-        <code>null</code> for no file.
-    */
+        <code>null</code> for no file. */
     public Regress(String program, ArrayList<String> tests, String output,
                    boolean longOutput, boolean verbose, File gtpFile)
         throws Exception
@@ -203,8 +202,7 @@ public class Regress
 
     /** Output file of the current test.
         The file contains an HTML formatted log of the GTP streams and
-        the standard error of Go program.
-    */
+        the standard error of Go program. */
     private File m_outFile;
 
     private final File m_gtpFile;
@@ -222,8 +220,7 @@ public class Regress
     private String m_name;
 
     /** Name of m_outFile and the summary file of the test without directory
-        and file extension for the current test.
-    */
+        and file extension for the current test. */
     private String m_outName;
 
     private String m_outFileRelativeName;
@@ -235,15 +232,13 @@ public class Regress
     private final String m_program;
 
     /** Relative URI path between m_outFile and the directory of the current
-        test.
-    */
+        test. */
     private String m_relativePath;
 
     private String m_version;
 
     /** Name of m_outFile and the summary file of the test without directory
-        and file extension for the all tests.
-    */
+        and file extension for the all tests. */
     private TreeMap<String,String> m_outNames;
 
     private final ArrayList<Test> m_tests = new ArrayList<Test>();
@@ -530,8 +525,7 @@ public class Regress
 
     /** Compute unique names for output directory.
         Appends a number, if tests with same name in different directories
-        exist.
-    */
+        exist. */
     private void initOutNames(ArrayList<String> tests)
     {
         m_outNames = new TreeMap<String,String>();

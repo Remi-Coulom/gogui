@@ -12,8 +12,7 @@ import java.io.PipedOutputStream;
     Redirects the input and output streams of a GtpClient to the GtpEngine.
     If it is not required for the test, that the interface to the GtpEngine
     is on the stream level, use GtpEngineClient instead because of the
-    better performance.
-*/
+    better performance. */
 public final class GtpEngineConnection
 {
     public GtpEngineConnection(GtpEngine engine) throws IOException, GtpError

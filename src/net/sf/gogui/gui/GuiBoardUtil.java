@@ -235,8 +235,7 @@ public final class GuiBoardUtil
     }
 
     /** Shows markup on board.
-        Existing markup is not cleared (but may be overwritten.
-    */
+        Existing markup is not cleared (but may be overwritten. */
     public static void showMarkup(GuiBoard guiBoard, ConstNode node)
     {
         ConstPointList mark = node.getMarkedConst(MarkType.MARK);
@@ -302,8 +301,7 @@ public final class GuiBoardUtil
     /** Shows moves in variation as stones with move number labels on board.
         If there are several moves on the same point then the only first move
         is shown for short variations (less/equal ten moves); and only the
-        last move for long variations.
-    */
+        last move for long variations. */
     public static void showVariation(GuiBoard guiBoard, Move[] variation)
     {
         guiBoard.clearAllLabels();

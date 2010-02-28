@@ -8,8 +8,7 @@ import java.awt.Image;
 import net.sf.gogui.go.GoColor;
 
 /** Const functions of Field.
-    @see Field
-*/
+    @see Field */
 public interface ConstField
 {
     void draw(Graphics graphics, int size, int x, int y, Image boardImage,

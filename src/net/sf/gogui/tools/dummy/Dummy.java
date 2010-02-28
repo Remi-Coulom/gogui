@@ -16,8 +16,7 @@ import net.sf.gogui.version.Version;
 
 /** Dummy Go program for testing GTP controlling programs.
     See the gogui-dummy documentation for information about the extension
-    commands.
-*/
+    commands. */
 public class Dummy
     extends GtpEngine
 {

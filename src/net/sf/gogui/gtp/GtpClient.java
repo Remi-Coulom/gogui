@@ -26,8 +26,7 @@ import net.sf.gogui.util.ProcessUtil;
     <p>
     Callbacks can be registered to monitor the input, output and error stream
     and to handle timeout and invalid responses.
-    </p>
-*/
+    </p> */
 public final class GtpClient
     extends GtpClientBase
 {
@@ -54,8 +53,7 @@ public final class GtpClient
     {
         /** Ask for continuation.
             If this function returns true, Gtp.send will wait for another
-            timeout period, if it returns false, the program will be killed.
-        */
+            timeout period, if it returns false, the program will be killed. */
         boolean askContinue();
     }
 
@@ -64,8 +62,7 @@ public final class GtpClient
         immediately, because send will not abort on an invalid response
         but continue to wait for a valid response line.
         This is necessary for some Go programs with broken GTP implementation
-        which write debug data to standard output (e.g. Wallyplus 0.1.2).
-    */
+        which write debug data to standard output (e.g. Wallyplus 0.1.2). */
     public interface InvalidResponseCallback
     {
         void show(String line);
@@ -73,8 +70,7 @@ public final class GtpClient
 
     /** Callback interface for logging or displaying the GTP stream.
         Note that some of the callback functions are called from different
-        threads.
-     */
+        threads. */
     public interface IOCallback
     {
         void receivedInvalidResponse(String s);
@@ -97,8 +93,7 @@ public final class GtpClient
         @param workingDirectory The working directory to run the program in or
         null for the current directory
         @param log Log input, output and error stream to standard error.
-        @param callback Callback for external display of the streams.
-    */
+        @param callback Callback for external display of the streams. */
     public GtpClient(String program, File workingDirectory, boolean log,
                      IOCallback callback)
         throws GtpClient.ExecFailed
@@ -171,8 +166,7 @@ public final class GtpClient
         explicit quit command well, so the preferred way to terminate a
         connection is to send a quit command. Closing the output stream after
         a quit is not strictly necessary, but may improve compatibility with
-        engines that read the input stream in a different thread
-    */
+        engines that read the input stream in a different thread */
     public void close()
     {
         m_out.close();
@@ -207,8 +201,7 @@ public final class GtpClient
     }
 
     /** Get the command line that was used for invoking the Go program.
-        @return The command line that was given to the constructor.
-    */
+        @return The command line that was given to the constructor. */
     public String getProgramCommand()
     {
         return m_program;
@@ -223,8 +216,7 @@ public final class GtpClient
     /** Send a command.
         @return The response text of the successful response not including
         the status character.
-        @throws GtpError containing the response if the command fails.
-    */
+        @throws GtpError containing the response if the command fails. */
     public String send(String command) throws GtpError
     {
         return send(command, -1, null);
@@ -243,8 +235,7 @@ public final class GtpClient
         @return The response text of the successful response not including
         the status character.
         @throws GtpError containing the response if the command fails.
-        @see TimeoutCallback
-    */
+        @see TimeoutCallback */
     public String send(String command, long timeout,
                        TimeoutCallback timeoutCallback) throws GtpError
     {
@@ -285,8 +276,7 @@ public final class GtpClient
     }
 
     /** Send comment.
-        @param comment comment line (must start with '#').
-    */
+        @param comment comment line (must start with '#'). */
     public void sendComment(String comment)
     {
         assert comment.trim().startsWith("#");
@@ -300,24 +290,21 @@ public final class GtpClient
 
     /** Enable auto-numbering commands.
         Every command will be prepended by an integer as defined in the GTP
-        standard, the integer is incremented after each command.
-    */
+        standard, the integer is incremented after each command. */
     public void setAutoNumber(boolean enable)
     {
         m_autoNumber = enable;
     }
 
     /** Set the callback for invalid responses.
-        @see InvalidResponseCallback
-    */
+        @see InvalidResponseCallback */
     public void setInvalidResponseCallback(InvalidResponseCallback callback)
     {
         m_invalidResponseCallback = callback;
     }
 
     /** Set a prefix for logging to standard error.
-        Only used if logging was enabled in the constructor.
-    */
+        Only used if logging was enabled in the constructor. */
     public void setLogPrefix(String prefix)
     {
         synchronized (this)
@@ -622,8 +609,7 @@ public final class GtpClient
 
     /** Print information about occurence of InterruptedException.
         An InterruptedException should never happen, because we don't call
-        Thread.interrupt
-    */
+        Thread.interrupt */
     private void printInterrupted()
     {
         System.err.println("GtpClient: InterruptedException");

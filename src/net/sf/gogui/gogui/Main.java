@@ -90,8 +90,7 @@ public final class Main
     /** Flag if crash dialog is currently shown.
         Avoids that more than one crash dialog pops up, because events in the
         event dispatch thread can still be handled and cause more exceptions
-        while the first crash dialog is shown.
-    */
+        while the first crash dialog is shown. */
     private static boolean s_duringShowCrashDialog;
 
     /** Make constructor unavailable; class is for namespace only. */

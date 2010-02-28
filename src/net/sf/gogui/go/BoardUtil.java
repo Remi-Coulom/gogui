@@ -9,15 +9,13 @@ import static net.sf.gogui.go.GoColor.WHITE;
 public final class BoardUtil
 {
     /** Number of rotation modes for <code>BoardUtil.rotate()</code>.
-        @see #rotate
-    */
+        @see #rotate */
     public static final int NUMBER_ROTATIONS = 8;
 
     /** Copy the state of one board to another.
         Initializes the target board with the size and the setup stones of the
         source board and executes all moves of the source board on the target
-        board.
-    */
+        board. */
     public static void copy(Board target, ConstBoard source)
     {
         target.init(source.getSize());
@@ -38,8 +36,7 @@ public final class BoardUtil
     /** Get board position as text diagram (without additional game
         information).
         Calls <code>toString()</code> with <code>withGameInfo == false</code>.
-        @see #toString(ConstBoard, boolean)
-    */
+        @see #toString(ConstBoard, boolean) */
     public static String toString(ConstBoard board)
     {
         return toString(board, true);
@@ -49,8 +46,7 @@ public final class BoardUtil
         @param board The board to print.
         @param withGameInfo Print additional game information on the right
         side of the board (at present only number of prisoners)
-        @return Board position as text diagram.
-    */
+        @return Board position as text diagram. */
     public static String toString(ConstBoard board, boolean withGameInfo)
     {
         StringBuilder s = new StringBuilder(1024);
@@ -109,8 +105,7 @@ public final class BoardUtil
         @param rotationMode The rotation mode in [0..NUMBER_ROTATIONS]
         @param point The point to be rotated
         @param size The board size
-        @return The rotated mirrored point
-    */
+        @return The rotated mirrored point */
     public static GoPoint rotate(int rotationMode, GoPoint point, int size)
     {
         assert rotationMode < NUMBER_ROTATIONS;

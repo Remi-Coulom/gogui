@@ -117,8 +117,7 @@ public class StatusBar
 
     /** Set text with move information.
         This text is displayed right and contains e.g. information about
-        the last move, current move number etc.
-    */
+        the last move, current move number etc. */
     public void setMoveText(String text, String toolTip)
     {
         if (text.length() > 18)
@@ -159,8 +158,7 @@ public class StatusBar
     }
 
     /** Hide or show the text field for move information.
-        @see #setMoveText
-    */
+        @see #setMoveText */
     public void showMoveText(boolean show)
     {
         m_moveText.setVisible(show);
@@ -189,8 +187,7 @@ public class StatusBar
 
     /** Set a preferred size, such that the layout does not change,
         if a text label on the status bar is empty.
-        The preferred size is derived from the font.
-    */
+        The preferred size is derived from the font. */
     private static void setPreferredLabelSize(JLabel label, int columns)
     {
         Font font = label.getFont();

@@ -61,8 +61,7 @@ public class Program
     }
 
     /** Get cputime since program start or last invocation of this
-        function.
-    */
+        function. */
     public double getAndClearCpuTime()
     {
         double cpuTime;
@@ -83,8 +82,7 @@ public class Program
     }
 
     /** Get unique label.
-        Call setLabel() first.
-    */
+        Call setLabel() first. */
     public String getLabel()
     {
         return m_label;
@@ -169,8 +167,7 @@ public class Program
         (or numbers, if the version string is empty or more than 40
         characters).
         @param programs The list of all programs (must include this
-        program)
-    */
+        program) */
     public void setLabel(ArrayList<Program> programs)
     {
         boolean isUnique = true;

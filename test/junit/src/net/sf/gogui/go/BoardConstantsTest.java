@@ -16,8 +16,7 @@ public final class BoardConstantsTest
     }
 
     /** Test BoardConstants.getHandicapStones according to GTP
-        specification.
-    */
+        specification. */
     public void testGetHandicapStones()
     {
         for (int size = 1; size <= 25; ++size)

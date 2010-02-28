@@ -23,8 +23,7 @@ public class RadialGradientPaint
         @param focus Focus shift away from the center along second radius
         normalized to interval between zero and one.
         @param color1 First color.
-        @param color2 Second color.
-    */
+        @param color2 Second color. */
     public RadialGradientPaint(Point2D center, Point2D radius1,
                                Point2D radius2, double focus, Color color1,
                                Color color2)

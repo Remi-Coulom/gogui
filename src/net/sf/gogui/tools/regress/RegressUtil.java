@@ -14,8 +14,7 @@ public class RegressUtil
     /** Check if files exist.
         @param list List of file names (as strings)
         @throws ErrorMessage If one of the files is not a normal file or
-        not readable.
-    */
+        not readable. */
     public static void checkFiles(ArrayList<String> list) throws ErrorMessage
     {
         for (int i = 0; i < list.size(); ++i)
@@ -37,8 +36,7 @@ public class RegressUtil
         The expansion is done recursively.
         @param list List of test names (as strings)
         @return List of test names (as strings) with all test suites
-        expanded.
-    */
+        expanded. */
     public static ArrayList<String> expandTestSuites(ArrayList<String> list)
         throws IOException
     {

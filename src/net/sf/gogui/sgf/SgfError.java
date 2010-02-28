@@ -9,8 +9,7 @@ public class SgfError
     extends ErrorMessage
 {
     /** Constructor.
-        @param message Error message.
-    */
+        @param message Error message. */
     public SgfError(String message)
     {
         super(message);

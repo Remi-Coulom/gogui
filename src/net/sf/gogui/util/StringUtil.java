@@ -70,8 +70,7 @@ public final class StringUtil
 
     /** Return the current time and date as a string using a long format.
         The time and date is formatted using DateFormat.LONG and
-        Locale.ENGLISH.
-    */
+        Locale.ENGLISH. */
     public static String getDate()
     {
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.LONG,
@@ -83,8 +82,7 @@ public final class StringUtil
 
     /** Return the current time and date as a string using a short format.
         The time and date is formatted using DateFormat.SHORT and
-        Locale.ENGLISH.
-    */
+        Locale.ENGLISH. */
     public static String getDateShort()
     {
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
@@ -110,8 +108,7 @@ public final class StringUtil
     /** Return a printable error message for an exception.
         Returns the error message is for instances of ErrorMessage or
         for other exceptions the class name with the exception message
-        appended, if not empty.
-    */
+        appended, if not empty. */
     public static String getErrorMessage(Throwable e)
     {
         String message = e.getMessage();
@@ -128,8 +125,7 @@ public final class StringUtil
     }
 
     /** Return a number formatter with maximum fraction digits,
-        no grouping, locale ENGLISH.
-    */
+        no grouping, locale ENGLISH. */
     public static NumberFormat getNumberFormat(int maximumFractionDigits)
     {
         NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
@@ -154,8 +150,7 @@ public final class StringUtil
         For exceptions of type Error or RuntimeException, a stack trace
         is printed in addition.
         @return A slightly differently formatted error message
-        for display in an error dialog.
-    */
+        for display in an error dialog. */
     public static String printException(Throwable exception)
     {
         String result = getErrorMessage(exception);
@@ -189,8 +184,7 @@ public final class StringUtil
     }
 
     /** Split command line into arguments.
-        Allows " for words containing whitespaces.
-    */
+        Allows " for words containing whitespaces. */
     public static String[] splitArguments(String string)
     {
         assert string != null;

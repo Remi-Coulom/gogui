@@ -14,8 +14,7 @@ import java.util.TreeMap;
 import java.util.ArrayList;
 
 /** Parser for command line options.
-    Options begin with a single '-' character.
-*/
+    Options begin with a single '-' character. */
 public class Options
 {
     /** Parse options.
@@ -24,8 +23,7 @@ public class Options
         (without '-'). Options that need an argument must have a ':' appended.
         The special argument '--' stops option parsing, all following
         arguments are treated as non-option arguments.
-        @throws ErrorMessage If options are not valid according to specs.
-    */
+        @throws ErrorMessage If options are not valid according to specs. */
     public Options(String[] args, String[] specs) throws ErrorMessage
     {
         for (String spec : specs)
@@ -45,8 +43,8 @@ public class Options
 
     /** Return string option value.
         @param option The option key.
-        @return The option value or en empty string, if option is not present.
-    */
+        @return The option value or en empty string, if option is not
+        present. */
     public String get(String option)
     {
         return get(option, "");
@@ -55,8 +53,7 @@ public class Options
     /** Return string option value.
         @param option The option key.
         @param defaultValue The default value.
-        @return The option value or defaultValue, if option is not present.
-    */
+        @return The option value or defaultValue, if option is not present. */
     public String get(String option, String defaultValue)
     {
         assert isValidOption(option);
@@ -67,16 +64,14 @@ public class Options
     }
 
     /** Get remaining arguments that are not options.
-        @return The sequence of non-option arguments.
-    */
+        @return The sequence of non-option arguments. */
     public ArrayList<String> getArguments()
     {
         return m_args;
     }
 
     /** Check that the number of non-option arguments is zero.
-        @throws ErrorMessage If there are any non-option arguments.
-    */
+        @throws ErrorMessage If there are any non-option arguments. */
     public void checkNoArguments() throws ErrorMessage
     {
         if (! m_args.isEmpty())
@@ -87,8 +82,7 @@ public class Options
     /** Parse double option.
         @param option The option key.
         @return The option value or 0, if option is not present.
-        @throws ErrorMessage If option value is not a double.
-    */
+        @throws ErrorMessage If option value is not a double. */
     public double getDouble(String option) throws ErrorMessage
     {
         return getDouble(option, 0);
@@ -98,8 +92,7 @@ public class Options
         @param option The option key.
         @param defaultValue The default value.
         @return The option value or defaultValue, if option is not present.
-        @throws ErrorMessage If option value is not a double.
-    */
+        @throws ErrorMessage If option value is not a double. */
     public double getDouble(String option, double defaultValue)
         throws ErrorMessage
     {
@@ -120,8 +113,7 @@ public class Options
     /** Parse integer option.
         @param option The option key.
         @return The option value or 0, if option is not present.
-        @throws ErrorMessage If option value is not an integer.
-    */
+        @throws ErrorMessage If option value is not an integer. */
     public int getInteger(String option) throws ErrorMessage
     {
         return getInteger(option, 0);
@@ -131,8 +123,7 @@ public class Options
         @param option The option key.
         @param defaultValue The default value.
         @return The option value or defaultValue, if option is not present.
-        @throws ErrorMessage If option value is not an integer.
-    */
+        @throws ErrorMessage If option value is not an integer. */
     public int getInteger(String option, int defaultValue) throws ErrorMessage
     {
         String value = get(option, Integer.toString(defaultValue));
@@ -154,8 +145,7 @@ public class Options
         @param defaultValue The default value.
         @param min The minimum valid value.
         @return The option value or defaultValue, if option is not present.
-        @throws ErrorMessage If option value is less than min.
-    */
+        @throws ErrorMessage If option value is less than min. */
     public int getInteger(String option, int defaultValue, int min)
         throws ErrorMessage
     {
@@ -173,8 +163,7 @@ public class Options
         @param max The maximum valid value.
         @return The option value or defaultValue, if option is not present.
         @throws ErrorMessage If option value is less than min or greater than
-        max.
-    */
+        max. */
     public int getInteger(String option, int defaultValue, int min, int max)
         throws ErrorMessage
     {
@@ -188,8 +177,7 @@ public class Options
     /** Parse long integer option.
         @param option The option key.
         @return The option value or 0, if option is not present.
-        @throws ErrorMessage If option value is not a long integer.
-    */
+        @throws ErrorMessage If option value is not a long integer. */
     public long getLong(String option) throws ErrorMessage
     {
         return getLong(option, 0L);
@@ -199,8 +187,7 @@ public class Options
         @param option The option key.
         @param defaultValue The default value.
         @return The option value or defaultValue, if option is not present.
-        @throws ErrorMessage If option value is not a long integer.
-    */
+        @throws ErrorMessage If option value is not a long integer. */
     public long getLong(String option, long defaultValue) throws ErrorMessage
     {
         String value = get(option, Long.toString(defaultValue));
@@ -220,8 +207,7 @@ public class Options
     /** Read options from a file given with the option "config".
         Requires that "config" is an allowed option.
         @throws ErrorMessage If options in file are not valid according to
-        the specification.
-    */
+        the specification. */
     public void handleConfigOption() throws ErrorMessage
     {
         if (! contains("config"))
@@ -274,8 +260,7 @@ public class Options
         @param args The command line split into arguments.
         @param specs Option specification as in constructor.
         @return The new Options instance.
-        @throws ErrorMessage If options are not valid according to specs.
-    */
+        @throws ErrorMessage If options are not valid according to specs. */
     public static Options parse(String[] args, String[] specs)
         throws ErrorMessage
     {

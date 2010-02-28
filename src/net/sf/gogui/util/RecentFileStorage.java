@@ -27,8 +27,7 @@ import org.xml.sax.SAXException;
 
 /** Recent file storage according to the Freedesktop standard.
     http://standards.freedesktop.org/recent-file-spec/0.2/
-    @todo Implementation not finished yet. Don't use this class.
-*/
+    @todo Implementation not finished yet. Don't use this class. */
 public final class RecentFileStorage
 {
     public static final int MAX_ITEMS = 500;
@@ -39,8 +38,7 @@ public final class RecentFileStorage
     }
 
     /** @todo create empty document, if read document is invalid (e.g.
-        no RecentFiles element)?
-    */
+        no RecentFiles element)? */
     public static void add(URI uri, String mimetype, String group,
                            boolean isPrivate)
     {
@@ -95,8 +93,7 @@ public final class RecentFileStorage
 
     /** Check if file was changed by another application.
         @return True if file was changed since the last invocation of one of
-        the getAll methods or if it was not read yet.
-    */
+        the getAll methods or if it was not read yet. */
     public static boolean wasChanged()
     {
         if (s_document == null)
@@ -108,8 +105,7 @@ public final class RecentFileStorage
     }
 
     /** For temporary testing.
-        @todo Remove later
-    */
+        @todo Remove later */
     public static void main(String[] args)
     {
         ArrayList<String> uriList = getAllMimeType("application/x-go-sgf");

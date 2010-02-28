@@ -223,8 +223,7 @@ public class GameTreePanel
     /** Only used for a workaround on Mac Java 1.4.2,
         which causes the scrollpane to lose focus after a new layout of
         this panel. If scrollPane is not null, a requestFocusOnWindow will
-        be called after each new layout
-    */
+        be called after each new layout */
     public void setScrollPane(JScrollPane scrollPane)
     {
         m_scrollPane = scrollPane;

@@ -46,8 +46,7 @@ public class Game
 
     /** Clear modified flag.
         Can be used for instance after game was saved.
-        @see #isModified()
-    */
+        @see #isModified() */
     public void clearModified()
     {
         m_modified = false;
@@ -55,8 +54,7 @@ public class Game
 
     /** Append new empty node and make it current node.
         Can be use for instance to prepare for setup stones if current node
-        contains a move.
-    */
+        contains a move. */
     public void createNewChild()
     {
         Node node = new Node();
@@ -134,8 +132,7 @@ public class Game
     }
 
     /** Return last node when startClock() was called.
-        @return The last such node or null, if the clock was never running.
-    */
+        @return The last such node or null, if the clock was never running. */
     public ConstNode getClockNode()
     {
         return m_clockNode;
@@ -161,8 +158,7 @@ public class Game
 
     /** Check if game was modified.
         @return true, if game was mofified since constructor or last call to
-        one of the init() functions or to clearModified().
-    */
+        one of the init() functions or to clearModified(). */
     public boolean isModified()
     {
         return m_modified;
@@ -241,8 +237,7 @@ public class Game
     /** Set clock listener.
         If the clock has a listener, the clock should be stopped with
         haltClock() if it is no longer used, otherwise the timer thread can
-        keep an application from terminating.
-    */
+        keep an application from terminating. */
     public void setClockListener(Clock.Listener listener)
     {
         m_clock.setListener(listener);
@@ -318,8 +313,7 @@ public class Game
     }
 
     /** Change the time settings.
-        If the current node is the root node, the clock will also be reset.
-    */
+        If the current node is the root node, the clock will also be reset. */
     public void setTimeSettings(TimeSettings timeSettings)
     {
         Node node = m_tree.getGameInfoNode(m_current);
@@ -353,8 +347,7 @@ public class Game
 
     /** Set a stone on the board or remove a stone.
         @param p The location.
-        @param c The color of the stone (EMPTY for removal).
-    */
+        @param c The color of the stone (EMPTY for removal). */
     public void setup(GoPoint p, GoColor c)
     {
         assert p != null;
@@ -383,8 +376,7 @@ public class Game
     }
 
     /** Truncate current node and subtree.
-        New current node is the father of the old current node.
-    */
+        New current node is the father of the old current node. */
     public void truncate()
     {
         Node father = m_current.getFather();

@@ -8,8 +8,7 @@ import net.sf.gogui.boardpainter.ConstField;
 import net.sf.gogui.go.GoPoint;
 
 /** Const functions of gui.GuiBoard.
-    @see GuiBoard
-*/
+    @see GuiBoard */
 public interface ConstGuiBoard
 {
     int getBoardSize();

@@ -10,8 +10,7 @@ import net.sf.gogui.util.ErrorMessage;
 
 /** Wrapper for starting GoGui.
     Loads the main class with the reflection API to set Mac AWT
-    properties before any AWT class is loaded.
-*/
+    properties before any AWT class is loaded. */
 public final class MainWrapper
 {
     public static void main(String[] args) throws Exception

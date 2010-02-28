@@ -40,8 +40,7 @@ class AntialiasingEditorPane
 /** Window for displaying help in HTML format.
     The window is a JFrame on all platforms but the Mac, where it is a
     parent-less JDialog (to avoid the brushed-metal look, which shouldn't be
-    used for the help window)
- */
+    used for the help window) */
 public class Help
     implements ActionListener, HyperlinkListener
 {
@@ -238,8 +237,7 @@ public class Help
     }
 
     /** Open URL in external browser if possible.
-        If it doesn't work, the URL is opened inside this dialog.
-    */
+        If it doesn't work, the URL is opened inside this dialog. */
     private void openExternal(URL url)
     {
         if (! Platform.openInExternalBrowser(url))

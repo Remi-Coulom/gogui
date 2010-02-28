@@ -27,8 +27,7 @@ public final class NodeUtil
         @param n The number of moves to go backward.
         @return The node reached by going n moves backward or the root node
         of the tree, if there are less than n nodes in the sequence before
-        the start node.
-    */
+        the start node. */
     public static ConstNode backward(ConstNode node, int n)
     {
         assert n >= 0;
@@ -45,8 +44,7 @@ public final class NodeUtil
         Handles the following properties: TM (because FF3 allowed an arbitrary
         text in TM), OT (FF4 allows arbitrary text)
         @return The cleaned properties, empty properties, if
-        node.getSgfProperties() was null
-    */
+        node.getSgfProperties() was null */
     public static SgfProperties cleanSgfProps(ConstNode node)
     {
         SgfProperties props = new SgfProperties(node.getSgfPropertiesConst());
@@ -68,8 +66,7 @@ public final class NodeUtil
         @param node The node to check.
         @param pattern The pattern.
         @return <tt>true</tt>, if the current node has a comment and a match
-        for the pattern is found in the comment.
-    */
+        for the pattern is found in the comment. */
     public static boolean commentContains(ConstNode node, Pattern pattern)
     {
         String comment = node.getComment();
@@ -81,8 +78,7 @@ public final class NodeUtil
         @param node The given node.
         @param moveNumber The move number of the wanted node.
         @return The node with the given move number or <code>null</code> if
-        no such node exists.
-    */
+        no such node exists. */
     public static ConstNode findByMoveNumber(ConstNode node, int moveNumber)
     {
         int maxMoveNumber = getMoveNumber(node) + getMovesLeft(node);
@@ -113,8 +109,7 @@ public final class NodeUtil
         @return The first node of the given variation, or the root node,
         if the variation string is empty, or <code>null</code>, if the
         variation string is invalid or does not specify a node in the
-        given tree.
-    */
+        given tree. */
     public static ConstNode findByVariation(ConstNode root, String variation)
     {
         if (variation.trim().equals(""))
@@ -155,8 +150,7 @@ public final class NodeUtil
         @param node The current node in the iteration.
         @param pattern The pattern.
         @return The next node in the iteration through the complete tree
-        after the current node that contains a match of the pattern.
-    */
+        after the current node that contains a match of the pattern. */
     public static ConstNode findInComments(ConstNode node, Pattern pattern)
     {
         node = nextNode(node);
@@ -172,8 +166,7 @@ public final class NodeUtil
     /** Find next node with a comment in the iteration through complete tree.
         @param node The current node in the iteration.
         @return The next node in the iteration through the complete tree
-        after the current node that has a comment.
-    */
+        after the current node that has a comment. */
     public static ConstNode findNextComment(ConstNode node)
     {
         node = nextNode(node);
@@ -191,8 +184,7 @@ public final class NodeUtil
         @param n The number of moves to go forward.
         @return The node reached by going n moves forward following the main
         variaton (always the first child) or the last node in this variation,
-        if it has less than n nodes.
-    */
+        if it has less than n nodes. */
     public static ConstNode forward(ConstNode node, int n)
     {
         assert n >= 0;
@@ -216,8 +208,7 @@ public final class NodeUtil
 
     /** Get all children moves.
         @return Point list containing the move points, not including passes
-        and independent of color.
-    */
+        and independent of color. */
     public static PointList getChildrenMoves(ConstNode node)
     {
         PointList moves = new PointList();
@@ -231,8 +222,7 @@ public final class NodeUtil
     }
 
     /** Get child node containing a certain move.
-        @return null if no such child exists.
-    */
+        @return null if no such child exists. */
     public static ConstNode getChildWithMove(ConstNode node, Move move)
     {
         for (int i = 0; i < node.getNumberChildren(); ++i)
@@ -247,8 +237,7 @@ public final class NodeUtil
 
     /** Get comment, but no more than a maximum number of characters.
         @return Start of comment, with ellipses appended if trunceted;
-        null, if node has no comment.
-    */
+        null, if node has no comment. */
     public static String getCommentStart(ConstNode node,
                                          boolean firstLineOnly,
                                          int maxChar)
@@ -293,8 +282,7 @@ public final class NodeUtil
         @param node The node.
         @return The number of nodes in the sequence from the root node
         to the given node, excluding the given node (which means that the
-        root node has depth 0).
-    */
+        root node has depth 0). */
     public static int getDepth(ConstNode node)
     {
         int depth = 0;
@@ -317,8 +305,7 @@ public final class NodeUtil
     /** Get the move number of a node.
         @param node The node.
         @return The total number of moves in the sequence of nodes from
-        the root node to the given node, including the given node.
-    */
+        the root node to the given node, including the given node. */
     public static int getMoveNumber(ConstNode node)
     {
         int moveNumber = 0;
@@ -384,8 +371,7 @@ public final class NodeUtil
     /** Get nodes in path from a given node to the root node.
         @param node The node
         @param result The resulting path. Passed as an argument to allow
-        reusing an array list. It will be cleared before it is used.
-    */
+        reusing an array list. It will be cleared before it is used. */
     public static void getPathToRoot(ConstNode node,
                                      ArrayList<ConstNode> result)
     {
@@ -428,8 +414,7 @@ public final class NodeUtil
 
     /** Get the root node.
         @param node The node.
-        @return The root node of the tree that the given node belongs to.
-    */
+        @return The root node of the tree that the given node belongs to. */
     public static ConstNode getRoot(ConstNode node)
     {
         while (node.getFatherConst() != null)
@@ -441,8 +426,7 @@ public final class NodeUtil
         The string contains the number of the child for each node with more
         than one child in the path from the root node to this node.
         The childs are counted starting with 1 and the numbers are separated
-        by colons.
-    */
+        by colons. */
     public static String getVariationString(ConstNode node)
     {
         ArrayList<String> list = new ArrayList<String>();
@@ -475,8 +459,7 @@ public final class NodeUtil
     }
 
     /** Check if game is in cleanup stage.
-        Cleanup stage is after two consecutive pass moves have been played.
-    */
+        Cleanup stage is after two consecutive pass moves have been played. */
     public static boolean isInCleanup(ConstNode node)
     {
         boolean lastPass = false;
@@ -503,8 +486,7 @@ public final class NodeUtil
         @param node The node.
         @return <tt>true</tt>, if the given node is in the main variation,
         which is the sequence of nodes starting from the root of the tree
-        and always following the first child.
-    */
+        and always following the first child. */
     public static boolean isInMainVariation(ConstNode node)
     {
         while (node.getFatherConst() != null)
@@ -518,8 +500,8 @@ public final class NodeUtil
 
     /** Check if node is root node and has no children.
         @param node The node to check.
-        @return <tt>true</tt>, if the node has no father node and no children.
-    */
+        @return <tt>true</tt>, if the node has no father node and no
+        children. */
     public static boolean isRootWithoutChildren(ConstNode node)
     {
         return (! node.hasFather() && ! node.hasChildren());
@@ -530,8 +512,7 @@ public final class NodeUtil
         move of the given color also contains information about the time left
         after the move for the color. If a previous node with a game info
         containing time settings exists and no move of the given color was
-        played since then, the function also returns true.
-    */
+        played since then, the function also returns true. */
     public static boolean isTimeLeftKnown(ConstNode node, GoColor color)
     {
         while (node != null)
@@ -553,8 +534,7 @@ public final class NodeUtil
         node to the current node (exclusive the current node), such that all
         nodes in the sequence (inclusive the current node) are the first
         child of their parents.
-        @param node The current node.
-    */
+        @param node The current node. */
     public static void makeMainVariation(Node node)
     {
         while (node.getFatherConst() != null)
@@ -605,8 +585,7 @@ public final class NodeUtil
     /** Return a string containing information about a node.
         The string contains a listing of the data stored in the node
         (like moves or setup stones) and properties of the node in the
-        tree (like depth or variation).
-    */
+        tree (like depth or variation). */
     public static String nodeInfo(ConstNode node)
     {
         StringBuilder buffer = new StringBuilder(128);
@@ -715,8 +694,7 @@ public final class NodeUtil
         Updates the clock from the time left information stored in the nodes
         of the sequence from the root node to the current node.
         @param node The current node.
-        @param clock The clock to update.
-    */
+        @param clock The clock to update. */
     public static void restoreClock(ConstNode node, Clock clock)
     {
         clock.reset();
@@ -736,8 +714,7 @@ public final class NodeUtil
         @param minDepth The minimum depth of the interval (inclusive)
         @param maxDepth The maximum depth of the interval (inclusive)
         @return A random node in the given depth interval, null, if there is
-        none.
-    */
+        none. */
     public static ConstNode selectRandom(ConstNode root, int minDepth,
                                          int maxDepth)
     {
@@ -755,8 +732,7 @@ public final class NodeUtil
     }
 
     /** Check if the number of nodes in the subtree of a node is greater
-        than a given limit.
-    */
+        than a given limit. */
     public static boolean subtreeGreaterThan(ConstNode node, int size)
     {
         int n = 0;
@@ -773,8 +749,8 @@ public final class NodeUtil
 
     /** Count number of nodes in subtree.
         @param node The root node of the subtree.
-        @return The number of nodes in the subtree (including the root node).
-    */
+        @return The number of nodes in the subtree (including the root
+        node). */
     public static int subtreeSize(ConstNode node)
     {
         int n = 0;
@@ -788,8 +764,7 @@ public final class NodeUtil
     }
 
     /** Return a string containing information and statistics of the subtree
-        of a node.
-    */
+        of a node. */
     public static String treeInfo(ConstNode node)
     {
         int numberNodes = 0;

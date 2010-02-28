@@ -1796,8 +1796,8 @@ public class GoGui
     }
 
     /** Get name of currently attached program.
-        @return Name or null, if no program is attached or name is not known.
-    */
+        @return Name or null, if no program is attached or name is not
+        known. */
     public String getProgramName()
     {
         String name = null;
@@ -1816,8 +1816,7 @@ public class GoGui
     /** Get label for currently attached program.
         @return Label from Program instance, if program was created with a
         Program instance, otherwise label as in GtpClientBase#getLabel; null
-        if no program is attached.
-    */
+        if no program is attached. */
     public String getProgramLabel()
     {
         if (m_gtp == null)
@@ -1864,8 +1863,7 @@ public class GoGui
     }
 
     /** Return whether the currently attached program has analyze commands of
-        type "param".
-    */
+        type "param". */
     public boolean hasParameterCommands()
     {
         if (m_analyzeCommands == null)
@@ -2050,8 +2048,7 @@ public class GoGui
 
     /** Callback for selected text.
         This is a callback for text selection exents in different components.
-        It parses the text for valid points and marks them on the board.
-    */
+        It parses the text for valid points and marks them on the board. */
     public void textSelected(String text)
     {
         if (text == null)
@@ -2093,8 +2090,7 @@ public class GoGui
 
     /** Return if a program is currently attached.
         Also returns true, if a program is attached but dead, which can be
-        checked with isProgramDead()
-    */
+        checked with isProgramDead() */
     public boolean isProgramAttached()
     {
         return (m_gtp != null);
@@ -2226,8 +2222,7 @@ public class GoGui
     private boolean m_computerWhite;
 
     /** State variable used between generateMove and computerMoved.
-        Flag is set in actionInterrupt.
-    */
+        Flag is set in actionInterrupt. */
     private boolean m_interruptComputerBoth;
 
     /** State variable used between generateMove and computerMoved. */
@@ -2335,12 +2330,10 @@ public class GoGui
 
     /** Program information.
         Can be null even if a program is attached, if only m_programName
-        is known.
-    */
+        is known. */
     private Program m_program;
 
-    /** Program currently being edited in actionNewProgram()
-     */
+    /** Program currently being edited in actionNewProgram() */
     private Program m_newProgram;
 
     private final ThumbnailCreator m_thumbnailCreator =
@@ -2358,8 +2351,7 @@ public class GoGui
 
     private ShowAnalyzeText m_showAnalyzeText;
 
-    /** Snapshot used in actionSnapshotParameters and actionRestoreParameters.
-     */
+    /** Snapshot used in actionSnapshotParameters and actionRestoreParameters. */
     private File m_parameterSnapshot;
 
     private void analyzeBegin(boolean checkComputerMove)
@@ -2477,8 +2469,7 @@ public class GoGui
     /** Attach program.
         @param programCommand Command line for running program.
         @param program Program information (may be null)
-        @return true if program was successfully attached.
-    */
+        @return true if program was successfully attached. */
     private boolean attachProgram(String programCommand, Program program)
     {
         programCommand = programCommand.trim();
@@ -2768,8 +2759,7 @@ public class GoGui
 
     /** Ask for saving file if it was modified.
         @return true If file was not modified, user chose not to save it
-        or file was saved successfully
-    */
+        or file was saved successfully */
     private boolean checkSaveGame(boolean isProgramTerminating)
     {
         if (! isModified())
@@ -3205,8 +3195,7 @@ public class GoGui
 
     /** Change current node.
         Automatically restores the clock, or halts it, if no time settings
-        are known.
-    */
+        are known. */
     private void gotoNode(ConstNode node)
     {
         // GameTreeViewer is not disabled in score mode
@@ -3546,8 +3535,7 @@ public class GoGui
 
     /** Paint point immediately to pretend better responsiveness.
         Necessary because waiting for a repaint of the Go board can be slow
-        due to the updating game tree or response to GTP commands.
-    */
+        due to the updating game tree or response to GTP commands. */
     private void paintImmediately(GoPoint point, GoColor color, boolean isMove)
     {
         m_guiBoard.setColor(point, color);
@@ -3667,8 +3655,7 @@ public class GoGui
     }
 
     /** Save game to file.
-        @return true If successfully saved.
-    */
+        @return true If successfully saved. */
     private boolean save(GameFile gameFile)
     {
         try
@@ -4325,8 +4312,7 @@ public class GoGui
         @param gameTreeChanged If nodes were added to or removed from the game
         tree, which will trigger a full and potentially slow game tree update
         @param sync Update game tree within the event handler if the gameTree
-        has changed.
-    */
+        has changed. */
     private void updateViews(boolean gameTreeChanged, boolean sync)
     {
         m_actions.update();

@@ -58,8 +58,7 @@ public final class GameTest
 
     /** Test removing a stone in the root node.
         It should just remove the setup stone from the node, but not add a
-        removal (empty setup stone).
-    */
+        removal (empty setup stone). */
     public static void testSetupEmptyInRoot()
     {
         Game game = new Game(19);

@@ -15,8 +15,7 @@ public final class FileUtil
 {
     /** Return the file extension of a file name.
         @param file The file.
-        @return File extension or null if file name has no extension.
-    */
+        @return File extension or null if file name has no extension. */
     public static String getExtension(File file)
     {
         String ext = null;
@@ -34,8 +33,7 @@ public final class FileUtil
         @todo Handle special charcters and file names containing slashes.
         @param fromFile File to compute the URI relative to.
         @param toFile Target file or directory.
-        @return Relative URI.
-    */
+        @return Relative URI. */
     public static String getRelativeURI(File fromFile, File toFile)
     {
         assert ! fromFile.exists() || ! fromFile.isDirectory();
@@ -62,8 +60,7 @@ public final class FileUtil
     }
 
     /** Return URI for file.
-        Replacement for File.toURI() with defined (empty) authority.
-    */
+        Replacement for File.toURI() with defined (empty) authority. */
     public static URI getURI(File file)
     {
         try
@@ -88,8 +85,7 @@ public final class FileUtil
     /** Read a list of strings from a file.
         The file is expected to contain one string per line; leading and
         trailing whitespaces are removed. Empty lines or lines beginning
-        with the comment character '#' are ignored.
-    */
+        with the comment character '#' are ignored. */
     public static ArrayList<String> readStringListFromFile(File file)
         throws IOException
     {
@@ -117,8 +113,7 @@ public final class FileUtil
 
     /** Remove extension in file name.
         If the file does not have the extension oldExtension,
-        the extension will not be removed.
-    */
+        the extension will not be removed. */
     public static String removeExtension(File file, String oldExtension)
     {
         String name = file.toString();
@@ -134,8 +129,7 @@ public final class FileUtil
     /** Replace extension in file name.
         If the file does not have the extension oldExtension,
         the extension will not be replaced but the new extension will be
-        appended.
-    */
+        appended. */
     public static String replaceExtension(File file, String oldExtension,
                                           String newExtension)
     {

@@ -109,8 +109,7 @@ class GtpShellText
 
     /** Check if last text appended is not part of the GTP streams.
         Returns true, if last text is standard error of program or invalid
-        response lines.
-    */
+        response lines. */
     public boolean isLastTextNonGTP()
     {
         return m_isLastTextNonGTP;

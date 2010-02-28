@@ -170,8 +170,7 @@ public final class BoardTest
 
     /** Test that playing on a occupied field does not fail.
         Board.play spciefies that a play never fails.
-        Also tests that the old stone is correctly restored.
-    */
+        Also tests that the old stone is correctly restored. */
     public void testPlayOnOccupied()
     {
         Board board = new Board(19);

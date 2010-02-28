@@ -19,8 +19,7 @@ public class SwitchLanguageDialog
         @param messageDialogs For displaying messages.
         @param prefs The preferences
         @param key The preferences key for reading and storing the
-        language setting
-    */
+        language setting */
     public SwitchLanguageDialog(Frame owner, MessageDialogs messageDialogs,
                                 Preferences prefs, String key)
     {

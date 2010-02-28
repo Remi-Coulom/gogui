@@ -91,8 +91,8 @@ public class GtpEngine
 
     /** Callback for interrupting commands.
         This callback will be invoked if the special comment line
-        "# interrupt" is received. It will be invoked from a different thread.
-    */
+        "# interrupt" is received. It will be invoked from a different
+        thread. */
     public void interruptCommand()
     {
         m_interrupted = true;
@@ -100,8 +100,7 @@ public class GtpEngine
 
     /** Handle command.
         The default implementation looks up the command within the registered
-        commands and calls the registered callback.
-    */
+        commands and calls the registered callback. */
     public void handleCommand(GtpCommand cmd) throws GtpError
     {
         m_interrupted = false;
@@ -126,8 +125,7 @@ public class GtpEngine
 
     /** Main command loop.
         Reads commands and calls GtpEngine.handleCommand until the end of
-        the input stream or the quit command is reached.
-    */
+        the input stream or the quit command is reached. */
     public void mainLoop(InputStream in, OutputStream out) throws IOException
     {
         m_out = new PrintStream(out);
@@ -163,8 +161,7 @@ public class GtpEngine
     /** Utility function for parsing a point argument.
         @param cmdArray Command line split into words.
         @param boardSize Board size is needed for parsing the point
-        @return GoPoint argument
-    */
+        @return GoPoint argument */
     public static GoPoint parsePointArgument(String[] cmdArray, int boardSize)
         throws GtpError
     {
@@ -183,8 +180,7 @@ public class GtpEngine
     /** Utility function for parsing an point list argument.
         @param cmdArray Command line split into words.
         @param boardSize Board size is needed for parsing the points
-        @return Point list argument
-    */
+        @return Point list argument */
     public static PointList parsePointListArgument(String[] cmdArray,
                                                    int boardSize)
         throws GtpError
@@ -211,8 +207,7 @@ public class GtpEngine
         Should only be used for simulationg broken GTP implementations
         like used in the gogui-dummy_invalid command.
         @param text Text to print to output stream.
-        No newline will be appended.
-    */
+        No newline will be appended. */
     public void printInvalidResponse(String text)
     {
         m_out.print(text);
@@ -220,8 +215,7 @@ public class GtpEngine
 
     /** Register new command.
         If a command was already registered with the same name,
-        it will be replaced by the new command.
-    */
+        it will be replaced by the new command. */
     public final void register(String command, GtpCallback callback)
     {
         unregister(command);
@@ -285,8 +279,7 @@ public class GtpEngine
 
     /** Engine version.
         The GTP standard says to return empty string, if no meaningful reponse
-        is available.
-    */
+        is available. */
     private String m_version;
 
     /** Mapping from command to callback. */
@@ -303,8 +296,7 @@ public class GtpEngine
 /** Thread reading the command stream.
     Reading is done in a seperate thread to allow the notification
     of Server about an asynchronous interrupt received using
-    the special comment line '# interrupt'.
-*/
+    the special comment line '# interrupt'. */
 class ReadThread
     extends Thread
 {

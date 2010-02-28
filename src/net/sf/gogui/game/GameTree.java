@@ -14,8 +14,7 @@ import net.sf.gogui.go.Komi;
     Note that the tree can have different GameInfo objects for different
     subtrees to allow the representation of trees loaded from SGF. Creating
     trees with multiple GameInfo objects is not not actively supported
-    in GoGui, because they cannot be saved in (Jago's) XML format.
-*/
+    in GoGui, because they cannot be saved in (Jago's) XML format. */
 public class GameTree
     implements ConstGameTree
 {
@@ -65,8 +64,7 @@ public class GameTree
     /** Find the game information valid for this node.
         @return The game information from the nearest ancestor node,
         which has a game information (the root node is always guaranteed
-        to have one).
-    */
+        to have one). */
     public GameInfo getGameInfo(ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();
@@ -75,8 +73,7 @@ public class GameTree
 
     /** Find the node with game information valid for this node.
         @return The nearest ancestor node which has a game information
-        (the root node is always guaranteed to have one).
-    */
+        (the root node is always guaranteed to have one). */
     public Node getGameInfoNode(ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();
@@ -92,8 +89,7 @@ public class GameTree
     }
 
     /** Get a non-const reference to a const node.
-        Requires: node is part of this game tree.
-    */
+        Requires: node is part of this game tree. */
     public Node getNode(ConstNode node)
     {
         assert NodeUtil.getRoot(node) == getRoot();

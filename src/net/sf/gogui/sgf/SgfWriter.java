@@ -37,8 +37,7 @@ public class SgfWriter
         @param tree Game tree to write.
         @param application Application name for AP property.
         @param version If not null, version appended to application name in
-        AP property.
-    */
+        AP property. */
     public SgfWriter(OutputStream out, ConstGameTree tree, String application,
                      String version)
     {
@@ -66,8 +65,7 @@ public class SgfWriter
         @param board Position to write.
         @param application Application name for AP property.
         @param version If not null, version appended to application name in
-        AP property.
-    */
+        AP property. */
     public SgfWriter(OutputStream out, ConstBoard board, String application,
                      String version)
     {

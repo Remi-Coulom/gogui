@@ -33,8 +33,7 @@ import net.sf.gogui.util.XmlUtil;
     This class uses Jago's XML format, see http://www.rene-grothmann.de/jago
     It writes files that are valid XML documents according to the go.dtd
     from the Jago webpage (10/2007), see also the appendix "XML Format"
-    of the GoGui documentation.
-*/
+    of the GoGui documentation. */
 public class XmlWriter
 {
     /** Construct writer and write tree. */
@@ -355,8 +354,7 @@ public class XmlWriter
     }
 
     /** Put game information for non-root nodes into SGF properties.
-        Game information for non-root nodes Not supported directly in XML.
-    */
+        Game information for non-root nodes Not supported directly in XML. */
     private void putGameInfoSgf(ConstGameInfo info, SgfProperties sgfProps)
     {
         putGameInfoSgf(info, sgfProps, "PB", StringInfoColor.NAME, BLACK);

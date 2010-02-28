@@ -85,8 +85,7 @@ public final class Program
     }
 
     /** Suggest and set a label derived from program name and version without
-        collision with an existing array of programs.
-    */
+        collision with an existing array of programs. */
     public void setUniqueLabel(ArrayList<Program> programs)
     {
         String label = m_name;
@@ -144,8 +143,7 @@ public final class Program
         version than at the last invocation.
         @param name Program name at current invovation (may be null)
         @param version Program name at current invovation (may be null)
-        @return true, if name or version program was updated
-    */
+        @return true, if name or version program was updated */
     public boolean updateInfo(String name, String version)
     {
         if (name == null)

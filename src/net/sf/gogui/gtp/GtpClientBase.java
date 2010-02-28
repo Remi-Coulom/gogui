@@ -16,21 +16,19 @@ import net.sf.gogui.util.StringUtil;
     This class implements most of the functionality of a connection to a GTP
     command apart from how commands are actually sent to the program.
     Subclasses need to implement the abstract function send() and a few
-    functions related to querying and using the ability to interrupt commands.
-*/
+    functions related to querying and using the ability to interrupt
+    commands. */
 public abstract class GtpClientBase
 {
     /** Close output connection.
         Should do nothing if the concrete class does not communicate through
-        streams.
-    */
+        streams. */
     public abstract void close();
 
     /** Get command for setting the board size.
         Note: call queryProtocolVersion first
         @return The boardsize command for GTP version 2 programs,
-        otherwise null.
-    */
+        otherwise null. */
     public String getCommandBoardsize(int size)
     {
         if (m_protocolVersion == 2)
@@ -47,8 +45,7 @@ public abstract class GtpClientBase
     /** Get command for starting a new game.
         Note: call queryProtocolVersion first
         @return The boardsize command for GTP version 1 programs,
-        otherwise the clear_board command.
-    */
+        otherwise the clear_board command. */
     public String getCommandClearBoard(int size)
     {
         if (m_protocolVersion == 1)
@@ -65,8 +62,7 @@ public abstract class GtpClientBase
     /** Get command for generating a move.
         Note: call queryProtocolVersion first
         @param color GoColor::BLACK or GoColor::WHITE
-        @return The right command depending on the GTP version.
-    */
+        @return The right command depending on the GTP version. */
     public String getCommandGenmove(GoColor color)
     {
         assert color.isBlackWhite();
@@ -85,8 +81,7 @@ public abstract class GtpClientBase
 
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
-        @return The right command depending on the GTP version.
-    */
+        @return The right command depending on the GTP version. */
     public String getCommandPlay(Move move)
     {
         m_buffer.setLength(0);
@@ -112,8 +107,7 @@ public abstract class GtpClientBase
 
     /** Send cputime command and convert the result to double.
         @throws GtpError if command fails or does not return a floating point
-        number.
-    */
+        number. */
     public double getCpuTime() throws GtpError
     {
         try
@@ -128,8 +122,7 @@ public abstract class GtpClientBase
 
     /** Get program name or "Unknown Program" if unknown.
         If queryName() was not called or the name command failed, the
-        string "Unknown Program" is returned.
-    */
+        string "Unknown Program" is returned. */
     public String getLabel()
     {
         return (m_name == null ? "Unknown Program" : m_name);
@@ -137,8 +130,7 @@ public abstract class GtpClientBase
 
     /** Get program name.
         If queryName() was not called or the name command failed, the
-        string "Unknown Program" is returned.
-    */
+        string "Unknown Program" is returned. */
     public String getName()
     {
         return m_name;
@@ -146,8 +138,7 @@ public abstract class GtpClientBase
 
     /** Get protocol version.
         You have to call queryProtocolVersion() first, otherwise this method
-        will always return 2.
-    */
+        will always return 2. */
     public int getProtocolVersion()
     {
         return m_protocolVersion;
@@ -155,8 +146,7 @@ public abstract class GtpClientBase
 
     /** Get the supported commands.
         Note: call querySupportedCommands() first.
-        @return A vector of strings with the supported commands.
-    */
+        @return A vector of strings with the supported commands. */
     public ArrayList<String> getSupportedCommands()
     {
         ArrayList<String> result = new ArrayList<String>(128);
@@ -167,16 +157,14 @@ public abstract class GtpClientBase
     }
 
     /** Is the program in a state, that all subsequent commands will fail.
-        Returns false, but can be reimplemented in a subclass.
-    */
+        Returns false, but can be reimplemented in a subclass. */
     public boolean isProgramDead()
     {
         return false;
     }
 
     /** Check if a command is supported.
-        Note: call querySupportedCommands() first.
-    */
+        Note: call querySupportedCommands() first. */
     public boolean isSupported(String command)
     {
         if (m_supportedCommands == null)
@@ -188,8 +176,7 @@ public abstract class GtpClientBase
     }
 
     /** Check if cputime command is supported.
-        Note: call querySupportedCommands() first.
-    */
+        Note: call querySupportedCommands() first. */
     public boolean isCpuTimeSupported()
     {
         return isSupported("cputime");
@@ -198,8 +185,7 @@ public abstract class GtpClientBase
     /** Check if a genmove command is supported.
         If list_commands is not supported, it is assumed that genmove is
         supported.
-        Note: call querySupportedCommands() first.
-    */
+        Note: call querySupportedCommands() first. */
     public boolean isGenmoveSupported()
     {
         if (m_protocolVersion == 1)
@@ -213,16 +199,14 @@ public abstract class GtpClientBase
         Interrupting can supported by ANSI C signals or the special
         comment line "# interrupt" as described in the GoGui documentation
         chapter "Interrupting commands".
-        Note: call queryInterruptSupport() first.
-    */
+        Note: call queryInterruptSupport() first. */
     public boolean isInterruptSupported()
     {
         return (m_isInterruptCommentSupported || m_pid != null);
     }
 
     /** Query if interrupting is supported.
-        @see GtpClient#isInterruptSupported
-    */
+        @see GtpClient#isInterruptSupported */
     public void queryInterruptSupport()
     {
         try
@@ -248,8 +232,7 @@ public abstract class GtpClientBase
     }
 
     /** Queries the name.
-        @see #getName()
-    */
+        @see #getName() */
     public void queryName()
     {
         try
@@ -264,8 +247,7 @@ public abstract class GtpClientBase
     /** Query the protocol version.
         Assumes version 2 if the protocol_version command is not available,
         fails, or returns a version greater 2.
-        @see GtpClientBase#getProtocolVersion
-    */
+        @see GtpClientBase#getProtocolVersion */
     public void queryProtocolVersion()
     {
         m_protocolVersion = 2;
@@ -286,8 +268,7 @@ public abstract class GtpClientBase
 
     /** Query the supported commands.
         @see GtpClientBase#getSupportedCommands
-        @see GtpClientBase#isSupported
-    */
+        @see GtpClientBase#isSupported */
     public void querySupportedCommands() throws GtpError
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
@@ -298,8 +279,7 @@ public abstract class GtpClientBase
     }
 
     /** Queries the program version.
-        @return The version or an empty string if the version command fails.
-    */
+        @return The version or an empty string if the version command fails. */
     public String queryVersion()
     {
         try
@@ -315,20 +295,17 @@ public abstract class GtpClientBase
     /** Send a command.
         @return The response text of the successful response not including
         the status character.
-        @throws GtpError containing the response if the command fails.
-    */
+        @throws GtpError containing the response if the command fails. */
     public abstract String send(String command) throws GtpError;
 
     /** Send comment.
-        @param comment comment line (must start with '#').
-    */
+        @param comment comment line (must start with '#'). */
     public abstract void sendComment(String comment);
 
     /** Send command for setting the board size.
         Send the command if it exists in the GTP protocol version.
         Note: call queryProtocolVersion first
-        @see GtpClientBase#getCommandBoardsize
-    */
+        @see GtpClientBase#getCommandBoardsize */
     public void sendBoardsize(int size) throws GtpError
     {
         String command = getCommandBoardsize(size);
@@ -338,16 +315,14 @@ public abstract class GtpClientBase
 
     /** Send command for staring a new game.
         Note: call queryProtocolVersion first
-        @see GtpClientBase#getCommandClearBoard
-    */
+        @see GtpClientBase#getCommandClearBoard */
     public void sendClearBoard(int size) throws GtpError
     {
         send(getCommandClearBoard(size));
     }
 
     /** Send command for playing a move.
-        Note: call queryProtocolVersion first
-    */
+        Note: call queryProtocolVersion first */
     public void sendPlay(Move move) throws GtpError
     {
         send(getCommandPlay(move));
@@ -357,8 +332,7 @@ public abstract class GtpClientBase
         Can be called from a different thread during a send.
         Note: call queryInterruptSupport first
         @see GtpClient#isInterruptSupported
-        @throws GtpError if interrupting commands is not supported.
-    */
+        @throws GtpError if interrupting commands is not supported. */
     public void sendInterrupt() throws GtpError
     {
         if (m_isInterruptCommentSupported)
@@ -391,16 +365,14 @@ public abstract class GtpClientBase
 
     /** Enable lower case mode for play commands.
         For engines that don't implement GTP correctly and understand
-        only lower case moves in the play command.
-    */
+        only lower case moves in the play command. */
     public void setLowerCase()
     {
         m_lowerCase = true;
     }
 
     /** Wait until the process of the program exits.
-        Should do nothing if the concrete class does not create a process.
-    */
+        Should do nothing if the concrete class does not create a process. */
     public abstract void waitForExit();
 
     private boolean m_isInterruptCommentSupported;

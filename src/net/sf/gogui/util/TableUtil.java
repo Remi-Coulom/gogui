@@ -11,8 +11,7 @@ public final class TableUtil
         @param table The table.
         @param column The column title.
         @return True, if all elements in this column are null or strings
-        containing only whitespaces.
-    */
+        containing only whitespaces. */
     public static boolean allEmpty(Table table, String column)
         throws Table.InvalidLocation
     {
@@ -29,8 +28,7 @@ public final class TableUtil
         The tables need to have the same number of columns.
         @param to The table to append to.
         @param from The table to take the row from.
-        @param row The index of the row in table from.
-    */
+        @param row The index of the row in table from. */
     public static void appendRow(Table to, Table from, int row)
     {
         assert to.getNumberColumns() == from.getNumberColumns();
@@ -46,8 +44,7 @@ public final class TableUtil
         @param compareColumn2 The second column title.
         @param compareValue2 The required value for the second column.
         @return The row with matching values for both columns or -1,
-        if no such row exists.
-    */
+        if no such row exists. */
     public static int findRow(Table table,
                               String compareColumn1, String compareValue1,
                               String compareColumn2, String compareValue2)

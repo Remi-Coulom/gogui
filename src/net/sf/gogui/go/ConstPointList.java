@@ -5,8 +5,7 @@ package net.sf.gogui.go;
 import java.util.Iterator;
 
 /** Const functions of go.PointList.
-    @see PointList
-*/
+    @see PointList */
 public interface ConstPointList
     extends Iterable<GoPoint>
 {

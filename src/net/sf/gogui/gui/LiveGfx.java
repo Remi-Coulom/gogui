@@ -5,8 +5,7 @@ package net.sf.gogui.gui;
 import javax.swing.SwingUtilities;
 
 /** Parse standard error of a GTP engine for GoGui live graphics commands.
-    See chapter "Live Graphics" in the GoGui documentation.
-*/
+    See chapter "Live Graphics" in the GoGui documentation. */
 public class LiveGfx
 {
     public interface Listener
@@ -25,8 +24,7 @@ public class LiveGfx
         event dispatch thread.
         @param s The line received from standard error (may or may not be
         a live gfx line).
-        @return true, if the line was a live gfx line
-    */
+        @return true, if the line was a live gfx line */
     public boolean handleLine(String s)
     {
         s = s.trim();

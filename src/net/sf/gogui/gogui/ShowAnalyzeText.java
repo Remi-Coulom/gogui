@@ -15,8 +15,7 @@ import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.TextViewer;
 
 /** Show multi-line text output from analyze command.
-    Optionally can reuse window of last output.
-*/
+    Optionally can reuse window of last output. */
 public final class ShowAnalyzeText
 {
     public ShowAnalyzeText(Frame owner, GuiBoard guiBoard)

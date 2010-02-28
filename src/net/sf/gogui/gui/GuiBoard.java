@@ -33,8 +33,7 @@ import net.sf.gogui.util.ObjectUtil;
 
 /** Graphical display of a Go board.
     This class does not use go.Board, so it can be used with other board
-    implementations. It uses go.GoPoint for coordinates.
-*/
+    implementations. It uses go.GoPoint for coordinates. */
 public final class GuiBoard
     extends JPanel
     implements ConstGuiBoard, Printable
@@ -49,8 +48,7 @@ public final class GuiBoard
             @param modifiedSelect Modified select. True if the click was a
             double click or with the right mouse button or if a modifier key
             (Ctrl, Alt, Meta) was pressed while clicking, as long as it was
-            not a (platform-dependent) popup menu trigger.
-        */
+            not a (platform-dependent) popup menu trigger. */
         void fieldClicked(GoPoint p, boolean modifiedSelect);
 
         /** Callback for context menu.
@@ -59,14 +57,12 @@ public final class GuiBoard
             @param point The point clicked.
             @param invoker The awt.Component that was clicked on.
             @param x The x coordinate on the invoker component.
-            @param y The y coordinate on the invoker component.
-        */
+            @param y The y coordinate on the invoker component. */
         void contextMenu(GoPoint point, Component invoker, int x, int y);
     }
 
     /** Constructor.
-        @param size The board size.
-    */
+        @param size The board size. */
     public GuiBoard(int size)
     {
         m_painter = new BoardPainter();
@@ -106,8 +102,7 @@ public final class GuiBoard
     }
 
     /** Clear all markup.
-        Clears mark, circle, square, triangle on all points.
-    */
+        Clears mark, circle, square, triangle on all points. */
     public void clearAllMarkup()
     {
         for (int x = 0; x < m_size; ++x)
@@ -175,8 +170,7 @@ public final class GuiBoard
     /** Return a field.
         Returns only a const interface to the field, the field state should
         be modified using GuiBoard functions to guarantee the UI repaint after
-        field changes.
-    */
+        field changes. */
     public ConstField getFieldConst(GoPoint p)
     {
         return getField(p);
@@ -190,8 +184,7 @@ public final class GuiBoard
 
     /** Get label.
         @param point The point.
-        @return Label or null if point has no label.
-    */
+        @return Label or null if point has no label. */
     public String getLabel(GoPoint point)
     {
         return getField(point).getLabel();
@@ -199,8 +192,7 @@ public final class GuiBoard
 
     /** Get location on screen for a point.
         @param point The point.
-        @return Location on screen of center of point.
-    */
+        @return Location on screen of center of point. */
     public Point getLocationOnScreen(GoPoint point)
     {
         Point center = m_painter.getCenter(point.getX(), point.getY());
@@ -213,8 +205,7 @@ public final class GuiBoard
     /** Check if point is marked.
         This unspecified mark uses a diagonal cross.
         @param point The point.
-        @return true, if point is marked.
-    */
+        @return true, if point is marked. */
     public boolean getMark(GoPoint point)
     {
         return getField(point).getMark();
@@ -222,8 +213,7 @@ public final class GuiBoard
 
     /** Check if point is marked with a circle.
         @param point The point.
-        @return true, if point is marked with a circle.
-    */
+        @return true, if point is marked with a circle. */
     public boolean getMarkCircle(GoPoint point)
     {
         return getField(point).getMarkCircle();
@@ -231,8 +221,7 @@ public final class GuiBoard
 
     /** Check if point is marked with a square.
         @param point The point.
-        @return true, if point is marked with a square.
-    */
+        @return true, if point is marked with a square. */
     public boolean getMarkSquare(GoPoint point)
     {
         return getField(point).getMarkSquare();
@@ -240,8 +229,7 @@ public final class GuiBoard
 
     /** Check if point is marked with a triangle.
         @param point The point.
-        @return true, if point is marked with a triangle.
-    */
+        @return true, if point is marked with a triangle. */
     public boolean getMarkTriangle(GoPoint point)
     {
         return getField(point).getMarkTriangle();
@@ -259,16 +247,14 @@ public final class GuiBoard
 
     /** Check if point is selected.
         @param point The point.
-        @return true, if point is selected.
-    */
+        @return true, if point is selected. */
     public boolean getSelect(GoPoint point)
     {
         return getField(point).getSelect();
     }
 
     /** Check if cursor is shown.
-        @return true, if cursor is shown.
-    */
+        @return true, if cursor is shown. */
     public boolean getShowCursor()
     {
         return m_showCursor;
@@ -280,8 +266,7 @@ public final class GuiBoard
     }
 
     /** Change the board size.
-        @param size The new board size.
-    */
+        @param size The new board size. */
     public void initSize(int size)
     {
         assert size > 0 && size <= GoPoint.MAX_SIZE;
@@ -376,8 +361,7 @@ public final class GuiBoard
     }
 
     /** Mark point of last move on the board.
-        The last move marker will be removed, if the parameter is null.
-    */
+        The last move marker will be removed, if the parameter is null. */
     public void markLastMove(GoPoint point)
     {
         clearLastMove();
@@ -423,8 +407,7 @@ public final class GuiBoard
     /** Set or remove stone.
         @param point The point.
         @param color The stone color or EMPTY to remove a stone,
-        if existing.
-    */
+        if existing. */
     public void setColor(GoPoint point, GoColor color)
     {
         Field field = getField(point);
@@ -436,8 +419,7 @@ public final class GuiBoard
     }
 
     /** Set the cursor.
-        @param point New location of the cursor.
-    */
+        @param point New location of the cursor. */
     public void setCursor(GoPoint point)
     {
         if (point != null && ! point.isOnBoard(m_size))
@@ -453,8 +435,7 @@ public final class GuiBoard
 
     /** Set the field background color.
         @param point The location of the field.
-        @param color The color.
-    */
+        @param color The color. */
     public void setFieldBackground(GoPoint point, Color color)
     {
         Field field = getField(point);
@@ -469,8 +450,7 @@ public final class GuiBoard
 
     /** Set crosshair.
         @param point The point.
-        @param crossHair True to set, false to remove crosshair.
-    */
+        @param crossHair True to set, false to remove crosshair. */
     public void setCrossHair(GoPoint point, boolean crossHair)
     {
         Field field = getField(point);
@@ -493,8 +473,7 @@ public final class GuiBoard
 
     /** Set influence value.
         @param point The point.
-        @param value The influence value between -1 and 1.
-    */
+        @param value The influence value between -1 and 1. */
     public void setInfluence(GoPoint point, double value)
     {
         getField(point).setInfluence(value);
@@ -504,8 +483,7 @@ public final class GuiBoard
     /** Set label.
         @param point The point.
         @param label The label. Should not be longer than 3 characters to
-        avoid clipping. null to remove label.
-    */
+        avoid clipping. null to remove label. */
     public void setLabel(GoPoint point, String label)
     {
         Field field = getField(point);
@@ -519,8 +497,7 @@ public final class GuiBoard
     }
 
     /** Set the listener.
-        @param listener The new listener; null to set no listener.
-    */
+        @param listener The new listener; null to set no listener. */
     public void setListener(Listener listener)
     {
         m_listener = listener;
@@ -529,8 +506,7 @@ public final class GuiBoard
     /** Set markup.
         This unspecified markup uses a diagonal cross.
         @param point The point.
-        @param mark True to set, false to remove.
-    */
+        @param mark True to set, false to remove. */
     public void setMark(GoPoint point, boolean mark)
     {
         Field field = getField(point);
@@ -543,8 +519,7 @@ public final class GuiBoard
 
     /** Set circle markup.
         @param point The point.
-        @param mark True to set, false to remove.
-    */
+        @param mark True to set, false to remove. */
     public void setMarkCircle(GoPoint point, boolean mark)
     {
         Field field = getField(point);
@@ -557,8 +532,7 @@ public final class GuiBoard
 
     /** Set square markup.
         @param point The point.
-        @param mark True to set, false to remove.
-    */
+        @param mark True to set, false to remove. */
     public void setMarkSquare(GoPoint point, boolean mark)
     {
         Field field = getField(point);
@@ -571,8 +545,7 @@ public final class GuiBoard
 
     /** Set triangle markup.
         @param point The point.
-        @param mark True to set, false to remove.
-    */
+        @param mark True to set, false to remove. */
     public void setMarkTriangle(GoPoint point, boolean mark)
     {
         Field field = getField(point);
@@ -591,8 +564,7 @@ public final class GuiBoard
 
     /** Set point selection markup.
         @param point The point.
-        @param select True to set, false to remove.
-    */
+        @param select True to set, false to remove. */
     public void setSelect(GoPoint point, boolean select)
     {
         Field field = getField(point);
@@ -604,8 +576,7 @@ public final class GuiBoard
     }
 
     /** Enable or disable cursor.
-        @param showCursor true to enable cursor.
-    */
+        @param showCursor true to enable cursor. */
     public void setShowCursor(boolean showCursor)
     {
         setCursor(m_cursor, false);
@@ -616,8 +587,7 @@ public final class GuiBoard
     }
 
     /** Enable or disable grid coordinates.
-        @param showGrid true to enable grid coordinates.
-    */
+        @param showGrid true to enable grid coordinates. */
     public void setShowGrid(boolean showGrid)
     {
         if (showGrid != m_showGrid)
@@ -631,8 +601,7 @@ public final class GuiBoard
     /** Set territory.
         @param point The point.
         @param color The territory color for this point; EMPTY for
-        no territory.
-    */
+        no territory. */
     public void setTerritory(GoPoint point, GoColor color)
     {
         Field field = getField(point);

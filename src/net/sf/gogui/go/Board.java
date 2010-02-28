@@ -37,16 +37,14 @@ public final class Board
 
     /** Constructor.
         @param boardSize The board size (number of points per row / column)
-        in the range from one to GoPoint.MAX_SIZE
-    */
+        in the range from one to GoPoint.MAX_SIZE */
     public Board(int boardSize)
     {
         init(boardSize);
     }
 
     /** Check for two consecutive passes.
-        @return true, if the last two moves were pass moves
-    */
+        @return true, if the last two moves were pass moves */
     public boolean bothPassed()
     {
         int n = getNumberMoves();
@@ -57,8 +55,7 @@ public final class Board
 
     /** Check if board contains a point.
         @param point The point to check
-        @return true, if the point is on the board
-    */
+        @return true, if the point is on the board */
     public boolean contains(GoPoint point)
     {
         return point.isOnBoard(getSize());
@@ -66,8 +63,7 @@ public final class Board
 
     /** Get points adjacent to a point.
         @param point The point.
-        @return List of points adjacent.
-    */
+        @return List of points adjacent. */
     public ConstPointList getAdjacent(GoPoint point)
     {
         return m_constants.getAdjacent(point);
@@ -75,16 +71,14 @@ public final class Board
 
     /** Get number of captured stones.
         @return The total number of stones of the given color captured by
-        opponent moves or by suicide.
-    */
+        opponent moves or by suicide. */
     public int getCaptured(GoColor c)
     {
         return m_captured.get(c);
     }
 
     /** Get state of a point on the board.
-        @return BLACK, WHITE or EMPTY
-    */
+        @return BLACK, WHITE or EMPTY */
     public GoColor getColor(GoPoint p)
     {
         return m_color[p.getIndex()];
@@ -95,8 +89,7 @@ public final class Board
         @param size The board size.
         @return List of points (go.Point) corresponding to the handicap
         stone locations.
-        @see BoardConstants#getHandicapStones
-    */
+        @see BoardConstants#getHandicapStones */
     public static ConstPointList getHandicapStones(int size, int n)
     {
         return BoardConstants.get(size).getHandicapStones(n);
@@ -107,8 +100,7 @@ public final class Board
         Requires that there is a last move (or setup stone).
         @return List of opponent stones (go.Point) captured in last move;
         empty if none were killed or there is no last move.
-        @see #getSuicide()
-    */
+        @see #getSuicide() */
     public ConstPointList getKilled()
     {
         int n = getNumberMoves();
@@ -117,8 +109,7 @@ public final class Board
     }
 
     /** Return last move.
-        @return Last move or null if there is no last move.
-    */
+        @return Last move or null if there is no last move. */
     public Move getLastMove()
     {
         int n = getNumberMoves();
@@ -129,8 +120,7 @@ public final class Board
 
     /** Get the number of moves played so far.
         @return The number of moves.
-        @see #getMove
-    */
+        @see #getMove */
     public int getNumberMoves()
     {
         return m_stack.size();
@@ -139,8 +129,7 @@ public final class Board
     /** Get a move from the sequence of moves played so far.
         @param i The number of the move (starting with zero).
         @return The move with the given number.
-        @see #getNumberMoves()
-    */
+        @see #getNumberMoves() */
     public Move getMove(int i)
     {
         return m_stack.get(i).m_move;
@@ -150,8 +139,7 @@ public final class Board
         @param c Black or White.
         @return Initial stones of this color placed on the board by calling
         <code>setup</code>.
-        @see #setup
-    */
+        @see #setup */
     public ConstPointList getSetup(GoColor c)
     {
         return m_setup.get(c);
@@ -160,16 +148,14 @@ public final class Board
     /** Get player of initial setup position.
         @return Player of initial setup position as used in the call to
         <code>setup</code>; <code>null</code> means unknown player color.
-        @see #setup
-    */
+        @see #setup */
     public GoColor getSetupPlayer()
     {
         return m_setupPlayer;
     }
 
     /** Get board size.
-        @return The board size.
-    */
+        @return The board size. */
     public int getSize()
     {
         return m_size;
@@ -189,8 +175,7 @@ public final class Board
         @return List of stones (go.Point) killed by suicide in last move,
         including the stone played; empty if no stones were killed by suicide
         or if there is no last move.
-        @see #getKilled()
-    */
+        @see #getKilled() */
     public ConstPointList getSuicide()
     {
         int n = getNumberMoves();
@@ -199,8 +184,7 @@ public final class Board
     }
 
     /** Get color to move.
-        @return The color to move.
-    */
+        @return The color to move. */
     public GoColor getToMove()
     {
         return m_toMove;
@@ -210,8 +194,7 @@ public final class Board
         For changing the board size.
         Also calls clear().
         @param size The new board size (number of points per
-        row / column) in the range from one to GoPoint.MAX_SIZE
-    */
+        row / column) in the range from one to GoPoint.MAX_SIZE */
     public void init(int size)
     {
         m_size = size;
@@ -224,8 +207,7 @@ public final class Board
         @param c The player color.
         @param p The point to check.
         @return true, if a move on the given point by the given player would
-        capture any opponent stones, or be a suicide move.
-    */
+        capture any opponent stones, or be a suicide move. */
     public boolean isCaptureOrSuicide(GoColor c, GoPoint p)
     {
         if (getColor(p) != EMPTY)
@@ -239,8 +221,7 @@ public final class Board
     /** Check if a point is a handicap point.
         @param point The point to check.
         @return true, if the given point is a handicap point.
-        @see BoardConstants#isHandicap
-    */
+        @see BoardConstants#isHandicap */
     public boolean isHandicap(GoPoint point)
     {
         return m_constants.isHandicap(point);
@@ -249,8 +230,8 @@ public final class Board
     /** Check if move would violate the simple Ko rule.
         Assumes other color to move than the color of the last move.
         @param point The point to check
-        @return true, if a move at this point would violate the simple ko rule
-    */
+        @return true, if a move at this point would violate the simple ko
+        rule */
     public boolean isKo(GoPoint point)
     {
         return point == m_koPoint;
@@ -268,8 +249,7 @@ public final class Board
     /** Check if the initial setup position was a handicap.
         @return <code>true</code>, if the initial position was setup by
         calling setupHandicap, <code>false</code> otherwise.
-        @see #setupHandicap
-    */
+        @see #setupHandicap */
     public boolean isSetupHandicap()
     {
         return m_isSetupHandicap;
@@ -279,8 +259,7 @@ public final class Board
         @param c The player color to check.
         @param p The point to check.
         @return true, if a move at the given point by the given player
-        would be a suicide move.
-    */
+        would be a suicide move. */
     public boolean isSuicide(GoColor c, GoPoint p)
     {
         if (getColor(p) != EMPTY)
@@ -297,8 +276,7 @@ public final class Board
     }
 
     /** Clear board.
-        Takes back the effects of any moves or setup stones on the board.
-    */
+        Takes back the effects of any moves or setup stones on the board. */
     public void clear()
     {
         for (GoPoint p : this)
@@ -318,8 +296,7 @@ public final class Board
     /** Play a move.
         @param color The player who played the move.
         @param point The location of the move.
-        @see #play(Move)
-    */
+        @see #play(Move) */
     public void play(GoColor color, GoPoint point)
     {
         play(Move.get(color, point));
@@ -332,8 +309,7 @@ public final class Board
         A move will place a stone of the given color, capture all dead
         blocks adjacent to the stone, capture the block the stone is part of
         if it was a suicide move and switches the color to move.
-        @param move The move (location and player)
-    */
+        @param move The move (location and player) */
     public void play(Move move)
     {
         StackEntry entry = new StackEntry(move);
@@ -342,8 +318,7 @@ public final class Board
     }
 
     /** Change the color to move.
-        @param toMove The new color to move.
-    */
+        @param toMove The new color to move. */
     public void setToMove(GoColor toMove)
     {
         m_toMove = toMove;
@@ -353,8 +328,7 @@ public final class Board
         Clears the board and move history and sets up a position.
         @param black Black stones to add on the board.
         @param white White stones to add on the board.
-        @param player Color to play
-    */
+        @param player Color to play */
     public void setup(ConstPointList black, ConstPointList white,
                       GoColor player)
     {
@@ -381,8 +355,7 @@ public final class Board
         This function is similar to an initial setup with only black stones,
         but it is remembered that the setup was a handicap and it can later
         be checked with <code>isSetupHandicap</code>.
-        @see #isSetupHandicap
-    */
+        @see #isSetupHandicap */
     public void setupHandicap(ConstPointList points)
     {
         setup(points, null, WHITE);
@@ -391,8 +364,7 @@ public final class Board
 
     /** Undo the last move.
         Restores any stones removed by the last move (captured or
-        suicide) and the color who was to move before the move.
-    */
+        suicide) and the color who was to move before the move. */
     public void undo()
     {
         int index = getNumberMoves() - 1;
@@ -404,8 +376,7 @@ public final class Board
     /** Undo a number of moves.
         @param n Number of moves to undo. Must be between 0
         and getNumberMoves().
-        @see #undo()
-    */
+        @see #undo() */
     public void undo(int n)
     {
         assert n >= 0;

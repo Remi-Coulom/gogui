@@ -5,8 +5,7 @@ package net.sf.gogui.go;
 import java.util.Iterator;
 
 /** Const functions of go.Board.
-    @see Board
-*/
+    @see Board */
 public interface ConstBoard
     extends Iterable<GoPoint>
 {

@@ -18,8 +18,7 @@ public final class AnalyzeCommandTest
     }
 
     /** Test that replacement of string argument works if string contains
-        backslashes.
-    */
+        backslashes. */
     public void testStringArgWithBackslashes()
     {
         AnalyzeCommand cmd = createCommand("none/Test/test %s");

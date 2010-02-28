@@ -22,8 +22,7 @@ public final class AnalyzeUtil
     }
 
     /** Get command for setting a parameter.
-        See chapter "Analyze Commands" of the GoGui documentation.
-    */
+        See chapter "Analyze Commands" of the GoGui documentation. */
     public static String getParameterCommand(String command, String key,
                                              String value)
     {
@@ -41,8 +40,7 @@ public final class AnalyzeUtil
 
     /** Parse a line in the response of an analyze command of type "param".
         See chapter "Analyze Commands" of the GoGui documentation.
-        @return The result or null, if line could not be parsed.
-    */
+        @return The result or null, if line could not be parsed. */
     public static Result parseParameterLine(String line)
     {
         line = line.trim();

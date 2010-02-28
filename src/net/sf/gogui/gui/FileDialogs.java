@@ -89,8 +89,7 @@ public final class FileDialogs
             Use this type, if a file name should be selected, but it is not
             known what the file name is used for and if the file already
             exists.
-            @deprecated Not supported by native AWT FileDialog
-        */
+            @deprecated Not supported by native AWT FileDialog */
         FILE_SELECT
     }
 
@@ -98,8 +97,7 @@ public final class FileDialogs
         They are used on Mac OS X because JFileChooser looks too different
         from the native dialogs (Java 1.5), and on Windows because
         JFileChooser is too slow on Windows XP (startup and directory changing
-        takes up to 10 sec; Java 1.6)
-    */
+        takes up to 10 sec; Java 1.6) */
     private static final boolean NATIVE_DIALOGS =
         (Platform.isMac() || Platform.isWindows());
 
@@ -111,8 +109,7 @@ public final class FileDialogs
     }
 
     /** Find first parent that is a Frame.
-        @return null If no such parent.
-    */
+        @return null If no such parent. */
     private static Frame findParentFrame(Component component)
     {
         while (component != null)

@@ -3,8 +3,7 @@
 package net.sf.gogui.gtp;
 
 /** Type of an analyze command.
-    See GoGui documentation, chapter "Analyze Commands".
-*/
+    See GoGui documentation, chapter "Analyze Commands". */
 public enum AnalyzeType
 {
     BWBOARD,

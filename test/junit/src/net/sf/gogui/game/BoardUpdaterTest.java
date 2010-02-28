@@ -62,8 +62,7 @@ public final class BoardUpdaterTest
     /** Test that setting a stone on an point occupied by the second move
         in a game works.
         Checks for a bug that was only triggered, if the changed stone color
-        was the second move played, not the first move,
-    */
+        was the second move played, not the first move. */
     public void testSetupOnOccupiedMoveTwo()
     {
         GameTree tree = new GameTree();

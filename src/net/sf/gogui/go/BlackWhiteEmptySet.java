@@ -7,8 +7,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** A set containing one element for Black, one for White, and one for
-    Empty.
-*/
+    Empty. */
 public class BlackWhiteEmptySet<T>
 {
     public BlackWhiteEmptySet()

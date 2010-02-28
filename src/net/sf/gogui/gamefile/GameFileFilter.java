@@ -13,8 +13,7 @@ public class GameFileFilter
 {
     /** Accept function.
         @param file The file to check.
-        @return true if file has extension .sgf or .SGF or is a directory
-    */
+        @return true if file has extension .sgf or .SGF or is a directory */
     public boolean accept(File file)
     {
         if (file.isDirectory())

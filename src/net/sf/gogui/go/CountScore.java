@@ -16,14 +16,12 @@ import static net.sf.gogui.go.Score.ScoringMethod.TERRITORY;
     Go engines return a list of dead stones on the final_status GTP command.
     It could happen that the program returns nonsense (e.g. a contiguous block
     of stones with only some stones dead) and this class should not crash
-    if that happens (even if the score will be no longer meaningful).
-*/
+    if that happens (even if the score will be no longer meaningful). */
 public class CountScore
 {
     /** Begin counting a score.
         @param board The board.
-        @param deadStones Initial set of stones to be marked as dead.
-     */
+        @param deadStones Initial set of stones to be marked as dead. */
     public void begin(ConstBoard board, ConstPointList deadStones)
     {
         m_board = board;
@@ -44,8 +42,7 @@ public class CountScore
         surrounding opponent stones are alive. Otherwise it only changes the
         life death status of all stones in the block the stone belongs to.
         @param p Location of a stone.
-        @return List of all points that changed their life and death status.
-     */
+        @return List of all points that changed their life and death status. */
     public PointList changeStatus(GoPoint p)
     {
         GoColor c = m_board.getColor(p);
@@ -105,8 +102,7 @@ public class CountScore
     /** Get the owner of a point.
         @param p The point (empty or occupied)
         @return BLACK, if point belongs to Black; WHITE, if
-        point belongs to White; EMPTY, if point is neutral.
-    */
+        point belongs to White; EMPTY, if point is neutral. */
     public GoColor getColor(GoPoint p)
     {
         return m_score[p.getX()][p.getY()];
@@ -114,8 +110,7 @@ public class CountScore
 
     /** Get the life-death status of a stone.
         @param p The stone.
-        @return true, if stone is dead, false if stone is alive.
-    */
+        @return true, if stone is dead, false if stone is alive. */
     public boolean isDead(GoPoint p)
     {
         return m_dead.get(p);
@@ -123,8 +118,7 @@ public class CountScore
 
     /** Get the score.
         @param komi The komi.
-        @param rules The scoring method
-    */
+        @param rules The scoring method */
     public Score getScore(Komi komi, ScoringMethod rules)
     {
         Score s = new Score();
@@ -198,8 +192,7 @@ public class CountScore
         You have to call #compute to update the score after changing the
         life-death status of one or more stones.
         @param p The stone.
-        @param value true, if stone is dead, false if stone is alive.
-    */
+        @param value true, if stone is dead, false if stone is alive. */
     public void setDead(GoPoint p, boolean value)
     {
         m_dead.set(p, value);

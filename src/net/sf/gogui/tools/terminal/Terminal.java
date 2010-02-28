@@ -156,8 +156,7 @@ public class Terminal
     }
 
     /** Handle command line from user.
-        @return true if quit command received.
-    */
+        @return true if quit command received. */
     private boolean handleCommand(String cmdLine)
     {
         String[] cmdArray = StringUtil.splitArguments(cmdLine);

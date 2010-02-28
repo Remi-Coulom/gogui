@@ -83,8 +83,7 @@ public final class ClockTest
     /** Test that move time is discarded if move is started twice.
         According to the specification of Clock#startMove, the time for
         the current move should be discarded is startMove is called and clock
-        is already running.
-    */
+        is already running. */
     public void testStartMoveIfRunning()
     {
         m_clock.setTimeSettings(new TimeSettings(10000));

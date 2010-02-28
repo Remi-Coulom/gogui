@@ -149,8 +149,7 @@ public class Table
 
     /** Get meta information.
         @param key the property key
-        @return The property value or null, if it dows not exist
-    */
+        @return The property value or null, if it dows not exist */
     public String getProperty(String key)
     {
         return getProperty(key, null);
@@ -158,8 +157,7 @@ public class Table
 
     /** Get meta information.
         @param key the property key
-        @param def the default value, if this property does not exist
-    */
+        @param def the default value, if this property does not exist */
     public String getProperty(String key, String def)
     {
         if (! hasProperty(key))
@@ -248,8 +246,7 @@ public class Table
 
     /** Set element in last row.
         @param column Column in last row.
-        @param value The value (must not contain newlines or tabs).
-    */
+        @param value The value (must not contain newlines or tabs). */
     public void set(int column, String value)
     {
         assert m_lastRow.get(column) == null;
@@ -277,8 +274,7 @@ public class Table
 
     /** Set meta information.
         @param key the property key
-        @param value the property value
-    */
+        @param value the property value */
     public Object setProperty(String key, String value)
     {
         return m_properties.put(key, value);

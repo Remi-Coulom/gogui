@@ -108,26 +108,22 @@ public enum GoColor
 
     /** Return color name if used for specifying player.
         Returns the capitalized color name (e.g. "Black" for BLACK).
-        This name will also potentially be internationalized in the future.
-    */
+        This name will also potentially be internationalized in the future. */
     public abstract String getCapitalizedName();
 
     /** Return uppercase letter identifying the color.
         Returns "B", "W", or "E". This letter is not internationalized,
         such that it can be used for instance in standard language independent
-        game results (e.g. "W+3").
-    */
+        game results (e.g. "W+3"). */
     public abstract String getUppercaseLetter();
 
     /** Check if color is black or white.
         @return <code>true</code>, if color is <code>BLACK</code> or
-        <code>WHITE</code>.
-    */
+        <code>WHITE</code>. */
     public abstract boolean isBlackWhite();
 
     /** Return other color.
         @return <code>BLACK</code> for <code>WHITE</code>, <code>WHITE</code>
-        for <code>BLACK</code>, <code>EMPTY</code> for <code>EMPTY</code>.
-    */
+        for <code>BLACK</code>, <code>EMPTY</code> for <code>EMPTY</code>. */
     public abstract GoColor otherColor();
 }

@@ -11,8 +11,7 @@ public final class PrefUtil
 {
     /** Get node path, create if not already existing.
         @param path The absolute path name of the node.
-        @return The node
-    */
+        @return The node */
     public static Preferences createNode(String path)
     {
         assert ! path.startsWith("/");
@@ -23,8 +22,7 @@ public final class PrefUtil
         The list is stored as a size property end element_N properties with
         N being the element index.
         @param path The absolute path name of the node.
-        @return The list of strings.
-    */
+        @return The list of strings. */
     public static ArrayList<String> getList(String path)
     {
         Preferences prefs = getNode(path);
@@ -48,8 +46,7 @@ public final class PrefUtil
     /** Get node for package and path, return null if not already existing.
         @param path The absolute path name of the node.
         @return The node or null, if node does not exist or failure in the
-        backing store.
-    */
+        backing store. */
     public static Preferences getNode(String path)
     {
         assert ! path.startsWith("/");
@@ -70,8 +67,7 @@ public final class PrefUtil
         The list is stored as a size property end element_N properties with
         N being the element index.
         @param path The absolute path name of the node.
-        @param list The list of strings.
-    */
+        @param list The list of strings. */
     public static void putList(String path, ArrayList<String> list)
     {
         Preferences prefs = createNode(path);

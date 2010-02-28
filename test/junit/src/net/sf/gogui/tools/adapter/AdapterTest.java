@@ -30,8 +30,7 @@ public final class AdapterTest
     /** Test clear_board and boardsize commands.
         The GtpSynchronizer used by Adapter should always send a boardsize
         and clear_board command after receiving a boardsize command to avoid
-        not knowing the state after the boardsize command.
-    */
+        not knowing the state after the boardsize command. */
     public void testClearBoard() throws ErrorMessage, IOException, GtpError
     {
         initAdapter();
@@ -45,8 +44,7 @@ public final class AdapterTest
 
     /** Test that place_free_handicap used if supported by the engine.
         GtpSynchronizer will still transmit them as play commands until
-        it also supports place_free_handicap.
-    */
+        it also supports place_free_handicap. */
     public void testFreeHandicap()
         throws ErrorMessage, IOException, GtpError
     {
@@ -59,8 +57,7 @@ public final class AdapterTest
     }
 
     /** Test that place_free_handicap is emulated if not supported by the
-        engine.
-    */
+        engine. */
     public void testFreeHandicapEmu()
         throws ErrorMessage, IOException, GtpError
     {

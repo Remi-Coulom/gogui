@@ -65,8 +65,7 @@ public class Statistics
         @param backward true, if games should be iterated backwards (counting
         the moves starting with one at the last move)
         @param random true, if only one random position should be selected
-        from each game
-    */
+        from each game */
     public void run(GtpClientBase gtp, String program,
                     ArrayList<String> sgfFiles, int size,
                     ArrayList<String> commands,
@@ -110,24 +109,21 @@ public class Statistics
     }
 
     /** Set maximum move number for positions to run the commands on.
-        Default is Integer.MAX_VALUE.
-    */
+        Default is Integer.MAX_VALUE. */
     public void setMax(int max)
     {
         m_max = max;
     }
 
     /** Set minimum move number for positions to run the commands on.
-        Default is zero.
-    */
+        Default is zero. */
     public void setMin(int min)
     {
         m_min = min;
     }
 
     /** Don't write information about progress.
-        Default is false.
-    */
+        Default is false. */
     public void setQuiet(boolean enable)
     {
         m_quiet = enable;
@@ -313,8 +309,7 @@ public class Statistics
     }
 
     /** Tries to convert score into number.
-        @return Score string or original string, if conversion fails.
-    */
+        @return Score string or original string, if conversion fails. */
     private String convertScore(String string)
     {
         String score = string.trim();

@@ -106,8 +106,7 @@ public final class ThumbnailReader
     /** Get meta data.
         @param node the (root) node of the meta data tree.
         @param key the key for the meta data.
-        @return value or empty string if meta data does not exist.
-    */
+        @return value or empty string if meta data does not exist. */
     private static String getMeta(Node node, String key)
     {
         if ("TextEntry".equalsIgnoreCase(node.getNodeName()))

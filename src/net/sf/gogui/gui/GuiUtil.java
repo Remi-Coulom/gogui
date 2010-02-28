@@ -53,14 +53,12 @@ import net.sf.gogui.util.ProgressShow;
 public class GuiUtil
 {
     /** Runnable for running protected by modal progress dialog.
-        @see #runProgress
-    */
+        @see #runProgress */
     public interface ProgressRunnable
     {
         /** Function to run.
             The function is expected to call ProgressShow.showProgress
-            regularly to indicate progress made.
-        */
+            regularly to indicate progress made. */
         void run(ProgressShow progressShow) throws Throwable;
     }
 
@@ -96,8 +94,7 @@ public class GuiUtil
 
     /** Wrapper object for JComboBox items.
         JComboBox can have focus and keyboard navigation problems if duplicate
-        String objects are added. See JDK 1.5 doc for JComboBox.addItem.
-    */
+        String objects are added. See JDK 1.5 doc for JComboBox.addItem. */
     public static Object createComboBoxItem(final String item)
     {
         return new Object() {
@@ -106,16 +103,14 @@ public class GuiUtil
     }
 
     /** Create empty border with normal padding.
-        @see #PAD
-    */
+        @see #PAD */
     public static Border createEmptyBorder()
     {
         return EMPTY_BORDER;
     }
 
     /** Create empty box with size of normal padding.
-        @see #PAD
-    */
+        @see #PAD */
     public static Box.Filler createFiller()
     {
         return new Box.Filler(FILLER_DIMENSION, FILLER_DIMENSION,
@@ -123,16 +118,14 @@ public class GuiUtil
     }
 
     /** Create empty border with small padding.
-        @see #SMALL_PAD
-    */
+        @see #SMALL_PAD */
     public static Border createSmallEmptyBorder()
     {
         return SMALL_EMPTY_BORDER;
     }
 
     /** Create empty box with size of small padding.
-        @see #SMALL_PAD
-    */
+        @see #SMALL_PAD */
     public static Box.Filler createSmallFiller()
     {
         return new Box.Filler(SMALL_FILLER_DIMENSION, SMALL_FILLER_DIMENSION,
@@ -162,8 +155,7 @@ public class GuiUtil
 
     /** Return a style sheet for message labels using HTML.
         @return A string with a HTML-head tag containing a style tag
-        with formatting options or an empty string.
-    */
+        with formatting options or an empty string. */
     public static String getMessageCss()
     {
         if (Platform.isMac())
@@ -180,8 +172,7 @@ public class GuiUtil
     }
 
     /** Get size of default monspaced font.
-        Can be used for setting the initial size of some GUI elements.
-    */
+        Can be used for setting the initial size of some GUI elements. */
     public static int getDefaultMonoFontSize()
     {
         return MONOSPACED_FONT.getSize();
@@ -199,8 +190,7 @@ public class GuiUtil
         If parameter is null, try to use plasticxp (jwindows on Windows), but
         don't show an error message, if it fails.
         Otherwise use parameter as class name or shortcut as decoumented
-        in the GoGui reference, and show message on failure.
-    */
+        in the GoGui reference, and show message on failure. */
     public static void initLookAndFeel(String laf)
     {
         if (laf == null
@@ -285,8 +275,7 @@ public class GuiUtil
         maximum width is set and the label text is automatically broken into
         multiple lines. The workaround with calling invalidate() and pack() a
         second time does not work either in this case. See also Sun Bug ID
-        4545951 (still in Linux JDK 1.5.0_04-b05 or Mac 1.4.2_12)
-    */
+        4545951 (still in Linux JDK 1.5.0_04-b05 or Mac 1.4.2_12) */
     public static String insertLineBreaks(String message)
     {
         final int MAX_CHAR_PER_LINE = 72;
@@ -319,8 +308,7 @@ public class GuiUtil
 
     /** Call SwingUtilities.invokeAndWait.
         Ignores possible exceptions (apart from printing a warning to
-        System.err
-    */
+        System.err */
     public static void invokeAndWait(Runnable runnable)
     {
         try
@@ -346,8 +334,7 @@ public class GuiUtil
 
     /** Check window for normal state.
         Checks if window is not maximized (in either or both directions) and
-        not iconified.
-    */
+        not iconified. */
     public static boolean isNormalSizeMode(JFrame window)
     {
         int state = window.getExtendedState();
@@ -381,8 +368,7 @@ public class GuiUtil
         @param message Title for the progress dialog.
         @param runnable Runnable to run.
         @throws Throwable Any exception that ProgressRunnable.run throwed,
-        you have to use instanceof to check for specific exception classes.
-    */
+        you have to use instanceof to check for specific exception classes. */
     public static void runProgress(Frame owner, String message,
                                    ProgressRunnable runnable)
         throws Throwable
@@ -420,8 +406,7 @@ public class GuiUtil
     }
 
     /** Set text field non-editable.
-        Also sets it non-focusable.
-    */
+        Also sets it non-focusable. */
     public static void setEditableFalse(JTextField field)
     {
         field.setEditable(false);
@@ -437,8 +422,7 @@ public class GuiUtil
     }
 
     /** Set property to render button in bevel style on the Mac.
-        Only has an effect if Quaqua Look and Feel is used.
-    */
+        Only has an effect if Quaqua Look and Feel is used. */
     public static void setMacBevelButton(JButton button)
     {
         button.putClientProperty("Quaqua.Button.style", "bevel");

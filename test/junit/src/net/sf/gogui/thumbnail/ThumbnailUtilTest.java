@@ -36,8 +36,7 @@ public final class ThumbnailUtilTest
     }
 
     /** Test that getNode() return the last position in a game with
-        handicap.
-    */
+        handicap. */
     public void testGetNodeGameWithHandicap()
     {
         PointList handicap = new PointList();
@@ -52,8 +51,7 @@ public final class ThumbnailUtilTest
     }
 
     /** Test that getNode() return the first position that contains both
-        black and white setup stones.
-    */
+        black and white setup stones. */
     public void testGetNodeSetup()
     {
         Game game = new Game(19);

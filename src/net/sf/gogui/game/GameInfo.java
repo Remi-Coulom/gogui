@@ -17,8 +17,7 @@ import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.StringUtil;
 
 /** Game information.
-    Contains information about handicap, rules and players.
-*/
+    Contains information about handicap, rules and players. */
 public class GameInfo
     implements ConstGameInfo
 {
@@ -84,8 +83,7 @@ public class GameInfo
     }
 
     /** Get komi.
-        @return The komi or null if komi is unknown.
-    */
+        @return The komi or null if komi is unknown. */
     public Komi getKomi()
     {
         return m_komi;
@@ -98,8 +96,7 @@ public class GameInfo
 
     /** Hash code dummy function (don't use).
         This class is not desgined to be used in a HashMap/HashTable. The
-        function will trigger an assertion if assertions are enabled.
-    */
+        function will trigger an assertion if assertions are enabled. */
     public int hashCode()
     {
         assert false : "hashCode not designed";
@@ -114,8 +111,7 @@ public class GameInfo
 
     /** Try to parse rules.
         @return Score.ScoringMethod.TERRITORY if rules string (to lowercase)
-        is "japanese", Score.ScoringMethod.AREA otherwise.
-    */
+        is "japanese", Score.ScoringMethod.AREA otherwise. */
     public ScoringMethod parseRules()
     {
         ScoringMethod result = AREA;
@@ -170,8 +166,7 @@ public class GameInfo
 
     /** Suggest a game name from the player names.
         @return A game name built from the player names or null, if not at
-        least one player name is known.
-    */
+        least one player name is known. */
     public String suggestGameName()
     {
         String playerBlack = get(StringInfoColor.NAME, BLACK);

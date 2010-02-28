@@ -51,8 +51,7 @@ public final class Main
                 int seconds = opt.getInteger("expire", 0, 0);
                 ThumbnailUtil.expire(seconds, true);
                 return;
-            }
-            */
+            } */
             boolean verbose = opt.contains("verbose");
             boolean scale = opt.contains("scale");
             ArrayList<String> arguments = opt.getArguments();

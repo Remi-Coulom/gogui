@@ -11,8 +11,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.PointList;
 
 /** Concrete analyze command including data for wildcard replacements.
-    See GoGui documentation, chapter "Analyze Commands"
-*/
+    See GoGui documentation, chapter "Analyze Commands" */
 public class AnalyzeCommand
 {
     public AnalyzeCommand(AnalyzeDefinition definition)

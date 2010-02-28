@@ -35,8 +35,7 @@ import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.ErrorMessage;
 
-/** GTP adapter for logging or protocol translations.
-*/
+/** GTP adapter for logging or protocol translations. */
 public class Adapter
     extends GtpEngine
 {
@@ -53,8 +52,7 @@ public class Adapter
         @param fillPasses Fill moves of non-alternating colors with pass
         moves.
         @param lowerCase Translate move commands to the engine to lower-case.
-        @param size Board size at startup.
-    */
+        @param size Board size at startup. */
     public Adapter(String program, PrintStream log, String gtpFile,
                    boolean verbose, boolean noScore, boolean version1,
                    boolean fillPasses, boolean lowerCase, int size)
@@ -73,8 +71,7 @@ public class Adapter
     }
 
     /** Construct with existing GtpClientBase.
-        For testing this class.
-    */
+        For testing this class. */
     public Adapter(GtpClientBase gtp, PrintStream log, boolean noScore,
                    boolean version1, boolean lowerCase, int size)
         throws GtpError

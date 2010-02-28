@@ -22,8 +22,7 @@ import net.sf.gogui.go.PointList;
     positions will be read into the smallest containing square board size at
     the top left position. If a a line contains the string "b|black|w|white
     to play|move" (case-insensitive), it will be used to set the current player
-    in the position.
-*/
+    in the position. */
 public class TextParser
 {
     public TextParser()
@@ -31,8 +30,7 @@ public class TextParser
     }
 
     /** Get board with parsed position.
-        Only valid after calling parse.
-    */
+        Only valid after calling parse. */
     public Board getBoard()
     {
         return m_board;
@@ -116,8 +114,7 @@ public class TextParser
     /** Ignore characters at beginning of line.
         Ignores characters that are sometimes left of the actual position.
         The included characters are digits, pipe symbols (edge) and dollar
-        signs.
-     */
+        signs. */
     private int ignoreBeginning(String line)
     {
         int i;
@@ -132,8 +129,7 @@ public class TextParser
     }
 
     /** Increase boardsize by one.
-        Keep existing position (shifted upward by one line)
-    */
+        Keep existing position (shifted upward by one line) */
     private void increaseBoardSize()
     {
         int newSize = m_board.getSize() + 1;
