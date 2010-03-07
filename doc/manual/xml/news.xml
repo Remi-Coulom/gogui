@@ -4,6 +4,25 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fix clearing of board markup if the caret in the comment field or GTP shell
+changes and no text was selected before and after the change. This made
+using SQUARE and other markup commands in Live Gfx unusable, because the
+markup was immediately cleared after the next line from the program's standard
+error was received. (Fixes bug #2964755)
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.2</revnumber>
 <date>28 Feb 2010</date>
 <authorinitials>enz</authorinitials>

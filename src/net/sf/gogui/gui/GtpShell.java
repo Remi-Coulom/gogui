@@ -34,6 +34,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import net.sf.gogui.gtp.GtpUtil;
 import static net.sf.gogui.gui.I18n.i18n;
+import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 
@@ -70,7 +71,17 @@ public class GtpShell
                 {
                     if (m_listener == null)
                         return;
-                    m_listener.textSelected(m_gtpShellText.getSelectedText());
+                    // Call the callback only if the selected text has changed.
+                    // This avoids that the callback is called multiple times
+                    // if the caret position changes, but the text selection
+                    // was null before and after the change (see also bug
+                    // #2964755)
+                    String selectedText = m_gtpShellText.getSelectedText();
+                    if (! ObjectUtil.equals(selectedText, m_selectedText))
+                    {
+                        m_listener.textSelected(selectedText);
+                        m_selectedText = selectedText;
+                    }
                 }
             };
         m_gtpShellText.addCaretListener(caretListener);
@@ -265,6 +276,8 @@ public class GtpShell
     private final StringBuilder m_commands = new StringBuilder(4096);
 
     private final ArrayList<String> m_history = new ArrayList<String>(128);
+
+    private String m_selectedText;
 
     private String m_programCommand = "unknown";
 
