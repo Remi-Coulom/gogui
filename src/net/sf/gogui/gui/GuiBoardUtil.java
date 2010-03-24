@@ -180,30 +180,12 @@ public final class GuiBoardUtil
             }
     }
 
+    /** @deprecated This function was renamed to showMoves(). The forwarding
+        functions may be removed in the future */
     public static void showChildrenMoves(GuiBoard guiBoard,
                                          ConstPointList childrenMoves)
     {
-        Marker marker = new Marker(guiBoard.getBoardSize());
-        int numberMarked = 0;
-        char label = 'A';
-        for (GoPoint p : childrenMoves)
-        {
-            if (marker.get(p))
-            {
-                String s = guiBoard.getLabel(p);
-                if (! s.endsWith(">"))
-                    guiBoard.setLabel(p, s + ">");
-                continue;
-            }
-            marker.set(p);
-            if (numberMarked >= 26)
-                guiBoard.setLabel(p, "*");
-            else
-                guiBoard.setLabel(p, Character.toString(label));
-            if (numberMarked < 26)
-                ++label;
-            ++numberMarked;
-        }
+        showMoves(guiBoard, childrenMoves);
     }
 
     public static void showColorBoard(GuiBoard guiBoard, String[][] colors)
@@ -273,6 +255,36 @@ public final class GuiBoardUtil
                 String value = entry.getValue();
                 guiBoard.setLabel(point, value);
             }
+        }
+    }
+
+    /** Show a list of moves with labels 'A', 'B', 'C' ...
+        If the list contains more than 26 unique moves, the label '*' is used.
+        If a move appears more than once in the list, the character '&gt;'
+        will be appended to the label. */
+    public static void showMoves(GuiBoard guiBoard,
+                                 ConstPointList childrenMoves)
+    {
+        Marker marker = new Marker(guiBoard.getBoardSize());
+        int numberMarked = 0;
+        char label = 'A';
+        for (GoPoint p : childrenMoves)
+        {
+            if (marker.get(p))
+            {
+                String s = guiBoard.getLabel(p);
+                if (! s.endsWith(">"))
+                    guiBoard.setLabel(p, s + ">");
+                continue;
+            }
+            marker.set(p);
+            if (numberMarked >= 26)
+                guiBoard.setLabel(p, "*");
+            else
+                guiBoard.setLabel(p, Character.toString(label));
+            if (numberMarked < 26)
+                ++label;
+            ++numberMarked;
         }
     }
 

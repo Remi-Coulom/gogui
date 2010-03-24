@@ -144,6 +144,15 @@ public class GoGui
                ScoreDialog.Listener, GoGuiMenuBar.Listener,
                ContextMenu.Listener, LiveGfx.Listener
 {
+    public enum VariationMode
+    {
+        CHILDREN,
+
+        SIBLINGS,
+
+        NONE
+    }
+
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
@@ -4395,7 +4404,7 @@ public class GoGui
         {
             ConstPointList childrenMoves
                 = NodeUtil.getChildrenMoves(getCurrentNode());
-            GuiBoardUtil.showChildrenMoves(m_guiBoard, childrenMoves);
+            GuiBoardUtil.showMoves(m_guiBoard, childrenMoves);
         }
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
