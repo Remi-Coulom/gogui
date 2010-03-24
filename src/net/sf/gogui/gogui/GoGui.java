@@ -242,6 +242,8 @@ public class GoGui
             };
         m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
                                      this);
+        // enums are stored as int's for compatibility with earlier versions
+        // of GoGui
         try
         {
             m_treeLabels =
@@ -253,8 +255,17 @@ public class GoGui
         {
             m_treeLabels = GameTreePanel.Label.NUMBER;
         }
-        m_treeSize = m_prefs.getInt("gametree-size",
-                                    GameTreePanel.SIZE_NORMAL);
+        try
+        {
+            m_treeSize =
+                GameTreePanel.Size.values()[
+                         m_prefs.getInt("gametree-size",
+                                        GameTreePanel.Size.NORMAL.ordinal())];
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            m_treeSize = GameTreePanel.Size.NORMAL;
+        }
         m_showSubtreeSizes =
             m_prefs.getBoolean("gametree-show-subtree-sizes", false);
         m_autoNumber = m_prefs.getBoolean("gtpshell-autonumber", false);
@@ -1732,10 +1743,10 @@ public class GoGui
         }
     }
 
-    public void actionTreeSize(int mode)
+    public void actionTreeSize(GameTreePanel.Size mode)
     {
         m_treeSize = mode;
-        m_prefs.putInt("gametree-size", mode);
+        m_prefs.putInt("gametree-size", mode.ordinal());
         if (m_gameTreeViewer == null)
             updateViews(false);
         else
@@ -1866,7 +1877,7 @@ public class GoGui
         return m_treeLabels;
     }
 
-    public int getTreeSize()
+    public GameTreePanel.Size getTreeSize()
     {
         return m_treeSize;
     }
@@ -2265,7 +2276,7 @@ public class GoGui
 
     private GameTreePanel.Label m_treeLabels;
 
-    private int m_treeSize;
+    private GameTreePanel.Size m_treeSize;
 
     private final GuiBoard m_guiBoard;
 

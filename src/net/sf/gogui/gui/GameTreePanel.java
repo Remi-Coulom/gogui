@@ -47,18 +47,21 @@ public class GameTreePanel
         NONE
     }
 
-    public static final int SIZE_LARGE = 0;
+    public enum Size
+    {
+        LARGE,
 
-    public static final int SIZE_NORMAL = 1;
+        NORMAL,
 
-    public static final int SIZE_SMALL = 2;
+        SMALL,
 
-    public static final int SIZE_TINY = 3;
+        TINY
+    }
 
     public static final Color BACKGROUND = new Color(192, 192, 192);
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
-                         Label labelMode, int sizeMode,
+                         Label labelMode, Size sizeMode,
                          MessageDialogs messageDialogs)
     {
         super(new SpringLayout());
@@ -167,7 +170,7 @@ public class GameTreePanel
         return m_showSubtreeSizes;
     }
 
-    public int getSizeMode()
+    public Size getSizeMode()
     {
         return m_sizeMode;
     }
@@ -237,14 +240,14 @@ public class GameTreePanel
         m_showSubtreeSizes = showSubtreeSizes;
     }
 
-    public void setSizeMode(int mode)
+    public void setSizeMode(Size mode)
     {
         switch (mode)
         {
-        case SIZE_LARGE:
-        case SIZE_NORMAL:
-        case SIZE_SMALL:
-        case SIZE_TINY:
+        case LARGE:
+        case NORMAL:
+        case SMALL:
+        case TINY:
             if (mode != m_sizeMode)
             {
                 m_sizeMode = mode;
@@ -405,7 +408,7 @@ public class GameTreePanel
 
     private int m_minWidth;
 
-    private int m_sizeMode;
+    private Size m_sizeMode;
 
     private int m_nodeSize;
 
@@ -464,33 +467,32 @@ public class GameTreePanel
 
     private JMenuItem m_itemShowChildren;
 
-    private void initSize(int sizeMode)
+    private void initSize(Size sizeMode)
     {
         switch (sizeMode)
         {
-        case SIZE_LARGE:
+        case LARGE:
             m_nodeSize = 32;
             m_nodeFullSize = 40;
             m_iconBlack = GuiUtil.getIcon("gogui-black-32x32", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-32x32", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-32x32", "");
             break;
-        case SIZE_SMALL:
+        case SMALL:
             m_nodeSize = 16;
             m_nodeFullSize = 20;
             m_iconBlack = GuiUtil.getIcon("gogui-black-16x16", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-16x16", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-16x16", "");
             break;
-        case SIZE_TINY:
+        case TINY:
             m_nodeSize = 8;
             m_nodeFullSize = 10;
             m_iconBlack = GuiUtil.getIcon("gogui-black-8x8", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-8x8", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-8x8", "");
             break;
-        default:
-            assert sizeMode == SIZE_NORMAL;
+        case NORMAL:
             m_nodeSize = 24;
             m_nodeFullSize = 30;
             m_iconBlack = GuiUtil.getIcon("gogui-black-24x24", "");

@@ -657,22 +657,22 @@ public class GoGuiActions
     public final Action m_actionTreeSizeLarge =
         new Action("ACT_TREE_SIZE_LARGE") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeSize(GameTreePanel.SIZE_LARGE); } };
+                m_goGui.actionTreeSize(GameTreePanel.Size.LARGE); } };
 
     public final Action m_actionTreeSizeNormal =
         new Action("ACT_TREE_SIZE_NORMAL") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeSize(GameTreePanel.SIZE_NORMAL); } };
+                m_goGui.actionTreeSize(GameTreePanel.Size.NORMAL); } };
 
     public final Action m_actionTreeSizeSmall =
         new Action("ACT_TREE_SIZE_SMALL") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeSize(GameTreePanel.SIZE_SMALL); } };
+                m_goGui.actionTreeSize(GameTreePanel.Size.SMALL); } };
 
     public final Action m_actionTreeSizeTiny =
         new Action("ACT_TREE_SIZE_TINY") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeSize(GameTreePanel.SIZE_TINY); } };
+                m_goGui.actionTreeSize(GameTreePanel.Size.TINY); } };
 
     public final Action m_actionTruncate =
         new Action("ACT_TRUNCATE") {
@@ -850,13 +850,13 @@ public class GoGuiActions
         m_actionTreeLabelsNone.setSelected(
                     m_goGui.getTreeLabels() == GameTreePanel.Label.NONE);
         m_actionTreeSizeLarge.setSelected(
-                    m_goGui.getTreeSize() == GameTreePanel.SIZE_LARGE);
+                    m_goGui.getTreeSize() == GameTreePanel.Size.LARGE);
         m_actionTreeSizeNormal.setSelected(
-                    m_goGui.getTreeSize() == GameTreePanel.SIZE_NORMAL);
+                    m_goGui.getTreeSize() == GameTreePanel.Size.NORMAL);
         m_actionTreeSizeSmall.setSelected(
-                    m_goGui.getTreeSize() == GameTreePanel.SIZE_SMALL);
+                    m_goGui.getTreeSize() == GameTreePanel.Size.SMALL);
         m_actionTreeSizeTiny.setSelected(
-                    m_goGui.getTreeSize() == GameTreePanel.SIZE_TINY);
+                    m_goGui.getTreeSize() == GameTreePanel.Size.TINY);
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
     }

@@ -37,7 +37,7 @@ public class GameTreeViewer
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.Label.NUMBER,
-                                    GameTreePanel.SIZE_NORMAL,
+                                    GameTreePanel.Size.NORMAL,
                                     messageDialogs);
         m_scrollPane =
             new JScrollPane(m_panel,
@@ -105,7 +105,7 @@ public class GameTreeViewer
         m_panel.setLabelMode(mode);
     }
 
-    public void setSizeMode(int mode)
+    public void setSizeMode(GameTreePanel.Size mode)
     {
         m_panel.setSizeMode(mode);
     }
