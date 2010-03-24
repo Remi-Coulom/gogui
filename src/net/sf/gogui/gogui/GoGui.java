@@ -242,8 +242,17 @@ public class GoGui
             };
         m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
                                      this);
-        m_treeLabels = m_prefs.getInt("gametree-labels",
-                                      GameTreePanel.LABEL_NUMBER);
+        try
+        {
+            m_treeLabels =
+                GameTreePanel.Label.values()[
+                         m_prefs.getInt("gametree-labels",
+                                        GameTreePanel.Label.NUMBER.ordinal())];
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            m_treeLabels = GameTreePanel.Label.NUMBER;
+        }
         m_treeSize = m_prefs.getInt("gametree-size",
                                     GameTreePanel.SIZE_NORMAL);
         m_showSubtreeSizes =
@@ -1710,10 +1719,10 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionTreeLabels(int mode)
+    public void actionTreeLabels(GameTreePanel.Label mode)
     {
         m_treeLabels = mode;
-        m_prefs.putInt("gametree-labels", mode);
+        m_prefs.putInt("gametree-labels", mode.ordinal());
         if (m_gameTreeViewer == null)
             updateViews(false);
         else
@@ -1852,7 +1861,7 @@ public class GoGui
         return m_timeStamp;
     }
 
-    public int getTreeLabels()
+    public GameTreePanel.Label getTreeLabels()
     {
         return m_treeLabels;
     }
@@ -2254,7 +2263,7 @@ public class GoGui
 
     private final int m_move;
 
-    private int m_treeLabels;
+    private GameTreePanel.Label m_treeLabels;
 
     private int m_treeSize;
 

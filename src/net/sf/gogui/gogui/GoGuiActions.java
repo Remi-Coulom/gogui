@@ -642,17 +642,17 @@ public class GoGuiActions
     public final Action m_actionTreeLabelsNumber =
         new Action("ACT_TREE_LABELS_MOVE_NUMBER") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeLabels(GameTreePanel.LABEL_NUMBER); } };
+                m_goGui.actionTreeLabels(GameTreePanel.Label.NUMBER); } };
 
     public final Action m_actionTreeLabelsMove =
         new Action("ACT_TREE_LABELS_MOVE") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeLabels(GameTreePanel.LABEL_MOVE); } };
+                m_goGui.actionTreeLabels(GameTreePanel.Label.MOVE); } };
 
     public final Action m_actionTreeLabelsNone =
         new Action("ACT_TREE_LABELS_NONE") {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTreeLabels(GameTreePanel.LABEL_NONE); } };
+                m_goGui.actionTreeLabels(GameTreePanel.Label.NONE); } };
 
     public final Action m_actionTreeSizeLarge =
         new Action("ACT_TREE_SIZE_LARGE") {
@@ -844,11 +844,11 @@ public class GoGuiActions
         m_actionToggleShowVariations.setSelected(m_goGui.getShowVariations());
         m_actionToggleTimeStamp.setSelected(m_goGui.getTimeStamp());
         m_actionTreeLabelsNumber.setSelected(
-                    m_goGui.getTreeLabels() == GameTreePanel.LABEL_NUMBER);
+                    m_goGui.getTreeLabels() == GameTreePanel.Label.NUMBER);
         m_actionTreeLabelsMove.setSelected(
-                    m_goGui.getTreeLabels() == GameTreePanel.LABEL_MOVE);
+                    m_goGui.getTreeLabels() == GameTreePanel.Label.MOVE);
         m_actionTreeLabelsNone.setSelected(
-                    m_goGui.getTreeLabels() == GameTreePanel.LABEL_NONE);
+                    m_goGui.getTreeLabels() == GameTreePanel.Label.NONE);
         m_actionTreeSizeLarge.setSelected(
                     m_goGui.getTreeSize() == GameTreePanel.SIZE_LARGE);
         m_actionTreeSizeNormal.setSelected(

@@ -36,7 +36,7 @@ public class GameTreeViewer
         super(owner, i18n("TIT_TREE"));
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(this, listener,
-                                    GameTreePanel.LABEL_NUMBER,
+                                    GameTreePanel.Label.NUMBER,
                                     GameTreePanel.SIZE_NORMAL,
                                     messageDialogs);
         m_scrollPane =
@@ -100,7 +100,7 @@ public class GameTreeViewer
         m_panel.scrollToCurrent();
     }
 
-    public void setLabelMode(int mode)
+    public void setLabelMode(GameTreePanel.Label mode)
     {
         m_panel.setLabelMode(mode);
     }

@@ -38,11 +38,14 @@ public class GameTreePanel
     extends JPanel
     implements Scrollable
 {
-    public static final int LABEL_NUMBER = 0;
+    public enum Label
+    {
+        NUMBER,
 
-    public static final int LABEL_MOVE = 1;
+        MOVE,
 
-    public static final int LABEL_NONE = 2;
+        NONE
+    }
 
     public static final int SIZE_LARGE = 0;
 
@@ -55,7 +58,7 @@ public class GameTreePanel
     public static final Color BACKGROUND = new Color(192, 192, 192);
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
-                         int labelMode, int sizeMode,
+                         Label labelMode, int sizeMode,
                          MessageDialogs messageDialogs)
     {
         super(new SpringLayout());
@@ -111,7 +114,7 @@ public class GameTreePanel
         return m_currentNode;
     }
 
-    public int getLabelMode()
+    public Label getLabelMode()
     {
         return m_labelMode;
     }
@@ -205,13 +208,13 @@ public class GameTreePanel
                                           3 * m_nodeSize));
     }
 
-    public void setLabelMode(int mode)
+    public void setLabelMode(Label mode)
     {
         switch (mode)
         {
-        case LABEL_NUMBER:
-        case LABEL_MOVE:
-        case LABEL_NONE:
+        case NUMBER:
+        case MOVE:
+        case NONE:
             m_labelMode = mode;
             break;
         default:
@@ -396,7 +399,7 @@ public class GameTreePanel
 
     private int m_currentNodeY;
 
-    private int m_labelMode;
+    private Label m_labelMode;
 
     private int m_minHeight;
 

@@ -173,13 +173,13 @@ class GameTreeNode
 
     private void drawText(Graphics graphics)
     {
-        int labelMode = m_gameTreePanel.getLabelMode();
-        if (labelMode == GameTreePanel.LABEL_NONE)
+        GameTreePanel.Label labelMode = m_gameTreePanel.getLabelMode();
+        if (labelMode == GameTreePanel.Label.NONE)
             return;
         Move move = m_node.getMove();
         int size = m_gameTreePanel.getNodeSize();
         String text;
-        if (labelMode == GameTreePanel.LABEL_MOVE)
+        if (labelMode == GameTreePanel.Label.MOVE)
         {
             if (move.getPoint() == null)
                 return;
