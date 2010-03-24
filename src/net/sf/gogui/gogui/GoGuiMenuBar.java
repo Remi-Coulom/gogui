@@ -493,15 +493,25 @@ public class GoGuiMenuBar
         GoGuiCheckBoxMenuItem itemShowLastMove =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowLastMove);
         menu.addItem(itemShowLastMove, KeyEvent.VK_L);
-        GoGuiCheckBoxMenuItem itemShowVariations =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowVariations);
-        menu.addItem(itemShowVariations, KeyEvent.VK_V);
         GoGuiCheckBoxMenuItem itemBeepAfterMove =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
         menu.addItem(itemBeepAfterMove, KeyEvent.VK_P);
         GoGuiCheckBoxMenuItem itemToggleCommentMonoFont =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleCommentMonoFont);
         menu.addItem(itemToggleCommentMonoFont, KeyEvent.VK_F);
+        MenuChecked menuVariationLabels =
+            createMenu("MEN_VARIATION_LABELS", KeyEvent.VK_V);
+        ButtonGroup group = new ButtonGroup();
+        menuVariationLabels.addRadioItem(group,
+                                        actions.m_actionShowVariationsChildren,
+                                        KeyEvent.VK_C);
+        menuVariationLabels.addRadioItem(group,
+                                        actions.m_actionShowVariationsSiblings,
+                                        KeyEvent.VK_S);
+        menuVariationLabels.addRadioItem(group,
+                                         actions.m_actionShowVariationsNone,
+                                         KeyEvent.VK_N);
+        menu.add(menuVariationLabels);
         menu.addSeparator();
         menu.add(createMenuConfigureTree(actions));
         menu.add(createMenuConfigureShell(actions));

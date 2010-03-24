@@ -569,6 +569,24 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionShowTree(); } };
 
+    public final Action m_actionShowVariationsChildren =
+        new Action("ACT_VARIATION_LABELS_CHILDREN") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetShowVariations(
+                                           GoGui.ShowVariations.CHILDREN); } };
+
+    public final Action m_actionShowVariationsSiblings =
+        new Action("ACT_VARIATION_LABELS_SIBLINGS") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetShowVariations(
+                                           GoGui.ShowVariations.SIBLINGS); } };
+
+    public final Action m_actionShowVariationsNone =
+        new Action("ACT_VARIATION_LABELS_NONE") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetShowVariations(
+                                           GoGui.ShowVariations.NONE); } };
+
     public final Action m_actionSnapshotParameters =
         new Action("ACT_SNAPSHOT_PARAMETERS") {
             public void actionPerformed(ActionEvent e) {
@@ -628,11 +646,6 @@ public class GoGuiActions
         new Action("ACT_TOOLBAR") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowToolbar(); } };
-
-    public final Action m_actionToggleShowVariations =
-        new Action("ACT_VARIATION_LABELS") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionToggleShowVariations(); } };
 
     public final Action m_actionToggleTimeStamp =
         new Action("ACT_TIMESTAMP") {
@@ -841,7 +854,12 @@ public class GoGuiActions
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
         m_actionToggleShowToolbar.setSelected(m_goGui.isToolbarShown());
-        m_actionToggleShowVariations.setSelected(m_goGui.getShowVariations());
+        m_actionShowVariationsChildren.setSelected(
+                 m_goGui.getShowVariations() == GoGui.ShowVariations.CHILDREN);
+        m_actionShowVariationsSiblings.setSelected(
+                 m_goGui.getShowVariations() == GoGui.ShowVariations.SIBLINGS);
+        m_actionShowVariationsNone.setSelected(
+                 m_goGui.getShowVariations() == GoGui.ShowVariations.NONE);
         m_actionToggleTimeStamp.setSelected(m_goGui.getTimeStamp());
         m_actionTreeLabelsNumber.setSelected(
                     m_goGui.getTreeLabels() == GameTreePanel.Label.NUMBER);

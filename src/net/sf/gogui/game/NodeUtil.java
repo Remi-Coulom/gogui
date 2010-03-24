@@ -450,6 +450,25 @@ public final class NodeUtil
         return result.toString();
     }
 
+    /** Check if a node contains a move and has sibling nodes containing other
+        moves. */
+    public static boolean hasSiblingMoves(ConstNode node)
+    {
+        ConstNode father = node.getFatherConst();
+        if (father == null)
+            return false;
+        Move move = node.getMove();
+        if (move == null)
+            return false;
+        for (int i = 0; i < father.getNumberChildren(); ++i)
+        {
+            Move childMove = father.getChildConst(i).getMove();
+            if (childMove != null && childMove != move)
+                return true;
+        }
+        return false;
+    }
+
     /** Subtree of node contains at least one node with 2 or more children. */
     public static boolean hasSubtree(ConstNode node)
     {

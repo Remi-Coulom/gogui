@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+The checkbox menu item "View/Variation Labels" was replaced by a submenu
+with the items "Children", "Siblings", "None"
 </simpara>
 </listitem>
 </itemizedlist>

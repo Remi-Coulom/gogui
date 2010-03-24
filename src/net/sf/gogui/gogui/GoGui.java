@@ -144,7 +144,7 @@ public class GoGui
                ScoreDialog.Listener, GoGuiMenuBar.Listener,
                ContextMenu.Listener, LiveGfx.Listener
 {
-    public enum VariationMode
+    public enum ShowVariations
     {
         CHILDREN,
 
@@ -275,6 +275,19 @@ public class GoGui
         {
             m_treeSize = GameTreePanel.Size.NORMAL;
         }
+
+        try
+        {
+            m_showVariations =
+                ShowVariations.values()[
+                           m_prefs.getInt("show-variations",
+                                          ShowVariations.CHILDREN.ordinal())];
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            m_showVariations = ShowVariations.CHILDREN;
+        }
+
         m_showSubtreeSizes =
             m_prefs.getBoolean("gametree-show-subtree-sizes", false);
         m_autoNumber = m_prefs.getBoolean("gtpshell-autonumber", false);
@@ -282,7 +295,6 @@ public class GoGui
             ! m_prefs.getBoolean("gtpshell-disable-completions", false);
         m_timeStamp = m_prefs.getBoolean("gtpshell-timestamp", false);
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);
-        m_showVariations = m_prefs.getBoolean("show-variations", false);
         boolean showCursor = m_prefs.getBoolean("show-cursor", false);
         boolean showGrid = m_prefs.getBoolean("show-grid", false);
         m_guiBoard.setShowCursor(showCursor);
@@ -1549,6 +1561,14 @@ public class GoGui
         analyzeBegin(false);
     }
 
+    public void actionSetShowVariations(ShowVariations mode)
+    {
+        m_showVariations = mode;
+        m_prefs.putInt("show-variations", m_showVariations.ordinal());
+        resetBoard();
+        updateViews(false);
+    }
+
     public void actionSetTimeLeft()
     {
         TimeLeftDialog.show(this, m_game, getCurrentNode(), m_messageDialogs);
@@ -1722,14 +1742,6 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionToggleShowVariations()
-    {
-        m_showVariations = ! m_showVariations;
-        m_prefs.putBoolean("show-variations", m_showVariations);
-        resetBoard();
-        updateViews(false);
-    }
-
     public void actionToggleTimeStamp()
     {
         m_timeStamp = ! m_timeStamp;
@@ -1871,7 +1883,7 @@ public class GoGui
         return m_showSubtreeSizes;
     }
 
-    public boolean getShowVariations()
+    public ShowVariations getShowVariations()
     {
         return m_showVariations;
     }
@@ -2273,7 +2285,7 @@ public class GoGui
 
     private boolean m_showToolbar;
 
-    private boolean m_showVariations;
+    private ShowVariations m_showVariations;
 
     private boolean m_setupNodeCreated;
 
@@ -4393,18 +4405,32 @@ public class GoGui
 
     private void updateFromGoBoard()
     {
+        boolean showLastMove =
+            (m_showLastMove
+             && ! (m_showVariations == ShowVariations.SIBLINGS
+                   && NodeUtil.hasSiblingMoves(getCurrentNode())));
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove);
-        if (getCurrentNode().getMove() == null)
+        if (! showLastMove || getCurrentNode().getMove() == null)
             m_guiBoard.markLastMove(null);
     }
 
     private void updateGuiBoard()
     {
-        if (m_showVariations)
+        if (m_showVariations == ShowVariations.CHILDREN)
         {
-            ConstPointList childrenMoves
-                = NodeUtil.getChildrenMoves(getCurrentNode());
-            GuiBoardUtil.showMoves(m_guiBoard, childrenMoves);
+            ConstPointList moves = NodeUtil.getChildrenMoves(getCurrentNode());
+            GuiBoardUtil.showMoves(m_guiBoard, moves);
+        }
+        else if (m_showVariations == ShowVariations.SIBLINGS
+                 && NodeUtil.hasSiblingMoves(getCurrentNode()))
+        {
+            ConstNode father = getCurrentNode().getFatherConst();
+            if (father != null)
+            {
+                ConstPointList moves = NodeUtil.getChildrenMoves(father);
+                if (moves.size() > 1)
+                    GuiBoardUtil.showMoves(m_guiBoard, moves);
+            }
         }
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
