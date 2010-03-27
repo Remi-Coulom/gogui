@@ -18,6 +18,11 @@ markup was immediately cleared after the next line from the program's standard
 error was received. (Fixes bug #2964755)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix capitalization of open button tooltip
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
