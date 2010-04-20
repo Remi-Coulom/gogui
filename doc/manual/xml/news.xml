@@ -23,6 +23,12 @@ error was received. (Fixes bug #2964755)
 Fix capitalization of open button tooltip
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix NullPointerException that occured during exporting a PNG image if board
+labels existed (bug #2989711)
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
