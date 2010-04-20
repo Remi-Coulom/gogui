@@ -15,7 +15,7 @@ Fix clearing of board markup if the caret in the comment field or GTP shell
 changes and no text was selected before and after the change. This made
 using SQUARE and other markup commands in Live Gfx unusable, because the
 markup was immediately cleared after the next line from the program's standard
-error was received. (Fixes bug #2964755)
+error was received. (bug #2964755)
 </simpara>
 </listitem>
 <listitem>
