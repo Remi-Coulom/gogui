@@ -409,22 +409,21 @@ public class Field
             else
                 m_graphics.setColor(Color.black);
         }
-        Rectangle clip = m_graphics.getClipBounds();
+        Rectangle oldClip = m_graphics.getClipBounds();
         width = Math.min(width, (int)(0.95 * m_size));
         m_graphics.setClip(x, y - ascent, width, height);
         if (m_color == EMPTY && m_ghostStone == null)
         {
-            Rectangle boardClip = boardGraphics.getClipBounds();
+            Rectangle oldBoardClip = boardGraphics.getClipBounds();
             boardGraphics.setClip(fieldX + x, fieldY + y - ascent,
                                   width, height);
             boardGraphics.drawImage(boardImage, 0, 0, boardWidth, boardWidth,
                                     null);
-            boardGraphics.setClip(boardClip.x, boardClip.y,
-                                  boardClip.width, boardClip.height);
+            boardGraphics.setClip(oldBoardClip);
             m_graphics.setColor(Color.black);
         }
         m_graphics.drawString(m_label, x, y);
-        m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
+        m_graphics.setClip(oldClip);
     }
 
     private void drawLastMoveMarker()
