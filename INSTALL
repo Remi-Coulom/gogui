@@ -25,9 +25,15 @@ environment. This script needs to be run as root and requires the option -j
 with the location of a Java 5 compatible virtual machine.
 
 On Ubuntu 9.10, it is recommended to install the package sun-java6-jre
-in the Synaptic package manager, and install GoGui by running the command:
+in the Synaptic package manager, and then install GoGui by running the command:
 
   sudo ./install.sh -j /usr/lib/jvm/java-6-sun
+
+On Ubuntu 10.4, the package sun-java6-jre has been moved to the partner
+repository. You first have to add the partner repository by running the
+command:
+
+  sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
 
 
 Installation on Mac OS
