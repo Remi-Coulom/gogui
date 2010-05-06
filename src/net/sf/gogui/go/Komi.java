@@ -2,16 +2,19 @@
 
 package net.sf.gogui.go;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /** Value of komi.
     This class is immutable. */
 public final class Komi
 {
     /** Constructor.
-        @param komi The value for the komi. Will be rounded to a multiple of
-        0.5 */
+        @param komi The value for the komi. */
     public Komi(double komi)
     {
-        m_value = (int)(Math.round(komi * 2.0));
+        m_value = komi;
     }
 
     public boolean equals(Object object)
@@ -24,7 +27,9 @@ public final class Komi
 
     public int hashCode()
     {
-        return m_value;
+        // As in Double.hashCode()
+        long v = Double.doubleToLongBits(m_value);
+        return (int)(v ^ (v >>> 32));
     }
 
     /** Parse komi from string.
@@ -50,19 +55,17 @@ public final class Komi
 
     public double toDouble()
     {
-        return m_value / 2.0;
+        return m_value;
     }
 
     public String toString()
     {
-        if (m_value % 2 == 0)
-            return Integer.toString(m_value / 2);
-        else if (m_value == -1)
-            return "-0.5";
-        else
-            return (m_value / 2) + ".5";
+        DecimalFormat format =
+            (DecimalFormat)(NumberFormat.getInstance(Locale.ENGLISH));
+        format.setGroupingUsed(false);
+        format.setDecimalSeparatorAlwaysShown(false);
+        return format.format(m_value);
     }
 
-    /** The value of the komi multiplied by two. */
-    private final int m_value;
+    private final double m_value;
 }
