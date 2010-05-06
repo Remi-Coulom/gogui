@@ -76,15 +76,7 @@ public final class KomiTest
         assertEquals(5, (new Komi(5)).toDouble(), delta);
         assertEquals(0.5, (new Komi(0.5)).toDouble(), delta);
         assertEquals(5.5, (new Komi(5.5)).toDouble(), delta);
-
-        // Test rounding
-        assertEquals(5, (new Komi(5.1)).toDouble(), delta);
-        assertEquals(5, (new Komi(4.9)).toDouble(), delta);
-        assertEquals(5.5, (new Komi(5.4)).toDouble(), delta);
-        assertEquals(5.5, (new Komi(5.6)).toDouble(), delta);
-        assertEquals(0, (new Komi(-0.002)).toDouble(), delta);
-        assertEquals(-0.5, (new Komi(-0.3)).toDouble(), delta);
-        assertEquals(-1, (new Komi(-1.2)).toDouble(), delta);
+        assertEquals(5.75, (new Komi(5.75)).toDouble(), delta);
     }
 
     public void testToString() throws InvalidKomiException
@@ -97,12 +89,6 @@ public final class KomiTest
         assertEquals("5", (new Komi(5)).toString());
         assertEquals("0.5", (new Komi(0.5)).toString());
         assertEquals("6.5", (new Komi(6.5)).toString());
-
-        // Test rounding
-        assertEquals("6.5", (new Komi(6.4)).toString());
-        assertEquals("6.5", (new Komi(6.6)).toString());
-        assertEquals("5", (new Komi(4.9)).toString());
-        assertEquals("5", (new Komi(5.1)).toString());
-        assertEquals("0", (new Komi(-0.002)).toString());
+        assertEquals("6.25", (new Komi(6.25)).toString());
     }
 }
