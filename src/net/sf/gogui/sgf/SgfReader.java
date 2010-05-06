@@ -596,7 +596,10 @@ public final class SgfReader
     {
         try
         {
-            createGameInfo(node).setKomi(Komi.parseKomi(value));
+            Komi komi = Komi.parseKomi(value);
+            createGameInfo(node).setKomi(komi);
+            if (komi != null && ! komi.isMultipleOf(0.5))
+                setWarning("Komi is not a multiple of 0.5");
         }
         catch (InvalidKomiException e)
         {
