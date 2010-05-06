@@ -32,6 +32,11 @@ public final class Komi
         return (int)(v ^ (v >>> 32));
     }
 
+    public boolean isMultipleOf(double multiple)
+    {
+        return Math.IEEEremainder(m_value, multiple) == 0;
+    }
+
     /** Parse komi from string.
         @param s The string (null not allowed), empty string means unknown
         komi.
