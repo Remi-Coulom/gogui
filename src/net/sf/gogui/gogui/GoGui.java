@@ -3483,7 +3483,7 @@ public class GoGui
                 String optionalMessage =
                     i18n("MSG_FILE_FORMAT_WARNING_2")
                     + "\n(" +
-                    warnings.replaceAll("\n\\z", ")").replaceAll("\n", ")\n(")
+                    warnings.replaceAll("\n\\z", "").replaceAll("\n", ")\n(")
                     + ")";
                 showWarning(i18n("MSG_FILE_FORMAT_WARNING"), optionalMessage,
                             true);
