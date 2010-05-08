@@ -15,6 +15,9 @@ Don't automatically round the komi to a multiple of 0.5 anymore and show
 a warning, if an SGF contains a komi that is not a multiple of 0.5
 (bug #2990714)
 </simpara>
+<simpara>
+Other small fixes
+</simpara>
 </listitem>
 </itemizedlist>
 </revdescription>
