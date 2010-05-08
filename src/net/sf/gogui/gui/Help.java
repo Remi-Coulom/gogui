@@ -27,16 +27,6 @@ import javax.swing.event.HyperlinkListener;
 import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
 
-class AntialiasingEditorPane
-    extends JEditorPane
-{
-    public void paintComponent(Graphics graphics)
-    {
-        GuiUtil.setAntiAlias(graphics);
-        super.paintComponent(graphics);
-    }
-}
-
 /** Window for displaying help in HTML format.
     The window is a JFrame on all platforms but the Mac, where it is a
     parent-less JDialog (to avoid the brushed-metal look, which shouldn't be
@@ -66,7 +56,7 @@ public class Help
         JPanel panel = new JPanel(new BorderLayout());
         contentPane.add(panel);
         panel.add(createButtons(), BorderLayout.NORTH);
-        m_editorPane = new AntialiasingEditorPane();
+        m_editorPane = new JEditorPane();
         m_editorPane.setEditable(false);
         m_editorPane.addHyperlinkListener(this);
         int width = GuiUtil.getDefaultMonoFontSize() * 50;
