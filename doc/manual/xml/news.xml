@@ -15,6 +15,13 @@ Don't automatically round the komi to a multiple of 0.5 anymore and show
 a warning, if an SGF contains a komi that is not a multiple of 0.5
 (bug #2990714)
 </simpara>
+</listitem>
+<listitem>
+<simpara>
+Update some standard icons to Tango icons from freedesktop.org
+</simpara>
+</listitem>
+<listitem>
 <simpara>
 Other small fixes
 </simpara>
