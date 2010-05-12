@@ -18,6 +18,12 @@ a warning, if an SGF contains a komi that is not a multiple of 0.5
 </listitem>
 <listitem>
 <simpara>
+Change Java2D rendering on Windows from DDraw to GDI to avoid repaint
+errors
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Update some standard icons to Tango icons from freedesktop.org
 </simpara>
 </listitem>

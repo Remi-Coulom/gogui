@@ -20,6 +20,9 @@ public final class MainWrapper
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
+        // Use GDI rendering on Windows, there are still repaint problems
+        // using DDraw with Java 1.6
+        System.setProperty("sun.java2d.noddraw", "true");
         GoGuiSettings settings;
         try
         {
