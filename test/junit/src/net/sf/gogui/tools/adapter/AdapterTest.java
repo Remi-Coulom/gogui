@@ -105,6 +105,15 @@ public final class AdapterTest
         assertExpectQueueEmpty();
     }
 
+    /** Test that a resign response is correctly forwarded. */
+    public void testResign() throws ErrorMessage, IOException, GtpError
+    {
+        initAdapter();
+        expect("genmove b", "resign");
+        assertEquals("resign", send("genmove b"));
+        assertExpectQueueEmpty();
+    }
+
     private Adapter m_adapter;
 
     private GtpExpectEngine m_expect;

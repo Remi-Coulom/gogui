@@ -24,6 +24,12 @@ errors
 </listitem>
 <listitem>
 <simpara>
+Make gogui-adapter correctly forward resign responses to genmove commands
+(bug #3016960)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Update some standard icons to Tango icons from freedesktop.org
 </simpara>
 </listitem>
