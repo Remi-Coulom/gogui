@@ -353,7 +353,10 @@ public class Adapter
     {
         String response = send(command);
         if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
+        {
+            cmd.setResponse("resign");
             return;
+        }
         try
         {
             GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
