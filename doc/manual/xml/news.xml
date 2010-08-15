@@ -35,6 +35,12 @@ Update some standard icons to Tango icons from freedesktop.org
 </listitem>
 <listitem>
 <simpara>
+Replaced some simple text files in the distribution, like README and INSTALL,
+by HTML.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other small fixes
 </simpara>
 </listitem>
