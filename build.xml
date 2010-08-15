@@ -139,10 +139,9 @@ Comment out the following exec tag for releases.
 <target name="dist" depends="all,check">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
- README
- CONTRIBUTE
- COPYING
- INSTALL
+ README.html
+ COPYING.html
+ INSTALL.html
  build.xml
  config/go.dtd
  config/gogui-gogui.desktop
@@ -152,7 +151,7 @@ Comment out the following exec tag for releases.
  config/gogui-C.omf.in
  config/gogui.schemas
  config/gogui-mime.xml
- doc/README
+ doc/README.html
  doc/manual/html/*.html
  doc/manual/html/*.png
  doc/manual/man/*.1
@@ -161,7 +160,7 @@ Comment out the following exec tag for releases.
  doc/manual/xml/*.xsl
  doc/doxygen/Doxyfile
  doc/doxygen/footer.html
- doc/doxygen/README
+ doc/doxygen/README.html
  ${docbook.path}.zip
  ${quaqua.nestedzipfile}
  lib/*.jar
@@ -172,9 +171,9 @@ Comment out the following exec tag for releases.
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.class
  mac/src/net/sf/gogui/specialmac/Listener.class
- sgf/openings/9x9/README
+ sgf/openings/9x9/README.html
  sgf/openings/9x9/*.sgf
- sgf/openings/19x19/README
+ sgf/openings/19x19/README.html
  sgf/openings/19x19/*.sgf
  src/net/sf/gogui/images/*.png
  src/net/sf/gogui/images/*.svg
