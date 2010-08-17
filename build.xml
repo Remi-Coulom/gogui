@@ -211,7 +211,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-adapter.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-adapter.jar" compress="true">
+<jar destfile="lib/gogui-adapter.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -233,7 +233,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-client.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-client.jar" compress="true">
+<jar destfile="lib/gogui-client.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -252,7 +252,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-convert.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-convert.jar" compress="true">
+<jar destfile="lib/gogui-convert.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -275,7 +275,7 @@ Comment out the following exec tag for releases.
 <target name="gogui-display.jar"
  depends="compile,extract-quaqua">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-display.jar" compress="true">
+<jar destfile="lib/gogui-display.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -304,7 +304,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-dummy.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-dummy.jar" compress="true">
+<jar destfile="lib/gogui-dummy.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -323,7 +323,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-regress.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-regress.jar" compress="true">
+<jar destfile="lib/gogui-regress.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -341,7 +341,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-server.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-server.jar" compress="true">
+<jar destfile="lib/gogui-server.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -361,7 +361,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-statistics.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-statistics.jar" compress="true">
+<jar destfile="lib/gogui-statistics.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -382,7 +382,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-terminal.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-terminal.jar" compress="true">
+<jar destfile="lib/gogui-terminal.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -408,7 +408,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-thumbnailer.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-thumbnailer.jar" compress="true">
+<jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -431,7 +431,7 @@ Comment out the following exec tag for releases.
 
 <target name="gogui-twogtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui-twogtp.jar" compress="true">
+<jar destfile="lib/gogui-twogtp.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
@@ -595,7 +595,7 @@ ${quaqua.nestedzipfile}
 
 <target name="gogui.jar" depends="compile,extract-quaqua">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui.jar" compress="true">
+<jar destfile="lib/gogui.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
