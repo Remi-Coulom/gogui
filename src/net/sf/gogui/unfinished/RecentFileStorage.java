@@ -1,6 +1,6 @@
 // RecentFileStorage.java
 
-package net.sf.gogui.util;
+package net.sf.gogui.unfinished;
 
 import java.net.URI;
 import java.io.File;
