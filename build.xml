@@ -14,7 +14,7 @@ Comment out the following exec tag for releases.
 <exec executable="git" outputproperty="gitversion">
  <arg value="describe"/><arg value="--always"/>
 </exec>
-<property name="version" value="1.2.1.GIT-${gitversion}"/>
+<property name="version" value="1.2.2"/>
 
 <tstamp><format property="DSTAMP" pattern="yyyy-MM-dd" timezone="UCT"/>
 <format property="TSTAMP" pattern="hh:mm" timezone="UCT"/></tstamp>
