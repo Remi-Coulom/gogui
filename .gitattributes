@@ -1,0 +1,4 @@
+# Don't use automatic line ending conversion for ff4_ex.sgf and ff4_ex.1.sgf,
+# because they contain \n and \r for testing purposes
+test/junit/src/net/sf/gogui/sgf/ff4_ex.sgf -text
+test/junit/src/net/sf/gogui/sgf/ff4_ex.1.sgf -text
