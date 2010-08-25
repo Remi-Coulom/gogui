@@ -79,12 +79,10 @@ Examples (>ok< shouldn't be split):
 linebreak 1 "\\n": >o\
 k<
 linebreak 2 "\\n\\r": >o\
-
-k<
+k<
 linebreak 3 "\\r\\n": >o\
 k<
-linebreak 4 "\\r": >o\
-k<]
+linebreak 4 "\\r": >o\k<]
 
 (;W[dd]N[W d16]C[Variation C is better.](;B[pp]N[B q4])
 (;B[dp]N[B d4])

@@ -98,6 +98,16 @@ public final class SgfReaderTest
         assertEquals("foo\n\nbar", tree.getRootConst().getComment());
         tree = readSgfFileString("(;C[foo\r\n\n\rbar])");
         assertEquals("foo\n\nbar", tree.getRootConst().getComment());
+
+        // Test escaped line breaks immediately before end of value
+        tree = readSgfFileString("(;XY[foo\\\n])");
+        assertEquals("foo", getSgfPropertyValue(tree.getRootConst(), "XY"));
+        tree = readSgfFileString("(;XY[foo\\\r])");
+        assertEquals("foo", getSgfPropertyValue(tree.getRootConst(), "XY"));
+        tree = readSgfFileString("(;XY[foo\\\n\r])");
+        assertEquals("foo", getSgfPropertyValue(tree.getRootConst(), "XY"));
+        tree = readSgfFileString("(;XY[foo\\\r\n])");
+        assertEquals("foo", getSgfPropertyValue(tree.getRootConst(), "XY"));
     }
 
     public void testRead() throws Exception
@@ -244,6 +254,8 @@ public final class SgfReaderTest
         checkSgfProperty(node, "LN", "pj:pd", "nf:ff", "ih:fj", "kh:nj");
         node = root.getChildConst(3);
         assertEquals(node.getNumberChildren(), 6);
+        // Note: These test rely on the fact that the line endings in the FF4
+        // file were not auto-replaced by some versioning system
         assertEquals(node.getComment(),
                      "There are hard linebreaks & soft linebreaks.\n" +
                      "Soft linebreaks are linebreaks preceeded by '\\' like"
@@ -315,6 +327,11 @@ public final class SgfReaderTest
     {
         InputStream in = new ByteArrayInputStream(text.getBytes());
         return new SgfReader(in, null, null, 0);
+    }
+
+    private static String getSgfPropertyValue(ConstNode node, String key)
+    {
+        return node.getSgfPropertiesConst().getValue(key, 0);
     }
 
     private ConstGameTree readSgfFile(String name, boolean expectFailure,

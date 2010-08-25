@@ -906,11 +906,9 @@ public final class SgfReader
             if (quoted)
             {
                 if (c != '\n' && c != '\r')
-                {
                     m_buffer.append((char)c);
-                    quoted = false;
-                }
                 last = Character.valueOf((char)c);
+                quoted = false;
             }
             else
             {
