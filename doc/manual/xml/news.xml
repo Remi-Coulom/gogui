@@ -11,8 +11,13 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Fix wrong parsing of escaped linebreaks in SGF files that could cause
+Fixed wrong parsing of escaped linebreaks in SGF files that could cause
 wrong reading of SGF files (bug #3050997)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Made remembering of "Show Info Panel" setting on startup work.
 </simpara>
 </listitem>
 </itemizedlist>

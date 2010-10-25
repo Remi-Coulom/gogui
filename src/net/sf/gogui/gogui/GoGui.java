@@ -3386,7 +3386,7 @@ public class GoGui
         else
             newGameFile(getBoardSize(), m_move);
         if (! m_prefs.getBoolean("show-info-panel", true))
-            showInfoPanel(true);
+            showInfoPanel(false);
         if (m_prefs.getBoolean("show-toolbar", true))
             showToolbar(true);
         restoreMainWindow(getBoardSize());
