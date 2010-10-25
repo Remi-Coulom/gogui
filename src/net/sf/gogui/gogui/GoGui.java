@@ -33,6 +33,7 @@ import java.net.URL;
 import static java.text.MessageFormat.format;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
@@ -3785,6 +3786,19 @@ public class GoGui
             m_prefs.putInt(name, m_comment.getWidth());
             name = "windows/main/size-" + getBoardSize() + "/comment/height";
             m_prefs.putInt(name, m_comment.getHeight());
+        }
+        // GoGui's program logic does currently not depend on syncing the
+        // preferences to disk immediately, but we do it anyway to work around
+        // a bug in OpenJDK 1.6.0_20 on Linux (Ubuntu 10.10), which fails to
+        // perform the automatic syncing of class Preferences on shutdown of
+        // the VM (probably because of a BadWindow X Error on window closing)
+        try
+        {
+            m_prefs.sync();
+        }
+        catch (BackingStoreException e)
+        {
+            System.err.println(e.getMessage());
         }
     }
 
