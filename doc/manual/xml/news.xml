@@ -20,6 +20,12 @@ wrong reading of SGF files (bug #3050997)
 Made remembering of "Show Info Panel" setting on startup work.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Work around a bug in OpenJDK 1.6.0_20 on Linux that made the saving of
+GoGui's settings fail.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
