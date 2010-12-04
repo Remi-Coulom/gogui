@@ -115,7 +115,7 @@ Comment out the following exec tag for releases.
 <target name="compile" depends="depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.5" target="1.5"
- deprecation="true" debug="true" listfiles="yes">
+ deprecation="true" debug="true" listfiles="yes" includeAntRuntime="false">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
 <copy todir="build">
@@ -689,7 +689,8 @@ ${quaqua.nestedzipfile}
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
 <javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
- deprecation="true" debug="true" listfiles="yes" classpath="build">
+ deprecation="true" debug="true" listfiles="yes" classpath="build"
+ includeAntRuntime="false">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
 <copy todir="build/test">
@@ -718,7 +719,7 @@ ${quaqua.nestedzipfile}
 <target name="specialmac" depends="compile"
  description="Compile special MAC classes depending on com.apple">
 <javac srcdir="mac/src" source="1.5" deprecation="true" classpath="build"
- listfiles="yes"
+ listfiles="yes" includeAntRuntime="false"
  includes="net/sf/gogui/specialmac/RegisterSpecialMacHandler.java"/>
 </target>
 
