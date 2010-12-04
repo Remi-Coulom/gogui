@@ -1603,6 +1603,7 @@ public class GoGui
                                      "language");
         dialog.addLanguage(Locale.ENGLISH, true);
         dialog.addLanguage(Locale.GERMAN, false);
+        dialog.addLanguage(new Locale("sl"), false);
         dialog.run();
     }
 
