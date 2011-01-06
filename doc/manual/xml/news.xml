@@ -16,6 +16,12 @@ Added Slowenian translation. Thanks to Boris Mitrovic.
 </listitem>
 <listitem>
 <simpara>
+Reduced maximum height of dialogs for parameter analyze commands to fit
+on smaller screens.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Build script: Added includeAntRuntime=false to javac task to avoid warning with
 Ant 1.8
 </simpara>
