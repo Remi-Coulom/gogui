@@ -107,7 +107,7 @@ public class ParameterDialog
     /** Length of a textfield for editing string parameters. */
     private static final int TEXTFIELD_LEN = 13;
 
-    private static final int MAX_PARAM_PER_COLUMN = 30;
+    private static final int MAX_PARAM_PER_COLUMN = 15;
 
     private abstract static class Parameter
     {
