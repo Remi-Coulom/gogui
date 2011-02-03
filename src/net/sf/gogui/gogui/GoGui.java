@@ -3357,6 +3357,14 @@ public class GoGui
         m_guiBoard.setListener(this);
         m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
                 public void mouseWheelMoved(MouseWheelEvent e) {
+                    // Silently ignore mouse wheel events if command in
+                    // progress because it is easy to generate multiple events
+                    // while using the wheel and if an analyze command is
+                    // enabled to automatically run after each board change,
+                    // actionForward() and actionBackward() would pop up an
+                    // error dialog if the analyze command is still in progress
+                    if (isCommandInProgress())
+                        return;
                     int n = e.getWheelRotation();
                     int mod = e.getModifiers();
                     int scale = (mod == ActionEvent.SHIFT_MASK ? 10 : 1);
