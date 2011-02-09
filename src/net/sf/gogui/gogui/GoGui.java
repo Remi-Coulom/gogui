@@ -296,6 +296,7 @@ public class GoGui
             ! m_prefs.getBoolean("gtpshell-disable-completions", false);
         m_timeStamp = m_prefs.getBoolean("gtpshell-timestamp", false);
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);
+        m_showMoveNumbers = m_prefs.getBoolean("show-move-numbers", false);
         boolean showCursor = m_prefs.getBoolean("show-cursor", false);
         boolean showGrid = m_prefs.getBoolean("show-grid", false);
         m_guiBoard.setShowCursor(showCursor);
@@ -1719,6 +1720,16 @@ public class GoGui
         updateViews(false);
     }
 
+    public void actionToggleShowMoveNumbers()
+    {
+        if (m_showMoveNumbers)
+            m_guiBoard.clearAllLabels();
+        m_showMoveNumbers = ! m_showMoveNumbers;
+        m_prefs.putBoolean("show-move-numbers", m_showMoveNumbers);
+        updateFromGoBoard();
+        updateViews(false);
+    }
+
     public void actionToggleShowSubtreeSizes()
     {
         m_showSubtreeSizes = ! m_showSubtreeSizes;
@@ -1878,6 +1889,11 @@ public class GoGui
     public boolean getShowLastMove()
     {
         return m_showLastMove;
+    }
+
+    public boolean getShowMoveNumbers()
+    {
+        return m_showMoveNumbers;
     }
 
     public boolean getShowSubtreeSizes()
@@ -2152,7 +2168,7 @@ public class GoGui
         if (! isCommandInProgress())
             return;
         m_guiBoard.clearAll();
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), false);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), false, false);
         AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar, null);
     }
 
@@ -2282,6 +2298,8 @@ public class GoGui
     private boolean m_showInfoPanel;
 
     private boolean m_showLastMove;
+
+    private boolean m_showMoveNumbers;
 
     private boolean m_showSubtreeSizes;
 
@@ -4432,7 +4450,8 @@ public class GoGui
             (m_showLastMove
              && ! (m_showVariations == ShowVariations.SIBLINGS
                    && NodeUtil.hasSiblingMoves(getCurrentNode())));
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove,
+                                       m_showMoveNumbers);
         if (! showLastMove || getCurrentNode().getMove() == null)
             m_guiBoard.markLastMove(null);
     }

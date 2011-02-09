@@ -15,6 +15,11 @@ The checkbox menu item "View/Variation Labels" was replaced by a submenu
 with the items "Children", "Siblings", "None"
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+New menu item: View/Move Numbers
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

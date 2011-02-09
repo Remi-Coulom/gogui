@@ -739,6 +739,15 @@ variations.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>Move Numbers</guimenuitem></term>
+<listitem>
+<para>
+Show the move numbers for all moves played so far as labels on the board.
+</para>
+</listitem>
+</varlistentry>
+
 <varlistentry id="variationlabels">
 <term><guimenuitem>Variation Labels</guimenuitem></term>
 <listitem>

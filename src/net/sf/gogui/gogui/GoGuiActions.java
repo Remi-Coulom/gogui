@@ -637,6 +637,11 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionToggleShowLastMove(); } };
 
+    public final Action m_actionToggleShowMoveNumbers =
+        new Action("ACT_MOVE_NUMBERS") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionToggleShowMoveNumbers(); } };
+
     public final Action m_actionToggleShowSubtreeSizes =
         new Action("ACT_SUBTREE_SIZES") {
             public void actionPerformed(ActionEvent e) {
@@ -851,6 +856,7 @@ public class GoGuiActions
         m_actionToggleShowGrid.setSelected(guiBoard.getShowGrid());
         m_actionToggleShowInfoPanel.setSelected(m_goGui.isInfoPanelShown());
         m_actionToggleShowLastMove.setSelected(m_goGui.getShowLastMove());
+        m_actionToggleShowMoveNumbers.setSelected(m_goGui.getShowMoveNumbers());
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
         m_actionToggleShowToolbar.setSelected(m_goGui.isToolbarShown());

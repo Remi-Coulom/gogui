@@ -493,6 +493,9 @@ public class GoGuiMenuBar
         GoGuiCheckBoxMenuItem itemShowLastMove =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowLastMove);
         menu.addItem(itemShowLastMove, KeyEvent.VK_L);
+        GoGuiCheckBoxMenuItem itemShowMoveNumbers =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowMoveNumbers);
+        menu.addItem(itemShowMoveNumbers, KeyEvent.VK_N);
         GoGuiCheckBoxMenuItem itemBeepAfterMove =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
         menu.addItem(itemBeepAfterMove, KeyEvent.VK_P);

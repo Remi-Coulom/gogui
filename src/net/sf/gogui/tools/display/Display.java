@@ -184,7 +184,7 @@ public class Display
     {
         assert SwingUtilities.isEventDispatchThread();
         m_guiBoard.clearAll();
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false, false);
         AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar, null);
     }
 
@@ -511,7 +511,7 @@ public class Display
     private void updateFromGoBoard()
     {
         m_guiBoard.clearAll(); // Live Gfx markup
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true, false);
         m_statusBar.clear();
         m_statusBar.setToPlay(m_board.getToMove());
     }

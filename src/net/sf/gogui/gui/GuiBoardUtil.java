@@ -342,24 +342,32 @@ public final class GuiBoardUtil
     }
 
     public static void updateFromGoBoard(GuiBoard guiBoard, ConstBoard board,
-                                         boolean markLastMove)
+                                         boolean markLastMove,
+                                         boolean showMoveNumbers)
     {
         for (GoPoint p : board)
             guiBoard.setColor(p, board.getColor(p));
-        GoPoint point = null;
+        GoPoint lastMove = null;
         if (board.getLastMove() != null)
-            point = board.getLastMove().getPoint();
+            lastMove = board.getLastMove().getPoint();
         if (markLastMove)
-            guiBoard.markLastMove(point);
+            guiBoard.markLastMove(lastMove);
         else
             guiBoard.markLastMove(null);
-        if (point == null)
+        if (showMoveNumbers)
+            for (int i = 0; i < board.getNumberMoves(); ++i)
+            {
+                GoPoint point = board.getMove(i).getPoint();
+                if (point != null)
+                    guiBoard.setLabel(point, Integer.toString(i + 1));
+            }
+        if (lastMove == null)
         {
             int size = guiBoard.getBoardSize();
             guiBoard.setCursor(GoPoint.get(size / 2, size / 2));
         }
         else
-            guiBoard.setCursor(point);
+            guiBoard.setCursor(lastMove);
     }
 
     /** Make constructor unavailable; class is for namespace only. */
