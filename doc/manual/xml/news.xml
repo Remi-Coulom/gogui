@@ -39,6 +39,11 @@ Added missing program argument to man pages of gogui-adapter and
 gogui-terminal.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+gogui-terminal: fixed bug that caused a crash in load command
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
