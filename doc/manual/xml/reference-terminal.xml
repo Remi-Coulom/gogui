@@ -21,6 +21,7 @@ Simple text based interface to Go programs supporting GTP.
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg choice="plain"><replaceable>program</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
 <command>gogui-terminal</command>
@@ -37,7 +38,10 @@ Simple text based interface to Go programs supporting GTP.
 <para>
 Simple text based interface to Go programs supporting the
 Go Text Protocol.
-It keeps track of the board and prints it after each change on the board.
+The argument <replaceable>program</replaceable> is a command line
+for the Go program .
+The interface keeps track of the board and prints it after each change on the
+board.
 If a move (coordinate on the board or pass) is entered, it is played
 on the board for the color to move, followed by a
 <command>genmove</command> command sent to the program.

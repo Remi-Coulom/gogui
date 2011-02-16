@@ -33,6 +33,12 @@ if multiple wheel events are generated and an auto-run analyze command is
 still processing the last board change.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Added missing program argument to man pages of gogui-adapter and
+gogui-terminal.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
