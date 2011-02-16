@@ -194,6 +194,17 @@ public final class BoardUtil
             s.append("  W ");
             s.append(board.getCaptured(WHITE));
         }
+        else if (yIndex <= size - 4)
+        {
+            int moveNumber = board.getNumberMoves() - yIndex - 1;
+            if (moveNumber >= 0)
+            {
+                s.append("  ");
+                s.append(moveNumber + 1);
+                s.append(' ');
+                s.append(board.getMove(moveNumber));
+            }
+        }
     }
 
     private static void printToMove(ConstBoard board, StringBuilder buffer)
