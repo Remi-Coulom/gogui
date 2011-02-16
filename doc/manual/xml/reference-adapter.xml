@@ -28,6 +28,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-version1</option></arg>
+<arg choice="plain"><replaceable>program</replaceable></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
