@@ -393,6 +393,7 @@ Comment out the following exec tag for releases.
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/ByteCountInputStream.class
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/FileUtil.class
  net/sf/gogui/util/MessageQueue.class
