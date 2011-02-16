@@ -166,7 +166,7 @@ public class Adapter
     public void cmdAdapterShowBoard(GtpCommand cmd) throws GtpError
     {
         cmd.getResponse().append("\n");
-        cmd.getResponse().append(BoardUtil.toString(m_board, true));
+        cmd.getResponse().append(BoardUtil.toString(m_board, true, false));
     }
 
     public void cmdKomi(GtpCommand cmd) throws GtpError

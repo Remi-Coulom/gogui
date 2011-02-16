@@ -20,6 +20,11 @@ with the items "Children", "Siblings", "None"
 New menu item: View/Move Numbers
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+gogui-terminal: New command line option -color
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

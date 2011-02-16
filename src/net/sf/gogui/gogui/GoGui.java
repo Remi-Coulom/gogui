@@ -667,7 +667,7 @@ public class GoGui
             return;
         try
         {
-            String text = BoardUtil.toString(getBoard(), false);
+            String text = BoardUtil.toString(getBoard(), false, false);
             PrintStream out = new PrintStream(file);
             out.print(text);
             out.close();
@@ -685,7 +685,7 @@ public class GoGui
 
     public void actionExportTextPositionToClipboard()
     {
-        GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));
+        GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false, false));
     }
 
     public void actionFind()

@@ -100,7 +100,17 @@ public class Terminal
     {
     }
 
+    /** Colorize go board text output.
+        @see Argument color in
+        net.sf.gogui.go.Board.toString(ConstBoard,boolean,boolean) */
+    public void setColor(boolean enable)
+    {
+        m_color = enable;
+    }
+
     private final boolean m_verbose;
+
+    private boolean m_color;
 
     private Board m_board;
 
@@ -333,7 +343,7 @@ public class Terminal
 
     private void printBoard()
     {
-        System.out.print(BoardUtil.toString(m_board, true));
+        System.out.print(BoardUtil.toString(m_board, true, m_color));
     }
 
     private void save(String[] cmdArray)

@@ -39,41 +39,78 @@ public final class BoardUtil
         @see #toString(ConstBoard, boolean) */
     public static String toString(ConstBoard board)
     {
-        return toString(board, true);
+        return toString(board, true, false);
     }
 
     /** Get board position as text diagram.
         @param board The board to print.
         @param withGameInfo Print additional game information on the right
         side of the board (at present only number of prisoners)
+        @param color Colorize board using ANSI escape sequences
         @return Board position as text diagram. */
-    public static String toString(ConstBoard board, boolean withGameInfo)
+    public static String toString(ConstBoard board, boolean withGameInfo,
+                                  boolean color)
     {
         StringBuilder s = new StringBuilder(1024);
         int size = board.getSize();
         String separator = System.getProperty("line.separator");
         assert separator != null;
         printXCoords(size, s, separator);
+        String ansiStart = "\u001b[";
         for (int y = size - 1; y >= 0; --y)
         {
             printYCoord(y, s, true);
             s.append(' ');
             for (int x = 0; x < size; ++x)
             {
+                if (x > 0)
+                {
+                    if (color)
+                    {
+                        s.append(ansiStart);
+                        s.append("43m");
+                    }
+                    s.append(' ');
+                }
                 GoPoint point = GoPoint.get(x, y);
-                GoColor color = board.getColor(point);
-                if (color == BLACK)
-                    s.append("X ");
-                else if (color == WHITE)
-                    s.append("O ");
+                GoColor c = board.getColor(point);
+                if (c == BLACK)
+                {
+                    if (color)
+                    {
+                        s.append(ansiStart);
+                        s.append("0;30;43m");
+                    }
+                    s.append('X');
+                }
+                else if (c == WHITE)
+                {
+                    if (color)
+                    {
+                        s.append(ansiStart);
+                        s.append("1;37;43m");
+                    }
+                    s.append('O');
+                }
                 else
                 {
+                    if (color)
+                    {
+                        s.append(ansiStart);
+                        s.append("1;30;43m");
+                    }
                     if (board.isHandicap(point))
-                        s.append("+ ");
+                        s.append('+');
                     else
-                        s.append(". ");
+                        s.append('.');
                 }
             }
+            if (color)
+            {
+                s.append(ansiStart);
+                s.append("0m");
+            }
+            s.append(' ');
             printYCoord(y, s, false);
             if (withGameInfo)
                 printGameInfo(board, s, y);

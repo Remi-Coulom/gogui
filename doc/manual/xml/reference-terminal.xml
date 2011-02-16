@@ -18,9 +18,10 @@ Simple text based interface to Go programs supporting GTP.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gogui-terminal</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-color</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><option>-config</option> <replaceable>file</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
 <command>gogui-terminal</command>
@@ -128,6 +129,17 @@ Other GTP commands are forwarded to the program.
 <listitem>
 <para>
 Read command line options and arguments from the given file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-color</option>
+</term>
+<listitem>
+<para>
+Colorize text output of the Go board using ANSI escape sequences.
 </para>
 </listitem>
 </varlistentry>
