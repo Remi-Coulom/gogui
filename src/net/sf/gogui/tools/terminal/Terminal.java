@@ -179,7 +179,7 @@ public class Terminal
         else if (cmd.equals("save"))
             save(cmdArray);
         else if (cmd.equals("undo"))
-            undo();
+            undo(cmdArray);
         else if (GtpUtil.isStateChangingCommand(cmd))
             System.out.println("Command not allowed");
         else
@@ -382,8 +382,13 @@ public class Terminal
         m_currentNode = m_tree.getNode(node);
     }
 
-    private void undo()
+    private void undo(String[] cmdArray)
     {
+        if (cmdArray.length > 1)
+        {
+            System.out.println("undo command takes no arguments");
+            return;
+        }
         StringBuilder response = new StringBuilder();
         if (! send("undo", response))
         {

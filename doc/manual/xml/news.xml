@@ -41,7 +41,8 @@ gogui-terminal.
 </listitem>
 <listitem>
 <simpara>
-gogui-terminal: fixed bug that caused a crash in load command
+gogui-terminal: fixed bug that caused a crash in load command; write error
+message if undo command has arguments
 </simpara>
 </listitem>
 </itemizedlist>
