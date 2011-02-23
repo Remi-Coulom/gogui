@@ -145,7 +145,8 @@ public class AnalyzeCommand
     public String replaceWildCards(GoColor toMove)
     {
         String command = m_definition.getCommand();
-        String result = command.replace("%m", toMove.toString());
+        String toMoveString = (toMove == BLACK ? "b" : "w");
+        String result = command.replace("%m", toMoveString);
         if (needsPointArg() && m_pointArg != null)
             result = result.replace("%p", m_pointArg.toString());
         if (needsPointListArg())
