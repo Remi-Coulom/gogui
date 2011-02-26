@@ -45,6 +45,11 @@ gogui-terminal: fixed bug that caused a crash in load command; write error
 message if undo command has arguments
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Typos fixed in German internationalization.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
