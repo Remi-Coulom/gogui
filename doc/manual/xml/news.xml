@@ -50,6 +50,11 @@ message if undo command has arguments
 Typos fixed in German internationalization.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+gogui-twogtp: Do not create a lock file if option -sgffile is not used
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

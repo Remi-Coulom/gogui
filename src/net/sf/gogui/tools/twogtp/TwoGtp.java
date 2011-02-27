@@ -68,7 +68,7 @@ public class TwoGtp
         m_filePrefix = filePrefix;
         m_useXml = useXml;
         File resultFile = getResultFile();
-        aquireLock();
+        acquireLock();
         if (force)
         {
             if (resultFile.exists() && ! resultFile.delete())
@@ -320,8 +320,10 @@ public class TwoGtp
 
     private ConstNode m_lastOpeningNode;
 
-    private void aquireLock() throws ErrorMessage
+    private void acquireLock() throws ErrorMessage
     {
+        if (m_filePrefix.equals(""))
+            return;
         File file = getLockFile();
         try
         {
@@ -353,9 +355,12 @@ public class TwoGtp
     {
         for (Program program : m_allPrograms)
             program.close();
-        File lockFile = getLockFile();
-        if (! lockFile.delete())
-            System.err.println("Could not delete '" + lockFile + "'");
+        if (! m_filePrefix.equals(""))
+        {
+            File lockFile = getLockFile();
+            if (! lockFile.delete())
+                System.err.println("Could not delete '" + lockFile + "'");
+        }
     }
 
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
