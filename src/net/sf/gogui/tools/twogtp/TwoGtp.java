@@ -8,10 +8,6 @@ import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
@@ -39,7 +35,6 @@ import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
-import net.sf.gogui.util.Table;
 import net.sf.gogui.version.Version;
 import net.sf.gogui.xml.XmlWriter;
 
@@ -67,14 +62,6 @@ public class TwoGtp
             throw new ErrorMessage("No white program set");
         m_filePrefix = filePrefix;
         m_useXml = useXml;
-        File resultFile = getResultFile();
-        aquireLock();
-        if (force)
-        {
-            if (resultFile.exists() && ! resultFile.delete())
-                throw new ErrorMessage("Could not delete file '" + resultFile
-                                       + "'");
-        }
         m_allPrograms = new ArrayList<Program>();
         m_black = new Program(black, "Black", "B", verbose);
         m_allPrograms.add(m_black);
@@ -103,42 +90,42 @@ public class TwoGtp
         m_openings = openings;
         m_verbose = verbose;
         m_timeSettings = timeSettings;
-        initTable();
+        m_resultFile =
+            new ResultFile(new File(m_filePrefix + ".dat"),
+                           new File(m_filePrefix + ".lock"), force, m_black,
+                           m_white, m_referee, m_size, m_komi, m_openings,
+                           m_useXml);
         readGames();
         initGame(size);
     }
 
-    public void autoPlay() throws Exception
+    public void autoPlayGame() throws Exception
     {
+        StringBuilder response = new StringBuilder(256);
         try
         {
-            System.in.close();
-            StringBuilder response = new StringBuilder(256);
-            while (m_gameIndex < m_numberGames)
+            newGame(m_size);
+            while (! gameOver())
             {
-                try
-                {
-                    newGame(m_size);
-                    while (! gameOver())
-                    {
-                        response.setLength(0);
-                        sendGenmove(getToMove(), response);
-                    }
-                }
-                catch (GtpError e)
-                {
-                    handleEndOfGame(true, e.getMessage());
-                }
-                if (m_black.isProgramDead())
-                    throw new ErrorMessage("Black program died");
-                if (m_white.isProgramDead())
-                    throw new ErrorMessage("White program died");
+                response.setLength(0);
+                sendGenmove(getToMove(), response);
             }
         }
-        finally
+        catch (GtpError e)
         {
-            close();
+            handleEndOfGame(true, e.getMessage());
         }
+        if (m_black.isProgramDead())
+            throw new ErrorMessage("Black program died");
+        if (m_white.isProgramDead())
+            throw new ErrorMessage("White program died");
+    }
+
+    public void close()
+    {
+        for (Program program : m_allPrograms)
+            program.close();
+        m_resultFile.close();
     }
 
     /** Get games left to play.
@@ -147,7 +134,7 @@ public class TwoGtp
     {
         if (m_numberGames <= 0)
             return -1;
-        return m_numberGames - m_gameIndex;
+        return m_numberGames - m_resultFile.getGameIndex();
     }
 
     public void handleCommand(GtpCommand cmd) throws GtpError
@@ -279,8 +266,6 @@ public class TwoGtp
 
     private final boolean m_verbose;
 
-    private int m_gameIndex;
-
     private final int m_numberGames;
 
     private final int m_size;
@@ -314,48 +299,17 @@ public class TwoGtp
     private final ArrayList<ArrayList<Compare.Placement>> m_games
         = new ArrayList<ArrayList<Compare.Placement>>(100);
 
-    private Table m_table;
+    private ResultFile m_resultFile;
 
     private final TimeSettings m_timeSettings;
 
     private ConstNode m_lastOpeningNode;
-
-    private void aquireLock() throws ErrorMessage
-    {
-        File file = getLockFile();
-        try
-        {
-            file.createNewFile();
-            FileChannel channel
-                = new RandomAccessFile(file, "rw").getChannel();
-            FileLock lock = channel.tryLock();
-            if (lock == null)
-                throw new ErrorMessage("Could not get lock on file '" + file
-                            + "': already used by another instance of TwoGtp");
-            // We keep the lock until the end of the process and rely on the
-            // operating system to release it
-        }
-        catch (IOException e)
-        {
-            throw new ErrorMessage("Could not lock file '" + file + "': "
-                                   + e.getMessage());
-        }
-    }
 
     private void checkInconsistentState() throws GtpError
     {
         for (Program program : m_allPrograms)
             if (program.isOutOfSync())
                 throw new GtpError("Inconsistent state");
-    }
-
-    private void close()
-    {
-        for (Program program : m_allPrograms)
-            program.close();
-        File lockFile = getLockFile();
-        if (! lockFile.delete())
-            System.err.println("Could not delete '" + lockFile + "'");
     }
 
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
@@ -422,67 +376,6 @@ public class TwoGtp
             throw new GtpError("neither player supports final_status");
     }
 
-    private void initTable() throws ErrorMessage
-    {
-        File file = getResultFile();
-        if (file.exists())
-        {
-            m_table = new Table();
-            try
-            {
-                m_table.read(getResultFile());
-                int lastRowIndex = m_table.getNumberRows() - 1;
-                m_gameIndex =
-                    Integer.parseInt(m_table.get("GAME", lastRowIndex)) + 1;
-                if (m_gameIndex < 0)
-                    throw new ErrorMessage("Invalid file format: " + file);
-            }
-            catch (NumberFormatException e)
-            {
-                throw new ErrorMessage("Invalid file format: " + file);
-            }
-            catch (FileNotFoundException e)
-            {
-                throw new ErrorMessage(e.getMessage());
-            }
-            catch (IOException e)
-            {
-                throw new ErrorMessage("Read error: " + file);
-            }
-            return;
-        }
-        ArrayList<String> columns = new ArrayList<String>();
-        columns.add("GAME");
-        columns.add("RES_B");
-        columns.add("RES_W");
-        columns.add("RES_R");
-        columns.add("ALT");
-        columns.add("DUP");
-        columns.add("LEN");
-        columns.add("TIME_B");
-        columns.add("TIME_W");
-        columns.add("CPU_B");
-        columns.add("CPU_W");
-        columns.add("ERR");
-        columns.add("ERR_MSG");
-        m_table = new Table(columns);
-        m_black.setTableProperties(m_table);
-        m_white.setTableProperties(m_table);
-        if (m_referee == null)
-            m_table.setProperty("Referee", "-");
-        else
-            m_referee.setTableProperties(m_table);
-        m_table.setProperty("Size", Integer.toString(m_size));
-        m_table.setProperty("Komi", m_komi.toString());
-        if (m_openings != null)
-            m_table.setProperty("Openings",
-                                m_openings.getDirectory() + " ("
-                                + m_openings.getNumber() + " files)");
-        m_table.setProperty("Date", StringUtil.getDate());
-        m_table.setProperty("Host", Platform.getHostInfo());
-        m_table.setProperty("Xml", m_useXml ? "1" : "0");
-    }
-
     private void forward(Program program, GtpCommand cmd) throws GtpError
     {
         cmd.setResponse(program.send(cmd.getLine()));
@@ -511,11 +404,6 @@ public class TwoGtp
             return new File(m_filePrefix + "-" + gameIndex + ".sgf");
     }
 
-    private File getLockFile()
-    {
-        return new File(m_filePrefix + ".lock");
-    }
-
     private GoColor getToMove()
     {
         return m_game.getToMove();
@@ -524,11 +412,6 @@ public class TwoGtp
     private ConstGameTree getTree()
     {
         return m_game.getTree();
-    }
-
-    private File getResultFile()
-    {
-        return new File(m_filePrefix + ".dat");
     }
 
     private String getTitle()
@@ -549,7 +432,7 @@ public class TwoGtp
         if (! m_filePrefix.equals(""))
         {
             buffer.append(" (");
-            buffer.append(m_gameIndex + 1);
+            buffer.append(m_resultFile.getGameIndex() + 1);
             buffer.append(')');
         }
         return buffer.toString();
@@ -611,12 +494,12 @@ public class TwoGtp
                 }
             }
             int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
-            saveResult(resultBlack, resultWhite, resultReferee,
-                       isAlternated(), duplicate, moveNumber, error,
-                       errorMessage, realTimeBlack, realTimeWhite,
-                       cpuTimeBlack, cpuTimeWhite);
-            saveGame(resultBlack, resultWhite, resultReferee);
-            ++m_gameIndex;
+            m_resultFile.addResult(resultBlack, resultWhite, resultReferee,
+                              isAlternated(), duplicate, moveNumber,
+                              error, errorMessage, realTimeBlack,
+                              realTimeWhite, cpuTimeBlack, cpuTimeWhite);
+            if (! m_filePrefix.equals(""))
+                saveGame(resultBlack, resultWhite, resultReferee);
             m_games.add(moves);
         }
         catch (FileNotFoundException e)
@@ -637,9 +520,11 @@ public class TwoGtp
         {
             int openingFileIndex;
             if (m_alternate)
-                openingFileIndex = (m_gameIndex / 2) % m_openings.getNumber();
+                openingFileIndex =
+                    (m_resultFile.getGameIndex() / 2) % m_openings.getNumber();
             else
-                openingFileIndex = m_gameIndex % m_openings.getNumber();
+                openingFileIndex =
+                    m_resultFile.getGameIndex() % m_openings.getNumber();
             try
             {
                 m_openings.loadFile(openingFileIndex);
@@ -676,7 +561,7 @@ public class TwoGtp
 
     private boolean isAlternated()
     {
-        return (m_alternate && m_gameIndex % 2 != 0);
+        return (m_alternate && m_resultFile.getGameIndex() % 2 != 0);
     }
 
     private boolean isInOpening()
@@ -710,7 +595,7 @@ public class TwoGtp
         if (m_verbose)
         {
             System.err.println("============================================");
-            System.err.println("Game " + m_gameIndex);
+            System.err.println("Game " + m_resultFile.getGameIndex());
             System.err.println("============================================");
         }
         m_black.getAndClearCpuTime();
@@ -724,7 +609,7 @@ public class TwoGtp
 
     private void readGames()
     {
-        for (int n = 0; n < m_gameIndex; ++n)
+        for (int n = 0; n < m_resultFile.getGameIndex(); ++n)
         {
             File file = getFile(n);
             if (! file.exists())
@@ -759,8 +644,6 @@ public class TwoGtp
                           String resultReferee)
         throws FileNotFoundException
     {
-        if (m_filePrefix.equals(""))
-            return;
         String nameBlack = m_black.getLabel();
         String nameWhite = m_white.getLabel();
         String blackCommand = m_black.getProgramCommand();
@@ -817,7 +700,7 @@ public class TwoGtp
         comment.append("\nDate: ");
         comment.append(StringUtil.getDate());
         m_game.setComment(comment.toString(), getTree().getRootConst());
-        File file = getFile(m_gameIndex);
+        File file = getFile(m_resultFile.getGameIndex());
         if (m_verbose)
             System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
@@ -825,44 +708,6 @@ public class TwoGtp
             new XmlWriter(out, getTree(), "GoGuiTwoGtp:" + Version.get());
         else
             new SgfWriter(out, getTree(), "GoGuiTwoGtp", Version.get());
-    }
-
-    private void saveResult(String resultBlack, String resultWhite,
-                            String resultReferee, boolean alternated,
-                            String duplicate, int numberMoves, boolean error,
-                            String errorMessage, double timeBlack,
-                            double timeWhite, double cpuTimeBlack,
-                            double cpuTimeWhite)
-        throws ErrorMessage
-    {
-        if (m_filePrefix.equals(""))
-            return;
-        NumberFormat format = StringUtil.getNumberFormat(1);
-        m_table.startRow();
-        m_table.set("GAME", Integer.toString(m_gameIndex));
-        m_table.set("RES_B", resultBlack);
-        m_table.set("RES_W", resultWhite);
-        m_table.set("RES_R", resultReferee);
-        m_table.set("ALT", alternated ? "1" : "0");
-        m_table.set("DUP", duplicate);
-        m_table.set("LEN", numberMoves);
-        m_table.set("TIME_B", format.format(timeBlack));
-        m_table.set("TIME_W", format.format(timeWhite));
-        m_table.set("CPU_B", format.format(cpuTimeBlack));
-        m_table.set("CPU_W", format.format(cpuTimeWhite));
-        m_table.set("ERR", error ? "1" : "0");
-        m_table.set("ERR_MSG", errorMessage);
-        File resultFile = getResultFile();
-        File tmpFile = new File(resultFile.getAbsolutePath() + ".new");
-        try
-        {
-            m_table.save(tmpFile);
-            tmpFile.renameTo(resultFile);
-        }
-        catch (IOException e)
-        {
-            throw new ErrorMessage("Could not write to: " + resultFile);
-        }
     }
 
     private void sendGenmove(GoColor color, StringBuilder response)

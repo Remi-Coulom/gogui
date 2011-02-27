@@ -122,11 +122,7 @@ public final class Main
                              openings, timeSettings, useXml);
             twoGtp.setMaxMoves(maxMoves);
             if (auto)
-            {
-                if (twoGtp.gamesLeft() == 0)
-                    System.err.println("Already " + games + " games played");
-                twoGtp.autoPlay();
-            }
+                autoPlay(twoGtp, games);
             else
                 twoGtp.mainLoop(System.in, System.out);
         }
@@ -140,5 +136,25 @@ public final class Main
     /** Make constructor unavailable; class is for namespace only. */
     private Main()
     {
+    }
+
+    private static void autoPlay(TwoGtp twoGtp,
+                                 int numberGames) throws Exception
+    {
+        if (twoGtp.gamesLeft() == 0)
+        {
+            System.err.println("Already " + numberGames + " games played");
+            return;
+        }
+        try
+        {
+            System.in.close();
+            while (twoGtp.gamesLeft() > 0)
+                twoGtp.autoPlayGame();
+        }
+        finally
+        {
+            twoGtp.close();
+        }
     }
 }
