@@ -116,10 +116,28 @@ public final class Main
             if (opt.contains("openings"))
                 openings = new Openings(new File(opt.get("openings")));
             boolean useXml = opt.contains("xml");
+
+            Program blackProgram = new Program(black, "Black", "B", verbose);
+            Program whiteProgram = new Program(white, "White", "W", verbose);
+            Program refereeProgram;
+            if (referee.equals(""))
+                refereeProgram = null;
+            else
+                refereeProgram = new Program(referee, "Referee", "R", verbose);
+            ResultFile resultFile;
+            if (sgfFile.equals(""))
+                resultFile = null;
+            else
+                resultFile = new ResultFile(new File(sgfFile + ".dat"),
+                                            new File(sgfFile + ".lock"),
+                                            force, blackProgram, whiteProgram,
+                                            refereeProgram, size, komi,
+                                            openings, useXml);
             TwoGtp twoGtp
-                = new TwoGtp(black, white, referee, observer, size, komi,
-                             games, alternate, sgfFile, force, verbose,
-                             openings, timeSettings, useXml);
+                = new TwoGtp(blackProgram, whiteProgram, refereeProgram,
+                             observer, size, komi, games, alternate, sgfFile,
+                             verbose, openings, timeSettings, useXml,
+                             resultFile);
             twoGtp.setMaxMoves(maxMoves);
             if (auto)
                 autoPlay(twoGtp, games);

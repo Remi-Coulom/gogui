@@ -45,11 +45,11 @@ public class TwoGtp
     /** Constructor.
         @param komi The fixed komi. See TwoGtp documentation for option
         -komi */
-    public TwoGtp(String black, String white, String referee, String observer,
-                  int size, Komi komi, int numberGames, boolean alternate,
-                  String filePrefix, boolean force, boolean verbose,
-                  Openings openings, TimeSettings timeSettings,
-                  boolean useXml)
+    public TwoGtp(Program black, Program white, Program referee,
+                  String observer, int size, Komi komi, int numberGames,
+                  boolean alternate, String filePrefix, boolean verbose,
+                  Openings openings, TimeSettings timeSettings, boolean useXml,
+                  ResultFile resultFile)
         throws Exception
     {
         super(null);
@@ -63,17 +63,13 @@ public class TwoGtp
         m_filePrefix = filePrefix;
         m_useXml = useXml;
         m_allPrograms = new ArrayList<Program>();
-        m_black = new Program(black, "Black", "B", verbose);
+        m_black = black;
         m_allPrograms.add(m_black);
-        m_white = new Program(white, "White", "W", verbose);
+        m_white = white;
         m_allPrograms.add(m_white);
-        if (referee.equals(""))
-            m_referee = null;
-        else
-        {
-            m_referee = new Program(referee, "Referee", "R", verbose);
+        m_referee = referee;
+        if (m_referee != null)
             m_allPrograms.add(m_referee);
-        }
         if (observer.equals(""))
             m_observer = null;
         else
@@ -90,11 +86,7 @@ public class TwoGtp
         m_openings = openings;
         m_verbose = verbose;
         m_timeSettings = timeSettings;
-        m_resultFile =
-            new ResultFile(new File(m_filePrefix + ".dat"),
-                           new File(m_filePrefix + ".lock"), force, m_black,
-                           m_white, m_referee, m_size, m_komi, m_openings,
-                           m_useXml);
+        m_resultFile = resultFile;
         readGames();
         initGame(size);
     }
