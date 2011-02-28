@@ -3,25 +3,39 @@
 package net.sf.gogui.tools.twogtp;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.go.Komi;
+import net.sf.gogui.sgf.SgfError;
+import net.sf.gogui.sgf.SgfReader;
+import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
+import net.sf.gogui.xml.XmlWriter;
+import net.sf.gogui.version.Version;
 
 public class ResultFile
 {
     public ResultFile(File file, File lockFile, boolean force, Program black,
                       Program white, Program referee, int size, Komi komi,
-                      Openings openings, boolean useXml) throws ErrorMessage
+                      String filePrefix, Openings openings, boolean alternate,
+                      boolean useXml) throws ErrorMessage
     {
+        m_filePrefix = filePrefix;
+        m_alternate = alternate;
+        m_useXml = useXml;
         m_lockFile = lockFile;
         acquireLock();
         m_file = file;
@@ -86,16 +100,22 @@ public class ResultFile
         m_table.setProperty("Date", StringUtil.getDate());
         m_table.setProperty("Host", Platform.getHostInfo());
         m_table.setProperty("Xml", useXml ? "1" : "0");
+        readGames();
     }
 
-    public void addResult(String resultBlack, String resultWhite,
-                          String resultReferee, boolean alternated,
-                          String duplicate, int numberMoves, boolean error,
+    public void addResult(ConstGame game, String resultBlack,
+                          String resultWhite, String resultReferee,
+                          boolean alternated, int numberMoves, boolean error,
                           String errorMessage, double timeBlack,
                           double timeWhite, double cpuTimeBlack,
                           double cpuTimeWhite)
         throws ErrorMessage
     {
+        ArrayList<Compare.Placement> moves
+            = Compare.getPlacements(game.getTree().getRootConst());
+        String duplicate =
+            Compare.checkDuplicate(game.getBoard(), moves, m_games,
+                                   m_alternate, alternated);
         NumberFormat format = StringUtil.getNumberFormat(1);
         m_table.startRow();
         m_table.set("GAME", Integer.toString(getGameIndex()));
@@ -121,6 +141,23 @@ public class ResultFile
         {
             throw new ErrorMessage("Could not write to: " + m_file);
         }
+        File file = getFile(getGameIndex());
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            if (m_useXml)
+                new XmlWriter(out, game.getTree(),
+                              "gogui-twogtp:" + Version.get());
+            else
+                new SgfWriter(out, game.getTree(),
+                              "gogui-twogtp", Version.get());
+            m_games.add(moves);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new ErrorMessage("Could not save " + file + ": "
+                                   + e.getMessage());
+        }
     }
 
     public void close()
@@ -134,11 +171,20 @@ public class ResultFile
         return m_table.getNumberRows();
     }
 
+    private boolean m_alternate;
+
+    private boolean m_useXml;
+
+    private String m_filePrefix;
+
     private File m_file;
 
     private File m_lockFile;
 
     private Table m_table;
+
+    private final ArrayList<ArrayList<Compare.Placement>> m_games
+        = new ArrayList<ArrayList<Compare.Placement>>(100);
 
     private void acquireLock() throws ErrorMessage
     {
@@ -159,6 +205,46 @@ public class ResultFile
         {
             throw new ErrorMessage("Could not lock file '" + m_lockFile
                                    + "': " + e.getMessage());
+        }
+    }
+
+    private File getFile(int gameIndex)
+    {
+        if (m_useXml)
+            return new File(m_filePrefix + "-" + gameIndex + ".xml");
+        else
+            return new File(m_filePrefix + "-" + gameIndex + ".sgf");
+    }
+
+    private void readGames()
+    {
+        for (int n = 0; n < getGameIndex(); ++n)
+        {
+            File file = getFile(n);
+            if (! file.exists())
+            {
+                System.err.println("Game " + file + " not found");
+                continue;
+            }
+            if (! file.exists())
+                return;
+            try
+            {
+                FileInputStream fileStream = new FileInputStream(file);
+                SgfReader reader = new SgfReader(fileStream, file, null, 0);
+                ConstNode root = reader.getTree().getRoot();
+                m_games.add(Compare.getPlacements(root));
+            }
+            catch (SgfError e)
+            {
+                System.err.println("Error reading " + file + ": " +
+                                   e.getMessage());
+            }
+            catch (Exception e)
+            {
+                System.err.println("Error reading " + file + ": " +
+                                   e.getMessage());
+            }
         }
     }
 }

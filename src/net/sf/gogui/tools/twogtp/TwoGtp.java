@@ -3,11 +3,8 @@
 package net.sf.gogui.tools.twogtp;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
@@ -28,15 +25,11 @@ import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.sgf.SgfError;
-import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-import net.sf.gogui.xml.XmlWriter;
 
 /** GTP adapter for playing games between two Go programs. */
 public class TwoGtp
@@ -48,7 +41,7 @@ public class TwoGtp
     public TwoGtp(Program black, Program white, Program referee,
                   String observer, int size, Komi komi, int numberGames,
                   boolean alternate, String filePrefix, boolean verbose,
-                  Openings openings, TimeSettings timeSettings, boolean useXml,
+                  Openings openings, TimeSettings timeSettings,
                   ResultFile resultFile)
         throws Exception
     {
@@ -61,7 +54,6 @@ public class TwoGtp
         if (white.equals(""))
             throw new ErrorMessage("No white program set");
         m_filePrefix = filePrefix;
-        m_useXml = useXml;
         m_allPrograms = new ArrayList<Program>();
         m_black = black;
         m_allPrograms.add(m_black);
@@ -87,7 +79,6 @@ public class TwoGtp
         m_verbose = verbose;
         m_timeSettings = timeSettings;
         m_resultFile = resultFile;
-        readGames();
         initGame(size);
     }
 
@@ -117,7 +108,6 @@ public class TwoGtp
     {
         for (Program program : m_allPrograms)
             program.close();
-        m_resultFile.close();
     }
 
     /** Get games left to play.
@@ -247,8 +237,6 @@ public class TwoGtp
     }
 
     private final boolean m_alternate;
-
-    private final boolean m_useXml;
 
     private boolean m_gameSaved;
 
@@ -388,14 +376,6 @@ public class TwoGtp
         return m_game.getCurrentNode();
     }
 
-    private File getFile(int gameIndex)
-    {
-        if (m_useXml)
-            return new File(m_filePrefix + "-" + gameIndex + ".xml");
-        else
-            return new File(m_filePrefix + "-" + gameIndex + ".sgf");
-    }
-
     private GoColor getToMove()
     {
         return m_game.getToMove();
@@ -433,71 +413,113 @@ public class TwoGtp
     private void handleEndOfGame(boolean error, String errorMessage)
         throws ErrorMessage
     {
-        try
+        String resultBlack;
+        String resultWhite;
+        String resultReferee;
+        if (m_resigned)
         {
-            String resultBlack;
-            String resultWhite;
-            String resultReferee;
-            if (m_resigned)
-            {
-                String result = (m_resignColor == BLACK ? "W" : "B");
-                result = result + "+R";
-                resultBlack = result;
-                resultWhite = result;
-                resultReferee = result;
-            }
-            else
-            {
-                resultBlack = m_black.getResult();
-                resultWhite = m_white.getResult();
-                resultReferee = "?";
-                if (m_referee != null)
-                    resultReferee = m_referee.getResult();
-            }
-            double cpuTimeBlack = m_black.getAndClearCpuTime();
-            double cpuTimeWhite = m_white.getAndClearCpuTime();
-            double realTimeBlack = m_realTime.get(BLACK);
-            double realTimeWhite = m_realTime.get(WHITE);
-            if (isAlternated())
-            {
-                resultBlack = inverseResult(resultBlack);
-                resultWhite = inverseResult(resultWhite);
-                resultReferee = inverseResult(resultReferee);
-                realTimeBlack = m_realTime.get(WHITE);
-                realTimeWhite = m_realTime.get(BLACK);
-            }
-            ArrayList<Compare.Placement> moves
-                = Compare.getPlacements(getTree().getRootConst());
-            String duplicate =
-                Compare.checkDuplicate(getBoard(), moves, m_games,
-                                       m_alternate, isAlternated());
-            // If a program is dead we wait for a few seconds, because it
-            // could be because the TwoGtp process was killed and we don't
-            // want to write a result in this case.
-            if (m_black.isProgramDead() || m_white.isProgramDead())
-            {
-                try
-                {
-                    Thread.sleep(3000);
-                }
-                catch (InterruptedException e)
-                {
-                    assert false;
-                }
-            }
-            int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
-            m_resultFile.addResult(resultBlack, resultWhite, resultReferee,
-                              isAlternated(), duplicate, moveNumber,
-                              error, errorMessage, realTimeBlack,
-                              realTimeWhite, cpuTimeBlack, cpuTimeWhite);
-            if (! m_filePrefix.equals(""))
-                saveGame(resultBlack, resultWhite, resultReferee);
-            m_games.add(moves);
+            String result = (m_resignColor == BLACK ? "W" : "B");
+            result = result + "+R";
+            resultBlack = result;
+            resultWhite = result;
+            resultReferee = result;
         }
-        catch (FileNotFoundException e)
+        else
         {
-            System.err.println("Could not save game: " + e.getMessage());
+            resultBlack = m_black.getResult();
+            resultWhite = m_white.getResult();
+            resultReferee = "?";
+            if (m_referee != null)
+                resultReferee = m_referee.getResult();
         }
+        double cpuTimeBlack = m_black.getAndClearCpuTime();
+        double cpuTimeWhite = m_white.getAndClearCpuTime();
+        double realTimeBlack = m_realTime.get(BLACK);
+        double realTimeWhite = m_realTime.get(WHITE);
+        if (isAlternated())
+        {
+            resultBlack = inverseResult(resultBlack);
+            resultWhite = inverseResult(resultWhite);
+            resultReferee = inverseResult(resultReferee);
+            realTimeBlack = m_realTime.get(WHITE);
+            realTimeWhite = m_realTime.get(BLACK);
+        }
+        // If a program is dead we wait for a few seconds, because it
+        // could be because the TwoGtp process was killed and we don't
+        // want to write a result in this case.
+        if (m_black.isProgramDead() || m_white.isProgramDead())
+        {
+            try
+            {
+                Thread.sleep(3000);
+            }
+            catch (InterruptedException e)
+            {
+                assert false;
+            }
+        }
+
+        String nameBlack = m_black.getLabel();
+        String nameWhite = m_white.getLabel();
+        String blackCommand = m_black.getProgramCommand();
+        String whiteCommand = m_white.getProgramCommand();
+        String blackVersion = m_black.getVersion();
+        String whiteVersion = m_white.getVersion();
+        if (isAlternated())
+        {
+            nameBlack = m_white.getLabel();
+            nameWhite = m_black.getLabel();
+            blackCommand = m_white.getProgramCommand();
+            whiteCommand = m_black.getProgramCommand();
+            blackVersion = m_white.getVersion();
+            whiteVersion = m_black.getVersion();
+            String resultTmp = inverseResult(resultWhite);
+            resultWhite = inverseResult(resultBlack);
+            resultBlack = resultTmp;
+            resultReferee = inverseResult(resultReferee);
+        }
+        m_game.setPlayer(BLACK, nameBlack);
+        m_game.setPlayer(WHITE, nameWhite);
+        if (m_referee != null)
+            m_game.setResult(resultReferee);
+        else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
+            m_game.setResult(resultBlack);
+        String host = Platform.getHostInfo();
+        StringBuilder comment = new StringBuilder();
+        comment.append("Black command: ");
+        comment.append(blackCommand);
+        comment.append("\nWhite command: ");
+        comment.append(whiteCommand);
+        comment.append("\nBlack version: ");
+        comment.append(blackVersion);
+        comment.append("\nWhite version: ");
+        comment.append(whiteVersion);
+        if (m_openings != null)
+        {
+            comment.append("\nOpening: ");
+            comment.append(m_openingFile);
+        }
+        comment.append("\nResult[Black]: ");
+        comment.append(resultBlack);
+        comment.append("\nResult[White]: ");
+        comment.append(resultWhite);
+        if (m_referee != null)
+        {
+            comment.append("\nReferee: ");
+            comment.append(m_referee.getProgramCommand());
+            comment.append("\nResult[Referee]: ");
+            comment.append(resultReferee);
+        }
+        comment.append("\nHost: ");
+        comment.append(host);
+        comment.append("\nDate: ");
+        comment.append(StringUtil.getDate());
+        m_game.setComment(comment.toString(), getTree().getRootConst());
+        int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
+        m_resultFile.addResult(m_game, resultBlack, resultWhite,
+                               resultReferee, isAlternated(), moveNumber,
+                               error, errorMessage, realTimeBlack,
+                               realTimeWhite, cpuTimeBlack, cpuTimeWhite);
     }
 
     private void initGame(int size) throws GtpError
@@ -597,109 +619,6 @@ public class TwoGtp
         if (m_timeSettings != null)
             sendIfSupported("time_settings",
                             GtpUtil.getTimeSettingsCommand(m_timeSettings));
-    }
-
-    private void readGames()
-    {
-        for (int n = 0; n < m_resultFile.getGameIndex(); ++n)
-        {
-            File file = getFile(n);
-            if (! file.exists())
-            {
-                System.err.println("Game " + file + " not found");
-                continue;
-            }
-            if (! file.exists())
-                return;
-            try
-            {
-                FileInputStream fileStream = new FileInputStream(file);
-                SgfReader reader =
-                    new SgfReader(fileStream, file, null, 0);
-                ConstNode root = reader.getTree().getRoot();
-                m_games.add(Compare.getPlacements(root));
-            }
-            catch (SgfError e)
-            {
-                System.err.println("Error reading " + file + ": " +
-                                   e.getMessage());
-            }
-            catch (Exception e)
-            {
-                System.err.println("Error reading " + file + ": " +
-                                   e.getMessage());
-            }
-        }
-    }
-
-    private void saveGame(String resultBlack, String resultWhite,
-                          String resultReferee)
-        throws FileNotFoundException
-    {
-        String nameBlack = m_black.getLabel();
-        String nameWhite = m_white.getLabel();
-        String blackCommand = m_black.getProgramCommand();
-        String whiteCommand = m_white.getProgramCommand();
-        String blackVersion = m_black.getVersion();
-        String whiteVersion = m_white.getVersion();
-        if (isAlternated())
-        {
-            nameBlack = m_white.getLabel();
-            nameWhite = m_black.getLabel();
-            blackCommand = m_white.getProgramCommand();
-            whiteCommand = m_black.getProgramCommand();
-            blackVersion = m_white.getVersion();
-            whiteVersion = m_black.getVersion();
-            String resultTmp = inverseResult(resultWhite);
-            resultWhite = inverseResult(resultBlack);
-            resultBlack = resultTmp;
-            resultReferee = inverseResult(resultReferee);
-        }
-        m_game.setPlayer(BLACK, nameBlack);
-        m_game.setPlayer(WHITE, nameWhite);
-        if (m_referee != null)
-            m_game.setResult(resultReferee);
-        else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
-            m_game.setResult(resultBlack);
-        String host = Platform.getHostInfo();
-        StringBuilder comment = new StringBuilder();
-        comment.append("Black command: ");
-        comment.append(blackCommand);
-        comment.append("\nWhite command: ");
-        comment.append(whiteCommand);
-        comment.append("\nBlack version: ");
-        comment.append(blackVersion);
-        comment.append("\nWhite version: ");
-        comment.append(whiteVersion);
-        if (m_openings != null)
-        {
-            comment.append("\nOpening: ");
-            comment.append(m_openingFile);
-        }
-        comment.append("\nResult[Black]: ");
-        comment.append(resultBlack);
-        comment.append("\nResult[White]: ");
-        comment.append(resultWhite);
-        if (m_referee != null)
-        {
-            comment.append("\nReferee: ");
-            comment.append(m_referee.getProgramCommand());
-            comment.append("\nResult[Referee]: ");
-            comment.append(resultReferee);
-        }
-        comment.append("\nHost: ");
-        comment.append(host);
-        comment.append("\nDate: ");
-        comment.append(StringUtil.getDate());
-        m_game.setComment(comment.toString(), getTree().getRootConst());
-        File file = getFile(m_resultFile.getGameIndex());
-        if (m_verbose)
-            System.err.println("Saving " + file);
-        OutputStream out = new FileOutputStream(file);
-        if (m_useXml)
-            new XmlWriter(out, getTree(), "GoGuiTwoGtp:" + Version.get());
-        else
-            new SgfWriter(out, getTree(), "GoGuiTwoGtp", Version.get());
     }
 
     private void sendGenmove(GoColor color, StringBuilder response)

@@ -132,17 +132,19 @@ public final class Main
                                             new File(sgfFile + ".lock"),
                                             force, blackProgram, whiteProgram,
                                             refereeProgram, size, komi,
-                                            openings, useXml);
+                                            sgfFile, openings, alternate,
+                                            useXml);
             TwoGtp twoGtp
                 = new TwoGtp(blackProgram, whiteProgram, refereeProgram,
                              observer, size, komi, games, alternate, sgfFile,
-                             verbose, openings, timeSettings, useXml,
-                             resultFile);
+                             verbose, openings, timeSettings, resultFile);
             twoGtp.setMaxMoves(maxMoves);
             if (auto)
                 autoPlay(twoGtp, games);
             else
                 twoGtp.mainLoop(System.in, System.out);
+            if (resultFile != null)
+                resultFile.close();
         }
         catch (Throwable t)
         {
