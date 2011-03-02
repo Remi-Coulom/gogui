@@ -13,6 +13,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.go.Komi;
@@ -28,87 +29,54 @@ import net.sf.gogui.version.Version;
 
 public class ResultFile
 {
-    public ResultFile(File file, File lockFile, boolean force, Program black,
-                      Program white, Program referee, int size, Komi komi,
+    public ResultFile(boolean force, Program black, Program white,
+                      Program referee, int numberGames, int size, Komi komi,
                       String filePrefix, Openings openings, boolean alternate,
                       boolean useXml) throws ErrorMessage
     {
         m_filePrefix = filePrefix;
         m_alternate = alternate;
+        m_numberGames = numberGames;
         m_useXml = useXml;
-        m_lockFile = lockFile;
+        m_lockFile = new File(filePrefix + ".lock");
         acquireLock();
-        m_file = file;
+        m_tableFile = new File(filePrefix + ".dat");
         if (force)
         {
-            if (file.exists() && ! file.delete())
-                throw new ErrorMessage("Could not delete file '" + file + "'");
+            if (m_tableFile.exists() && ! m_tableFile.delete())
+                throw new ErrorMessage("Could not delete file '"
+                                       + m_tableFile + "'");
         }
-        if (file.exists())
+        if (m_tableFile.exists())
         {
-            m_table = new Table();
-            try
+            m_table = readTable(m_tableFile, numberGames, m_gameExists);
+            m_nextGameIndex = 0;
+            while (m_gameExists.contains(m_nextGameIndex))
             {
-                m_table.read(file);
-                int lastRowIndex = m_table.getNumberRows() - 1;
-                int gameIndex =
-                    Integer.parseInt(m_table.get("GAME", lastRowIndex)) + 1;
-                if (gameIndex < 0)
-                    throw new ErrorMessage("Invalid file format: " + file);
+                ++m_nextGameIndex;
+                if (m_nextGameIndex > numberGames)
+                {
+                    m_nextGameIndex = -1;
+                    break;
+                }
             }
-            catch (NumberFormatException e)
-            {
-                throw new ErrorMessage("Invalid file format: " + file);
-            }
-            catch (FileNotFoundException e)
-            {
-                throw new ErrorMessage(e.getMessage());
-            }
-            catch (IOException e)
-            {
-                throw new ErrorMessage("Read error: " + file);
-            }
-            return;
+            readGames();
         }
-        ArrayList<String> columns = new ArrayList<String>();
-        columns.add("GAME");
-        columns.add("RES_B");
-        columns.add("RES_W");
-        columns.add("RES_R");
-        columns.add("ALT");
-        columns.add("DUP");
-        columns.add("LEN");
-        columns.add("TIME_B");
-        columns.add("TIME_W");
-        columns.add("CPU_B");
-        columns.add("CPU_W");
-        columns.add("ERR");
-        columns.add("ERR_MSG");
-        m_table = new Table(columns);
-        black.setTableProperties(m_table);
-        white.setTableProperties(m_table);
-        if (referee == null)
-            m_table.setProperty("Referee", "-");
         else
-            referee.setTableProperties(m_table);
-        m_table.setProperty("Size", Integer.toString(size));
-        m_table.setProperty("Komi", komi.toString());
-        if (openings != null)
-            m_table.setProperty("Openings",
-                                openings.getDirectory() + " ("
-                                + openings.getNumber() + " files)");
-        m_table.setProperty("Date", StringUtil.getDate());
-        m_table.setProperty("Host", Platform.getHostInfo());
-        m_table.setProperty("Xml", useXml ? "1" : "0");
-        readGames();
+        {
+            m_table = createTable(black, white, referee, size, komi, openings);
+            m_nextGameIndex = 0;
+        }
     }
 
-    public void addResult(ConstGame game, String resultBlack,
-                          String resultWhite, String resultReferee,
-                          boolean alternated, int numberMoves, boolean error,
-                          String errorMessage, double timeBlack,
-                          double timeWhite, double cpuTimeBlack,
-                          double cpuTimeWhite)
+    public synchronized void addResult(int gameIndex, ConstGame game,
+                                       String resultBlack, String resultWhite,
+                                       String resultReferee,
+                                       boolean alternated, int numberMoves,
+                                       boolean error, String errorMessage,
+                                       double timeBlack, double timeWhite,
+                                       double cpuTimeBlack,
+                                       double cpuTimeWhite)
         throws ErrorMessage
     {
         ArrayList<Compare.Placement> moves
@@ -118,7 +86,7 @@ public class ResultFile
                                    m_alternate, alternated);
         NumberFormat format = StringUtil.getNumberFormat(1);
         m_table.startRow();
-        m_table.set("GAME", Integer.toString(getGameIndex()));
+        m_table.set("GAME", Integer.toString(gameIndex));
         m_table.set("RES_B", resultBlack);
         m_table.set("RES_W", resultWhite);
         m_table.set("RES_R", resultReferee);
@@ -131,17 +99,17 @@ public class ResultFile
         m_table.set("CPU_W", format.format(cpuTimeWhite));
         m_table.set("ERR", error ? "1" : "0");
         m_table.set("ERR_MSG", errorMessage);
-        File tmpFile = new File(m_file.getAbsolutePath() + ".new");
+        File tmpFile = new File(m_tableFile.getAbsolutePath() + ".new");
         try
         {
             m_table.save(tmpFile);
-            tmpFile.renameTo(m_file);
+            tmpFile.renameTo(m_tableFile);
         }
         catch (IOException e)
         {
-            throw new ErrorMessage("Could not write to: " + m_file);
+            throw new ErrorMessage("Could not write to: " + m_tableFile);
         }
-        File file = getFile(getGameIndex());
+        File file = getFile(gameIndex);
         try
         {
             OutputStream out = new FileOutputStream(file);
@@ -166,22 +134,40 @@ public class ResultFile
             System.err.println("Could not delete '" + m_lockFile + "'");
     }
 
-    public int getGameIndex()
+    public synchronized int getNextGameIndex()
     {
-        return m_table.getNumberRows();
+        if (m_nextGameIndex == -1)
+            // All games played
+            return m_nextGameIndex;
+        while (m_gameExists.contains(m_nextGameIndex))
+        {
+            ++m_nextGameIndex;
+            if (m_numberGames > 0 && m_nextGameIndex > m_numberGames)
+            {
+                m_nextGameIndex = -1;
+                break;
+            }
+        }
+        return m_nextGameIndex;
     }
 
-    private boolean m_alternate;
+    private final boolean m_alternate;
 
-    private boolean m_useXml;
+    private final boolean m_useXml;
 
-    private String m_filePrefix;
+    private final TreeSet<Integer> m_gameExists = new TreeSet<Integer>();
 
-    private File m_file;
+    private int m_nextGameIndex;
 
-    private File m_lockFile;
+    private final int m_numberGames;
 
-    private Table m_table;
+    private final String m_filePrefix;
+
+    private final File m_tableFile;
+
+    private final File m_lockFile;
+
+    private final Table m_table;
 
     private final ArrayList<ArrayList<Compare.Placement>> m_games
         = new ArrayList<ArrayList<Compare.Placement>>(100);
@@ -208,6 +194,42 @@ public class ResultFile
         }
     }
 
+    private Table createTable(Program black, Program white, Program referee,
+                              int size, Komi komi, Openings openings)
+    {
+        ArrayList<String> columns = new ArrayList<String>();
+        columns.add("GAME");
+        columns.add("RES_B");
+        columns.add("RES_W");
+        columns.add("RES_R");
+        columns.add("ALT");
+        columns.add("DUP");
+        columns.add("LEN");
+        columns.add("TIME_B");
+        columns.add("TIME_W");
+        columns.add("CPU_B");
+        columns.add("CPU_W");
+        columns.add("ERR");
+        columns.add("ERR_MSG");
+        Table table = new Table(columns);
+        black.setTableProperties(table);
+        white.setTableProperties(table);
+        if (referee == null)
+            table.setProperty("Referee", "-");
+        else
+            referee.setTableProperties(table);
+        table.setProperty("Size", Integer.toString(size));
+        table.setProperty("Komi", komi.toString());
+        if (openings != null)
+            table.setProperty("Openings",
+                                openings.getDirectory() + " ("
+                                + openings.getNumber() + " files)");
+        table.setProperty("Date", StringUtil.getDate());
+        table.setProperty("Host", Platform.getHostInfo());
+        table.setProperty("Xml", m_useXml ? "1" : "0");
+        return table;
+    }
+
     private File getFile(int gameIndex)
     {
         if (m_useXml)
@@ -218,8 +240,10 @@ public class ResultFile
 
     private void readGames()
     {
-        for (int n = 0; n < getGameIndex(); ++n)
+        for (int n = 0; n < m_numberGames; ++n)
         {
+            if (! m_gameExists.contains(n))
+                continue;
             File file = getFile(n);
             if (! file.exists())
             {
@@ -246,5 +270,42 @@ public class ResultFile
                                    e.getMessage());
             }
         }
+    }
+
+    private static Table readTable(File file, int numberGames,
+                                   TreeSet<Integer> gameExists)
+        throws ErrorMessage
+    {
+        Table table = new Table();
+        try
+        {
+            table.read(file);
+            int numberRows = table.getNumberRows();
+            if (numberRows > numberGames)
+                throw new ErrorMessage("File " + file + " already contains "
+                                       + numberRows + " games");
+            for (int i = 0; i < numberGames; ++i)
+            {
+                if (i >= numberRows)
+                    break;
+                int gameIndex = Integer.parseInt(table.get("GAME", i)) - 1;
+                if (gameIndex < 0)
+                    throw new ErrorMessage("Invalid file format: " + file);
+                gameExists.add(gameIndex);
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            throw new ErrorMessage("Invalid file format: " + file);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new ErrorMessage(e.getMessage());
+        }
+        catch (IOException e)
+        {
+            throw new ErrorMessage("Read error: " + file);
+        }
+        return table;
     }
 }

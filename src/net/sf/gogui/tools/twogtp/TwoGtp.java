@@ -82,21 +82,26 @@ public class TwoGtp
         initGame(size);
     }
 
-    public void autoPlayGame() throws Exception
+    public void autoPlay() throws Exception
     {
         StringBuilder response = new StringBuilder(256);
-        try
+        while (true)
         {
-            newGame(m_size);
-            while (! gameOver())
+            try
             {
-                response.setLength(0);
-                sendGenmove(getToMove(), response);
+                newGame(m_size);
+                while (! gameOver())
+                {
+                    response.setLength(0);
+                    sendGenmove(getToMove(), response);
+                }
             }
-        }
-        catch (GtpError e)
-        {
-            handleEndOfGame(true, e.getMessage());
+            catch (GtpError e)
+            {
+                if (m_gameIndex == -1)
+                    break;
+                handleEndOfGame(true, e.getMessage());
+            }
         }
         if (m_black.isProgramDead())
             throw new ErrorMessage("Black program died");
@@ -108,15 +113,6 @@ public class TwoGtp
     {
         for (Program program : m_allPrograms)
             program.close();
-    }
-
-    /** Get games left to play.
-        @return number of games left of -1 if no maximum set. */
-    public int gamesLeft()
-    {
-        if (m_numberGames <= 0)
-            return -1;
-        return m_numberGames - m_resultFile.getGameIndex();
     }
 
     public void handleCommand(GtpCommand cmd) throws GtpError
@@ -242,6 +238,8 @@ public class TwoGtp
 
     private int m_maxMoves = 1000;
 
+    private int m_gameIndex;
+
     private boolean m_resigned;
 
     private final boolean m_verbose;
@@ -303,9 +301,6 @@ public class TwoGtp
     private void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        if (gamesLeft() == 0)
-            throw new GtpError("Maximum number of " + m_numberGames +
-                               " games reached");
         newGame(m_size);
     }
 
@@ -404,7 +399,7 @@ public class TwoGtp
         if (! m_filePrefix.equals(""))
         {
             buffer.append(" (");
-            buffer.append(m_resultFile.getGameIndex() + 1);
+            buffer.append(m_gameIndex + 1);
             buffer.append(')');
         }
         return buffer.toString();
@@ -516,7 +511,7 @@ public class TwoGtp
         comment.append(StringUtil.getDate());
         m_game.setComment(comment.toString(), getTree().getRootConst());
         int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
-        m_resultFile.addResult(m_game, resultBlack, resultWhite,
+        m_resultFile.addResult(m_gameIndex, m_game, resultBlack, resultWhite,
                                resultReferee, isAlternated(), moveNumber,
                                error, errorMessage, realTimeBlack,
                                realTimeWhite, cpuTimeBlack, cpuTimeWhite);
@@ -534,11 +529,9 @@ public class TwoGtp
         {
             int openingFileIndex;
             if (m_alternate)
-                openingFileIndex =
-                    (m_resultFile.getGameIndex() / 2) % m_openings.getNumber();
+                openingFileIndex = (m_gameIndex / 2) % m_openings.getNumber();
             else
-                openingFileIndex =
-                    m_resultFile.getGameIndex() % m_openings.getNumber();
+                openingFileIndex = m_gameIndex % m_openings.getNumber();
             try
             {
                 m_openings.loadFile(openingFileIndex);
@@ -575,7 +568,7 @@ public class TwoGtp
 
     private boolean isAlternated()
     {
-        return (m_alternate && m_resultFile.getGameIndex() % 2 != 0);
+        return (m_alternate && m_gameIndex % 2 != 0);
     }
 
     private boolean isInOpening()
@@ -606,10 +599,20 @@ public class TwoGtp
 
     private void newGame(int size) throws GtpError
     {
+        if (m_resultFile != null)
+            m_gameIndex = m_resultFile.getNextGameIndex();
+        else
+        {
+            ++m_gameIndex;
+            if (m_numberGames > 0 && m_gameIndex > m_numberGames)
+                m_gameIndex = -1;
+        }
+        if (m_gameIndex == -1)
+            throw new GtpError("maximum number of games reached");
         if (m_verbose)
         {
             System.err.println("============================================");
-            System.err.println("Game " + m_resultFile.getGameIndex());
+            System.err.println("Game " + (m_gameIndex + 1));
             System.err.println("============================================");
         }
         m_black.getAndClearCpuTime();

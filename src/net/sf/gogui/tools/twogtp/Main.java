@@ -108,7 +108,7 @@ public final class Main
             if (opt.contains("time"))
                 timeSettings = TimeSettings.parse(opt.get("time"));
             int defaultGames = (auto ? 1 : 0);
-            int games = opt.getInteger("games", defaultGames, 0);
+            int numberGames = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.get("sgffile", "");
             if (opt.contains("games") && sgfFile.equals(""))
                 throw new ErrorMessage("Use option -sgffile with -games");
@@ -128,19 +128,18 @@ public final class Main
             if (sgfFile.equals(""))
                 resultFile = null;
             else
-                resultFile = new ResultFile(new File(sgfFile + ".dat"),
-                                            new File(sgfFile + ".lock"),
-                                            force, blackProgram, whiteProgram,
-                                            refereeProgram, size, komi,
-                                            sgfFile, openings, alternate,
+                resultFile = new ResultFile(force, blackProgram, whiteProgram,
+                                            refereeProgram, numberGames, size,
+                                            komi, sgfFile, openings, alternate,
                                             useXml);
             TwoGtp twoGtp
                 = new TwoGtp(blackProgram, whiteProgram, refereeProgram,
-                             observer, size, komi, games, alternate, sgfFile,
-                             verbose, openings, timeSettings, resultFile);
+                             observer, size, komi, numberGames, alternate,
+                             sgfFile, verbose, openings, timeSettings,
+                             resultFile);
             twoGtp.setMaxMoves(maxMoves);
             if (auto)
-                autoPlay(twoGtp, games);
+                autoPlay(twoGtp, numberGames);
             else
                 twoGtp.mainLoop(System.in, System.out);
             if (resultFile != null)
@@ -161,16 +160,10 @@ public final class Main
     private static void autoPlay(TwoGtp twoGtp,
                                  int numberGames) throws Exception
     {
-        if (twoGtp.gamesLeft() == 0)
-        {
-            System.err.println("Already " + numberGames + " games played");
-            return;
-        }
         try
         {
             System.in.close();
-            while (twoGtp.gamesLeft() > 0)
-                twoGtp.autoPlayGame();
+            twoGtp.autoPlay();
         }
         finally
         {
