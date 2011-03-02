@@ -13,6 +13,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGame;
@@ -120,7 +121,7 @@ public class ResultFile
             else
                 new SgfWriter(out, game.getTree(),
                               "gogui-twogtp", Version.get());
-            m_games.add(moves);
+            m_games.put(gameIndex, moves);
         }
         catch (FileNotFoundException e)
         {
@@ -170,8 +171,8 @@ public class ResultFile
 
     private final Table m_table;
 
-    private final ArrayList<ArrayList<Compare.Placement>> m_games
-        = new ArrayList<ArrayList<Compare.Placement>>(100);
+    private final TreeMap<Integer, ArrayList<Compare.Placement>> m_games
+        = new TreeMap<Integer, ArrayList<Compare.Placement>>();
 
     private void acquireLock() throws ErrorMessage
     {
@@ -258,7 +259,7 @@ public class ResultFile
                 FileInputStream fileStream = new FileInputStream(file);
                 SgfReader reader = new SgfReader(fileStream, file, null, 0);
                 ConstNode root = reader.getTree().getRoot();
-                m_games.add(Compare.getPlacements(root));
+                m_games.put(n, Compare.getPlacements(root));
             }
             catch (SgfError e)
             {
