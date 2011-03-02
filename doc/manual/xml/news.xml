@@ -25,6 +25,11 @@ New menu item: View/Move Numbers
 gogui-terminal: New command line option -color
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+gogui-twogtp: New command line option -threads
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

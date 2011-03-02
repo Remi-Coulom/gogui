@@ -34,6 +34,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-referee</option> <replaceable>command</replaceable></arg>
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-threads</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-xml</option></arg>
@@ -329,6 +330,19 @@ default size 19 will be used when option <option>-auto</option> is set.
 
 <varlistentry>
 <term>
+<option>-threads</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Use multi-threading. Setting the number of threads to a value greater than 1
+will create multiple instances of the Go programs to play n games in parallel.
+Can only used together with option <option>-auto</option>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
 <option>-time</option> <replaceable>timespec</replaceable>
 </term>
 <listitem>
@@ -344,7 +358,10 @@ The base time and overtime (byoyomi) can have an optional unit specifier
 <term><option>-verbose</option></term>
 <listitem>
 <para>
-Print debugging messages.
+Print debugging messages. This will print GTP commands and responses and
+text written to the standard error stream by the programs to the standard
+error stream. If option <option>-threads</option> is used, only the
+debugging messages of the first thread are written.
 </para>
 </listitem>
 </varlistentry>

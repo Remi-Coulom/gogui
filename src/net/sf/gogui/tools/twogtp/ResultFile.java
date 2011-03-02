@@ -136,18 +136,18 @@ public class ResultFile
 
     public synchronized int getNextGameIndex()
     {
-        if (m_nextGameIndex == -1)
-            // All games played
-            return m_nextGameIndex;
-        while (m_gameExists.contains(m_nextGameIndex))
-        {
-            ++m_nextGameIndex;
-            if (m_numberGames > 0 && m_nextGameIndex > m_numberGames)
+        if (m_nextGameIndex != -1)
+            while (m_gameExists.contains(m_nextGameIndex))
             {
-                m_nextGameIndex = -1;
-                break;
+                ++m_nextGameIndex;
+                if (m_numberGames > 0 && m_nextGameIndex > m_numberGames)
+                {
+                    m_nextGameIndex = -1;
+                    break;
+                }
             }
-        }
+        if (m_nextGameIndex != -1)
+            m_gameExists.add(m_nextGameIndex);
         return m_nextGameIndex;
     }
 

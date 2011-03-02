@@ -17,6 +17,7 @@ public final class Main
     /** TwoGtp main function. */
     public static void main(String[] args)
     {
+        boolean exitError = false;
         try
         {
             String options[] = {
@@ -36,6 +37,7 @@ public final class Main
                 "referee:",
                 "sgffile:",
                 "size:",
+                "threads:",
                 "time:",
                 "verbose",
                 "version",
@@ -65,6 +67,7 @@ public final class Main
                     "-referee        command for referee program\n" +
                     "-sgffile        filename prefix\n" +
                     "-size           board size for autoplay (default 19)\n" +
+                    "-threads n      number of threads\n" +
                     "-time spec      set time limits (min[+min/moves])\n" +
                     "-verbose        log GTP streams to stderr\n" +
                     "-version        print version and exit\n" +
@@ -109,6 +112,9 @@ public final class Main
                 timeSettings = TimeSettings.parse(opt.get("time"));
             int defaultGames = (auto ? 1 : 0);
             int numberGames = opt.getInteger("games", defaultGames, 0);
+            int threads = opt.getInteger("threads", 1, 1);
+            if (threads > 1 && ! auto)
+                throw new ErrorMessage("Option -threads needs option -auto");
             String sgfFile = opt.get("sgffile", "");
             if (opt.contains("games") && sgfFile.equals(""))
                 throw new ErrorMessage("Use option -sgffile with -games");
@@ -117,57 +123,103 @@ public final class Main
                 openings = new Openings(new File(opt.get("openings")));
             boolean useXml = opt.contains("xml");
 
-            Program blackProgram = new Program(black, "Black", "B", verbose);
-            Program whiteProgram = new Program(white, "White", "W", verbose);
-            Program refereeProgram;
-            if (referee.equals(""))
-                refereeProgram = null;
-            else
-                refereeProgram = new Program(referee, "Referee", "R", verbose);
-            ResultFile resultFile;
-            if (sgfFile.equals(""))
-                resultFile = null;
-            else
-                resultFile = new ResultFile(force, blackProgram, whiteProgram,
-                                            refereeProgram, numberGames, size,
-                                            komi, sgfFile, openings, alternate,
-                                            useXml);
-            TwoGtp twoGtp
-                = new TwoGtp(blackProgram, whiteProgram, refereeProgram,
-                             observer, size, komi, numberGames, alternate,
-                             sgfFile, verbose, openings, timeSettings,
-                             resultFile);
-            twoGtp.setMaxMoves(maxMoves);
+            TwoGtp twoGtp[] = new TwoGtp[threads];
+            ResultFile resultFile = null;
+            for (int i = 0; i < threads; ++i)
+            {
+                Program blackProgram =
+                    new Program(black, "Black", "B", verbose);
+                Program whiteProgram =
+                    new Program(white, "White", "W", verbose);
+                Program refereeProgram;
+                if (referee.equals(""))
+                    refereeProgram = null;
+                else
+                    refereeProgram =
+                        new Program(referee, "Referee", "R", verbose);
+                if (! sgfFile.equals("") && resultFile == null)
+                    resultFile =
+                        new ResultFile(force, blackProgram, whiteProgram,
+                                       refereeProgram, numberGames, size,
+                                       komi, sgfFile, openings, alternate,
+                                       useXml);
+                if (i > 0)
+                    verbose = false;
+                twoGtp[i] = new TwoGtp(blackProgram, whiteProgram,
+                                       refereeProgram, observer, size, komi,
+                                       numberGames, alternate, sgfFile,
+                                       verbose, openings, timeSettings,
+                                       resultFile);
+                twoGtp[i].setMaxMoves(maxMoves);
+            }
             if (auto)
-                autoPlay(twoGtp, numberGames);
+            {
+                System.in.close();
+                TwoGtpThread thread[] = new TwoGtpThread[threads];
+                for (int i = 0; i < threads; ++i)
+                {
+                    thread[i] = new TwoGtpThread(twoGtp[i]);
+                    thread[i].start();
+                }
+                for (int i = 0; i < threads; ++i)
+                    thread[i].join();
+                for (int i = 0; i < threads; ++i)
+                    if (thread[i].getException() != null)
+                    {
+                        StringUtil.printException(thread[i].getException());
+                        exitError = true;
+                    }
+            }
             else
-                twoGtp.mainLoop(System.in, System.out);
+                twoGtp[0].mainLoop(System.in, System.out);
             if (resultFile != null)
                 resultFile.close();
         }
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            System.exit(1);
+            exitError = true;
         }
+        if (exitError)
+            System.exit(1);
     }
 
     /** Make constructor unavailable; class is for namespace only. */
     private Main()
     {
     }
+}
 
-    private static void autoPlay(TwoGtp twoGtp,
-                                 int numberGames) throws Exception
+class TwoGtpThread
+    extends Thread
+{
+    public TwoGtpThread(TwoGtp twoGtp)
+    {
+        m_twoGtp = twoGtp;
+    }
+
+    public Exception getException()
+    {
+        return m_exception;
+    }
+
+    public void run()
     {
         try
         {
-            System.in.close();
-            twoGtp.autoPlay();
+            m_twoGtp.autoPlay();
+        }
+        catch (Exception e)
+        {
+            m_exception = e;
         }
         finally
         {
-            twoGtp.close();
+            m_twoGtp.close();
         }
     }
+
+    private Exception m_exception;
+
+    private TwoGtp m_twoGtp;
 }
