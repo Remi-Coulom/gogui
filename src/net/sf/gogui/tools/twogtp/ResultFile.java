@@ -142,7 +142,7 @@ public class ResultFile
             while (m_gameExists.contains(m_nextGameIndex))
             {
                 ++m_nextGameIndex;
-                if (m_numberGames > 0 && m_nextGameIndex > m_numberGames)
+                if (m_numberGames > 0 && m_nextGameIndex >= m_numberGames)
                 {
                     m_nextGameIndex = -1;
                     break;
