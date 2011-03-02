@@ -612,7 +612,7 @@ public class TwoGtp
         if (m_verbose)
         {
             System.err.println("============================================");
-            System.err.println("Game " + (m_gameIndex + 1));
+            System.err.println("Game " + m_gameIndex);
             System.err.println("============================================");
         }
         m_black.getAndClearCpuTime();
