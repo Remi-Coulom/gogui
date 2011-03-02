@@ -122,8 +122,11 @@ public final class Main
             if (opt.contains("openings"))
                 openings = new Openings(new File(opt.get("openings")));
             boolean useXml = opt.contains("xml");
+            if (auto)
+                System.in.close();
 
             TwoGtp twoGtp[] = new TwoGtp[threads];
+            TwoGtpThread thread[] = new TwoGtpThread[threads];
             ResultFile resultFile = null;
             for (int i = 0; i < threads; ++i)
             {
@@ -151,16 +154,14 @@ public final class Main
                                        verbose, openings, timeSettings,
                                        resultFile);
                 twoGtp[i].setMaxMoves(maxMoves);
-            }
-            if (auto)
-            {
-                System.in.close();
-                TwoGtpThread thread[] = new TwoGtpThread[threads];
-                for (int i = 0; i < threads; ++i)
+                if (auto)
                 {
                     thread[i] = new TwoGtpThread(twoGtp[i]);
                     thread[i].start();
                 }
+            }
+            if (auto)
+            {
                 for (int i = 0; i < threads; ++i)
                     thread[i].join();
                 for (int i = 0; i < threads; ++i)
