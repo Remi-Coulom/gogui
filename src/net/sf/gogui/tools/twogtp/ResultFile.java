@@ -99,6 +99,7 @@ public class ResultFile
         m_table.set("CPU_W", format.format(cpuTimeWhite));
         m_table.set("ERR", error ? "1" : "0");
         m_table.set("ERR_MSG", errorMessage);
+        m_table.sortByIntColumn("GAME");
         File tmpFile = new File(m_tableFile.getAbsolutePath() + ".new");
         try
         {

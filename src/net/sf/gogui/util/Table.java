@@ -289,6 +289,25 @@ public class Table
         m_lastRow = row;
     }
 
+    public void sortByIntColumn(int column) throws InvalidElement
+    {
+        int numberRows = getNumberRows();
+        for (int row1 = 0; row1 < numberRows - 1; ++row1)
+            for (int row2 = row1 + 1; row2 < numberRows; ++row2)
+                if (getInt(column, row2) < getInt(column, row1))
+                {
+                    ArrayList<String> tmp = m_rows.get(row1);
+                    m_rows.set(row1, m_rows.get(row2));
+                    m_rows.set(row2, tmp);
+                }
+    }
+
+    public void sortByIntColumn(String columnTitle)
+        throws InvalidElement, InvalidLocation
+    {
+        sortByIntColumn(getColumnIndex(columnTitle));
+    }
+
     private boolean m_propertiesRead;
 
     private int m_lineNumber;
