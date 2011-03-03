@@ -3,6 +3,7 @@
 package net.sf.gogui.tools.twogtp;
 
 import java.io.File;
+import java.util.ArrayList;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
@@ -130,16 +131,24 @@ public final class Main
             ResultFile resultFile = null;
             for (int i = 0; i < numberThreads; ++i)
             {
+                ArrayList<Program> allPrograms = new ArrayList<Program>();
                 Program blackProgram =
                     new Program(black, "Black", "B", verbose);
+                allPrograms.add(blackProgram);
                 Program whiteProgram =
                     new Program(white, "White", "W", verbose);
+                allPrograms.add(whiteProgram);
                 Program refereeProgram;
                 if (referee.equals(""))
                     refereeProgram = null;
                 else
+                {
                     refereeProgram =
                         new Program(referee, "Referee", "R", verbose);
+                    allPrograms.add(refereeProgram);
+                }
+                for (Program program : allPrograms)
+                    program.setLabel(allPrograms);
                 if (! sgfFile.equals("") && resultFile == null)
                     resultFile =
                         new ResultFile(force, blackProgram, whiteProgram,
