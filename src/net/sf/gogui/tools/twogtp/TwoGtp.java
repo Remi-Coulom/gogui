@@ -320,6 +320,8 @@ public class TwoGtp
 
     private ConstNode m_lastOpeningNode;
 
+    private FileChannel m_lockFileChannel;
+
     private void acquireLock() throws ErrorMessage
     {
         if (m_filePrefix.equals(""))
@@ -328,14 +330,12 @@ public class TwoGtp
         try
         {
             file.createNewFile();
-            FileChannel channel
+            m_lockFileChannel
                 = new RandomAccessFile(file, "rw").getChannel();
-            FileLock lock = channel.tryLock();
+            FileLock lock = m_lockFileChannel.tryLock();
             if (lock == null)
                 throw new ErrorMessage("Could not get lock on file '" + file
                             + "': already used by another instance of TwoGtp");
-            // We keep the lock until the end of the process and rely on the
-            // operating system to release it
         }
         catch (IOException e)
         {
@@ -358,6 +358,14 @@ public class TwoGtp
         if (! m_filePrefix.equals(""))
         {
             File lockFile = getLockFile();
+            try
+            {
+                m_lockFileChannel.close();
+            }
+            catch (IOException e)
+            {
+                System.err.println("Could not close '" + lockFile + "'");
+            }
             if (! lockFile.delete())
                 System.err.println("Could not delete '" + lockFile + "'");
         }
@@ -862,6 +870,9 @@ public class TwoGtp
         try
         {
             m_table.save(tmpFile);
+            if (Platform.isWindows())
+                // File.renameTo() fails on Windows if target exists
+                resultFile.delete();
             tmpFile.renameTo(resultFile);
         }
         catch (IOException e)

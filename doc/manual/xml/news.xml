@@ -52,7 +52,8 @@ Typos fixed in German internationalization.
 </listitem>
 <listitem>
 <simpara>
-gogui-twogtp: Do not create a lock file if option -sgffile is not used
+gogui-twogtp: do not create a lock file if option -sgffile is not used;
+fix broken writing to result file on Windows
 </simpara>
 </listitem>
 </itemizedlist>
