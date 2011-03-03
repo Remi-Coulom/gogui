@@ -317,7 +317,7 @@ public class ResultFile
             {
                 if (i >= numberRows)
                     break;
-                int gameIndex = Integer.parseInt(table.get("GAME", i)) - 1;
+                int gameIndex = Integer.parseInt(table.get("GAME", i));
                 if (gameIndex < 0)
                     throw new ErrorMessage("Invalid file format: " + file);
                 gameExists.add(gameIndex);
