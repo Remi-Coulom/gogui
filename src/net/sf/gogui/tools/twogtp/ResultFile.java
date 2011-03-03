@@ -119,6 +119,9 @@ public class ResultFile
         try
         {
             m_table.save(tmpFile);
+            if (Platform.isWindows())
+                // File.renameTo() fails on Windows if target exists
+                m_tableFile.delete();
             tmpFile.renameTo(m_tableFile);
         }
         catch (IOException e)
@@ -146,6 +149,14 @@ public class ResultFile
 
     public void close()
     {
+        try
+        {
+            m_lockFileChannel.close();
+        }
+        catch (IOException e)
+        {
+            System.err.println("Could not close '" + m_lockFile + "'");
+        }
         if (! m_lockFile.delete())
             System.err.println("Could not delete '" + m_lockFile + "'");
     }
@@ -185,6 +196,8 @@ public class ResultFile
 
     private final File m_lockFile;
 
+    private FileChannel m_lockFileChannel;
+
     private final Table m_table;
 
     private final TreeMap<Integer, ArrayList<Compare.Placement>> m_games
@@ -195,15 +208,13 @@ public class ResultFile
         try
         {
             m_lockFile.createNewFile();
-            FileChannel channel
+            m_lockFileChannel
                 = new RandomAccessFile(m_lockFile, "rw").getChannel();
-            FileLock lock = channel.tryLock();
+            FileLock lock = m_lockFileChannel.tryLock();
             if (lock == null)
                 throw new ErrorMessage("Could not get lock on file '"
                                        + m_lockFile
                             + "': already used by another instance of TwoGtp");
-            // We keep the lock until the end of the process and rely on the
-            // operating system to release it
         }
         catch (IOException e)
         {
