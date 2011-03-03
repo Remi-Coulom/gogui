@@ -33,12 +33,13 @@ public class ResultFile
     public ResultFile(boolean force, Program black, Program white,
                       Program referee, int numberGames, int size, Komi komi,
                       String filePrefix, Openings openings, boolean alternate,
-                      boolean useXml) throws ErrorMessage
+                      boolean useXml, int numberThreads) throws ErrorMessage
     {
         m_filePrefix = filePrefix;
         m_alternate = alternate;
         m_numberGames = numberGames;
         m_useXml = useXml;
+        m_numberThreads = numberThreads;
         m_lockFile = new File(filePrefix + ".lock");
         acquireLock();
         m_tableFile = new File(filePrefix + ".dat");
@@ -100,7 +101,20 @@ public class ResultFile
         m_table.set("CPU_W", format.format(cpuTimeWhite));
         m_table.set("ERR", error ? "1" : "0");
         m_table.set("ERR_MSG", errorMessage);
-        m_table.sortByIntColumn("GAME");
+
+        // The code does not rely on the table being sorted by game number,
+        // but it looks nicer for the user.
+        int rowEnd = m_table.getNumberRows();
+        int rowBegin = rowEnd - m_numberThreads;
+        if (rowBegin < 0)
+            rowBegin = 0;
+        // If the run was terminated and continued with a different number
+        // of threads, there could be a gap between gameIndex and
+        // getNumberRows() larger than m_numberThreads
+        if (gameIndex < rowBegin)
+            rowBegin = gameIndex;
+        m_table.sortByIntColumn("GAME", rowBegin, rowEnd);
+
         File tmpFile = new File(m_tableFile.getAbsolutePath() + ".new");
         try
         {
@@ -162,6 +176,8 @@ public class ResultFile
     private int m_nextGameIndex;
 
     private final int m_numberGames;
+
+    private final int m_numberThreads;
 
     private final String m_filePrefix;
 

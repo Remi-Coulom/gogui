@@ -112,8 +112,8 @@ public final class Main
                 timeSettings = TimeSettings.parse(opt.get("time"));
             int defaultGames = (auto ? 1 : 0);
             int numberGames = opt.getInteger("games", defaultGames, 0);
-            int threads = opt.getInteger("threads", 1, 1);
-            if (threads > 1 && ! auto)
+            int numberThreads = opt.getInteger("threads", 1, 1);
+            if (numberThreads > 1 && ! auto)
                 throw new ErrorMessage("Option -threads needs option -auto");
             String sgfFile = opt.get("sgffile", "");
             if (opt.contains("games") && sgfFile.equals(""))
@@ -125,10 +125,10 @@ public final class Main
             if (auto)
                 System.in.close();
 
-            TwoGtp twoGtp[] = new TwoGtp[threads];
-            TwoGtpThread thread[] = new TwoGtpThread[threads];
+            TwoGtp twoGtp[] = new TwoGtp[numberThreads];
+            TwoGtpThread thread[] = new TwoGtpThread[numberThreads];
             ResultFile resultFile = null;
-            for (int i = 0; i < threads; ++i)
+            for (int i = 0; i < numberThreads; ++i)
             {
                 Program blackProgram =
                     new Program(black, "Black", "B", verbose);
@@ -145,7 +145,7 @@ public final class Main
                         new ResultFile(force, blackProgram, whiteProgram,
                                        refereeProgram, numberGames, size,
                                        komi, sgfFile, openings, alternate,
-                                       useXml);
+                                       useXml, numberThreads);
                 if (i > 0)
                     verbose = false;
                 twoGtp[i] = new TwoGtp(blackProgram, whiteProgram,
@@ -162,9 +162,9 @@ public final class Main
             }
             if (auto)
             {
-                for (int i = 0; i < threads; ++i)
+                for (int i = 0; i < numberThreads; ++i)
                     thread[i].join();
-                for (int i = 0; i < threads; ++i)
+                for (int i = 0; i < numberThreads; ++i)
                     if (thread[i].getException() != null)
                     {
                         StringUtil.printException(thread[i].getException());

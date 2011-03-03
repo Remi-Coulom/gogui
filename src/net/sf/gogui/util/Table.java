@@ -289,11 +289,11 @@ public class Table
         m_lastRow = row;
     }
 
-    public void sortByIntColumn(int column) throws InvalidElement
+    public void sortByIntColumn(int column, int rowBegin,
+                                int rowEnd) throws InvalidElement
     {
-        int numberRows = getNumberRows();
-        for (int row1 = 0; row1 < numberRows - 1; ++row1)
-            for (int row2 = row1 + 1; row2 < numberRows; ++row2)
+        for (int row1 = rowBegin; row1 < rowEnd - 1; ++row1)
+            for (int row2 = row1 + 1; row2 < rowEnd; ++row2)
                 if (getInt(column, row2) < getInt(column, row1))
                 {
                     ArrayList<String> tmp = m_rows.get(row1);
@@ -302,10 +302,11 @@ public class Table
                 }
     }
 
-    public void sortByIntColumn(String columnTitle)
+    public void sortByIntColumn(String columnTitle, int rowBegin,
+                                int rowEnd)
         throws InvalidElement, InvalidLocation
     {
-        sortByIntColumn(getColumnIndex(columnTitle));
+        sortByIntColumn(getColumnIndex(columnTitle), rowBegin, rowEnd);
     }
 
     private boolean m_propertiesRead;
