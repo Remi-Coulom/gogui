@@ -336,7 +336,7 @@ default size 19 will be used when option <option>-auto</option> is set.
 <para>
 Use multi-threading. Setting the number of threads to a value greater than 1
 will create multiple instances of the Go programs to play n games in parallel.
-Can only used together with option <option>-auto</option>.
+Can only be used together with option <option>-auto</option>.
 </para>
 </listitem>
 </varlistentry>
