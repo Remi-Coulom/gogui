@@ -89,7 +89,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GoGuiClient " + Version.get());
+                System.out.println("gogui-client " + Version.get());
                 System.exit(0);
             }
             int timeout = opt.getInteger("timeout", 10, 0);

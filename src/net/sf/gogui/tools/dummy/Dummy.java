@@ -26,7 +26,7 @@ public class Dummy
     {
         super(log);
         registerCommands();
-        setName("GoGuiDummy");
+        setName("gogui-dummy");
         setVersion(Version.get());
         m_random = new Random();
         m_resign = resign;

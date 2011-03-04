@@ -156,7 +156,7 @@ public class TwoGtp
         else if (command.equals("scoring_system"))
             sendIfSupported(command, cmd.getLine());
         else if (command.equals("name"))
-            cmd.setResponse("GoGuiTwoGtp");
+            cmd.setResponse("gogui-twogtp");
         else if (command.equals("version"))
             cmd.setResponse(Version.get());
         else if (command.equals("protocol_version"))

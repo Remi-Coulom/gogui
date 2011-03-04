@@ -44,7 +44,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GoGuiConvert " + Version.get());
+                System.out.println("gogui-convert " + Version.get());
                 System.exit(0);
             }
             boolean force = opt.contains("force");
@@ -93,10 +93,10 @@ public final class Main
                 String version = Version.get();
                 if (format.equals("xml"))
                     new XmlWriter(new FileOutputStream(out), tree,
-                                  "GoGuiConvert:" + version);
+                                  "gogui-convert:" + version);
                 else if (format.equals("sgf"))
                     new SgfWriter(new FileOutputStream(out), tree,
-                                  "GoGuiConvert", version);
+                                  "gogui-convert", version);
                 else if (format.equals("tex"))
                     new TexWriter(title, new FileOutputStream(out), tree);
                 else

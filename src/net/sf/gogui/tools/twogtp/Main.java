@@ -86,7 +86,7 @@ public final class Main
             boolean force = opt.contains("force");
             if (opt.contains("version"))
             {
-                System.out.println("GoGuiTwoGtp " + Version.get());
+                System.out.println("gogui-twogtp " + Version.get());
                 System.exit(0);
             }
             if (opt.contains("analyze"))

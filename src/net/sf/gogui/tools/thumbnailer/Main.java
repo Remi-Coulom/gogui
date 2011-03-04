@@ -36,7 +36,7 @@ public final class Main
             }
             if (opt.contains("version"))
             {
-                System.out.println("GoGuiThumbnailer " + Version.get());
+                System.out.println("gogui-thumbnailer " + Version.get());
                 return;
             }
             /*
