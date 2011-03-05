@@ -105,7 +105,7 @@ It is also possible to create an application bundle for Mac OS X by typing
 <programlisting>
 <userinput>ant gogui.app</userinput></programlisting>
 in the main directory. The resulting application bundle will be in
-<filename>build/GoGui.app</filename>. This requires, that the
+<filename>build/GoGui.app</filename>. This requires that the
 <ulink url="http://ant.apache.org">Ant</ulink> build system is installed on
 the system.
 </para>
