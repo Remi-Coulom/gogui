@@ -1,0 +1,81 @@
+; Script for creating a Windows installer with NSIS
+; (http://nsis.sourceforge.net)
+
+Name "GoGui"
+Caption "GoGui Installer"
+Icon "gogui.ico"
+OutFile "..\install.exe"
+InstallDir "$PROGRAMFILES\GoGui"
+
+Page directory
+Page instfiles
+
+Section ""
+
+Var /GLOBAL JAVA_VERSION
+Var /GLOBAL JAVA_HOME
+Var /GLOBAL JAVA
+
+ReadRegStr $JAVA_VERSION HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
+ReadRegStr $JAVA_HOME HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$JAVA_VERSION" "JavaHome"
+StrCpy $JAVA "$JAVA_HOME\bin\javaw.exe"
+IfFileExists $JAVA javafound
+MessageBox MB_ICONSTOP "Please install Java before installing GoGui."
+Abort
+javafound:
+
+SetOutPath "$INSTDIR\lib"
+File "..\lib\gogui.jar"
+File "..\lib\gogui-adapter.jar"
+File "..\lib\gogui-dummy.jar"
+File "..\lib\gogui-terminal.jar"
+File "..\lib\gogui-client.jar"
+File "..\lib\gogui-regress.jar"
+File "..\lib\gogui-thumbnailer.jar"
+File "..\lib\gogui-convert.jar"
+File "..\lib\gogui-server.jar"
+File "..\lib\gogui-twogtp.jar"
+File "..\lib\gogui-display.jar"
+File "..\lib\gogui-statistics.jar"
+SetOutPath "$INSTDIR\config"
+File "..\config\gogui.ico"
+
+WriteUninstaller $INSTDIR\uninstall.exe
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" "DisplayName" "GoGui"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" "UninstallString" \
+  "$INSTDIR\uninstall.exe"
+
+CreateDirectory "$SMPROGRAMS\Games"
+CreateShortCut "$SMPROGRAMS\Games\GoGui.lnk" "$JAVA" "-jar $\"$INSTDIR\lib\gogui.jar$\"" \
+  "$INSTDIR\config\gogui.ico"
+CreateShortCut "$Desktop\GoGui.lnk" "$JAVA" "-jar $\"$INSTDIR\lib\gogui.jar$\"" \
+  "$INSTDIR\config\gogui.ico"
+
+SectionEnd
+ 
+Section "Uninstall"
+ 
+Delete "$INSTDIR\uninstall.exe"
+Delete "$INSTDIR\config\gogui.ico"
+Delete "$INSTDIR\lib\gogui.jar"
+Delete "$INSTDIR\lib\gogui-adapter.jar"
+Delete "$INSTDIR\lib\gogui-dummy.jar"
+Delete "$INSTDIR\lib\gogui-terminal.jar"
+Delete "$INSTDIR\lib\gogui-client.jar"
+Delete "$INSTDIR\lib\gogui-regress.jar"
+Delete "$INSTDIR\lib\gogui-thumbnailer.jar"
+Delete "$INSTDIR\lib\gogui-convert.jar"
+Delete "$INSTDIR\lib\gogui-server.jar"
+Delete "$INSTDIR\lib\gogui-twogtp.jar"
+Delete "$INSTDIR\lib\gogui-display.jar"
+Delete "$INSTDIR\lib\gogui-statistics.jar"
+RmDir "$INSTDIR\lib"
+RmDir "$INSTDIR"
+Delete "$SMPROGRAMS\GoGui\GoGui.lnk"
+RmDir "$SMPROGRAMS\GoGui"
+Delete "$Desktop\GoGui.lnk"
+
+DeleteRegKey HKLM "SOFTWARE\GoGui"
+DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
+
+SectionEnd
