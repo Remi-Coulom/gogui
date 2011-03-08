@@ -144,6 +144,7 @@ Comment out the following exec tag for releases.
  COPYING.html
  INSTALL.html
  build.xml
+ config/License.txt
  config/go.dtd
  config/gogui.ico
  config/gogui-gogui.desktop
@@ -154,6 +155,7 @@ Comment out the following exec tag for releases.
  config/gogui.schemas
  config/gogui-mime.xml
  config/install.nsis
+ config/sgf.ico
  doc/README.html
  doc/manual/html/*.html
  doc/manual/html/*.png
