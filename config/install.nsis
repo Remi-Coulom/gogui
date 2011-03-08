@@ -4,27 +4,41 @@
 Name "GoGui"
 Caption "GoGui Installer"
 Icon "gogui.ico"
-OutFile "..\install.exe"
+OutFile "..\Install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
+LicenseData "License.txt"
 
+; Set admin level, needed for shortcut removal on Vista
+; (http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista)
+RequestExecutionLevel admin
+
+Page license
+Page components
 Page directory
 Page instfiles
-
-Section ""
+UninstPage uninstConfirm
+UninstPage instfiles
 
 Var /GLOBAL JAVA_VERSION
 Var /GLOBAL JAVA_HOME
 Var /GLOBAL JAVA
 
-ReadRegStr $JAVA_VERSION HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
-ReadRegStr $JAVA_HOME HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$JAVA_VERSION" "JavaHome"
+Function .onInit
+ReadRegStr $JAVA_VERSION HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" \
+  "CurrentVersion"
+ReadRegStr $JAVA_HOME HKLM \
+  "SOFTWARE\JavaSoft\Java Runtime Environment\$JAVA_VERSION" "JavaHome"
 StrCpy $JAVA "$JAVA_HOME\bin\javaw.exe"
 IfFileExists $JAVA javafound
-MessageBox MB_ICONSTOP "Please install Java before installing GoGui."
-Abort
+MessageBox MB_ICONSTOP \
+  "Java not found. Please install Java before installing GoGui."
+Quit
 javafound:
+FunctionEnd
 
-SetOutPath "$INSTDIR\lib"
+Section
+
+SetOutPath "$INSTDIR"
 File "..\lib\gogui.jar"
 File "..\lib\gogui-adapter.jar"
 File "..\lib\gogui-dummy.jar"
@@ -37,45 +51,78 @@ File "..\lib\gogui-server.jar"
 File "..\lib\gogui-twogtp.jar"
 File "..\lib\gogui-display.jar"
 File "..\lib\gogui-statistics.jar"
-SetOutPath "$INSTDIR\config"
-File "..\config\gogui.ico"
+File "gogui.ico"
+File "License.txt"
 
-WriteUninstaller $INSTDIR\uninstall.exe
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" "DisplayName" "GoGui"
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" "UninstallString" \
-  "$INSTDIR\uninstall.exe"
+WriteUninstaller $INSTDIR\Uninstall.exe
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
+  "DisplayName" "GoGui"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
+  "DisplayIcon" "$INSTDIR\gogui.ico"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
+  "URLInfoAbout" "http://gogui.sourceforge.net/"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
+  "UninstallString" "$INSTDIR\Uninstall.exe"
 
+SectionEnd
+
+Section "Add start menu entry"
+
+SetShellVarContext all
 CreateDirectory "$SMPROGRAMS\Games"
-CreateShortCut "$SMPROGRAMS\Games\GoGui.lnk" "$JAVA" "-jar $\"$INSTDIR\lib\gogui.jar$\"" \
-  "$INSTDIR\config\gogui.ico"
-CreateShortCut "$Desktop\GoGui.lnk" "$JAVA" "-jar $\"$INSTDIR\lib\gogui.jar$\"" \
-  "$INSTDIR\config\gogui.ico"
+CreateShortCut "$SMPROGRAMS\Games\GoGui.lnk" "$JAVA"\
+  "-jar $\"$INSTDIR\gogui.jar$\"" "$INSTDIR\gogui.ico"
+
+SectionEnd
+
+Section "Create desktop shortcut"
+
+SetShellVarContext all
+CreateShortCut "$Desktop\GoGui.lnk" "$JAVA" \
+  "-jar $\"$INSTDIR\gogui.jar$\"" "$INSTDIR\gogui.ico"
 
 SectionEnd
  
+Section /o "Register GoGui as handler for SGF files"
+
+File "sgf.ico"
+
+WriteRegStr HKCR ".sgf" "" "GoGui.sgf"
+WriteRegStr HKCR ".sgf" "Content Type" "application/x-go-sgf"
+WriteRegStr HKCR "GoGui.sgf" "" "SGF file (Smart Game Format)"
+WriteRegStr HKCR "GoGui.sgf\DefaultIcon" "" "$INSTDIR\sgf.ico"
+WriteRegStr HKCR "GoGui.sgf\shell\open\command" "" \
+  "$\"$JAVA$\" -jar $\"$INSTDIR\gogui.jar$\" $\"%1$\""
+WriteRegStr HKCR "MIME\Database\Content Type\application/x-go-sgf" \
+  "Extension" ".sgf"
+
+SectionEnd
+
 Section "Uninstall"
  
-Delete "$INSTDIR\uninstall.exe"
-Delete "$INSTDIR\config\gogui.ico"
-Delete "$INSTDIR\lib\gogui.jar"
-Delete "$INSTDIR\lib\gogui-adapter.jar"
-Delete "$INSTDIR\lib\gogui-dummy.jar"
-Delete "$INSTDIR\lib\gogui-terminal.jar"
-Delete "$INSTDIR\lib\gogui-client.jar"
-Delete "$INSTDIR\lib\gogui-regress.jar"
-Delete "$INSTDIR\lib\gogui-thumbnailer.jar"
-Delete "$INSTDIR\lib\gogui-convert.jar"
-Delete "$INSTDIR\lib\gogui-server.jar"
-Delete "$INSTDIR\lib\gogui-twogtp.jar"
-Delete "$INSTDIR\lib\gogui-display.jar"
-Delete "$INSTDIR\lib\gogui-statistics.jar"
-RmDir "$INSTDIR\lib"
+Delete "$INSTDIR\Uninstall.exe"
+Delete "$INSTDIR\gogui.ico"
+Delete "$INSTDIR\gogui.jar"
+Delete "$INSTDIR\gogui-adapter.jar"
+Delete "$INSTDIR\gogui-dummy.jar"
+Delete "$INSTDIR\gogui-terminal.jar"
+Delete "$INSTDIR\gogui-client.jar"
+Delete "$INSTDIR\gogui-regress.jar"
+Delete "$INSTDIR\gogui-thumbnailer.jar"
+Delete "$INSTDIR\gogui-convert.jar"
+Delete "$INSTDIR\gogui-server.jar"
+Delete "$INSTDIR\gogui-twogtp.jar"
+Delete "$INSTDIR\gogui-display.jar"
+Delete "$INSTDIR\gogui-statistics.jar"
+Delete "$INSTDIR\sgf.ico"
 RmDir "$INSTDIR"
-Delete "$SMPROGRAMS\GoGui\GoGui.lnk"
-RmDir "$SMPROGRAMS\GoGui"
+
+SetShellVarContext all
+Delete "$SMPROGRAMS\Games\GoGui.lnk"
 Delete "$Desktop\GoGui.lnk"
 
 DeleteRegKey HKLM "SOFTWARE\GoGui"
 DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
+DeleteRegKey HKCR "GoGui.sgf"
 
 SectionEnd
