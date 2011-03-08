@@ -58,6 +58,10 @@ WriteUninstaller $INSTDIR\Uninstall.exe
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
   "DisplayName" "GoGui"
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
+  "DisplayIcon" "$INSTDIR\gogui.ico"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
+  "URLInfoAbout" "http://gogui.sourceforge.net/"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
   "UninstallString" "$INSTDIR\Uninstall.exe"
 
 SectionEnd
@@ -83,11 +87,11 @@ Section /o "Register GoGui as handler for SGF files"
 
 File "sgf.ico"
 
-WriteRegStr HKCR ".sgf" "" "GoGui.SGFFile"
+WriteRegStr HKCR ".sgf" "" "GoGui.sgf"
 WriteRegStr HKCR ".sgf" "Content Type" "application/x-go-sgf"
-WriteRegStr HKCR "GoGui.SGFFile" "" "SGF file (Smart Game Format)"
-WriteRegStr HKCR "GoGui.SGFFile\DefaultIcon" "" "$INSTDIR\sgf.ico"
-WriteRegStr HKCR "GoGui.SGFFile\shell\open\command" "" \
+WriteRegStr HKCR "GoGui.sgf" "" "SGF file (Smart Game Format)"
+WriteRegStr HKCR "GoGui.sgf\DefaultIcon" "" "$INSTDIR\sgf.ico"
+WriteRegStr HKCR "GoGui.sgf\shell\open\command" "" \
   "$\"$JAVA$\" -jar $\"$INSTDIR\gogui.jar$\" $\"%1$\""
 WriteRegStr HKCR "MIME\Database\Content Type\application/x-go-sgf" \
   "Extension" ".sgf"
@@ -119,6 +123,6 @@ Delete "$Desktop\GoGui.lnk"
 
 DeleteRegKey HKLM "SOFTWARE\GoGui"
 DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
-DeleteRegKey HKCR "GoGui.SGFFile"
+DeleteRegKey HKCR "GoGui.sgf"
 
 SectionEnd
