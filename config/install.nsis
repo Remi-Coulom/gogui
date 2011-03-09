@@ -7,7 +7,8 @@ Icon "gogui.ico"
 OutFile "..\Install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
 LicenseData "License.txt"
-
+XPStyle on
+SetCompressor /SOLID lzma
 ; Set admin level, needed for shortcut removal on Vista
 ; (http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista)
 RequestExecutionLevel admin
