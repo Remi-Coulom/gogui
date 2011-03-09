@@ -7,7 +7,8 @@ Icon "gogui.ico"
 OutFile "..\Install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
 LicenseData "License.txt"
-
+XPStyle on
+SetCompressor /SOLID lzma
 ; Set admin level, needed for shortcut removal on Vista
 ; (http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista)
 RequestExecutionLevel admin
@@ -89,7 +90,7 @@ File "sgf.ico"
 
 WriteRegStr HKCR ".sgf" "" "GoGui.sgf"
 WriteRegStr HKCR ".sgf" "Content Type" "application/x-go-sgf"
-WriteRegStr HKCR "GoGui.sgf" "" "SGF file (Smart Game Format)"
+WriteRegStr HKCR "GoGui.sgf" "" "SGF File (Smart Game Format)"
 WriteRegStr HKCR "GoGui.sgf\DefaultIcon" "" "$INSTDIR\sgf.ico"
 WriteRegStr HKCR "GoGui.sgf\shell\open\command" "" \
   "$\"$JAVA$\" -jar $\"$INSTDIR\gogui.jar$\" $\"%1$\""
@@ -101,6 +102,7 @@ SectionEnd
 Section "Uninstall"
  
 Delete "$INSTDIR\Uninstall.exe"
+Delete "$INSTDIR\License.txt"
 Delete "$INSTDIR\gogui.ico"
 Delete "$INSTDIR\gogui.jar"
 Delete "$INSTDIR\gogui-adapter.jar"
