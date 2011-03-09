@@ -132,7 +132,8 @@ public final class Main
                                   settings.m_initComputerColor,
                                   settings.m_computerBlack,
                                   settings.m_computerWhite, settings.m_auto,
-                                  settings.m_gtpFile, settings.m_gtpCommand,
+                                  settings.m_register, settings.m_gtpFile,
+                                  settings.m_gtpCommand,
                                   settings.m_analyzeCommands);
                     }
                     catch (ErrorMessage e)

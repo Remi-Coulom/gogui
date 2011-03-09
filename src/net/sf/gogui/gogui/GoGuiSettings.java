@@ -18,6 +18,8 @@ public final class GoGuiSettings
 {
     public boolean m_auto;
 
+    public boolean m_register;
+
     public boolean m_initComputerColor;
 
     public boolean m_computerBlack;
@@ -65,6 +67,7 @@ public final class GoGuiSettings
             "laf:",
             "move:",
             "program:",
+            "register",
             "size:",
             "time:",
             "verbose",
@@ -113,6 +116,10 @@ public final class GoGuiSettings
             m_initComputerColor = true;
         }
         m_program = opt.get("program", null);
+        m_register = opt.contains("register");
+        if (m_register && m_program == null)
+            throw new ErrorMessage(
+                     "Option -register can be used only with option -program");
         m_gtpFile = opt.get("gtpfile", "");
         m_gtpCommand = opt.get("command", "");
         if (opt.contains("komi"))

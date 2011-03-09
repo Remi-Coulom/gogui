@@ -31,6 +31,7 @@
 <arg><option>-laf</option> <replaceable>name</replaceable></arg>
 <arg><option>-move</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>command</replaceable></arg>
+<arg><option>-register</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -270,6 +271,19 @@ Load SGF file given as the main argument until the given move number.
 <para>
 Go program to attach. The argument is the command line to start the
 program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-register</option>
+</term>
+<listitem>
+<para>
+Automatically create an entry in the  Program menu if GoGui was invoked with
+the option <option>-program</option> and no menu item for a program with the
+given command already exists.
 </para>
 </listitem>
 </varlistentry>

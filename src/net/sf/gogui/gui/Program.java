@@ -33,6 +33,17 @@ public final class Program
         init(label, name, version, command, workingDirectory);
     }
 
+    /** Check if a list of programs already contains an entry with a given
+        command. */
+    public static boolean containsCommand(ArrayList<Program> programs,
+                                          String command)
+    {
+        for (Program p : programs)
+            if (p.m_command.equals(command))
+                return true;
+        return false;
+    }
+
     public void copyFrom(Program program)
     {
         init(program.m_label, program.m_name, program.m_version,

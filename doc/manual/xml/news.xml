@@ -56,6 +56,11 @@ gogui-twogtp: do not create a lock file if option -sgffile is not used;
 fix broken writing to result file on Windows
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: new option -register
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
