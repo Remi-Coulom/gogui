@@ -157,7 +157,8 @@ public class GoGui
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
-                 String gtpFile, String gtpCommand, File analyzeCommandsFile)
+                 boolean register, String gtpFile, String gtpCommand,
+                 File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -167,6 +168,7 @@ public class GoGui
         m_gtpCommand = gtpCommand;
         m_analyzeCommandsFile = analyzeCommandsFile;
         m_move = move;
+        m_register = register;
         if (initComputerColor)
         {
             m_computerBlack = computerBlack;
@@ -2270,6 +2272,10 @@ public class GoGui
 
     private boolean m_commandCompletion;
 
+    /** Automatically register program in Program menu if GoGui was invoked
+        with the option -program */
+    private final boolean m_register;
+
     private boolean m_timeStamp;
 
     private final boolean m_auto;
@@ -2509,7 +2515,7 @@ public class GoGui
             saveSession();
             detachProgram();
         }
-        if (! attachProgram(command, program))
+        if (! attachProgram(command, program, false))
         {
             m_prefs.putInt("program", -1);
             if (m_gtp == null || m_gtp.isProgramDead())
@@ -2530,8 +2536,10 @@ public class GoGui
     /** Attach program.
         @param programCommand Command line for running program.
         @param program Program information (may be null)
+        @param register Create an entry for this program in the Program menu.
         @return true if program was successfully attached. */
-    private boolean attachProgram(String programCommand, Program program)
+    private boolean attachProgram(String programCommand, Program program,
+                                  boolean register)
     {
         programCommand = programCommand.trim();
         if (programCommand.equals(""))
@@ -2643,6 +2651,16 @@ public class GoGui
                 m_shell.setProgramVersion(m_version);
                 m_gtp.querySupportedCommands();
                 m_gtp.queryInterruptSupport();
+                if (m_register
+                    && ! Program.containsCommand(m_programs, programCommand))
+                {
+                    m_program = new Program("", m_gtp.getName(), m_version,
+                                            programCommand, "");
+                    m_program.setUniqueLabel(m_programs);
+                    m_programs.add(m_program);
+                    m_menuBar.setPrograms(m_programs);
+                    Program.save(m_programs);
+                }
             }
             catch (GtpError e)
             {
@@ -3465,7 +3483,7 @@ public class GoGui
         setVisible(true);
         if (m_programCommand != null)
         {
-            attachProgram(m_programCommand, m_program);
+            attachProgram(m_programCommand, m_program, m_register);
             if (m_gtp == null || m_gtp.isProgramDead())
                 m_prefs.putInt("program", -1);
         }
