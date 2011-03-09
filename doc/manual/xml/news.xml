@@ -22,12 +22,6 @@ on smaller screens.
 </listitem>
 <listitem>
 <simpara>
-Build script: Added includeAntRuntime=false to javac task to avoid warning with
-Ant 1.8
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 Ignore mouse wheel events while command in progress to avoid error dialogs
 if multiple wheel events are generated and an auto-run analyze command is
 still processing the last board change.
