@@ -70,9 +70,10 @@ The HTML documentation is generated using Docbook.
 To re-generate the HTML files after changes in the XML files,
 the XSL transformer <a href="http://xmlsoft.org/XSLT">xsltproc</a> has to be
 installed.
-The built in ant target <tt>Style</tt> is no longer used, because it has
-problems with newer versions of Docbook XSL and also replaces some HTML
-entities in a way that the Java JEditorPane does not render correctly.
+The built in ant target <tt>xslt</tt> is no longer used, because it has
+problems with newer versions of Docbook XSL and Xalan XSLTC and also replaces
+some HTML entities in a way that the Java JEditorPane does not render
+correctly.
 </li>
 <li>
 If all requirements are met, simply type <tt>ant</tt> in the main directory of
