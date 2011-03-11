@@ -3,7 +3,7 @@
 
 Name "GoGui"
 Caption "GoGui Installer"
-Icon "gogui.ico"
+Icon "..\icons\gogui.ico"
 OutFile "..\..\Install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
 LicenseData "License.txt"
