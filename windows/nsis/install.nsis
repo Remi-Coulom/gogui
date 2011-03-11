@@ -1,24 +1,30 @@
 ; Script for creating a Windows installer with NSIS
 ; (http://nsis.sourceforge.net)
 
+SetCompressor /SOLID lzma
+
+!define MUI_COMPONENTSPAGE_NODESC
+!include "MUI.nsh"
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "License.txt"
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\GoGui.exe"
+!insertmacro MUI_PAGE_FINISH
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
+
 Name "GoGui"
 Caption "GoGui Installer"
 Icon "..\icons\gogui.ico"
 OutFile "..\..\Install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
-LicenseData "License.txt"
-XPStyle on
-SetCompressor /SOLID lzma
 ; Set admin level, needed for shortcut removal on Vista
 ; (http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista)
 RequestExecutionLevel admin
-
-Page license
-Page components
-Page directory
-Page instfiles
-UninstPage uninstConfirm
-UninstPage instfiles
 
 Section
 
