@@ -15,7 +15,6 @@ SetCompressor /SOLID lzma
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
-!insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
 Name "GoGui"
 Caption "GoGui Installer"
@@ -67,7 +66,7 @@ SectionEnd
 Section "Create desktop shortcut"
 
 SetShellVarContext all
-CreateShortCut "$Desktop\GoGui.lnk" "$INSTDIR\GoGui.exe"
+CreateShortCut "$DESKTOP\GoGui.lnk" "$INSTDIR\GoGui.exe"
 
 SectionEnd
  
@@ -113,7 +112,7 @@ RmDir "$INSTDIR"
 
 SetShellVarContext all
 Delete "$SMPROGRAMS\Games\GoGui.lnk"
-Delete "$Desktop\GoGui.lnk"
+Delete "$DESKTOP\GoGui.lnk"
 
 DeleteRegKey HKLM "SOFTWARE\GoGui"
 DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
