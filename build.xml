@@ -21,21 +21,17 @@ Comment out the following exec tag for releases.
 <format property="TSTAMP" pattern="hh:mm" timezone="UCT"/></tstamp>
 
 <property environment="env"/>
-
 <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
-
 <property name="pmd.home" value="${env.PMD_HOME}"/>
-
+<property name="launch4j.home" value="${env.LAUNCH4J_HOME}"/>
+<property name="nsis.home" value="${env.NSIS_HOME}"/>
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
-
 <property name="quaqua.nestedzipfile"
  value="external/quaqua/quaqua-5.2.1.nested.zip"/>
 <property name="quaqua.zipfile" value="quaqua-5.2.1.zip"/>
 <property name="quaqua.dir" value="Quaqua/dist"/>
 <property name="quaqua.jarfile" value="quaqua.jar"/>
-
 <property name="docbook.path" value="external/docbook/${docbook.name}"/>
-
 <property name="scripts" value="
  gogui
  gogui-adapter
@@ -50,13 +46,10 @@ Comment out the following exec tag for releases.
  gogui-thumbnailer
  gogui-twogtp
 "/>
-
 <available property="docbook.available"
  file="${docbook.path}/html/chunk.xsl"/>
-
 <available property="quaqua.available"
  file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
-
 <available property="quaqua.zip-available" file="${quaqua.nestedzipfile}"/>
 
 <target name="all"
@@ -144,9 +137,7 @@ Comment out the following exec tag for releases.
  COPYING.html
  INSTALL.html
  build.xml
- config/License.txt
  config/go.dtd
- config/gogui.ico
  config/gogui-gogui.desktop
  config/gogui-gogui.png
  config/application-x-go-sgf.png
@@ -154,8 +145,6 @@ Comment out the following exec tag for releases.
  config/gogui-C.omf.in
  config/gogui.schemas
  config/gogui-mime.xml
- config/install.nsis
- config/sgf.ico
  doc/README.html
  doc/manual/html/*.html
  doc/manual/html/*.png
@@ -195,6 +184,11 @@ Comment out the following exec tag for releases.
  test/junit/src/net/sf/gogui/*/*.sgf
  test/junit/src/net/sf/gogui/*/*.png
  test/pmd/ruleset.xml
+ windows/icons/gogui.ico
+ windows/icons/sgf.ico
+ windows/l4j/*.xml
+ windows/nsis/License.txt
+ windows/nsis/install.nsis
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
@@ -212,248 +206,6 @@ Comment out the following exec tag for releases.
  bin/gogui-twogtp,
 " />
 </zip>
-</target>
-
-<target name="gogui-adapter.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-adapter.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/gamefile/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
- net/sf/gogui/xml/*.class
- net/sf/gogui/tools/adapter/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-client.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-client.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/util/ErrorMessage.class
- net/sf/gogui/util/Options.class
- net/sf/gogui/util/StreamCopy.class
- net/sf/gogui/util/StringUtil.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/tools/client/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-convert.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-convert.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/gamefile/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/tex/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
- net/sf/gogui/xml/*.class
- net/sf/gogui/tools/convert/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-display.jar"
- depends="compile,extract-quaqua">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-display.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${quaqua.jarfile}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/boardpainter/*.class
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/go/*.properties
- net/sf/gogui/gui/*.class
- net/sf/gogui/gui/*.png
- net/sf/gogui/gui/*.properties
- net/sf/gogui/gtp/*.class
- net/sf/gogui/images/*.png
- net/sf/gogui/sgf/*.class
- net/sf/gogui/tex/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/tools/display/*.class
-"/>
-</jar>
-<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
-</target>
-
-<target name="gogui-dummy.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-dummy.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
- net/sf/gogui/tools/dummy/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-regress.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-regress.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/tools/regress/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-server.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-server.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/util/ErrorMessage.class
- net/sf/gogui/util/Options.class
- net/sf/gogui/util/ProcessUtil*.class
- net/sf/gogui/util/StreamCopy.class
- net/sf/gogui/util/StringUtil.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/tools/server/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-statistics.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-statistics.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/gui/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
- net/sf/gogui/tools/statistics/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-terminal.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-terminal.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/util/ByteCountInputStream.class
- net/sf/gogui/util/ErrorMessage.class
- net/sf/gogui/util/FileUtil.class
- net/sf/gogui/util/MessageQueue.class
- net/sf/gogui/util/Options.class
- net/sf/gogui/util/ProcessUtil*.class
- net/sf/gogui/util/ProgressShow*.class
- net/sf/gogui/util/StringUtil.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/tools/terminal/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-thumbnailer.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/boardpainter/*.class
- net/sf/gogui/game/*.class
- net/sf/gogui/gamefile/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/thumbnail/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/*.class
- net/sf/gogui/xml/*.class
- net/sf/gogui/tools/thumbnailer/*.class
-"/>
-</jar>
-</target>
-
-<target name="gogui-twogtp.jar" depends="compile">
-<mkdir dir="lib"/>
-<jar destfile="lib/gogui-twogtp.jar" compress="true" level="9">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-</manifest>
-<fileset dir="build" includes="
- net/sf/gogui/game/*.class
- net/sf/gogui/go/*.class
- net/sf/gogui/gtp/*.class
- net/sf/gogui/sgf/*.class
- net/sf/gogui/util/*.class
- net/sf/gogui/version/Version.class
- net/sf/gogui/xml/*.class
- net/sf/gogui/tools/twogtp/*.class
-"/>
-</jar>
 </target>
 
 <target name="doc" depends="extract-docbook,doc-check-uptodate"
@@ -640,6 +392,248 @@ ${quaqua.nestedzipfile}
 <copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
+<target name="gogui-adapter.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-adapter.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/adapter/*.class
+"/>
+  </jar>
+</target>
+
+ <target name="gogui-client.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-client.jar" compress="true" level="9">
+     <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/client/*.class
+"/>
+  </jar>
+</target>
+
+<target name="gogui-convert.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-convert.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/convert/*.class
+"/>
+  </jar>
+</target>
+
+<target name="gogui-display.jar"
+ depends="compile,extract-quaqua">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-display.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Class-Path" value="${quaqua.jarfile}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/boardpainter/*.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/go/*.properties
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/gui/*.png
+ net/sf/gogui/gui/*.properties
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/images/*.png
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/tex/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/display/*.class
+"/>
+  </jar>
+  <copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
+</target>
+
+<target name="gogui-dummy.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-dummy.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/tools/dummy/*.class
+"/>
+  </jar>
+</target>
+
+<target name="gogui-regress.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-regress.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/regress/*.class
+"/>
+  </jar>
+</target>
+
+<target name="gogui-server.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-server.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/ProcessUtil*.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/server/*.class
+"/>
+  </jar>
+</target>
+
+<target name="gogui-statistics.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-statistics.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/tools/statistics/*.class
+"/>
+  </jar>
+</target>
+
+<target name="gogui-terminal.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-terminal.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/ByteCountInputStream.class
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/FileUtil.class
+ net/sf/gogui/util/MessageQueue.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/ProcessUtil*.class
+ net/sf/gogui/util/ProgressShow*.class
+ net/sf/gogui/util/StringUtil.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/tools/terminal/*.class
+"/>
+  </jar>
+</target>
+
+  <target name="gogui-thumbnailer.jar" depends="compile">
+    <mkdir dir="lib"/>
+    <jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9">
+      <manifest>
+        <attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      </manifest>
+      <fileset dir="build" includes="
+ net/sf/gogui/boardpainter/*.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/gamefile/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/thumbnail/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/*.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/thumbnailer/*.class
+"/>
+    </jar>
+  </target>
+
+<target name="gogui-twogtp.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-twogtp.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/util/*.class
+ net/sf/gogui/version/Version.class
+ net/sf/gogui/xml/*.class
+ net/sf/gogui/tools/twogtp/*.class
+"/>
+  </jar>
+</target>
+
 <target name="javadoc"
  description="Create Javadoc documentation for public parts of packages">
 <javadoc sourcepath="src" destdir="doc/javadoc" source="1.5"
@@ -707,6 +701,53 @@ ${quaqua.nestedzipfile}
 </copy>
 </target>
 
+<target name="l4j" depends="all"
+  description="Create Windows jar wrappers using launch4j (launch4j.sourceforge.net)">
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-adapter.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-client.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-convert.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-display.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-dummy.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-regress.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-server.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-statistics.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-terminal.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-thumbnailer.xml"/>
+  </exec>
+  <exec executable="${launch4j.home}/launch4jc">
+    <arg line="windows/l4j/gogui-twogtp.xml"/>
+  </exec>
+</target>
+
+<target name="nsis" depends="l4j"
+ description="Create Windows installer using NSIS (nsis.sourceforge.net)">
+  <exec executable="${nsis.home}/makensis">
+    <arg line="windows/nsis/install.nsis"/>
+  </exec>
+</target>
+  
 <target name="pmd" depends="compile"
  description="Run PMD (pmd.sourceforge.net)">
 <mkdir dir="test/pmd"/>
