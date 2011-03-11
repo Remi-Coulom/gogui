@@ -12,11 +12,23 @@
   <customProcName>true</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>../icons/gogui.ico</icon>
+  <icon>..\icons\gogui.ico</icon>
   <jre>
     <path></path>
     <minVersion>1.5.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
   </jre>
+  <versionInfo>
+    <fileVersion>0.0.0.0</fileVersion>
+    <txtFileVersion>unknown</txtFileVersion>
+    <fileDescription>GoGui</fileDescription>
+    <copyright>Markus Enzenberger</copyright>
+    <productVersion>0.0.0.0</productVersion>
+    <txtProductVersion>unknown</txtProductVersion>
+    <productName>GoGui</productName>
+    <companyName></companyName>
+    <internalName>GoGui</internalName>
+    <originalFilename>GoGui.exe</originalFilename>
+  </versionInfo>
 </launch4jConfig>
