@@ -230,20 +230,20 @@ Comment out the following exec tag for releases.
 </target>
 
 <!--
-Generate documentation using ant style target.
+Generate documentation using ant xslt target.
 Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan)
 -->
-<target name="doc-style" depends="extract-docbook,doc-check-uptodate"
+<target name="doc-xslt" depends="extract-docbook,doc-check-uptodate"
  unless="doc-uptodate">
-<style basedir="doc/manual/xml" includes="book.xml" destdir="doc/manual/html"
+<xslt basedir="doc/manual/xml" includes="book.xml" destdir="doc/manual/html"
  style="${docbook.path}/html/chunk.xsl" force="true">
 <xmlcatalog>
 <dtd
  publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
  location="${docbook.path}/html/chunk.xsl"/>
 </xmlcatalog>
-</style>
+</xslt>
 </target>
 
 <target name="docvalidate">
@@ -689,8 +689,7 @@ ${quaqua.nestedzipfile}
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
 <javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
- deprecation="true" debug="true" listfiles="yes" classpath="build"
- includeAntRuntime="false">
+ deprecation="true" debug="true" listfiles="yes" classpath="build">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
 <copy todir="build/test">
