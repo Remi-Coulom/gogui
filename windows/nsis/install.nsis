@@ -86,6 +86,8 @@ WriteRegStr HKCR "MIME\Database\Content Type\application/x-go-sgf" \
   "Extension" ".sgf"
 
 WriteRegStr HKCR "Applications\GoGui.exe" "SupportedTypes" ".sgf"
+WriteRegStr HKCR "Applications\GoGui\shell\open\command" "" \
+  "$\"$INSTDIR\GoGui.exe$\" $\"%1$\""
 
 SectionEnd
 
