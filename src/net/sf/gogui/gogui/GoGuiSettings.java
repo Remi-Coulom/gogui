@@ -144,7 +144,7 @@ public final class GoGuiSettings
     private void printHelp()
     {
         String helpText =
-            "Usage: java -jar gogui.jar [options] [file]\n" +
+            "Usage: gogui [options] [file]\n" +
             "Graphical user interface for Go programs\n" +
             "using the Go Text Protocol.\n" +
             "\n" +
