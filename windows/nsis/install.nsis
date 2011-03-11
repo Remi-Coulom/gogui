@@ -13,18 +13,6 @@ SetCompressor /SOLID lzma
 ; (http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista)
 RequestExecutionLevel admin
 
-Function .onInit
-
-ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
-  "UninstallString"
-IfFileExists $0 0 done
-MessageBox MB_YESNO "A version of GoGui is already installed. Do you want to uninstall it before installing this version?" \
-  0 done
-ExecWait $0
-done:
-
-FunctionEnd
-
 Page license
 Page components
 Page directory
@@ -81,14 +69,17 @@ Section "Register GoGui as handler for SGF files"
 
 File "..\icons\sgf.ico"
 
-WriteRegStr HKCR ".sgf" "" "GoGui.sgf"
+WriteRegStr HKCR ".sgf" "" "GoGui"
 WriteRegStr HKCR ".sgf" "Content Type" "application/x-go-sgf"
-WriteRegStr HKCR "GoGui.sgf" "" "SGF File (Smart Game Format)"
-WriteRegStr HKCR "GoGui.sgf\DefaultIcon" "" "$INSTDIR\sgf.ico"
-WriteRegStr HKCR "GoGui.sgf\shell\open\command" "" \
+WriteRegStr HKCR "GoGui" "" "SGF File (Smart Game Format)"
+WriteRegStr HKCR "GoGui\DefaultIcon" "" "$INSTDIR\sgf.ico"
+WriteRegStr HKCR "GoGui\shell\open\command" "" \
   "$\"$INSTDIR\GoGui.exe$\" $\"%1$\""
+
 WriteRegStr HKCR "MIME\Database\Content Type\application/x-go-sgf" \
   "Extension" ".sgf"
+
+WriteRegStr HKCR "Applications\GoGui.exe" "SupportedTypes" ".sgf"
 
 SectionEnd
 
@@ -118,6 +109,7 @@ Delete "$Desktop\GoGui.lnk"
 
 DeleteRegKey HKLM "SOFTWARE\GoGui"
 DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
-DeleteRegKey HKCR "GoGui.sgf"
+DeleteRegKey HKCR "GoGui"
+DeleteRegKey HKCR "Applications\GoGui.exe"
 
 SectionEnd
