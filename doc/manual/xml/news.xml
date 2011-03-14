@@ -16,6 +16,13 @@ is attached using the -program option of GoGui if a program with the given
 command already exists in the Program menu.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Don't use Go program version in automatically generated suggested label for the
+program menu anymore because the version can change if a new version of the Go
+program is installed in the same directory.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
