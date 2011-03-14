@@ -11,6 +11,9 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Update Go program information in the menu (name and version) even if program
+is attached using the -program option of GoGui if a program with the given
+command already exists in the Program menu.
 </simpara>
 </listitem>
 </itemizedlist>
