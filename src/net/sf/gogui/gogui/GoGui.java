@@ -2651,15 +2651,19 @@ public class GoGui
                 m_shell.setProgramVersion(m_version);
                 m_gtp.querySupportedCommands();
                 m_gtp.queryInterruptSupport();
-                if (m_register
-                    && ! Program.containsCommand(m_programs, programCommand))
+                if (m_program == null)
                 {
-                    m_program = new Program("", m_gtp.getName(), m_version,
-                                            programCommand, "");
-                    m_program.setUniqueLabel(m_programs);
-                    m_programs.add(m_program);
-                    m_menuBar.setPrograms(m_programs);
-                    Program.save(m_programs);
+                    m_program =
+                        Program.findProgram(m_programs, programCommand);
+                    if (m_program == null && m_register)
+                    {
+                        m_program = new Program("", m_gtp.getName(), m_version,
+                                                programCommand, "");
+                        m_program.setUniqueLabel(m_programs);
+                        m_programs.add(m_program);
+                        m_menuBar.setPrograms(m_programs);
+                        Program.save(m_programs);
+                    }
                 }
             }
             catch (GtpError e)
