@@ -96,7 +96,7 @@ public final class Program
         }
     }
 
-    /** Suggest and set a label derived from program name and version without
+    /** Suggest and set a label derived from program name without
         collision with an existing array of programs. */
     public void setUniqueLabel(ArrayList<Program> programs)
     {
@@ -115,22 +115,6 @@ public final class Program
         {
             m_label = tryLabel;
             return;
-        }
-        if (! StringUtil.isEmpty(m_version))
-        {
-            tryLabel = label + " " + m_version.trim();
-            alreadyExists = false;
-            for (int i = 0; i < programs.size(); ++i)
-                if (tryLabel.equals((programs.get(i)).m_label))
-                {
-                    alreadyExists = true;
-                    break;
-                }
-            if (! alreadyExists)
-            {
-                m_label = tryLabel;
-                return;
-            }
         }
         for (int i = 2; ; ++i)
         {
