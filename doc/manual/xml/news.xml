@@ -22,6 +22,12 @@ New menu item: View/Move Numbers
 </listitem>
 <listitem>
 <simpara>
+Ignore leading '>' characters when importing text positions to support
+quotations in emails
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 gogui-terminal: New command line option -color
 </simpara>
 </listitem>

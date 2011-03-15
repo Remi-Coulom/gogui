@@ -16,13 +16,13 @@ import net.sf.gogui.go.PointList;
     Can handle a variety of formats. Black stones can be represented by 'X',
     'x', '@' or '#'; white stones by 'O' or 'o' (however one representation
     must be used consistently); '.' and '+' are interpreted as empty points.
-    Space characters are allowed between the points; leading numbers (or '|'
-    and '$' characters) are ignored, as well as single inserted invalid lines
-    (to support appended text after the row that was wrapped). Non-rectangular
-    positions will be read into the smallest containing square board size at
-    the top left position. If a a line contains the string "b|black|w|white
-    to play|move" (case-insensitive), it will be used to set the current player
-    in the position. */
+    Space characters are allowed between the points; leading numbers (or '|',
+    '&gt;' and '$' characters) are ignored, as well as single inserted invalid
+    lines (to support appended text after the row that was wrapped).
+    Non-rectangular positions will be read into the smallest containing square
+    board size at the top left position. If a a line contains the string
+    "b|black|w|white to play|move" (case-insensitive), it will be used to set
+    the current player in the position. */
 public class TextParser
 {
     public TextParser()
@@ -122,7 +122,7 @@ public class TextParser
         {
             char c = line.charAt(i);
             if (! Character.isSpaceChar(c) && ! Character.isDigit(c)
-                && c != '$' && c != '|')
+                && c != '$' && c != '|' && c != '>')
                 break;
         }
         return i;

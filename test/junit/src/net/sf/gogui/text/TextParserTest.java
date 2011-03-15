@@ -171,6 +171,20 @@ public final class TextParserTest
         checkSize(9);
     }
 
+    /** Test that parsing succeeds if leading &gt; characters exist as
+        in quotatations in emails. */
+    public void testMailQuotations()
+    {
+        parse(">" +
+              ">      . . . . . ." +
+              ">      O O . . . ." +
+              ">      O O X X X X" +
+              ">      . X O O X ." +
+              ">      . X O . O X" +
+              ">      . X O O . X");
+        checkSize(6);
+    }
+
     private Board m_board;
 
     private void checkColor(int x, int y, GoColor c)
