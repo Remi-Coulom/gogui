@@ -23,12 +23,7 @@ public final class ProgramTest
         programs.add(new Program("Foo", "Foo", "", "", ""));
         Program p;
 
-        // Label already exists, version not empty
-        p = new Program("Foo", "Foo", "1.1", "", "");
-        p.setUniqueLabel(programs);
-        assertEquals("Foo 1.1", p.m_label);
-
-        // Label already exists, version empty
+        // Label already exists
         p = new Program("Foo", "Foo", "", "", "");
         p.setUniqueLabel(programs);
         assertEquals("Foo (2)", p.m_label);
