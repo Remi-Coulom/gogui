@@ -28,6 +28,12 @@ quotations in emails
 </listitem>
 <listitem>
 <simpara>
+Assume that non-square positions are anchored at lower-left corner when
+importing text positions
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 gogui-terminal: New command line option -color
 </simpara>
 </listitem>

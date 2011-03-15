@@ -76,6 +76,10 @@ public class TextParser
                 parseBoardRow(line, m_board.getSize() - i);
                 ++i;
             }
+            if (i != m_board.getSize() + 1)
+                // Assume that non-square positions are anchored at lower-left
+                // corner
+                shiftBoardDown(m_board.getSize() + 1 - i);
         }
         finally
         {
@@ -253,5 +257,25 @@ public class TextParser
         {
             return null;
         }
+    }
+
+    private void shiftBoardDown(int deltaY)
+    {
+        int size = m_board.getSize();
+        Board newBoard = new Board(size);
+        PointList black = new PointList();
+        PointList white = new PointList();
+        for (int y = 0; y < size - deltaY; ++y)
+            for (int x = 0; x < size; ++x)
+            {
+                GoColor c = m_board.getColor(GoPoint.get(x, y + deltaY));
+                GoPoint p = GoPoint.get(x, y);
+                if (c == BLACK)
+                    black.add(p);
+                else if (c == WHITE)
+                    white.add(p);
+            }
+        newBoard.setup(black, white, m_board.getToMove());
+        m_board = newBoard;
     }
 }

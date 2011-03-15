@@ -69,8 +69,8 @@ public final class TextParserTest
         parse(". X . . . .\n" +
               "O . . . . .\n");
         checkSize(6);
-        checkColor(0, 4, WHITE);
-        checkColor(1, 5, BLACK);
+        checkColor(0, 0, WHITE);
+        checkColor(1, 1, BLACK);
     }
 
     /** Test example from GNU Go documentation width row width increasing. */
