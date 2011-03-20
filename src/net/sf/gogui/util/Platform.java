@@ -169,13 +169,10 @@ public class Platform
             Constructor constructor = registerClass.getConstructor(arglist);
             constructor.newInstance(args);
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            StringUtil.printException(e);
-        }
-        catch (NoClassDefFoundError e)
-        {
-            StringUtil.printException(e);
+            System.err.println("Could not register handler for Mac events." +
+                               " (com.apple.eawt classes not found)");
         }
     }
 

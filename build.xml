@@ -97,6 +97,7 @@ Comment out the following exec tag for releases.
 <fileset dir="build/classes"/>
 <fileset dir="build/depcache"/>
 <fileset dir="build/depcache-test"/>
+<fileset dir="build/specialmac"/>
 <fileset dir="build/test"/>
 <fileset dir="build/GoGui.app"/>
 <fileset dir="build" includes="GoGui*.dmg"/>
@@ -125,6 +126,14 @@ Comment out the following exec tag for releases.
 <copy todir="build/classes/net/sf/gogui/doc">
 <fileset dir="doc/manual/html" includes="*.html *.png"/>
 </copy>
+<mkdir dir="build/specialmac"/>
+<javac srcdir="mac/src" destdir="build/specialmac" source="1.5"
+ deprecation="true" classpath="build/classes" listfiles="yes"
+ includeAntRuntime="false"
+ includes="
+  net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
+  com/apple/eawt/*.java
+"/>
 </target>
 
 <target name="depend">
@@ -163,9 +172,11 @@ Comment out the following exec tag for releases.
  mac/packaging/Info.plist
  mac/packaging/Info.plist.in
  mac/packaging/PkgInfo
+ mac/src/com/apple/eawt/Application.java
+ mac/src/com/apple/eawt/ApplicationEvent.java
+ mac/src/com/apple/eawt/ApplicationListener.java
+ mac/src/com/apple/eawt/ApplicationAdapter.java
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
- mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.class
- mac/src/net/sf/gogui/specialmac/Listener.class
  sgf/openings/9x9/README.html
  sgf/openings/9x9/*.sgf
  sgf/openings/19x19/README.html
@@ -305,7 +316,7 @@ ${quaqua.nestedzipfile}
 </exec>
 </target>
 
-<target name="gogui.app" depends="specialmac,all"
+<target name="gogui.app" depends="all"
  description="Make Mac application bundle">
 <property name="appdir" value="build/GoGui.app"/>
 <mkdir dir="${appdir}"/>
@@ -386,7 +397,7 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/version/Version.class
  net/sf/gogui/xml/*.class
 "/>
-<fileset dir="mac/src" includes="
+<fileset dir="build/specialmac" includes="
  net/sf/gogui/specialmac/*.class
 "/>
 </jar>
@@ -761,16 +772,6 @@ ${quaqua.nestedzipfile}
 
 <target name="run" depends="gogui.jar" description="Run GoGui">
 <java jar="lib/gogui.jar" fork="true"/>
-</target>
-
-<target name="specialmac" depends="compile"
- description="Compile special MAC classes depending on com.apple">
-<javac srcdir="mac/src" source="1.5" deprecation="true"
- classpath="build/classes" listfiles="yes" includeAntRuntime="false"
- includes="
-  net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
-  com/apple/eawt/*.java
-"/>
 </target>
 
 <target name="tags"

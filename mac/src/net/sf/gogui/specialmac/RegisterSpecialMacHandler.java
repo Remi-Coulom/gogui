@@ -41,6 +41,15 @@ public class RegisterSpecialMacHandler
     public RegisterSpecialMacHandler(Platform.SpecialMacHandler handler)
     {
         Application application = Application.getApplication();
+        if (application == null)
+        {
+            // Can happen if the stub classes included in GoGui are in the
+            // classpath. Should not happen in released versions.
+            System.err.println(
+              "Error: com.apple.eawt.Application.getApplication() returned " +
+              "null.");
+            return;
+        }
         application.removePreferencesMenuItem();
         application.addAboutMenuItem();
         application.setEnabledAboutMenu(true);
