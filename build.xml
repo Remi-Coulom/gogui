@@ -26,8 +26,7 @@ Comment out the following exec tag for releases.
 <property name="launch4j.home" value="${env.LAUNCH4J_HOME}"/>
 <property name="nsis.home" value="${env.NSIS_HOME}"/>
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
-<property name="quaqua.nestedzipfile"
- value="external/quaqua/quaqua-5.2.1.nested.zip"/>
+<property name="quaqua.nestedzipfile" value="quaqua-5.2.1.nested.zip"/>
 <property name="quaqua.zipfile" value="quaqua-5.2.1.zip"/>
 <property name="quaqua.dir" value="Quaqua/dist"/>
 <property name="quaqua.jarfile" value="quaqua.jar"/>
@@ -50,7 +49,8 @@ Comment out the following exec tag for releases.
  file="${docbook.path}/html/chunk.xsl"/>
 <available property="quaqua.available"
  file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
-<available property="quaqua.zip-available" file="${quaqua.nestedzipfile}"/>
+<available property="quaqua.zip-available"
+  file="external/quaqua/${quaqua.nestedzipfile}"/>
 
 <target name="all"
  description="Compile all programs (default target)"
@@ -166,7 +166,7 @@ Comment out the following exec tag for releases.
  doc/doxygen/footer.html
  doc/doxygen/README.html
  ${docbook.path}.zip
- ${quaqua.nestedzipfile}
+ external/quaqua/${quaqua.nestedzipfile}
  lib/*.jar
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
@@ -289,10 +289,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <target name="extract-quaqua" unless="quaqua.available">
 <fail unless="quaqua.zip-available">
 Please download the Quaqua Look and Feel from
-http://www.randelshofer.ch/quaqua/download.html and copy it to
-${quaqua.nestedzipfile}
+http://www.randelshofer.ch/quaqua/files/${quaqua.nestedzipfile}
+and copy it to external/quaqua/${quaqua.nestedzipfile}
 </fail>
-<unzip src="${quaqua.nestedzipfile}" dest="external/quaqua">
+<unzip src="external/quaqua/${quaqua.nestedzipfile}" dest="external/quaqua">
 <patternset>
 <include name="${quaqua.zipfile}"/>
 </patternset>
