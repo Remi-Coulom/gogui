@@ -47,8 +47,12 @@ Comment out the following exec tag for releases.
 "/>
 <available property="docbook.available"
  file="${docbook.path}/html/chunk.xsl"/>
-<available property="quaqua.available"
- file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
+<condition property="quaqua.noextract">
+  <or>
+    <available file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
+    <istrue value="${noquaqua}"/>
+  </or>
+</condition>
 <available property="quaqua.zip-available"
   file="external/quaqua/${quaqua.nestedzipfile}"/>
 
@@ -134,6 +138,11 @@ Comment out the following exec tag for releases.
   net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
   com/apple/eawt/*.java
 "/>
+</target>
+
+<target name="copy-quaqua" depends="extract-quaqua" unless="noquaqua">
+<mkdir dir="lib"/>
+<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
 <target name="depend">
@@ -286,11 +295,12 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </unzip>
 </target>
 
-<target name="extract-quaqua" unless="quaqua.available">
+<target name="extract-quaqua" unless="quaqua.noextract">
 <fail unless="quaqua.zip-available">
 Please download the Quaqua Look and Feel from
 http://www.randelshofer.ch/quaqua/files/${quaqua.nestedzipfile}
-and copy it to external/quaqua/${quaqua.nestedzipfile}
+and copy it to external/quaqua/${quaqua.nestedzipfile} or compile GoGui
+with limited Mac support by invoking ant with the option -Dnoquaqua=true.
 </fail>
 <unzip src="external/quaqua/${quaqua.nestedzipfile}" dest="external/quaqua">
 <patternset>
@@ -363,7 +373,7 @@ and copy it to external/quaqua/${quaqua.nestedzipfile}
 </exec>
 </target>
 
-<target name="gogui.jar" depends="compile,extract-quaqua">
+<target name="gogui.jar" depends="compile,copy-quaqua">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" compress="true" level="9">
 <manifest>
@@ -401,7 +411,6 @@ and copy it to external/quaqua/${quaqua.nestedzipfile}
  net/sf/gogui/specialmac/*.class
 "/>
 </jar>
-<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
 <target name="gogui-adapter.jar" depends="compile">
@@ -467,8 +476,7 @@ and copy it to external/quaqua/${quaqua.nestedzipfile}
   </jar>
 </target>
 
-<target name="gogui-display.jar"
- depends="compile,extract-quaqua">
+<target name="gogui-display.jar" depends="compile,copy-quaqua">
   <mkdir dir="lib"/>
   <jar destfile="lib/gogui-display.jar" compress="true" level="9">
     <manifest>
@@ -494,7 +502,6 @@ and copy it to external/quaqua/${quaqua.nestedzipfile}
  net/sf/gogui/tools/display/*.class
 "/>
   </jar>
-  <copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
 </target>
 
 <target name="gogui-dummy.jar" depends="compile">
@@ -681,7 +688,7 @@ and copy it to external/quaqua/${quaqua.nestedzipfile}
 </target>
 
 <target name="junit" depends="compile,junit-compile"
- description="Run JUnit tests (define property test for a single test)" >
+ description="Run JUnit tests (define property 'test' for a single test)" >
 <junit printsummary="withOutAndErr" fork="true" timeout="60000"
  haltonfailure="true">
 <assertions><enable/></assertions>
