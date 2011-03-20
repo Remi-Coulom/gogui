@@ -94,9 +94,9 @@ Comment out the following exec tag for releases.
 
 <target name="clean-build-dir">
 <delete failonerror="false" includeEmptyDirs="true">
+<fileset dir="build/classes"/>
 <fileset dir="build/depcache"/>
 <fileset dir="build/depcache-test"/>
-<fileset dir="build/net"/>
 <fileset dir="build/test"/>
 <fileset dir="build/GoGui.app"/>
 <fileset dir="build" includes="GoGui*.dmg"/>
@@ -108,11 +108,12 @@ Comment out the following exec tag for releases.
 
 <target name="compile" depends="depend,version,doc">
 <mkdir dir="build"/>
-<javac srcdir="src" destdir="build" source="1.5" target="1.5"
+<mkdir dir="build/classes"/>
+<javac srcdir="src" destdir="build/classes" source="1.5" target="1.5"
  deprecation="true" debug="true" listfiles="yes" includeAntRuntime="false">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
-<copy todir="build">
+<copy todir="build/classes">
 <fileset dir="src"
  includes="
   net/sf/gogui/*/*.properties
@@ -121,13 +122,13 @@ Comment out the following exec tag for releases.
   net/sf/gogui/gui/*.png
 "/>
 </copy>
-<copy todir="build/net/sf/gogui/doc">
+<copy todir="build/classes/net/sf/gogui/doc">
 <fileset dir="doc/manual/html" includes="*.html *.png"/>
 </copy>
 </target>
 
 <target name="depend">
-<depend srcdir="src" destdir="build" cache="build/depcache"/>
+<depend srcdir="src" destdir="build/classes" cache="build/depcache"/>
 </target>
 
 <target name="dist" depends="all,check">
@@ -360,7 +361,7 @@ ${quaqua.nestedzipfile}
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 <attribute name="Class-Path" value="${quaqua.jarfile}"/>
 </manifest>
-<fileset dir="build" includes="
+<fileset dir="build/classes" includes="
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
  net/sf/gogui/boardpainter/*.class
@@ -400,7 +401,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/gamefile/*.class
  net/sf/gogui/go/*.class
@@ -414,7 +415,7 @@ ${quaqua.nestedzipfile}
   </jar>
 </target>
 
- <target name="gogui-client.jar" depends="compile">
+<target name="gogui-client.jar" depends="compile">
   <mkdir dir="lib"/>
   <jar destfile="lib/gogui-client.jar" compress="true" level="9">
      <manifest>
@@ -422,7 +423,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/Options.class
  net/sf/gogui/util/StreamCopy.class
@@ -441,7 +442,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/gamefile/*.class
  net/sf/gogui/go/*.class
@@ -465,7 +466,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
       <attribute name="Class-Path" value="${quaqua.jarfile}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
@@ -493,7 +494,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
@@ -512,7 +513,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/util/*.class
@@ -530,7 +531,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/util/ErrorMessage.class
  net/sf/gogui/util/Options.class
  net/sf/gogui/util/ProcessUtil*.class
@@ -550,7 +551,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
@@ -571,7 +572,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
@@ -590,15 +591,15 @@ ${quaqua.nestedzipfile}
   </jar>
 </target>
 
-  <target name="gogui-thumbnailer.jar" depends="compile">
-    <mkdir dir="lib"/>
-    <jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9">
-      <manifest>
-        <attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
-        <attribute name="Built-By" value="${user.name}"/>
-        <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-      </manifest>
-      <fileset dir="build" includes="
+<target name="gogui-thumbnailer.jar" depends="compile">
+  <mkdir dir="lib"/>
+  <jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9">
+    <manifest>
+      <attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+    </manifest>
+    <fileset dir="build/classes" includes="
  net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/gamefile/*.class
@@ -610,8 +611,8 @@ ${quaqua.nestedzipfile}
  net/sf/gogui/xml/*.class
  net/sf/gogui/tools/thumbnailer/*.class
 "/>
-    </jar>
-  </target>
+  </jar>
+</target>
 
 <target name="gogui-twogtp.jar" depends="compile">
   <mkdir dir="lib"/>
@@ -621,7 +622,7 @@ ${quaqua.nestedzipfile}
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
     </manifest>
-    <fileset dir="build" includes="
+    <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
@@ -674,7 +675,7 @@ ${quaqua.nestedzipfile}
  haltonfailure="true">
 <assertions><enable/></assertions>
 <classpath>
-<pathelement location="build"/>
+<pathelement location="build/classes"/>
 <pathelement location="build/test"/>
 </classpath>
 <formatter type="brief" usefile="false"/>
@@ -689,7 +690,7 @@ ${quaqua.nestedzipfile}
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
 <javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
- deprecation="true" debug="true" listfiles="yes" classpath="build">
+ deprecation="true" debug="true" listfiles="yes" classpath="build/classes">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
 <copy todir="build/test">
@@ -764,9 +765,12 @@ ${quaqua.nestedzipfile}
 
 <target name="specialmac" depends="compile"
  description="Compile special MAC classes depending on com.apple">
-<javac srcdir="mac/src" source="1.5" deprecation="true" classpath="build"
- listfiles="yes" includeAntRuntime="false"
- includes="net/sf/gogui/specialmac/RegisterSpecialMacHandler.java"/>
+<javac srcdir="mac/src" source="1.5" deprecation="true"
+ classpath="build/classes" listfiles="yes" includeAntRuntime="false"
+ includes="
+  net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
+  com/apple/eawt/*.java
+"/>
 </target>
 
 <target name="tags"
