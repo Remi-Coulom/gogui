@@ -130,6 +130,11 @@ Comment out the following exec tag for releases.
  bin/gogui-thumbnailer,
  bin/gogui-twogtp,
 "/>
+<zipfileset id="distfiles-doc" prefix="gogui-${version}" dir="." includes="
+ doc/manual/html/*.html
+ doc/manual/html/*.png
+ doc/manual/man/*.1
+"/>
 <zipfileset id="distfiles-jar" prefix="gogui-${version}" dir="." includes="
  lib/*.jar
 "/>
@@ -238,12 +243,13 @@ Comment out the following exec tag for releases.
 <zip destfile="gogui-${version}.zip">
 <zipfileset refid="distfiles-src"/>
 <zipfileset refid="distfiles-src-scripts"/>
+<zipfileset refid="distfiles-doc"/>
 <zipfileset refid="distfiles-jar"/>
 <zipfileset refid="distfiles-external"/>
 </zip>
 </target>
 
-<target name="dist-src" depends="build">
+<target name="dist-src">
 <tar destfile="gogui-${version}-src.tar">
 <zipfileset refid="distfiles-src"/>
 <zipfileset refid="distfiles-src-scripts"/>
