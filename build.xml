@@ -56,6 +56,88 @@ Comment out the following exec tag for releases.
 <available property="quaqua.zip-available"
   file="external/quaqua/${quaqua.nestedzipfile}"/>
 
+<zipfileset id="distfiles-src" prefix="gogui-${version}" dir="." includes="
+ README.html
+ COPYING.html
+ INSTALL.html
+ build.xml
+ config/go.dtd
+ config/gogui-gogui.desktop
+ config/gogui-gogui.png
+ config/application-x-go-sgf.png
+ config/gogui-C.omf
+ config/gogui-C.omf.in
+ config/gogui.schemas
+ config/gogui-mime.xml
+ doc/README.html
+ doc/manual/html/*.html
+ doc/manual/html/*.png
+ doc/manual/man/*.1
+ doc/manual/xml/*.xml
+ doc/manual/xml/*.xml.in
+ doc/manual/xml/*.xsl
+ doc/doxygen/Doxyfile
+ doc/doxygen/footer.html
+ doc/doxygen/README.html
+ ${docbook.path}.zip
+ mac/packaging/GoGui.icns
+ mac/packaging/Info.plist
+ mac/packaging/Info.plist.in
+ mac/packaging/PkgInfo
+ mac/src/com/apple/eawt/Application.java
+ mac/src/com/apple/eawt/ApplicationEvent.java
+ mac/src/com/apple/eawt/ApplicationListener.java
+ mac/src/com/apple/eawt/ApplicationAdapter.java
+ mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
+ sgf/openings/9x9/README.html
+ sgf/openings/9x9/*.sgf
+ sgf/openings/19x19/README.html
+ sgf/openings/19x19/*.sgf
+ src/net/sf/gogui/images/*.png
+ src/net/sf/gogui/images/*.svg
+ src/net/sf/gogui/overview.html
+ src/net/sf/gogui/*/package.html
+ src/net/sf/gogui/*/*.properties
+ src/net/sf/gogui/*/*.java
+ src/net/sf/gogui/*/*.java.in
+ src/net/sf/gogui/gui/analyze-commands
+ src/net/sf/gogui/tools/*/*.java
+ test/findbugs/gogui.fb
+ test/checkstyle/checkstyle_checks.xml
+ test/junit/src/net/sf/gogui/*/*.java
+ test/junit/src/net/sf/gogui/*/*.sgf
+ test/junit/src/net/sf/gogui/*/*.png
+ test/pmd/ruleset.xml
+ windows/icons/gogui.ico
+ windows/icons/sgf.ico
+ windows/l4j/*.xml
+ windows/nsis/License.txt
+ windows/nsis/install.nsis
+"/>
+<zipfileset id="distfiles-src-scripts" prefix="gogui-${version}" dir="."
+  filemode="755" includes="
+ install.sh,
+ bin/gogui,
+ bin/gogui-adapter,
+ bin/gogui-client,
+ bin/gogui-convert,
+ bin/gogui-display,
+ bin/gogui-dummy,
+ bin/gogui-regress,
+ bin/gogui-server,
+ bin/gogui-statistics,
+ bin/gogui-terminal,
+ bin/gogui-thumbnailer,
+ bin/gogui-twogtp,
+"/>
+<zipfileset id="distfiles-jar" prefix="gogui-${version}" dir="." includes="
+ lib/*.jar
+"/>
+<zipfileset id="distfiles-external" prefix="gogui-${version}" dir="."
+  includes="
+ external/quaqua/${quaqua.nestedzipfile}
+"/>
+
 <target name="all"
  description="Compile all programs (default target)"
  depends="
@@ -149,84 +231,25 @@ Comment out the following exec tag for releases.
 <depend srcdir="src" destdir="build/classes" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,check">
+<target name="dist" depends="all,check,dist-nocheck">
+</target>
+
+<target name="dist-nocheck" depends="all">
 <zip destfile="gogui-${version}.zip">
-<zipfileset prefix="gogui-${version}" dir="." includes="
- README.html
- COPYING.html
- INSTALL.html
- build.xml
- config/go.dtd
- config/gogui-gogui.desktop
- config/gogui-gogui.png
- config/application-x-go-sgf.png
- config/gogui-C.omf
- config/gogui-C.omf.in
- config/gogui.schemas
- config/gogui-mime.xml
- doc/README.html
- doc/manual/html/*.html
- doc/manual/html/*.png
- doc/manual/man/*.1
- doc/manual/xml/*.xml
- doc/manual/xml/*.xml.in
- doc/manual/xml/*.xsl
- doc/doxygen/Doxyfile
- doc/doxygen/footer.html
- doc/doxygen/README.html
- ${docbook.path}.zip
- external/quaqua/${quaqua.nestedzipfile}
- lib/*.jar
- mac/packaging/GoGui.icns
- mac/packaging/Info.plist
- mac/packaging/Info.plist.in
- mac/packaging/PkgInfo
- mac/src/com/apple/eawt/Application.java
- mac/src/com/apple/eawt/ApplicationEvent.java
- mac/src/com/apple/eawt/ApplicationListener.java
- mac/src/com/apple/eawt/ApplicationAdapter.java
- mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
- sgf/openings/9x9/README.html
- sgf/openings/9x9/*.sgf
- sgf/openings/19x19/README.html
- sgf/openings/19x19/*.sgf
- src/net/sf/gogui/images/*.png
- src/net/sf/gogui/images/*.svg
- src/net/sf/gogui/overview.html
- src/net/sf/gogui/*/package.html
- src/net/sf/gogui/*/*.properties
- src/net/sf/gogui/*/*.java
- src/net/sf/gogui/*/*.java.in
- src/net/sf/gogui/gui/analyze-commands
- src/net/sf/gogui/tools/*/*.java
- test/findbugs/gogui.fb
- test/checkstyle/checkstyle_checks.xml
- test/junit/src/net/sf/gogui/*/*.java
- test/junit/src/net/sf/gogui/*/*.sgf
- test/junit/src/net/sf/gogui/*/*.png
- test/pmd/ruleset.xml
- windows/icons/gogui.ico
- windows/icons/sgf.ico
- windows/l4j/*.xml
- windows/nsis/License.txt
- windows/nsis/install.nsis
-" />
-<zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
- install.sh,
- bin/gogui,
- bin/gogui-adapter,
- bin/gogui-client,
- bin/gogui-convert,
- bin/gogui-display,
- bin/gogui-dummy,
- bin/gogui-regress,
- bin/gogui-server,
- bin/gogui-statistics,
- bin/gogui-terminal,
- bin/gogui-thumbnailer,
- bin/gogui-twogtp,
-" />
+<zipfileset refid="distfiles-src"/>
+<zipfileset refid="distfiles-src-scripts"/>
+<zipfileset refid="distfiles-jar"/>
+<zipfileset refid="distfiles-external"/>
 </zip>
+</target>
+
+<target name="dist-src" depends="all">
+<tar destfile="gogui-${version}-src.tar">
+<zipfileset refid="distfiles-src"/>
+<zipfileset refid="distfiles-src-scripts"/>
+</tar>
+<gzip src="gogui-${version}-src.tar" destfile="gogui-${version}-src.tar.gz"/>
+<delete file="gogui-${version}-src.tar"/>
 </target>
 
 <target name="doc" depends="extract-docbook,doc-check-uptodate"
