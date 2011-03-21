@@ -1,6 +1,8 @@
 ; Script for creating a Windows installer with NSIS
 ; (http://nsis.sourceforge.net)
 
+!define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" 
+
 SetCompressor /SOLID lzma
 
 !define MUI_COMPONENTSPAGE_NODESC
@@ -16,7 +18,7 @@ SetCompressor /SOLID lzma
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
-Name "GoGui"
+Name "GoGui @VERSION@"
 Caption "GoGui Installer"
 Icon "..\icons\gogui.ico"
 OutFile "..\..\gogui-@VERSION@-install.exe"
@@ -47,14 +49,11 @@ File "..\l4j\gogui-statistics.exe"
 File "..\icons\gogui.ico"
 
 WriteUninstaller $INSTDIR\Uninstall.exe
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
-  "DisplayName" "GoGui"
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
-  "DisplayIcon" "$INSTDIR\gogui.ico"
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
-  "URLInfoAbout" "http://gogui.sourceforge.net/"
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui" \
-  "UninstallString" "$INSTDIR\Uninstall.exe"
+WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "GoGui"
+WriteRegStr HKLM "${UNINST_KEY}" "DisplayVersion" "@VERSION@"
+WriteRegStr HKLM "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\gogui.ico"
+WriteRegStr HKLM "${UNINST_KEY}" "URLInfoAbout" "http://gogui.sourceforge.net/"
+WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" "$INSTDIR\Uninstall.exe"
 
 SectionEnd
 
