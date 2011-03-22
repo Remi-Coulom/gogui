@@ -65,9 +65,6 @@ Comment out the following exec tag for releases.
  config/gogui.schemas
  config/gogui-mime.xml
  doc/README.html
- doc/manual/html/*.html
- doc/manual/html/*.png
- doc/manual/man/*.1
  doc/manual/xml/*.xml
  doc/manual/xml/*.xml.in
  doc/manual/xml/*.xsl
