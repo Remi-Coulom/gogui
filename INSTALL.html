@@ -74,6 +74,13 @@ ant option -Ddocbook-xsl.dir=directory (default is
 /usr/share/xml/docbook/stylesheet/docbook-xsl).
 </li>
 <li>
+To run the validation of the GoGui documentation XML sources (which is part of
+the check target in build.xml), a local copy of the Docbook DTD 4.2 needs to
+be installed. The location of the file can be defined with the ant option
+-Ddocbook.dtd-4.2=file (default is
+/usr/share/xml/docbook/schema/dtd/4.2/docbookx.dtd).
+</li>
+<li>
 If the GoGui sources were checked out from the repository, the Quaqua Look and
 Feel (http://www.randelshofer.ch/quaqua/) needs to be downloaded and copied to
 external/quaqua. See the property quaqua.nestedzipfile in build.xml for the

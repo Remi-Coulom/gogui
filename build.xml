@@ -31,6 +31,8 @@ Comment out the following exec tag for releases.
 <property name="quaqua.jarfile" value="quaqua.jar"/>
 <property name="docbook-xsl.dir"
 	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
+<property name="docbook.dtd-4.2"
+	  value="/usr/share/xml/docbook/schema/dtd/4.2/docbookx.dtd"/>
 <property name="scripts" value="
  gogui
  gogui-adapter
@@ -294,7 +296,12 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </target>
 
 <target name="docvalidate">
-<xmlvalidate file="doc/manual/xml/book.xml"/>
+<xmlvalidate file="doc/manual/xml/book.xml">
+  <xmlcatalog>
+    <dtd publicId="-//OASIS//DTD DocBook XML V4.2//EN"
+	 location="${docbook.dtd-4.2}"/>
+  </xmlcatalog>
+</xmlvalidate>
 </target>
 
 <target name="doc-check-uptodate">

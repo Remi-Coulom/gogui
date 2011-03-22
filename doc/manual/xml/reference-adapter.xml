@@ -1,12 +1,5 @@
 <refentry id="reference-adapter">
 
-<info>
-<author>
-<firstname>Markus</firstname><surname>Enzenberger</surname>
-<personblurb>GoGui maintainer</personblurb>
-</author>
-</info>
-
 <refmeta>
 <refentrytitle>gogui-adapter</refentrytitle>
 <manvolnum>1</manvolnum>

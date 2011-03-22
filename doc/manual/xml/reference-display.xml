@@ -1,12 +1,5 @@
 <refentry id="reference-display">
 
-<info>
-<author>
-<firstname>Markus</firstname><surname>Enzenberger</surname>
-<personblurb>GoGui maintainer</personblurb>
-</author>
-</info>
-
 <refmeta>
 <refentrytitle>gogui-display</refentrytitle>
 <manvolnum>1</manvolnum>

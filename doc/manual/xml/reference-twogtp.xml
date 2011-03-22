@@ -1,12 +1,5 @@
 <refentry id="reference-twogtp">
 
-<info>
-<author>
-<firstname>Markus</firstname><surname>Enzenberger</surname>
-<personblurb>GoGui maintainer</personblurb>
-</author>
-</info>
-
 <refmeta>
 <refentrytitle>gogui-twogtp</refentrytitle>
 <manvolnum>1</manvolnum>

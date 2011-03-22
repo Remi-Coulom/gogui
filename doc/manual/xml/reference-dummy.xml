@@ -1,12 +1,5 @@
 <refentry id="reference-dummy">
 
-<info>
-<author>
-<firstname>Markus</firstname><surname>Enzenberger</surname>
-<personblurb>GoGui maintainer</personblurb>
-</author>
-</info>
-
 <refmeta>
 <refentrytitle>gogui-dummy</refentrytitle>
 <manvolnum>1</manvolnum>

@@ -1,12 +1,5 @@
 <refentry id="reference-client">
 
-<info>
-<author>
-<firstname>Markus</firstname><surname>Enzenberger</surname>
-<personblurb>GoGui maintainer</personblurb>
-</author>
-</info>
-
 <refmeta>
 <refentrytitle>gogui-client</refentrytitle>
 <manvolnum>1</manvolnum>
