@@ -34,6 +34,12 @@ importing text positions
 </listitem>
 <listitem>
 <simpara>
+The Windows installer now installs exe wrappers for the GoGui jar files
+(created with Launch4j, see ant targets nsis and l4j).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 gogui-terminal: New command line option -color
 </simpara>
 </listitem>
