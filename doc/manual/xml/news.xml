@@ -56,6 +56,19 @@ The location of the directory can be given with the ant option
 -Ddocbook-xsl.dir=directory.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+The full Quaqua sources are no longer included in compiled GoGui distributions,
+only the file quaqua.jar. GoGui can be compiled without Quaqua with the
+ant option -Dquaqua.ignore=true
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+A source distribution of GoGui that contains no bytecode files can be
+created with the new ant target dist-src.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

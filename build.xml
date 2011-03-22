@@ -26,10 +26,6 @@ Comment out the following exec tag for releases.
 <property name="pmd.home" value="${env.PMD_HOME}"/>
 <property name="launch4j.home" value="${env.LAUNCH4J_HOME}"/>
 <property name="nsis.home" value="${env.NSIS_HOME}"/>
-<property name="quaqua.nestedzipfile" value="quaqua-5.2.1.nested.zip"/>
-<property name="quaqua.zipfile" value="quaqua-5.2.1.zip"/>
-<property name="quaqua.dir" value="Quaqua/dist"/>
-<property name="quaqua.jarfile" value="quaqua.jar"/>
 <property name="docbook-xsl.dir"
 	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
 <property name="docbook.dtd-4.2"
@@ -48,14 +44,12 @@ Comment out the following exec tag for releases.
  gogui-thumbnailer
  gogui-twogtp
 "/>
-<condition property="quaqua.noextract">
+<condition property="quaqua.available">
   <or>
-    <available file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
-    <istrue value="${noquaqua}"/>
+    <available file="lib/quaqua.jar"/>
+    <istrue value="${quaqua.ignore}"/>
   </or>
 </condition>
-<available property="quaqua.zip-available"
-  file="external/quaqua/${quaqua.nestedzipfile}"/>
 
 <zipfileset id="distfiles-src" prefix="gogui-${version}" dir="." includes="
  README.html
@@ -138,10 +132,6 @@ Comment out the following exec tag for releases.
 <zipfileset id="distfiles-jar" prefix="gogui-${version}" dir="." includes="
  lib/*.jar
 "/>
-<zipfileset id="distfiles-external" prefix="gogui-${version}" dir="."
-  includes="
- external/quaqua/${quaqua.nestedzipfile}
-"/>
 
 <target name="build"
  description="Compile all programs (default target)"
@@ -160,6 +150,18 @@ Comment out the following exec tag for releases.
   gogui-twogtp.jar
 "/>
 
+<target name="check-quaqua">
+  <fail unless="quaqua.available">
+lib/quaqua.jar not found.
+Please download the Quaqua Look and Feel (http://www.randelshofer.ch/quaqua)
+and copy the file quaqua.jar from the distribution to lib/quaqua.jar. The
+last version tested with GoGui was:
+http://www.randelshofer.ch/quaqua/files/quaqua-5.2.1.nested.zip
+To compile GoGui with limited Mac support, you can invoke ant with the
+option -Dquaqua.ignore=true.
+  </fail>
+</target>
+
 <target name="clean" depends="clean-build-dir"
  description="Delete class and jar files built by target all">
 <delete failonerror="false" includeEmptyDirs="true">
@@ -176,8 +178,7 @@ Comment out the following exec tag for releases.
    gogui-statistics.jar,
    gogui-terminal.jar,
    gogui-thumbnailer.jar,
-   gogui-twogtp.jar,
-   ${quaqua.jarfile},
+   gogui-twogtp.jar
   "
 />
 </delete>
@@ -227,11 +228,6 @@ Comment out the following exec tag for releases.
 "/>
 </target>
 
-<target name="copy-quaqua" depends="extract-quaqua" unless="noquaqua">
-<mkdir dir="lib"/>
-<copy file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}" todir="lib"/>
-</target>
-
 <target name="depend">
 <depend srcdir="src" destdir="build/classes" cache="build/depcache"/>
 </target>
@@ -245,7 +241,6 @@ Comment out the following exec tag for releases.
 <zipfileset refid="distfiles-src-scripts"/>
 <zipfileset refid="distfiles-doc"/>
 <zipfileset refid="distfiles-jar"/>
-<zipfileset refid="distfiles-external"/>
 </zip>
 </target>
 
@@ -317,25 +312,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <exec executable="doxygen" dir="doc/doxygen"/>
 </target>
 
-<target name="extract-quaqua" unless="quaqua.noextract">
-<fail unless="quaqua.zip-available">
-Please download the Quaqua Look and Feel from
-http://www.randelshofer.ch/quaqua/files/${quaqua.nestedzipfile}
-and copy it to external/quaqua/${quaqua.nestedzipfile} or compile GoGui
-with limited Mac support by invoking ant with the option -Dnoquaqua=true.
-</fail>
-<unzip src="external/quaqua/${quaqua.nestedzipfile}" dest="external/quaqua">
-<patternset>
-<include name="${quaqua.zipfile}"/>
-</patternset>
-</unzip>
-<unzip src="external/quaqua/${quaqua.zipfile}" dest="external/quaqua">
-<patternset>
-<include name="${quaqua.dir}/${quaqua.jarfile}"/>
-</patternset>
-</unzip>
-</target>
-
 <target name="findbugs" depends="compile"
  description="Invoke FindBugs (with exec)">
 <mkdir dir="test/findbugs"/>
@@ -395,14 +371,14 @@ with limited Mac support by invoking ant with the option -Dnoquaqua=true.
 </exec>
 </target>
 
-<target name="gogui.jar" depends="compile,copy-quaqua">
+<target name="gogui.jar" depends="compile,check-quaqua">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" compress="true" level="9">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="${quaqua.jarfile}"/>
+<attribute name="Class-Path" value="quaqua.jar"/>
 </manifest>
 <fileset dir="build/classes" includes="
  net/sf/gogui/doc/*.html
@@ -498,14 +474,14 @@ with limited Mac support by invoking ant with the option -Dnoquaqua=true.
   </jar>
 </target>
 
-<target name="gogui-display.jar" depends="compile,copy-quaqua">
+<target name="gogui-display.jar" depends="compile,check-quaqua">
   <mkdir dir="lib"/>
   <jar destfile="lib/gogui-display.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
       <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-      <attribute name="Class-Path" value="${quaqua.jarfile}"/>
+      <attribute name="Class-Path" value="quaqua.jar"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/boardpainter/*.class
