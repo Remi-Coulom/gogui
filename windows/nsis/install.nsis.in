@@ -18,8 +18,8 @@ SetCompressor /SOLID lzma
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
-Name "GoGui @VERSION@"
-Caption "GoGui Installer"
+Name "GoGui"
+Caption "GoGui @VERSION@ Installer"
 Icon "..\icons\gogui.ico"
 OutFile "..\..\gogui-@VERSION@-install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
