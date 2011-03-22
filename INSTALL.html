@@ -65,14 +65,13 @@ Compiling GoGui from the sources needs the
 </li>
 <li>
 The HTML documentation is generated using Docbook.
-To re-generate the HTML files after changes in the XML files (or for the
-first time, if the GoGui sources were checked out from the repository, which
-does not contain the HTML files), the XSL transformer
-<a href="http://xmlsoft.org/XSLT">xsltproc</a> has to be installed.
-The built in ant target <tt>xslt</tt> is no longer used, because it has
-problems with newer versions of Docbook XSL and Xalan XSLTC and also replaces
-some HTML entities in a way that the Java JEditorPane does not render
-correctly.
+This requires that the XSL transformer
+<a href="http://xmlsoft.org/XSLT">xsltproc</a> and the
+<a href="http://sourceforge.net/projects/docbook/files/docbook-xsl/">Docbook
+XSL Stylesheets</a> are installed.
+The location of the Docbook XSL directory can be defined with the
+ant option -Ddocbook-xsl.dir=directory (default is
+/usr/share/xml/docbook/stylesheet/docbook-xsl).
 </li>
 <li>
 If the GoGui sources were checked out from the repository, the Quaqua Look and

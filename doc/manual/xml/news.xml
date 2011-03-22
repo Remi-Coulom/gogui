@@ -42,6 +42,14 @@ gogui-terminal: New command line option -color
 gogui-twogtp: New command line option -threads
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+The Docbook XSL stylesheets are no longer included in the GoGui sources.
+To compile GoGui, they need to be installed on the system.
+The location of the directory can be given with the ant option
+-Ddocbook-xsl.dir=directory.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

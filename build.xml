@@ -25,12 +25,12 @@ Comment out the following exec tag for releases.
 <property name="pmd.home" value="${env.PMD_HOME}"/>
 <property name="launch4j.home" value="${env.LAUNCH4J_HOME}"/>
 <property name="nsis.home" value="${env.NSIS_HOME}"/>
-<property name="docbook.name" value="docbook-xsl-1.68.1"/>
 <property name="quaqua.nestedzipfile" value="quaqua-5.2.1.nested.zip"/>
 <property name="quaqua.zipfile" value="quaqua-5.2.1.zip"/>
 <property name="quaqua.dir" value="Quaqua/dist"/>
 <property name="quaqua.jarfile" value="quaqua.jar"/>
-<property name="docbook.path" value="external/docbook/${docbook.name}"/>
+<property name="docbook-xsl.dir"
+	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
 <property name="scripts" value="
  gogui
  gogui-adapter
@@ -45,8 +45,6 @@ Comment out the following exec tag for releases.
  gogui-thumbnailer
  gogui-twogtp
 "/>
-<available property="docbook.available"
- file="${docbook.path}/html/chunk.xsl"/>
 <condition property="quaqua.noextract">
   <or>
     <available file="external/quaqua/${quaqua.dir}/${quaqua.jarfile}"/>
@@ -79,7 +77,6 @@ Comment out the following exec tag for releases.
  doc/doxygen/Doxyfile
  doc/doxygen/footer.html
  doc/doxygen/README.html
- ${docbook.path}.zip
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
  mac/packaging/Info.plist.in
@@ -258,12 +255,12 @@ Comment out the following exec tag for releases.
 <delete file="gogui-${version}-src.tar"/>
 </target>
 
-<target name="doc" depends="extract-docbook,doc-check-uptodate"
+<target name="doc" depends="doc-check-uptodate"
  unless="doc-uptodate"
  description="Generate documentation using xsltproc">
 <echo message="Running xsltproc"/>
-<exec executable="xsltproc">
-<arg line="--path ${docbook.path}/html"/>
+<exec executable="xsltproc" failonerror="true">
+<arg line="--path ${docbook-xsl.dir}/html"/>
 <arg line="-o doc/manual/html/"/>
 <arg line="doc/manual/xml/custom.xsl"/>
 <arg line="doc/manual/xml/book.xml"/>
@@ -271,10 +268,10 @@ Comment out the following exec tag for releases.
 <!-- Remove empty div sections that create unwanted space in JEditorPane -->
 <replace dir="doc/manual/html" includes="*.html"
  token="&lt;div&gt;&lt;/div&gt;" encoding="UTF-8"/>
-<exec executable="xsltproc">
+<exec executable="xsltproc" failonerror="true">
 <arg line="--param chunk.quietly 1"/>
 <arg line="-o doc/manual/man/"/>
-<arg line="${docbook.path}/manpages/docbook.xsl"/>
+<arg line="${docbook-xsl.dir}/manpages/docbook.xsl"/>
 <arg line="doc/manual/xml/manpages.xml"/>
 </exec>
 </target>
@@ -284,14 +281,14 @@ Generate documentation using ant xslt target.
 Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan)
 -->
-<target name="doc-xslt" depends="extract-docbook,doc-check-uptodate"
+<target name="doc-xslt" depends="doc-check-uptodate"
  unless="doc-uptodate">
 <xslt basedir="doc/manual/xml" includes="book.xml" destdir="doc/manual/html"
- style="${docbook.path}/html/chunk.xsl" force="true">
+ style="${docbook-xsl.dir}/html/chunk.xsl" force="true">
 <xmlcatalog>
 <dtd
  publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
- location="${docbook.path}/html/chunk.xsl"/>
+ location="${docbook-xsl.dir}/html/chunk.xsl"/>
 </xmlcatalog>
 </xslt>
 </target>
@@ -310,18 +307,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <target name="doxygen"
  description="Generate source code documentation using doxygen">
 <exec executable="doxygen" dir="doc/doxygen"/>
-</target>
-
-<target name="extract-docbook" unless="docbook.available">
-<unzip src="${docbook.path}.zip" dest="external/docbook">
-<patternset>
-<include name="${docbook.name}/VERSION"/>
-<include name="${docbook.name}/common/*"/>
-<include name="${docbook.name}/html/*"/>
-<include name="${docbook.name}/lib/*"/>
-<include name="${docbook.name}/manpages/*"/>
-</patternset>
-</unzip>
 </target>
 
 <target name="extract-quaqua" unless="quaqua.noextract">
