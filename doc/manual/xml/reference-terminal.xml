@@ -1,5 +1,12 @@
 <refentry id="reference-terminal">
 
+<info>
+<author>
+<firstname>Markus</firstname><surname>Enzenberger</surname>
+<personblurb>GoGui maintainer</personblurb>
+</author>
+</info>
+
 <refmeta>
 <refentrytitle>gogui-terminal</refentrytitle>
 <manvolnum>1</manvolnum>
