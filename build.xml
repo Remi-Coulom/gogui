@@ -725,41 +725,46 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
   <copy file="windows/l4j/gogui.xml.in"
 	tofile="windows/l4j/gogui.xml" overwrite="true"/>
   <replace file="windows/l4j/gogui.xml" token="@VERSION@" value="${version}"/>
+  <!--
+     Use absolute paths for launch4j arguments to make it work with the
+     launch4j Unix script included in Launch4j 3.0.2, which changes the
+     working directory before running launch4j.jar
+  -->
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-adapter.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-adapter.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-client.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-client.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-convert.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-convert.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-display.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-display.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-dummy.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-dummy.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-regress.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-regress.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-server.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-server.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-statistics.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-statistics.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-terminal.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-terminal.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-thumbnailer.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-thumbnailer.xml"/>
   </exec>
   <exec executable="${launch4j}" failonerror="true">
-    <arg line="windows/l4j/gogui-twogtp.xml"/>
+    <arg line="${basedir}/windows/l4j/gogui-twogtp.xml"/>
   </exec>
 </target>
 
