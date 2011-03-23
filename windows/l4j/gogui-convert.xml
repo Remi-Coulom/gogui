@@ -1,7 +1,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>..\..\lib\gogui-convert.jar</jar>
+  <jar>../../lib/gogui-convert.jar</jar>
   <outfile>gogui-convert.exe</outfile>
   <cmdLine></cmdLine>
   <chdir></chdir>

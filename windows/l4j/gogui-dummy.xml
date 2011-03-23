@@ -1,7 +1,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>..\..\lib\gogui-dummy.jar</jar>
+  <jar>../../lib/gogui-dummy.jar</jar>
   <outfile>gogui-dummy.exe</outfile>
   <cmdLine></cmdLine>
   <chdir></chdir>

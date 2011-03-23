@@ -1,7 +1,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>..\..\lib\gogui-regress.jar</jar>
+  <jar>../../lib/gogui-regress.jar</jar>
   <outfile>gogui-regress.exe</outfile>
   <cmdLine></cmdLine>
   <chdir></chdir>

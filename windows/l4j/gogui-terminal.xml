@@ -1,7 +1,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>..\..\lib\gogui-terminal.jar</jar>
+  <jar>../../lib/gogui-terminal.jar</jar>
   <outfile>gogui-terminal.exe</outfile>
   <cmdLine></cmdLine>
   <chdir></chdir>

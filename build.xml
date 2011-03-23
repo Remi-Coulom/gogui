@@ -24,8 +24,8 @@ Comment out the following exec tag for releases.
 <property environment="env"/>
 <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
 <property name="pmd.home" value="${env.PMD_HOME}"/>
-<property name="launch4j.home" value="${env.LAUNCH4J_HOME}"/>
-<property name="nsis.home" value="${env.NSIS_HOME}"/>
+<property name="launch4j" value="launch4jc.exe"/>
+<property name="makensis" value="makensis.exe"/>
 <property name="docbook-xsl.dir"
 	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
 <property name="docbook.dtd-4.2"
@@ -716,40 +716,43 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 
 <target name="l4j" depends="build"
   description="Create Windows jar wrappers using launch4j (launch4j.sourceforge.net)">
-  <exec executable="${launch4j.home}/launch4jc">
+  <copy file="windows/l4j/gogui.xml.in"
+	tofile="windows/l4j/gogui.xml" overwrite="true"/>
+  <replace file="windows/l4j/gogui.xml" token="@VERSION@" value="${version}"/>
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-adapter.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-client.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-convert.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-display.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-dummy.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-regress.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-server.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-statistics.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-terminal.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-thumbnailer.xml"/>
   </exec>
-  <exec executable="${launch4j.home}/launch4jc">
+  <exec executable="${launch4j}" failonerror="true">
     <arg line="windows/l4j/gogui-twogtp.xml"/>
   </exec>
 </target>
@@ -760,7 +763,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 	tofile="windows/nsis/install.nsis" overwrite="true"/>
   <replace file="windows/nsis/install.nsis" token="@VERSION@"
 	   value="${version}"/>
-  <exec executable="${nsis.home}/makensis">
+  <exec executable="${makensis}" failonerror="true">
     <arg line="windows/nsis/install.nsis"/>
   </exec>
 </target>

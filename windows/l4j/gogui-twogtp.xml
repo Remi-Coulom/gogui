@@ -1,7 +1,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>..\..\lib\gogui-twogtp.jar</jar>
+  <jar>../../lib/gogui-twogtp.jar</jar>
   <outfile>gogui-twogtp.exe</outfile>
   <cmdLine></cmdLine>
   <chdir></chdir>
