@@ -51,7 +51,8 @@ Comment out the following exec tag for releases.
   </or>
 </condition>
 
-<zipfileset id="distfiles-src" prefix="gogui-${version}" dir="." includes="
+<zipfileset id="distfiles-src" prefix="gogui-${version}" dir="."
+  includes="
  README.html
  COPYING.html
  INSTALL.html
@@ -60,7 +61,6 @@ Comment out the following exec tag for releases.
  config/gogui-gogui.desktop
  config/gogui-gogui.png
  config/application-x-go-sgf.png
- config/gogui-C.omf
  config/gogui-C.omf.in
  config/gogui.schemas
  config/gogui-mime.xml
@@ -72,7 +72,6 @@ Comment out the following exec tag for releases.
  doc/doxygen/footer.html
  doc/doxygen/README.html
  mac/packaging/GoGui.icns
- mac/packaging/Info.plist
  mac/packaging/Info.plist.in
  mac/packaging/PkgInfo
  mac/src/com/apple/eawt/Application.java
@@ -102,9 +101,16 @@ Comment out the following exec tag for releases.
  windows/icons/gogui.ico
  windows/icons/sgf.ico
  windows/l4j/*.xml
+ windows/l4j/*.xml.in
  windows/nsis/License.txt
  windows/nsis/install.nsis.in
-"/>
+"
+  excludes="
+ doc/manual/xml/version.xml
+ src/net/sf/gogui/version/Version.java
+ windows/l4j/gogui.xml
+"
+/>
 <zipfileset id="distfiles-src-scripts" prefix="gogui-${version}" dir="."
   filemode="755" includes="
  install.sh,
@@ -121,13 +127,14 @@ Comment out the following exec tag for releases.
  bin/gogui-thumbnailer,
  bin/gogui-twogtp,
 "/>
-<zipfileset id="distfiles-doc" prefix="gogui-${version}" dir="." includes="
+<zipfileset id="distfiles-nonsrc" prefix="gogui-${version}" dir="." includes="
+ config/gogui-C.omf
  doc/manual/html/*.html
  doc/manual/html/*.png
  doc/manual/man/*.1
-"/>
-<zipfileset id="distfiles-jar" prefix="gogui-${version}" dir="." includes="
  lib/*.jar
+ mac/packaging/Info.plist
+ windows/nsis/install.nsis
 "/>
 
 <target name="build"
@@ -236,8 +243,7 @@ option -Dquaqua.ignore=true.
 <zip destfile="gogui-${version}.zip">
 <zipfileset refid="distfiles-src"/>
 <zipfileset refid="distfiles-src-scripts"/>
-<zipfileset refid="distfiles-doc"/>
-<zipfileset refid="distfiles-jar"/>
+<zipfileset refid="distfiles-nonsrc"/>
 </zip>
 </target>
 
