@@ -310,7 +310,7 @@ public class ResultFile
         {
             table.read(file);
             int numberRows = table.getNumberRows();
-            if (numberRows > numberGames)
+            if (numberRows >= numberGames)
                 throw new ErrorMessage("File " + file + " already contains "
                                        + numberRows + " games");
             for (int i = 0; i < numberGames; ++i)
