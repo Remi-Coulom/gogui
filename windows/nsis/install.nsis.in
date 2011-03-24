@@ -26,6 +26,7 @@ Name "GoGui"
 Caption "GoGui @VERSION@ Installer"
 OutFile "..\..\gogui-@VERSION@-install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
+InstallDirRegKey HKLM "Software\GoGui" ""
 ; Set admin level, needed for shortcut removal on Vista
 ; (http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista)
 RequestExecutionLevel admin
@@ -50,6 +51,8 @@ File "..\l4j\gogui-twogtp.exe"
 File "..\l4j\gogui-display.exe"
 File "..\l4j\gogui-statistics.exe"
 File "..\icons\gogui.ico"
+
+WriteRegStr HKLM "Software\GoGui" "" $INSTDIR
 
 WriteUninstaller $INSTDIR\Uninstall.exe
 WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "GoGui"
