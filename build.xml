@@ -26,10 +26,11 @@ Comment out the following exec tag for releases.
 <property name="pmd.home" value="${env.PMD_HOME}"/>
 <property name="launch4j" value="launch4jc.exe"/>
 <property name="makensis" value="makensis.exe"/>
+<property name="xsltproc" value="xsltproc"/>
 <property name="docbook-xsl.dir"
-	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
+	        value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
 <property name="docbook.dtd-4.2"
-	  value="/usr/share/xml/docbook/schema/dtd/4.2/docbookx.dtd"/>
+          value="/usr/share/xml/docbook/schema/dtd/4.2/docbookx.dtd"/>
 <property name="scripts" value="
  gogui
  gogui-adapter
@@ -260,7 +261,7 @@ option -Dquaqua.ignore=true.
  unless="doc-uptodate"
  description="Generate documentation using xsltproc">
 <echo message="Running xsltproc"/>
-<exec executable="xsltproc" failonerror="true">
+<exec executable="${xsltproc}" failonerror="true">
 <arg line="--path ${docbook-xsl.dir}/html"/>
 <arg line="-o doc/manual/html/"/>
 <arg line="doc/manual/xml/custom.xsl"/>
