@@ -25,7 +25,7 @@ Comment out the following exec tag for releases.
 <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
 <property name="pmd.home" value="${env.PMD_HOME}"/>
 <property name="launch4j" value="launch4jc.exe"/>
-<property name="makensis" value="makensis.exe"/>
+<property name="makensis" value="makensis"/>
 <property name="xsltproc" value="xsltproc"/>
 <property name="docbook-xsl.dir"
 	        value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
