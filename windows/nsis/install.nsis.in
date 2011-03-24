@@ -11,6 +11,7 @@ SetCompressor /SOLID lzma
 !define MUI_COMPONENTSPAGE_NODESC
 !include "MUI.nsh"
 !insertmacro MUI_PAGE_WELCOME
+!define MUI_LICENSEPAGE_CHECKBOX
 !insertmacro MUI_PAGE_LICENSE "License.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
@@ -118,8 +119,8 @@ SetShellVarContext all
 Delete "$SMPROGRAMS\Games\GoGui.lnk"
 Delete "$DESKTOP\GoGui.lnk"
 
-DeleteRegKey HKLM "SOFTWARE\GoGui"
-DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
+DeleteRegKey HKLM "Software\GoGui"
+DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GoGui"
 DeleteRegKey HKCR "GoGui"
 DeleteRegKey HKCR "Applications\GoGui.exe"
 
