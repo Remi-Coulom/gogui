@@ -9,7 +9,7 @@ import java.util.prefs.Preferences;
 import net.sf.gogui.util.ErrorMessage;
 
 /** Wrapper for starting GoGui.
-    Loads the main class with the reflection API to set Mac AWT
+    Loads the main class with the reflection API to set Mac AWT and other
     properties before any AWT class is loaded. */
 public final class MainWrapper
 {
@@ -20,8 +20,11 @@ public final class MainWrapper
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
-        // Use GDI rendering on Windows, there are still repaint problems
-        // using DDraw with Java 1.6
+        // Use GDI rendering on Windows, there are repaint problems using
+        // DDraw (last tested with Java 1.6 on Windows 7).
+        // Also, using DDraw does not work well with Wine (http://winehq.com,
+        // last tested versions 1.2.2 and 1.3.16) and Wine can be useful to
+        // test the Windows installer for GoGui on Linux.
         System.setProperty("sun.java2d.noddraw", "true");
         GoGuiSettings settings;
         try
