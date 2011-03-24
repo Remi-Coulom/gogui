@@ -5,6 +5,9 @@
 
 SetCompressor /SOLID lzma
 
+!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange.bmp"
 !define MUI_COMPONENTSPAGE_NODESC
 !include "MUI.nsh"
 !insertmacro MUI_PAGE_WELCOME
@@ -20,7 +23,6 @@ SetCompressor /SOLID lzma
 
 Name "GoGui"
 Caption "GoGui @VERSION@ Installer"
-Icon "..\icons\gogui.ico"
 OutFile "..\..\gogui-@VERSION@-install.exe"
 InstallDir "$PROGRAMFILES\GoGui"
 ; Set admin level, needed for shortcut removal on Vista
