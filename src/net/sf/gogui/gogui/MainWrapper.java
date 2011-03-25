@@ -4,6 +4,7 @@ package net.sf.gogui.gogui;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 import net.sf.gogui.util.ErrorMessage;
@@ -61,12 +62,19 @@ public final class MainWrapper
 
     private static void setLocale()
     {
-        // Language preference as stored by GoGui.actionSwitchLanguage()
+        // Set language from preference as stored by
+        // GoGui.actionSwitchLanguage(). For languages not supported by GoGui,
+        // use English to avoid a mix between English and the local language
+        // in Swing dialogs.
+        ArrayList<String> supportedLanguages = new ArrayList<String>();
+        supportedLanguages.add("en");
+        supportedLanguages.add("de");
+        supportedLanguages.add("sl");
+        String defaultLanguage = Locale.getDefault().getLanguage();
+        if (! supportedLanguages.contains(defaultLanguage))
+            defaultLanguage = "en";
         Preferences prefs = Preferences.userNodeForPackage(MainWrapper.class);
-        // Default is "en", not Locale.getDefault().getLanguage(), to avoid a
-        // mix between English and local language in Swing dialogs for
-        // languages not supported by GoGui
-        String language = prefs.get("language", "en");
+        String language = prefs.get("language", defaultLanguage);
         Locale.setDefault(new Locale(language));
     }
 }
