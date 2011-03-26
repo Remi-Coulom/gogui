@@ -18,8 +18,11 @@ Comment out the following exec tag for releases.
 </exec>
 <property name="version" value="1.3.GIT-${gitversion}"/>
 
-<tstamp><format property="DSTAMP" pattern="yyyy-MM-dd" timezone="UCT"/>
-<format property="TSTAMP" pattern="hh:mm" timezone="UCT"/></tstamp>
+<tstamp><format property="dstamp" pattern="yyyy-MM-dd" timezone="UCT"/>
+<format property="tstamp" pattern="hh:mm" timezone="UCT"/></tstamp>
+
+<filter token="VERSION" value="${version}"/>
+<filter token="DATE" value="${dstamp}"/>
 
 <property environment="env"/>
 <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
@@ -381,7 +384,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+<attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
 <attribute name="Class-Path" value="quaqua.jar"/>
 </manifest>
 <fileset dir="build/classes" includes="
@@ -421,7 +424,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
@@ -443,7 +446,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
      <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/util/ErrorMessage.class
@@ -462,7 +465,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
@@ -484,7 +487,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
       <attribute name="Class-Path" value="quaqua.jar"/>
     </manifest>
     <fileset dir="build/classes" includes="
@@ -512,7 +515,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
@@ -531,7 +534,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/go/*.class
@@ -549,7 +552,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/util/ErrorMessage.class
@@ -569,7 +572,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
@@ -590,7 +593,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
@@ -617,7 +620,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/boardpainter/*.class
@@ -640,7 +643,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+      <attribute name="Build-Date" value="${dstamp} ${tstamp}"/>
     </manifest>
     <fileset dir="build/classes" includes="
  net/sf/gogui/game/*.class
@@ -808,23 +811,15 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 
 <target name="version" depends="version-check-uptodate"
  unless="version-uptodate">
-<copy
-file="src/net/sf/gogui/version/Version.java.in"
-tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
-<replace file="src/net/sf/gogui/version/Version.java" token="@VERSION@"
- value="${version}"/>
-<copy
- file="doc/manual/xml/version.xml.in"
- tofile="doc/manual/xml/version.xml" overwrite="true"/>
-<replace file="doc/manual/xml/version.xml" token="@VERSION@"
- value="${version}"/>
-<copy
- file="mac/packaging/Info.plist.in"
- tofile="mac/packaging/Info.plist" overwrite="true"/>
-<replace file="mac/packaging/Info.plist" token="@VERSION@" value="${version}"/>
-<copy
- file="config/gogui-C.omf.in" tofile="config/gogui-C.omf" overwrite="true"/>
-<replace file="config/gogui-C.omf" token="@DATE@" value="${DSTAMP}"/>
+<copy file="src/net/sf/gogui/version/Version.java.in"
+      tofile="src/net/sf/gogui/version/Version.java" overwrite="true"
+      filtering="true"/>
+<copy file="doc/manual/xml/version.xml.in"
+      tofile="doc/manual/xml/version.xml" overwrite="true" filtering="true"/>
+<copy file="mac/packaging/Info.plist.in"
+      tofile="mac/packaging/Info.plist" overwrite="true" filtering="true"/>
+<copy file="config/gogui-C.omf.in" tofile="config/gogui-C.omf"
+      overwrite="true" filtering="true"/>
 </target>
 
 <target name="version-check-uptodate">
