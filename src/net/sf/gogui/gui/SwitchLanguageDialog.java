@@ -30,11 +30,10 @@ public class SwitchLanguageDialog
         m_key = key;
     }
 
-    public void addLanguage(Locale locale, boolean isFullyLocalized)
+    public void addLanguage(Locale locale)
     {
         Entry entry = new Entry();
         entry.m_locale = locale;
-        entry.m_isFullyLocalized = isFullyLocalized;
         m_entries.add(entry);
     }
 
@@ -58,25 +57,17 @@ public class SwitchLanguageDialog
             return;
         Entry entry = (Entry)result;
         m_prefs.put(m_key, entry.m_locale.getLanguage());
-        if (entry.m_locale.getLanguage().equals(current))
-            return;
-        if (! entry.m_isFullyLocalized)
+        if (! entry.m_locale.getLanguage().equals(current))
             m_messageDialogs.showInfo(m_owner,
-                                      i18n("MSG_SWITCHLANG_NOT_FULL_SUPPORT"),
-                                      i18n("MSG_SWITCHLANG_NOT_FULL_SUPPORT_2"),
+                                      i18n("MSG_SWITCHLANG_NEXT_START"),
+                                      i18n("MSG_SWITCHLANG_NEXT_START_2"),
                                       false);
-        m_messageDialogs.showInfo(m_owner,
-                                  i18n("MSG_SWITCHLANG_NEXT_START"),
-                                  i18n("MSG_SWITCHLANG_NEXT_START_2"),
-                                  false);
 
     }
 
     private static class Entry
     {
         public Locale m_locale;
-
-        public boolean m_isFullyLocalized;
 
         public String toString()
         {

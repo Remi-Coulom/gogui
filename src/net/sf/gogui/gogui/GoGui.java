@@ -1653,9 +1653,9 @@ public class GoGui
         SwitchLanguageDialog dialog =
             new SwitchLanguageDialog(this, m_messageDialogs, m_prefs,
                                      "language");
-        dialog.addLanguage(Locale.ENGLISH, true);
-        dialog.addLanguage(Locale.GERMAN, false);
-        dialog.addLanguage(new Locale("sl"), false);
+        dialog.addLanguage(Locale.ENGLISH);
+        dialog.addLanguage(Locale.GERMAN);
+        dialog.addLanguage(new Locale("sl"));
         dialog.run();
     }
 
