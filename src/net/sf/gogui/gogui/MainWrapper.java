@@ -16,7 +16,6 @@ public final class MainWrapper
 {
     public static void main(String[] args) throws Exception
     {
-        setLocale();
         System.setProperty("apple.awt.brushMetalLook", "true");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
@@ -58,23 +57,5 @@ public final class MainWrapper
     /** Make constructor unavailable; class is for namespace only. */
     private MainWrapper()
     {
-    }
-
-    private static void setLocale()
-    {
-        // Set language from preference as stored by
-        // GoGui.actionSwitchLanguage(). For languages not supported by GoGui,
-        // use English to avoid a mix between English and the local language
-        // in Swing dialogs.
-        ArrayList<String> supportedLanguages = new ArrayList<String>();
-        supportedLanguages.add("en");
-        supportedLanguages.add("de");
-        supportedLanguages.add("sl");
-        String defaultLanguage = Locale.getDefault().getLanguage();
-        if (! supportedLanguages.contains(defaultLanguage))
-            defaultLanguage = "en";
-        Preferences prefs = Preferences.userNodeForPackage(MainWrapper.class);
-        String language = prefs.get("language", defaultLanguage);
-        Locale.setDefault(new Locale(language));
     }
 }

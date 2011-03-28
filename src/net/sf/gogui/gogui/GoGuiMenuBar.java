@@ -415,8 +415,6 @@ public class GoGuiMenuBar
         MenuChecked menu = createMenu("MEN_HELP", KeyEvent.VK_H);
         menu.addItem(actions.m_actionHelp, KeyEvent.VK_G);
         menu.addSeparator();
-        menu.addItem(actions.m_actionSwitchLanguage, KeyEvent.VK_S);
-        menu.addSeparator();
         menu.addItem(actions.m_actionAbout, KeyEvent.VK_A);
         return menu;
     }

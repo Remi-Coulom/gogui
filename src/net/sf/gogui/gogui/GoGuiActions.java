@@ -592,11 +592,6 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSnapshotParameters(); } };
 
-    public final Action m_actionSwitchLanguage =
-        new Action("ACT_SWITCH_LANGUAGE") {
-            public void actionPerformed(ActionEvent e) {
-                m_goGui.actionSwitchLanguage(); } };
-
     public final Action m_actionToggleAutoNumber =
         new Action("ACT_AUTO_NUMBER") {
             public void actionPerformed(ActionEvent e) {

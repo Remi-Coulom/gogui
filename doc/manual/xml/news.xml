@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+No longer support switching the language in "Help/Switch language".
+The language is now always set according to the default system language.
 </simpara>
 </listitem>
 </itemizedlist>

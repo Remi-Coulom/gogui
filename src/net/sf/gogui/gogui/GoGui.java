@@ -118,7 +118,6 @@ import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.gui.SwitchLanguageDialog;
 import net.sf.gogui.gui.TimeLeftDialog;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
@@ -1646,17 +1645,6 @@ public class GoGui
         }
         else
             m_gameTreeViewer.toFront();
-    }
-
-    public void actionSwitchLanguage()
-    {
-        SwitchLanguageDialog dialog =
-            new SwitchLanguageDialog(this, m_messageDialogs, m_prefs,
-                                     "language");
-        dialog.addLanguage(Locale.ENGLISH);
-        dialog.addLanguage(Locale.GERMAN);
-        dialog.addLanguage(new Locale("sl"));
-        dialog.run();
     }
 
     public void actionToggleBeepAfterMove()

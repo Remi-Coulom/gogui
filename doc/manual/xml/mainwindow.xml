@@ -1031,16 +1031,6 @@ Open a window for browsing the GoGui documentation.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Switch Language</guimenuitem></term>
-<listitem>
-<para>
-Switch the language used by the GoGui application. The default language is
-English.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>About</guimenuitem></term>
 <listitem>
 <para>
