@@ -69,6 +69,7 @@ public final class MainWrapper
         ArrayList<String> supportedLanguages = new ArrayList<String>();
         supportedLanguages.add("en");
         supportedLanguages.add("de");
+        supportedLanguages.add("fr");
         supportedLanguages.add("sl");
         String defaultLanguage = Locale.getDefault().getLanguage();
         if (! supportedLanguages.contains(defaultLanguage))
