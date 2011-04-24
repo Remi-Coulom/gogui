@@ -102,6 +102,7 @@ import net.sf.gogui.gui.GameInfoPanel;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
+import net.sf.gogui.gui.GuiAction;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiGtpClient;
@@ -2540,7 +2541,7 @@ public class GoGui
             m_shell = null;
         }
         m_shell = new GtpShell(this, this, m_messageDialogs);
-        m_actions.registerAll(m_shell.getLayeredPane());
+        GuiAction.registerAll(m_shell.getLayeredPane());
         m_shell.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     saveSession();
@@ -3022,7 +3023,7 @@ public class GoGui
                                             m_gtp, m_messageDialogs);
         m_analyzeDialog.setReuseTextWindow(
                         m_prefs.getBoolean("analyze-reuse-text-window", false));
-        m_actions.registerAll(m_analyzeDialog.getLayeredPane());
+        GuiAction.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     actionDisposeAnalyzeDialog();
@@ -3052,7 +3053,7 @@ public class GoGui
                     actionDisposeTree();
                 }
             });
-        m_actions.registerAll(m_gameTreeViewer.getLayeredPane());
+        GuiAction.registerAll(m_gameTreeViewer.getLayeredPane());
         m_gameTreeViewer.setLabelMode(m_treeLabels);
         m_gameTreeViewer.setSizeMode(m_treeSize);
         m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
@@ -3445,7 +3446,7 @@ public class GoGui
             });
 
         GuiUtil.removeKeyBinding(m_splitPane, "F8");
-        m_actions.registerAll(getLayeredPane());
+        GuiAction.registerAll(getLayeredPane());
 
         m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);

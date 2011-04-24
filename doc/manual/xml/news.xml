@@ -15,6 +15,14 @@ No longer support switching the language in "Help/Switch language".
 The language is now always set according to the default system language.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+The mnemonic keys in the menu labels are now parsed from the language
+resource files using the Qt convention (the mnemonic is marked with a
+preceding '&#38;'). This avoids that non-English languages use the menmonics
+from the English labels that may not exist in the non-English label.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

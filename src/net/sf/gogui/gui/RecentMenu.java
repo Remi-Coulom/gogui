@@ -60,7 +60,7 @@ public final class RecentMenu
         assert listener != null;
         m_path = path;
         m_listener = listener;
-        m_menu = new JMenu(label);
+        m_menu = new GuiMenu(label);
         m_actionListener = new ActionListener()
             {
                 public void actionPerformed(ActionEvent event)
@@ -93,7 +93,7 @@ public final class RecentMenu
     }
 
     /** Don't modify the items in this menu! */
-    public JMenu getMenu()
+    public GuiMenu getMenu()
     {
         return m_menu;
     }
@@ -129,7 +129,7 @@ public final class RecentMenu
 
     private final Listener m_listener;
 
-    private final JMenu m_menu;
+    private final GuiMenu m_menu;
 
     private void get()
     {

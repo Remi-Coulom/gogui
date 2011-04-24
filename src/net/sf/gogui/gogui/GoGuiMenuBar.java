@@ -5,20 +5,18 @@ package net.sf.gogui.gogui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 import static net.sf.gogui.gogui.I18n.i18n;
+import net.sf.gogui.gui.GuiMenu;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.RecentFileMenu;
@@ -181,13 +179,13 @@ public class GoGuiMenuBar
 
     private final Listener m_listener;
 
-    private final MenuChecked m_menuBookmarks;
+    private final GuiMenu m_menuBookmarks;
 
-    private MenuChecked m_menuAttach;
+    private GuiMenu m_menuAttach;
 
-    private MenuChecked m_menuViewTree;
+    private GuiMenu m_menuViewTree;
 
-    private MenuChecked m_menuViewShell;
+    private GuiMenu m_menuViewShell;
 
     private JSeparator m_bookmarksSeparator;
 
@@ -201,11 +199,11 @@ public class GoGuiMenuBar
     private final ArrayList<JMenuItem> m_programItems
         = new ArrayList<JMenuItem>();
 
-    private JMenu m_computerColor;
+    private GuiMenu m_computerColor;
 
-    private MenuChecked createBoardSizeMenu(GoGuiActions actions)
+    private GuiMenu createBoardSizeMenu(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_BOARDSIZE", KeyEvent.VK_S);
+        GuiMenu menu = new GuiMenu(i18n("MEN_BOARDSIZE"));
         ButtonGroup group = new ButtonGroup();
         menu.addRadioItem(group, actions.m_actionBoardSize9);
         menu.addRadioItem(group, actions.m_actionBoardSize11);
@@ -217,30 +215,30 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private MenuChecked createClockMenu(GoGuiActions actions)
+    private GuiMenu createClockMenu(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_CLOCK", KeyEvent.VK_K);
-        menu.addItem(actions.m_actionClockStart, KeyEvent.VK_S);
-        menu.addItem(actions.m_actionClockHalt, KeyEvent.VK_H);
-        menu.addItem(actions.m_actionClockResume, KeyEvent.VK_R);
-        menu.addItem(actions.m_actionSetTimeLeft, KeyEvent.VK_T);
+        GuiMenu menu = new GuiMenu(i18n("MEN_CLOCK"));
+        menu.add(actions.m_actionClockStart);
+        menu.add(actions.m_actionClockHalt);
+        menu.add(actions.m_actionClockResume);
+        menu.add(actions.m_actionSetTimeLeft);
         return menu;
     }
 
-    private MenuChecked createComputerColorMenu(GoGuiActions actions)
+    private GuiMenu createComputerColorMenu(GoGuiActions actions)
     {
         ButtonGroup group = new ButtonGroup();
-        MenuChecked menu = createMenu("MEN_COMPUTER_COLOR", KeyEvent.VK_C);
-        menu.addRadioItem(group, actions.m_actionComputerBlack, KeyEvent.VK_B);
-        menu.addRadioItem(group, actions.m_actionComputerWhite, KeyEvent.VK_W);
-        menu.addRadioItem(group, actions.m_actionComputerBoth, KeyEvent.VK_T);
-        menu.addRadioItem(group, actions.m_actionComputerNone, KeyEvent.VK_N);
+        GuiMenu menu = new GuiMenu(i18n("MEN_COMPUTER_COLOR"));
+        menu.addRadioItem(group, actions.m_actionComputerBlack);
+        menu.addRadioItem(group, actions.m_actionComputerWhite);
+        menu.addRadioItem(group, actions.m_actionComputerBoth);
+        menu.addRadioItem(group, actions.m_actionComputerNone);
         return menu;
     }
 
-    private MenuChecked createHandicapMenu(GoGuiActions actions)
+    private GuiMenu createHandicapMenu(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_HANDICAP", KeyEvent.VK_H);
+        GuiMenu menu = new GuiMenu(i18n("MEN_HANDICAP"));
         ButtonGroup group = new ButtonGroup();
         menu.addRadioItem(group, actions.m_actionHandicapNone);
         menu.addRadioItem(group, actions.m_actionHandicap2);
@@ -254,367 +252,221 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private MenuChecked createMenu(String name, int mnemonic)
+    private GuiMenu createMenuBookmarks(GoGuiActions actions)
     {
-        MenuChecked menu = new MenuChecked(name);
-        menu.setMnemonic(mnemonic);
+        GuiMenu menu = new GuiMenu(i18n("MEN_BOOKMARKS"));
+        menu.add(actions.m_actionAddBookmark);
+        menu.add(actions.m_actionEditBookmarks);
         return menu;
     }
 
-    private MenuChecked createMenuBookmarks(GoGuiActions actions)
+    private GuiMenu createMenuConfigureShell(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_BOOKMARKS", KeyEvent.VK_B);
-        menu.addItem(actions.m_actionAddBookmark, KeyEvent.VK_A);
-        menu.addItem(actions.m_actionEditBookmarks, KeyEvent.VK_E);
-        return menu;
-    }
-
-    private MenuChecked createMenuConfigureShell(GoGuiActions actions)
-    {
-        m_menuViewShell = new MenuChecked("MEN_SHELL");
-        m_menuViewShell.setMnemonic(KeyEvent.VK_H);
-        GoGuiCheckBoxMenuItem itemCompletion =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleCompletion);
-        m_menuViewShell.addItem(itemCompletion, KeyEvent.VK_P);
-        GoGuiCheckBoxMenuItem itemAutonumber =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleAutoNumber);
-        m_menuViewShell.addItem(itemAutonumber, KeyEvent.VK_A);
-        GoGuiCheckBoxMenuItem itemTimestamp =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleTimeStamp);
-        m_menuViewShell.addItem(itemTimestamp, KeyEvent.VK_T);
+        m_menuViewShell = new GuiMenu(i18n("MEN_SHELL"));
+        m_menuViewShell.addCheckBoxItem(actions.m_actionToggleCompletion);
+        m_menuViewShell.addCheckBoxItem(actions.m_actionToggleAutoNumber);
+        m_menuViewShell.addCheckBoxItem(actions.m_actionToggleTimeStamp);
         return m_menuViewShell;
     }
 
-    private MenuChecked createMenuConfigureTree(GoGuiActions actions)
+    private GuiMenu createMenuConfigureTree(GoGuiActions actions)
     {
-        m_menuViewTree = new MenuChecked("MEN_TREE");
-        m_menuViewTree.setMnemonic(KeyEvent.VK_E);
-        MenuChecked menuLabel = createMenu("MEN_TREE_LABELS", KeyEvent.VK_L);
+        m_menuViewTree = new GuiMenu(i18n("MEN_TREE"));
+        GuiMenu menuLabel = new GuiMenu(i18n("MEN_TREE_LABELS"));
         ButtonGroup group = new ButtonGroup();
-        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNumber,
-                               KeyEvent.VK_N);
-        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsMove,
-                               KeyEvent.VK_M);
-        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNone,
-                               KeyEvent.VK_O);
+        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNumber);
+        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsMove);
+        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNone);
         m_menuViewTree.add(menuLabel);
-        MenuChecked menuSize = createMenu("MEN_TREE_SIZE", KeyEvent.VK_S);
+        GuiMenu menuSize = new GuiMenu(i18n("MEN_TREE_SIZE"));
         group = new ButtonGroup();
-        menuSize.addRadioItem(group, actions.m_actionTreeSizeLarge,
-                              KeyEvent.VK_L);
-        menuSize.addRadioItem(group, actions.m_actionTreeSizeNormal,
-                              KeyEvent.VK_N);
-        menuSize.addRadioItem(group, actions.m_actionTreeSizeSmall,
-                              KeyEvent.VK_S);
-        menuSize.addRadioItem(group, actions.m_actionTreeSizeTiny,
-                              KeyEvent.VK_T);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeLarge);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeNormal);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeSmall);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeTiny);
         m_menuViewTree.add(menuSize);
-        GoGuiCheckBoxMenuItem itemShowSubtreeSizes =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowSubtreeSizes);
-        m_menuViewTree.addItem(itemShowSubtreeSizes, KeyEvent.VK_S);
+        m_menuViewTree.addCheckBoxItem(actions.m_actionToggleShowSubtreeSizes);
         return m_menuViewTree;
     }
 
-    private MenuChecked createMenuEdit(GoGuiActions actions)
+    private GuiMenu createMenuEdit(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_EDIT", KeyEvent.VK_E);
-        menu.addItem(actions.m_actionFind, KeyEvent.VK_F);
-        menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
-        menu.addItem(actions.m_actionFindNextComment, KeyEvent.VK_C);
+        GuiMenu menu = new GuiMenu(i18n("MEN_EDIT"));
+        menu.add(actions.m_actionFind);
+        menu.add(actions.m_actionFindNext);
+        menu.add(actions.m_actionFindNextComment);
         menu.addSeparator();
-        menu.addItem(actions.m_actionMakeMainVariation, KeyEvent.VK_M);
-        menu.addItem(actions.m_actionDeleteSideVariations, KeyEvent.VK_D);
-        menu.addItem(actions.m_actionKeepOnlyPosition, KeyEvent.VK_K);
-        menu.addItem(actions.m_actionTruncate, KeyEvent.VK_T);
-        menu.addItem(actions.m_actionTruncateChildren, KeyEvent.VK_R);
+        menu.add(actions.m_actionMakeMainVariation);
+        menu.add(actions.m_actionDeleteSideVariations);
+        menu.add(actions.m_actionKeepOnlyPosition);
+        menu.add(actions.m_actionTruncate);
+        menu.add(actions.m_actionTruncateChildren);
         menu.addSeparator();
-        GoGuiCheckBoxMenuItem itemSetupBlack =
-            new GoGuiCheckBoxMenuItem(actions.m_actionSetupBlack);
-        menu.addItem(itemSetupBlack, KeyEvent.VK_B);
-        GoGuiCheckBoxMenuItem itemSetupWhite =
-            new GoGuiCheckBoxMenuItem(actions.m_actionSetupWhite);
-        menu.addItem(itemSetupWhite, KeyEvent.VK_W);
+        menu.addCheckBoxItem(actions.m_actionSetupBlack);
+        menu.addCheckBoxItem(actions.m_actionSetupWhite);
         return menu;
     }
 
-    private MenuChecked createMenuExport(GoGuiActions actions)
+    private GuiMenu createMenuExport(GoGuiActions actions)
     {
-        MenuChecked menu = new MenuChecked("MEN_EXPORT");
-        menu.setMnemonic(KeyEvent.VK_E);
-        menu.addItem(actions.m_actionExportSgfPosition, KeyEvent.VK_S);
-        menu.addItem(actions.m_actionExportLatexMainVariation, KeyEvent.VK_L);
-        menu.addItem(actions.m_actionExportLatexPosition, KeyEvent.VK_P);
-        menu.addItem(actions.m_actionExportPng, KeyEvent.VK_I);
-        menu.addItem(actions.m_actionExportTextPosition, KeyEvent.VK_T);
-        menu.addItem(actions.m_actionExportTextPositionToClipboard,
-                     KeyEvent.VK_C);
+        GuiMenu menu = new GuiMenu(i18n("MEN_EXPORT"));
+        menu.add(actions.m_actionExportSgfPosition);
+        menu.add(actions.m_actionExportLatexMainVariation);
+        menu.add(actions.m_actionExportLatexPosition);
+        menu.add(actions.m_actionExportPng);
+        menu.add(actions.m_actionExportTextPosition);
+        menu.add(actions.m_actionExportTextPositionToClipboard);
         return menu;
     }
 
-    private MenuChecked createMenuFile(GoGuiActions actions,
+    private GuiMenu createMenuFile(GoGuiActions actions,
                                        RecentFileMenu.Listener listener)
     {
-        MenuChecked menu = createMenu("MEN_FILE", KeyEvent.VK_F);
-        menu.addItem(actions.m_actionOpen, KeyEvent.VK_O);
+        GuiMenu menu = new GuiMenu(i18n("MEN_FILE"));
+        menu.add(actions.m_actionOpen);
         menu.add(createRecentMenu(listener));
-        menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
-        menu.addItem(actions.m_actionSaveAs, KeyEvent.VK_A);
+        menu.add(actions.m_actionSave);
+        menu.add(actions.m_actionSaveAs);
         menu.addSeparator();
         menu.add(createMenuImport(actions));
         menu.add(createMenuExport(actions));
         menu.addSeparator();
-        menu.addItem(actions.m_actionPrint, KeyEvent.VK_P);
+        menu.add(actions.m_actionPrint);
         if (! Platform.isMac())
         {
             menu.addSeparator();
-            menu.addItem(actions.m_actionQuit, KeyEvent.VK_Q);
+            menu.add(actions.m_actionQuit);
         }
         return menu;
     }
 
-    private MenuChecked createMenuGame(GoGuiActions actions)
+    private GuiMenu createMenuGame(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_GAME", KeyEvent.VK_A);
-        menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
+        GuiMenu menu = new GuiMenu(i18n("MEN_GAME"));
+        menu.add(actions.m_actionNewGame);
         menu.addSeparator();
         menu.add(createBoardSizeMenu(actions));
         menu.add(createHandicapMenu(actions));
-        menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
+        menu.add(actions.m_actionGameInfo);
         menu.addSeparator();
         m_computerColor = createComputerColorMenu(actions);
         menu.add(m_computerColor);
         menu.addSeparator();
-        menu.addItem(actions.m_actionPass, KeyEvent.VK_P);
+        menu.add(actions.m_actionPass);
         menu.add(createClockMenu(actions));
-        menu.addItem(actions.m_actionScore, KeyEvent.VK_O);
+        menu.add(actions.m_actionScore);
         return menu;
     }
 
-    private MenuChecked createMenuGo(GoGuiActions actions)
+    private GuiMenu createMenuGo(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_GO", KeyEvent.VK_G);
-        menu.addItem(actions.m_actionBeginning, KeyEvent.VK_B);
-        menu.addItem(actions.m_actionBackwardTen, KeyEvent.VK_W);
-        menu.addItem(actions.m_actionBackward, KeyEvent.VK_K);
-        menu.addItem(actions.m_actionForward, KeyEvent.VK_F);
-        menu.addItem(actions.m_actionForwardTen, KeyEvent.VK_R);
-        menu.addItem(actions.m_actionEnd, KeyEvent.VK_E);
-        menu.addItem(actions.m_actionGotoMove, KeyEvent.VK_O);
+        GuiMenu menu = new GuiMenu(i18n("MEN_GO"));
+        menu.add(actions.m_actionBeginning);
+        menu.add(actions.m_actionBackwardTen);
+        menu.add(actions.m_actionBackward);
+        menu.add(actions.m_actionForward);
+        menu.add(actions.m_actionForwardTen);
+        menu.add(actions.m_actionEnd);
+        menu.add(actions.m_actionGotoMove);
         menu.addSeparator();
-        menu.addItem(actions.m_actionNextVariation, KeyEvent.VK_N);
-        menu.addItem(actions.m_actionPreviousVariation, KeyEvent.VK_P);
-        menu.addItem(actions.m_actionNextEarlierVariation, KeyEvent.VK_X);
-        menu.addItem(actions.m_actionPreviousEarlierVariation, KeyEvent.VK_L);
-        menu.addItem(actions.m_actionBackToMainVariation, KeyEvent.VK_M);
-        menu.addItem(actions.m_actionGotoVariation, KeyEvent.VK_V);
+        menu.add(actions.m_actionNextVariation);
+        menu.add(actions.m_actionPreviousVariation);
+        menu.add(actions.m_actionNextEarlierVariation);
+        menu.add(actions.m_actionPreviousEarlierVariation);
+        menu.add(actions.m_actionBackToMainVariation);
+        menu.add(actions.m_actionGotoVariation);
         return menu;
     }
 
-    private MenuChecked createMenuHelp(GoGuiActions actions)
+    private GuiMenu createMenuHelp(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_HELP", KeyEvent.VK_H);
-        menu.addItem(actions.m_actionHelp, KeyEvent.VK_G);
+        GuiMenu menu = new GuiMenu(i18n("MEN_HELP"));
+        menu.add(actions.m_actionHelp);
         menu.addSeparator();
-        menu.addItem(actions.m_actionAbout, KeyEvent.VK_A);
+        menu.add(actions.m_actionAbout);
         return menu;
     }
 
-    private MenuChecked createMenuImport(GoGuiActions actions)
+    private GuiMenu createMenuImport(GoGuiActions actions)
     {
-        MenuChecked menu = new MenuChecked("MEN_IMPORT");
-        menu.setMnemonic(KeyEvent.VK_I);
-        menu.addItem(actions.m_actionImportTextPosition, KeyEvent.VK_T);
-        menu.addItem(actions.m_actionImportTextPositionFromClipboard,
-                     KeyEvent.VK_C);
-        menu.addItem(actions.m_actionImportSgfFromClipboard, KeyEvent.VK_S);
+        GuiMenu menu = new GuiMenu(i18n("MEN_IMPORT"));
+        menu.add(actions.m_actionImportTextPosition);
+        menu.add(actions.m_actionImportTextPositionFromClipboard);
+        menu.add(actions.m_actionImportSgfFromClipboard);
         return menu;
     }
 
-    private MenuChecked createMenuProgram(GoGuiActions actions)
+    private GuiMenu createMenuProgram(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_PROGRAM", KeyEvent.VK_P);
-        m_menuAttach = createMenu("MEN_ATTACH", KeyEvent.VK_A);
+        GuiMenu menu = new GuiMenu(i18n("MEN_PROGRAM"));
+        m_menuAttach = new GuiMenu(i18n("MEN_ATTACH"));
         m_menuAttach.setEnabled(false);
         menu.add(m_menuAttach);
-        menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
+        menu.add(actions.m_actionDetachProgram);
         menu.addSeparator();
-        menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
-        menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_I);
+        menu.add(actions.m_actionPlaySingleMove);
+        menu.add(actions.m_actionInterrupt);
         menu.addSeparator();
-        menu.addItem(actions.m_actionNewProgram, KeyEvent.VK_N);
-        menu.addItem(actions.m_actionEditPrograms, KeyEvent.VK_E);
+        menu.add(actions.m_actionNewProgram);
+        menu.add(actions.m_actionEditPrograms);
         return menu;
     }
 
-    private MenuChecked createMenuTools(GoGuiActions actions,
-                                        RecentFileMenu.Listener listener)
+    private GuiMenu createMenuTools(GoGuiActions actions,
+                                    RecentFileMenu.Listener listener)
     {
-        MenuChecked menu = createMenu("MEN_TOOLS", KeyEvent.VK_T);
-        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_T);
-        menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
-        menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
+        GuiMenu menu = new GuiMenu(i18n("MEN_TOOLS"));
+        menu.add(actions.m_actionShowTree);
+        menu.add(actions.m_actionShowAnalyzeDialog);
+        menu.add(actions.m_actionShowShell);
         menu.addSeparator();
-        menu.addItem(actions.m_actionReattachProgram, KeyEvent.VK_R);
+        menu.add(actions.m_actionReattachProgram);
         menu.addSeparator();
-        menu.addItem(actions.m_actionReattachWithParameters, KeyEvent.VK_P);
-        menu.addItem(actions.m_actionSnapshotParameters, KeyEvent.VK_N);
-        menu.addItem(actions.m_actionRestoreParameters, KeyEvent.VK_E);
-        menu.addItem(actions.m_actionSaveParameters, KeyEvent.VK_M);
+        menu.add(actions.m_actionReattachWithParameters);
+        menu.add(actions.m_actionSnapshotParameters);
+        menu.add(actions.m_actionRestoreParameters);
+        menu.add(actions.m_actionSaveParameters);
         menu.addSeparator();
-        menu.addItem(actions.m_actionSaveLog, KeyEvent.VK_L);
-        menu.addItem(actions.m_actionSaveCommands, KeyEvent.VK_C);
-        menu.addItem(actions.m_actionSendFile, KeyEvent.VK_F);
+        menu.add(actions.m_actionSaveLog);
+        menu.add(actions.m_actionSaveCommands);
+        menu.add(actions.m_actionSendFile);
         m_recentGtp = new RecentFileMenu(i18n("MEN_SEND_RECENT"),
                                          "net/sf/gogui/recentgtpfiles",
                                          listener);
-        m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
         menu.add(m_recentGtp.getMenu());
         return menu;
     }
 
-    private MenuChecked createMenuView(GoGuiActions actions)
+    private GuiMenu createMenuView(GoGuiActions actions)
     {
-        MenuChecked menu = createMenu("MEN_VIEW", KeyEvent.VK_V);
-        GoGuiCheckBoxMenuItem itemToggleShowToolbar =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowToolbar);
-        menu.addItem(itemToggleShowToolbar, KeyEvent.VK_T);
-        GoGuiCheckBoxMenuItem itemToggleShowInfoPanel =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowInfoPanel);
-        menu.addItem(itemToggleShowInfoPanel, KeyEvent.VK_I);
+        GuiMenu menu = new GuiMenu(i18n("MEN_VIEW"));
+        menu.addCheckBoxItem(actions.m_actionToggleShowToolbar);
+        menu.addCheckBoxItem(actions.m_actionToggleShowInfoPanel);
         menu.addSeparator();
-        GoGuiCheckBoxMenuItem itemShowCursor =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowCursor);
-        menu.addItem(itemShowCursor, KeyEvent.VK_C);
-        GoGuiCheckBoxMenuItem itemShowGrid =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowGrid);
-        menu.addItem(itemShowGrid, KeyEvent.VK_G);
-        GoGuiCheckBoxMenuItem itemShowLastMove =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowLastMove);
-        menu.addItem(itemShowLastMove, KeyEvent.VK_L);
-        GoGuiCheckBoxMenuItem itemShowMoveNumbers =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowMoveNumbers);
-        menu.addItem(itemShowMoveNumbers, KeyEvent.VK_N);
-        GoGuiCheckBoxMenuItem itemBeepAfterMove =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
-        menu.addItem(itemBeepAfterMove, KeyEvent.VK_P);
-        GoGuiCheckBoxMenuItem itemToggleCommentMonoFont =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleCommentMonoFont);
-        menu.addItem(itemToggleCommentMonoFont, KeyEvent.VK_F);
-        MenuChecked menuVariationLabels =
-            createMenu("MEN_VARIATION_LABELS", KeyEvent.VK_V);
+        menu.addCheckBoxItem(actions.m_actionToggleShowCursor);
+        menu.addCheckBoxItem(actions.m_actionToggleShowGrid);
+        menu.addCheckBoxItem(actions.m_actionToggleShowLastMove);
+        menu.addCheckBoxItem(actions.m_actionToggleShowMoveNumbers);
+        menu.addCheckBoxItem(actions.m_actionToggleBeepAfterMove);
+        menu.addCheckBoxItem(actions.m_actionToggleCommentMonoFont);
+        GuiMenu menuVarLabels = new GuiMenu(i18n("MEN_VARIATION_LABELS"));
         ButtonGroup group = new ButtonGroup();
-        menuVariationLabels.addRadioItem(group,
-                                        actions.m_actionShowVariationsChildren,
-                                        KeyEvent.VK_C);
-        menuVariationLabels.addRadioItem(group,
-                                        actions.m_actionShowVariationsSiblings,
-                                        KeyEvent.VK_S);
-        menuVariationLabels.addRadioItem(group,
-                                         actions.m_actionShowVariationsNone,
-                                         KeyEvent.VK_N);
-        menu.add(menuVariationLabels);
+        menuVarLabels.addRadioItem(group,
+                                   actions.m_actionShowVariationsChildren);
+        menuVarLabels.addRadioItem(group,
+                                   actions.m_actionShowVariationsSiblings);
+        menuVarLabels.addRadioItem(group, actions.m_actionShowVariationsNone);
+        menu.add(menuVarLabels);
         menu.addSeparator();
         menu.add(createMenuConfigureTree(actions));
         menu.add(createMenuConfigureShell(actions));
         return menu;
     }
 
-    private JMenu createRecentMenu(RecentFileMenu.Listener listener)
+    private GuiMenu createRecentMenu(RecentFileMenu.Listener listener)
     {
         m_recent = new RecentFileMenu(i18n("MEN_OPEN_RECENT"),
-                                      "net/sf/gogui/recentfiles",
-                                      listener);
-        JMenu menu = m_recent.getMenu();
-        menu.setMnemonic(KeyEvent.VK_R);
-        return menu;
-    }
-}
-
-/** Menu with assertions for unique mnemonics. */
-class MenuChecked
-    extends JMenu
-{
-    public MenuChecked(String text)
-    {
-        super(I18n.i18n(text));
-    }
-
-    public JMenuItem addItem(JMenuItem item, int mnemonic)
-    {
-        item.setIcon(null);
-        setMnemonic(item, mnemonic);
-        item.setToolTipText(null);
-        add(item);
-        return item;
-    }
-
-    public JMenuItem addItem(AbstractAction action, int mnemonic)
-    {
-        JMenuItem item = new JMenuItem(action);
-        addItem(item, mnemonic);
-        return item;
-    }
-
-    public JMenuItem addRadioItem(ButtonGroup group, AbstractAction action,
-                                  int mnemonic)
-    {
-        JMenuItem item = addRadioItem(group, action);
-        setMnemonic(item, mnemonic);
-        return item;
-    }
-
-    public JMenuItem addRadioItem(ButtonGroup group, AbstractAction action)
-    {
-        JMenuItem item = new GoGuiRadioButtonMenuItem(action);
-        group.add(item);
-        item.setIcon(null);
-        add(item);
-        return item;
-    }
-
-    private final ArrayList<Integer> m_mnemonics = new ArrayList<Integer>();
-
-    private void setMnemonic(JMenuItem item, int mnemonic)
-    {
-        item.setMnemonic(mnemonic);
-        if (m_mnemonics.contains(mnemonic))
-        {
-            System.err.println("Warning: duplicate mnemonic item "
-                               + item.getText());
-            assert false;
-        }
-        m_mnemonics.add(mnemonic);
-    }
-}
-
-/** Radio menu item with additional "selected" action property. */
-class GoGuiRadioButtonMenuItem
-    extends JRadioButtonMenuItem
-{
-    public GoGuiRadioButtonMenuItem(AbstractAction action)
-    {
-        super(action);
-        action.addPropertyChangeListener(new PropertyChangeListener() {
-                public void  propertyChange(PropertyChangeEvent e) {
-                    if (e.getPropertyName().equals("selected"))
-                        setSelected(((Boolean)e.getNewValue()).booleanValue());
-                }
-            });
-    }
-}
-
-/** Checkbox item with additional "selected" action property. */
-class GoGuiCheckBoxMenuItem
-    extends JCheckBoxMenuItem
-{
-    public GoGuiCheckBoxMenuItem(AbstractAction action)
-    {
-        super(action);
-        action.addPropertyChangeListener(new PropertyChangeListener() {
-                public void  propertyChange(PropertyChangeEvent e) {
-                    if (e.getPropertyName().equals("selected"))
-                        setSelected(((Boolean)e.getNewValue()).booleanValue());
-                }
-            });
+                                      "net/sf/gogui/recentfiles", listener);
+        return m_recent.getMenu();
     }
 }

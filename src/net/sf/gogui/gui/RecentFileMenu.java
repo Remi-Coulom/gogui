@@ -70,7 +70,7 @@ public class RecentFileMenu
     }
 
     /** Don't modify the items in this menu! */
-    public JMenu getMenu()
+    public GuiMenu getMenu()
     {
         return m_menu.getMenu();
     }
