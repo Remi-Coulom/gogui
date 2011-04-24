@@ -4409,7 +4409,6 @@ public class GoGui
     private void updateViews(boolean gameTreeChanged, boolean sync)
     {
         m_actions.update();
-        m_toolBar.update();
         m_menuBar.update(isProgramAttached(), isTreeShown(), isShellShown());
         m_gameInfoPanel.update();
         m_comment.setComment(getCurrentNode().getComment());

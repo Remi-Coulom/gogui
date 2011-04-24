@@ -24,7 +24,7 @@ public class GoGuiToolBar
         GoGuiActions actions = m_goGui.getActions();
         m_actions = actions;
         addButton(actions.m_actionOpen);
-        m_buttonSave = addButton(actions.m_actionSave);
+        addButton(actions.m_actionSave);
         addSeparator();
         addButton(actions.m_actionNewGame);
         addButton(actions.m_actionPass);
@@ -47,19 +47,7 @@ public class GoGuiToolBar
         setFloatable(false);
     }
 
-    public void update()
-    {
-        File file = m_goGui.getFile();
-        if (file == null)
-            m_buttonSave.setAction(m_actions.m_actionSaveAs);
-        else
-            m_buttonSave.setAction(m_actions.m_actionSave);
-        m_buttonSave.setText(null);
-    }
-
     private final GoGui m_goGui;
-
-    private final JButton m_buttonSave;
 
     private final GoGuiActions m_actions;
 

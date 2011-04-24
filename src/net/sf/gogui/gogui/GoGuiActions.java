@@ -912,8 +912,10 @@ public class GoGuiActions
 
     private void updateSave(File file, boolean isModified)
     {
+        m_actionSave.setEnabled(isModified);
+        m_actionSaveAs.setEnabled(file != null);
         if (file == null)
-            m_actionSave.setDescription(i18n("ACT_SAVE"));
+            m_actionSave.setDescription(i18n("TT_SAVE"));
         else
         {
             if (isModified)
