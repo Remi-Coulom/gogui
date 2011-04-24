@@ -822,11 +822,6 @@ public class GoGuiActions
     private void updateDetachProgram(boolean isProgramAttached, String name)
     {
         m_actionDetachProgram.setEnabled(isProgramAttached);
-        if (! isProgramAttached || name == null)
-            m_actionDetachProgram.setName(i18n("ACT_DETACH_PROGRAM"));
-        else
-            m_actionDetachProgram.setName(i18n("ACT_DETACH_PROGRAM_NAME"),
-                                          name);
     }
 
     private void updateInterrupt(boolean isProgramAttached,

@@ -122,16 +122,6 @@ public abstract class GuiAction
         putValue(AbstractAction.SHORT_DESCRIPTION, format(desc, args));
     }
 
-    public void setName(String name)
-    {
-        putValue(AbstractAction.NAME, name);
-    }
-
-    public void setName(String name, Object... args)
-    {
-        putValue(AbstractAction.NAME, format(name, args));
-    }
-
     public void setSelected(boolean selected)
     {
         putValue("selected", Boolean.valueOf(selected));
