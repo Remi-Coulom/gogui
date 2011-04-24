@@ -913,7 +913,7 @@ public class GoGuiActions
     private void updateSave(File file, boolean isModified)
     {
         if (file == null)
-            m_actionSave.setDescription("ACT_SAVE");
+            m_actionSave.setDescription(i18n("ACT_SAVE"));
         else
         {
             if (isModified)
