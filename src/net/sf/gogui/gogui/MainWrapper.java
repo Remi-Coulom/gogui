@@ -70,6 +70,7 @@ public final class MainWrapper
         supportedLanguages.add("en");
         supportedLanguages.add("de");
         supportedLanguages.add("fr");
+        supportedLanguages.add("ja");
         supportedLanguages.add("sl");
         String defaultLanguage = Locale.getDefault().getLanguage();
         if (! supportedLanguages.contains(defaultLanguage))

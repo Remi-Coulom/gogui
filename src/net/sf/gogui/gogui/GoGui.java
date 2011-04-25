@@ -1656,6 +1656,7 @@ public class GoGui
         dialog.addLanguage(Locale.ENGLISH, true);
         dialog.addLanguage(Locale.FRENCH, false);
         dialog.addLanguage(Locale.GERMAN, false);
+        dialog.addLanguage(Locale.JAPANESE, false);
         dialog.addLanguage(new Locale("sl"), false);
         dialog.run();
     }
