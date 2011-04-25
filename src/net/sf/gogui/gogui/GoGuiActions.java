@@ -422,8 +422,7 @@ public class GoGuiActions
                 m_goGui.actionSave(); } };
 
     public final GuiAction m_actionSaveAs =
-        new GuiAction(i18n("ACT_SAVE_AS"), i18n("TT_SAVE_AS"),
-                      "document-save-as") {
+        new GuiAction(i18n("ACT_SAVE_AS"), i18n("TT_SAVE_AS")) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionSaveAs(); } };
 
