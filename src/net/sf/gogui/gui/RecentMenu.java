@@ -7,43 +7,9 @@ import java.awt.event.ActionListener;
 import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.ObjectUtil;
-
-class RecentMenuItem
-    extends JMenuItem
-{
-    public RecentMenuItem(String label, String value,
-                          ActionListener listener)
-    {
-        super(label);
-        m_label = label;
-        m_value = value;
-        if (! ObjectUtil.equals(label, value))
-            setToolTipText(value);
-        addActionListener(listener);
-    }
-
-    public String getRecentMenuLabel()
-    {
-        return m_label;
-    }
-
-    public String getRecentMenuValue()
-    {
-        return m_value;
-    }
-
-    public void setRecentMenuLabel(String label)
-    {
-        setText(label);
-        m_label = label;
-    }
-
-    private String m_label;
-
-    private final String m_value;
-}
 
 /** Menu for recent item.
     Handles removing duplicates and storing the items between sessions. */
@@ -55,12 +21,24 @@ public final class RecentMenu
         void itemSelected(String label, String value);
     }
 
-    public RecentMenu(String label, String path, Listener listener)
+    /** The maximum number of items.
+        If set to a value larger than 10, only the first 10 items will have
+        a mnemonic key. */
+    public static final int MAX_ITEMS = 10;
+
+    /** Constructor.
+        @param text The label of the menu. Supports marking the mnemonics in
+        the label with a preceeding '&amp;' (like in Qt).
+        @param path The absolute path name of the node in
+        java.util.prefs.Preferences that is used to store the menu items.
+        @param listener The callback to be called if a menu item is
+        selected. */
+    public RecentMenu(String text, String path, Listener listener)
     {
         assert listener != null;
         m_path = path;
         m_listener = listener;
-        m_menu = new GuiMenu(label);
+        m_menu = new GuiMenu(text);
         m_actionListener = new ActionListener()
             {
                 public void actionPerformed(ActionEvent event)
@@ -75,15 +53,12 @@ public final class RecentMenu
         updateEnabled();
     }
 
+    /** Add a new item at the top.
+        If the new number of items is greater than MAX_ITEM, the oldest item
+        is removed. */
     public void add(String label, String value)
     {
-        for (int i = 0; i < getCount(); ++i)
-            if (getValue(i).equals(value))
-                m_menu.remove(i);
-        JMenuItem item = new RecentMenuItem(label, value, m_actionListener);
-        m_menu.add(item, 0);
-        while (getCount() > MAX_ITEMS)
-            m_menu.remove(getCount() - 1);
+        addNewItem(label, value);
         put();
     }
 
@@ -106,11 +81,13 @@ public final class RecentMenu
     public void remove(int i)
     {
         m_menu.remove(getItem(i));
+        relabel();
     }
 
     public void setLabel(int i, String label)
     {
         getItem(i).setRecentMenuLabel(label);
+        getItem(i).setPosition(i);
         put();
     }
 
@@ -121,8 +98,6 @@ public final class RecentMenu
         m_menu.setEnabled(count > 0);
     }
 
-    private static final int MAX_ITEMS = 20;
-
     private final String m_path;
 
     private final ActionListener m_actionListener;
@@ -130,6 +105,21 @@ public final class RecentMenu
     private final Listener m_listener;
 
     private final GuiMenu m_menu;
+
+    private void addNewItem(String label, String value)
+    {
+        for (int i = 0; i < getCount(); ++i)
+            if (getValue(i).equals(value))
+                m_menu.remove(i);
+        JMenuItem item = new RecentMenuItem(label, value, m_actionListener);
+        m_menu.add(item, 0);
+        // There might be several oldest items to remove, if the list in the
+        // preferences was created with a version of GoGui compiled with a
+        // different value for MAX_ITEM.
+        while (getCount() > MAX_ITEMS)
+            m_menu.remove(getCount() - 1);
+        relabel();
+    }
 
     private void get()
     {
@@ -149,7 +139,7 @@ public final class RecentMenu
             String value = prefs.get("value", null);
             if (label == null || value == null)
                 continue;
-            add(label, value);
+            addNewItem(label, value);
         }
     }
 
@@ -179,4 +169,74 @@ public final class RecentMenu
             prefs.put("value", getValue(i));
         }
     }
+
+    /** Compute all new labels (including the number and mnemonic key) after
+        changes were made. */
+    private void relabel()
+    {
+        int size = getCount();
+        for (int i = 0; i < size; ++i)
+            getItem(i).setPosition(i);
+    }
+}
+
+class RecentMenuItem
+    extends JMenuItem
+{
+    public RecentMenuItem(String label, String value, ActionListener listener)
+    {
+        setRecentMenuLabel(label);
+        m_value = value;
+        if (! ObjectUtil.equals(label, value))
+            setToolTipText(value);
+        addActionListener(listener);
+    }
+
+    public String getRecentMenuLabel()
+    {
+        return m_label;
+    }
+
+    public String getRecentMenuValue()
+    {
+        return m_value;
+    }
+
+    public void setPosition(int i)
+    {
+        String text;
+        String mnemonic;
+        // Use 1-9 and 0 as mnemonics for the first 10 items
+        if (i < 9)
+        {
+            text = Integer.toString(i + 1) + ": " + m_label;
+            mnemonic = Integer.toString(i + 1);
+        }
+        else if (i == 9)
+        {
+            text = "10: " + m_label;
+            mnemonic = "0";
+        }
+        else
+        {
+            text = m_label;
+            mnemonic = "";
+        }
+        setText(text);
+        if (! mnemonic.equals(""))
+        {
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemonic);
+            int code = keyStroke.getKeyCode();
+            setMnemonic(code);
+        }
+   }
+
+    public void setRecentMenuLabel(String label)
+    {
+        m_label = label;
+    }
+
+    private String m_label;
+
+    private final String m_value;
 }

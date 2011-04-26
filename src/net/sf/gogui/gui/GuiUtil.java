@@ -432,8 +432,8 @@ public class GuiUtil
         button.setText(text);
         if (pos >= 0 && pos < text.length())
         {
-            String mnemomic = text.substring(pos, pos + 1).toUpperCase();
-            KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemomic);
+            String mnemonic = text.substring(pos, pos + 1).toUpperCase();
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemonic);
             int code = keyStroke.getKeyCode();
             button.setMnemonic(code);
             button.setDisplayedMnemonicIndex(pos);
