@@ -12,27 +12,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
-/** Menu that checks for unique mnemonics.
-    Prints a warning to System.err if a mnemonic is used twice in the same
-    submenu. */
+/** JMenu with additional features.
+    Supports marking the mnemonics in the label with a preceeding '&amp;'
+    (like in Qt).
+    Checks the added menu items for unique mnemonics and prints a warning to
+    System.err if a mnemonic is used twice. */
 public class GuiMenu
     extends JMenu
 {
-    public GuiMenu(String label)
+    public GuiMenu(String text)
     {
-        // Parse label that has the mnemonic marked with a preceding'&amp;'
-        // (like in Qt)
-        int pos = label.indexOf('&');
-        label = label.replace("&", "");
-        setText(label);
-        if (pos >= 0 && pos < label.length())
-        {
-            String mnemomic = label.substring(pos, pos + 1).toUpperCase();
-            KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemomic);
-            int code = keyStroke.getKeyCode();
-            setMnemonic(code);
-            setDisplayedMnemonicIndex(pos);
-        }
+        GuiUtil.setTextAndMnemonic(this, text);
     }
 
     public JMenuItem add(JMenuItem item)
@@ -54,8 +44,7 @@ public class GuiMenu
     public JMenuItem add(GuiAction action)
     {
         JMenuItem item = new JMenuItem(action);
-        item.setMnemonic(action.getMenuMnemonic());
-        item.setDisplayedMnemonicIndex(action.getMenuDisplayedMnemonicIndex());
+        GuiUtil.setTextAndMnemonic(item, action.getNameWithMnemonic());
         return add(item);
     }
 
@@ -88,8 +77,7 @@ class GuiRadioButtonMenuItem
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
                 }
             });
-        setMnemonic(action.getMenuMnemonic());
-        setDisplayedMnemonicIndex(action.getMenuDisplayedMnemonicIndex());
+        GuiUtil.setTextAndMnemonic(this, action.getNameWithMnemonic());
     }
 }
 
@@ -106,7 +94,6 @@ class GuiCheckBoxMenuItem
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
                 }
             });
-        setMnemonic(action.getMenuMnemonic());
-        setDisplayedMnemonicIndex(action.getMenuDisplayedMnemonicIndex());
+        GuiUtil.setTextAndMnemonic(this, action.getNameWithMnemonic());
     }
 }

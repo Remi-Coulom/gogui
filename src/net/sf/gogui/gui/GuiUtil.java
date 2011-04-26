@@ -22,7 +22,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
-import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -421,6 +421,23 @@ public class GuiUtil
         URL url = s_iconURL;
         if (url != null)
             frame.setIconImage(new ImageIcon(url).getImage());
+    }
+
+    /** Parse text that has the mnemonic marked with a preceding'&amp;'
+        (like in Qt) and set the text and mnemonic of the button. */
+    public static void setTextAndMnemonic(AbstractButton button, String text)
+    {
+        int pos = text.indexOf('&');
+        text = text.replace("&", "");
+        button.setText(text);
+        if (pos >= 0 && pos < text.length())
+        {
+            String mnemomic = text.substring(pos, pos + 1).toUpperCase();
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemomic);
+            int code = keyStroke.getKeyCode();
+            button.setMnemonic(code);
+            button.setDisplayedMnemonicIndex(pos);
+        }
     }
 
     /** Set property to render button in bevel style on the Mac.

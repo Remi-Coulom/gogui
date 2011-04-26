@@ -11,84 +11,74 @@ import javax.swing.JComponent;
 import static javax.swing.JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
 import javax.swing.KeyStroke;
 
+/** AbstractAction with additional features.
+    Keeps a global variable that stores all actions to allow to register
+    the accelerator keys at windows and dialogs with a single function
+    call (GuiAction.registerAll()).
+    The action name may contain a mnemomic marked with a preceding '&amp;'
+    (like in Qt). This mnemonic is intended for use in a menu, it is not set
+    as the global mnemonic for the action, but only stored for later use
+    (see GuiAction.getNameWithMnemonic(), GuiUtil.setTextAndMnemonic()). */
 public abstract class GuiAction
     extends AbstractAction
 {
     public static final ArrayList<GuiAction> s_allActions
         = new ArrayList<GuiAction>();
 
-    public GuiAction(String label)
+    public GuiAction(String name)
     {
-        this(label, null, null, 0, null);
+        this(name, null, null, 0, null);
     }
 
-    public GuiAction(String label, String desc)
+    public GuiAction(String name, String desc)
     {
-        this(label, desc, null, 0, null);
+        this(name, desc, null, 0, null);
     }
 
-    public GuiAction(String label, String desc, String icon)
+    public GuiAction(String name, String desc, String icon)
     {
-        this(label, desc, null, 0, icon);
+        this(name, desc, null, 0, icon);
     }
 
-    public GuiAction(String label, String desc, int accel, String icon)
+    public GuiAction(String name, String desc, int accel, String icon)
     {
-        this(label, desc, accel, SHORTCUT, icon);
+        this(name, desc, accel, SHORTCUT, icon);
     }
 
-    public GuiAction(String label, String desc, int accel)
+    public GuiAction(String name, String desc, int accel)
     {
-        this(label, desc, accel, SHORTCUT, null);
+        this(name, desc, accel, SHORTCUT, null);
     }
 
-    public GuiAction(String label, String desc, int accel, int modifier)
+    public GuiAction(String name, String desc, int accel, int modifier)
     {
-        this(label, desc, accel, modifier, null);
+        this(name, desc, accel, modifier, null);
     }
 
-    /** @param label The action name. May contain a mnemomic marked
-        with the convention used in Qt (a preceding '&amp;'). This
-        mnemonic is intended for use in a menu, it is not set as the
-        global mnemonic for the action, but only stored for later use
-        (see getMenuMnemonic() and getMenuDisplayedMnemonicIndex()). */
-    public GuiAction(String label, String desc, Integer accel, int modifier,
+    public GuiAction(String name, String desc, Integer accel, int modifier,
                      String icon)
     {
-        int pos = label.indexOf('&');
-        label = label.replace("&", "");
-        putValue(AbstractAction.NAME, label);
-        m_menuMnemonic = 0;
-        m_menuDisplayedMnemonicIndex = -1;
-        if (pos >= 0 && pos < label.length())
-        {
-            String mnemomic = label.substring(pos, pos + 1).toUpperCase();
-            KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemomic);
-            int code = keyStroke.getKeyCode();
-            m_menuMnemonic = code;
-            m_menuDisplayedMnemonicIndex = pos;
-        }
+        m_nameWithMnemonic = name;
+        name = name.replace("&", "");
+        putValue(AbstractAction.NAME, name);
         if (desc != null)
             putValue(AbstractAction.SHORT_DESCRIPTION, desc);
         if (accel != null)
             putValue(AbstractAction.ACCELERATOR_KEY,
                      getKeyStroke(accel.intValue(), modifier));
         if (icon != null)
-            putValue(AbstractAction.SMALL_ICON,
-                     GuiUtil.getIcon(icon, label));
+            putValue(AbstractAction.SMALL_ICON, GuiUtil.getIcon(icon, name));
         s_allActions.add(this);
     }
 
-    public int getMenuMnemonic()
+    /** Get the name of the action with the mnemonic marked with a preceeding
+        '&amp;' (like in Qt). */
+    public String getNameWithMnemonic()
     {
-        return m_menuMnemonic;
+        return m_nameWithMnemonic;
     }
 
-    public int getMenuDisplayedMnemonicIndex()
-    {
-        return m_menuDisplayedMnemonicIndex;
-    }
-
+    /** Register the accelerator key of an action at a component. */
     public static void register(JComponent component, GuiAction action)
     {
         KeyStroke keyStroke =
@@ -103,6 +93,7 @@ public abstract class GuiAction
         }
     }
 
+    /** Register the accelerator keys of all actions at a component. */
     public static void registerAll(JComponent component)
     {
         for (GuiAction action : s_allActions)
@@ -130,9 +121,7 @@ public abstract class GuiAction
     private static final int SHORTCUT
         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-    private int m_menuMnemonic;
-
-    private int m_menuDisplayedMnemonicIndex;
+    private String m_nameWithMnemonic;
 
     private static KeyStroke getKeyStroke(int keyCode, int modifier)
     {
