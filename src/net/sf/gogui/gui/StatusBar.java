@@ -48,12 +48,6 @@ public class StatusBar
                                                    Short.MAX_VALUE));
         setToPlay(BLACK);
         m_iconBox.add(m_toPlayLabel);
-        m_labelScore
-            = new JLabel(GuiUtil.getIcon("gogui-score",
-                                         i18n("LB_STATUS_SCORE")));
-        m_labelScore.setToolTipText(i18n("TT_STATUS_SCORE"));
-        m_labelScore.setVisible(false);
-        m_iconBox.add(m_labelScore);
 
         m_labelSetup
             = new JLabel(GuiUtil.getIcon("gogui-setup-16x16",
@@ -131,12 +125,6 @@ public class StatusBar
         m_labelSetup.setVisible(enabled);
     }
 
-    public void setScoreMode(boolean enabled)
-    {
-        m_labelScore.setVisible(enabled);
-        m_toPlayLabel.setVisible(! enabled);
-    }
-
     public void setText(String text)
     {
         m_text.setText(text);
@@ -176,8 +164,6 @@ public class StatusBar
     private final JLabel m_toPlayLabel;
 
     private final JLabel m_labelSetup;
-
-    private final JLabel m_labelScore;
 
     private final JLabel m_moveText;
 

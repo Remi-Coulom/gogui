@@ -4421,7 +4421,6 @@ public class GoGui
         m_statusBar.setSetupMode(m_setupMode);
         if (m_setupMode)
             m_statusBar.setToPlay(m_setupColor);
-        m_statusBar.setScoreMode(m_scoreMode);
         if (m_gameTreeViewer != null)
         {
             if (gameTreeChanged)
