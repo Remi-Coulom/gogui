@@ -136,7 +136,29 @@ public class GoGuiMenuBar
         for (int i = 0; i < programs.size(); ++i)
         {
             Program program = programs.get(i);
-            JMenuItem item = new JMenuItem(program.m_label);
+            String[] mnemonicArray =
+                { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C",
+                  "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+                  "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+            String text;
+            String mnemonic;
+            if (i < mnemonicArray.length)
+            {
+                mnemonic = mnemonicArray[i];
+                text = mnemonic + ": " + program.m_label;
+            }
+            else
+            {
+                mnemonic = "";
+                text = program.m_label;
+            }
+            JMenuItem item = new JMenuItem(text);
+            if (! mnemonic.equals(""))
+            {
+                KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemonic);
+                int code = keyStroke.getKeyCode();
+                item.setMnemonic(code);
+            }
             final int index = i;
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
