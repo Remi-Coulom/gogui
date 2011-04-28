@@ -20,7 +20,21 @@ SetCompressor /SOLID lzma
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_RESERVEFILE_INSTALLOPTIONS 
+
+!define ADD_START_MENU_ENTRY_DEFAULT "Add start menu entry"
+!define CREATE_DESKTOP_SHORTCUT_DEFAULT "Create desktop shortcut"
+!define REGISTER_AS_SGF_HANDLER "Register GoGui as handler for SGF files"
+LangString ADD_START_MENU_ENTRY ${LANG_ENGLISH} \
+  "${ADD_START_MENU_ENTRY_DEFAULT}"
+LangString CREATE_DESKTOP_SHORTCUT ${LANG_ENGLISH} \
+  "${CREATE_DESKTOP_SHORTCUT_DEFAULT}"
+LangString REGISTER_AS_SGF_HANDLER ${LANG_ENGLISH} \
+  "${REGISTER_AS_SGF_HANDLER_DEFAULT}"
+!include "German.nsh"
 
 Name "GoGui"
 Caption "GoGui @VERSION@ Installer"
@@ -63,7 +77,7 @@ WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" "$INSTDIR\Uninstall.exe"
 
 SectionEnd
 
-Section "Add start menu entry"
+Section "$(ADD_START_MENU_ENTRY)"
 
 SetShellVarContext all
 CreateDirectory "$SMPROGRAMS\Games"
@@ -71,14 +85,14 @@ CreateShortCut "$SMPROGRAMS\Games\GoGui.lnk" "$INSTDIR\GoGui.exe"
 
 SectionEnd
 
-Section "Create desktop shortcut"
+Section "$(CREATE_DESKTOP_SHORTCUT)"
 
 SetShellVarContext all
 CreateShortCut "$DESKTOP\GoGui.lnk" "$INSTDIR\GoGui.exe"
 
 SectionEnd
  
-Section "Register GoGui as handler for SGF files"
+Section "$(REGISTER_AS_SGF_HANDLER)"
 
 File "..\icons\sgf.ico"
 
