@@ -781,6 +781,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 
 <target name="nsis" depends="l4j"
  description="Create Windows installer using NSIS (nsis.sourceforge.net)">
+  <copy file="windows/nsis/install.nsis.in" tofile="windows/nsis/install.nsis"
+	overwrite="true" filtering="true"/>
   <exec executable="${makensis}" failonerror="true">
     <arg line="windows/nsis/install.nsis"/>
   </exec>
@@ -824,8 +826,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <copy file="config/gogui-C.omf.in" tofile="config/gogui-C.omf"
       overwrite="true" filtering="true"/>
 <copy file="windows/l4j/gogui.xml.in" tofile="windows/l4j/gogui.xml"
-      overwrite="true" filtering="true"/>
-<copy file="windows/nsis/install.nsis.in" tofile="windows/nsis/install.nsis"
       overwrite="true" filtering="true"/>
 </target>
 
