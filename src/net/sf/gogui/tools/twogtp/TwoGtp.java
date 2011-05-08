@@ -468,10 +468,6 @@ public class TwoGtp
             whiteCommand = m_black.getProgramCommand();
             blackVersion = m_white.getVersion();
             whiteVersion = m_black.getVersion();
-            String resultTmp = inverseResult(resultWhite);
-            resultWhite = inverseResult(resultBlack);
-            resultBlack = resultTmp;
-            resultReferee = inverseResult(resultReferee);
         }
         m_game.setPlayer(BLACK, nameBlack);
         m_game.setPlayer(WHITE, nameWhite);
