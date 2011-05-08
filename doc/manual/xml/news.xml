@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+gogui-twogtp: fix wrong counting of results if option -alternate is used
+introduced in version 1.3.0 (bug #3298984)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New French translation. Thanks to Bruno Vasselle.
 </simpara>
 </listitem>
