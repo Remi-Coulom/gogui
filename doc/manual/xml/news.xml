@@ -12,7 +12,14 @@
 <listitem>
 <simpara>
 gogui-twogtp: fix wrong counting of results if option -alternate is used
-introduced in version 1.3.0 (bug #3298984)
+(bug #3298984, introduced in version 1.3.0)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-twogtp: fix bug that made continuing playing games fail if the number
+of games was set to unlimited and a result table already existed
+(bug #3299052, introduced in version 1.3.0)
 </simpara>
 </listitem>
 <listitem>

@@ -56,7 +56,7 @@ public class ResultFile
             while (m_gameExists.contains(m_nextGameIndex))
             {
                 ++m_nextGameIndex;
-                if (m_nextGameIndex > numberGames)
+                if (numberGames > 0 && m_nextGameIndex > numberGames)
                 {
                     m_nextGameIndex = -1;
                     break;
@@ -310,13 +310,11 @@ public class ResultFile
         {
             table.read(file);
             int numberRows = table.getNumberRows();
-            if (numberRows >= numberGames)
+            if (numberGames > 0 && numberRows >= numberGames)
                 throw new ErrorMessage("File " + file + " already contains "
                                        + numberRows + " games");
-            for (int i = 0; i < numberGames; ++i)
+            for (int i = 0; i < numberRows; ++i)
             {
-                if (i >= numberRows)
-                    break;
                 int gameIndex = Integer.parseInt(table.get("GAME", i));
                 if (gameIndex < 0)
                     throw new ErrorMessage("Invalid file format: " + file);
