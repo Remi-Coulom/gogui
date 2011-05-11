@@ -161,6 +161,11 @@ public class Program
         }
     }
 
+    public void setIOCallback(GtpClient.IOCallback callback)
+    {
+        m_gtp.setIOCallback(callback);
+    }
+
     /** Choose a unique label for this program.
         The label will be the program name, if it is the only one with
         this name, otherwise the program name with the version appended

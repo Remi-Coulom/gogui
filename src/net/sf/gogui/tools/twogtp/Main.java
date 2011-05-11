@@ -28,6 +28,7 @@ public final class Main
                 "black:",
                 "compare",
                 "config:",
+                "debugtocomment",
                 "force",
                 "games:",
                 "help",
@@ -50,30 +51,31 @@ public final class Main
             if (opt.contains("help"))
             {
                 String helpText =
-                    "Usage: gogui-twogtp [options]\n" +
-                    "\n" +
-                    "-alternate      alternate colors\n" +
-                    "-analyze file   analyze result file\n" +
-                    "-auto           autoplay games\n" +
-                    "-black          command for black program\n" +
-                    "-compare        compare list of sgf files\n" +
-                    "-config         config file\n" +
-                    "-force          overwrite existing files\n" +
-                    "-games          number of games (0=unlimited)\n" +
-                    "-help           display this help and exit\n" +
-                    "-komi           komi\n" +
-                    "-maxmoves       move limit\n" +
-                    "-observer       command for observer program\n" +
-                    "-openings       directory with opening sgf files\n" +
-                    "-referee        command for referee program\n" +
-                    "-sgffile        filename prefix\n" +
-                    "-size           board size for autoplay (default 19)\n" +
-                    "-threads n      number of threads\n" +
-                    "-time spec      set time limits (min[+min/moves])\n" +
-                    "-verbose        log GTP streams to stderr\n" +
-                    "-version        print version and exit\n" +
-                    "-white          command for white program\n" +
-                    "-xml            save games in XML format\n";
+                   "Usage: gogui-twogtp [options]\n" +
+                   "\n" +
+                   "-alternate      alternate colors\n" +
+                   "-analyze file   analyze result file\n" +
+                   "-auto           autoplay games\n" +
+                   "-black          command for black program\n" +
+                   "-compare        compare list of sgf files\n" +
+                   "-config         config file\n" +
+                   "-debugtocomment save stderr of programs in SGF comments\n" +
+                   "-force          overwrite existing files\n" +
+                   "-games          number of games (0=unlimited)\n" +
+                   "-help           display this help and exit\n" +
+                   "-komi           komi\n" +
+                   "-maxmoves       move limit\n" +
+                   "-observer       command for observer program\n" +
+                   "-openings       directory with opening sgf files\n" +
+                   "-referee        command for referee program\n" +
+                   "-sgffile        filename prefix\n" +
+                   "-size           board size for autoplay (default 19)\n" +
+                   "-threads n      number of threads\n" +
+                   "-time spec      set time limits (min[+min/moves])\n" +
+                   "-verbose        log GTP streams to stderr\n" +
+                   "-version        print version and exit\n" +
+                   "-white          command for white program\n" +
+                   "-xml            save games in XML format\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
@@ -83,12 +85,12 @@ public final class Main
                 Compare.compare(opt.getArguments());
                 System.exit(0);
             }
-            boolean force = opt.contains("force");
             if (opt.contains("version"))
             {
                 System.out.println("gogui-twogtp " + Version.get());
                 System.exit(0);
             }
+            boolean force = opt.contains("force");
             if (opt.contains("analyze"))
             {
                 String filename = opt.get("analyze");
@@ -97,6 +99,7 @@ public final class Main
             }
             boolean alternate = opt.contains("alternate");
             boolean auto = opt.contains("auto");
+            boolean debugToComment = opt.contains("debugtocomment");
             boolean verbose = opt.contains("verbose");
             String black = opt.get("black", "");
             String white = opt.get("white", "");
@@ -163,6 +166,8 @@ public final class Main
                                        verbose, openings, timeSettings,
                                        resultFile);
                 twoGtp[i].setMaxMoves(maxMoves);
+                if (debugToComment)
+                    twoGtp[i].setDebugToComment(true);
                 if (auto)
                 {
                     thread[i] = new TwoGtpThread(twoGtp[i]);

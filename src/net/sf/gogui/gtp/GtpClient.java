@@ -303,6 +303,11 @@ public final class GtpClient
         m_invalidResponseCallback = callback;
     }
 
+    public void setIOCallback(GtpClient.IOCallback callback)
+    {
+        m_callback = callback;
+    }
+
     /** Set a prefix for logging to standard error.
         Only used if logging was enabled in the constructor. */
     public void setLogPrefix(String prefix)
@@ -550,7 +555,7 @@ public final class GtpClient
 
     private int m_commandNumber;
 
-    private final IOCallback m_callback;
+    private IOCallback m_callback;
 
     private PrintWriter m_out;
 

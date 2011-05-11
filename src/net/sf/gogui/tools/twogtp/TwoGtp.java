@@ -20,6 +20,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.InvalidKomiException;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
@@ -224,6 +225,43 @@ public class TwoGtp
             program.interruptProgram();
     }
 
+    /** Store stderr of programs during move generation in SGF comments. */
+    public void setDebugToComment(boolean enable)
+    {
+        m_black.setIOCallback(null);
+        m_white.setIOCallback(null);
+        m_debugToComment = enable;
+        if (m_debugToComment)
+        {
+            m_black.setIOCallback(new GtpClient.IOCallback()
+                {
+                    public void receivedInvalidResponse(String s) { }
+
+                    public void receivedResponse(boolean error, String s) { }
+
+                    public void receivedStdErr(String s)
+                    {
+                        appendDebugToCommentBuffer(BLACK, s);
+                    }
+
+                    public void sentCommand(String s) { }
+                });
+            m_white.setIOCallback(new GtpClient.IOCallback()
+                {
+                    public void receivedInvalidResponse(String s) { }
+
+                    public void receivedResponse(boolean error, String s) { }
+
+                    public void receivedStdErr(String s)
+                    {
+                        appendDebugToCommentBuffer(WHITE, s);
+                    }
+
+                    public void sentCommand(String s) { }
+                });
+        }
+    }
+
     /** Limit number of moves.
         @param maxMoves Maximum number of moves after which genmove will fail,
         -1 for no limit. */
@@ -235,6 +273,8 @@ public class TwoGtp
     private final boolean m_alternate;
 
     private boolean m_gameSaved;
+
+    private boolean m_debugToComment;
 
     private int m_maxMoves = 1000;
 
@@ -283,11 +323,29 @@ public class TwoGtp
 
     private ConstNode m_lastOpeningNode;
 
+    /** Buffers for stderr of programs if setDebugToComment() is used.
+        This member is used by two threads. Access only through synchronized
+        functions. */
+    private BlackWhiteSet<StringBuilder> m_debugToCommentBuffer =
+        new BlackWhiteSet<StringBuilder>(new StringBuilder(),
+                                         new StringBuilder());
+
+    private synchronized void appendDebugToCommentBuffer(GoColor c, String s)
+    {
+        m_debugToCommentBuffer.get(c).append(s);
+    }
+
     private void checkInconsistentState() throws GtpError
     {
         for (Program program : m_allPrograms)
             if (program.isOutOfSync())
                 throw new GtpError("Inconsistent state");
+    }
+
+    private synchronized void clearDebugToCommentBuffers()
+    {
+        m_debugToCommentBuffer.get(BLACK).setLength(0);
+        m_debugToCommentBuffer.get(WHITE).setLength(0);
     }
 
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
@@ -369,6 +427,11 @@ public class TwoGtp
     private ConstNode getCurrentNode()
     {
         return m_game.getCurrentNode();
+    }
+
+    private synchronized String getDebugToCommentBuffer(GoColor color)
+    {
+        return m_debugToCommentBuffer.get(color).toString();
     }
 
     private GoColor getToMove()
@@ -654,6 +717,7 @@ public class TwoGtp
             program = m_white;
         else
             program = m_black;
+        clearDebugToCommentBuffers();
         long timeMillis = System.currentTimeMillis();
         String responseGenmove = program.sendCommandGenmove(color);
         double time = (System.currentTimeMillis() - timeMillis) / 1000.;
@@ -683,6 +747,21 @@ public class TwoGtp
             program.updateAfterGenmove(board);
             synchronize();
             response.append(GoPoint.toString(move.getPoint()));
+            if (m_debugToComment)
+            {
+                // All stderr that was written by the program before the
+                // response to genmove should have been received by now, but
+                // maybe the IO callback thread had no chance to run yet, so we
+                // wait for an extra 10 milliseconds
+                try
+                {
+                    Thread.sleep(10);
+                }
+                catch (InterruptedException e)
+                {
+                }
+                m_game.setComment(getDebugToCommentBuffer(color));
+            }
         }
         if (gameOver() && ! m_gameSaved)
         {

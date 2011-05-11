@@ -25,6 +25,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-alternate</option></arg>
 <arg><option>-auto</option></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-debugtocomment</option></arg>
 <arg><option>-force</option></arg>
 <arg><option>-games</option> <replaceable>n</replaceable></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
@@ -221,6 +222,16 @@ Read command line options and arguments from the given file.
 <listitem>
 <para>
 Overwrite existing files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-debugtocomment</option></term>
+<listitem>
+<para>
+Store all text that was written by each program to the standard error stream
+during the move generation in the comment properties of the SGF file.
 </para>
 </listitem>
 </varlistentry>

@@ -23,6 +23,11 @@ preceding '&#38;'). This avoids that non-English languages use the menmonics
 from the English labels that may not exist in the non-English label.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+gogui-twogtp: new option -debugtocomment
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
