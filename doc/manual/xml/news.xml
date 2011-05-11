@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+gogui-twogtp: fix crash if used without option -sgffile
+(bug #3300256, introduced in version 1.3.0)
 </simpara>
 </listitem>
 </itemizedlist>

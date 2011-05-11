@@ -507,10 +507,12 @@ public class TwoGtp
         comment.append(StringUtil.getDate());
         m_game.setComment(comment.toString(), getTree().getRootConst());
         int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
-        m_resultFile.addResult(m_gameIndex, m_game, resultBlack, resultWhite,
-                               resultReferee, isAlternated(), moveNumber,
-                               error, errorMessage, realTimeBlack,
-                               realTimeWhite, cpuTimeBlack, cpuTimeWhite);
+        if (m_resultFile != null)
+            m_resultFile.addResult(m_gameIndex, m_game, resultBlack,
+                                   resultWhite, resultReferee, isAlternated(),
+                                   moveNumber, error, errorMessage,
+                                   realTimeBlack, realTimeWhite, cpuTimeBlack,
+                                   cpuTimeWhite);
     }
 
     private void initGame(int size) throws GtpError
