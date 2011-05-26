@@ -4037,11 +4037,11 @@ public class GoGui
         if (m_gameFile != null)
         {
             filename = m_gameFile.m_file.getName();
+            // On the Mac, a modified document is indicated by setting the
+            // windowModified property in updateViews()
             if (isModified() && ! Platform.isMac())
-                filename = filename + " " + i18n("TIT_MODIFIED");
+                filename = filename + "*";
         }
-        else if (isModified() && ! Platform.isMac())
-            filename = i18n("TIT_MODIFIED");
         ConstGameInfo info = getGameInfo();
         String gameName = info.suggestGameName();
         if (gameName != null)
