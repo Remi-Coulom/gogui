@@ -194,10 +194,9 @@ Set the komi value.
 <para>
 Set the Swing look and feel.
 If this option is not used, GoGui tries to use "system" on Linux and Windows,
-and "quaqua" on Mac OS/X, but shows no error if the look and feel is not found.
-If the option is used, the name can be "default" or an empty string for the
-default look and feel of the Java implementation, a full class name, or one of
-the following shortcuts:
+but shows no error if the look and feel is not found. If the option is used,
+the name can be "default" or an empty string for the default look and feel of
+the Java implementation, a full class name, or one of the following shortcuts:
 <variablelist>
 <varlistentry>
 <term>cross</term>
@@ -227,7 +226,8 @@ com.sun.java.swing.plaf.gtk.GTKLookAndFeel
 <term>quaqua</term>
 <listitem>
 <simpara>
-ch.randelshofer.quaqua.QuaquaLookAndFeel
+ch.randelshofer.quaqua.QuaquaLookAndFeel (needs quaqua.jar in the same
+directory as gogui.jar)
 </simpara>
 </listitem>
 </varlistentry>

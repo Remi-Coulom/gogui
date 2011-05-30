@@ -213,8 +213,6 @@ public class GuiUtil
             showError = false;
             if (Platform.isWindows())
                 laf = "system";
-            else if (Platform.isMac())
-                laf = "quaqua";
             else if (Platform.isUnix())
                 laf = "system";
             else
@@ -440,11 +438,12 @@ public class GuiUtil
         }
     }
 
-    /** Set property to render button in bevel style on the Mac.
-        Only has an effect if Quaqua Look and Feel is used. */
+    /** Set property to render button in bevel style on the Mac. */
     public static void setMacBevelButton(JButton button)
     {
         button.putClientProperty("Quaqua.Button.style", "bevel");
+        // Works since Apple Java 5
+        button.putClientProperty("JButton.buttonType", "bevel");
     }
 
     public static void setMonospacedFont(JComponent component)

@@ -51,12 +51,6 @@ Comment out the following exec tag for releases.
  gogui-thumbnailer
  gogui-twogtp
 "/>
-<condition property="quaqua.available">
-  <or>
-    <available file="lib/quaqua.jar"/>
-    <istrue value="${quaqua.ignore}"/>
-  </or>
-</condition>
 
 <zipfileset id="distfiles-src" prefix="gogui-${version}" dir="."
   includes="
@@ -160,18 +154,6 @@ Comment out the following exec tag for releases.
   gogui-thumbnailer.jar,
   gogui-twogtp.jar
 "/>
-
-<target name="check-quaqua">
-  <fail unless="quaqua.available">
-lib/quaqua.jar not found.
-Please download the Quaqua Look and Feel (http://www.randelshofer.ch/quaqua)
-and copy the file quaqua.jar from the distribution to lib/quaqua.jar. The
-last version tested with GoGui was:
-http://www.randelshofer.ch/quaqua/files/quaqua-5.2.1.nested.zip
-To compile GoGui with limited Mac support, you can invoke ant with the
-option -Dquaqua.ignore=true.
-  </fail>
-</target>
 
 <target name="clean" depends="clean-build-dir"
  description="Delete class and jar files built by target all">
@@ -381,7 +363,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </exec>
 </target>
 
-<target name="gogui.jar" depends="compile,check-quaqua">
+<target name="gogui.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" compress="true" level="9" update="true">
 <manifest>
@@ -486,7 +468,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
   </jar>
 </target>
 
-<target name="gogui-display.jar" depends="compile,check-quaqua">
+<target name="gogui-display.jar" depends="compile">
   <mkdir dir="lib"/>
   <jar destfile="lib/gogui-display.jar" compress="true" level="9"
        update="true">
