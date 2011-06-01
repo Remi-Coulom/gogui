@@ -28,15 +28,6 @@ from the English labels that may not exist in the non-English label.
 gogui-twogtp: new option -debugtocomment
 </simpara>
 </listitem>
-<listitem>
-<simpara>
-The Mac Look and Feel quaqua.jar is no longer included in the distribution,
-since it is possible to set Mac-specific button styles with the default
-Mac Java since version 5. It is still possible to specify to use Quaqa
-by invoking "gogui -laf quaqua" as long as the file quaqua.jar is in the
-same directory as gogui.jar.
-</simpara>
-</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
