@@ -51,6 +51,8 @@ Comment out the following exec tag for releases.
  gogui-thumbnailer
  gogui-twogtp
 "/>
+<available file="${docbook-xsl.dir}" type="dir"
+	   property="docbook.xsl-available"/>
 <condition property="quaqua.available">
   <or>
     <available file="lib/quaqua.jar"/>
@@ -266,6 +268,13 @@ option -Dquaqua.ignore=true.
 <target name="doc" depends="doc-check-uptodate"
  unless="doc-uptodate"
  description="Generate documentation using xsltproc">
+  <fail unless="docbook.xsl-available">
+Docbook XSL files not found in
+${docbook-xsl.dir}
+Please install the docbook-xsl package or download the XSL files from
+http://sourceforge.net/projects/docbook/files/docbook-xsl
+and invoke ant with the option -Ddocbook-xsl.dir=directory
+  </fail>
 <echo message="Running xsltproc"/>
 <exec executable="${xsltproc}" failonerror="true">
 <arg line="--path ${docbook-xsl.dir}/html"/>
