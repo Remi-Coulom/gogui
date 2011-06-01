@@ -445,6 +445,8 @@ public class GuiUtil
     public static void setMacBevelButton(JButton button)
     {
         button.putClientProperty("Quaqua.Button.style", "bevel");
+        // Works since Apple Java 5
+        button.putClientProperty("JButton.buttonType", "bevel");
     }
 
     public static void setMonospacedFont(JComponent component)
