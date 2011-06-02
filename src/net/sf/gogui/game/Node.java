@@ -507,7 +507,7 @@ public final class Node
     /** Make child the first child of this node.
         @param child One of the child nodes of this node. */
     @SuppressWarnings("unchecked")
-    public void makeMainVariation(Node child)
+    public void makeFirstChild(Node child)
     {
         assert child.isChildOf(this);
         if (getNumberChildren() <= 1)

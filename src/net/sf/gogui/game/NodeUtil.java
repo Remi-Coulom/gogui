@@ -558,7 +558,7 @@ public final class NodeUtil
     {
         while (node.getFatherConst() != null)
         {
-            node.getFather().makeMainVariation(node);
+            node.getFather().makeFirstChild(node);
             node = node.getFather();
         }
     }
