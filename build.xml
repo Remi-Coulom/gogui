@@ -34,7 +34,7 @@ Comment out the following exec tag for releases.
 <property name="makensis" value="makensis"/>
 <property name="xsltproc" value="xsltproc"/>
 <property name="docbook-xsl.dir"
-	        value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
+	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
 <property name="docbook.dtd-4.2"
           value="/usr/share/xml/docbook/schema/dtd/4.2/docbookx.dtd"/>
 <property name="scripts" value="
@@ -53,6 +53,7 @@ Comment out the following exec tag for releases.
 "/>
 <available file="${docbook-xsl.dir}" type="dir"
 	   property="docbook.xsl-available"/>
+<available file="${docbook.dtd-4.2}" property="docbook.dtd-4.2-available"/>
 <condition property="quaqua.available">
   <or>
     <available file="lib/quaqua.jar"/>
@@ -274,6 +275,7 @@ ${docbook-xsl.dir}
 Please install the docbook-xsl package or download the XSL files from
 http://sourceforge.net/projects/docbook/files/docbook-xsl
 and invoke ant with the option -Ddocbook-xsl.dir=directory
+with "directory" replaced by the location of the docbook-xsl directory.
   </fail>
 <echo message="Running xsltproc"/>
 <exec executable="${xsltproc}" failonerror="true">
@@ -311,6 +313,14 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </target>
 
 <target name="docvalidate">
+  <fail unless="docbook.dtd-4.2-available">
+Docbook DTD file not found in
+${docbook.dtd-4.2}
+Please install the docbook-xml package or download the DTD files from
+http://www.oasis-open.org/docbook/xml/4.2/docbook-xml-4.2.zip
+and invoke ant with the option -Ddocbook.dtd-4.2=location
+with "location" replaced by the location of the file docbookx.dtd.
+  </fail>
 <xmlvalidate file="doc/manual/xml/book.xml">
   <xmlcatalog>
     <dtd publicId="-//OASIS//DTD DocBook XML V4.2//EN"
