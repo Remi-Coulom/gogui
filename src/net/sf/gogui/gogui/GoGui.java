@@ -2191,26 +2191,11 @@ public class GoGui
         {
             String name = getProgramName();
             String mainMessage = format(i18n("MSG_INVALID_RESPONSE"), name);
-            if (m_line.trim().equals(""))
-            {
-                String disableKey =
-                    "net.sf.gogui.gogui.GoGui.invalid-empty-response";
-                String optionalMessage =
-                    format(i18n("MSG_INVALID_EMPTY_RESPONSE"), name);
-                m_messageDialogs.showWarning(disableKey, GoGui.this,
-                                             mainMessage, optionalMessage,
-                                             true);
-            }
-            else
-            {
-                String disableKey =
-                    "net.sf.gogui.gogui.GoGui.invalid-response";
-                String optionalMessage =
-                    format(i18n("MSG_INVALID_NOSTATUS_RESPONSE"), name);
-                m_messageDialogs.showWarning(disableKey, GoGui.this,
-                                             mainMessage, optionalMessage,
-                                             true);
-            }
+            String disableKey = "net.sf.gogui.gogui.GoGui.invalid-response";
+            String optionalMessage =
+                format(i18n("MSG_INVALID_NOSTATUS_RESPONSE"), name);
+            m_messageDialogs.showWarning(disableKey, GoGui.this, mainMessage,
+                                         optionalMessage, true);
         }
 
         private final String m_line;

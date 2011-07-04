@@ -28,6 +28,19 @@ from the English labels that may not exist in the non-English label.
 gogui-twogtp: new option -debugtocomment
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+No longer display a warning if the Go engine sends empty lines outside
+responses, which is allowed by GTP (version 2, draft 2, section 2.9).
+Fixes bug #3351774.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Show meaningful error messages when compiling GoGui with ant and the local
+copies of the Docbook DTD or XSL files are not found.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

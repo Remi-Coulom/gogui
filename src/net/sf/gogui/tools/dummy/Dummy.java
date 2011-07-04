@@ -155,7 +155,6 @@ public class Dummy
             "none/File Save/gogui-dummy-file_save %w\n" +
             "gfx/Gfx/gogui-dummy-gfx\n" +
             "none/Invalid/gogui-dummy-invalid\n" +
-            "none/Invalid Empty/gogui-dummy-invalid_empty\n" +
             "none/Live Gfx/gogui-dummy-live_gfx\n" +
             "string/Long Response/gogui-dummy-long_response %s\n" +
             "none/Next Failure/gogui-dummy-next_failure %s\n" +
@@ -208,12 +207,6 @@ public class Dummy
         cmd.checkArgNone();
         printInvalidResponse("This is an invalid GTP response.\n" +
                              "It does not start with a status character.\n");
-    }
-
-    public void cmdInvalidEmpty(GtpCommand cmd) throws GtpError
-    {
-        cmd.checkArgNone();
-        printInvalidResponse("\n");
     }
 
     public void cmdLiveGfx(GtpCommand cmd) throws GtpError
@@ -409,9 +402,6 @@ public class Dummy
         register("gogui-dummy-invalid", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdInvalid(cmd); } });
-        register("gogui-dummy-invalid_empty", new GtpCallback() {
-                public void run(GtpCommand cmd) throws GtpError {
-                    cmdInvalidEmpty(cmd); } });
         register("gogui-dummy-live_gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLiveGfx(cmd); } });
