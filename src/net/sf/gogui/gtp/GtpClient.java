@@ -431,10 +431,13 @@ public final class GtpClient
                 appendBuffer(line);
                 if (! isResponseStart(line))
                 {
-                    if (m_callback != null)
-                        m_callback.receivedInvalidResponse(line);
-                    if (m_invalidResponseCallback != null)
-                        m_invalidResponseCallback.show(line);
+                    if (! line.trim().equals(""))
+                    {
+                        if (m_callback != null)
+                            m_callback.receivedInvalidResponse(line);
+                        if (m_invalidResponseCallback != null)
+                            m_invalidResponseCallback.show(line);
+                    }
                     m_buffer.setLength(0);
                     continue;
                 }
