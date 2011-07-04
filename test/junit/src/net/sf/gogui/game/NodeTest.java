@@ -60,14 +60,14 @@ public final class NodeTest
         assertTrue(child2.isChildOf(father));
     }
 
-    public void testMakeMainVariation()
+    public void testMakeFirstChild()
     {
         Node father = new Node();
         Node child1 = new Node();
         Node child2 = new Node();
         father.append(child1);
         father.append(child2);
-        father.makeMainVariation(child2);
+        father.makeFirstChild(child2);
         assertEquals(child2, father.getChild(0));
         assertEquals(child1, father.getChild(1));
     }
