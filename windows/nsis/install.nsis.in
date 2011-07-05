@@ -11,7 +11,6 @@ SetCompressor /SOLID lzma
 !define MUI_COMPONENTSPAGE_NODESC
 !include "MUI.nsh"
 !insertmacro MUI_PAGE_WELCOME
-!define MUI_LICENSEPAGE_CHECKBOX
 !insertmacro MUI_PAGE_LICENSE "License.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
