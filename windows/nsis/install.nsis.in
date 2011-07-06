@@ -26,7 +26,7 @@ SetCompressor /SOLID lzma
 
 !define ADD_START_MENU_ENTRY_DEFAULT "Add start menu entry"
 !define CREATE_DESKTOP_SHORTCUT_DEFAULT "Create desktop shortcut"
-!define REGISTER_AS_SGF_HANDLER "Register GoGui as handler for SGF files"
+!define REGISTER_AS_SGF_HANDLER_DEFAULT "Register GoGui as handler for SGF files"
 LangString ADD_START_MENU_ENTRY ${LANG_ENGLISH} \
   "${ADD_START_MENU_ENTRY_DEFAULT}"
 LangString CREATE_DESKTOP_SHORTCUT ${LANG_ENGLISH} \
