@@ -798,7 +798,7 @@ with "location" replaced by the location of the file docbookx.dtd.
   </exec>
 </target>
 
-<target name="nsis" depends="l4j"
+<target name="nsis" depends="l4j,dist-src"
  description="Create Windows installer using NSIS (nsis.sourceforge.net)">
   <copy file="windows/nsis/install.nsis.in" tofile="windows/nsis/install.nsis"
 	overwrite="true" filtering="true"/>

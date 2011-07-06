@@ -41,6 +41,16 @@ Show meaningful error messages when compiling GoGui with ant and the local
 copies of the Docbook DTD or XSL files are not found.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Added German translation of the Windows installer.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The Windows installer now optionally installs the source code of GoGui.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

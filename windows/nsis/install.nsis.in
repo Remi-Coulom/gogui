@@ -27,12 +27,15 @@ SetCompressor /SOLID lzma
 !define ADD_START_MENU_ENTRY_DEFAULT "Add start menu entry"
 !define CREATE_DESKTOP_SHORTCUT_DEFAULT "Create desktop shortcut"
 !define REGISTER_AS_SGF_HANDLER_DEFAULT "Register GoGui as handler for SGF files"
+!define INSTALL_SOURCE_CODE_DEFAULT "Install source code"
 LangString ADD_START_MENU_ENTRY ${LANG_ENGLISH} \
   "${ADD_START_MENU_ENTRY_DEFAULT}"
 LangString CREATE_DESKTOP_SHORTCUT ${LANG_ENGLISH} \
   "${CREATE_DESKTOP_SHORTCUT_DEFAULT}"
 LangString REGISTER_AS_SGF_HANDLER ${LANG_ENGLISH} \
   "${REGISTER_AS_SGF_HANDLER_DEFAULT}"
+LangString INSTALL_SOURCE_CODE ${LANG_ENGLISH} \
+  "${INSTALL_SOURCE_CODE_DEFAULT}"
 !include "German.nsh"
 
 Name "GoGui"
@@ -111,6 +114,12 @@ WriteRegStr HKCR "Applications\GoGui\shell\open\command" "" \
 
 SectionEnd
 
+Section /o "$(INSTALL_SOURCE_CODE)"
+
+File ..\..\gogui-@VERSION@-src.tar.gz
+
+SectionEnd
+
 Section "Uninstall"
  
 Delete "$INSTDIR\Uninstall.exe"
@@ -129,6 +138,7 @@ Delete "$INSTDIR\gogui-statistics.exe"
 Delete "$INSTDIR\License.txt"
 Delete "$INSTDIR\gogui.ico"
 Delete "$INSTDIR\sgf.ico"
+Delete "$INSTDIR\gogui-@VERSION@-src.tar.gz"
 RmDir "$INSTDIR"
 
 SetShellVarContext all

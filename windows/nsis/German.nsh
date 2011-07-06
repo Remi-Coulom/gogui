@@ -8,3 +8,5 @@ LangString CREATE_DESKTOP_SHORTCUT ${LANG_GERMAN} \
   "Desktopverknüpfung erstellen"
 LangString REGISTER_AS_SGF_HANDLER ${LANG_GERMAN} \
   "GoGui als Anwendung für SGF-Dateien registrieren"
+LangString INSTALL_SOURCE_CODE ${LANG_GERMAN} \
+  "Quelltext installieren"
