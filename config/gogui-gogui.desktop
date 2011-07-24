@@ -8,4 +8,4 @@ Icon=gogui-gogui.png
 Terminal=false
 Type=Application
 Categories=Java;Application;Game;BoardGame;
-MimeType=application/x-go-sgf;application/x-go+xml
+MimeType=application/x-go-sgf;application/x-go+xml;
