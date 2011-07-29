@@ -1,22 +1,23 @@
 #!/bin/sh
 
 PREFIX=/usr/local
-SYSCONFDIR=/etc
+SYSCONFDIR="$PREFIX/etc"
 JAVA_HOME=
 
 usage() {
-    printf "Usage: %s [-p prefix] [-j javahome]\n" $0
+    printf "Usage: %s -j javahome [-p prefix] [-s sysconfdir]\n" $0
 }
 
 #-----------------------------------------------------------------------------
 # Parse options
 #-----------------------------------------------------------------------------
 
-while getopts hj:p: OPTION; do
+while getopts hj:p:s: OPTION; do
     case $OPTION in
         h) usage; exit 0;;
         j) JAVA_HOME="$OPTARG";;
         p) PREFIX="$OPTARG";;
+        s) SYSCONFDIR="$OPTARG";;
         ?) usage; exit 1;;
     esac
 done

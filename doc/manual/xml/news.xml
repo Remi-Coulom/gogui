@@ -51,6 +51,12 @@ Added German translation of the Windows installer.
 The Windows installer now optionally installs the source code of GoGui.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+New option -s for the Unix install script to specify sysconfdir.
+Default changed to /usr/local/etc.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
