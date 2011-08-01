@@ -1,7 +1,6 @@
 #!/bin/sh
 
 PREFIX=/usr/local
-SYSCONFDIR="$PREFIX/etc"
 JAVA_HOME=
 
 usage() {
@@ -35,6 +34,9 @@ fi
 if [ ! -x "$JAVA_HOME/bin/java" ]; then
     echo "$JAVA_HOME/bin/java does not exist or is not executable" >&2
     exit 1
+fi
+if [ -z "$SYSCONFDIR" ]; then
+    SYSCONFDIR="$PREFIX/etc"
 fi
 
 #-----------------------------------------------------------------------------
