@@ -8,8 +8,8 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
@@ -174,7 +174,14 @@ public class Comment
     private static void setFocusTraversalKeys(JTextPane textPane)
     {
         int id = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
-        Set<AWTKeyStroke> keystrokes = new TreeSet<AWTKeyStroke>();
+        // Note: using TreeSet<AWTKeyStroke> as an argument for
+        // JTextPane.setFocusTraversalKeys() throws an exception in Java
+        // 1.7.0-b147 because TreeSet.add() tries to cast AWTKeyStroke to
+        // Comparable. This worked previously, and there seems to be nothing in
+        // the documentation that forbids to use a TreeSet here, so maybe this
+        // is a bug of this particular Java version. Anyway, using a HashSet is
+        // safe with all tested versions of Java. (See also GoGui bug #3388086)
+        Set<AWTKeyStroke> keystrokes = new HashSet<AWTKeyStroke>();
         keystrokes.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
         textPane.setFocusTraversalKeys(id, keystrokes);
     }
