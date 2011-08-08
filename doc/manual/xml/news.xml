@@ -4,11 +4,17 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>1.4.0</revnumber>
+<date>08 Aug 2011</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
+<listitem>
+<simpara>
+Workaround for exception thrown at startup when GoGui is used with Java
+1.7.0 (bug #3388086)
+</simpara>
+</listitem>
 <listitem>
 <simpara>
 No longer support switching the language in "Help/Switch language".
