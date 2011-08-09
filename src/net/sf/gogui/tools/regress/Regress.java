@@ -13,7 +13,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.gtp.GtpClient;
@@ -183,8 +182,6 @@ public class Regress
     private File m_testFile;
 
     private PrintStream m_out;
-
-    private final Set m_dataFiles = new TreeSet();
 
     private static final String COLOR_ERROR = "#ffa954";
 
@@ -747,7 +744,6 @@ public class Regress
     private void runTest(String test) throws Exception
     {
         m_tests.clear();
-        m_dataFiles.clear();
         m_otherErrors = 0;
         m_testFile = new File(test);
         m_outName = m_outNames.get(test);
