@@ -585,7 +585,7 @@ public class GoGui
             return;
         m_game.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
-        updateGuiBoard();
+        updateViews(false);
     }
 
     public void actionEditPrograms()
@@ -1073,7 +1073,7 @@ public class GoGui
             m_guiBoard.setMarkSquare(point, mark);
         else if (type == MarkType.TRIANGLE)
             m_guiBoard.setMarkTriangle(point, mark);
-        updateGuiBoard();
+        updateViews(false);
     }
 
     public void actionNewGame()

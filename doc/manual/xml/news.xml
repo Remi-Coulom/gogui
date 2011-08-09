@@ -4,6 +4,22 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Set file status to modified and enable Save menu item if a label or markup was
+added or changed.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.4.0</revnumber>
 <date>08 Aug 2011</date>
 <authorinitials>enz</authorinitials>
