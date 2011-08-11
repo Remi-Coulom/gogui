@@ -142,7 +142,7 @@ public class GoGuiMenuBar
                   "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
             String text;
             String mnemonic;
-            if (i < mnemonicArray.length)
+            if (! Platform.isMac() && i < mnemonicArray.length)
             {
                 mnemonic = mnemonicArray[i];
                 text = mnemonic + ": " + program.m_label;

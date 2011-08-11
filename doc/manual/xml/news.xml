@@ -15,6 +15,12 @@ Set file status to modified and enable Save menu item if a label or markup was
 added or changed.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Removed numbers in list menu items (like Recent Files) if the platform
+is Mac because no mnemonics are used on the Mac
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
