@@ -8,8 +8,9 @@ import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import net.sf.gogui.util.PrefUtil;
 import net.sf.gogui.util.ObjectUtil;
+import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.PrefUtil;
 
 /** Menu for recent item.
     Handles removing duplicates and storing the items between sessions. */
@@ -207,12 +208,12 @@ class RecentMenuItem
         String text;
         String mnemonic;
         // Use 1-9 and 0 as mnemonics for the first 10 items
-        if (i < 9)
+        if (! Platform.isMac() && i < 9)
         {
             text = Integer.toString(i + 1) + ": " + m_label;
             mnemonic = Integer.toString(i + 1);
         }
-        else if (i == 9)
+        else if (! Platform.isMac() && i == 9)
         {
             text = "10: " + m_label;
             mnemonic = "0";
