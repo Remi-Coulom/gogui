@@ -2332,8 +2332,7 @@ public class GoGui
 
     private GoColor m_setupColor;
 
-    private final MessageDialogs m_messageDialogs =
-        new MessageDialogs(i18n("LB_GOGUI"));
+    private final MessageDialogs m_messageDialogs = new MessageDialogs();
 
     private Pattern m_pattern;
 

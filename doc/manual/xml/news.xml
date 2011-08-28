@@ -21,6 +21,11 @@ Removed numbers in list menu items (like Recent Files) if the platform
 is Mac because no mnemonics are used on the Mac
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+No longer use window titles in alert dialogs.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
