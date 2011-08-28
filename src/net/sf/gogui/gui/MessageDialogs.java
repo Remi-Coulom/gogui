@@ -21,9 +21,8 @@ import net.sf.gogui.util.StringUtil;
 /** Simple message dialogs. */
 public final class MessageDialogs
 {
-    public MessageDialogs(String applicationName)
+    public MessageDialogs()
     {
-        m_applicationName = applicationName;
     }
 
     public void showError(Component frame, String mainMessage,
@@ -42,8 +41,7 @@ public final class MessageDialogs
             type = JOptionPane.PLAIN_MESSAGE;
         Object[] options = { i18n("LB_CLOSE") };
         Object defaultOption = options[0];
-        String title = i18n("LB_ERROR") + " - " + m_applicationName;
-        show(null, frame, title, mainMessage, optionalMessage, type,
+        show(null, frame, "", mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
 
@@ -77,8 +75,7 @@ public final class MessageDialogs
             type = JOptionPane.PLAIN_MESSAGE;
         Object[] options = { i18n("LB_CLOSE") };
         Object defaultOption = options[0];
-        String title = i18n("LB_INFORMATION") + " - " + m_applicationName;
-        show(disableKey, frame, title, mainMessage, optionalMessage,
+        show(disableKey, frame, "", mainMessage, optionalMessage,
              type, JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
 
@@ -121,8 +118,7 @@ public final class MessageDialogs
         }
         Object defaultOption = options[0];
         int type = JOptionPane.QUESTION_MESSAGE;
-        String title = i18n("LB_QUESTION") + " - " + m_applicationName;
-        Object value = show(disableKey, parent, title, mainMessage,
+        Object value = show(disableKey, parent, "", mainMessage,
                             optionalMessage, type,
                             JOptionPane.YES_NO_CANCEL_OPTION, options,
                             defaultOption, destructiveIndex);
@@ -155,8 +151,7 @@ public final class MessageDialogs
             type = JOptionPane.PLAIN_MESSAGE;
         Object[] options = { i18n("LB_CLOSE") };
         Object defaultOption = options[0];
-        String title = i18n("LB_WARNING") + " - " + m_applicationName;
-        show(disableKey, parent, title, mainMessage, optionalMessage, type,
+        show(disableKey, parent, "", mainMessage, optionalMessage, type,
              JOptionPane.DEFAULT_OPTION, options, defaultOption, -1);
     }
 
@@ -210,8 +205,7 @@ public final class MessageDialogs
             type = JOptionPane.QUESTION_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        String title = i18n("LB_QUESTION") + " - " + m_applicationName;
-        Object result = show(disableKey, parent, title, mainMessage,
+        Object result = show(disableKey, parent, "", mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption, -1);
         return (result == affirmativeOption);
@@ -265,14 +259,11 @@ public final class MessageDialogs
             type = JOptionPane.WARNING_MESSAGE;
         else
             type = JOptionPane.PLAIN_MESSAGE;
-        String title = i18n("LB_WARNING") + " - " + m_applicationName;
-        Object result = show(disableKey, parent, title, mainMessage,
+        Object result = show(disableKey, parent, "", mainMessage,
                              optionalMessage, type, JOptionPane.YES_NO_OPTION,
                              options, defaultOption, -1);
         return (result == destructiveOption);
     }
-
-    private final String m_applicationName;
 
     private final Set<String> m_disabled = new TreeSet<String>();
 

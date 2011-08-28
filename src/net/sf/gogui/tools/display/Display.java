@@ -212,8 +212,7 @@ public class Display
 
     private final String m_name;
 
-    private final MessageDialogs m_messageDialogs =
-        new MessageDialogs("gogui-display");
+    private final MessageDialogs m_messageDialogs = new MessageDialogs();
 
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {

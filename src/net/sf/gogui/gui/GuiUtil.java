@@ -601,7 +601,7 @@ public class GuiUtil
     {
         if (! showError)
             return;
-        MessageDialogs messageDialogs = new MessageDialogs("GoGui");
+        MessageDialogs messageDialogs = new MessageDialogs();
         messageDialogs.showWarning(null,
                                    i18n("MSG_LAF_ERROR"),
                                    MessageFormat.format(i18n("MSG_LAF_ERROR_2"),
