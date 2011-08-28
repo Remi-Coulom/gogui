@@ -61,6 +61,14 @@ public class GuiMenu
         return add(new GuiCheckBoxMenuItem(action));
     }
 
+    public void remove(JMenuItem item)
+    {
+        int mnemonic = item.getMnemonic();
+        if (mnemonic > 0)
+            m_mnemonics.remove(Integer.valueOf(mnemonic));
+        super.remove(item);
+    }
+
     private final ArrayList<Integer> m_mnemonics = new ArrayList<Integer>();
 }
 
