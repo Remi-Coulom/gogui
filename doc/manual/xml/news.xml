@@ -28,7 +28,12 @@ No longer use window titles in alert dialogs.
 </listitem>
 <listitem>
 <simpara>
-Avoid unjustified warnings (on standard error) about duplicate mnemonics in
+Removed duplicate menu access keys
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Avoid unjustified warnings (on standard error) about duplicate access keys in
 menu items.
 </simpara>
 </listitem>
