@@ -69,6 +69,7 @@ Comment out the following exec tag for releases.
  build.xml
  config/go.dtd
  config/gogui-gogui.desktop
+ config/gogui.thumbnailer
  config/gogui-gogui.png
  config/application-x-go-sgf.png
  config/gogui-C.omf.in
