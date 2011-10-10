@@ -8,8 +8,8 @@
 <type>bool</type>
 <default>true</default>
 <locale name="C">
-<short>Enable thumbnailing of Go games.</short>
-<long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails.</long>
+<short>Enable thumbnailing of Go games in Gnome 2.</short>
+<long>Boolean options available, true enables thumbnailing in Gnome 2 and false disables the creation of new thumbnails.</long>
 </locale>
 </schema>
 
@@ -20,7 +20,7 @@
 <type>string</type>
 <default>/usr/bin/gogui-thumbnailer -size %s %i %o</default>
 <locale name="C">
-<short>Thumbnail command for Go games.</short>
+<short>Thumbnail command for Go games in Gnome 2.</short>
 <long>Valid command plus arguments for SGF thumbnailer.</long>
 </locale>
 </schema>
@@ -32,8 +32,8 @@
 <type>bool</type>
 <default>true</default>
 <locale name="C">
-<short>Enable thumbnailing of Go games in XML format.</short>
-<long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails.</long>
+<short>Enable thumbnailing of Go games in XML format in Gnome 2.</short>
+<long>Boolean options available, true enables thumbnailing in Gnome 2 and false disables the creation of new thumbnails.</long>
 </locale>
 </schema>
 
@@ -44,7 +44,7 @@
 <type>string</type>
 <default>/usr/bin/gogui-thumbnailer -size %s %i %o</default>
 <locale name="C">
-<short>Thumbnail command for Go games in XML format.</short>
+<short>Thumbnail command for Go games in XML format in Gnome 2.</short>
 <long>Valid command plus arguments for SGF thumbnailer.</long>
 </locale>
 </schema>

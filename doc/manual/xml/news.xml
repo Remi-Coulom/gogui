@@ -37,6 +37,11 @@ Avoid unjustified warnings (on standard error) about duplicate access keys in
 menu items.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Make registering thumbnailer for SGF files work in Gnome 3.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

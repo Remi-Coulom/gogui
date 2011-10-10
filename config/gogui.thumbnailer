@@ -1,0 +1,4 @@
+[Thumbnailer Entry]
+TryExec=/usr/bin/gogui-thumbnailer
+Exec=/usr/bin/gogui-thumbnailer -size %s %i %o
+MimeType=application/x-go-sgf;application/x-go+xml;

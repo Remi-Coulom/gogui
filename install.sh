@@ -86,12 +86,19 @@ xdg-desktop-menu install config/gogui-gogui.desktop
 
 xdg-mime install config/gogui-mime.xml
 
-# Install Gnome thumbnailer
+# Install Gnome 2 thumbnailer
 
 install -d $SYSCONFDIR/gconf/schemas
 cat config/gogui.schemas \
 | sed "s;/usr/bin/gogui-thumbnailer;$PREFIX/bin/gogui-thumbnailer;" \
 > $SYSCONFDIR/gconf/schemas/gogui.schemas
+
+# Install Gnome 3 thumbnailer
+
+install -d $SYSCONFDIR/gconf/schemas
+cat config/gogui.thumbnailer \
+| sed "s;/usr/bin/gogui-thumbnailer;$PREFIX/bin/gogui-thumbnailer;" \
+> $PREFIX/share/thumbnailers/gogui.thumbnailer
 
 # Install scrollkeeper entry
 
