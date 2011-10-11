@@ -6,7 +6,7 @@
 <h2>Basics</h2>
 <p>
 GoGui requires at least Java version 5. The recommended Java runtime
-environment is Sun's Java SE 6 or a new version of OpenJDK (it might work on
+environment is Oracle's Java SE 7 or a new version of OpenJDK (it might work on
 older versions of OpenJDK but there can be minor rendering issues, e.g. the
 stones on the board are not completely round).
 </p>
@@ -26,24 +26,16 @@ defined, and look for the jar files relative to the bin directory.
 <p>
 For Linux, there is an installation script <tt>install.sh</tt>, which installs
 GoGui into the system directories and integrates it into the desktop
-environment. This script needs to be run as root and requires the option
-<tt>-j</tt> with the location of a Java 5 compatible virtual machine.
+environment. This script needs to be run as root. It has options to specify
+the location of the java runtime (-j, default is /usr), the installation
+directory (-p, default is /usr/local) and sysconf directory (-s, default is
+etc relative to the installation directory).
 </p>
 <p>
-On Ubuntu 9.10, it is recommended to install the package sun-java6-jre
-in the Synaptic package manager, and then install GoGui by running the command:
+On newer Linux systems with a recent version of OpenJDK, you probably do not
+have to change the default parameters and you can simply run
 <blockquote>
-<tt>sudo ./install.sh -j /usr/lib/jvm/java-6-sun</tt>
-</blockquote>
-On Ubuntu 10.4, the package sun-java6-jre has been moved to the partner
-repository. You first have to add the partner repository by running the
-command:
-<blockquote>
-<tt>sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"</tt>
-</blockquote>
-If a newer version of OpenJDK is installed in /usr/bin/java, run the command:
-<blockquote>
-<tt>sudo ./install.sh -j /usr</tt>
+<tt>sudo ./install.sh</tt>.
 </blockquote>
 </p>
 
