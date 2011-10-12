@@ -11,6 +11,9 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fixed bug in Unix install script introduced in version 1.4.1 that made it fail
+when installing the Gnome 3 thumbnailer and the share/thumbnailers directory
+did not already exist.
 </simpara>
 </listitem>
 </itemizedlist>

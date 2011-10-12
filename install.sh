@@ -95,7 +95,7 @@ cat config/gogui.schemas \
 
 # Install Gnome 3 thumbnailer
 
-install -d $SYSCONFDIR/gconf/schemas
+install -d $PREFIX/share/thumbnailers
 cat config/gogui.thumbnailer \
 | sed "s;/usr/bin/gogui-thumbnailer;$PREFIX/bin/gogui-thumbnailer;" \
 > $PREFIX/share/thumbnailers/gogui.thumbnailer
