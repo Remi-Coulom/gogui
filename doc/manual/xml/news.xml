@@ -4,6 +4,20 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date></date>
+<authorinitials></authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.4.2</revnumber>
 <date></date>
 <authorinitials>12 Oct 2011</authorinitials>
