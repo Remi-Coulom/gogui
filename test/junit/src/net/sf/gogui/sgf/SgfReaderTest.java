@@ -302,19 +302,6 @@ public final class SgfReaderTest
         assertNull(node.getMove());
     }
 
-    private void checkTimeSettings(String name, long preByoyomi, long byoyomi,
-                                   int byoyomiMoves) throws Exception
-    {
-        SgfReader reader = getReader(name);
-        GameTree tree = reader.getTree();
-        GameInfo info = tree.getGameInfo(tree.getRoot());
-        TimeSettings timeSettings = info.getTimeSettings();
-        assertNotNull(timeSettings);
-        assertEquals(timeSettings.getPreByoyomi(), preByoyomi);
-        assertEquals(timeSettings.getByoyomi(), byoyomi);
-        assertEquals(timeSettings.getByoyomiMoves(), byoyomiMoves);
-    }
-
     private SgfReader getReader(String name) throws SgfError, Exception
     {
         InputStream in = getClass().getResourceAsStream(name);
