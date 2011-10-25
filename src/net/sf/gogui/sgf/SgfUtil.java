@@ -142,34 +142,6 @@ public final class SgfUtil
     }
 
     private static Overtime parseOvertime(String value, String regex,
-                                          long timeUnitFactor)
-    {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(value);
-        if (matcher.matches())
-        {
-            assert matcher.groupCount() == 1;
-            try
-            {
-                String group = matcher.group(1);
-                Overtime overtime = new Overtime();
-                overtime.m_byoyomiMoves = 1;
-                overtime.m_byoyomi =
-                    (long)(Double.parseDouble(group) * timeUnitFactor);
-                return overtime;
-            }
-            catch (NumberFormatException e)
-            {
-                // should not happen if patterns match only integer
-                assert false;
-                return null;
-            }
-        }
-        else
-            return null;
-    }
-
-    private static Overtime parseOvertime(String value, String regex,
                                           boolean byoyomiMovesFirst,
                                           long timeUnitFactor)
     {

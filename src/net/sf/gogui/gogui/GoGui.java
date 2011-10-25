@@ -2184,7 +2184,6 @@ public class GoGui
     {
         public ShowInvalidResponse(String line)
         {
-            m_line = line;
         }
 
         public void run()
@@ -2197,8 +2196,6 @@ public class GoGui
             m_messageDialogs.showWarning(disableKey, GoGui.this, mainMessage,
                                          optionalMessage, true);
         }
-
-        private final String m_line;
     }
 
     private static class LoadFileRunnable
