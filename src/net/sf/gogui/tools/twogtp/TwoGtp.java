@@ -50,10 +50,6 @@ public class TwoGtp
         assert size > 0;
         assert size <= GoPoint.MAX_SIZE;
         assert komi != null;
-        if (black.equals(""))
-            throw new ErrorMessage("No black program set");
-        if (white.equals(""))
-            throw new ErrorMessage("No white program set");
         m_filePrefix = filePrefix;
         m_allPrograms = new ArrayList<Program>();
         m_black = black;

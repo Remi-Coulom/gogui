@@ -102,7 +102,11 @@ public final class Main
             boolean debugToComment = opt.contains("debugtocomment");
             boolean verbose = opt.contains("verbose");
             String black = opt.get("black", "");
+            if (black.equals(""))
+                throw new ErrorMessage("No black program set");
             String white = opt.get("white", "");
+            if (white.equals(""))
+                throw new ErrorMessage("No white program set");
             String referee = opt.get("referee", "");
             String observer = opt.get("observer", "");
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
