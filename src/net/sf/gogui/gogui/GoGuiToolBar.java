@@ -4,7 +4,6 @@ package net.sf.gogui.gogui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import javax.swing.Action;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;

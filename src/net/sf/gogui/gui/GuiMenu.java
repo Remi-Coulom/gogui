@@ -10,7 +10,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.KeyStroke;
 
 /** JMenu with additional features.
     Supports marking the mnemonics in the label with a preceeding '&amp;'
