@@ -5,17 +5,12 @@ package net.sf.gogui.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import net.sf.gogui.game.MarkType;
-import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import static net.sf.gogui.gui.I18n.i18n;
-import net.sf.gogui.util.Platform;
 
 /** Context menu for fields on board. */
 public class ContextMenu

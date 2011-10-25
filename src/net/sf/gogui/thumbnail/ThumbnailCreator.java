@@ -17,7 +17,6 @@ import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.Field;
 import net.sf.gogui.game.ConstGameTree;
-import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.gamefile.GameFile;
 import net.sf.gogui.gamefile.GameReader;

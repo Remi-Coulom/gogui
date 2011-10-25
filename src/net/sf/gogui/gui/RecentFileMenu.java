@@ -4,7 +4,6 @@ package net.sf.gogui.gui;
 
 import java.io.File;
 import java.util.ArrayList;
-import javax.swing.JMenu;
 
 /** Menu for recent files.
     Automatically assigns short, but unique labels. */

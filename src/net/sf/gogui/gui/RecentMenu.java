@@ -5,7 +5,6 @@ package net.sf.gogui.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.prefs.Preferences;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import net.sf.gogui.util.ObjectUtil;

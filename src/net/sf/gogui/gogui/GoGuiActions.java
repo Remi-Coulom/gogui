@@ -6,11 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
@@ -22,7 +17,6 @@ import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GuiAction;
-import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Platform;
 
 /** Actions used in the GoGui tool bar and menu bar.

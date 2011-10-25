@@ -4,9 +4,6 @@ package net.sf.gogui.gogui;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.prefs.Preferences;
 import net.sf.gogui.util.ErrorMessage;
 
 /** Wrapper for starting GoGui.

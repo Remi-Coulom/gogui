@@ -2,9 +2,6 @@
 
 package net.sf.gogui.tools.twogtp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
