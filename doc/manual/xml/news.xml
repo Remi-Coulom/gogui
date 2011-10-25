@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fix broken thumbnail generation on Unix if file name contained
+non-ASCII characters.
 </simpara>
 </listitem>
 </itemizedlist>

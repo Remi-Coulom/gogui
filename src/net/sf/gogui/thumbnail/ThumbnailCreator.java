@@ -134,7 +134,7 @@ public final class ThumbnailCreator
                 output = getThumbnailFileNormalSize(input);
             long lastModified = getLastModified(input);
             Map<String,String> metaData = new TreeMap<String,String>();
-            metaData.put("Thumb::URI", uri.toString());
+            metaData.put("Thumb::URI", uri.toASCIIString());
             metaData.put("Thumb::MTime", Long.toString(lastModified));
             switch (m_gameFile.m_format)
             {
@@ -222,7 +222,7 @@ public final class ThumbnailCreator
         try
         {
             MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] md5 = digest.digest(string.getBytes("US-ASCII"));
+            byte[] md5 = digest.digest(string.getBytes());
             StringBuilder buffer = new StringBuilder();
             for (int i = 0; i < md5.length; ++i)
             {
@@ -235,16 +235,12 @@ public final class ThumbnailCreator
         {
             throw new Error("No MD5 message digest found");
         }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new Error("MD5: unsupported encoding");
-        }
     }
 
     private File getThumbnailFileNormalSize(File file) throws Error
     {
         URI uri = getURI(file);
-        String md5 = getMD5(uri.toString());
+        String md5 = getMD5(uri.toASCIIString());
         return new File(ThumbnailPlatform.getNormalDir(), md5 + ".png");
     }
 
