@@ -1,11 +1,10 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=GoGui
 Comment=Graphical user interface for the board game Go
 Comment[de]=Grafische Benutzeroberfläche für das Brettspiel Go
 Exec=gogui %f
-Icon=gogui-gogui.png
+Icon=gogui-gogui
 Terminal=false
 Type=Application
-Categories=Java;Application;Game;BoardGame;
+Categories=Java;Game;BoardGame;
 MimeType=application/x-go-sgf;application/x-go+xml;
