@@ -15,6 +15,13 @@ Fix broken thumbnail generation on Unix if file name contained
 non-ASCII characters.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Changed Back to Main Variation to go to the last move in the main
+variation that had a variation, not to the last position in the main
+variation.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
