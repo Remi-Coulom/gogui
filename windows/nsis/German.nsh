@@ -6,7 +6,7 @@ LangString ADD_START_MENU_ENTRY ${LANG_GERMAN} \
   "Eintrag im Startmenü hinzufügen"
 LangString CREATE_DESKTOP_SHORTCUT ${LANG_GERMAN} \
   "Desktopverknüpfung erstellen"
+LangString INSTALLER_TITLE ${LANG_GERMAN} \
+  "GoGui ${GOGUI_VERSION} installieren"
 LangString REGISTER_AS_SGF_HANDLER ${LANG_GERMAN} \
   "GoGui als Anwendung für SGF-Dateien registrieren"
-LangString INSTALL_SOURCE_CODE ${LANG_GERMAN} \
-  "Quelltext installieren"
