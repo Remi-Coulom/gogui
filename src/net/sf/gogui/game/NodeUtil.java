@@ -201,9 +201,11 @@ public final class NodeUtil
     /** Find the last node that was still in the main variation. */
     public static ConstNode getBackToMainVariation(ConstNode node)
     {
+        if (isInMainVariation(node))
+            return node;
         while (! isInMainVariation(node))
             node = node.getFatherConst();
-        return node;
+        return node.getChildConst(0);
     }
 
     /** Get all children moves.
