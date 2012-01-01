@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
@@ -123,6 +124,22 @@ public final class Main
             };
         Runnable runnable = new Runnable() {
                 public void run() {
+                    // Fix wrong taskbar title in Gnome 3. See
+      // http://elliotth.blogspot.com/2007/02/fixing-wmclass-for-your-java.html
+              // and http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6528430
+                    try
+                    {
+                        Toolkit toolkit = Toolkit.getDefaultToolkit();
+                        java.lang.reflect.Field field =
+                            toolkit.getClass()
+                            .getDeclaredField("awtAppClassName");
+                        field.setAccessible(true);
+                        field.set(toolkit, "GoGui");
+                    }
+                    catch (Exception e)
+                    {
+                    }
+
                     GuiUtil.initLookAndFeel(settings.m_lookAndFeel);
                     try
                     {
