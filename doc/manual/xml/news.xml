@@ -22,6 +22,12 @@ variation that had a variation, not to the last position in the main
 variation.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Workaround for bad taskbar title (java-lang-Thread instead of GoGui)
+with Gnome 3
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
