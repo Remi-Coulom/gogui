@@ -100,21 +100,10 @@ cat config/gogui.thumbnailer \
 | sed "s;/usr/bin/gogui-thumbnailer;$PREFIX/bin/gogui-thumbnailer;" \
 > $PREFIX/share/thumbnailers/gogui.thumbnailer
 
-# Install scrollkeeper entry
-
-install -d $PREFIX/share/omf/gogui
-cat config/gogui-C.omf \
-| sed "s;file:/usr/;file:$PREFIX/;" \
-> $PREFIX/share/omf/gogui/gogui-C.omf
-
 #-----------------------------------------------------------------------------
 # Post installation
 # Fail quietly on error, some programs might not be available
 #-----------------------------------------------------------------------------
-
-# Update scrollkeeper.
-
-scrollkeeper-update >/dev/null 2>&1
 
 # Gnome thumbnailer
 

@@ -72,7 +72,6 @@ Comment out the following exec tag for releases.
  config/gogui.thumbnailer
  config/gogui-gogui.png
  config/application-x-go-sgf.png
- config/gogui-C.omf.in
  config/gogui.schemas
  config/gogui-mime.xml
  doc/README.html
@@ -139,7 +138,6 @@ Comment out the following exec tag for releases.
  bin/gogui-twogtp,
 "/>
 <zipfileset id="distfiles-nonsrc" prefix="gogui-${version}" dir="." includes="
- config/gogui-C.omf
  doc/manual/html/*.html
  doc/manual/html/*.png
  doc/manual/man/*.1
@@ -843,8 +841,6 @@ with "location" replaced by the location of the file docbookx.dtd.
       tofile="doc/manual/xml/version.xml" overwrite="true" filtering="true"/>
 <copy file="mac/packaging/Info.plist.in"
       tofile="mac/packaging/Info.plist" overwrite="true" filtering="true"/>
-<copy file="config/gogui-C.omf.in" tofile="config/gogui-C.omf"
-      overwrite="true" filtering="true"/>
 <copy file="windows/l4j/gogui.xml.in" tofile="windows/l4j/gogui.xml"
       overwrite="true" filtering="true"/>
 </target>

@@ -28,6 +28,13 @@ Workaround for bad taskbar title (java-lang-Thread instead of GoGui)
 with Gnome 3
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+No longer install the gogui-C.omf documentation metadata file on Unix,
+which was the likely cause of problems with the system-wide help system
+on some Linux distributions.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
