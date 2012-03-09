@@ -68,9 +68,9 @@ public final class NodeUtilTest
     {
         assertTrue(NodeUtil.getBackToMainVariation(m_node1) == m_node1);
         assertTrue(NodeUtil.getBackToMainVariation(m_node5) == m_node5);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node7) == m_node1);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node8) == m_node1);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node9) == m_node1);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node7) == m_node2);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node8) == m_node2);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node9) == m_node2);
     }
 
     public void testGetChildrenMoves()
