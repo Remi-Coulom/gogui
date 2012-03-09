@@ -4,9 +4,9 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
-<authorinitials></authorinitials>
+<revnumber>1.4.3</revnumber>
+<date>09 Mar 2012</date>
+<authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
 <listitem>
@@ -46,8 +46,8 @@ Updated toolbar icon for play command
 
 <revision>
 <revnumber>1.4.2</revnumber>
-<date></date>
-<authorinitials>12 Oct 2011</authorinitials>
+<date>12 Oct 2011</date>
+<authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
 <listitem>
