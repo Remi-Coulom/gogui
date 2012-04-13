@@ -34,7 +34,7 @@ public class GameReader
         }
         catch (FileNotFoundException e)
         {
-            throw new ErrorMessage("File \"" + file + "\"not found");
+            throw new ErrorMessage("File \"" + file + "\" not found");
         }
         switch (format)
         {
