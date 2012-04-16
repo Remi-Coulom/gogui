@@ -14,6 +14,11 @@
 Don't use separators in toolbar anymore
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Add StartupWMClass key to desktop entry
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
