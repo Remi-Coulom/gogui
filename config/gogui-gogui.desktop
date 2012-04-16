@@ -8,3 +8,4 @@ Terminal=false
 Type=Application
 Categories=Java;Game;BoardGame;
 MimeType=application/x-go-sgf;application/x-go+xml;
+StartupWMClass=GoGui
