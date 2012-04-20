@@ -92,7 +92,18 @@ public class GtpSynchronizer
         int numberUndo = computeToPlay(moves, targetState);
         if (numberUndo == 0 || m_isSupportedUndo || m_isSupportedGGUndo)
         {
-            undo(numberUndo);
+            try
+            {
+                undo(numberUndo);
+            }
+            catch (GtpError e)
+            {
+                // According to the GTP standard, undo may fail even if it is
+                // supported and there were moves played. In this case, we
+                // fall back to a full initialization.
+                init(board, komi, timeSettings);
+                return;
+            }
             // Send komi/time_settings before play commands, some engines
             // cannot handle them otherwise
             sendGameInfo(komi, timeSettings);
