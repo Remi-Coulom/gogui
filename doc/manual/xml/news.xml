@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Handle failing of undo commands sent to the Go program in gogui-adapter and
+GoGui (bug #3519829)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Don't use separators in toolbar anymore
 </simpara>
 </listitem>
