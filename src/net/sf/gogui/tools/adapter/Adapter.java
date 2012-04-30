@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
+import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.Game;
+import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.gamefile.GameFileUtil;
+import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
@@ -174,6 +177,7 @@ public class Adapter
         try
         {
             m_komi = Komi.parseKomi(cmd.getArg());
+            synchronize();
         }
         catch (InvalidKomiException e)
         {
@@ -190,7 +194,27 @@ public class Adapter
             maxMove = cmd.getIntArg(1);
         try
         {
-            BoardUtil.copy(m_board, GameFileUtil.load(file, maxMove));
+            GameReader reader = new GameReader(file);
+            GameTree tree = reader.getTree();
+            Game game = new Game(tree);
+            ConstNode node = tree.getRoot();
+            int moveNumber = 0;
+            while (true)
+            {
+                if (node.getMove() != null)
+                {
+                    ++moveNumber;
+                    if (maxMove >= 0 && moveNumber >= maxMove)
+                        break;
+                }
+                ConstNode child = node.getChildConst();
+                if (child == null)
+                    break;
+                node = child;
+            }
+            game.gotoNode(node);
+            BoardUtil.copy(m_board, game.getBoard());
+            m_komi = game.getGameInfo(node).getKomi();
         }
         catch (ErrorMessage e)
         {

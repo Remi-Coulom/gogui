@@ -12,7 +12,9 @@ import net.sf.gogui.util.ErrorMessage;
 /** Static utility functions. */
 public final class GameFileUtil
 {
-    /** Load position from SGF or XML file.
+    /** Load position from SGF or XML file. (deprecated)
+        @deprecated This function should no longer be used because it provides
+        no way to know the komi from the loaded file.
         @param file The file.
         @param maxMove A move number (or -1 for last position)
         @return Position of main variation before that move number or last
