@@ -17,6 +17,11 @@ GoGui (bug #3519829)
 </listitem>
 <listitem>
 <simpara>
+gogui-adapter did not use komi from file in loadsgf (bug #3522401)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Don't use separators in toolbar anymore
 </simpara>
 </listitem>
