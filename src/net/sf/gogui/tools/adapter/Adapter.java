@@ -11,7 +11,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.Game;
+import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.gamefile.GameReader;
@@ -196,7 +197,6 @@ public class Adapter
         {
             GameReader reader = new GameReader(file);
             GameTree tree = reader.getTree();
-            Game game = new Game(tree);
             ConstNode node = tree.getRoot();
             int moveNumber = 0;
             while (true)
@@ -212,9 +212,9 @@ public class Adapter
                     break;
                 node = child;
             }
-            game.gotoNode(node);
-            BoardUtil.copy(m_board, game.getBoard());
-            m_komi = game.getGameInfo(node).getKomi();
+            BoardUpdater boardUpdater = new BoardUpdater();
+            boardUpdater.update(tree, node, m_board);
+            m_komi = tree.getGameInfoConst(node).getKomi();
         }
         catch (ErrorMessage e)
         {
