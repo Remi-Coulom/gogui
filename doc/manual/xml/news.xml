@@ -22,6 +22,14 @@ gogui-adapter did not use komi from file in loadsgf (bug #3522401)
 </listitem>
 <listitem>
 <simpara>
+Explicitely send "komi 0" command to program if the komi is not defined.
+This avoids that the program uses an old komi for example if first a SGF
+file is loaded that has a komi property and then a file is loaded that
+has no komi property.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Don't use separators in toolbar anymore
 </simpara>
 </listitem>

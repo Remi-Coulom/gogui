@@ -326,11 +326,16 @@ public class GtpSynchronizer
         if (! ObjectUtil.equals(komi, m_komi))
         {
             m_komi = komi;
-            if (m_gtp.isSupported("komi") && komi != null)
+            if (m_gtp.isSupported("komi"))
             {
                 try
                 {
-                    m_gtp.send("komi " + komi);
+                    // Use Komi.toString(Komi), which interprets null argument
+                    // (undefined komi) as zero komi. If we did nothing if the
+                    // komi value is not defined, the engine would use the
+                    // old komi value if a komi was set previously (e.g. from a
+                    // previously loaded file)
+                    m_gtp.send("komi " + Komi.toString(komi));
                 }
                 catch (GtpError e)
                 {
