@@ -63,6 +63,14 @@ public final class Komi
         return m_value;
     }
 
+    /** Like Komi.toString() but interprets null argument as zero komi. */
+    static public String toString(Komi komi)
+    {
+        if (komi == null)
+            return "0";
+        return komi.toString();
+    }
+
     public String toString()
     {
         DecimalFormat format =
