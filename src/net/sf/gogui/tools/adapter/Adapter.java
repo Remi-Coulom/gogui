@@ -190,28 +190,28 @@ public class Adapter
     {
         cmd.checkNuArgLessEqual(2);
         File file = new File(cmd.getArg(0));
-        int maxMove = -1;
+        int moveNumber = -1;
         if (cmd.getNuArg() == 2)
-            maxMove = cmd.getIntArg(1);
+            moveNumber = cmd.getIntArg(1);
         try
         {
             GameReader reader = new GameReader(file);
             GameTree tree = reader.getTree();
             ConstNode node = tree.getRoot();
-            int moveNumber = 0;
+            int n = 0;
             while (true)
             {
                 if (node.getMove() != null)
-                {
-                    ++moveNumber;
-                    if (maxMove >= 0 && moveNumber >= maxMove)
-                        break;
-                }
+                    ++n;
+                if (moveNumber >= 0 && n == moveNumber - 1)
+                    break;
                 ConstNode child = node.getChildConst();
                 if (child == null)
                     break;
                 node = child;
             }
+            if (moveNumber >= 0 && n < moveNumber - 1)
+                throw new GtpError("invalid move number");
             BoardUpdater boardUpdater = new BoardUpdater();
             boardUpdater.update(tree, node, m_board);
             m_komi = tree.getGameInfoConst(node).getKomi();
