@@ -23,55 +23,33 @@ public class BoardUpdater
 
     public void update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
-        ConstGameInfo info = tree.getGameInfoConst(currentNode);
-        int size = tree.getBoardSize();
-        int handicap = info.getHandicap();
+        board.init(tree.getBoardSize());
+        int handicap = tree.getGameInfoConst(currentNode).getHandicap();
         NodeUtil.getPathToRoot(currentNode, m_nodes);
-        board.init(size);
+        int nuMoves = 0;
         boolean isFirstPlacement = true;
+        boolean isHandicapSetupDone = false;
+        boolean isInInitialBlackMoveSequence = true;
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {
-            ConstNode node = (ConstNode)m_nodes.get(i);
+            ConstNode node = m_nodes.get(i);
             GoColor player = node.getPlayer();
             if (node.hasSetup())
             {
                 ConstPointList setupBlack = node.getSetup(BLACK);
                 ConstPointList setupWhite = node.getSetup(WHITE);
                 ConstPointList setupEmpty = node.getSetup(EMPTY);
-                if (isFirstPlacement && setupBlack.size() == handicap
-                    && setupWhite.size() == 0 && setupEmpty.size() == 0)
-                    board.setupHandicap(setupBlack);
-                else
+                if (handicap > 0 && isFirstPlacement
+                    && setupBlack.size() == handicap && setupWhite.isEmpty()
+                    && setupEmpty.isEmpty())
                 {
-                    PointList black = new PointList();
-                    PointList white = new PointList();
-                    for (GoPoint p : board)
-                    {
-                        if (board.getColor(p) == BLACK)
-                            black.add(p);
-                        else if (board.getColor(p) == WHITE)
-                            white.add(p);
-                    }
-                    for (GoPoint p : setupBlack)
-                    {
-                        white.remove(p);
-                        if (! black.contains(p))
-                            black.add(p);
-                    }
-                    for (GoPoint p : setupWhite)
-                    {
-                        black.remove(p);
-                        if (! white.contains(p))
-                            white.add(p);
-                    }
-                    for (GoPoint p : setupEmpty)
-                    {
-                        black.remove(p);
-                        white.remove(p);
-                    }
-                    board.setup(black, white, player);
+                    board.setupHandicap(setupBlack);
+                    isHandicapSetupDone = true;
                 }
+                else
+                    newSetup(board, setupBlack, setupWhite, setupEmpty, player);
                 isFirstPlacement = false;
+                isInInitialBlackMoveSequence = false;
             }
             else if (player != null)
                 board.setToMove(player);
@@ -79,7 +57,18 @@ public class BoardUpdater
             if (move != null)
             {
                 board.play(move);
+                ++nuMoves;
                 isFirstPlacement = false;
+                if (move.getColor() != BLACK)
+                    isInInitialBlackMoveSequence = false;
+                // Files from the KGS Go server with Chines rules store
+                // handicap stones as moves, not as setup as specified by SGF
+                if (handicap > 0 && ! isHandicapSetupDone &&
+                    isInInitialBlackMoveSequence && nuMoves == handicap)
+                {
+                    setupMovesAsHandicap(board);
+                    isHandicapSetupDone = true;
+                }
             }
         }
     }
@@ -87,4 +76,53 @@ public class BoardUpdater
     /** Local variable used in update.
         Member variable for avoiding frequent new memory allocations. */
     private final ArrayList<ConstNode> m_nodes;
+
+    /** Initialize board with new setup from merging the current position
+        with the setup properties from a node. */
+    private void newSetup(Board board, ConstPointList setupBlack,
+                          ConstPointList setupWhite, ConstPointList setupEmpty,
+                          GoColor player)
+    {
+        PointList black = new PointList();
+        PointList white = new PointList();
+        for (GoPoint p : board)
+        {
+            GoColor c = board.getColor(p);
+            if (c == BLACK)
+                black.add(p);
+            else if (c == WHITE)
+                white.add(p);
+        }
+        for (GoPoint p : setupBlack)
+        {
+            white.remove(p);
+            if (! black.contains(p))
+                black.add(p);
+        }
+        for (GoPoint p : setupWhite)
+        {
+            black.remove(p);
+            if (! white.contains(p))
+                white.add(p);
+        }
+        for (GoPoint p : setupEmpty)
+        {
+            black.remove(p);
+            white.remove(p);
+        }
+        board.setup(black, white, player);
+    }
+
+    void setupMovesAsHandicap(Board board)
+    {
+        PointList black = new PointList();
+        for (GoPoint p : board)
+        {
+            GoColor c = board.getColor(p);
+            assert c != WHITE;
+            if (c == BLACK)
+                black.add(p);
+        }
+        board.setupHandicap(black);
+    }
 }
