@@ -17,6 +17,13 @@ moves instead of setup properties, like files from the KGS Go server with
 Chinese rules (bug #3529926)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fixed an assertion that triggered when using a SGF file that used moves left
+properties and an overtime system other than Canadian overtime (which is the
+only overtime system supported by GoGui)
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
