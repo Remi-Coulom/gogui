@@ -273,10 +273,20 @@ public final class Clock
     public void setTimeLeft(GoColor color, long time, int movesLeft)
     {
         halt();
+        boolean isInByoyomi = (movesLeft >= 0);
         TimeRecord record = getRecord(color);
-        record.m_isInByoyomi = (movesLeft >= 0);
-        if (record.m_isInByoyomi)
+        if (isInByoyomi)
         {
+            // We cannot handle setting the time left in overtime if we don't
+            // know the overtime settings (e.g. if an SGF file was loaded
+            // that has TM,OT and BL/WL/OB/OW properties but we couldn't parse
+            // the value of OT, which is not standardized in SGF, or could
+            // use an overtime system not supported by GoGui (GoGui supports
+            // only the Canadian overtime system as used by the time_settings
+            // GTP command
+            if (! m_timeSettings.getUseByoyomi())
+                return;
+            record.m_isInByoyomi = isInByoyomi;
             record.m_time = getByoyomi() - time;
             record.m_movesLeft = movesLeft;
             record.m_byoyomiExceeded = time > 0;
