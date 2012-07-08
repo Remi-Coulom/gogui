@@ -229,6 +229,8 @@ public class ParameterDialog
             return (m_comboBox.getSelectedIndex() != m_initialIndex);
         }
 
+        // See comment at m_comboBox
+        @SuppressWarnings("unchecked")
         public void createComponents(int gridy, JPanel panel,
                                      GridBagLayout gridbag)
         {
@@ -261,6 +263,9 @@ public class ParameterDialog
 
         private final String[] m_labels;
 
+        /** @note JComboBox is a generic type since Java 7. We use a raw type
+            and suppress unchecked warnings where needed to be compatible with
+            earlier Java versions. */
         private JComboBox m_comboBox;
     }
 

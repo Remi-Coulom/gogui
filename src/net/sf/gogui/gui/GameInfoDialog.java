@@ -347,6 +347,8 @@ public final class GameInfoDialog
 class TimeField
     extends Box
 {
+    // See comment at m_comboBox
+    @SuppressWarnings("unchecked")
     public TimeField(int cols, String toolTipText)
     {
         super(BoxLayout.Y_AXIS);
@@ -432,5 +434,8 @@ class TimeField
 
     private final JTextField m_textField;
 
+    /** @note JComboBox is a generic type since Java 7. We use a raw type
+        and suppress unchecked warnings where needed to be compatible with
+        earlier Java versions. */
     private final JComboBox m_comboBox;
 }
