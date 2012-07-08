@@ -11,16 +11,14 @@ version in the branch was 123. The crash dialog in gogui/Main.java assumes
 that unreleased versions contain the string GIT.
 Comment out the following exec tag for releases.
 -->
-<!--
 <exec executable="git" outputproperty="gitversion"
       failifexecutionfails="false">
-  <arg value="describe"/><arg value="- -always"/>
+  <arg value="describe"/><arg value="--always"/>
 </exec>
 <condition property="gitversion" value="unknown">
   <not><isset property="gitversion"/></not>
 </condition>
--->
-<property name="version" value="1.4.5"/>
+<property name="version" value="1.4.5.GIT-${gitversion}"/>
 
 <tstamp>
   <format property="dstamp" pattern="yyyy-MM-dd" timezone="UCT"/>
