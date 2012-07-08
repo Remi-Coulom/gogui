@@ -11,17 +11,23 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Added a workaround for a bug in Ubuntu 12.04 that made the menu bar
+unreadable in the default Ubuntu theme (Ubuntu bug #932274).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Use set_free_handicap command to make the Go program aware that handicap is
 used if a SGF file is opened that stores handicaps as a sequence of black
 moves instead of setup properties, like files from the KGS Go server with
-Chinese rules (bug #3529926)
+Chinese rules (bug #3529926).
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Fixed an assertion that triggered when using a SGF file that used moves left
 properties and an overtime system other than Canadian overtime (which is the
-only overtime system supported by GoGui)
+only overtime system supported by GoGui).
 </simpara>
 </listitem>
 <listitem>

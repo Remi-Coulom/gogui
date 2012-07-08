@@ -2,20 +2,26 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
 
 /** JMenu with additional features.
-    Supports marking the mnemonics in the label with a preceeding '&amp;'
-    (like in Qt).
-    Checks the added menu items for unique mnemonics and prints a warning to
-    System.err if a mnemonic is used twice. */
+    - Supports marking the mnemonics in the label with a preceeding '&amp;'
+      (like in Qt).
+    - Checks the added menu items for unique mnemonics and prints a warning to
+      System.err if a mnemonic is used twice.
+    - Contains a workaround for a bug in Ubuntu 12.04 that made the menu
+      use unreadable color combinations in the default Ubuntu theme Ambiance. */
 public class GuiMenu
     extends JMenu
 {
@@ -66,6 +72,45 @@ public class GuiMenu
         if (mnemonic > 0)
             m_mnemonics.remove(Integer.valueOf(mnemonic));
         super.remove(item);
+    }
+
+    public void updateUI()
+    {
+        super.updateUI();
+        // Workaround for Ubuntu bug #932274 (Regression: Unreadable menu bar
+        // with Ambiance theme in Java/Swing GTK L&F)
+        LookAndFeel laf = UIManager.getLookAndFeel();
+        if (laf != null)
+        {
+            Class<? extends LookAndFeel> lafClass = laf.getClass();
+            if ("GTKLookAndFeel".equals(lafClass.getSimpleName()))
+            {
+                String themeName = null;
+                try
+                {
+                    Method method =
+                        lafClass.getDeclaredMethod("getGtkThemeName");
+                    method.setAccessible(true);
+                    Object theme = method.invoke(laf);
+                    if (theme != null)
+                        themeName = theme.toString();
+                }
+                catch (Exception e)
+                {
+                }
+                if ("Ambiance".equalsIgnoreCase(themeName))
+                {
+                    // Hard-coding the colors is not nice. It might look bad
+                    // in future versions of the Ambiance theme. But it is also
+                    // not nice of Ubuntu not to fix a critical bug that breaks
+                    // all Java Swing applications in the default Ubuntu theme
+                    // for such a long time and we don't know a better
+                    // workaround.
+                    setForeground(new Color(223, 219, 210));
+                    setBackground(new Color(60, 59, 55));
+                }
+            }
+        }
     }
 
     private final ArrayList<Integer> m_mnemonics = new ArrayList<Integer>();
