@@ -98,6 +98,9 @@ public class ObjectListEditor<OBJECT>
 
     private JButton m_remove;
 
+    /** @note JList is a generic type since Java 7. We use a raw type
+        and suppress unchecked warnings where needed to be compatible with
+        earlier Java versions. */
     private JList m_list;
 
     private JDialog m_dialog;
@@ -216,6 +219,8 @@ public class ObjectListEditor<OBJECT>
         m_moveDown.setEnabled(index < m_objects.size() - 1);
     }
 
+    // See comment at m_list
+    @SuppressWarnings("unchecked")
     private void updateList(int selectedIndex)
     {
         ArrayList<String> data = new ArrayList<String>();

@@ -24,6 +24,12 @@ properties and an overtime system other than Canadian overtime (which is the
 only overtime system supported by GoGui)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Suppressed some warnings with Java 7 that occurred because some Java classes
+have become generic that were raw before (JComboBox, JList).
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

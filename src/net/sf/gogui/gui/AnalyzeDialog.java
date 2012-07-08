@@ -202,8 +202,14 @@ public final class AnalyzeDialog
 
     private JCheckBox m_reuseWindow;
 
+    /** @note JComboBox is a generic type since Java 7. We use a raw type
+        and suppress unchecked warnings where needed to be compatible with
+        earlier Java versions. */
     private JComboBox m_comboBoxHistory;
 
+    /** @note JList is a generic type since Java 7. We use a raw type
+        and suppress unchecked warnings where needed to be compatible with
+        earlier Java versions. */
     private JList m_list;
 
     private Box m_colorBox;
@@ -279,6 +285,8 @@ public final class AnalyzeDialog
         return m_colorBox;
     }
 
+    // See comment at m_list
+    @SuppressWarnings("unchecked")
     private JPanel createCommandPanel()
     {
         JPanel panel = new JPanel(new BorderLayout());
@@ -289,13 +297,8 @@ public final class AnalyzeDialog
                 public void mouseClicked(MouseEvent e) {
                     int modifiers = e.getModifiers();
                     int mask = ActionEvent.ALT_MASK;
-                    if (e.getClickCount() == 2
-                        || ((modifiers & mask) != 0))
-                    {
-                        //int index =
-                        //   m_list.locationToIndex(event.getPoint());
+                    if (e.getClickCount() == 2 || ((modifiers & mask) != 0))
                         runCommand();
-                    }
                 }
             });
         m_list.addFocusListener(new FocusAdapter() {
@@ -401,12 +404,16 @@ public final class AnalyzeDialog
         return getCommandIndex(item.toString());
     }
 
+    // See comment at m_comboBoxHistory
+    @SuppressWarnings("unchecked")
     private void insertComboBoxItem(String label, int index)
     {
         m_comboBoxHistory.insertItemAt(GuiUtil.createComboBoxItem(label),
                                        index);
     }
 
+    // See comment at m_comboBoxHistory
+    @SuppressWarnings("unchecked")
     private void loadRecent()
     {
         m_comboBoxHistory.removeAllItems();

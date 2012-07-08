@@ -267,6 +267,9 @@ public class GtpShell
 
     private JTextField m_textField;
 
+    /** @note JComboBox is a generic type since Java 7. We use a raw type
+        and suppress unchecked warnings where needed to be compatible with
+        earlier Java versions. */
     private JComboBox m_comboBox;
 
     private final JScrollPane m_scrollPane;
@@ -287,6 +290,8 @@ public class GtpShell
 
     private final MessageDialogs m_messageDialogs;
 
+    // See comment at m_comboBox
+    @SuppressWarnings("unchecked")
     private void addAllCompletions(ArrayList<String> completions)
     {
         // On Windows JDK 1.4 changing the popup automatically

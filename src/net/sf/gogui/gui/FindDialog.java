@@ -45,6 +45,8 @@ public class FindDialog
         pack();
     }
 
+    // See comment at m_comboBox
+    @SuppressWarnings("unchecked")
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
@@ -95,6 +97,9 @@ public class FindDialog
         }
     }
 
+    /** @note JComboBox is a generic type since Java 7. We use a raw type
+        and suppress unchecked warnings where needed to be compatible with
+        earlier Java versions. */
     private JComboBox m_comboBox;
 
     private JTextField m_textField;
@@ -134,6 +139,8 @@ public class FindDialog
         return panel;
     }
 
+    // See comment at m_comboBox
+    @SuppressWarnings("unchecked")
     private JPanel createInputPanel()
     {
         JPanel outerPanel = new JPanel(new BorderLayout());
