@@ -24,7 +24,7 @@ and <command>play</command> commands is sent to the Go program
 to go there.
 </para>
 <para>
-The context menu for a node allows to expand or hide subtrees
+The context menu for a node allows the user to expand or hide subtrees
 and to display node information and subtree statistics.
 </para>
 <para>

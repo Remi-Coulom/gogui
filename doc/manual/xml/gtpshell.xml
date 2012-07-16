@@ -2,10 +2,10 @@
 <title>GTP Shell</title>
 
 <para>
-The GTP shell is a window that allows to trace the
+The GTP shell is a window that allows the user to trace the
 stream of GTP commands and responses, which are sent to and
 received from the Go program.
-Also, it allows to enter commands and send it to the Go program.
+Also, it allows the user to enter commands and send it to the Go program.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 <warning>

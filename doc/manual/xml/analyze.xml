@@ -2,7 +2,7 @@
 <title>Analyze Commands</title>
 
 <para>
-GoGui allows to define analyze commands.
+GoGui allows the Go program to define analyze commands.
 An analyze command corresponds to a GTP command and describes its parameters
 and response type in a way that they can be invoked from the user interface
 and the response be displayed graphically on the board.

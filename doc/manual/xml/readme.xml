@@ -10,10 +10,11 @@ the
 </para>
 
 <para>
-It is especially useful for Go program developers, since it allows
-direct communication with the program by sending any GTP command
-and to log and save the stream of sent GTP commands
-to facilitate debugging and reproducing errors.
+GoGui has many special features for Go program developers.
+It supports direct communication with the Go engine over a command shell.
+The Go engine can be replaced while keeping the current board position.
+Commands can be configured to display their response graphically on
+the board.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
