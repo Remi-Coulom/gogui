@@ -52,7 +52,7 @@ lines are stored as paragraphs without text content. Despite of the
 documentation on Jago's web site that paragraphs are handled as in HTML,
 GoGui does not ignore any whitespaces, it only replaces newlines by empty
 characters when reading the text content of a paragraph. GoGui stores
-the paragraph text in a single line. This allows loss-less forward and
+the paragraph text in a single line. This supports loss-less forward and
 backward conversion between SGF and XML.
 </simpara>
 </listitem>
@@ -81,7 +81,7 @@ player.
 <simpara>
 In general, GoGui tries to preserve information using the legacy SGF element,
 if the DTD has no elements for this information or does not support storing
-the information in the current node. For example, the DTD allows only
+the information in the current node. For example, the DTD supports only
 one game information per GoGame element, but SGF allows game information
 in non-root nodes. In this case, SGF elements are used to store the
 information.
