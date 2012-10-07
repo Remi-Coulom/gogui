@@ -11,6 +11,10 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Removed workaround for a bug in Ubuntu 12.04 that made the menu bar
+unreadable in the default Ubuntu theme (Ubuntu bug #932274) because this
+bug is now fixed in Ubuntu 12.10 (OpenJDK 7) and the workaround had
+other side-effects on the menu colors.
 </simpara>
 </listitem>
 </itemizedlist>
