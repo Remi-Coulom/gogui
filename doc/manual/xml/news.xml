@@ -11,6 +11,10 @@
 <itemizedlist>
 <listitem>
 <simpara>
+The location of the SetFile executable needed on OS X to create GoGui.app
+can now be specified with the ant option -Dosx.setfile=... This is necessary
+if "ant gogui.app" fails on newer OS X systems because SetFile was
+moved from /Developer/Tools/SetFile to /usr/bin/SetFile.
 </simpara>
 </listitem>
 </itemizedlist>

@@ -37,6 +37,7 @@ Comment out the following exec tag for releases.
 	  value="/usr/share/xml/docbook/stylesheet/docbook-xsl"/>
 <property name="docbook.dtd-4.2"
           value="/usr/share/xml/docbook/schema/dtd/4.2/docbookx.dtd"/>
+<property name="osx.setfile" value="/Developer/Tools/SetFile"/>
 <property name="scripts" value="
  gogui
  gogui-adapter
@@ -387,7 +388,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 <replace dir="${appdir}/Contents/bin" includes="${scripts}"
  token="/../lib" value="/../Resources/Java"/>
 <chmod dir="${appdir}/Contents/bin" includes="${scripts}" perm="755"/>
-<exec executable="/Developer/Tools/SetFile">
+<exec executable="${osx.setfile}" failonerror="true">
 <arg line="-a B ${appdir}"/>
 </exec>
 </target>
