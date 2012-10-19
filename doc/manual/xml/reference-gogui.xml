@@ -319,7 +319,7 @@ The base time and overtime (byoyomi) can have an optional unit specifier
 <listitem>
 <para>
 Print debugging messages. This includes the complete stream of GTP commands.
-Compared to the GTP shell, this has the additional advantage, that the
+Compared to the GTP shell, this has the additional advantage that the
 commands and responses are written immediately when they are received
 and the order of the standard output and standard error stream of the
 Go engine will more likely be in the correct order.
