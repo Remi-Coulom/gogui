@@ -56,10 +56,7 @@ Comment out the following exec tag for releases.
 	   property="docbook.xsl-available"/>
 <available file="${docbook.dtd-4.2}" property="docbook.dtd-4.2-available"/>
 <condition property="quaqua.available">
-  <or>
-    <available file="lib/quaqua.jar"/>
-    <istrue value="${quaqua.ignore}"/>
-  </or>
+  <available file="lib/quaqua.jar"/>
 </condition>
 
 <zipfileset id="distfiles-src" prefix="gogui-${version}" dir="."
@@ -164,7 +161,7 @@ Comment out the following exec tag for releases.
   gogui-twogtp.jar
 "/>
 
-<target name="check-quaqua">
+<target name="check-quaqua" unless="quaqua.ignore">
   <fail unless="quaqua.available">
 lib/quaqua.jar not found.
 Please download the Quaqua Look and Feel (http://www.randelshofer.ch/quaqua)
@@ -203,6 +200,7 @@ option -Dquaqua.ignore=true.
 <fileset dir="build/classes"/>
 <fileset dir="build/depcache"/>
 <fileset dir="build/depcache-test"/>
+<fileset dir="build/manifests"/>
 <fileset dir="build/specialmac"/>
 <fileset dir="build/test"/>
 <fileset dir="build/GoGui.app"/>
@@ -400,15 +398,27 @@ with "location" replaced by the location of the file docbookx.dtd.
 </exec>
 </target>
 
-<target name="gogui.jar" depends="compile,check-quaqua">
+<target name="gogui-manifest-classpath" unless="quaqua.ignore">
+  <manifest file="build/manifests/gogui.mf" mode="update">
+    <attribute name="Class-Path" value="quaqua.jar"/>
+  </manifest>
+</target>
+
+<target name="gogui-manifest">
+  <mkdir dir="build"/>
+  <mkdir dir="build/manifests"/>
+  <manifest file="build/manifests/gogui.mf" mode="replace">
+    <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
+    <attribute name="Built-By" value="${user.name}"/>
+    <attribute name="Build-Date" value="${dstamp}"/>
+  </manifest>
+</target>
+
+<target name="gogui.jar"
+	depends="compile,check-quaqua,gogui-manifest,gogui-manifest-classpath">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui.jar" compress="true" level="9" update="true">
-<manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
-<attribute name="Built-By" value="${user.name}"/>
-<attribute name="Build-Date" value="${dstamp}"/>
-<attribute name="Class-Path" value="quaqua.jar"/>
-</manifest>
+<jar destfile="lib/gogui.jar" manifest="build/manifests/gogui.mf"
+     compress="true" level="9">
 <fileset dir="build/classes" includes="
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
@@ -442,8 +452,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-adapter.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-adapter.jar" compress="true" level="9"
-       update="true">
+  <jar destfile="lib/gogui-adapter.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.adapter.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -465,7 +474,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-client.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-client.jar" compress="true" level="9" update="true">
+  <jar destfile="lib/gogui-client.jar" compress="true" level="9">
      <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.client.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -484,8 +493,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-convert.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-convert.jar" compress="true" level="9"
-       update="true">
+  <jar destfile="lib/gogui-convert.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.convert.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -505,16 +513,27 @@ with "location" replaced by the location of the file docbookx.dtd.
   </jar>
 </target>
 
-<target name="gogui-display.jar" depends="compile,check-quaqua">
+<target name="gogui-display-manifest-classpath" unless="quaqua.ignore">
+  <manifest file="build/manifests/gogui-display.mf" mode="update">
+    <attribute name="Class-Path" value="quaqua.jar"/>
+  </manifest>
+</target>
+
+<target name="gogui-display-manifest">
+  <mkdir dir="build"/>
+  <mkdir dir="build/manifests"/>
+  <manifest file="build/manifests/gogui-display.mf" mode="replace">
+    <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
+    <attribute name="Built-By" value="${user.name}"/>
+    <attribute name="Build-Date" value="${dstamp}"/>
+  </manifest>
+</target>
+
+<target name="gogui-display.jar"
+	depends="compile,check-quaqua,gogui-display-manifest,gogui-display-manifest-classpath">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-display.jar" compress="true" level="9"
-       update="true">
-    <manifest>
-      <attribute name="Main-Class" value="net.sf.gogui.tools.display.Main"/>
-      <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Build-Date" value="${dstamp}"/>
-      <attribute name="Class-Path" value="quaqua.jar"/>
-    </manifest>
+  <jar destfile="lib/gogui-display.jar"
+       manifest="build/manifests/gogui-display.mf" compress="true" level="9">
     <fileset dir="build/classes" includes="
  net/sf/gogui/boardpainter/*.class
  net/sf/gogui/game/*.class
@@ -536,7 +555,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-dummy.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-dummy.jar" compress="true" level="9" update="true">
+  <jar destfile="lib/gogui-dummy.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.dummy.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -555,8 +574,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-regress.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-regress.jar" compress="true" level="9"
-       update="true">
+  <jar destfile="lib/gogui-regress.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.regress.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -574,7 +592,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-server.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-server.jar" compress="true" level="9" update="true">
+  <jar destfile="lib/gogui-server.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.server.Server"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -594,8 +612,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-statistics.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-statistics.jar" compress="true" level="9"
-       update="true">
+  <jar destfile="lib/gogui-statistics.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.statistics.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -616,8 +633,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-terminal.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-terminal.jar" compress="true" level="9"
-       update="true">
+  <jar destfile="lib/gogui-terminal.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.terminal.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -644,8 +660,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-thumbnailer.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9"
-       update="true">
+  <jar destfile="lib/gogui-thumbnailer.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.thumbnailer.Main"/>
       <attribute name="Built-By" value="${user.name}"/>
@@ -668,7 +683,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="gogui-twogtp.jar" depends="compile">
   <mkdir dir="lib"/>
-  <jar destfile="lib/gogui-twogtp.jar" compress="true" level="9" update="true">
+  <jar destfile="lib/gogui-twogtp.jar" compress="true" level="9">
     <manifest>
       <attribute name="Main-Class" value="net.sf.gogui.tools.twogtp.Main"/>
       <attribute name="Built-By" value="${user.name}"/>

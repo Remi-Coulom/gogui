@@ -11,6 +11,13 @@
 <itemizedlist>
 <listitem>
 <simpara>
+gogui.jar no longer contains a Class-Path attribute in its manifest if
+GoGui is compiled with -Dquaqua.ignore=true, which violated the guidelines
+for Fedora packages (bug #3578030).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 The location of the SetFile executable needed on OS X to create GoGui.app
 can now be specified with the ant option -Dosx.setfile=... This is necessary
 if "ant gogui.app" fails on newer OS X systems because SetFile was
