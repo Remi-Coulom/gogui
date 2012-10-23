@@ -28,6 +28,11 @@ Removed vendor prefix from Unix desktop entry file and application icon.
 </listitem>
 <listitem>
 <simpara>
+Install SVG icon for GoGui on Unix.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 The location of the SetFile executable needed on OS X to create GoGui.app
 can now be specified with the ant option -Dosx.setfile=... This is necessary
 if "ant gogui.app" fails on newer OS X systems because SetFile was
