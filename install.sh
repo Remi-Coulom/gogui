@@ -74,13 +74,14 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 # Install icons
 
-xdg-icon-resource install --size 48 config/gogui-gogui.png
+xdg-icon-resource install --novendor --size 48 \
+    src/net/sf/gogui/images/gogui-48x48.png gogui
 xdg-icon-resource install --size 48 --context mimetypes \
     config/application-x-go-sgf.png
 
 # Install desktop entry
 
-xdg-desktop-menu install config/gogui-gogui.desktop
+xdg-desktop-menu install --novendor config/gogui.desktop
 
 # Install shared mime info
 

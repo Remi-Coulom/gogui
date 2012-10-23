@@ -66,9 +66,9 @@ Comment out the following exec tag for releases.
  INSTALL.html
  build.xml
  config/go.dtd
- config/gogui-gogui.desktop
+ config/gogui.desktop
  config/gogui.thumbnailer
- config/gogui-gogui.png
+ config/gogui.png
  config/application-x-go-sgf.png
  config/gogui.schemas
  config/gogui-mime.xml
