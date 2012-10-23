@@ -76,6 +76,8 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
     $PREFIX/share/icons/hicolor/48x48/apps/gogui.png
+install -m 644 src/net/sf/gogui/images/gogui.svg \
+    $PREFIX/share/icons/hicolor/scalable/apps
 install -m 644 config/application-x-go-sgf.png \
     $PREFIX/share/icons/hicolor/48x48/mimetypes
 
