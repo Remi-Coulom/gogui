@@ -18,6 +18,11 @@ for Fedora packages (bug #3578030).
 </listitem>
 <listitem>
 <simpara>
+No longer use xdg-utils in Unix installation script.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Removed vendor prefix from Unix desktop entry file and application icon.
 </simpara>
 </listitem>
