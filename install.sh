@@ -74,18 +74,18 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 # Install icons
 
-xdg-icon-resource install --novendor --size 48 \
-    src/net/sf/gogui/images/gogui-48x48.png gogui
-xdg-icon-resource install --size 48 --context mimetypes \
-    config/application-x-go-sgf.png
+install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
+    $PREFIX/share/icons/hicolor/48x48/apps/gogui.png
+install -m 644 config/application-x-go-sgf.png \
+    $PREFIX/share/icons/hicolor/48x48/mimetypes
 
 # Install desktop entry
 
-xdg-desktop-menu install --novendor config/gogui.desktop
+install -m 644 config/gogui.desktop $PREFIX/share/applications
 
 # Install shared mime info
 
-xdg-mime install config/gogui-mime.xml
+install -m 644 config/gogui-mime.xml $PREFIX/share/mime/packages
 
 # Install Gnome 2 thumbnailer
 
@@ -111,3 +111,11 @@ cat config/gogui.thumbnailer \
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
     $SYSCONFDIR/gconf/schemas/gogui.schemas >/dev/null 2>&1
+
+# Desktop database
+
+update-desktop-database $PREFIX/share/applications >/dev/null 2>&1
+
+# MIME database
+
+update-mime-database $PREFIX/share/mime >/dev/null 2>&1
