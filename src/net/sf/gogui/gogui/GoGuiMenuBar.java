@@ -401,7 +401,6 @@ public class GoGuiMenuBar
     {
         GuiMenu menu = new GuiMenu(i18n("MEN_HELP"));
         menu.add(actions.m_actionHelp);
-        menu.addSeparator();
         menu.add(actions.m_actionAbout);
         return menu;
     }
@@ -440,7 +439,6 @@ public class GoGuiMenuBar
         menu.add(actions.m_actionShowShell);
         menu.addSeparator();
         menu.add(actions.m_actionReattachProgram);
-        menu.addSeparator();
         menu.add(actions.m_actionReattachWithParameters);
         menu.add(actions.m_actionSnapshotParameters);
         menu.add(actions.m_actionRestoreParameters);
