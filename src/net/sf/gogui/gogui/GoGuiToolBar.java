@@ -24,17 +24,21 @@ public class GoGuiToolBar
         m_actions = actions;
         addButton(actions.m_actionOpen);
         addButton(actions.m_actionSave);
+        addSeparator();
         addButton(actions.m_actionNewGame);
         addButton(actions.m_actionPass);
         addButton(actions.m_actionPlay);
+        addSeparator();
         addToggleButton(actions.m_actionSetupBlack);
         addToggleButton(actions.m_actionSetupWhite);
+        addSeparator();
         addButton(actions.m_actionBeginning);
         addButton(actions.m_actionBackwardTen);
         addButton(actions.m_actionBackward);
         addButton(actions.m_actionForward);
         addButton(actions.m_actionForwardTen);
         addButton(actions.m_actionEnd);
+        addSeparator();
         addButton(actions.m_actionNextVariation);
         addButton(actions.m_actionPreviousVariation);
         if (! Platform.isMac())
