@@ -80,7 +80,7 @@ Use the given file to read analyze command configuration.
 </term>
 <listitem>
 <para>
-Automatically start a new game, if the program plays both
+Automatically start a new game if the program plays both
 colors and a game is finished.
 </para>
 </listitem>
