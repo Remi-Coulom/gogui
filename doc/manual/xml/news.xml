@@ -18,6 +18,11 @@ for Fedora packages (bug #3578030).
 </listitem>
 <listitem>
 <simpara>
+Accept ',' for empty points when importing Go text diagrams
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 No longer use xdg-utils in Unix installation script.
 </simpara>
 </listitem>
