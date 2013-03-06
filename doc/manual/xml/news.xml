@@ -4,8 +4,8 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>1.4.7</revnumber>
+<date>06 Mar 2013</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -13,7 +13,7 @@
 <simpara>
 gogui.jar no longer contains a Class-Path attribute in its manifest if
 GoGui is compiled with -Dquaqua.ignore=true, which violated the guidelines
-for Fedora packages (bug #3578030).
+for Fedora packages (bug #37).
 </simpara>
 </listitem>
 <listitem>
