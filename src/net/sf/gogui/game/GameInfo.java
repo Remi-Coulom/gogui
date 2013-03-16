@@ -183,7 +183,7 @@ public class GameInfo
             playerWhite = StringUtil.capitalize(playerWhite);
         else
             playerWhite = "Unknown";
-        return playerWhite + " vs " + playerBlack + " (B)";
+        return playerWhite + " vs. " + playerBlack + " (B)";
     }
 
     private int m_handicap;

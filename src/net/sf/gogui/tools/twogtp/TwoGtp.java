@@ -449,7 +449,7 @@ public class TwoGtp
             nameWhite = tmpName;
         }
         buffer.append(nameWhite);
-        buffer.append(" vs ");
+        buffer.append(" vs. ");
         buffer.append(nameBlack);
         buffer.append(" (B)");
         if (! m_filePrefix.equals(""))
