@@ -11,6 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fix bug in install.sh, which failed if icon directories did not already exist
 </simpara>
 </listitem>
 </itemizedlist>
