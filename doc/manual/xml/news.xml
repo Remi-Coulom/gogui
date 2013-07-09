@@ -4,14 +4,17 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>1.4.8</revnumber>
+<date>09 Jul 2013</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
 <listitem>
 <simpara>
-Fix bug in install.sh, which failed if icon directories did not already exist
+Fixed bug in install.sh, which failed if icon and other data directories did
+not already exist in /usr/local/. Note that the old install.sh might have
+corrupted /usr/local/, which needs to be fixed before installing the new
+version, see https://sourceforge.net/p/gogui/discussion/198965/thread/dd2e1b77/
 </simpara>
 </listitem>
 </itemizedlist>
