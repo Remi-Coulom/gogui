@@ -255,7 +255,7 @@ public class SgfWriter
     private void printLabels(ConstNode node)
     {
         Map<GoPoint,String> labels = node.getLabelsUnmodifiable();
-        if (labels == null)
+        if (labels == null || labels.isEmpty())
             return;
         StringBuilder buffer = new StringBuilder(STRINGBUF_CAPACITY);
         buffer.append("LB");
@@ -275,7 +275,7 @@ public class SgfWriter
     private void printMarked(ConstNode node, String property, MarkType type)
     {
         ConstPointList marked = node.getMarkedConst(type);
-        if (marked != null)
+        if (marked != null && ! marked.isEmpty())
             print(property + getPointList(marked));
     }
 
