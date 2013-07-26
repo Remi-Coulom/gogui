@@ -815,7 +815,10 @@ public final class SgfReader
             while ((s = readValue()) != null)
                 values.add(s);
             if (values.isEmpty())
-                throw getError("Property \"" + p + "\" has no value");
+            {
+                setWarning("Property \"" + p + "\" has no value");
+                return true;
+            }
             p = checkForObsoleteLongProps(p);
             if (m_props.containsKey(p))
                 // Silently accept duplicate properties, as long as they have
