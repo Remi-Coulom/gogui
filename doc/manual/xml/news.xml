@@ -11,6 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Fixed writing of invalid SGF files if markups or labels were created on the
+board and then all of them removed before saving the game (bug #38).
 </simpara>
 </listitem>
 </itemizedlist>
