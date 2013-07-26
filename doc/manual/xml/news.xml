@@ -15,6 +15,12 @@ Fixed writing of invalid SGF files if markups or labels were created on the
 board and then all of them removed before saving the game (bug #38).
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Show warning when reading an SGF file with property without values
+instead of rejecting the file (bug #38).
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
