@@ -228,7 +228,7 @@ public final class SgfReader
     }
 
     /** Check for obsolete long names for standard properties.
-        These are still used in asome old SGF files.
+        These are still used in some old SGF files.
         @param property Property name
         @return Short standard version of the property or original property */
     private String checkForObsoleteLongProps(String property)
