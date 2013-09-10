@@ -21,6 +21,12 @@ Show warning when reading an SGF file with property without values
 instead of rejecting the file (bug #38).
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+With analyze commands of type gfx, fill the background of labels on empty
+fields with the field color if the field has both a color and a label.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
