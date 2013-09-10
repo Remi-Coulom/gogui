@@ -419,6 +419,8 @@ public class Field
                                   width, height);
             boardGraphics.drawImage(boardImage, 0, 0, boardWidth, boardWidth,
                                     null);
+            if (m_fieldColor != null)
+                drawFieldColor();
             boardGraphics.setClip(oldBoardClip);
             m_graphics.setColor(Color.black);
         }
