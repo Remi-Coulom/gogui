@@ -11,10 +11,6 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Use set_free_handicap command to make the Go program aware that handicap is
-used if a SGF file is opened that stores handicaps as a sequence of black
-moves instead of setup properties, like files from the KGS Go server with
-Chinese rules (bug #3529926)
 </simpara>
 </listitem>
 </itemizedlist>
