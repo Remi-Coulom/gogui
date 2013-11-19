@@ -141,6 +141,17 @@ public class GoGui
                ScoreDialog.Listener, GoGuiMenuBar.Listener,
                ContextMenu.Listener, LiveGfx.Listener
 {
+    public enum Orientation
+    {
+        NORMAL,
+
+        FLIP_HORIZONTALLY,
+
+        FLIP_VERTICALLY,
+
+        ROTATE_180
+    }
+
     public enum ShowVariations
     {
         CHILDREN,
@@ -1561,6 +1572,12 @@ public class GoGui
         analyzeBegin(false);
     }
 
+    public void actionSetOrientation(Orientation orientation)
+    {
+        m_orientation = orientation;
+        m_guiBoard.setOrientation(m_orientation);
+    }
+
     public void actionSetShowVariations(ShowVariations mode)
     {
         m_showVariations = mode;
@@ -1834,6 +1851,10 @@ public class GoGui
     public boolean getCompletion()
     {
         return m_commandCompletion;
+    }
+
+    public Orientation getOrientation() {
+        return m_orientation;
     }
 
     /** Get name of currently attached program.
@@ -2261,6 +2282,8 @@ public class GoGui
     private boolean m_isSingleMove;
 
     private boolean m_lostOnTimeShown;
+
+    private Orientation m_orientation = Orientation.NORMAL;
 
     private boolean m_resigned;
 

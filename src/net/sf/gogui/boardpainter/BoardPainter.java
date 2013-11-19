@@ -19,6 +19,7 @@ import java.net.URL;
 import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
+import net.sf.gogui.gogui.GoGui.Orientation;
 
 /** Draws a board. */
 public class BoardPainter
@@ -83,9 +84,13 @@ public class BoardPainter
 
     public Point getLocation(int x, int y)
     {
+        if (m_flipVertical)
+            x = m_size - 1 - x;
+        if (! m_flipHorizontal)
+            y = m_size - 1 - y;
         Point point = new Point();
         point.x = m_fieldOffset + x * m_fieldSize;
-        point.y = m_fieldOffset + (m_size - y - 1) * m_fieldSize;
+        point.y = m_fieldOffset + y * m_fieldSize;
         return point;
     }
 
@@ -93,12 +98,19 @@ public class BoardPainter
     {
         if (m_fieldSize == 0)
             return null;
-        int x = ((int)point.getX() - m_fieldOffset) / m_fieldSize;
-        int y = ((int)point.getY() - m_fieldOffset) / m_fieldSize;
-        y = m_size - y - 1;
-        if (x >= 0 && x < m_size && y >= 0 && y < m_size)
-            return GoPoint.get(x, y);
-        return null;
+        int x = (int)point.getX() - m_fieldOffset;
+        int y = (int)point.getY() - m_fieldOffset;
+        if (x < 0 || y < 0)
+            return null;
+        x = x / m_fieldSize;
+        y = y / m_fieldSize;
+        if (x >= m_size || y >= m_size)
+            return null;
+        if (m_flipVertical)
+            x = m_size - 1 - x;
+        if (! m_flipHorizontal)
+            y = m_size - 1 - y;
+        return GoPoint.get(x, y);
     }
 
     /** Get preferred board size given a preferred field size.
@@ -135,6 +147,10 @@ public class BoardPainter
     private int m_fieldSize;
 
     private int m_fieldOffset;
+
+    private boolean m_flipHorizontal = false;
+
+    private boolean m_flipVertical = false;
 
     private int m_size;
 
@@ -253,10 +269,16 @@ public class BoardPainter
         {
             String string = Character.toString(c);
             point = getLocation(x, 0);
-            point.y += offset;
+            if (m_flipHorizontal)
+                point.y -= offset;
+            else
+                point.y += offset;
             drawLabel(graphics, point, string);
             point = getLocation(x, m_size - 1);
-            point.y -= offset;
+            if (m_flipHorizontal)
+                point.y += offset;
+            else
+                point.y -= offset;
             drawLabel(graphics, point, string);
             ++c;
             if (c == 'I')
@@ -266,10 +288,16 @@ public class BoardPainter
         {
             String string = Integer.toString(y + 1);
             point = getLocation(0, y);
-            point.x -= offset;
+            if (m_flipVertical)
+                point.x += offset;
+            else
+                point.x -= offset;
             drawLabel(graphics, point, string);
             point = getLocation(m_size - 1, y);
-            point.x += offset;
+            if (m_flipVertical)
+                point.x -= offset;
+            else
+                point.x += offset;
             drawLabel(graphics, point, string);
         }
     }
@@ -344,5 +372,10 @@ public class BoardPainter
         s_cachedFont = new Font("SansSerif", Font.PLAIN, fontSize);
         s_cachedFontFieldSize = fieldSize;
         graphics.setFont(s_cachedFont);
+    }
+
+    public void setOrientation(boolean flipHorizontal, boolean flipVertical) {
+        m_flipHorizontal = flipHorizontal;
+        m_flipVertical = flipVertical;
     }
 }

@@ -357,6 +357,26 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionOpen(); } };
 
+    public final GuiAction m_actionOrientationNormal =
+        new GuiAction(i18n("ACT_ORIENTATION_NORMAL")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetOrientation(GoGui.Orientation.NORMAL); } };
+
+    public final GuiAction m_actionOrientationFlipH =
+        new GuiAction(i18n("ACT_ORIENTATION_FLIP_HORIZONTALLY")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetOrientation(GoGui.Orientation.FLIP_HORIZONTALLY); } };
+
+    public final GuiAction m_actionOrientationFlipV =
+        new GuiAction(i18n("ACT_ORIENTATION_FLIP_VERTICALLY")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetOrientation(GoGui.Orientation.FLIP_VERTICALLY); } };
+
+    public final GuiAction m_actionOrientationRotate180 =
+       new GuiAction(i18n("ACT_ORIENTATION_ROTATE_180")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionSetOrientation(GoGui.Orientation.ROTATE_180); } };
+
     public final GuiAction m_actionPass =
         new GuiAction(i18n("ACT_PASS"), i18n("TT_PASS"),
                       KeyEvent.VK_F2, FUNCTION_KEY, "gogui-pass") {
@@ -744,6 +764,14 @@ public class GoGuiActions
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
         m_actionToggleShowToolbar.setSelected(m_goGui.isToolbarShown());
+        m_actionOrientationNormal.setSelected(
+            m_goGui.getOrientation() == GoGui.Orientation.NORMAL);
+        m_actionOrientationFlipH.setSelected(
+            m_goGui.getOrientation() == GoGui.Orientation.FLIP_HORIZONTALLY);
+        m_actionOrientationFlipV.setSelected(
+                m_goGui.getOrientation() == GoGui.Orientation.FLIP_VERTICALLY);
+        m_actionOrientationRotate180.setSelected(
+                m_goGui.getOrientation() == GoGui.Orientation.ROTATE_180);
         m_actionShowVariationsChildren.setSelected(
                  m_goGui.getShowVariations() == GoGui.ShowVariations.CHILDREN);
         m_actionShowVariationsSiblings.setSelected(

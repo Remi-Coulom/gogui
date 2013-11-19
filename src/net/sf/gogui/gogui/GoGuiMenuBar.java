@@ -460,6 +460,17 @@ public class GoGuiMenuBar
         menu.addCheckBoxItem(actions.m_actionToggleShowToolbar);
         menu.addCheckBoxItem(actions.m_actionToggleShowInfoPanel);
         menu.addSeparator();
+        GuiMenu menuOrientation = new GuiMenu(i18n("MEN_ORIENTATION"));
+        ButtonGroup groupOrientation = new ButtonGroup();
+        menuOrientation.addRadioItem(groupOrientation,
+                                   actions.m_actionOrientationNormal);
+        menuOrientation.addRadioItem(groupOrientation,
+                                   actions.m_actionOrientationRotate180);
+        menuOrientation.addRadioItem(groupOrientation,
+                                   actions.m_actionOrientationFlipH);
+        menuOrientation.addRadioItem(groupOrientation,
+                                   actions.m_actionOrientationFlipV);
+        menu.add(menuOrientation);
         menu.addCheckBoxItem(actions.m_actionToggleShowCursor);
         menu.addCheckBoxItem(actions.m_actionToggleShowGrid);
         menu.addCheckBoxItem(actions.m_actionToggleShowLastMove);

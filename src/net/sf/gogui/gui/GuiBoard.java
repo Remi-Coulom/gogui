@@ -29,6 +29,7 @@ import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gogui.GoGui.Orientation;
 import net.sf.gogui.util.ObjectUtil;
 
 /** Graphical display of a Go board.
@@ -720,6 +721,10 @@ public final class GuiBoard
 
     private static final boolean DEBUG_REPAINT = false;
 
+    private boolean m_flipHorizontal = false;
+
+    private boolean m_flipVertical = false;
+
     private boolean m_showCursor = true;
 
     private boolean m_showGrid = true;
@@ -824,31 +829,55 @@ public final class GuiBoard
         GoPoint point = m_cursor;
         if (code == KeyEvent.VK_DOWN)
         {
-            point = point.down();
+            if (m_flipHorizontal)
+                point = point.up(m_size);
+            else
+                point = point.down();
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getY()))
-                    point = point.down();
+                    if (m_flipHorizontal)
+                        point = point.up(m_size);
+                    else
+                        point = point.down();
         }
         else if (code == KeyEvent.VK_UP)
         {
-            point = point.up(m_size);
+            if (m_flipHorizontal)
+                point = point.down();
+            else
+                point = point.up(m_size);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getY()))
-                    point = point.up(m_size);
+                    if (m_flipHorizontal)
+                        point = point.down();
+                    else
+                        point = point.up(m_size);
         }
         else if (code == KeyEvent.VK_LEFT)
         {
-            point = point.left();
+            if (m_flipVertical)
+                point = point.right(m_size);
+            else
+                point = point.left();
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getX()))
-                    point = point.left();
+                    if (m_flipVertical)
+                        point = point.right(m_size);
+                    else
+                        point = point.left();
         }
         else if (code == KeyEvent.VK_RIGHT)
         {
-            point = point.right(m_size);
+            if (m_flipVertical)
+                point = point.left();
+            else
+                point = point.right(m_size);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getX()))
-                    point = point.right(m_size);
+                    if (m_flipVertical)
+                        point = point.left();
+                    else
+                        point = point.right(m_size);
         }
         setCursor(point);
     }
@@ -868,6 +897,26 @@ public final class GuiBoard
             field.setCursor(cursor);
             repaint(point);
         }
+    }
+
+    public void setOrientation(Orientation orientation) {
+        switch (orientation) {
+        case NORMAL:
+            m_flipHorizontal = false; m_flipVertical = false;
+            break;
+        case FLIP_HORIZONTALLY:
+            m_flipHorizontal = true; m_flipVertical = false;
+            break;
+        case FLIP_VERTICALLY:
+            m_flipHorizontal = false; m_flipVertical = true;
+            break;
+        case ROTATE_180:
+            m_flipHorizontal = true; m_flipVertical = true;
+            break;
+        }
+        m_painter.setOrientation(m_flipHorizontal, m_flipVertical);
+        m_dirty = new Rectangle(0, 0, getWidth(), getHeight());
+        repaint();
     }
 
     private void setPreferredFieldSize()
