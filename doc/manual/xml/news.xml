@@ -18,6 +18,297 @@
 </revision>
 
 <revision>
+<revnumber>1.4.9</revnumber>
+<date>09 Oct 2013</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fixed writing of invalid SGF files if markups or labels were created on the
+board and then all of them removed before saving the game (bug #38).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Show warning when reading an SGF file with property without values
+instead of rejecting the file (bug #38).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+With analyze commands of type gfx, fill the background of labels on empty
+fields with the field color if the field has both a color and a label.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.8</revnumber>
+<date>09 Jul 2013</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fixed bug in install.sh, which failed if icon and other data directories did
+not already exist in /usr/local/. Note that the old install.sh might have
+corrupted /usr/local/, which needs to be fixed before installing the new
+version, see https://sourceforge.net/p/gogui/discussion/198965/thread/dd2e1b77/
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.7</revnumber>
+<date>06 Mar 2013</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+gogui.jar no longer contains a Class-Path attribute in its manifest if
+GoGui is compiled with -Dquaqua.ignore=true, which violated the guidelines
+for Fedora packages (bug #37).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Accept ',' for empty points when importing Go text diagrams
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+No longer use xdg-utils in Unix installation script.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Removed vendor prefix from Unix desktop entry file and application icon.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Install SVG icon for GoGui on Unix.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+The location of the SetFile executable needed on OS X to create GoGui.app
+can now be specified with the ant option -Dosx.setfile=... This is necessary
+if "ant gogui.app" fails on newer OS X systems because SetFile was
+moved from /Developer/Tools/SetFile to /usr/bin/SetFile.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.6</revnumber>
+<date>07 Oct 2012</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Removed workaround for a bug in Ubuntu 12.04 that made the menu bar
+unreadable in the default Ubuntu theme (Ubuntu bug #932274) because this
+bug is now fixed in Ubuntu 12.10 (OpenJDK 7) and the workaround had
+other side-effects on the menu colors.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.5</revnumber>
+<date>08 Jul 2012</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Added a workaround for a bug in Ubuntu 12.04 that made the menu bar
+unreadable in the default Ubuntu theme (Ubuntu bug #932274).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Use set_free_handicap command to make the Go program aware that handicap is
+used if a SGF file is opened that stores handicaps as a sequence of black
+moves instead of setup properties, like files from the KGS Go server with
+Chinese rules (bug #3529926).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Fixed an assertion that triggered when using a SGF file that used moves left
+properties and an overtime system other than Canadian overtime (which is the
+only overtime system supported by GoGui).
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Suppressed some warnings with Java 7 that occurred because some Java classes
+have become generic that were raw before (JComboBox, JList).
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.4</revnumber>
+<date>17 May 2012</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Handle failing of undo commands sent to the Go program in gogui-adapter and
+GoGui (bug #3519829)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-adapter did not use komi from file in loadsgf (bug #3522401)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+gogui-adapter: loadsgf loaded the position AFTER move_number (bug #3527339)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Explicitely send "komi 0" command to program if the komi is not defined.
+This avoids that the program uses an old komi for example if first a SGF
+file is loaded that has a komi property and then a file is loaded that
+has no komi property.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Don't use separators in toolbar anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Add StartupWMClass key to desktop entry
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.3</revnumber>
+<date>09 Mar 2012</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fix broken thumbnail generation on Unix if file name contained
+non-ASCII characters.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Changed Back to Main Variation to go to the last move in the main
+variation that had a variation, not to the last position in the main
+variation.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Workaround for bad taskbar title (java-lang-Thread instead of GoGui)
+with Gnome 3
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+No longer install the gogui-C.omf documentation metadata file on Unix,
+which was the likely cause of problems with the system-wide help system
+on some Linux distributions.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Updated toolbar icon for play command
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.2</revnumber>
+<date>12 Oct 2011</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Fixed bug in Unix install script introduced in version 1.4.1 that made it fail
+when installing the Gnome 3 thumbnailer and the share/thumbnailers directory
+did not already exist.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>1.4.1</revnumber>
+<date>11 Oct 2011</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Set file status to modified and enable Save menu item if a label or markup was
+added or changed.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Removed numbers in list menu items (like Recent Files) if the platform
+is Mac because no mnemonics are used on the Mac.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+No longer use window titles in alert dialogs.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Removed duplicate menu access keys
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Avoid unjustified warnings (on standard error) about duplicate access keys in
+menu items.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Make registering thumbnailer for SGF files work in Gnome 3.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.4.0</revnumber>
 <date>08 Aug 2011</date>
 <authorinitials>enz</authorinitials>

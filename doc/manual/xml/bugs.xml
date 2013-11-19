@@ -10,7 +10,7 @@ Since Java offers no stream selectors for file streams, GoGui needs to use
 thread synchronization to read the output and error stream of the Go program
 for preserving the correct order of the received output in the GTP shell and
 for detecting timeouts.
-This synchronization can becomes slow if there are other CPU intensive
+This synchronization can become slow if there are other CPU intensive
 background processes running on the computer.
 The problem can be avoided if the Go engine implements the
 <command>gg-undo</command> and <command>gogui-play_sequence</command> commands
@@ -34,36 +34,12 @@ in the terminal.
 </section>
 
 <section>
-<title>Out of memory error when loading large SGF trees</title>
-<para>
-Java uses a low maximum memory heap size by default.
-It can be increased by using the "-Xmx" option, for example for 512MB:
-<programlisting>
-<userinput>java -Xmx512M -jar gogui.jar</userinput>
-</programlisting>
-Don't use more memory than there is real memory on the machine,
-because using swap space will make the program unusable slow.
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
 <title>Wrong line numbers in SGF error messages</title>
 <para>
 If reading an SGF file fails, the line numbers of the error messages
 are sometimes wrong.
 This is due to bugs in the Java class StreamTokenizer, which is used
 for parsing the SGF stream.
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Cannot enter text in some dialogs</title>
-<para>
-This seems to be a bug in the focus handling after showing modal dialogs
-that occurs with Java 1.6 on Linux. The only known workaround for the text
-field to gain focus again is to switch to another window and back.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
