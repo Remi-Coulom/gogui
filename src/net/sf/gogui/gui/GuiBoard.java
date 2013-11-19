@@ -902,16 +902,20 @@ public final class GuiBoard
     public void setOrientation(Orientation orientation) {
         switch (orientation) {
         case NORMAL:
-            m_flipHorizontal = false; m_flipVertical = false;
+            m_flipHorizontal = false;
+            m_flipVertical = false;
             break;
         case FLIP_HORIZONTALLY:
-            m_flipHorizontal = true; m_flipVertical = false;
+            m_flipHorizontal = true;
+            m_flipVertical = false;
             break;
         case FLIP_VERTICALLY:
-            m_flipHorizontal = false; m_flipVertical = true;
+            m_flipHorizontal = false;
+            m_flipVertical = true;
             break;
         case ROTATE_180:
-            m_flipHorizontal = true; m_flipVertical = true;
+            m_flipHorizontal = true;
+            m_flipVertical = true;
             break;
         }
         m_painter.setOrientation(m_flipHorizontal, m_flipVertical);
