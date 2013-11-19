@@ -344,7 +344,7 @@ Play a pass move.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Clock</guimenuitem></term>
+<term><guisubmenu>Clock</guisubmenu></term>
 <listitem>
 <para>
 Halt or resume the clock.
@@ -389,7 +389,7 @@ only one color, which can occur in the Japanese rule set.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Attach</guimenuitem></term>
+<term><guisubmenu>Attach</guisubmenu></term>
 <listitem>
 <para>
 Start a program from the list of Go programs and synchronize it to the current
@@ -749,14 +749,15 @@ Show the move numbers for all moves played so far as labels on the board.
 </varlistentry>
 
 <varlistentry id="variationlabels">
-<term><guimenuitem>Variation Labels</guimenuitem></term>
+<term><guisubmenu>Variation Labels</guisubmenu></term>
 <listitem>
 <para>
-If set to "Children", the first moves of all variations from this position
-will be marked with labels (also if the current node has only a main variation
-and no side variations).
-If set to "Siblings", all variations from the parent position will be marked
-(not if the parent node has only a main variation and no side variations).
+If set to <guimenuitem>Children</guimenuitem>, the first moves of all
+variations from this position will be marked with labels (also if the current
+node has only a main variation and no side variations).
+If set to <guimenuitem>Siblings</guimenuitem>, all variations from the parent
+position will be marked (not if the parent node has only a main variation and
+no side variations).
 The labels are letters starting with 'A' ('*' will be used after 'Z').
 If multiple variations start with the same move, a '>' is appended.
 </para>
