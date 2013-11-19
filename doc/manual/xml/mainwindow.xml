@@ -711,12 +711,13 @@ Show or hide the game information panel at the right side of the board.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Board Orientation</guimenuitem></term>
+<term><guisubmenu>Board Orientation</guisubmenu></term>
 <listitem>
 <para>
 Select the point of view from which the board is displayed.
-"Rotate 180°" presents it from the opponents place.
-"Flip Horizontally" and "Flip Vertically" may be used in case of malformed
+<guimenuitem>Rotate 180°</guimenuitem> presents it from the opponents place.
+<guimenuitem>Flip Horizontally</guimenuitem> and
+<guimenuitem>Flip Vertically</guimenuitem> may be used in case of malformed
 SGF files, which are created by some programs.
 </para>
 </listitem>
