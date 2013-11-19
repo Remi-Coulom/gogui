@@ -746,8 +746,8 @@ Show grid labels for board columns and rows.
 <listitem>
 <para>
 Mark the last move with a gray dot. If <xref linkend="variationlabels"/> is
-set to "Siblings", the last move will not be marked if there are sibling
-variations.
+set to <guimenuitem>Siblings</guimenuitem>, the last move will not be marked
+if there are sibling variations.
 </para>
 </listitem>
 </varlistentry>
