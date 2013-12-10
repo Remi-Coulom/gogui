@@ -413,7 +413,7 @@ Terminate the currently attached Go program.
 <term><guimenuitem>Play Single Move</guimenuitem></term>
 <listitem>
 <para>
-Make the computer play a move, but do not change the computer color.
+Make the computer play a move but do not change the computer color.
 </para>
 </listitem>
 </varlistentry>
@@ -927,10 +927,10 @@ the current position again.
 <term><guimenuitem>Reattach With Parameters</guimenuitem></term>
 <listitem>
 <para>
-Like <xref linkend="reattachprogram"/>, but saves the current program
+Like <xref linkend="reattachprogram"/> but saves the current program
 parameters to a temporary GTP file and restores them after the program
 was reattached (see <xref linkend="saveparameters"/>). If the program is
-dead but a parameter snapshot exists, it will be reattached with the
+dead but a parameter snapshot exists it will be reattached with the
 parameter snapshot.
 </para>
 </listitem>
@@ -940,12 +940,12 @@ parameter snapshot.
 <term><guimenuitem>Snapshot Parameters</guimenuitem></term>
 <listitem>
 <para>
-Like <xref linkend="saveparameters"/>, but automatically saves to a temporary
+Like <xref linkend="saveparameters"/> but automatically saves to a temporary
 file that can be restored during the current session with
 <xref linkend="restoreparameters"/>. This command is useful for developers
-who want to debug a crash of the program (which does not allow to use
-<xref linkend="reattachwithparameters"/>, because the program must still be
-alive when running this command).
+who want to debug a crash of the program (which does not allow the developer
+to use <xref linkend="reattachwithparameters"/> because the program must still
+be alive when running this command).
 </para>
 </listitem>
 </varlistentry>

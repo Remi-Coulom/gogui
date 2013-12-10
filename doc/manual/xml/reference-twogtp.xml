@@ -151,7 +151,7 @@ percentage of wins is close to 0% or 100%).
 <para>
 Alternate colors. Black and White are exchanged every odd game;
 the scores saved in the results table <option>-sgffile</option>
-are still using the name Black and White, as given with
+are still using the name Black and White as given with
 <option>-black</option> and <option>-white</option>.
 </para>
 </listitem>
@@ -180,7 +180,7 @@ Automatically play games.
 Use this option if you want to run <application>TwoGtp</application> as a
 standalone program, without a program like <application>GoGui</application>
 which controls the move generation with <command>genmove</command> commands.
-If a result file already exists (as specified with <option>-sgffile</option>),
+If a result file already exists (as specified with <option>-sgffile</option>)
 and contains less games than specified with <option>-games</option>,
 the remaining games will be played.
 Use <option>-force</option> to overwrite existing result files.
@@ -260,7 +260,7 @@ Display help and exit.
 <para>
 Komi. If this option is not used, a default komi of 6.5 will be used.
 The komi cannot be changed at runtime. The <command>komi</command> GTP
-command will succeed, if the argument has the same value as the configured
+command will succeed if the argument has the same value as the configured
 komi and fail otherwise.
 </para>
 </listitem>
@@ -371,7 +371,7 @@ The base time and overtime (byoyomi) can have an optional unit specifier
 <para>
 Print debugging messages. This will print GTP commands and responses and
 text written to the standard error stream by the programs to the standard
-error stream. If option <option>-threads</option> is used, only the
+error stream. If option <option>-threads</option> is used only the
 debugging messages of the first thread are written.
 </para>
 </listitem>
@@ -418,7 +418,7 @@ Save games in XML format.
 <para>
 Indicate interrupt ability for GoGui.
 <application>TwoGtp</application> will forward the interrupt to both
-programs, with the appropriate method, if they implement either
+programs, with the appropriate method if they implement either
 <command>gogui-interrupt</command> or <command>gogui-sigint</command>.
 See the chapter "Interrupting Commands" in the <application>GoGui</application>
 documentation.
@@ -430,7 +430,7 @@ documentation.
 <term><command>gogui-title</command></term>
 <listitem>
 <para>
-Return a title for the current game, consisting of the game number (if option
+Return a title for the current game consisting of the game number (if option
 <option>-sgffile</option> was used) and the player names.
 </para>
 </listitem>
@@ -526,7 +526,7 @@ gogui-twogtp -analyze gnugo5.dat
 <simpara>
 Play one game between GNU Go, default level, and GNU Go, level 5, using GoGui
 as a graphical display
-(to start play, select Computer Color/Both from the Game menu in GoGui):
+(to start playing select Computer Color/Both from the Game menu in GoGui):
 </simpara>
 <para>
 <programlisting>
