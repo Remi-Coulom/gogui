@@ -27,6 +27,8 @@ New menu item <guisubmenu>View</guisubmenu> /
 <itemizedlist>
 <listitem>
 <simpara>
+SGF files with invalid point values of length one were not loaded
+by GoGui and triggered unhandled exceptions in the GoGui tools (bug #40).
 </simpara>
 </listitem>
 </itemizedlist>

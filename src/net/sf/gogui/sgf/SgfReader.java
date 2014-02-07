@@ -666,7 +666,7 @@ public final class SgfReader
         if (s.equals(""))
             return null;
         if (s.length() > 2
-            || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
+            || (s.length() == 2 && (s.charAt(1) < 'a' || s.charAt(1) > 'z')))
         {
             // Try human-readable encoding as used by SmartGo
             try
