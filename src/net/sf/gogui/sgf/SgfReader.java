@@ -39,10 +39,8 @@ import net.sf.gogui.util.ByteCountInputStream;
 import net.sf.gogui.util.ProgressShow;
 
 /** SGF reader.
-    @bug The error messages sometimes contain wrong line numbers, because of
-    problems in StreamTokenizer.lineno(). Maybe the implementation should be
-    replaced not using StreamTokenizer, because this class is a legacy class.
-    (Does this happen only on Windows?) */
+    @bug The error messages currently don't contain line numbers, see
+    implementation of getError(). */
 public final class SgfReader
 {
     /** Read SGF file from stream.
@@ -326,6 +324,11 @@ public final class SgfReader
 
     private SgfError getError(String message)
     {
+        // Line numbers in error messages is currently disabled because
+        // StreamTokenizer.lineno() does not work as expected with Windows-style
+        // line endings (it seems to count CRLF as two line endings; last with
+        // Java 1.7).
+        /*
         int lineNumber = m_tokenizer.lineno();
         if (m_file == null)
             return new SgfError(lineNumber + ": " + message);
@@ -334,6 +337,11 @@ public final class SgfReader
             String s = m_file.getName() + ":" + lineNumber + ": " + message;
             return new SgfError(s);
         }
+        */
+        if (m_file == null)
+            return new SgfError(message);
+        else
+            return new SgfError(m_file.getName() + ": " + message);
     }
 
     private void handleProps(Node node, boolean isRoot)
