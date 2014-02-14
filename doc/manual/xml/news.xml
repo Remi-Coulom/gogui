@@ -15,6 +15,13 @@ SGF files with invalid point values of length one were not loaded
 by GoGui and triggered unhandled exceptions in the GoGui tools (bug #40).
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+The error messages when reading faulty SGF files no longer contain line numbers
+because the current implementation doesn't handle Windows-style line
+endings correctly.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
