@@ -433,6 +433,12 @@ public class GuiUtil
         {
             String mnemonic = text.substring(pos, pos + 1).toUpperCase();
             KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemonic);
+            if (keyStroke == null)
+            {
+                System.err.println(
+                    "Warning: keystroke for mnemonic not found: " + text);
+                return;
+            }
             int code = keyStroke.getKeyCode();
             button.setMnemonic(code);
             button.setDisplayedMnemonicIndex(pos);
