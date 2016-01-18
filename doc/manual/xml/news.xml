@@ -21,6 +21,9 @@ The error messages when reading faulty SGF files no longer contain line numbers
 because the current implementation doesn't handle Windows-style line
 endings correctly.
 </simpara>
+<simpara>
+Added Hungarian translation (contributed by direktx@users.sf.net).
+</simpara>
 </listitem>
 </itemizedlist>
 </revdescription>
