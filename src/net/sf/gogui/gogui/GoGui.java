@@ -4229,6 +4229,7 @@ public class GoGui
         {
             restoreSize(m_shell, "shell");
             m_shell.setVisible(true);
+            updateViews(false);
         }
     }
 
