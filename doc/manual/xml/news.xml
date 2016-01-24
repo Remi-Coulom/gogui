@@ -27,6 +27,9 @@ New menu item <guisubmenu>View</guisubmenu> /
 <itemizedlist>
 <listitem>
 <simpara>
+Added Hungarian translation (contributed by direktx@users.sf.net).
+</simpara>
+<simpara>
 SGF files with invalid point values of length one were not loaded
 by GoGui and triggered unhandled exceptions in the GoGui tools (bug #40).
 </simpara>
@@ -37,8 +40,10 @@ The error messages when reading faulty SGF files no longer contain line numbers
 because the current implementation doesn't handle Windows-style line
 endings correctly.
 </simpara>
+</listitem>
+<listitem>
 <simpara>
-Added Hungarian translation (contributed by direktx@users.sf.net).
+The View/Shell menu was not enabled after opening the GTP shell.
 </simpara>
 </listitem>
 </itemizedlist>
