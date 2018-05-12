@@ -2046,7 +2046,8 @@ public class GoGui
                 return;
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
             Komi komi = getGameInfo().getKomi();
-            m_scoreDialog.showScore(m_countScore, komi);
+	    int handicap = getGameInfo().getHandicap();
+            m_scoreDialog.showScore(m_countScore, komi, handicap);
         }
         else if (modifiedSelect)
             m_guiBoard.contextMenu(p);
@@ -3511,7 +3512,8 @@ public class GoGui
         }
         restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInfo().getKomi();
-        m_scoreDialog.showScore(m_countScore, komi);
+	int handicap = getGameInfo().getHandicap();
+        m_scoreDialog.showScore(m_countScore, komi, handicap);
         m_scoreDialog.setVisible(true);
         showStatus(i18n("STAT_SCORE"));
     }

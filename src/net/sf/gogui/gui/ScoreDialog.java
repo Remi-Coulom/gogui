@@ -75,6 +75,7 @@ public class ScoreDialog
                                        "TT_SCORE_PRISONERS_WHITE", labels,
                                        values);
         m_komi = createKomiEntry(3, labels, values);
+        m_handicap = createHandicapEntry(3, labels, values);
         m_resultArea = createEntry("LB_SCORE_RESULT_AREA", 8,
                                    "TT_SCORE_RESULT_AREA", labels, values);
         m_resultTerritory = createEntry("LB_SCORE_RESULT_TERRITORY", 8,
@@ -103,12 +104,12 @@ public class ScoreDialog
         pack();
     }
 
-    public void showScore(CountScore countScore, Komi komi)
+    public void showScore(CountScore countScore, Komi komi, int handicap)
     {
         ScoringMethod rules = m_initialRules;
         if (m_score != null)
             rules = m_score.m_rules;
-        m_score = countScore.getScore(komi, rules);
+        m_score = countScore.getScore(komi, rules, handicap);
         showScore();
     }
 
@@ -130,6 +131,8 @@ public class ScoreDialog
     private final ColorFields m_prisoners;
 
     private final JTextField m_komi;
+
+    private final JTextField m_handicap;
 
     private final JTextField m_resultArea;
 
@@ -221,6 +224,22 @@ public class ScoreDialog
         return field;
     }
 
+    private JTextField createHandicapEntry(int cols, JComponent labels,
+					   JComponent values)
+    {
+        labels.add(createEntryLabel("LB_SCORE_HANDICAP"));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        panel.add(new JLabel(ICON_WHITE));
+        panel.add(GuiUtil.createSmallFiller());
+        JTextField field = new JTextField(cols);
+        field.setHorizontalAlignment(JTextField.CENTER);
+        GuiUtil.setEditableFalse(field);
+        field.setToolTipText(i18n("TT_SCORE_HANDICAP"));
+        panel.add(field);
+        values.add(panel);
+        return field;
+    }
+
     private void createRulesEntry(JComponent labels, JComponent values)
     {
         labels.add(createEntryLabel("LB_SCORE_METHOD"));
@@ -274,6 +293,7 @@ public class ScoreDialog
         setTextInteger(m_prisoners.m_white, m_score.m_capturedBlack);
         if (m_score.m_komi != null)
             m_komi.setText(m_score.m_komi.toString());
+	setTextInteger(m_handicap, m_score.m_handicap);
         double resultArea = m_score.m_resultArea;
         m_resultArea.setText(Score.formatResult(resultArea));
         double resultTerritory = m_score.m_resultTerritory;
