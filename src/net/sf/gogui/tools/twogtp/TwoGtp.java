@@ -9,6 +9,7 @@ import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.BlackWhiteSet;
+import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -37,7 +38,7 @@ public class TwoGtp
         @param komi The fixed komi. See TwoGtp documentation for option
         -komi */
     public TwoGtp(Program black, Program white, Program referee,
-                  String observer, int size, Komi komi, int numberGames,
+                  String observer, int size, Komi komi, int handicap, int numberGames,
                   boolean alternate, String filePrefix, boolean verbose,
                   Openings openings, TimeSettings timeSettings,
                   ResultFile resultFile)
@@ -67,6 +68,7 @@ public class TwoGtp
             program.setLabel(m_allPrograms);
         m_size = size;
         m_komi = komi;
+	m_handicap = handicap;
         m_alternate = alternate;
         m_numberGames = numberGames;
         m_openings = openings;
@@ -147,6 +149,8 @@ public class TwoGtp
             cmdGenmove(cmd);
         else if (command.equals("komi"))
             komi(cmd);
+        else if (command.equals("handicap"))
+            handicap(cmd);
         else if (command.equals("scoring_system"))
             sendIfSupported(command, cmd.getLine());
         else if (command.equals("name"))
@@ -165,6 +169,8 @@ public class TwoGtp
                             "gogui-interrupt\n" +
                             "gogui-title\n" +
                             "komi\n" +
+                            "fixed_handicap\n" +
+                            "fixed\n" +
                             "list_commands\n" +
                             "name\n" +
                             "play\n" +
@@ -283,6 +289,8 @@ public class TwoGtp
 
     /** Fixed komi. */
     private final Komi m_komi;
+
+    private final int m_handicap;
 
     private Game m_game;
 
@@ -573,7 +581,7 @@ public class TwoGtp
 
     private void initGame(int size) throws GtpError
     {
-        m_game = new Game(size, m_komi, null, null, null);
+        m_game = new Game(size, m_komi, Board.getHandicapStones(size, m_handicap), null, null);
         m_realTime.set(BLACK, 0.);
         m_realTime.set(WHITE, 0.);
         // Clock is not needed
@@ -649,6 +657,14 @@ public class TwoGtp
         {
             throw new GtpError("invalid komi: " + arg);
         }
+    }
+
+    private void handicap(GtpCommand cmd) throws GtpError
+    {
+        String arg = cmd.getArg();
+	int handicap = cmd.getIntArg(0);
+        if (handicap != m_handicap)
+            throw new GtpError("handicap is fixed at " + m_handicap);
     }
 
     private void newGame(int size) throws GtpError
