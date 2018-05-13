@@ -1222,9 +1222,9 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
-                                   i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
-            return;
+        //if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
+        //                           i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
+        //    return;
         humanMoved(Move.getPass(getToMove()));
     }
 
