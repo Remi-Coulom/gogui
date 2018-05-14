@@ -3453,15 +3453,16 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
         m_programs = Program.load();
         m_menuBar.setPrograms(m_programs);
-        if (m_programCommand == null)
-        {
-            int index = m_prefs.getInt("program", -1);
-            if (index >= 0 && index < m_programs.size())
-            {
-                m_program = m_programs.get(index);
-                m_programCommand = m_program.m_command;
-            }
-        }
+        //if (m_programCommand == null)
+        //{
+        //    Attach last program automatically.
+        //    int index = m_prefs.getInt("program", -1);
+        //    if (index >= 0 && index < m_programs.size())
+        //    {
+        //        m_program = m_programs.get(index);
+        //        m_programCommand = m_program.m_command;
+        //    }
+        //}
         if (m_initialFile == null)
             newGame(getBoardSize());
         else
