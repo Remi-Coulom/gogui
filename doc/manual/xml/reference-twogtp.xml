@@ -29,6 +29,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-force</option></arg>
 <arg><option>-games</option> <replaceable>n</replaceable></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
+<arg><option>-handicap</option> <replaceable>n</replaceable></arg>
 <arg><option>-maxmoves</option> <replaceable>n</replaceable></arg>
 <arg><option>-observer</option> <replaceable>command</replaceable></arg>
 <arg><option>-openings</option> <replaceable>dir</replaceable></arg>
@@ -83,6 +84,9 @@ programs (command translation is done for protocol version 1 programs):
 </listitem>
 <listitem>
 <simpara><command>komi</command> (if supported)</simpara>
+</listitem>
+<listitem>
+<simpara><command>fixed_handicap</command></simpara>
 </listitem>
 <listitem>
 <simpara><command>play</command></simpara>
@@ -262,6 +266,15 @@ Komi. If this option is not used, a default komi of 6.5 will be used.
 The komi cannot be changed at runtime. The <command>komi</command> GTP
 command will succeed if the argument has the same value as the configured
 komi and fail otherwise.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-handicap</option> <replaceable>handicap</replaceable></term>
+<listitem>
+<para>
+Number of handicap stones (default none).
 </para>
 </listitem>
 </varlistentry>
