@@ -643,7 +643,7 @@ public class GameTreePanel
         item.setActionCommand("show-variations");
         item.addActionListener(listener);
         m_popup.add(item);
-
+ 
         item = new JMenuItem(i18n("MN_TREE_MAKE_MAIN_VARIATION"));
         m_itemMakeMainVariation = item;
         item.setActionCommand("make-main-variation"); 
