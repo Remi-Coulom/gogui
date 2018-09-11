@@ -31,6 +31,8 @@ import javax.swing.SwingConstants;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.gogui.GoGuiActions;
+
 import static net.sf.gogui.gui.I18n.i18n;
 
 /** Panel displaying a game tree. */
@@ -80,6 +82,7 @@ public class GameTreePanel
             {
                 public void mouseClicked(MouseEvent event)
                 {
+                    //Left click
                     if (event.getButton() != MouseEvent.BUTTON1)
                         return;
                     GameTreeNode gameNode = (GameTreeNode)event.getSource();
@@ -100,6 +103,7 @@ public class GameTreePanel
 
                 public void mouseReleased(MouseEvent event)
                 {
+                	//Right click
                     if (event.isPopupTrigger())
                     {
                         GameTreeNode gameNode
@@ -466,6 +470,8 @@ public class GameTreePanel
     private JMenuItem m_itemShowSubtree;
 
     private JMenuItem m_itemShowChildren;
+    
+    private JMenuItem m_itemMakeMainVariation;
 
     private void initSize(Size sizeMode)
     {
@@ -600,9 +606,16 @@ public class GameTreePanel
                         treeInfo(m_popupLocation, m_popupNode);
                     else if (command.equals("cancel"))
                         m_popup.setVisible(false);
+                    else if (command.equals("make-principal-variation"))
+                    	makePrincipalVariation(m_popupNode);
                     else
                         assert false;
                 }
+
+				private void makePrincipalVariation(ConstNode m_popupNode) {
+					//TODO ajouter le bout de code qui transforme en variante principale
+					
+				}
             };
         JMenuItem item;
         item = new JMenuItem(i18n("MN_TREE_GOTO"));
@@ -630,6 +643,13 @@ public class GameTreePanel
         item.setActionCommand("show-variations");
         item.addActionListener(listener);
         m_popup.add(item);
+
+        item = new JMenuItem(i18n("MN_TREE_MAKE_MAIN_VARIATION"));
+        m_itemMakeMainVariation = item;
+        item.setActionCommand("make-main-variation"); 
+        item.addActionListener(listener);
+        m_popup.add(item);
+
         item = new JMenuItem(i18n("MN_TREE_SHOW_SUBTREE"));
         m_itemShowSubtree = item;
         item.setActionCommand("show-subtree");
@@ -753,6 +773,7 @@ public class GameTreePanel
         m_itemHideSubtree.setEnabled(hasChildren);
         m_itemShowSubtree.setEnabled(hasChildren);
         m_itemShowChildren.setEnabled(hasChildren);
+        m_itemMakeMainVariation.setEnabled(hasChildren); //setEnabledMainVariation
         m_popup.show(gameNode, x, y);
         m_popupLocation = m_popup.getLocationOnScreen();
     }
