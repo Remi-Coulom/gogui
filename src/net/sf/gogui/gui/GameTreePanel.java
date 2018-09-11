@@ -29,9 +29,14 @@ import javax.swing.Scrollable;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.Game;
+import net.sf.gogui.game.Node;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.gogui.GoGui;
 import net.sf.gogui.gogui.GoGuiActions;
+import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.util.ErrorMessage;
 
 import static net.sf.gogui.gui.I18n.i18n;
 
@@ -64,7 +69,7 @@ public class GameTreePanel
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
                          Label labelMode, Size sizeMode,
-                         MessageDialogs messageDialogs)
+                         MessageDialogs messageDialogs, GoGuiActions m_actions)
     {
         super(new SpringLayout());
         m_messageDialogs = messageDialogs;
@@ -97,7 +102,7 @@ public class GameTreePanel
                             = (GameTreeNode)event.getSource();
                         int x = event.getX();
                         int y = event.getY();
-                        showPopup(x, y, gameNode);
+                        showPopup(x, y, gameNode, m_actions);
                     }
                 }
 
@@ -110,7 +115,7 @@ public class GameTreePanel
                             = (GameTreeNode)event.getSource();
                         int x = event.getX();
                         int y = event.getY();
-                        showPopup(x, y, gameNode);
+                        showPopup(x, y, gameNode, m_actions);
                     }
                 }
             };
@@ -290,7 +295,7 @@ public class GameTreePanel
                                        m_maxY + m_nodeFullSize + MARGIN));
     }
 
-    public void showPopup()
+    public void showPopup(GoGuiActions m_actions)
     {
         if (m_currentNode == null)
             return;
@@ -299,7 +304,7 @@ public class GameTreePanel
         if (gameNode == null)
             return;
         showPopup(gameNode.getWidth() / 2, gameNode.getHeight() / 2,
-                  gameNode);
+                  gameNode, m_actions);
     }
 
     public void update(ConstGameTree tree, ConstNode currentNode,
@@ -470,8 +475,6 @@ public class GameTreePanel
     private JMenuItem m_itemShowSubtree;
 
     private JMenuItem m_itemShowChildren;
-    
-    private JMenuItem m_itemMakeMainVariation;
 
     private void initSize(Size sizeMode)
     {
@@ -580,7 +583,7 @@ public class GameTreePanel
         return dy;
     }
 
-    private void createPopup()
+    private void createPopup(GoGuiActions m_actions)
     {
         m_popup = new JPopupMenu();
         ActionListener listener = new ActionListener()
@@ -605,18 +608,12 @@ public class GameTreePanel
                     else if (command.equals("tree-info"))
                         treeInfo(m_popupLocation, m_popupNode);
                     else if (command.equals("cancel"))
-                        m_popup.setVisible(false);
-                    else if (command.equals("make-principal-variation"))
-                    	makePrincipalVariation(m_popupNode);
-                    else
+                    	m_popup.setVisible(false);
+					else
                         assert false;
                 }
-
-				private void makePrincipalVariation(ConstNode m_popupNode) {
-					//TODO ajouter le bout de code qui transforme en variante principale
-					
-				}
             };
+
         JMenuItem item;
         item = new JMenuItem(i18n("MN_TREE_GOTO"));
         item.setActionCommand("goto");
@@ -643,18 +640,18 @@ public class GameTreePanel
         item.setActionCommand("show-variations");
         item.addActionListener(listener);
         m_popup.add(item);
- 
-        item = new JMenuItem(i18n("MN_TREE_MAKE_MAIN_VARIATION"));
-        m_itemMakeMainVariation = item;
-        item.setActionCommand("make-main-variation"); 
-        item.addActionListener(listener);
-        m_popup.add(item);
-
         item = new JMenuItem(i18n("MN_TREE_SHOW_SUBTREE"));
         m_itemShowSubtree = item;
         item.setActionCommand("show-subtree");
         item.addActionListener(listener);
         m_popup.add(item);
+        GuiMenu edit = new GuiMenu(i18n("LB_EDIT"));
+        edit.add(m_actions.m_actionMakeMainVariation);
+        edit.add(m_actions.m_actionDeleteSideVariations);
+        edit.add(m_actions.m_actionKeepOnlyPosition);
+        edit.add(m_actions.m_actionTruncate);
+        edit.add(m_actions.m_actionTruncateChildren);
+        m_popup.add(edit);
         m_popup.addSeparator();
         item = new JMenuItem(i18n("MN_TREE_NODE_INFO"));
         item.setActionCommand("node-info");
@@ -761,19 +758,18 @@ public class GameTreePanel
         scrollRectToVisible(rectangle);
     }
 
-    private void showPopup(int x, int y, GameTreeNode gameNode)
+    private void showPopup(int x, int y, GameTreeNode gameNode, GoGuiActions m_actions)
     {
         ConstNode node = gameNode.getNode();
         m_popupNode = node;
         if (m_popup == null)
-            createPopup();
+            createPopup(m_actions);
         m_itemGoto.setEnabled(node != m_currentNode);
         m_itemScrollToCurrent.setEnabled(node != m_currentNode);
         boolean hasChildren = node.hasChildren();
         m_itemHideSubtree.setEnabled(hasChildren);
         m_itemShowSubtree.setEnabled(hasChildren);
         m_itemShowChildren.setEnabled(hasChildren);
-        m_itemMakeMainVariation.setEnabled(hasChildren); //setEnabledMainVariation
         m_popup.show(gameNode, x, y);
         m_popupLocation = m_popup.getLocationOnScreen();
     }

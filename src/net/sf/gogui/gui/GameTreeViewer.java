@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.gogui.GoGuiActions;
 import net.sf.gogui.game.ConstGameTree;
 import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.Platform;
@@ -31,14 +32,14 @@ public class GameTreeViewer
     }
 
     public GameTreeViewer(Frame owner, Listener listener,
-                          MessageDialogs messageDialogs)
+                          MessageDialogs messageDialogs, GoGuiActions m_actions)
     {
         super(owner, i18n("TIT_TREE"));
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.Label.NUMBER,
                                     GameTreePanel.Size.NORMAL,
-                                    messageDialogs);
+                                    messageDialogs, m_actions);
         m_scrollPane =
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -61,7 +62,7 @@ public class GameTreeViewer
                     }
                     boolean shift = ((mod & ActionEvent.SHIFT_MASK) != 0);
                     if (c == KeyEvent.VK_ENTER && ! shift)
-                        m_panel.showPopup();
+                        m_panel.showPopup(m_actions);
                 }
 
                 private final int m_shortcut

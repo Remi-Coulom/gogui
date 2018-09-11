@@ -48,6 +48,7 @@ public class GuiMenu
     {
         JMenuItem item = new JMenuItem(action);
         GuiUtil.setTextAndMnemonic(item, action.getNameWithMnemonic());
+        
         return add(item);
     }
 

@@ -320,7 +320,7 @@ public class GoGui
         protectGui(); // Show wait cursor
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    initialize();
+                    initialize(m_actions);
                 } });
     }
 
@@ -1585,6 +1585,8 @@ public class GoGui
         resetBoard();
         updateViews(false);
     }
+    
+    //public void actionMakeMainVariation()
 
     public void actionSetTimeLeft()
     {
@@ -1654,7 +1656,7 @@ public class GoGui
     {
         if (m_gameTreeViewer == null)
         {
-            createTree();
+            createTree(getActions());
             updateViews(false);
         }
         else
@@ -3037,7 +3039,7 @@ public class GoGui
 
     private ContextMenu createContextMenu(GoPoint point)
     {
-        boolean noProgram = (m_gtp == null);
+        //boolean noProgram = (m_gtp == null);
         return new ContextMenu(point, m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),
                                m_guiBoard.getMarkSquare(point),
@@ -3045,9 +3047,9 @@ public class GoGui
                                this);
     }
 
-    private void createTree()
+    private void createTree(GoGuiActions actions)
     {
-        m_gameTreeViewer = new GameTreeViewer(this, this, m_messageDialogs);
+        m_gameTreeViewer = new GameTreeViewer(this, this, m_messageDialogs, actions);
         m_gameTreeViewer.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     actionDisposeTree();
@@ -3422,7 +3424,7 @@ public class GoGui
         return ! isOutOfSync();
     }
 
-    private void initialize()
+    private void initialize(GoGuiActions m_actions)
     {
         m_guiBoard.setListener(this);
         m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
@@ -3487,7 +3489,7 @@ public class GoGui
         if (m_shell != null && m_session.isVisible("shell"))
             m_shell.setVisible(true);
         if (m_session.isVisible("tree"))
-            createTree();
+            createTree(m_actions);
         if (m_gtp != null && m_session.isVisible("analyze"))
             createAnalyzeDialog();
         setTitleFromProgram();
