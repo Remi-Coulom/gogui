@@ -2761,7 +2761,6 @@ ContextMenu.Listener, LiveGfx.Listener
 		if (isCommandInProgress()) 
 		{
 			long timeComputerThinks = System.currentTimeMillis() - time;
-			System.out.println(System.currentTimeMillis()-time);
 			if (timeComputerThinks > 500) {
 
 				showError(i18n("MSG_CANNOT_EXECUTE_WHILE_THINKING"),
