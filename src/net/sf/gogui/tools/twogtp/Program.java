@@ -214,6 +214,12 @@ public class Program
         }
     }
 
+    /**
+     * 
+     * @author Fretel
+     * @param game
+     * @throws GtpError
+     */
     public void synchronizeInit(ConstGame game) throws GtpError
     {
         try
