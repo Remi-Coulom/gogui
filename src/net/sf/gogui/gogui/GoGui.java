@@ -1222,9 +1222,9 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
-                                   i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
-            return;
+        //if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
+        //                           i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
+        //    return;
         humanMoved(Move.getPass(getToMove()));
     }
 
@@ -2046,7 +2046,8 @@ public class GoGui
                 return;
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
             Komi komi = getGameInfo().getKomi();
-            m_scoreDialog.showScore(m_countScore, komi);
+	    int handicap = getGameInfo().getHandicap();
+            m_scoreDialog.showScore(m_countScore, komi, handicap);
         }
         else if (modifiedSelect)
             m_guiBoard.contextMenu(p);
@@ -3452,15 +3453,16 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
         m_programs = Program.load();
         m_menuBar.setPrograms(m_programs);
-        if (m_programCommand == null)
-        {
-            int index = m_prefs.getInt("program", -1);
-            if (index >= 0 && index < m_programs.size())
-            {
-                m_program = m_programs.get(index);
-                m_programCommand = m_program.m_command;
-            }
-        }
+        //if (m_programCommand == null)
+        //{
+        //    Attach last program automatically.
+        //    int index = m_prefs.getInt("program", -1);
+        //    if (index >= 0 && index < m_programs.size())
+        //    {
+        //        m_program = m_programs.get(index);
+        //        m_programCommand = m_program.m_command;
+        //    }
+        //}
         if (m_initialFile == null)
             newGame(getBoardSize());
         else
@@ -3511,7 +3513,8 @@ public class GoGui
         }
         restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInfo().getKomi();
-        m_scoreDialog.showScore(m_countScore, komi);
+	int handicap = getGameInfo().getHandicap();
+        m_scoreDialog.showScore(m_countScore, komi, handicap);
         m_scoreDialog.setVisible(true);
         showStatus(i18n("STAT_SCORE"));
     }

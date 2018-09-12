@@ -32,6 +32,7 @@ public final class Main
                 "force",
                 "games:",
                 "help",
+                "handicap:",
                 "komi:",
                 "maxmoves:",
                 "observer:",
@@ -64,6 +65,7 @@ public final class Main
                    "-games          number of games (0=unlimited)\n" +
                    "-help           display this help and exit\n" +
                    "-komi           komi\n" +
+                   "-handicap       handicap\n" +
                    "-maxmoves       move limit\n" +
                    "-observer       command for observer program\n" +
                    "-openings       directory with opening sgf files\n" +
@@ -114,6 +116,7 @@ public final class Main
             Komi komi = new Komi(6.5);
             if (opt.contains("komi"))
                 komi = Komi.parseKomi(opt.get("komi"));
+            int handicap = opt.getInteger("handicap", 0, 0, 9);
             int maxMoves = opt.getInteger("maxmoves", 1000, -1);
             TimeSettings timeSettings = null;
             if (opt.contains("time"))
@@ -165,7 +168,7 @@ public final class Main
                 if (i > 0)
                     verbose = false;
                 twoGtp[i] = new TwoGtp(blackProgram, whiteProgram,
-                                       refereeProgram, observer, size, komi,
+                                       refereeProgram, observer, size, komi, handicap,
                                        numberGames, alternate, sgfFile,
                                        verbose, openings, timeSettings,
                                        resultFile);
