@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -172,7 +173,7 @@ public class GuiUtil
                 "</style></head>";
     }
 
-    /** Get size of default monspaced font.
+    /** Get size of default monospaced font.
         Can be used for setting the initial size of some GUI elements. */
     public static int getDefaultMonoFontSize()
     {
@@ -181,10 +182,21 @@ public class GuiUtil
 
     public static ImageIcon getIcon(String icon, String name)
     {
+        //TODO replace .png by .svg images and change ImageIcon to
         String resource = "net/sf/gogui/images/" + icon + ".png";
         URL url = GuiUtil.class.getClassLoader().getResource(resource);
-        return new ImageIcon(url, name);
+
+        return getScaledIcon(new ImageIcon(url,name));
     }
+
+    public static ImageIcon getScaledIcon(ImageIcon imageIcon)
+    {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Image image = imageIcon.getImage();
+        int scale = (int)screenSize.getWidth()*imageIcon.getIconWidth()/1400;
+        return new ImageIcon(image.getScaledInstance(scale,scale,scale));
+    }
+
 
     /** Init look and feel.
         If parameter is empty string, no initialization will be done.
