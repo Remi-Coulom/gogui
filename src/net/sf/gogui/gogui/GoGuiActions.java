@@ -124,7 +124,7 @@ public class GoGuiActions
                 m_goGui.actionComputerColor(true, true); } };
 
     public final GuiAction m_actionComputerNone =
-        new GuiAction(i18n("ACT_COMPUTER_NONE")) {
+        new GuiAction(i18n("ACT_COMPUTER_NONE"), "Computer color: None", "gogui") {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionComputerColor(false, false); } };
 

@@ -5,7 +5,7 @@ Build file for Apache Ant (http://ant.apache.org/)
 
 <project name="GoGui" default="build">
 
-<property name="version" value="1.4.UNKNOWN"/>
+<property name="version" value="1.4.10"/>
 
 <tstamp>
   <format property="dstamp" pattern="yyyy-MM-dd" timezone="UCT"/>
