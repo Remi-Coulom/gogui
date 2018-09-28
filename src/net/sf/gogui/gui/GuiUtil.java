@@ -20,6 +20,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -182,18 +183,39 @@ public class GuiUtil
 
     public static ImageIcon getIcon(String icon, String name)
     {
-        //TODO replace .png by .svg images and change ImageIcon to
         String resource = "net/sf/gogui/images/" + icon + ".png";
         URL url = GuiUtil.class.getClassLoader().getResource(resource);
-
-        return getScaledIcon(new ImageIcon(url,name));
+        return getScaledIcon(url, icon);
     }
 
-    public static ImageIcon getScaledIcon(ImageIcon imageIcon)
+    /**
+     * @return the scaled image depending on the screensize
+     */
+    private static ImageIcon getScaledIcon(URL url, String icon)
     {
+        String name = url.getFile();
+        ImageIcon imageIcon = new ImageIcon(url,icon);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if (! name.contains("x")) {
+            if (screenSize.getHeight() >= 1800) {
+                String newUrl = url.getFile().replace (".png", "-32x32.png");
+                if (new File(newUrl).exists()) {
+                    imageIcon = new ImageIcon(url.getFile().replace(".png", "-32x32.png"));
+                }
+            }else if (screenSize.getHeight() >= 1500) {
+                String newUrl = url.getFile().replace (".png", "-24x24.png");
+                if (new File(newUrl).exists()) {
+                    imageIcon = new ImageIcon(url.getFile().replace(".png", "-24x24.png"));
+                }
+            }else {
+                String newUrl = url.getFile().replace (".png", "-16x16.png");
+                if (new File(newUrl).exists()) {
+                    imageIcon = new ImageIcon(url.getFile().replace(".png", "-16x16.png"));
+                }
+            }
+        }
         Image image = imageIcon.getImage();
-        int scale = (int)screenSize.getWidth()*imageIcon.getIconWidth()/1400;
+        int scale = (int)screenSize.getWidth()/100;
         return new ImageIcon(image.getScaledInstance(scale,scale,scale));
     }
 
