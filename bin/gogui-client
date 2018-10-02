@@ -1,0 +1,18 @@
+#!/bin/sh
+
+JAVA_DEFAULT=java
+GOGUI_LIB=`dirname "$0"`/../lib
+# Fix path if running Cygwin environment on Windows
+if [ -f /usr/bin/cygpath ]; then
+    GOGUI_LIB=`cygpath -w "$GOGUI_LIB"`
+fi
+if [ -z "$GOGUI_JAVA_HOME" ]; then
+    JAVA="$JAVA_DEFAULT"
+else
+    JAVA="$GOGUI_JAVA_HOME/bin/java"
+fi
+if [ "$GOGUI_ENABLE_ASSERTIONS" = "1" ]; then
+    OPTIONS="-ea"
+fi
+
+"$JAVA" $OPTIONS -jar "$GOGUI_LIB/gogui-client.jar" "$@"
