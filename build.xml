@@ -201,7 +201,7 @@ option -Dquaqua.ignore=true.
 <target name="compile" depends="depend,version,doc">
 <mkdir dir="build"/>
 <mkdir dir="build/classes"/>
-<javac srcdir="src" destdir="build/classes" source="1.5" target="1.5"
+<javac srcdir="src" destdir="build/classes" source="1.8" target="1.8"
  deprecation="true" debug="true" listfiles="yes" includeAntRuntime="false">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
@@ -218,7 +218,7 @@ option -Dquaqua.ignore=true.
 <fileset dir="doc/manual/html" includes="*.html *.png"/>
 </copy>
 <mkdir dir="build/specialmac"/>
-<javac srcdir="mac/src" destdir="build/specialmac" source="1.5"
+<javac srcdir="mac/src" destdir="build/specialmac" source="1.8"
  deprecation="true" classpath="build/classes" listfiles="yes"
  includeAntRuntime="false"
  includes="
@@ -691,7 +691,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 
 <target name="javadoc"
  description="Create Javadoc documentation for public parts of packages">
-<javadoc sourcepath="src" destdir="doc/javadoc" source="1.5"
+<javadoc sourcepath="src" destdir="doc/javadoc" source="1.8"
  windowtitle="GoGui Source Documentation"
  overview="src/net/sf/gogui/overview.html"
  packagenames="
@@ -743,7 +743,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 <target name="junit-compile" depends="compile,test-depend"
  description="Compile JUnit tests">
 <mkdir dir="build/test"/>
-<javac srcdir="test/junit/src" destdir="build/test" source="1.5" target="1.5"
+<javac srcdir="test/junit/src" destdir="build/test" source="1.8" target="1.8"
  deprecation="true" debug="true" listfiles="yes" classpath="build/classes">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>
