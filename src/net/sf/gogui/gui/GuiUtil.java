@@ -215,7 +215,7 @@ public class GuiUtil
             }
         }
         Image image = imageIcon.getImage();
-        int scale = (int)screenSize.getWidth()/100;
+        int scale = (int)(screenSize.getWidth()*imageIcon.getIconWidth()/1400);
         return new ImageIcon(image.getScaledInstance(scale,scale,scale));
     }
 
