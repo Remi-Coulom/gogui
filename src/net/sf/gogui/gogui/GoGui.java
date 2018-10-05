@@ -27,13 +27,8 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
-import java.sql.Time;
-
 import static java.text.MessageFormat.format;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
@@ -142,9 +137,9 @@ import net.sf.gogui.version.Version;
 public class GoGui
 extends JFrame
 implements AnalyzeDialog.Listener, GuiBoard.Listener,
-    GameTreeViewer.Listener, GtpShell.Listener,
-    ScoreDialog.Listener, GoGuiMenuBar.Listener,
-    ContextMenu.Listener, LiveGfx.Listener
+            GameTreeViewer.Listener, GtpShell.Listener,
+            ScoreDialog.Listener, GoGuiMenuBar.Listener,
+            ContextMenu.Listener, LiveGfx.Listener
 {
     public enum Orientation
     {
@@ -167,11 +162,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     }
 
     public GoGui(String program, File file, int move, String time,
-            boolean verbose, boolean initComputerColor,
-            boolean computerBlack, boolean computerWhite, boolean auto,
-            boolean register, String gtpFile, String gtpCommand,
-            File analyzeCommandsFile)
-                    throws GtpError, ErrorMessage
+                 boolean verbose, boolean initComputerColor,
+                 boolean computerBlack, boolean computerWhite, boolean auto,
+                 boolean register, String gtpFile, String gtpCommand,
+                 File analyzeCommandsFile)
+        throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
@@ -1227,9 +1222,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         if (! checkStateChangePossible())
             return;
-        if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
-                i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
-            return;
+        //if (! showOptionalQuestion("pass", i18n("MSG_PASS"),
+        //                           i18n("MSG_PASS_2"), i18n("LB_PASS"), false))
+        //    return;
         humanMoved(Move.getPass(getToMove()));
     }
 
@@ -2053,7 +2048,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 return;
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
             Komi komi = getGameInfo().getKomi();
-            m_scoreDialog.showScore(m_countScore, komi);
+	    int handicap = getGameInfo().getHandicap();
+            m_scoreDialog.showScore(m_countScore, komi, handicap);
         }
         else if (modifiedSelect)
             m_guiBoard.contextMenu(p);
@@ -3475,15 +3471,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_menuBar.setBookmarks(m_bookmarks);
         m_programs = Program.load();
         m_menuBar.setPrograms(m_programs);
-        if (m_programCommand == null)
-        {
-            int index = m_prefs.getInt("program", -1);
-            if (index >= 0 && index < m_programs.size())
-            {
-                m_program = m_programs.get(index);
-                m_programCommand = m_program.m_command;
-            }
-        }
+        //if (m_programCommand == null)
+        //{
+        //    Attach last program automatically.
+        //    int index = m_prefs.getInt("program", -1);
+        //    if (index >= 0 && index < m_programs.size())
+        //    {
+        //        m_program = m_programs.get(index);
+        //        m_programCommand = m_program.m_command;
+        //    }
+        //}
         if (m_initialFile == null)
             newGame(getBoardSize());
         else
@@ -3534,7 +3531,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInfo().getKomi();
-        m_scoreDialog.showScore(m_countScore, komi);
+	int handicap = getGameInfo().getHandicap();
+        m_scoreDialog.showScore(m_countScore, komi, handicap);
         m_scoreDialog.setVisible(true);
         showStatus(i18n("STAT_SCORE"));
     }

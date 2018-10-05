@@ -27,6 +27,8 @@ public class Score
 
     public Komi m_komi;
 
+    public int m_handicap;
+
     public double m_result;
 
     public double m_resultArea;

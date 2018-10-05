@@ -119,14 +119,15 @@ public class CountScore
     /** Get the score.
         @param komi The komi.
         @param rules The scoring method */
-    public Score getScore(Komi komi, ScoringMethod rules)
+    public Score getScore(Komi komi, ScoringMethod rules, int handicap)
     {
         Score s = new Score();
         s.m_rules = rules;
         s.m_komi = komi;
+	s.m_handicap = (handicap > 1 ? handicap : 0);
         s.m_capturedBlack = m_board.getCaptured(BLACK);
         s.m_capturedWhite = m_board.getCaptured(WHITE);
-        int areaDiff = 0;
+        int areaDiff = -handicap;
         int territoryDiff = 0;
         for (GoPoint p : m_board)
         {
