@@ -2,10 +2,7 @@ package net.sf.gogui.gomoku;
 
 import java.util.ArrayList;
 
-import javax.swing.plaf.synth.SynthScrollBarUI;
-
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;

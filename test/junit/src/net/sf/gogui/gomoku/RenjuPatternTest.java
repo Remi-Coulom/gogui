@@ -18,7 +18,8 @@ public class RenjuPatternTest extends junit.framework.TestCase{
 	}
 	
 	public void testIsDoubleFourTrue() {
-        Board b = new Board(19);
+        System.out.println("\n\nis double four true");
+	    Board b = new Board(19);
 	    b.play(GoColor.BLACK, GoPoint.get(6, 6));
 	    b.play(GoColor.BLACK, GoPoint.get(6, 5));
 	    b.play(GoColor.BLACK, GoPoint.get(6, 3));
@@ -30,7 +31,8 @@ public class RenjuPatternTest extends junit.framework.TestCase{
 	}
 	
 	public void testIsDoubleFourFalse() {
-        Board b = new Board(19);
+        System.out.println("\n\nis double four false");
+	    Board b = new Board(19);
 	    b.play(GoColor.BLACK, GoPoint.get(6, 6));
         b.play(GoColor.BLACK, GoPoint.get(6, 5));
         b.play(GoColor.BLACK, GoPoint.get(6, 3));
@@ -48,6 +50,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
 	}
     
     public void testIsOpenFourTrue() {
+        System.out.println("\n\nis open four true");
         Board b = new Board(8);
         b.play(GoColor.BLACK, GoPoint.get(1, 1));
         b.play(GoColor.BLACK, GoPoint.get(2, 2));
@@ -57,6 +60,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
 
     public void testIsOpenFourFalse() {
+        System.out.println("\n\nis open four false");
         Board b = new Board(8);
         b.play(GoColor.WHITE, GoPoint.get(0, 0));
         b.play(GoColor.BLACK, GoPoint.get(1, 1));
@@ -66,7 +70,8 @@ public class RenjuPatternTest extends junit.framework.TestCase{
         assertFalse(rj.isDoubleFour());
     }
     public void testIsDoubleOpenThree() {
-    	Board b = new Board(11);
+        System.out.println("\n\nis double open three true");
+        Board b = new Board(11);
         b.play(GoColor.BLACK, GoPoint.get(2, 2));
         b.play(GoColor.BLACK, GoPoint.get(5, 2));
         b.play(GoColor.BLACK, GoPoint.get(3, 3));
@@ -75,6 +80,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
         assertTrue(rj.isDoubleOpenThree());
     }
     public void testIsDoubleFourAligned() {
+        System.out.println("\n\nis double four while aligned");
         Board b = new Board(10);
         b.play(GoColor.WHITE, GoPoint.get(0, 0));
         b.play(GoColor.BLACK, GoPoint.get(1, 0));
@@ -88,6 +94,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     } 
     
     public void testIsDoubleFourAligned2() {
+        System.out.println("\n\nis double four while aligned2");
         Board b = new Board(10);
         b.play(GoColor.WHITE, GoPoint.get(0, 0));
         b.play(GoColor.BLACK, GoPoint.get(1, 0));
@@ -101,6 +108,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
 
     public void testIsDoubleOpenThreeFalse() {
+        System.out.println("\n\nis double open three false");
         Board b = new Board(11);
         b.play(GoColor.BLACK, GoPoint.get(2, 2));
         b.play(GoColor.BLACK, GoPoint.get(5, 2));
@@ -112,6 +120,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
     
     public void testIsFork() {
+        System.out.println("\n\nis fork");
         Board b = new Board(12);
         b.play(GoColor.WHITE, GoPoint.get(1, 1));
         b.play(GoColor.BLACK, GoPoint.get(2, 1));
@@ -125,6 +134,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
     
     public void testIsForbiddenMove() {
+        System.out.println("\n\nis forbidden move");
         Board b = new Board(15);
         b.play(GoColor.BLACK, GoPoint.get(4, 5));
         b.play(GoColor.BLACK, GoPoint.get(3, 3));
@@ -135,6 +145,8 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
     
     public void testIsNotForbidden() {
+        System.out.println("\n\nis not forbidden move (because of fork 4-3)");
+        //Does not work because it's 4/4 when I put the stone on
         Board b = new Board(11);
         b.play(GoColor.BLACK, GoPoint.get(1,4));
         b.play(GoColor.BLACK, GoPoint.get(5, 4));
@@ -147,6 +159,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
     
     public void testIsNotForbidden2() {
+        System.out.println("\n\nis not forbidden move 2 (because of 6 alignment)");
         Board b = new Board(11);
         b.play(GoColor.WHITE, GoPoint.get(1, 1));
         b.play(GoColor.BLACK, GoPoint.get(2, 2));
@@ -163,6 +176,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
     
     public void testIsNotForbidden3() {
+        System.out.println("\n\nis not forbidden move 3");
         Board b = new Board(11);
         b.play(GoColor.WHITE, GoPoint.get(1, 8));
         b.play(GoColor.WHITE, GoPoint.get(2, 7));
@@ -190,6 +204,7 @@ public class RenjuPatternTest extends junit.framework.TestCase{
     }
     
     public void testStopRecursivity() {
+        System.out.println("\n\nstop recursivity");
         Board b = new Board(7);
         b.play(GoColor.WHITE, GoPoint.get(1, 0));
         b.play(GoColor.WHITE, GoPoint.get(0, 1));

@@ -6,7 +6,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
-public class ForbiddenRenjuMoveTest {
+public class ForbiddenRenjuMoveTest{
 	
 
 	public static Test suite() {
@@ -17,7 +17,13 @@ public class ForbiddenRenjuMoveTest {
 		return new junit.framework.TestSuite(ForbiddenRenjuMoveTest.class);
 	}
 	
-	
+	public void testIsOpenFour() {
+	    Board b = new Board(8);
+	    b.play(GoColor.BLACK, GoPoint.get(1, 1));
+	    b.play(GoColor.BLACK, GoPoint.get(2, 2));
+	    b.play(GoColor.BLACK, GoPoint.get(4, 4));
+	  //  RenjuPattern.
+	}
 	public void testIsFork() {
 		Board b = new Board(12);
 		b.play(GoColor.WHITE, GoPoint.get(1, 1));
