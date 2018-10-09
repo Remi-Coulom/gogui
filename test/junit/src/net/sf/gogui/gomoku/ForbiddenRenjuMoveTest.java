@@ -27,8 +27,6 @@ public class ForbiddenRenjuMoveTest {
 		b.play(GoColor.BLACK, GoPoint.get(8, 1));
 		b.play(GoColor.BLACK, GoPoint.get(9, 1));
 		b.play(GoColor.WHITE, GoPoint.get(10, 1));
-		
-		ForbiddenRenjuMove.
 	}
 
 }
