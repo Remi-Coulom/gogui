@@ -117,9 +117,15 @@ public class Game
     {
         return m_tree;
     }
+    
     public boolean getEndGame()
     {
         return m_endGame;
+    }
+    
+    public void resetEndGame()
+    {
+        m_endGame = false;
     }
 
     public void gotoNode(ConstNode node)
@@ -194,6 +200,8 @@ public class Game
 
     public void play(Move move)
     {
+        if (!m_endGame)
+        {
         m_clock.stopMove();
         Node node = new Node(move);
         GoColor color = move.getColor();
@@ -211,6 +219,12 @@ public class Game
         m_current.append(node);
         m_current = node;
         updateBoard();
+        }
+        if (m_endGame)
+        {
+            m_clock.halt();
+            return;
+        }
         setModified();
         m_clock.startMove(getToMove());
     }

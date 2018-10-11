@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpGameRuler;
+import net.sf.gogui.gtp.GtpSynchronizer;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -208,13 +209,19 @@ implements ConstBoard
         clear();
     }
 
-    public void attachGameRuler(GtpGameRuler gameRuler)
+    public void attachGameRuler(GtpGameRuler gameRuler, GtpSynchronizer gameRulerSynchro)
     {
         m_gameRuler = gameRuler;
+        m_gameRulerSynchro = gameRulerSynchro;
+    }
+    
+    public void attachGameRulerSynchro(GtpSynchronizer gameRulerSynchro)
+    {
+        m_gameRulerSynchro = gameRulerSynchro;
     }
 
     public boolean isGameRulerAttached() {
-        return m_gameRuler != null;
+        return (m_gameRuler != null && m_gameRulerSynchro != null);
     }
 
     /** Check if a move would capture anything (including suicide).
@@ -280,21 +287,6 @@ implements ConstBoard
             return false;
         play(c, p);
         boolean result = (getSuicide().size() > 0);
-        undo();
-        return result;
-    }
-
-    public boolean isGameOver(Move move)
-    {
-        GoColor c = move.getColor();
-        GoPoint p = move.getPoint();
-        play(c, p);
-        boolean result = true;
-        try {
-            result = m_gameRuler.isGameOver();
-        } catch (GtpError e) {
-            e.printStackTrace();
-        }
         undo();
         return result;
     }
@@ -431,6 +423,8 @@ implements ConstBoard
         public PointList m_suicide;
 
         public GtpGameRuler m_gameRuler;
+        
+        public GtpSynchronizer m_gameRulerSynchro;
 
         public int m_moveIndex = 0;
 
@@ -467,7 +461,7 @@ implements ConstBoard
             if (board.m_lastMoveIndex < board.getNumberMoves()-1) {
                 board.m_lastMoveIndex = board.getNumberMoves()-1 ;
             }
-            this.m_moveIndex = board.m_lastMoveIndex;
+            m_moveIndex = board.m_lastMoveIndex;
             return result;
         }
 
@@ -591,7 +585,9 @@ implements ConstBoard
 
     private GoPoint m_koPoint;
 
-    public GtpGameRuler m_gameRuler;
+    private GtpGameRuler m_gameRuler;
+    
+    private GtpSynchronizer m_gameRulerSynchro;
 
     private int m_lastMoveIndex = 0;
 

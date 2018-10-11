@@ -5,6 +5,7 @@ package net.sf.gogui.go;
 import java.util.Iterator;
 
 import net.sf.gogui.gtp.GtpGameRuler;
+import net.sf.gogui.gtp.GtpSynchronizer;
 
 /** Const functions of go.Board.
     @see Board */
@@ -55,5 +56,5 @@ public interface ConstBoard
 
     Iterator<GoPoint> iterator();
 
-    void attachGameRuler(GtpGameRuler gameRuler);
+    void attachGameRuler(GtpGameRuler gameRuler, GtpSynchronizer gameRulerSynchro);
 }
