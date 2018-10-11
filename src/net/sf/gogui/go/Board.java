@@ -479,14 +479,14 @@ implements ConstBoard
                 }
                 else if (board.m_lastMoveIndex == m_moveIndex)
                 {
+                    if (m_moveIndex == 0 || !board.m_gameRulerSynchro.isOutOfSync())
+                    {
+                        board.setColor(p, c);
+                    }
                     if (m_legalMoves.contains(p.toString()))
                     {
                         board.setColor(p, c);
                         m_gameRuler.sendPlay(m_move);
-                    }
-                    else if (m_moveIndex == 0)
-                    {
-                        board.setColor(p, c);
                     }
                     else
                     {

@@ -32,6 +32,7 @@ public class BoardUpdater
         boolean isFirstPlacement = true;
         boolean isHandicapSetupDone = false;
         boolean isInInitialBlackMoveSequence = true;
+        boolean endGame = false;
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {
             ConstNode node = m_nodes.get(i);
@@ -59,7 +60,7 @@ public class BoardUpdater
             if (move != null)
             {
                 if (board.play(move)) {
-                    return true;
+                    endGame = true;
                 }
                 ++nuMoves;
                 isFirstPlacement = false;
@@ -75,7 +76,7 @@ public class BoardUpdater
                 }
             }
         }
-        return false;
+        return endGame;
     }
 
     /** Local variable used in update.

@@ -1240,6 +1240,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     public void actionPlay(boolean isSingleMove)
     {
+        try {
+            this.m_gameRulerSynchro.synchronize(getBoard(), getPrefsKomi(), m_timeSettings);
+        } catch (GtpError e) {
+            showError(e);
+        }
         if (m_game.getEndGame())
             return;
         if (! checkStateChangePossible())
