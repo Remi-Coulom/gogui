@@ -12,6 +12,8 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gui.MessageDialogs;
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater
@@ -21,7 +23,7 @@ public class BoardUpdater
         m_nodes = new ArrayList<ConstNode>(400);
     }
 
-    public void update(ConstGameTree tree, ConstNode currentNode, Board board)
+    public boolean update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
         board.init(tree.getBoardSize());
         int handicap = tree.getGameInfoConst(currentNode).getHandicap();
@@ -56,7 +58,9 @@ public class BoardUpdater
             Move move = node.getMove();
             if (move != null)
             {
-                board.play(move);
+                if (board.play(move)) {
+                    return true;
+                }
                 ++nuMoves;
                 isFirstPlacement = false;
                 if (move.getColor() != BLACK)
@@ -71,6 +75,7 @@ public class BoardUpdater
                 }
             }
         }
+        return false;
     }
 
     /** Local variable used in update.

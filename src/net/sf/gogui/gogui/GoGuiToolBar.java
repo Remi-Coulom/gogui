@@ -31,6 +31,7 @@ public class GoGuiToolBar
         addButton(actions.m_actionComputerNone);
         addSeparator();
         addButton(actions.m_actionPass);
+        actions.m_actionPass.setEnabled(m_goGui.isPassEnabled());
         addButton(actions.m_actionPlay);
         addSeparator();
         addButton(actions.m_actionBeginning);

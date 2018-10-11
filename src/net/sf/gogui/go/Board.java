@@ -4,6 +4,11 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.function.Consumer;
+
+import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpGameRuler;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
@@ -11,10 +16,10 @@ import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 
 /** Go board. */
 public final class Board
-    implements ConstBoard
+implements ConstBoard
 {
     public class BoardIterator
-        implements Iterator<GoPoint>
+    implements Iterator<GoPoint>
     {
         public boolean hasNext()
         {
@@ -32,7 +37,7 @@ public final class Board
         }
 
         private final Iterator<GoPoint> m_iterator =
-            m_constants.getPoints().iterator();
+                m_constants.getPoints().iterator();
     }
 
     /** Constructor.
@@ -203,6 +208,15 @@ public final class Board
         clear();
     }
 
+    public void attachGameRuler(GtpGameRuler gameRuler)
+    {
+        m_gameRuler = gameRuler;
+    }
+
+    public boolean isGameRulerAttached() {
+        return m_gameRuler != null;
+    }
+
     /** Check if a move would capture anything (including suicide).
         @param c The player color.
         @param p The point to check.
@@ -270,6 +284,21 @@ public final class Board
         return result;
     }
 
+    public boolean isGameOver(Move move)
+    {
+        GoColor c = move.getColor();
+        GoPoint p = move.getPoint();
+        play(c, p);
+        boolean result = true;
+        try {
+            result = m_gameRuler.isGameOver();
+        } catch (GtpError e) {
+            e.printStackTrace();
+        }
+        undo();
+        return result;
+    }
+
     public Iterator<GoPoint> iterator()
     {
         return new BoardIterator();
@@ -310,11 +339,12 @@ public final class Board
         blocks adjacent to the stone, capture the block the stone is part of
         if it was a suicide move and switches the color to move.
         @param move The move (location and player) */
-    public void play(Move move)
+    public boolean play(Move move)
     {
         StackEntry entry = new StackEntry(move);
-        entry.execute(this);
+        boolean result = entry.execute(this);
         m_stack.add(entry);
+        return result;
     }
 
     /** Change the color to move.
@@ -371,6 +401,7 @@ public final class Board
         assert index >= 0;
         m_stack.get(index).undo(this);
         m_stack.remove(index);
+        m_lastMoveIndex = index;
     }
 
     /** Undo a number of moves.
@@ -399,20 +430,89 @@ public final class Board
 
         public PointList m_suicide;
 
+        public GtpGameRuler m_gameRuler;
+
+        public int m_moveIndex = 0;
+
+        private String m_legalMoves;
+
         public StackEntry(Move move)
         {
             m_move = move;
         }
 
-        public void execute(Board board)
+        public boolean execute(Board board)
         {
-            GoPoint p = m_move.getPoint();
-            GoColor c = m_move.getColor();
-            GoColor otherColor = c.otherColor();
+            boolean result = false;
             m_killed = new PointList();
             m_suicide = new PointList();
             m_oldKoPoint = board.m_koPoint;
             board.m_koPoint = null;
+            if (m_moveIndex < board.m_stack.size())
+                m_moveIndex = board.m_stack.size();
+            if (board.isGameRulerAttached())
+            {
+                m_gameRuler = board.m_gameRuler;
+                try {
+                    result = executeGameRules(board);
+                } catch (GtpError e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else
+            {
+                executeGo(board);
+            }
+            if (board.m_lastMoveIndex < board.getNumberMoves()-1) {
+                board.m_lastMoveIndex = board.getNumberMoves()-1 ;
+            }
+            this.m_moveIndex = board.m_lastMoveIndex;
+            return result;
+        }
+
+        private boolean executeGameRules(Board board) throws GtpError
+        {
+            m_legalMoves = m_gameRuler.getLegalMoves();
+            GoPoint p = m_move.getPoint();
+            GoColor c = m_move.getColor();
+            m_oldToMove = c;
+            if (p != null)
+            {
+                if (board.m_lastMoveIndex > m_moveIndex)
+                {
+                    board.setColor(p, c);
+                }
+                else if (board.m_lastMoveIndex == m_moveIndex)
+                {
+                    if (m_legalMoves.contains(p.toString()))
+                    {
+                        board.setColor(p, c);
+                        m_gameRuler.sendPlay(m_move);
+                    }
+                    else if (m_moveIndex == 0)
+                    {
+                        board.setColor(p, c);
+                    }
+                    else
+                    {
+                        System.out.println("illegal move");
+                    }
+                    //TODO show illegal move message
+                }
+            }
+            m_oldColor = board.getColor(p); // color when UNDO
+            m_oldToMove = board.m_toMove;
+            board.m_toMove = m_gameRuler.getSideToMove(m_move);
+            m_gameRuler.send("showboard");
+            return m_gameRuler.isGameOver();
+        }
+
+        private void executeGo(Board board)
+        {
+            GoPoint p = m_move.getPoint();
+            GoColor c = m_move.getColor();
+            GoColor otherColor = c.otherColor();
             if (p != null)
             {
                 m_oldColor = board.getColor(p);
@@ -490,6 +590,10 @@ public final class Board
     private BoardConstants m_constants;
 
     private GoPoint m_koPoint;
+
+    public GtpGameRuler m_gameRuler;
+
+    private int m_lastMoveIndex = 0;
 
     private final BlackWhiteSet<PointList> m_setup
         = new BlackWhiteSet<PointList>(new PointList(), new PointList());

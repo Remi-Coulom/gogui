@@ -49,6 +49,10 @@ public final class GoGuiSettings
 
     public String m_time;
 
+    public String m_rules;
+
+    public String m_gameRuler;
+
     public GoGuiSettings(String args[], Class c) throws ErrorMessage
     {
         m_prefs = Preferences.userNodeForPackage(c);
@@ -67,6 +71,7 @@ public final class GoGuiSettings
             "laf:",
             "move:",
             "program:",
+            "rules:",
             "register",
             "size:",
             "time:",
@@ -132,6 +137,7 @@ public final class GoGuiSettings
         m_verbose = opt.contains("verbose");
         ArrayList<String> arguments = opt.getArguments();
         m_file = null;
+        m_rules = opt.get("rules");
         if (arguments.size() == 1)
             m_file = new File(arguments.get(0));
         else if (arguments.size() > 1)
@@ -163,6 +169,7 @@ public final class GoGuiSettings
             "-laf              Set Swing look and feel\n" +
             "-move             Load SGF file until move number\n" +
             "-program          Go program to attach\n" +
+            "-rules            Game ruler program to attach\n" +
             "-size             Set board size\n" +
             "-time             Set time limits (min[+min/moves])\n" +
             "-verbose          Print debugging messages\n" +

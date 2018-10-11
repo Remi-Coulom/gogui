@@ -4,6 +4,8 @@ package net.sf.gogui.go;
 
 import java.util.Iterator;
 
+import net.sf.gogui.gtp.GtpGameRuler;
+
 /** Const functions of go.Board.
     @see Board */
 public interface ConstBoard
@@ -52,4 +54,6 @@ public interface ConstBoard
     boolean isSuicide(GoColor c, GoPoint p);
 
     Iterator<GoPoint> iterator();
+
+    void attachGameRuler(GtpGameRuler gameRuler);
 }

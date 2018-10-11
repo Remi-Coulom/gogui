@@ -117,6 +117,10 @@ public class Game
     {
         return m_tree;
     }
+    public boolean getEndGame()
+    {
+        return m_endGame;
+    }
 
     public void gotoNode(ConstNode node)
     {
@@ -154,6 +158,7 @@ public class Game
         m_clock.halt();
         m_modified = false;
         m_clockNode = null;
+        m_endGame = false;
     }
 
     /** Check if game was modified.
@@ -410,6 +415,8 @@ public class Game
 
     private final Clock m_clock;
 
+    private boolean m_endGame;
+
     private void setModified()
     {
         m_modified = true;
@@ -417,7 +424,7 @@ public class Game
 
     private void updateBoard()
     {
-        m_boardUpdater.update(m_tree, m_current, m_board);
+        m_endGame = m_boardUpdater.update(m_tree, m_current, m_board);
     }
 
     private void updateClock()

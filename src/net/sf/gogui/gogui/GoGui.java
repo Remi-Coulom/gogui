@@ -81,6 +81,7 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientUtil;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpGameRuler;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
@@ -165,7 +166,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
                  boolean register, String gtpFile, String gtpCommand,
-                 File analyzeCommandsFile)
+                 String gtpGameRuler, File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -195,12 +196,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_verbose = verbose;
         m_showInfoPanel = true;
         m_showToolbar = false;
-
         Container contentPane = getContentPane();
         m_innerPanel = new JPanel(new BorderLayout());
         contentPane.add(m_innerPanel, BorderLayout.CENTER);
-        m_toolBar = new GoGuiToolBar(this);
-
         m_infoPanel = new JPanel(new BorderLayout());
         m_game = new Game(boardSize);
         m_gameInfoPanel = new GameInfoPanel(m_game);
@@ -313,6 +311,64 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setJMenuBar(m_menuBar);
         setMinimumSize();
         m_programCommand = program;
+
+        //TODO replace the directory and the program by the params and the directory
+        m_gameRuler = new GtpGameRuler("/home/fretel/crazy_zero/gomoku/gomoku_gtp gogui.gtp",
+                new File("/home/fretel/crazy_zero/gomoku"),
+                false,new GtpGameRuler.IOCallback() {
+            @Override
+            public void receivedInvalidResponse(String s) {
+                if (m_shell == null)
+                    return;
+                boolean invokeLater = true;
+                m_shell.receivedInvalidResponse(s, invokeLater);
+			}
+
+			@Override
+			public void receivedResponse(boolean error, String s) {
+
+                if (m_shell == null)
+                    return;
+                boolean invokeLater = true;
+                m_shell.receivedResponse(error, s, invokeLater);
+			}
+
+			@Override
+			public void receivedStdErr(String s){
+                if (m_shell == null)
+                    return;
+				m_lineReader.add(s);
+                while (m_lineReader.hasLines())
+                {
+                    String line = m_lineReader.getLine();
+                    boolean isLiveGfx = m_liveGfx.handleLine(line);
+                    boolean isWarning =
+                            line.startsWith("warning:")
+                            || line.startsWith("Warning:")
+                            || line.startsWith("WARNING:");
+                    boolean invokeLater = true;
+                    m_shell.receivedStdErr(line, invokeLater, isLiveGfx,
+                            isWarning);
+                }
+            }
+
+			@Override
+			public void sentCommand(String s){
+                if (m_shell != null)
+                    m_shell.sentCommand(s);
+            }
+
+            private final LineReader m_lineReader = new LineReader();
+
+            private LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
+
+        });
+        if (m_gameRuler != null)
+        {
+	        m_gameRuler.querySupportedCommands();
+	        m_game.getBoard().attachGameRuler(m_gameRuler);
+        }
+        m_toolBar = new GoGuiToolBar(this);
         if (m_programCommand != null && m_programCommand.trim().equals(""))
             m_programCommand = null;
         if (time != null)
@@ -1216,6 +1272,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     unprotectGui();
             }
         });
+    }
+
+    public boolean isPassEnabled() {
+        try {
+            return (m_gameRuler == null || m_gameRuler != null && m_gameRuler.isPassLegal());
+        } catch (GtpError e) {
+            return true;
+        }
     }
 
     public void actionPass()
@@ -2277,6 +2341,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private boolean m_computerWhite;
 
+    private GtpGameRuler m_gameRuler;
+
     /** State variable used between generateMove and computerMoved.
         Flag is set in actionInterrupt. */
     private boolean m_interruptComputerBoth;
@@ -2786,7 +2852,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     return;
                 }
                 m_game.haltClock();
-                showGameFinished();
+                showGoFinished();
                 return;
             }
             generateMove(false);
@@ -2796,7 +2862,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             if (gameFinished)
             {
                 m_game.haltClock();
-                showGameFinished();
+                showGoFinished();
                 return;
             }
             else if (computerToMove())
@@ -3026,6 +3092,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             showError(e);
             clearStatus();
         }
+        if (m_game.getEndGame())
+            endGame();
     }
 
     private boolean computerToMove()
@@ -3311,8 +3379,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void humanMoved(Move move)
     {
         GoPoint p = move.getPoint();
-        if (p != null)
-            paintImmediately(p, move.getColor(), true);
+        try {
+			if (p != null && (m_gameRuler == null || m_gameRuler.isLegalMove(move)))
+			    paintImmediately(p, move.getColor(), true);
+		} catch (GtpError e1) {
+            showError(e1);
+		}
         if (m_gtp != null && ! isComputerNone() && ! isOutOfSync()
                 && ! m_gtp.isProgramDead())
         {
@@ -3352,6 +3424,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             gameTreeChanged = false;
         }
         boardChangedBegin(true, gameTreeChanged);
+        if (m_game.getEndGame())
+            endGame();
     }
 
     private void importTextPosition(Reader reader)
@@ -4200,7 +4274,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 isCritical);
     }
 
-    private void showGameFinished()
+    private void showGoFinished()
     {
         if (m_resigned)
             return;
@@ -4208,6 +4282,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_messageDialogs.showInfo(disableKey, this,
                 i18n("MSG_GAME_FINISHED"),
                 i18n("MSG_GAME_FINISHED_2"), false);
+    }
+
+    private void showGameFinished()
+    {
+        if (m_resigned)
+            return;
+        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
+        m_messageDialogs.showInfo(disableKey, this,
+                i18n("MSG_GAME_FINISHED"),
+               "", false);
     }
 
     private void showInfo(String mainMessage, String optionalMessage,
@@ -4507,5 +4591,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             }
         }
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
+    }
+
+    private void endGame()
+    {
+        this.showGameFinished();
     }
 }
