@@ -454,6 +454,7 @@ implements ConstBoard
             m_legalMoves = GenericBoard.getLegalMoves(board.m_gameRuler);
             GoPoint p = m_move.getPoint();
             GoColor c = m_move.getColor();
+            GoColor sideToMove =  GenericBoard.getSideToMove(board.m_gameRuler, m_move);
             m_oldToMove = c;
             if (p != null)
             {
@@ -463,17 +464,17 @@ implements ConstBoard
                 }
                 else if (board.m_lastMoveIndex == m_moveIndex)
                 {
-                    if (m_moveIndex == 0)
-                    {
-                        board.setColor(p, c);
-                    }
                     if (m_legalMoves.contains(p.toString()))
                     {
-                        board.setColor(p, c);
-                        board.m_gameRuler.sendPlay(m_move);
+                        System.out.println("legal");
+                        board.setColor(p, sideToMove);
+                        Move move = Move.get(sideToMove, p);
+                        System.out.println(move);
+                        board.m_gameRuler.sendPlay(move);
                     }
                     else
                     {
+                        System.out.println(m_move);
                         System.out.println("illegal move");
                     }
                     //TODO show illegal move message

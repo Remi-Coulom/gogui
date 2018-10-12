@@ -5,7 +5,6 @@ package net.sf.gogui.go;
 import java.util.Iterator;
 
 import net.sf.gogui.gtp.GtpClientBase;
-import net.sf.gogui.gtp.GtpSynchronizer;
 
 /** Const functions of go.Board.
     @see Board */

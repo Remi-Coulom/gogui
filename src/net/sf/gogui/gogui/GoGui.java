@@ -2070,6 +2070,25 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 return;
             if (! checkCommandInProgress())
                 return;
+            if (m_gameRuler != null)
+            {
+                try {
+                    boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
+                    if (isEndGame)
+                    {
+                        this.showGameFinished();
+                        return;
+                    }
+                    boolean isLegalMove = GenericBoard.isLegalMove(m_gameRuler, Move.get(getToMove(), p));
+                    if (!isLegalMove)
+                    {
+                        this.showGameFinished();
+                        return;
+                    }
+                } catch (GtpError e) {
+                    showError(e);
+                }
+            }
             if (getBoard().isSuicide(getToMove(), p)
                     && ! showQuestion(i18n("MSG_SUICIDE"), i18n("MSG_SUICIDE_2"),
                             i18n("LB_SUICIDE"),false))
@@ -2081,6 +2100,20 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 return;
             Move move = Move.get(getToMove(), p);
             humanMoved(move);
+            if (m_gameRuler != null)
+            {
+                try {
+                    boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
+                    if (isEndGame)
+                    {
+                        this.showGameFinished();
+                        return;
+                    }
+                } catch (GtpError e) {
+                    showError(e);
+                }
+            }
+            
         }
     }
 
@@ -3292,6 +3325,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private GoColor getToMove()
     {
+        if (m_gameRuler != null)
+        {
+            try {
+                return GenericBoard.getSideToMove(m_gameRuler, null);
+            } catch (GtpError e) {
+                showError(e);
+            }
+        }
         return m_game.getToMove();
     }
 
