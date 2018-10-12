@@ -118,16 +118,6 @@ public class Game
         return m_tree;
     }
     
-    public boolean getEndGame()
-    {
-        return m_endGame;
-    }
-    
-    public void resetEndGame()
-    {
-        m_endGame = false;
-    }
-
     public void gotoNode(ConstNode node)
     {
         assert node != null;
@@ -164,7 +154,6 @@ public class Game
         m_clock.halt();
         m_modified = false;
         m_clockNode = null;
-        m_endGame = false;
     }
 
     /** Check if game was modified.
@@ -200,8 +189,6 @@ public class Game
 
     public void play(Move move)
     {
-        if (!m_endGame)
-        {
         m_clock.stopMove();
         Node node = new Node(move);
         GoColor color = move.getColor();
@@ -219,12 +206,6 @@ public class Game
         m_current.append(node);
         m_current = node;
         updateBoard();
-        }
-        if (m_endGame)
-        {
-            m_clock.halt();
-            return;
-        }
         setModified();
         m_clock.startMove(getToMove());
     }
@@ -429,8 +410,6 @@ public class Game
 
     private final Clock m_clock;
 
-    private boolean m_endGame;
-
     private void setModified()
     {
         m_modified = true;
@@ -438,7 +417,7 @@ public class Game
 
     private void updateBoard()
     {
-        m_endGame = m_boardUpdater.update(m_tree, m_current, m_board);
+        m_boardUpdater.update(m_tree, m_current, m_board);
     }
 
     private void updateClock()

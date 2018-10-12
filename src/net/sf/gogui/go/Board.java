@@ -4,11 +4,9 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.function.Consumer;
 
+import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpGameRuler;
-import net.sf.gogui.gtp.GtpSynchronizer;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -209,19 +207,13 @@ implements ConstBoard
         clear();
     }
 
-    public void attachGameRuler(GtpGameRuler gameRuler, GtpSynchronizer gameRulerSynchro)
+    public void attachGameRuler(GtpClientBase gameRuler)
     {
         m_gameRuler = gameRuler;
-        m_gameRulerSynchro = gameRulerSynchro;
-    }
-    
-    public void attachGameRulerSynchro(GtpSynchronizer gameRulerSynchro)
-    {
-        m_gameRulerSynchro = gameRulerSynchro;
     }
 
     public boolean isGameRulerAttached() {
-        return (m_gameRuler != null && m_gameRulerSynchro != null);
+        return (m_gameRuler != null);
     }
 
     /** Check if a move would capture anything (including suicide).
@@ -331,12 +323,11 @@ implements ConstBoard
         blocks adjacent to the stone, capture the block the stone is part of
         if it was a suicide move and switches the color to move.
         @param move The move (location and player) */
-    public boolean play(Move move)
+    public void play(Move move)
     {
         StackEntry entry = new StackEntry(move);
-        boolean result = entry.execute(this);
+        entry.execute(this);
         m_stack.add(entry);
-        return result;
     }
 
     /** Change the color to move.
@@ -422,10 +413,6 @@ implements ConstBoard
 
         public PointList m_suicide;
 
-        public GtpGameRuler m_gameRuler;
-        
-        public GtpSynchronizer m_gameRulerSynchro;
-
         public int m_moveIndex = 0;
 
         private String m_legalMoves;
@@ -435,9 +422,8 @@ implements ConstBoard
             m_move = move;
         }
 
-        public boolean execute(Board board)
+        public void execute(Board board)
         {
-            boolean result = false;
             m_killed = new PointList();
             m_suicide = new PointList();
             m_oldKoPoint = board.m_koPoint;
@@ -446,9 +432,8 @@ implements ConstBoard
                 m_moveIndex = board.m_stack.size();
             if (board.isGameRulerAttached())
             {
-                m_gameRuler = board.m_gameRuler;
                 try {
-                    result = executeGameRules(board);
+                    executeGameRules(board);
                 } catch (GtpError e) {
                     e.printStackTrace();
                 }
@@ -462,12 +447,11 @@ implements ConstBoard
                 board.m_lastMoveIndex = board.getNumberMoves()-1 ;
             }
             m_moveIndex = board.m_lastMoveIndex;
-            return result;
         }
 
         private boolean executeGameRules(Board board) throws GtpError
         {
-            m_legalMoves = m_gameRuler.getLegalMoves();
+            m_legalMoves = GenericBoard.getLegalMoves(board.m_gameRuler);
             GoPoint p = m_move.getPoint();
             GoColor c = m_move.getColor();
             m_oldToMove = c;
@@ -479,14 +463,14 @@ implements ConstBoard
                 }
                 else if (board.m_lastMoveIndex == m_moveIndex)
                 {
-                    if (m_moveIndex == 0 || !board.m_gameRulerSynchro.isOutOfSync())
+                    if (m_moveIndex == 0)
                     {
                         board.setColor(p, c);
                     }
                     if (m_legalMoves.contains(p.toString()))
                     {
                         board.setColor(p, c);
-                        m_gameRuler.sendPlay(m_move);
+                        board.m_gameRuler.sendPlay(m_move);
                     }
                     else
                     {
@@ -497,9 +481,9 @@ implements ConstBoard
             }
             m_oldColor = board.getColor(p); // color when UNDO
             m_oldToMove = board.m_toMove;
-            board.m_toMove = m_gameRuler.getSideToMove(m_move);
-            m_gameRuler.send("showboard");
-            return m_gameRuler.isGameOver();
+            board.m_toMove = GenericBoard.getSideToMove(board.m_gameRuler, m_move);
+            board.m_gameRuler.send("showboard");
+            return GenericBoard.isGameOver(board.m_gameRuler);
         }
 
         private void executeGo(Board board)
@@ -584,10 +568,8 @@ implements ConstBoard
     private BoardConstants m_constants;
 
     private GoPoint m_koPoint;
-
-    private GtpGameRuler m_gameRuler;
     
-    private GtpSynchronizer m_gameRulerSynchro;
+    private GtpClientBase m_gameRuler;
 
     private int m_lastMoveIndex = 0;
 

@@ -23,7 +23,7 @@ public class BoardUpdater
         m_nodes = new ArrayList<ConstNode>(400);
     }
 
-    public boolean update(ConstGameTree tree, ConstNode currentNode, Board board)
+    public void update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
         board.init(tree.getBoardSize());
         int handicap = tree.getGameInfoConst(currentNode).getHandicap();
@@ -32,7 +32,6 @@ public class BoardUpdater
         boolean isFirstPlacement = true;
         boolean isHandicapSetupDone = false;
         boolean isInInitialBlackMoveSequence = true;
-        boolean endGame = false;
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {
             ConstNode node = m_nodes.get(i);
@@ -59,9 +58,7 @@ public class BoardUpdater
             Move move = node.getMove();
             if (move != null)
             {
-                if (board.play(move)) {
-                    endGame = true;
-                }
+                board.play(move);
                 ++nuMoves;
                 isFirstPlacement = false;
                 if (move.getColor() != BLACK)
@@ -76,7 +73,6 @@ public class BoardUpdater
                 }
             }
         }
-        return endGame;
     }
 
     /** Local variable used in update.

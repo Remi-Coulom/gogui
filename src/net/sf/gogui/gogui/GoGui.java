@@ -61,6 +61,7 @@ import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
+import net.sf.gogui.go.GenericBoard;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -81,8 +82,8 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientUtil;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpGameRuler;
-import net.sf.gogui.gtp.GtpGameRuler.ExecFailed;
+import net.sf.gogui.gtp.GtpClientBase;
+import net.sf.gogui.gtp.GtpClient.ExecFailed;
 import net.sf.gogui.gtp.GtpResponseFormatError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
@@ -167,7 +168,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
                  boolean register, String gtpFile, String gtpCommand,
-                 String gtpGameRuler, File analyzeCommandsFile)
+                 String GtpClientBase, File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -312,7 +313,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setJMenuBar(m_menuBar);
         setMinimumSize();
         m_programCommand = program;
-        m_gtpGameRuler = gtpGameRuler;
+        m_GtpClientBase = GtpClientBase;
         initGameRuler();
         m_toolBar = new GoGuiToolBar(this);
         if (m_programCommand != null && m_programCommand.trim().equals(""))
@@ -1222,7 +1223,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     public boolean isPassEnabled() {
         try {
-            return (m_gameRuler == null || m_gameRuler != null && m_gameRuler.isPassLegal());
+            return (m_gameRuler == null || m_gameRuler != null && GenericBoard.isPassLegal(m_gameRuler));
         } catch (GtpError e) {
             return true;
         }
@@ -1240,13 +1241,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     public void actionPlay(boolean isSingleMove)
     {
-        try {
-            this.m_gameRulerSynchro.synchronize(getBoard(), getPrefsKomi(), m_timeSettings);
-        } catch (GtpError e) {
-            showError(e);
-        }
-        if (m_game.getEndGame())
-            return;
         if (! checkStateChangePossible())
             return;
         if (! synchronizeProgram())
@@ -2293,13 +2287,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
-    
-    private String m_gtpGameRuler;
 
-    private GtpGameRuler m_gameRuler;
-    
-    private GtpSynchronizer m_gameRulerSynchro;
+    private String m_GtpClientBase;
 
+    private GtpClientBase m_gameRuler;
+    
     /** State variable used between generateMove and computerMoved.
         Flag is set in actionInterrupt. */
     private boolean m_interruptComputerBoth;
@@ -2964,8 +2956,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void computerMoved()
     {
-        if (m_game.getEndGame())
-            return;
         if (! endLengthyCommand())
             return;
         if (m_beepAfterMove)
@@ -3020,7 +3010,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 Move move = Move.get(toMove, point);
                 m_game.play(move);
                 m_gtp.updateAfterGenmove(getBoard());
-                m_gameRulerSynchro.updateAfterGenmove(getBoard());
+           //     m_gameRulerSynchro.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
                 {
                     String disableKey =
@@ -3052,9 +3042,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             showError(e);
             clearStatus();
         }
-
-        if (m_game.getEndGame())
-            endGame();
     }
 
     private boolean computerToMove()
@@ -3321,6 +3308,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
+        try {
+            initGameRuler();
+        } catch (ExecFailed e) {
+            showError(e);
+        }
         m_game.gotoNode(node);
         if (getClock().isInitialized())
             m_game.restoreClock();
@@ -3339,15 +3331,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void humanMoved(Move move)
     {
-        if (! m_game.getEndGame())
-        {
         GoPoint p = move.getPoint();
-        try {
-			if (p != null && (m_gameRuler == null || m_gameRuler.isLegalMove(move)))
-			    paintImmediately(p, move.getColor(), true);
-		} catch (GtpError e1) {
-            showError(e1);
-		}
+		paintImmediately(p, move.getColor(), true);
         if (m_gtp != null && ! isComputerNone() && ! isOutOfSync()
                 && ! m_gtp.isProgramDead())
         {
@@ -3387,9 +3372,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             gameTreeChanged = false;
         }
         boardChangedBegin(true, gameTreeChanged);
-        if (m_game.getEndGame())
-            endGame();
-        }
     }
 
     private void importTextPosition(Reader reader)
@@ -4561,19 +4543,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
-
-    private void endGame()
-    {
-        this.showGameFinished();
-    }
     
     private void initGameRuler() throws ExecFailed
     {
-        m_game.resetEndGame();
         //TODO replace the directory and the program by the params and the directory
-        m_gameRuler = new GtpGameRuler("/home/fretel/crazy_zero/gomoku/gomoku_gtp gogui.gtp",
+        m_gameRuler = new GtpClient("/home/fretel/crazy_zero/gomoku/gomoku_gtp gogui.gtp",
                 new File("/home/fretel/crazy_zero/gomoku"),
-                false,new GtpGameRuler.IOCallback() {
+                false,new GtpClient.IOCallback() {
             @Override
             public void receivedInvalidResponse(String s) {
                 if (m_shell == null)
@@ -4625,9 +4601,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             try {
                 m_gameRuler.querySupportedCommands();
-                m_gameRulerSynchro = new GtpSynchronizer(m_gameRuler);
-                m_gameRulerSynchro.init(getBoard(), getPrefsKomi(), m_timeSettings);
-                m_game.getBoard().attachGameRuler(m_gameRuler, m_gameRulerSynchro);
+           //     m_gameRulerSynchro = new GtpSynchronizer(m_gameRuler);
+           //     m_gameRulerSynchro.init(getBoard(), getPrefsKomi(), m_timeSettings);
+                getBoard().attachGameRuler(m_gameRuler);
             } catch (GtpError e) {
                 this.showError(e);
             }
