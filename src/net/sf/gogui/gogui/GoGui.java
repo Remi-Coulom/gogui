@@ -2076,13 +2076,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
                     if (isEndGame)
                     {
-                        this.showGameFinished();
+                        showGameFinished();
                         return;
                     }
                     boolean isLegalMove = GenericBoard.isLegalMove(m_gameRuler, Move.get(getToMove(), p));
                     if (!isLegalMove)
                     {
-                        this.showGameFinished();
+                        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
+                        m_messageDialogs.showInfo(disableKey, this,
+                                i18n("MSG_ILLEGAL_MOVE"),
+                                "", false);
                         return;
                     }
                 } catch (GtpError e) {
@@ -2106,7 +2109,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
                     if (isEndGame)
                     {
-                        this.showGameFinished();
+                        showGameFinished();
                         return;
                     }
                 } catch (GtpError e) {
@@ -4280,8 +4283,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         if (m_resigned)
             return;
-        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
-        m_messageDialogs.showInfo(disableKey, this,
+        m_messageDialogs.showInfo(this,
                 i18n("MSG_GAME_FINISHED"),
                "", false);
     }
