@@ -29,6 +29,8 @@ public class GoGuiMenuBar
         void actionGotoBookmark(int i);
 
         void actionAttachProgram(int i);
+
+        void actionAttachRuler(int index);
     }
 
     public GoGuiMenuBar(GoGuiActions actions,
@@ -219,7 +221,7 @@ public class GoGuiMenuBar
             final int index = i;
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        m_listener.actionAttachProgram(index);
+                        m_listener.actionAttachRuler(index);
                     }
                 });
             StringBuilder toolTip = new StringBuilder(128);
@@ -429,8 +431,8 @@ public class GoGuiMenuBar
     {
         GuiMenu menu = new GuiMenu(i18n("MEN_GAME"));
         menu.add(actions.m_actionNewGame);
-        this.m_menuRuler = new GuiMenu("Change Game");
-        this.setRulers(Program.load(true));
+        m_menuRuler = new GuiMenu(i18n("ACT_CHANGE_GAME"));
+        setRulers(Program.load(true));
         menu.add(m_menuRuler);
         menu.addSeparator();
         menu.add(createBoardSizeMenu(actions));

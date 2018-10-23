@@ -61,6 +61,32 @@ public final class GenericBoard {
         return legalMoves.contains("pass") || legalMoves.contains("PASS");
     }
     
+    /**
+     * Forces the position from the gameRuler to the board for a better synchronization.
+     * @param gameRuler
+     * @param board
+     */
+    public static void copyRulerBoardState(GtpClientBase gameRuler, Board board) {
+        if (!gameRuler.isSupported("showboard"))
+            return;
+        String rulerBoardState = "";
+        try {
+            rulerBoardState = gameRuler.send("showboard");
+        } catch (GtpError e) {
+        }
+        if (rulerBoardState.equals("")) {
+            board.clear();
+            return;
+        }
+        System.out.println(rulerBoardState);
+        int size = board.getSize();
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
+                System.out.println(rulerBoardState.charAt(i*size+j));
+            }
+        }
+    }
+    
     private GenericBoard()
     {
     }

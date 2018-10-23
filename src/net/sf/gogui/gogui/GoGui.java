@@ -314,7 +314,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setMinimumSize();
         m_programCommand = program;
         m_GtpClientBase = GtpClientBase;
-        initGameRuler();
+       // initGameRuler();
         m_toolBar = new GoGuiToolBar(this);
         if (m_programCommand != null && m_programCommand.trim().equals(""))
             m_programCommand = null;
@@ -378,6 +378,20 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_prefs.putInt("program", index);
         actionAttachProgram(m_programs.get(index));
     }
+    
+    public void actionAttachRuler(int index)
+    {
+        System.out.println("attaching ruler");
+        Program ruler = this.m_rulers.get(index);
+        try {
+            this.initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
+        } catch (ExecFailed e) {
+            e.printStackTrace();
+            System.out.println("errooor");
+        }
+        m_prefs.putInt("ruler", index);
+        actionAttachRuler(m_rulers.get(index));
+    }
 
     public void actionAttachProgram(final Program program)
     {
@@ -398,6 +412,28 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         };
         SwingUtilities.invokeLater(runnable);
     }
+    
+    public void actionAttachRuler(final Program program)
+    {
+        if (! checkCommandInProgress())
+            return;
+        protectGui();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try
+                {
+                    System.out.println("attachNewRuler GoGui.java l.418");
+                    attachNewRuler(program.m_command, program);
+                }
+                finally
+                {
+                    unprotectGui();
+                }
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
+    }
+
 
     public void actionBackToMainVariation()
     {
@@ -519,6 +555,29 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 {
                     saveSession();
                     detachProgram();
+                    updateViews(false);
+                }
+                finally
+                {
+                    unprotectGui();
+                }
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
+    }
+    
+    public void actionDetachRuler()
+    {
+        if (m_gameRuler == null)
+            return;
+        m_prefs.putInt("ruler", -1);
+        protectGui();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try
+                {
+                    saveSession();
+                    detachRuler();
                     updateViews(false);
                 }
                 finally
@@ -1165,6 +1224,54 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 m_prefs.putInt("program", m_programs.size() - 1);
                 m_menuBar.setPrograms(m_programs);
                 Program.save(m_programs, false);
+                updateViews(false);
+            } 
+        });
+    }
+    
+    public void actionNewRuler()
+    {
+        m_newRuler = new Program("", "", "", "", "");
+        final ProgramEditor editor = new ProgramEditor();
+        m_newRuler =
+                editor.editItem(this, i18n("TIT_NEW_PROGRAM"), m_newRuler, true,
+                        false, m_messageDialogs);
+        if (m_newRuler == null)
+            return;
+        protectGui();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                attachNewRuler(m_newRuler.m_command, m_newRuler);
+                unprotectGui();
+                if (m_gameRuler == null || m_gameRuler.isProgramDead())
+                {
+                    m_newRuler = editor.editItem(GoGui.this,
+                            i18n("TIT_NEW_PROGRAM"),
+                            m_newRuler, true,
+                            false,
+                            m_messageDialogs);
+                    if (m_newRuler == null)
+                        return;
+                    SwingUtilities.invokeLater(this);
+                    return;
+                }
+                m_newRuler.m_name = m_gameRuler.getLabel();
+                m_newRuler.m_version = m_gameRuler.queryVersion();
+                m_newRuler.setUniqueLabel(m_programs);
+                m_newRuler = editor.editItem(GoGui.this,
+                        i18n("TIT_NEW_PROGRAM"),
+                        m_newRuler, false, true,
+                        m_messageDialogs);
+                if (m_newRuler == null)
+                {
+                    actionDetachRuler();
+                    return;
+                }
+                m_rulers.add(m_newRuler);
+              //  m_program = m_newProgram;
+                m_prefs.putInt("ruler", m_rulers.size() - 1);
+                m_menuBar.setRulers(m_rulers);
+                Program.save(m_rulers, true);
                 updateViews(false);
             } 
         });
@@ -2447,6 +2554,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     /** Program currently being edited in actionNewProgram() */
     private Program m_newProgram;
 
+    /** Program ruler currently being edited in actionNewRuler() */
+    private Program m_newRuler;
+
     private final ThumbnailCreator m_thumbnailCreator =
             new ThumbnailCreator(false);
 
@@ -2466,9 +2576,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     /** Timer used to delay the message error while the computer is thinking*/
     private long time;
-    public void setTime(long time) {
-        this.time = time;
-    }
 
     /** Snapshot used in actionSnapshotParameters and actionRestoreParameters. */
     private File m_parameterSnapshot;
@@ -2580,6 +2687,23 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             m_shell.setVisible(true);
         if (m_session.isVisible("analyze"))
             createAnalyzeDialog();
+        toFrontLater();
+        updateViews(false);
+        return true;
+    }
+    
+    private boolean attachNewRuler(String command, Program program)
+    {
+        if (m_gameRuler != null)
+        {
+            saveSession();
+        }
+        if (! attachProgram(command, program, false))
+        {
+            m_prefs.putInt("ruler", -1);
+            updateViews(false);
+            return false;
+        }
         toFrontLater();
         updateViews(false);
         return true;
@@ -3201,6 +3325,29 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setTitle();
     }
 
+    private void detachRuler()
+    {
+        if (m_gameRuler != null && ! m_gameRuler.isProgramDead())
+        {
+            // Some programs do not handle closing the GTP stream
+            // correctly, so we send a quit before
+            try
+            {
+                if (m_gameRuler.isSupported("quit"))
+                    m_gameRuler.send("quit");
+            }
+            catch (GtpError e)
+            {
+            }
+            m_gameRuler.close();
+        }
+        m_gameRuler = null;
+        actionSave();
+        resetBoard();
+        clearStatus();
+        setTitle();
+    }
+
     private boolean endLengthyCommand()
     {
         return endLengthyCommand(true, true);
@@ -3355,11 +3502,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        try {
-            initGameRuler();
-        } catch (ExecFailed e) {
-            showError(e);
-        }
+        //TODO synchronize Board from GenericBoard (play moves from the start)
         m_game.gotoNode(node);
         if (getClock().isInitialized())
             m_game.restoreClock();
@@ -3690,11 +3833,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         initGame(size);
         initGtp();
-        try {
-            initGameRuler();
-        } catch (ExecFailed e) {
-            showError(e);
-        }
+        if (m_gameRuler != null)
+            try {
+                m_gameRuler.sendClearBoard(getBoardSize());
+            } catch (GtpError e) {
+                showError(e);
+            }
         updateFromGoBoard();
         setTitle();
         setTitleFromProgram();
@@ -4592,12 +4736,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
     
-    private void initGameRuler() throws ExecFailed
+    private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
         //TODO replace the directory and the program by the params and the directory
-        m_gameRuler = new GtpClient("/home/fretel/crazy_zero/gomoku/gomoku_gtp gogui.gtp",
-                new File("/home/fretel/crazy_zero/gomoku"),
-                false,new GtpClient.IOCallback() {
+        System.out.println(command);
+        m_gameRuler = new GtpClient(command,//"/home/fretel/crazy_zero/gomoku/gomoku_gtp gogui.gtp",
+                new File(directory),//"/home/fretel/crazy_zero/gomoku"),
+                false,null);/*new GtpClient.IOCallback() {
             @Override
             public void receivedInvalidResponse(String s) {
                 if (m_shell == null)
@@ -4608,7 +4753,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
             @Override
             public void receivedResponse(boolean error, String s) {
-
+                
                 if (m_shell == null)
                     return;
                 boolean invokeLater = true;
@@ -4617,6 +4762,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
             @Override
             public void receivedStdErr(String s){
+                
                 if (m_shell == null)
                     return;
                 m_lineReader.add(s);
@@ -4632,11 +4778,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_shell.receivedStdErr(line, invokeLater, isLiveGfx,
                             isWarning);
                 }
+                
             }
 
             @Override
             public void sentCommand(String s){
-                if (m_shell != null)
+               if (m_shell != null)
                     m_shell.sentCommand(s);
             }
 
@@ -4644,7 +4791,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
             private LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
 
-        });
+        });*/
         if (m_gameRuler != null)
         {
             try {
@@ -4653,7 +4800,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
            //     m_gameRulerSynchro.init(getBoard(), getPrefsKomi(), m_timeSettings);
                 getBoard().attachGameRuler(m_gameRuler);
             } catch (GtpError e) {
-                this.showError(e);
+                showError(e);
             }
         }
     }

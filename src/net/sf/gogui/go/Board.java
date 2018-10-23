@@ -449,7 +449,7 @@ implements ConstBoard
             m_moveIndex = board.m_lastMoveIndex;
         }
 
-        private boolean executeGameRules(Board board) throws GtpError
+        private void executeGameRules(Board board) throws GtpError
         {
             m_legalMoves = GenericBoard.getLegalMoves(board.m_gameRuler);
             GoPoint p = m_move.getPoint();
@@ -484,7 +484,6 @@ implements ConstBoard
             m_oldToMove = board.m_toMove;
             board.m_toMove = GenericBoard.getSideToMove(board.m_gameRuler, m_move);
             board.m_gameRuler.send("showboard");
-            return GenericBoard.isGameOver(board.m_gameRuler);
         }
 
         private void executeGo(Board board)
