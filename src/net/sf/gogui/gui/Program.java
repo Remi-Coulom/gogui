@@ -51,16 +51,24 @@ public final class Program
         return null;
     }
 
-    public static ArrayList<Program> load()
+    /**
+     * @param true if the program is a game ruler, false if it is an engine player
+     */
+    public static ArrayList<Program> load(boolean gameRuler)
     {
         ArrayList<Program> programs = new ArrayList<Program>();
-        Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/program");
+        String type = (gameRuler ? "ruler" : "program");
+        Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type);
+        System.out.println(gameRuler + prefs.absolutePath());
         if (prefs == null)
             return programs;
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtil.getNode("net/sf/gogui/gui/program/" + i);
+            prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type + "/" + i);
+            if (gameRuler) {
+                System.out.println(i);
+            }
             if (prefs == null)
                 break;
             String label = prefs.get("label", null);
@@ -76,9 +84,13 @@ public final class Program
         return programs;
     }
 
-    public static void save(ArrayList<Program> programs)
+    /**
+     * @param true if the program is a game ruler, false if it is an engine player
+     */
+    public static void save(ArrayList<Program> programs, boolean gameRuler)
     {
-        Preferences prefs = PrefUtil.createNode("net/sf/gogui/gui/program");
+        String type = (gameRuler ? "ruler" : "program");
+        Preferences prefs = PrefUtil.createNode("net/sf/gogui/gui/" + type);
         if (prefs == null)
             return;
         prefs.putInt("size", programs.size());

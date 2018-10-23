@@ -607,7 +607,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             return;
         m_menuBar.setPrograms(m_programs);
         m_prefs.putInt("program", -1);
-        Program.save(m_programs);
+        Program.save(m_programs, false);
     }
 
     public void actionEnd()
@@ -1164,7 +1164,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 m_program = m_newProgram;
                 m_prefs.putInt("program", m_programs.size() - 1);
                 m_menuBar.setPrograms(m_programs);
-                Program.save(m_programs);
+                Program.save(m_programs, false);
                 updateViews(false);
             } 
         });
@@ -2109,6 +2109,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
                     if (isEndGame)
                     {
+                        m_game.haltClock();
                         showGameFinished();
                         return;
                     }
@@ -2458,6 +2459,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private ArrayList<Bookmark> m_bookmarks;
 
     private ArrayList<Program> m_programs;
+    
+    private ArrayList<Program> m_rulers;
 
     private ShowAnalyzeText m_showAnalyzeText;
 
@@ -2711,7 +2714,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         m_program.setUniqueLabel(m_programs);
                         m_programs.add(m_program);
                         m_menuBar.setPrograms(m_programs);
-                        Program.save(m_programs);
+                        Program.save(m_programs, false);
                     }
                 }
             }
@@ -2721,7 +2724,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             if (m_program != null
                     && m_program.updateInfo(getProgramName(), m_version))
             {
-                Program.save(m_programs);
+                Program.save(m_programs, false);
                 m_menuBar.setPrograms(m_programs);
             }
             try
@@ -3533,7 +3536,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
         m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);
-        m_programs = Program.load();
+        m_programs = Program.load(false);
+        m_rulers = Program.load(true);
+      //  m_menuBar.setRulers(m_rulers);
         m_menuBar.setPrograms(m_programs);
         //if (m_programCommand == null)
         //{
