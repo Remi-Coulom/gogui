@@ -168,7 +168,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                  boolean verbose, boolean initComputerColor,
                  boolean computerBlack, boolean computerWhite, boolean auto,
                  boolean register, String gtpFile, String gtpCommand,
-                 String GtpClientBase, File analyzeCommandsFile)
+                 File analyzeCommandsFile)
         throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
@@ -313,7 +313,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setJMenuBar(m_menuBar);
         setMinimumSize();
         m_programCommand = program;
-        m_GtpClientBase = GtpClientBase;
        // initGameRuler();
         m_toolBar = new GoGuiToolBar(this);
         if (m_programCommand != null && m_programCommand.trim().equals(""))
@@ -384,13 +383,18 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         System.out.println("attaching ruler");
         Program ruler = this.m_rulers.get(index);
         try {
-            this.initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
+            initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
         } catch (ExecFailed e) {
             e.printStackTrace();
             System.out.println("errooor");
+        
+        }
+        try {
+            m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
+        }catch (GtpError e) {
         }
         m_prefs.putInt("ruler", index);
-        actionAttachRuler(m_rulers.get(index));
+    //    actionAttachRuler(m_rulers.get(index));
     }
 
     public void actionAttachProgram(final Program program)
@@ -413,7 +417,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         SwingUtilities.invokeLater(runnable);
     }
     
-    public void actionAttachRuler(final Program program)
+    private void actionAttachRuler(final Program program)
     {
         if (! checkCommandInProgress())
             return;
@@ -424,6 +428,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 {
                     System.out.println("attachNewRuler GoGui.java l.418");
                     attachNewRuler(program.m_command, program);
+                  
                 }
                 finally
                 {
@@ -2432,8 +2437,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private boolean m_computerWhite;
 
-    private String m_GtpClientBase;
-
     private GtpClientBase m_gameRuler;
     
     /** State variable used between generateMove and computerMoved.
@@ -2701,6 +2704,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (! attachProgram(command, program, false))
         {
             m_prefs.putInt("ruler", -1);
+          /*  try {
+                this.initGameRuler(command, program.m_workingDirectory, program.m_label);
+            } catch (ExecFailed e) {
+                e.printStackTrace();
+            }*/
             updateViews(false);
             return false;
         }
@@ -3205,6 +3213,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             showError(e);
             clearStatus();
         }
+        if (m_gameRuler != null) {
+            try {
+                m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
+            } catch (GtpError e)
+            {
+            }
+        }
     }
 
     private boolean computerToMove()
@@ -3522,7 +3537,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void humanMoved(Move move)
     {
         GoPoint p = move.getPoint();
-		paintImmediately(p, move.getColor(), true);
+        if (p != null)
+            paintImmediately(p, move.getColor(), true);
         if (m_gtp != null && ! isComputerNone() && ! isOutOfSync()
                 && ! m_gtp.isProgramDead())
         {
@@ -3562,6 +3578,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             gameTreeChanged = false;
         }
         boardChangedBegin(true, gameTreeChanged);
+        if (m_gameRuler != null) {
+            try {
+                m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
+            } catch (GtpError e)
+            {
+            }
+        }
     }
 
     private void importTextPosition(Reader reader)

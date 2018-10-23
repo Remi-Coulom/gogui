@@ -59,16 +59,12 @@ public final class Program
         ArrayList<Program> programs = new ArrayList<Program>();
         String type = (gameRuler ? "ruler" : "program");
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type);
-        System.out.println(gameRuler + prefs.absolutePath());
         if (prefs == null)
             return programs;
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
             prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type + "/" + i);
-            if (gameRuler) {
-                System.out.println(i);
-            }
             if (prefs == null)
                 break;
             String label = prefs.get("label", null);
