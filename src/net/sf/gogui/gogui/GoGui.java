@@ -4761,66 +4761,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
-        //TODO replace the directory and the program by the params and the directory
-        System.out.println(command);
-        m_gameRuler = new GtpClient(command,//"/home/fretel/crazy_zero/gomoku/gomoku_gtp gogui.gtp",
-                new File(directory),//"/home/fretel/crazy_zero/gomoku"),
-                false,null);/*new GtpClient.IOCallback() {
-            @Override
-            public void receivedInvalidResponse(String s) {
-                if (m_shell == null)
-                    return;
-                boolean invokeLater = true;
-                m_shell.receivedInvalidResponse(s, invokeLater);
-            }
-
-            @Override
-            public void receivedResponse(boolean error, String s) {
-                
-                if (m_shell == null)
-                    return;
-                boolean invokeLater = true;
-                m_shell.receivedResponse(error, s, invokeLater);
-            }
-
-            @Override
-            public void receivedStdErr(String s){
-                
-                if (m_shell == null)
-                    return;
-                m_lineReader.add(s);
-                while (m_lineReader.hasLines())
-                {
-                    String line = m_lineReader.getLine();
-                    boolean isLiveGfx = m_liveGfx.handleLine(line);
-                    boolean isWarning =
-                            line.startsWith("warning:")
-                            || line.startsWith("Warning:")
-                            || line.startsWith("WARNING:");
-                    boolean invokeLater = true;
-                    m_shell.receivedStdErr(line, invokeLater, isLiveGfx,
-                            isWarning);
-                }
-                
-            }
-
-            @Override
-            public void sentCommand(String s){
-               if (m_shell != null)
-                    m_shell.sentCommand(s);
-            }
-
-            private final LineReader m_lineReader = new LineReader();
-
-            private LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
-
-        });*/
+        m_gameRuler = new GtpClient(command,
+                new File(directory),
+                false,null);
         if (m_gameRuler != null)
         {
             try {
                 m_gameRuler.querySupportedCommands();
-           //     m_gameRulerSynchro = new GtpSynchronizer(m_gameRuler);
-           //     m_gameRulerSynchro.init(getBoard(), getPrefsKomi(), m_timeSettings);
                 getBoard().attachGameRuler(m_gameRuler);
             } catch (GtpError e) {
                 showError(e);
