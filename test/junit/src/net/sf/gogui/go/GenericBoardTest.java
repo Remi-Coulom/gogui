@@ -7,6 +7,8 @@ import java.io.File;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 
+import net.sf.gogui.game.Game;
+import net.sf.gogui.game.GameTree;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClient.ExecFailed;
 import net.sf.gogui.gtp.GtpError;
@@ -27,6 +29,8 @@ public final class GenericBoardTest
     
     GtpClient gameRuler;
     Board board;
+    GameTree gameTree;
+    Game game;
     
     private void gameRuler() {
         try {
@@ -39,6 +43,8 @@ public final class GenericBoardTest
             e.printStackTrace();
         }
         board = new Board(19);
+        gameTree = new GameTree();
+        game = new Game(gameTree);
     }
     
     public void testGomokuRulerLegalMoves()
@@ -88,11 +94,11 @@ public final class GenericBoardTest
     public void testSynchroSideToMove()
     {
         gameRuler();
-        assertTrue(board.getToMove().equals(BLACK));
+        assertEquals(board.getToMove(), BLACK);
         Move m = Move.get(BLACK, GoPoint.get(18, 18));
+        GenericBoard.sendPlay(gameRuler, board,  m);
+        assertEquals(board.getToMove(), WHITE);
         GenericBoard.sendPlay(gameRuler, board, m);
-        assertTrue(board.getToMove().equals(WHITE));
-        GenericBoard.sendPlay(gameRuler, board, m);
-        assertTrue(board.getToMove().equals(BLACK));
+        assertEquals(board.getToMove(), BLACK);
     }
 }

@@ -313,7 +313,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setJMenuBar(m_menuBar);
         setMinimumSize();
         m_programCommand = program;
-       // initGameRuler();
         m_toolBar = new GoGuiToolBar(this);
         if (m_programCommand != null && m_programCommand.trim().equals(""))
             m_programCommand = null;
@@ -380,21 +379,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     public void actionAttachRuler(int index)
     {
-        System.out.println("attaching ruler");
         Program ruler = this.m_rulers.get(index);
         try {
             initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
         } catch (ExecFailed e) {
-            e.printStackTrace();
-            System.out.println("errooor");
-        
         }
         try {
             m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
         }catch (GtpError e) {
         }
         m_prefs.putInt("ruler", index);
-    //    actionAttachRuler(m_rulers.get(index));
     }
 
     public void actionAttachProgram(final Program program)
@@ -416,29 +410,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         };
         SwingUtilities.invokeLater(runnable);
     }
-    
-    private void actionAttachRuler(final Program program)
-    {
-        if (! checkCommandInProgress())
-            return;
-        protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    System.out.println("attachNewRuler GoGui.java l.418");
-                    attachNewRuler(program.m_command, program);
-                  
-                }
-                finally
-                {
-                    unprotectGui();
-                }
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
-    }
-
 
     public void actionBackToMainVariation()
     {
@@ -571,7 +542,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         SwingUtilities.invokeLater(runnable);
     }
     
-    public void actionDetachRuler()
+    private void actionDetachRuler()
     {
         if (m_gameRuler == null)
             return;
@@ -981,6 +952,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void actionGotoNode(final ConstNode node, final boolean protectGui)
     {
+        if (m_gameRuler != null) GenericBoard.copyBoardState(m_gameRuler, (Board)getBoard());
         if (! checkStateChangePossible())
             return;
         if (protectGui)
@@ -3493,14 +3465,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private GoColor getToMove()
     {
-        if (m_gameRuler != null)
+    /*    if (m_gameRuler != null)
         {
             try {
                 return GenericBoard.getSideToMove(m_gameRuler, null);
             } catch (GtpError e) {
-                showError(e);
             }
-        }
+        }*/
         return m_game.getToMove();
     }
 
@@ -3560,6 +3531,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             newNodeCreated = true;
             m_game.play(move);
+            if (m_gameRuler != null)
+            {
+                    GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
+               //     m_game.setToMove(getToMove());
+              //      GenericBoard.copyRulerBoardState(m_gameRuler, ((Board)getBoard()));
+            }
         }
         else
         {

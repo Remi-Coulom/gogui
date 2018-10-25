@@ -329,6 +329,13 @@ implements ConstBoard
         entry.execute(this);
         m_stack.add(entry);
     }
+    
+    public void playGameMove(Move move)
+    {
+        StackEntry entry = new StackEntry(move);
+        entry.execute(this);
+        m_stack.add(entry);
+    }
 
     /** Change the color to move.
         @param toMove The new color to move. */
@@ -357,6 +364,7 @@ implements ConstBoard
                 m_setup.set(c, new PointList());
             else
             {
+                System.out.println("  " +c);
                 for (GoPoint p : stones)
                     setColor(p, c);
                 m_setup.set(c, new PointList(stones));
@@ -435,7 +443,6 @@ implements ConstBoard
                 try {
                     executeGameRules(board);
                 } catch (GtpError e) {
-                    e.printStackTrace();
                 }
 
             }
@@ -450,7 +457,7 @@ implements ConstBoard
         }
 
         private void executeGameRules(Board board) throws GtpError
-        {
+        {/*
             m_legalMoves = GenericBoard.getLegalMoves(board.m_gameRuler);
             GoPoint p = m_move.getPoint();
             GoColor c = m_move.getColor();
@@ -482,8 +489,13 @@ implements ConstBoard
             }
             m_oldColor = board.getColor(p); // color when UNDO
             m_oldToMove = board.m_toMove;
-            board.m_toMove = GenericBoard.getSideToMove(board.m_gameRuler, m_move);
-            board.m_gameRuler.send("showboard");
+            board.m_toMove = GenericBoard.getSideToMove(board.m_gameRuler, m_move);*/
+            GoPoint p = m_move.getPoint();
+            GoColor c = m_move.getColor();
+            board.setColor(p, c);
+            m_oldColor = board.getColor(p);
+            m_oldToMove = board.m_toMove;
+            System.out.println("Board.java l500 " + c);
         }
 
         private void executeGo(Board board)
