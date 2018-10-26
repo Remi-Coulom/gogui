@@ -379,7 +379,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     public void actionAttachRuler(int index)
     {
-        Program ruler = this.m_rulers.get(index);
+        Program ruler = m_rulers.get(index);
         try {
             initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
         } catch (ExecFailed e) {
@@ -952,7 +952,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void actionGotoNode(final ConstNode node, final boolean protectGui)
     {
-        if (m_gameRuler != null) GenericBoard.copyBoardState(m_gameRuler, (Board)getBoard());
+        if (m_gameRuler != null) GenericBoard.copyBoardState(m_gameRuler, node, (Board)getBoard());
         if (! checkStateChangePossible())
             return;
         if (protectGui)
@@ -4738,17 +4738,41 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
-        m_gameRuler = new GtpClient(command,
-                new File(directory),
-                false,null);
-        if (m_gameRuler != null)
-        {
-            try {
-                m_gameRuler.querySupportedCommands();
-                getBoard().attachGameRuler(m_gameRuler);
-            } catch (GtpError e) {
-                showError(e);
+        try {
+            boolean alreadyAttached = m_gameRuler != null;
+            String previousGame = "";
+            int previousSize = -1;
+            if (alreadyAttached)
+            {
+                if (m_gameRuler.isSupported("gogui-rules_game_id"))
+                    previousGame = m_gameRuler.send("gogui-rules_game_id");
+                previousSize = GenericBoard.getBoardSize(m_gameRuler);
             }
+            m_gameRuler = new GtpClient(command,
+                    new File(directory),
+                    false,null);
+            String newGame = "";
+            int newSize = -1;
+            if (m_gameRuler != null)
+            {
+                    m_gameRuler.querySupportedCommands();
+                    getBoard().attachGameRuler(m_gameRuler);
+                    if (m_gameRuler.isSupported("gogui-rules_game_id"))
+                        newGame = m_gameRuler.send("gogui-rules_game_id");
+                    newSize = GenericBoard.getBoardSize(m_gameRuler);
+            }
+            if (previousGame.equals(newGame) && !previousGame.equals("") && previousSize==newSize && previousSize > 0)
+            {
+                GenericBoard.copyBoardState(m_gameRuler, getCurrentNode(), (Board)getBoard());
+                gotoNode(getCurrentNode());
+            }
+            else
+            {
+                //TODO clear board and delete the tree 
+            }
+            
+        } catch (GtpError e) {
+            showError(e);
         }
     }
 }

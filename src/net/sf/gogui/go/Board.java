@@ -341,6 +341,12 @@ implements ConstBoard
         @param toMove The new color to move. */
     public void setToMove(GoColor toMove)
     {
+        if (isGameRulerAttached())
+            try {
+                m_toMove = GenericBoard.getSideToMove(m_gameRuler, getLastMove());
+                return;
+            } catch (GtpError e) {
+            }
         m_toMove = toMove;
     }
 
@@ -364,7 +370,6 @@ implements ConstBoard
                 m_setup.set(c, new PointList());
             else
             {
-                System.out.println("  " +c);
                 for (GoPoint p : stones)
                     setColor(p, c);
                 m_setup.set(c, new PointList(stones));
@@ -423,8 +428,6 @@ implements ConstBoard
 
         public int m_moveIndex = 0;
 
-        private String m_legalMoves;
-
         public StackEntry(Move move)
         {
             m_move = move;
@@ -457,45 +460,16 @@ implements ConstBoard
         }
 
         private void executeGameRules(Board board) throws GtpError
-        {/*
-            m_legalMoves = GenericBoard.getLegalMoves(board.m_gameRuler);
+        {
             GoPoint p = m_move.getPoint();
             GoColor c = m_move.getColor();
-            GoColor sideToMove =  GenericBoard.getSideToMove(board.m_gameRuler, m_move);
-            m_oldToMove = c;
-            if (p != null)
+            if(p != null)
             {
-                if (board.m_lastMoveIndex > m_moveIndex)
-                {
-                    board.setColor(p, c);
-                }
-                else if (board.m_lastMoveIndex == m_moveIndex)
-                {
-                    if (m_legalMoves.contains(p.toString()))
-                    {
-                        System.out.println("legal");
-                        board.setColor(p, sideToMove);
-                        Move move = Move.get(sideToMove, p);
-                        System.out.println(move);
-                        board.m_gameRuler.sendPlay(move);
-                    }
-                    else
-                    {
-                        System.out.println(m_move);
-                        System.out.println("illegal move");
-                    }
-                    //TODO show illegal move message
-                }
+                board.setColor(p, c);
+                m_oldColor = board.getColor(p);
             }
-            m_oldColor = board.getColor(p); // color when UNDO
             m_oldToMove = board.m_toMove;
-            board.m_toMove = GenericBoard.getSideToMove(board.m_gameRuler, m_move);*/
-            GoPoint p = m_move.getPoint();
-            GoColor c = m_move.getColor();
-            board.setColor(p, c);
-            m_oldColor = board.getColor(p);
-            m_oldToMove = board.m_toMove;
-            System.out.println("Board.java l500 " + c);
+            board.setToMove(GenericBoard.getSideToMove(board.m_gameRuler, m_move));
         }
 
         private void executeGo(Board board)
