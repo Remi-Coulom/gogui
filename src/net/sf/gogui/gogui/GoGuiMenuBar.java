@@ -431,6 +431,9 @@ public class GoGuiMenuBar
     {
         GuiMenu menu = new GuiMenu(i18n("MEN_GAME"));
         menu.add(actions.m_actionNewGame);
+        menu.addSeparator();
+        menu.add(actions.m_actionNewRuler);
+        menu.add(actions.m_actionDetachRuler);
         m_menuRuler = new GuiMenu(i18n("ACT_CHANGE_GAME"));
         setRulers(Program.load(true));
         menu.add(m_menuRuler);

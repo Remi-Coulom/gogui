@@ -49,6 +49,7 @@ import net.sf.gogui.game.Game;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.MarkType;
+import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
@@ -372,7 +373,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     }
 
     public void actionAttachProgram(int index)
-    {
+    { 
         m_prefs.putInt("program", index);
         actionAttachProgram(m_programs.get(index));
     }
@@ -384,11 +385,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
         } catch (ExecFailed e) {
         }
-        try {
-            m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
-        }catch (GtpError e) {
+        if (m_gameRuler != null)
+        {
+            try {
+                m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
+            }catch (GtpError e) {
+            }
+            m_prefs.putInt("ruler", index);
         }
-        m_prefs.putInt("ruler", index);
     }
 
     public void actionAttachProgram(final Program program)
@@ -542,7 +546,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         SwingUtilities.invokeLater(runnable);
     }
     
-    private void actionDetachRuler()
+    public void actionDetachRuler()
     {
         if (m_gameRuler == null)
             return;
@@ -552,7 +556,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             public void run() {
                 try
                 {
-                    saveSession();
+                 //   saveSession();
                     detachRuler();
                     updateViews(false);
                 }
@@ -563,6 +567,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             }
         };
         SwingUtilities.invokeLater(runnable);
+        m_gameRuler = null;
     }
 
     public void actionDisposeAnalyzeDialog()
@@ -1891,18 +1896,21 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
     }
 
-    public void actionTruncate()
+    public void actionTruncate(boolean showMessage)
     {
         if (! checkStateChangePossible())
             return;
         if (! getCurrentNode().hasFather())
             return;
-        String disableKey = "net.sf.gogui.gogui.GoGui.truncate";
-        if (! m_messageDialogs.showQuestion(disableKey, this,
-                i18n("MSG_TRUNCATE"),
-                i18n("MSG_TRUNCATE_2"),
-                i18n("LB_TRUNCATE"), false))
-            return;
+        if (showMessage)
+            {
+            String disableKey = "net.sf.gogui.gogui.GoGui.truncate";
+            if (! m_messageDialogs.showQuestion(disableKey, this,
+                    i18n("MSG_TRUNCATE"),
+                    i18n("MSG_TRUNCATE_2"),
+                    i18n("LB_TRUNCATE"), false))
+                return;
+        }
         m_game.truncate();
         actionGotoNode(getCurrentNode());
         boardChangedBegin(false, true);
@@ -2296,6 +2304,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     public boolean isProgramAttached()
     {
         return (m_gtp != null);
+    }
+    
+    public boolean isRulerAttached()
+    {
+        return (m_gameRuler != null);
     }
 
     public boolean isProgramDead()
@@ -3152,6 +3165,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 }
                 Move move = Move.get(toMove, point);
                 m_game.play(move);
+                if (m_gameRuler != null)
+                {
+                    GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
+                }
                 m_gtp.updateAfterGenmove(getBoard());
            //     m_gameRulerSynchro.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
@@ -3533,9 +3550,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             m_game.play(move);
             if (m_gameRuler != null)
             {
-                    GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
-               //     m_game.setToMove(getToMove());
-              //      GenericBoard.copyRulerBoardState(m_gameRuler, ((Board)getBoard()));
+                GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
             }
         }
         else
@@ -4320,6 +4335,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         assert point != null;
         m_game.setup(point, color);
+        if (m_gameRuler != null)
+        {
+            GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), Move.get(color, point));
+        }
     }
 
     private void setupDone()
@@ -4739,40 +4758,66 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
         try {
+            GtpClientBase m_gameRulerCopie = null;
             boolean alreadyAttached = m_gameRuler != null;
             String previousGame = "";
             int previousSize = -1;
             if (alreadyAttached)
             {
-                if (m_gameRuler.isSupported("gogui-rules_game_id"))
-                    previousGame = m_gameRuler.send("gogui-rules_game_id");
+                previousGame = GenericBoard.getGameId(m_gameRuler);
                 previousSize = GenericBoard.getBoardSize(m_gameRuler);
             }
-            m_gameRuler = new GtpClient(command,
+            m_gameRulerCopie = new GtpClient(command,
                     new File(directory),
                     false,null);
+            if (m_gameRulerCopie == null)
+                return;
             String newGame = "";
             int newSize = -1;
-            if (m_gameRuler != null)
+            m_gameRulerCopie.querySupportedCommands();
+            newGame = GenericBoard.getGameId(m_gameRulerCopie);
+            newSize = GenericBoard.getBoardSize(m_gameRulerCopie);
+            if (previousGame.equals(newGame) && !previousGame.equals("")
+                    && previousSize==newSize && previousSize > 0)
             {
-                    m_gameRuler.querySupportedCommands();
-                    getBoard().attachGameRuler(m_gameRuler);
-                    if (m_gameRuler.isSupported("gogui-rules_game_id"))
-                        newGame = m_gameRuler.send("gogui-rules_game_id");
-                    newSize = GenericBoard.getBoardSize(m_gameRuler);
-            }
-            if (previousGame.equals(newGame) && !previousGame.equals("") && previousSize==newSize && previousSize > 0)
-            {
-                GenericBoard.copyBoardState(m_gameRuler, getCurrentNode(), (Board)getBoard());
+                GenericBoard.copyBoardState(m_gameRulerCopie, getCurrentNode(), (Board)getBoard());
+                m_gameRuler = m_gameRulerCopie;
+                getBoard().attachGameRuler(m_gameRuler);
                 gotoNode(getCurrentNode());
+                currentNodeChanged();
+                updateViews(true);
             }
             else
             {
-                //TODO clear board and delete the tree 
+                if (checkSaveGame())
+                {
+                    ConstNode root = NodeUtil.getRoot(getCurrentNode());
+                    while (root.hasChildren())
+                    {
+                        ConstNode child = root.getChildConst();
+                        gotoNode(child);
+                        actionTruncate(false);
+                    }
+                    if (newSize < 0)
+                        newSize = getBoardSize();
+                    m_gameRuler = m_gameRulerCopie;
+                    initGame(newSize);
+                    getBoard().attachGameRuler(m_gameRuler);
+                    actionDetachProgram();
+                    updateViews(true);
+                }
+                else
+                {
+                    System.out.println("change cancelled");
+                    actionGotoNode(getCurrentNode());
+                }
             }
-            
         } catch (GtpError e) {
             showError(e);
         }
+    }
+
+    public boolean isRulerSetupPossible() {
+        return GenericBoard.isSetupPossible(m_gameRuler);
     }
 }

@@ -10,6 +10,7 @@ import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -162,6 +163,11 @@ public class GoGuiActions
         new GuiAction(i18n("ACT_DETACH_PROGRAM")) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionDetachProgram(); } };
+
+    public final GuiAction m_actionDetachRuler =
+        new GuiAction(i18n("ACT_DETACH_PROGRAM")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionDetachRuler(); } };
 
     public final GuiAction m_actionEnd =
         new GuiAction(i18n("ACT_END"), i18n("TT_END"),
@@ -350,6 +356,12 @@ public class GoGuiActions
         new GuiAction(i18n("ACT_NEW_PROGRAM")) {
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionNewProgram(); } };
+
+    public final GuiAction m_actionNewRuler =
+        new GuiAction(i18n("ACT_NEW_PROGRAM")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionNewRuler(); } };
+
 
     public final GuiAction m_actionOpen =
         new GuiAction(i18n("ACT_OPEN"), i18n("TT_OPEN"), KeyEvent.VK_O,
@@ -619,7 +631,7 @@ public class GoGuiActions
     public final GuiAction m_actionTruncate =
         new GuiAction(i18n("ACT_TRUNCATE")) {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionTruncate(); } };
+                m_goGui.actionTruncate(true); } };
 
     public final GuiAction m_actionTruncateChildren =
         new GuiAction(i18n("ACT_TRUNCATE_CHILDREN")) {
@@ -669,6 +681,8 @@ public class GoGuiActions
         boolean hasParameterSnapshot = m_goGui.hasParameterSnapshot();
         int numberPrograms = m_goGui.getNumberPrograms();
         boolean hasParameterCommands = m_goGui.hasParameterCommands();
+        boolean isRulerAttached = m_goGui.isRulerAttached();
+        boolean isRulerSetupPossible = m_goGui.isRulerSetupPossible();
         ConstClock clock = game.getClock();
         int boardSize = game.getSize();
         GoColor toMove = game.getToMove();
@@ -698,6 +712,7 @@ public class GoGuiActions
         m_actionComputerWhite.setSelected(! computerBlack && computerWhite);
         m_actionDeleteSideVariations.setEnabled(isInMain && treeHasVariations);
         updateDetachProgram(isProgramAttached, name);
+        updateDetachRuler(isRulerAttached, "");
         m_actionEditPrograms.setEnabled(numberPrograms > 0);
         m_actionEnd.setEnabled(hasChildren);
         m_actionFindNext.setEnabled(hasPattern);
@@ -742,6 +757,10 @@ public class GoGuiActions
                                        && setupColor == BLACK);
         m_actionSetupWhite.setSelected(setupMode
                                        && setupColor == WHITE);
+        m_actionSetupBlack.setEnabled(!isRulerAttached || isRulerAttached
+                                      && isRulerSetupPossible);
+        m_actionSetupWhite.setEnabled(!isRulerAttached || isRulerAttached
+                                      && isRulerSetupPossible);
         m_actionSaveCommands.setEnabled(isProgramAttached);
         m_actionSaveLog.setEnabled(isProgramAttached);
         m_actionSaveParameters.setEnabled(isProgramAttached
@@ -844,6 +863,12 @@ public class GoGuiActions
     {
         m_actionDetachProgram.setEnabled(isProgramAttached);
     }
+    
+    private void updateDetachRuler(boolean isRulerAttached, String name)
+    {
+        m_actionDetachRuler.setEnabled(isRulerAttached);
+    }
+
 
     private void updateInterrupt(boolean isProgramAttached,
                                  boolean isInterruptSupported,

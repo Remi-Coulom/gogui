@@ -78,6 +78,8 @@ public final class GenericBoard {
         try {
             Move rightColor = Move.get(GenericBoard.getSideToMove(gameRuler, move), move.getPoint());
             gameRuler.sendPlay(move);
+            if (rightColor.getColor() != move.getColor())
+                System.err.println("Color of the game ruler and the board do not match\n");
             GenericBoard.copyRulerBoardState(gameRuler, board);
             GenericBoard.setToMove(gameRuler, board, rightColor);
         } catch (GtpError e) {
@@ -197,6 +199,11 @@ public final class GenericBoard {
             }
         }
     }
+    
+    public static boolean isSetupPossible(GtpClientBase gameRuler)
+    {
+        return gameRuler != null && gameRuler.isSupported("gogui-rules_setup");
+    }
 
     public static void copyBoardState(GtpClientBase gameRuler, ConstNode node, Board board) {
         ArrayList<Move> moves = new ArrayList<Move>();
@@ -219,6 +226,11 @@ public final class GenericBoard {
             gameRuler.sendPlay(moves.get(i));
         }
         GenericBoard.copyRulerBoardState(gameRuler, board);
+    }
+    
+    public static void setup(GtpClientBase gameRuler, Move move) throws GtpError {
+        String s= gameRuler.getCommandPlay(move);
+        System.out.println(s);
     }
 
     
