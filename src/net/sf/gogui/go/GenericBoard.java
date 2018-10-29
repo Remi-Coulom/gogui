@@ -64,6 +64,8 @@ public final class GenericBoard {
      */
     public static boolean isPassLegal(GtpClientBase gameRuler) throws GtpError
     {
+        if (gameRuler == null)
+            return true;
         if (! gameRuler.isSupported("gogui-rules_legal_moves"))
             return false;
         String legalMoves = getLegalMoves(gameRuler);

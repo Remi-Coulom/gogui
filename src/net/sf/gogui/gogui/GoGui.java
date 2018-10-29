@@ -387,10 +387,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         if (m_gameRuler != null)
         {
-            try {
-                m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
-            }catch (GtpError e) {
-            }
             m_prefs.putInt("ruler", index);
         }
     }
@@ -550,15 +546,23 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         if (m_gameRuler == null)
             return;
+        if (!checkSaveGame())
+            return;
         m_prefs.putInt("ruler", -1);
+        m_prefs.putInt("program", -1);
         protectGui();
         Runnable runnable = new Runnable() {
             public void run() {
                 try
                 {
-                 //   saveSession();
+                    saveSession();
                     detachRuler();
-                    updateViews(false);
+                    initGame(getBoardSize());
+                    m_gameRuler = null;
+                    getBoard().detachGameRuler();
+                    updateViews(true);
+                    if (isProgramAttached())
+                        detachProgram();
                 }
                 finally
                 {
@@ -567,7 +571,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             }
         };
         SwingUtilities.invokeLater(runnable);
-        m_gameRuler = null;
     }
 
     public void actionDisposeAnalyzeDialog()
@@ -3331,6 +3334,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void detachRuler()
     {
+        if (false)
+            return;
         if (m_gameRuler != null && ! m_gameRuler.isProgramDead())
         {
             // Some programs do not handle closing the GTP stream
@@ -3346,7 +3351,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             m_gameRuler.close();
         }
         m_gameRuler = null;
-        actionSave();
         resetBoard();
         clearStatus();
         setTitle();
@@ -4770,8 +4774,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             m_gameRulerCopie = new GtpClient(command,
                     new File(directory),
                     false,null);
-            if (m_gameRulerCopie == null)
-                return;
             String newGame = "";
             int newSize = -1;
             m_gameRulerCopie.querySupportedCommands();
@@ -4808,7 +4810,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 }
                 else
                 {
-                    System.out.println("change cancelled");
                     actionGotoNode(getCurrentNode());
                 }
             }

@@ -211,6 +211,11 @@ implements ConstBoard
     {
         m_gameRuler = gameRuler;
     }
+    
+    public void detachGameRuler()
+    {
+        m_gameRuler = null;
+    }
 
     public boolean isGameRulerAttached() {
         return (m_gameRuler != null);

@@ -56,4 +56,6 @@ public interface ConstBoard
     Iterator<GoPoint> iterator();
 
     void attachGameRuler(GtpClientBase gameRuler);
+
+    void detachGameRuler();
 }

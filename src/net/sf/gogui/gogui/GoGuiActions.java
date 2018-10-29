@@ -11,7 +11,11 @@ import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.GenericBoard;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.gtp.GtpClientBase;
+import net.sf.gogui.gtp.GtpError;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.gogui.I18n.i18n;
@@ -737,6 +741,10 @@ public class GoGuiActions
         m_actionNextVariation.setEnabled(hasNextVariation);
         updatePass(toMove);
         updatePlay(toMove, isProgramAttached, computerBoth, name);
+        try {
+            m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
+        } catch (GtpError e) {
+        }
         m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
@@ -815,6 +823,8 @@ public class GoGuiActions
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
     }
+    
+    private GtpClientBase m_gameRuler;
 
     private final GoGui m_goGui;
 
