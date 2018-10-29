@@ -21,7 +21,7 @@ import net.sf.gogui.gtp.GtpError;
  *
  */
 public final class GenericBoard {
-    
+
     public static GoColor getSideToMove(GtpClientBase gameRuler, Move move) throws GtpError {
         if (! gameRuler.isSupported("gogui-rules_side_to_move"))
             return move.getColor().otherColor();
@@ -81,7 +81,7 @@ public final class GenericBoard {
             Move rightColor = Move.get(GenericBoard.getSideToMove(gameRuler, move), move.getPoint());
             gameRuler.sendPlay(move);
             if (rightColor.getColor() != move.getColor())
-                System.err.println("Color of the game ruler and the board do not match\n");
+                System.err.println("Colors of the game ruler and the board do not match\n");
             GenericBoard.copyRulerBoardState(gameRuler, board);
             GenericBoard.setToMove(gameRuler, board, rightColor);
         } catch (GtpError e) {
@@ -114,7 +114,7 @@ public final class GenericBoard {
             return "";
         return gameRuler.send("gogui-rules_game_id");
     }
-    
+
     /**
      * Forces the position from the game ruler to the board for a better synchronization.
      */
@@ -126,28 +126,49 @@ public final class GenericBoard {
             rulerBoardState = gameRuler.send("gogui-rules_board");;
         } catch (GtpError e) {
         }
-        if (rulerBoardState.equals("")) {
-            board.clear();
-            return;
-        }
+        if (rulerBoardState.equals("")) return;
         int size = 0;
         try {
             size = GenericBoard.getBoardSize(gameRuler);
         } catch (GtpError e) {
-            e.printStackTrace();
             return;
         }
+        GenericBoard.setup(rulerBoardState, board, size);
+    }
+    
+    /**
+     * Clears the game ruler and set the initial position of the game ruler on the board
+     * @param gameRuler
+     * @param board
+     */
+    public static void setInitialBoardState(GtpClientBase gameRuler, Board board)
+    {
+        String rulerBoardState = board.getInitialPosition();
+        if (rulerBoardState.equals("")) return;
+        int size = 0;
+        try {
+            size = GenericBoard.getBoardSize(gameRuler);
+        } catch (GtpError e) {
+            return;
+        }
+        GenericBoard.setup(rulerBoardState, board, size);
+        
+    }
+
+    private static void setup(String position, Board board, int size)
+    {
         int nbChar = 0;
         boolean setup = false;
         PointList blacksSetup = new PointList();
         PointList whitesSetup = new PointList();
+        PointList emptySetup = new PointList();
         Move playOneMove = null;
         for (int i = 0; i < size; i++) {
             int j = -1;
             char c = ' ';
             do {
                 do {
-                    c = rulerBoardState.charAt(nbChar);
+                    c = position.charAt(nbChar);
                     nbChar++;
                 }while (c != 'X'&& c != 'O' && c != '.' && c != '\n');
                 if (c != '\n')
@@ -157,31 +178,30 @@ public final class GenericBoard {
                 if ( c == 'X')
                 {
                     GoPoint black = GoPoint.get(j, size-i-1);
-                    blacksSetup.add(black);
                     if (board.getColor(black) != BLACK)
                     {
+                        blacksSetup.add(black);
                         if (playOneMove == null)
                             playOneMove = Move.get(BLACK, black);
-                        else if (!setup)
-                            setup = true;
+                        else setup = true;
                     }
                 }
                 else if (c == 'O')
                 {
                     GoPoint white = GoPoint.get(j, size-i-1);
-                    whitesSetup.add(white);
                     if (board.getColor(white) != WHITE)
                     {
+                        whitesSetup.add(white);
                         if (playOneMove == null)
                             playOneMove = Move.get(WHITE, white);
-                        else if (!setup)
-                            setup = true;
+                        else setup = true;
                     }
                 }
                 else if (c == '.')
                 {
                     GoPoint empty = GoPoint.get(j, size-i-1);
-                    if (!board.getColor(empty).equals(EMPTY)) {
+                    if (board.getColor(empty) != EMPTY) {
+                        emptySetup.add(empty);
                         setup = true;
                     }
                 }
@@ -189,10 +209,9 @@ public final class GenericBoard {
         }
         if (setup)
         {
-            try {
-                board.setup(blacksSetup, whitesSetup, GenericBoard.getSideToMove(gameRuler, null));
-            } catch (GtpError e) {
-            }
+            board.setPoints(blacksSetup, BLACK);
+            board.setPoints(whitesSetup, WHITE);
+            board.setPoints(emptySetup, EMPTY);
         }
         else {
             if (playOneMove != null)
@@ -201,26 +220,30 @@ public final class GenericBoard {
             }
         }
     }
-    
+
     public static boolean isSetupPossible(GtpClientBase gameRuler)
     {
         return gameRuler != null && gameRuler.isSupported("gogui-rules_setup");
     }
 
-    public static void copyBoardState(GtpClientBase gameRuler, ConstNode node, Board board) {
+    /**
+     * Clears the ruler board and plays moves from the begining.
+     * Then copy the ruler board changes to the board.
+     */
+    public static void copyBoardState(GtpClientBase gameRuler, ConstNode node, Board board)
+    {
         ArrayList<Move> moves = new ArrayList<Move>();
         while (node.hasFather())
         {
             moves.add(node.getMove());
             node = node.getFatherConst();
-            
         }
         try {
             GenericBoard.playFromBeginning(gameRuler, moves, board);
         } catch (GtpError e) {
         }
     }
-    
+
     private static void playFromBeginning(GtpClientBase gameRuler, ArrayList<Move> moves, Board board) throws GtpError {
         gameRuler.sendClearBoard(board.getSize());
         for (int i = moves.size() - 1; i >= 0; i--)
@@ -228,11 +251,6 @@ public final class GenericBoard {
             gameRuler.sendPlay(moves.get(i));
         }
         GenericBoard.copyRulerBoardState(gameRuler, board);
-    }
-    
-    public static void setup(GtpClientBase gameRuler, Move move) throws GtpError {
-        String s= gameRuler.getCommandPlay(move);
-        System.out.println(s);
     }
 
     

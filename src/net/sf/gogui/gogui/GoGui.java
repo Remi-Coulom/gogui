@@ -557,9 +557,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 {
                     saveSession();
                     detachRuler();
+                    getBoard().detachGameRuler();
+                    ConstNode root = getTree().getRootConst();
+                    gotoNode(root);
+                    currentNodeChanged();
                     initGame(getBoardSize());
                     m_gameRuler = null;
-                    getBoard().detachGameRuler();
                     updateViews(true);
                     if (isProgramAttached())
                         detachProgram();
@@ -1253,7 +1256,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     return;
                 }
                 m_rulers.add(m_newRuler);
-              //  m_program = m_newProgram;
                 m_prefs.putInt("ruler", m_rulers.size() - 1);
                 m_menuBar.setRulers(m_rulers);
                 Program.save(m_rulers, true);
@@ -3509,7 +3511,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        //TODO synchronize Board from GenericBoard (play moves from the start)
         m_game.gotoNode(node);
         if (getClock().isInitialized())
             m_game.restoreClock();
@@ -3552,6 +3553,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             newNodeCreated = true;
             m_game.play(move);
+            
             if (m_gameRuler != null)
             {
                 GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
@@ -4805,12 +4807,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_gameRuler = m_gameRulerCopie;
                     initGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
+                //    actionGotoNode(getCurrentNode());
                     actionDetachProgram();
                     updateViews(true);
                 }
                 else
                 {
-                    actionGotoNode(getCurrentNode());
+                System.out.println("goto");
+                actionGotoNode(getCurrentNode());
                 }
             }
         } catch (GtpError e) {

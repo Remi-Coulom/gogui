@@ -80,6 +80,14 @@ implements ConstBoard
     {
         return m_captured.get(c);
     }
+    
+    /** Get the initial position if a game ruler is attached.
+     * @return "" if the initial position is empty or no game ruler is attached.
+     */
+    public String getInitialPosition()
+    {
+        return m_initialPosition;
+    }
 
     /** Get state of a point on the board.
         @return BLACK, WHITE or EMPTY */
@@ -210,11 +218,22 @@ implements ConstBoard
     public void attachGameRuler(GtpClientBase gameRuler)
     {
         m_gameRuler = gameRuler;
+        m_initialPosition = "";
+        if (m_gameRuler.isSupported("gogui-rules_board"))
+            try {
+                String initialPosition = m_gameRuler.send("gogui-rules_board");
+                if (initialPosition.contains("O") ||
+                        initialPosition.contains("X")){
+                    m_initialPosition = initialPosition;
+                }
+            } catch (GtpError e) {
+            }
     }
     
     public void detachGameRuler()
     {
         m_gameRuler = null;
+        m_initialPosition = "";
     }
 
     public boolean isGameRulerAttached() {
@@ -305,7 +324,15 @@ implements ConstBoard
             m_setup.get(c).clear();
             m_captured.set(c, 0);
         }
-        m_toMove = BLACK;
+        if (isGameRulerAttached())
+            try {
+                GenericBoard.setInitialBoardState(m_gameRuler, this);
+                System.out.println("l.311 Board.java");
+                m_toMove = GenericBoard.getSideToMove(m_gameRuler, Move.get(BLACK, null));
+            } catch (GtpError e) {
+            }
+        else
+            m_toMove = BLACK;
         m_koPoint = null;
         m_isSetupHandicap = false;
         m_setupPlayer = null;
@@ -379,6 +406,18 @@ implements ConstBoard
                     setColor(p, c);
                 m_setup.set(c, new PointList(stones));
             }
+        }
+    }
+    
+    /**
+     * Forces the points to color c
+     */
+    public void setPoints(ConstPointList points, GoColor c)
+    {
+        for (GoPoint p: points)
+        {
+            System.out.println(p + " " + c);
+            setColor(p, c);
         }
     }
 
@@ -568,6 +607,8 @@ implements ConstBoard
         = new BlackWhiteSet<PointList>(new PointList(), new PointList());
 
     private boolean m_isSetupHandicap;
+    
+    private String m_initialPosition = "";
 
     private boolean isSingleStoneSingleLib(GoPoint point, GoColor color)
     {
