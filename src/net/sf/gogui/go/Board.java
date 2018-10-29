@@ -326,8 +326,7 @@ implements ConstBoard
         }
         if (isGameRulerAttached())
             try {
-                GenericBoard.setInitialBoardState(m_gameRuler, this);
-                System.out.println("l.311 Board.java");
+                GenericBoard.setInitialBoardState(m_gameRuler, this); //Does not change the gameRuler state
                 m_toMove = GenericBoard.getSideToMove(m_gameRuler, Move.get(BLACK, null));
             } catch (GtpError e) {
             }
@@ -416,7 +415,6 @@ implements ConstBoard
     {
         for (GoPoint p: points)
         {
-            System.out.println(p + " " + c);
             setColor(p, c);
         }
     }

@@ -964,6 +964,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void actionGotoNode(final ConstNode node, final boolean protectGui)
     {
         if (m_gameRuler != null) GenericBoard.copyBoardState(m_gameRuler, node, (Board)getBoard());
+        updateViews(false);
         if (! checkStateChangePossible())
             return;
         if (protectGui)
@@ -4807,14 +4808,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_gameRuler = m_gameRulerCopie;
                     initGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
+                    GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
                 //    actionGotoNode(getCurrentNode());
                     actionDetachProgram();
                     updateViews(true);
                 }
                 else
                 {
-                System.out.println("goto");
-                actionGotoNode(getCurrentNode());
+                    actionGotoNode(getCurrentNode());
                 }
             }
         } catch (GtpError e) {

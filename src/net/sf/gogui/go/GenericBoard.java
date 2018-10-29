@@ -138,8 +138,6 @@ public final class GenericBoard {
     
     /**
      * Clears the game ruler and set the initial position of the game ruler on the board
-     * @param gameRuler
-     * @param board
      */
     public static void setInitialBoardState(GtpClientBase gameRuler, Board board)
     {
@@ -250,6 +248,7 @@ public final class GenericBoard {
         {
             gameRuler.sendPlay(moves.get(i));
         }
+        System.out.println(gameRuler.send("gogui-rules_board"));
         GenericBoard.copyRulerBoardState(gameRuler, board);
     }
 
