@@ -4,12 +4,15 @@ package net.sf.gogui.game;
 
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.ConstPointList;
+import net.sf.gogui.go.GenericBoard;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.gtp.GtpClientBase;
+import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.ObjectUtil;
 
 /** Manages a tree, board, current node and clock. */
@@ -118,12 +121,15 @@ public class Game
         return m_tree;
     }
     
-    public void gotoNode(ConstNode node)
+    public void gotoNode(ConstNode node, GtpClientBase gameRuler)
     {
+        if (gameRuler != null)
+            GenericBoard.copyBoardState(gameRuler, node, (Board)getBoard());
         assert node != null;
         assert NodeUtil.getRoot(node) == getRoot();
         m_current = (Node)node;
-        updateBoard();
+        if (gameRuler == null)
+            updateBoard();
     }
 
     public void haltClock()

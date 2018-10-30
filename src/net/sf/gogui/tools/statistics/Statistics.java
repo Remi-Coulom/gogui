@@ -425,7 +425,7 @@ public class Statistics
         for (ConstNode node = game.getRoot(); node != null;
              node = node.getChildConst())
         {
-            game.gotoNode(node);
+            game.gotoNode(node, null);
             synchronize(game);
             Move move = node.getMove();
             boolean beginCommands = ! node.hasFather();
@@ -447,7 +447,7 @@ public class Statistics
         for (ConstNode node = NodeUtil.getLast(game.getRoot()); node != null;
              node = node.getFatherConst())
         {
-            game.gotoNode(node);
+            game.gotoNode(node, null);
             synchronize(game);
             Move move = node.getMove();
             boolean beginCommands = ! node.hasChildren();
@@ -483,7 +483,7 @@ public class Statistics
         if (node == null)
             return;
         int number = NodeUtil.getDepth(node);
-        game.gotoNode(node);
+        game.gotoNode(node, null);
         synchronize(game);
         Move move = node.getMove();
         boolean beginCommands = ! node.hasChildren();

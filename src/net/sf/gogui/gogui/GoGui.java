@@ -963,8 +963,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void actionGotoNode(final ConstNode node, final boolean protectGui)
     {
-        if (m_gameRuler != null) GenericBoard.copyBoardState(m_gameRuler, node, (Board)getBoard());
-        updateViews(false);
         if (! checkStateChangePossible())
             return;
         if (protectGui)
@@ -3512,7 +3510,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        m_game.gotoNode(node);
+        m_game.gotoNode(node, m_gameRuler);
         if (getClock().isInitialized())
             m_game.restoreClock();
         else
@@ -3563,7 +3561,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         else
         {
             m_game.haltClock();
-            m_game.gotoNode(node);
+            m_game.gotoNode(node, m_gameRuler);
         }
         checkLostOnTime(move.getColor());
         m_resigned = false;
@@ -3808,7 +3806,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 ConstNode node =
                         NodeUtil.findByMoveNumber(getCurrentNode(), move);
                 if (node != null)
-                    m_game.gotoNode(node);
+                    m_game.gotoNode(node, m_gameRuler);
             }
             setFile(runnable.getGameFile());
             FileDialogs.setLastFile(file);

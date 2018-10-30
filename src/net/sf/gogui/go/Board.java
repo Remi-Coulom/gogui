@@ -326,7 +326,7 @@ implements ConstBoard
         }
         if (isGameRulerAttached())
             try {
-                GenericBoard.setInitialBoardState(m_gameRuler, this); //Does not change the gameRuler state
+                GenericBoard.setInitialBoardState(m_gameRuler, this);
                 m_toMove = GenericBoard.getSideToMove(m_gameRuler, Move.get(BLACK, null));
             } catch (GtpError e) {
             }
@@ -507,8 +507,8 @@ implements ConstBoard
             GoColor c = m_move.getColor();
             if(p != null)
             {
-                board.setColor(p, c);
                 m_oldColor = board.getColor(p);
+                board.setColor(p, c);
             }
             m_oldToMove = board.m_toMove;
             board.setToMove(GenericBoard.getSideToMove(board.m_gameRuler, m_move));

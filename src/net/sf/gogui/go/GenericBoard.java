@@ -125,6 +125,7 @@ public final class GenericBoard {
         try {
             rulerBoardState = gameRuler.send("gogui-rules_board");;
         } catch (GtpError e) {
+            return;
         }
         if (rulerBoardState.equals("")) return;
         int size = 0;
@@ -248,7 +249,6 @@ public final class GenericBoard {
         {
             gameRuler.sendPlay(moves.get(i));
         }
-        System.out.println(gameRuler.send("gogui-rules_board"));
         GenericBoard.copyRulerBoardState(gameRuler, board);
     }
 

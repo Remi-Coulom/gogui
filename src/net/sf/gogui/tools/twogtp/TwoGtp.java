@@ -392,7 +392,7 @@ public class TwoGtp
         int moveNumber = m_game.getMoveNumber();
         if (moveNumber == 0)
             throw new GtpError("cannot undo");
-        m_game.gotoNode(getCurrentNode().getFatherConst());
+        m_game.gotoNode(getCurrentNode().getFatherConst(), null);
         assert m_game.getMoveNumber() == moveNumber - 1;
         synchronize();
     }
@@ -713,7 +713,7 @@ public class TwoGtp
             Move move = child.getMove();
             if (move.getColor() != color)
                 throw new GtpError("next opening move is " + move);
-            m_game.gotoNode(child);
+            m_game.gotoNode(child, null);
             synchronize();
             response.append(GoPoint.toString(move.getPoint()));
             return;
