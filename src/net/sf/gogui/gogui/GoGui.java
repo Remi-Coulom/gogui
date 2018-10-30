@@ -2894,13 +2894,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private boolean attachRuler(String programCommand, Program program,
             boolean register)
     {
+        System.out.println(programCommand + " ");
         programCommand = programCommand.trim();
         if (programCommand.equals(""))
         {
             return false; }
         m_newRuler = program;
         try {
-            initGameRuler(programCommand, "/home/fretel/crazy_zero/othello", "othello 8x8");
+            initGameRuler(programCommand, program.m_workingDirectory, program.m_name);
             Program.save(m_programs, true);
         } catch (ExecFailed e1) 
         {
@@ -3572,13 +3573,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private GoColor getToMove()
     {
-    /*    if (m_gameRuler != null)
+        if (m_gameRuler != null)
         {
             try {
                 return GenericBoard.getSideToMove(m_gameRuler, null);
             } catch (GtpError e) {
             }
-        }*/
+        }
         return m_game.getToMove();
     }
 

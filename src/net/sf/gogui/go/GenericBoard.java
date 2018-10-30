@@ -80,8 +80,8 @@ public final class GenericBoard {
         try {
             Move rightColor = Move.get(GenericBoard.getSideToMove(gameRuler, move), move.getPoint());
             gameRuler.sendPlay(move);
-            if (rightColor.getColor() != move.getColor())
-                System.err.println("Colors of the game ruler and the board do not match\n");
+        //    if (rightColor.getColor() != move.getColor())
+        //        System.err.println("Colors of the game ruler and the board do not match\n");
             GenericBoard.copyRulerBoardState(gameRuler, board);
             GenericBoard.setToMove(gameRuler, board, rightColor);
         } catch (GtpError e) {
@@ -157,11 +157,9 @@ public final class GenericBoard {
     private static void setup(String position, Board board, int size)
     {
         int nbChar = 0;
-        boolean setup = false;
         PointList blacksSetup = new PointList();
         PointList whitesSetup = new PointList();
         PointList emptySetup = new PointList();
-        Move playOneMove = null;
         for (int i = 0; i < size; i++) {
             int j = -1;
             char c = ' ';
@@ -180,9 +178,6 @@ public final class GenericBoard {
                     if (board.getColor(black) != BLACK)
                     {
                         blacksSetup.add(black);
-                        if (playOneMove == null)
-                            playOneMove = Move.get(BLACK, black);
-                        else setup = true;
                     }
                 }
                 else if (c == 'O')
@@ -191,9 +186,6 @@ public final class GenericBoard {
                     if (board.getColor(white) != WHITE)
                     {
                         whitesSetup.add(white);
-                        if (playOneMove == null)
-                            playOneMove = Move.get(WHITE, white);
-                        else setup = true;
                     }
                 }
                 else if (c == '.')
@@ -201,23 +193,13 @@ public final class GenericBoard {
                     GoPoint empty = GoPoint.get(j, size-i-1);
                     if (board.getColor(empty) != EMPTY) {
                         emptySetup.add(empty);
-                        setup = true;
                     }
                 }
             } while (j < size-1);
         }
-        if (setup)
-        {
-            board.setPoints(blacksSetup, BLACK);
-            board.setPoints(whitesSetup, WHITE);
-            board.setPoints(emptySetup, EMPTY);
-        }
-        else {
-            if (playOneMove != null)
-            {
-                board.playGameMove(playOneMove);
-            }
-        }
+        board.setPoints(blacksSetup, BLACK);
+        board.setPoints(whitesSetup, WHITE);
+        board.setPoints(emptySetup, EMPTY);
     }
 
     public static boolean isSetupPossible(GtpClientBase gameRuler)
