@@ -123,19 +123,26 @@ public class Game
     
     public void gotoNode(ConstNode node, GtpClientBase gameRuler)
     {
-        if (gameRuler != null)
-            GenericBoard.copyBoardState(gameRuler, node, (Board)getBoard());
+    //    if (gameRuler != null)
+    //        GenericBoard.copyBoardState(gameRuler, node, (Board)getBoard());
         assert node != null;
         assert NodeUtil.getRoot(node) == getRoot();
         m_current = (Node)node;
-        if (gameRuler == null)
-            updateBoard();
-        else
+        if (gameRuler != null)
+        {
             try {
+            //    m_board.setToMove(GenericBoard.getSideToMove(gameRuler, node.getMove()));
+                updateBoard();
+                GenericBoard.copyBoardState(gameRuler, node, m_board);
                 m_board.setToMove(GenericBoard.getSideToMove(gameRuler, node.getMove()));
             } catch (GtpError e) {
                 m_board.setToMove(node.getMove().getColor().otherColor());
             }
+        }
+        else
+        {
+            updateBoard();
+        }
     }
 
     public void haltClock()
@@ -430,6 +437,8 @@ public class Game
     private void updateBoard()
     {
         m_boardUpdater.update(m_tree, m_current, m_board);
+        if (m_board.isGameRulerAttached())
+            GenericBoard.copyBoardState(m_board.getGameRuler(), m_current, m_board);
     }
 
     private void updateClock()

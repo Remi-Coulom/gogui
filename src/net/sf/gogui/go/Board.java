@@ -692,4 +692,8 @@ implements ConstBoard
         assert p != null;
         m_color[p.getIndex()] = c;
     }
+
+    public GtpClientBase getGameRuler() {
+        return m_gameRuler;
+    }
 }

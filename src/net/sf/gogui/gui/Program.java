@@ -92,7 +92,7 @@ public final class Program
         prefs.putInt("size", programs.size());
         for (int i = 0; i < programs.size(); ++i)
         {
-            prefs = PrefUtil.createNode("net/sf/gogui/gui/program/" + i);
+            prefs = PrefUtil.createNode("net/sf/gogui/gui/" + type + "/" + i);
             if (prefs == null)
                 break;
             Program p = programs.get(i);

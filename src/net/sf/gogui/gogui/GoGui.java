@@ -49,7 +49,6 @@ import net.sf.gogui.game.Game;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.MarkType;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.StringInfo;
 import net.sf.gogui.game.StringInfoColor;
@@ -2689,8 +2688,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (m_gameRuler != null)
         {
             saveSession();
+            detachRuler();
         }
-        if (! attachProgram(command, program, false))
+        if (! attachRuler(command, program, false))
         {
             m_prefs.putInt("ruler", -1);
           /*  try {
@@ -2882,6 +2882,90 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             showError(e);
             return false;
+        }
+        finally
+        {
+            clearStatus();
+        }
+        currentNodeChanged();
+        return true;
+    }
+
+    private boolean attachRuler(String programCommand, Program program,
+            boolean register)
+    {
+        programCommand = programCommand.trim();
+        if (programCommand.equals(""))
+        {
+            return false; }
+        m_newRuler = program;
+        try {
+            initGameRuler(programCommand, "/home/fretel/crazy_zero/othello", "othello 8x8");
+            Program.save(m_programs, true);
+        } catch (ExecFailed e1) 
+        {
+            return false;
+        }
+        GtpSynchronizer.Listener synchronizerCallback =
+                new GtpSynchronizer.Listener() {
+            public void moveNumberChanged(int moveNumber) {
+                String text = "[" + moveNumber + "]";
+                m_statusBar.immediatelyPaintMoveText(text);
+            }
+        };
+        try
+        {
+            showStatusImmediately(i18n("STAT_ATTACHING_PROGRAM"));
+            File workingDirectory = null;
+            if (program != null
+                    && ! StringUtil.isEmpty(program.m_workingDirectory))
+                workingDirectory = new File(program.m_workingDirectory);
+            m_gameRuler.queryName();
+            m_gameRuler.queryProtocolVersion();
+            try
+            {
+                String version = m_gameRuler.queryVersion();
+                m_gameRuler.querySupportedCommands();
+                m_gameRuler.queryInterruptSupport();
+                if (m_newRuler == null)
+                {
+                    m_newRuler =
+                            Program.findProgram(m_rulers, programCommand);
+                    if (m_newRuler == null && m_register)
+                    {
+                        m_newRuler = new Program("", m_gameRuler.getName(), m_version,
+                                programCommand, "");
+                        m_newRuler.setUniqueLabel(m_rulers);
+                        m_rulers.add(m_program);
+                        m_menuBar.setRulers(m_rulers);
+                        Program.save(m_rulers, true);
+                        System.out.println("saving");
+                    }
+                }
+            }
+            catch (GtpError e)
+            {
+                System.err.println("err l.3004");
+            }
+            if (m_newRuler != null
+                    && m_newRuler.updateInfo(getProgramName(), m_version))
+            {
+                Program.save(m_rulers, true); 
+                m_menuBar.setRulers(m_rulers);
+            }
+            try
+            {
+                String programAnalyzeCommands
+                = GtpClientUtil.getAnalyzeCommands(m_gameRuler);
+                m_analyzeCommands
+                = AnalyzeDefinition.read(m_gameRuler.getSupportedCommands(),
+                        m_analyzeCommandsFile,
+                        programAnalyzeCommands);
+            }
+            catch (ErrorMessage e)
+            {
+                showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
+            }
         }
         finally
         {
@@ -3171,6 +3255,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 m_game.play(move);
                 if (m_gameRuler != null)
                 {
+                    m_game.setToMove(getToMove());
                     GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
                 }
                 m_gtp.updateAfterGenmove(getBoard());
@@ -3556,6 +3641,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             if (m_gameRuler != null)
             {
                 GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
+                m_game.setToMove(getToMove());
             }
         }
         else
@@ -4340,10 +4426,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         assert point != null;
         m_game.setup(point, color);
-        if (m_gameRuler != null)
+    /*    if (m_gameRuler != null)
         {
             GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), Move.get(color, point));
-        }
+            m_game.setToMove(getToMove());
+        }*/
     }
 
     private void setupDone()
@@ -4778,6 +4865,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             String newGame = "";
             int newSize = -1;
             m_gameRulerCopie.querySupportedCommands();
+            m_gameRulerCopie.queryInterruptSupport();
             newGame = GenericBoard.getGameId(m_gameRulerCopie);
             newSize = GenericBoard.getBoardSize(m_gameRulerCopie);
             if (previousGame.equals(newGame) && !previousGame.equals("")
