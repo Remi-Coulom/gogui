@@ -130,6 +130,12 @@ public class Game
         m_current = (Node)node;
         if (gameRuler == null)
             updateBoard();
+        else
+            try {
+                m_board.setToMove(GenericBoard.getSideToMove(gameRuler, node.getMove()));
+            } catch (GtpError e) {
+                m_board.setToMove(node.getMove().getColor().otherColor());
+            }
     }
 
     public void haltClock()
