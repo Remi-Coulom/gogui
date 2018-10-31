@@ -2852,6 +2852,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             gtp.setAutoNumber(m_autoNumber);
             if (ruler)
             {
+                initGameRuler(programCommand,
+                        workingDirectory.getPath(),
+                        gtp.getName());
                 m_gameRuler = new GuiGtpClient(gtp, this, synchronizerCallback,
                         m_messageDialogs);
                 m_gameRuler.queryName();
@@ -2920,7 +2923,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     Program.save(m_programs, false);
                     m_menuBar.setPrograms(m_programs, false);
                 }
-                // }
                 try
                 {
                     String programAnalyzeCommands
@@ -2934,8 +2936,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 {
                     showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
                 }
-                //   if (! ruler)
-                //   {
                 restoreSize(m_shell, "shell");
                 m_shell.setProgramName(getProgramLabel());
                 ArrayList<String> supportedCommands =
@@ -2967,82 +2967,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         currentNodeChanged();
         return true;
     }
-/*
-    private boolean attachRuler(String programCommand, Program program,
-            boolean register)
-    {
-        programCommand = programCommand.trim();
-        if (programCommand.equals(""))
-        {
-            return false; }
-        m_newRuler = program;
-        try {
-            System.out.println("init game ruler");
-            initGameRuler(programCommand, program.m_workingDirectory, program.m_name);
-            Program.save(m_rulers, true);
-        } catch (ExecFailed e1) 
-        {
-            e1.printStackTrace();
-            return false;
-        }
-        try
-        {
-            showStatusImmediately(i18n("STAT_ATTACHING_PROGRAM"));
-            File workingDirectory = null;
-            if (program != null
-                    && ! StringUtil.isEmpty(program.m_workingDirectory))
-                workingDirectory = new File(program.m_workingDirectory);
-         
-            try
-            {
-                m_gameRuler.querySupportedCommands();
-                m_gameRuler.queryInterruptSupport();
-                if (m_newRuler == null)
-                {
-                    m_newRuler =
-                            Program.findProgram(m_rulers, programCommand);
-                    if (m_newRuler == null && m_register)
-                    {
-                        m_newRuler = new Program("", m_gameRuler.getName(), m_version,
-                                programCommand, "");
-                        m_newRuler.setUniqueLabel(m_rulers);
-                        m_rulers.add(m_program);
-                        m_menuBar.setPrograms(m_rulers, false);
-                        Program.save(m_rulers, true);
-                    }
-                }
-            }
-            catch (GtpError e)
-            {
-                showError(e);
-            }
-            if (m_newRuler != null
-                    && m_newRuler.updateInfo(getProgramName(), m_version))
-            {
-                Program.save(m_rulers, true); 
-                m_menuBar.setPrograms(m_rulers, false);
-            }
-            try
-            {
-                String programAnalyzeCommands
-                = GtpClientUtil.getAnalyzeCommands(m_gameRuler);
-                m_analyzeCommands
-                = AnalyzeDefinition.read(m_gameRuler.getSupportedCommands(),
-                        m_analyzeCommandsFile,
-                        programAnalyzeCommands);
-            }
-            catch (ErrorMessage e)
-            {
-                showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
-            }
-        }
-        finally
-        {
-            clearStatus();
-        }
-        currentNodeChanged();
-        return true;
-    }*/
 
     private void beginLengthyCommand()
     {
@@ -4946,7 +4870,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     break;
                 }
             }
-            System.out.println(directory);
         }
         try {
             GtpClientBase m_gameRulerCopie = null;
