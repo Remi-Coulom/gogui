@@ -2541,6 +2541,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private String m_lastAnalyzeCommand;
 
     private String m_programCommand;
+    
+    private String m_rulerCommand;
 
     private String m_titleFromProgram;
 
@@ -2559,11 +2561,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         Can be null even if a program is attached, if only m_programName
         is known. */
     private Program m_program;
+    
+    private Program m_ruler;
 
     /** Program currently being edited in actionNewProgram() */
     private Program m_newProgram;
 
-    /** Program ruler currently being edited in actionNewRuler() */
     private Program m_newRuler;
 
     private final ThumbnailCreator m_thumbnailCreator =
@@ -2683,7 +2686,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             saveSession();
             detachProgram();
         }
-        if (! attachProgram(command, program, false))
+        if (! attachProgram(command, program, false, false))
         {
             m_prefs.putInt("program", -1);
             if (m_gtp == null || m_gtp.isProgramDead())
@@ -2708,14 +2711,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             saveSession();
             detachRuler();
         }
-        if (! attachRuler(command, program, false))
+        if (! attachProgram(command, program, false, true))
         {
             m_prefs.putInt("ruler", -1);
-          /*  try {
-                this.initGameRuler(command, program.m_workingDirectory, program.m_label);
-            } catch (ExecFailed e) {
-                e.printStackTrace();
-            }*/
             updateViews(false);
             return false;
         }
@@ -2728,32 +2726,40 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         @param programCommand Command line for running program.
         @param program Program information (may be null)
         @param register Create an entry for this program in the Program menu.
+        @param ruler True if attaching a game ruler.
         @return true if program was successfully attached. */
     private boolean attachProgram(String programCommand, Program program,
-            boolean register)
+            boolean register, boolean ruler)
     {
         programCommand = programCommand.trim();
         if (programCommand.equals(""))
             return false;
-        m_program = program;
-        m_programCommand = programCommand;
-        if (m_shell != null)
-        {
-            m_shell.dispose();
-            m_shell = null;
+        if (ruler) {
+            m_ruler = program;
+            m_rulerCommand = programCommand;
         }
-        m_shell = new GtpShell(this, this, m_messageDialogs);
-        GuiAction.registerAll(m_shell.getLayeredPane());
-        m_shell.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                saveSession();
-                hideShell();
+        else 
+        {
+            m_program = program;
+            m_programCommand = programCommand;
+            if (m_shell != null)
+            {
+                m_shell.dispose();
+                m_shell = null;
             }
-        });
-        restoreSize(m_shell, "shell");
-        m_shell.setProgramCommand(programCommand);
-        m_shell.setTimeStamp(m_timeStamp);
-        m_shell.setCommandCompletion(m_commandCompletion);
+            m_shell = new GtpShell(this, this, m_messageDialogs);
+            GuiAction.registerAll(m_shell.getLayeredPane());
+            m_shell.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    saveSession();
+                    hideShell();
+                }
+            });
+            restoreSize(m_shell, "shell");
+            m_shell.setProgramCommand(programCommand);
+            m_shell.setTimeStamp(m_timeStamp);
+            m_shell.setCommandCompletion(m_commandCompletion);
+        }
         GtpClient.InvalidResponseCallback invalidResponseCallback =
                 new GtpClient.InvalidResponseCallback()
         {
@@ -2770,43 +2776,55 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             public void receivedInvalidResponse(String s)
             {
-                if (m_shell == null)
-                    return;
-                boolean invokeLater = true;
-                m_shell.receivedInvalidResponse(s, invokeLater);
+                if (! ruler)
+                    {
+                    if (m_shell == null)
+                        return;
+                    boolean invokeLater = true;
+                    m_shell.receivedInvalidResponse(s, invokeLater);
+                }
             }
 
             public void receivedResponse(boolean error, String s)
             {
-                if (m_shell == null)
-                    return;
-                boolean invokeLater = true;
-                m_shell.receivedResponse(error, s, invokeLater);
+                if (! ruler)
+                {
+                    if (m_shell == null)
+                        return;
+                    boolean invokeLater = true;
+                    m_shell.receivedResponse(error, s, invokeLater);
+                }
             }
 
             public void receivedStdErr(String s)
             {
-                if (m_shell == null)
-                    return;
-                m_lineReader.add(s);
-                while (m_lineReader.hasLines())
+                if (! ruler)
                 {
-                    String line = m_lineReader.getLine();
-                    boolean isLiveGfx = m_liveGfx.handleLine(line);
-                    boolean isWarning =
-                            line.startsWith("warning:")
-                            || line.startsWith("Warning:")
-                            || line.startsWith("WARNING:");
-                    boolean invokeLater = true;
-                    m_shell.receivedStdErr(line, invokeLater, isLiveGfx,
-                            isWarning);
+                    if (m_shell == null)
+                        return;
+                    m_lineReader.add(s);
+                    while (m_lineReader.hasLines())
+                    {
+                        String line = m_lineReader.getLine();
+                        boolean isLiveGfx = m_liveGfx.handleLine(line);
+                        boolean isWarning =
+                                line.startsWith("warning:")
+                                || line.startsWith("Warning:")
+                                || line.startsWith("WARNING:");
+                        boolean invokeLater = true;
+                        m_shell.receivedStdErr(line, invokeLater, isLiveGfx,
+                                isWarning);
+                    }
                 }
             }
 
             public void sentCommand(String s)
             {
-                if (m_shell != null)
-                    m_shell.sentCommand(s);
+                if (! ruler)
+                {
+                    if (m_shell != null)
+                        m_shell.sentCommand(s);
+                }
             }
 
             private final LineReader m_lineReader = new LineReader();
@@ -2828,71 +2846,112 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     && ! StringUtil.isEmpty(program.m_workingDirectory))
                 workingDirectory = new File(program.m_workingDirectory);
             GtpClient gtp =
-                    new GtpClient(m_programCommand, workingDirectory,
+                    new GtpClient(program.m_command, workingDirectory,
                             m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_autoNumber);
-            m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback,
-                    m_messageDialogs);
-            m_gtp.queryName();
-            m_gtp.queryProtocolVersion();
-            try
+            if (ruler)
             {
-                m_version = m_gtp.queryVersion();
-                m_shell.setProgramVersion(m_version);
-                m_gtp.querySupportedCommands();
-                m_gtp.queryInterruptSupport();
-                if (m_program == null)
+                m_gameRuler = new GuiGtpClient(gtp, this, synchronizerCallback,
+                        m_messageDialogs);
+                m_gameRuler.queryName();
+                m_gameRuler.queryProtocolVersion();
+                try
                 {
-                    m_program =
-                            Program.findProgram(m_programs, programCommand);
-                    if (m_program == null && m_register)
+                    m_gameRuler.querySupportedCommands();
+                    if (m_ruler == null)
                     {
-                        m_program = new Program("", m_gtp.getName(), m_version,
-                                programCommand, "");
-                        m_program.setUniqueLabel(m_programs);
-                        m_programs.add(m_program);
-                        m_menuBar.setPrograms(m_programs, false);
-                        Program.save(m_programs, false);
+                        m_ruler =
+                                Program.findProgram(m_rulers, programCommand);
+                        if (m_ruler == null && m_register)
+                        {
+                            m_ruler = new Program("", m_gameRuler.getName(), program.m_version,
+                                    programCommand, "");
+                            m_ruler.setUniqueLabel(m_rulers);
+                            m_rulers.add(m_ruler);
+                            m_menuBar.setPrograms(m_rulers, true);
+                            Program.save(m_rulers, true);
+                        }
                     }
                 }
+                catch (GtpError e)
+                {
+                }
+                if (m_ruler != null
+                        && m_ruler.updateInfo(getProgramName(), program.m_version))
+                {
+                    Program.save(m_rulers, true);
+                    m_menuBar.setPrograms(m_rulers, true);
+                }
             }
-            catch (GtpError e)
+            else
             {
+                m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback,
+                        m_messageDialogs);
+                m_gtp.queryName();
+                m_gtp.queryProtocolVersion();
+                try
+                {
+                    m_version = m_gtp.queryVersion();
+                    m_shell.setProgramVersion(m_version);
+                    m_gtp.querySupportedCommands();
+                    m_gtp.queryInterruptSupport();
+                    if (m_program == null)
+                    {
+                        m_program =
+                                Program.findProgram(m_programs, programCommand);
+                        if (m_program == null && m_register)
+                        {
+                            m_program = new Program("", m_gtp.getName(), m_version,
+                                    programCommand, "");
+                            m_program.setUniqueLabel(m_programs);
+                            m_programs.add(m_program);
+                            m_menuBar.setPrograms(m_programs, false);
+                            Program.save(m_programs, false);
+                        }
+                    }
+                }
+                catch (GtpError e)
+                {
+                }
+                if (m_program != null
+                        && m_program.updateInfo(getProgramName(), m_version))
+                {
+                    Program.save(m_programs, false);
+                    m_menuBar.setPrograms(m_programs, false);
+                }
+                // }
+                try
+                {
+                    String programAnalyzeCommands
+                    = GtpClientUtil.getAnalyzeCommands(ruler ? m_gameRuler : m_gtp);
+                    m_analyzeCommands
+                    = AnalyzeDefinition.read((ruler ? m_gameRuler : m_gtp).getSupportedCommands(),
+                            m_analyzeCommandsFile,
+                            programAnalyzeCommands);
+                }
+                catch (ErrorMessage e)
+                {
+                    showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
+                }
+                //   if (! ruler)
+                //   {
+                restoreSize(m_shell, "shell");
+                m_shell.setProgramName(getProgramLabel());
+                ArrayList<String> supportedCommands =
+                        (ruler ? m_gameRuler : m_gtp).getSupportedCommands();
+                m_shell.setInitialCompletions(supportedCommands);
+
+                if (! m_gtp.isGenmoveSupported())
+                {
+                    m_computerBlack = false;
+                    m_computerWhite = false;
+                }
+                initGtp();// REGARDER LA DEDANS
+                if (! m_gtpFile.equals(""))
+                    sendGtpFile(new File(m_gtpFile));
             }
-            if (m_program != null
-                    && m_program.updateInfo(getProgramName(), m_version))
-            {
-                Program.save(m_programs, false);
-                m_menuBar.setPrograms(m_programs, false);
-            }
-            try
-            {
-                String programAnalyzeCommands
-                = GtpClientUtil.getAnalyzeCommands(m_gtp);
-                m_analyzeCommands
-                = AnalyzeDefinition.read(m_gtp.getSupportedCommands(),
-                        m_analyzeCommandsFile,
-                        programAnalyzeCommands);
-            }
-            catch (ErrorMessage e)
-            {
-                showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
-            }
-            restoreSize(m_shell, "shell");
-            m_shell.setProgramName(getProgramLabel());
-            ArrayList<String> supportedCommands =
-                    m_gtp.getSupportedCommands();
-            m_shell.setInitialCompletions(supportedCommands);
-            if (! m_gtp.isGenmoveSupported())
-            {
-                m_computerBlack = false;
-                m_computerWhite = false;
-            }
-            initGtp();
-            if (! m_gtpFile.equals(""))
-                sendGtpFile(new File(m_gtpFile));
-            if (! m_gtpCommand.equals(""))
+            if (! (ruler ? m_rulerCommand : m_gtpCommand).equals(""))
                 sendGtpString(m_gtpCommand);
             setTitle();
         }
@@ -2908,7 +2967,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         currentNodeChanged();
         return true;
     }
-
+/*
     private boolean attachRuler(String programCommand, Program program,
             boolean register)
     {
@@ -2918,19 +2977,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             return false; }
         m_newRuler = program;
         try {
+            System.out.println("init game ruler");
             initGameRuler(programCommand, program.m_workingDirectory, program.m_name);
-            Program.save(m_programs, true);
+            Program.save(m_rulers, true);
         } catch (ExecFailed e1) 
         {
+            e1.printStackTrace();
             return false;
         }
-        GtpSynchronizer.Listener synchronizerCallback =
-                new GtpSynchronizer.Listener() {
-            public void moveNumberChanged(int moveNumber) {
-                String text = "[" + moveNumber + "]";
-                m_statusBar.immediatelyPaintMoveText(text);
-            }
-        };
         try
         {
             showStatusImmediately(i18n("STAT_ATTACHING_PROGRAM"));
@@ -2938,11 +2992,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             if (program != null
                     && ! StringUtil.isEmpty(program.m_workingDirectory))
                 workingDirectory = new File(program.m_workingDirectory);
-            m_gameRuler.queryName();
-            m_gameRuler.queryProtocolVersion();
+         
             try
             {
-                String version = m_gameRuler.queryVersion();
                 m_gameRuler.querySupportedCommands();
                 m_gameRuler.queryInterruptSupport();
                 if (m_newRuler == null)
@@ -2990,7 +3042,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         currentNodeChanged();
         return true;
-    }
+    }*/
 
     private void beginLengthyCommand()
     {
@@ -3846,7 +3898,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setVisible(true);
         if (m_programCommand != null)
         {
-            attachProgram(m_programCommand, m_program, m_register);
+            attachProgram(m_programCommand, m_program, m_register, false);
             if (m_gtp == null || m_gtp.isProgramDead())
                 m_prefs.putInt("program", -1);
         }
@@ -4881,6 +4933,21 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
+        File f = new File(directory);
+        File f2 = new File(command);
+        if (!f.exists())
+        {
+            directory = f2.getParent();
+            directory = "";
+            for (int i = command.length()-1; i >= 0; i--) {
+                if (command.charAt(i) == '/')
+                {
+                    directory = command.substring(0, i);
+                    break;
+                }
+            }
+            System.out.println(directory);
+        }
         try {
             GtpClientBase m_gameRulerCopie = null;
             boolean alreadyAttached = m_gameRuler != null;

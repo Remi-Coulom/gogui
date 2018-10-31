@@ -130,12 +130,19 @@ public class GoGuiMenuBar
     public void setPrograms(ArrayList<Program> programs, boolean ruler)
     {
         if (ruler)
+        {
             m_menuRuler.setEnabled(! programs.isEmpty());
+            ArrayList<JMenuItem> items = m_rulerItems;
+            for (int i = 0; i < items.size(); ++i)
+                m_menuRuler.remove(items.get(i));
+        }
         else
+        {
             m_menuAttach.setEnabled(! programs.isEmpty());
-        ArrayList<JMenuItem> items = (ruler ? m_rulerItems : m_programItems);
-        for (int i = 0; i < items.size(); ++i)
-            m_menuAttach.remove(items.get(i));
+            ArrayList<JMenuItem> items = m_programItems;
+            for (int i = 0; i < items.size(); ++i)
+                m_menuAttach.remove(items.get(i));
+        }
         if (programs.isEmpty())
             return;
         for (int i = 0; i < programs.size(); ++i)
@@ -190,10 +197,15 @@ public class GoGuiMenuBar
             }
             item.setToolTipText(toolTip.toString());
             if (ruler)
+            {
                 m_menuRuler.add(item);
+                m_rulerItems.add(item);
+            }
             else
+            {
                 m_menuAttach.add(item);
-            m_programItems.add(item);
+                m_programItems.add(item);
+            }
         }
     }
 
