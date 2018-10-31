@@ -2853,7 +2853,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             if (ruler)
             {
                 initGameRuler(programCommand,
-                        workingDirectory.getPath(),
+                        program.m_workingDirectory,
                         gtp.getName());
                 m_gameRuler = new GuiGtpClient(gtp, this, synchronizerCallback,
                         m_messageDialogs);
@@ -2947,7 +2947,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_computerBlack = false;
                     m_computerWhite = false;
                 }
-                initGtp();// REGARDER LA DEDANS
+                initGtp();
                 if (! m_gtpFile.equals(""))
                     sendGtpFile(new File(m_gtpFile));
             }
@@ -4434,11 +4434,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         assert point != null;
         m_game.setup(point, color);
-    /*    if (m_gameRuler != null)
-        {
-            GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), Move.get(color, point));
-            m_game.setToMove(getToMove());
-        }*/
     }
 
     private void setupDone()
@@ -4857,6 +4852,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
+        detachRuler();
         File f = new File(directory);
         File f2 = new File(command);
         if (!f.exists())
