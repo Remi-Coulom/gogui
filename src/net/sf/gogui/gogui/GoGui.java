@@ -3317,6 +3317,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             showError(e);
             clearStatus();
         }
+        if (m_gameRuler != null)
+            try {
+                if (GenericBoard.isGameOver(m_gameRuler))
+                    showGameFinished();
+            } catch (GtpError e) {
+                showError(e);
+            }
     }
 
     private boolean computerToMove()
@@ -3604,13 +3611,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private GoColor getToMove()
     {
-        if (m_gameRuler != null)
-        {
-            try {
-                return GenericBoard.getSideToMove(m_gameRuler, null);
-            } catch (GtpError e) {
-            }
-        }
         return m_game.getToMove();
     }
 
@@ -3976,7 +3976,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             m_gameRuler = null;
             ((Board)getBoard()).detachGameRuler();
             ((Board)getBoard()).clear();
-            System.out.println(((Board)getBoard()).isGameRulerAttached());
         }
         updateFromGoBoard();
         setTitle();
