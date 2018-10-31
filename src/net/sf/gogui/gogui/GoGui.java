@@ -3281,6 +3281,15 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         m_gameTreeViewer.addNewSingleChild(currentNode);
                     gameTreeChanged = false;
                 }
+                if (m_gameRuler != null) {
+                    try {GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
+                    m_game.setToMove(getToMove());
+                    m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
+                } catch (GtpError e)
+                {
+                    showError(e);
+                }
+            }
             }
             boolean doCheckComputerMove
             = (! m_isSingleMove
@@ -3291,13 +3300,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             showError(e);
             clearStatus();
-        }
-        if (m_gameRuler != null) {
-            try {
-                m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
-            } catch (GtpError e)
-            {
-            }
         }
     }
 
@@ -3485,6 +3487,19 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         if (! synchronizeProgram())
             return;
+        if (m_gameRuler != null)
+        {
+            try {
+                boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
+                if (isEndGame)
+                {
+                    showGameFinished();
+                    return;
+                }
+            } catch (GtpError e) {
+                showError(e);
+            }
+        }
         GoColor toMove = getToMove();
         ConstNode node = getCurrentNode();
         ConstNode father = node.getFatherConst();

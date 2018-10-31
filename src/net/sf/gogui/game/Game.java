@@ -128,20 +128,10 @@ public class Game
         assert node != null;
         assert NodeUtil.getRoot(node) == getRoot();
         m_current = (Node)node;
+        updateBoard();
         if (gameRuler != null)
         {
-            try {
-            //    m_board.setToMove(GenericBoard.getSideToMove(gameRuler, node.getMove()));
-                updateBoard();
-                GenericBoard.copyBoardState(gameRuler, node, m_board);
-                m_board.setToMove(GenericBoard.getSideToMove(gameRuler, node.getMove()));
-            } catch (GtpError e) {
-                m_board.setToMove(node.getMove().getColor().otherColor());
-            }
-        }
-        else
-        {
-            updateBoard();
+            GenericBoard.copyBoardState(gameRuler, node, m_board);
         }
     }
 
