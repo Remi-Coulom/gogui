@@ -3941,11 +3941,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         initGame(size);
         initGtp();
         if (m_gameRuler != null)
-            try {
-                m_gameRuler.sendClearBoard(getBoardSize());
-            } catch (GtpError e) {
-                showError(e);
-            }
+        {
+            m_gameRuler = null;
+            ((Board)getBoard()).detachGameRuler();
+            ((Board)getBoard()).clear();
+            System.out.println(((Board)getBoard()).isGameRulerAttached());
+        }
         updateFromGoBoard();
         setTitle();
         setTitleFromProgram();
@@ -4896,8 +4897,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     initGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
-                //    actionGotoNode(getCurrentNode());
                     actionDetachProgram();
+                    ((Board)getBoard()).clear();
                     updateViews(true);
                 }
                 else
