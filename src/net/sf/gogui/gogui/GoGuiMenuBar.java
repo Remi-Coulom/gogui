@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.GuiMenu;
+import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.RecentFileMenu;
@@ -41,6 +42,7 @@ public class GoGuiMenuBar
         m_listener = bookmarkListener;
         add(createMenuFile(actions, recentListener));
         add(createMenuGame(actions));
+        add(createMenuRules(actions));
         add(createMenuProgram(actions));
         add(createMenuGo(actions));
         add(createMenuEdit(actions));
@@ -125,11 +127,15 @@ public class GoGuiMenuBar
         }
     }
 
-    public void setPrograms(ArrayList<Program> programs)
+    public void setPrograms(ArrayList<Program> programs, boolean ruler)
     {
-        m_menuAttach.setEnabled(! programs.isEmpty());
-        for (int i = 0; i < m_programItems.size(); ++i)
-            m_menuAttach.remove(m_programItems.get(i));
+        if (ruler)
+            m_menuRuler.setEnabled(! programs.isEmpty());
+        else
+            m_menuAttach.setEnabled(! programs.isEmpty());
+        ArrayList<JMenuItem> items = (ruler ? m_rulerItems : m_programItems);
+        for (int i = 0; i < items.size(); ++i)
+            m_menuAttach.remove(items.get(i));
         if (programs.isEmpty())
             return;
         for (int i = 0; i < programs.size(); ++i)
@@ -180,11 +186,14 @@ public class GoGuiMenuBar
                 toolTip.append(')');
             }
             item.setToolTipText(toolTip.toString());
-            m_menuAttach.add(item);
+            if (ruler)
+                m_menuRuler.add(item);
+            else
+                m_menuAttach.add(item);
             m_programItems.add(item);
         }
     }
-    
+    /*
     public void setRulers(ArrayList<Program> rulers)
     {
         m_menuRuler.setEnabled(! rulers.isEmpty());
@@ -243,7 +252,7 @@ public class GoGuiMenuBar
             m_menuRuler.add(item);
             m_rulerItems.add(item);
         }
-    }
+    }*/
 
     public void update(boolean isProgramAttached, boolean isTreeShown,
                        boolean isShellShown)
@@ -432,12 +441,12 @@ public class GoGuiMenuBar
         GuiMenu menu = new GuiMenu(i18n("MEN_GAME"));
         menu.add(actions.m_actionNewGame);
         menu.addSeparator();
-        menu.add(actions.m_actionNewRuler);
-        menu.add(actions.m_actionDetachRuler);
-        m_menuRuler = new GuiMenu(i18n("ACT_CHANGE_GAME"));
-        setRulers(Program.load(true));
-        menu.add(m_menuRuler);
-        menu.addSeparator();
+        //menu.add(actions.m_actionNewRuler);
+        //menu.add(actions.m_actionDetachRuler);
+        //m_menuRuler = new GuiMenu(i18n("ACT_CHANGE_GAME"));
+        //setPrograms(Program.load(true), true);
+        //menu.add(m_menuRuler);
+        //menu.addSeparator();
         menu.add(createBoardSizeMenu(actions));
         menu.add(createHandicapMenu(actions));
         menu.add(actions.m_actionGameInfo);
@@ -449,6 +458,20 @@ public class GoGuiMenuBar
         menu.add(createClockMenu(actions));
         menu.add(actions.m_actionScore);
         return menu;
+    }
+    
+    private GuiMenu createMenuRules(GoGuiActions actions)
+    {
+        GuiMenu menu = new GuiMenu(i18n("MEN_RULES"));
+        m_menuRuler = new GuiMenu(i18n("MEN_ATTACH"));
+        setPrograms(Program.load(true), true);
+        menu.add(m_menuRuler);
+        menu.add(actions.m_actionDetachRuler);
+        menu.addSeparator();
+        menu.add(actions.m_actionNewRuler);
+        menu.add(actions.m_actionEditRulers); //TODO actionEditRulers
+        return menu;
+       
     }
 
     private GuiMenu createMenuGo(GoGuiActions actions)

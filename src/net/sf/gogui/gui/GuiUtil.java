@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
+
 import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
@@ -49,6 +52,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import static net.sf.gogui.gui.I18n.i18n;
+
+import net.sf.gogui.gogui.GoGui;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
 
@@ -181,28 +186,38 @@ public class GuiUtil
         return MONOSPACED_FONT.getSize();
     }
 
+    /**
+     * @return the scaled image depending on the preferences.
+     */
     public static ImageIcon getIcon(String icon, String name)
     {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         String resource = "net/sf/gogui/images/" + icon + ".png";
         URL url = GuiUtil.class.getClassLoader().getResource(resource);
-        return getScaledIcon(url, icon);
+        ImageIcon imageIcon = new ImageIcon(url,icon);
+        
+        Preferences prefs = Preferences.userNodeForPackage(GoGui.class);
+        int size = prefs.getInt("imagesize", -1);
+        if (size < 0)
+            prefs.putInt("imagesize", 24);
+        size = prefs.getInt("imagesize", 24);
+        return getScaledIcon(url, icon, size);
+        
+    //   prefs.putInt("imagesize",(int)(screenSize.getWidth()*16/1400));
+    //    return getScaledIcon(url, icon);
     }
 
-    /**
-     * @return the scaled image depending on the screensize
-     */
-    private static ImageIcon getScaledIcon(URL url, String icon)
+    private static ImageIcon getScaledIcon(URL url, String icon, int size)
     {
         String name = url.getFile();
         ImageIcon imageIcon = new ImageIcon(url,icon);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         if (! name.contains("x")) {
-            if (screenSize.getHeight() >= 1800) {
+            if (size >= 32) {
                 String newUrl = url.getFile().replace (".png", "-32x32.png");
                 if (new File(newUrl).exists()) {
                     imageIcon = new ImageIcon(url.getFile().replace(".png", "-32x32.png"));
                 }
-            }else if (screenSize.getHeight() >= 1500) {
+            }else if (size >= 24) {
                 String newUrl = url.getFile().replace (".png", "-24x24.png");
                 if (new File(newUrl).exists()) {
                     imageIcon = new ImageIcon(url.getFile().replace(".png", "-24x24.png"));
@@ -214,9 +229,7 @@ public class GuiUtil
                 }
             }
         }
-        Image image = imageIcon.getImage();
-        int scale = (int)(screenSize.getWidth()*imageIcon.getIconWidth()/1400);
-        return new ImageIcon(image.getScaledInstance(scale,scale,scale));
+        return imageIcon;
     }
 
 

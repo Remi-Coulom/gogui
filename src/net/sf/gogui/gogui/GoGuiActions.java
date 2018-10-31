@@ -6,6 +6,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+
+import javax.swing.JMenuItem;
+
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
@@ -146,7 +149,12 @@ public class GoGuiActions
     public final GuiAction m_actionEditPrograms =
         new GuiAction(i18n("ACT_EDIT_PROGRAMS")) {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionEditPrograms(); } };
+                m_goGui.actionEditPrograms(false); } };
+                
+    public final GuiAction m_actionEditRulers =
+        new GuiAction(i18n("ACT_EDIT_PROGRAMS")) {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionEditPrograms(true); } };
 
     public final GuiAction m_actionGotoMove =
         new GuiAction(i18n("ACT_GOTO_MOVE"), null, KeyEvent.VK_G) {

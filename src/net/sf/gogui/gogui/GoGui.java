@@ -643,16 +643,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         updateViews(false);
     }
 
-    public void actionEditPrograms()
+    public void actionEditPrograms(boolean ruler)
     {
         ProgramEditor editor = new ProgramEditor();
         ObjectListEditor<Program> listEditor = new ObjectListEditor<Program>();
-        if (! listEditor.edit(this, i18n("TIT_EDIT_PROGRAMS"), m_programs,
+        if (! listEditor.edit(this, i18n("TIT_EDIT_PROGRAMS"), ruler ? m_rulers : m_programs,
                 editor, m_messageDialogs))
             return;
-        m_menuBar.setPrograms(m_programs);
-        m_prefs.putInt("program", -1);
-        Program.save(m_programs, false);
+        m_menuBar.setPrograms(ruler ? m_rulers : m_programs, ruler);
+        m_prefs.putInt(ruler ? "ruler" :"program", -1);
+        Program.save(ruler ? m_rulers : m_programs, ruler);
     }
 
     public void actionEnd()
@@ -1208,7 +1208,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 m_programs.add(m_newProgram);
                 m_program = m_newProgram;
                 m_prefs.putInt("program", m_programs.size() - 1);
-                m_menuBar.setPrograms(m_programs);
+                m_menuBar.setPrograms(m_programs, false);
                 Program.save(m_programs, false);
                 updateViews(false);
             } 
@@ -1243,7 +1243,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 }
                 m_newRuler.m_name = m_gameRuler.getLabel();
                 m_newRuler.m_version = m_gameRuler.queryVersion();
-                m_newRuler.setUniqueLabel(m_programs);
+                m_newRuler.setUniqueLabel(m_rulers);
                 m_newRuler = editor.editItem(GoGui.this,
                         i18n("TIT_NEW_PROGRAM"),
                         m_newRuler, false, true,
@@ -1255,7 +1255,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 }
                 m_rulers.add(m_newRuler);
                 m_prefs.putInt("ruler", m_rulers.size() - 1);
-                m_menuBar.setRulers(m_rulers);
+                m_menuBar.setPrograms(m_rulers, true);
                 Program.save(m_rulers, true);
                 updateViews(false);
             } 
@@ -2834,7 +2834,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                                 programCommand, "");
                         m_program.setUniqueLabel(m_programs);
                         m_programs.add(m_program);
-                        m_menuBar.setPrograms(m_programs);
+                        m_menuBar.setPrograms(m_programs, false);
                         Program.save(m_programs, false);
                     }
                 }
@@ -2846,7 +2846,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     && m_program.updateInfo(getProgramName(), m_version))
             {
                 Program.save(m_programs, false);
-                m_menuBar.setPrograms(m_programs);
+                m_menuBar.setPrograms(m_programs, false);
             }
             try
             {
@@ -2894,7 +2894,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private boolean attachRuler(String programCommand, Program program,
             boolean register)
     {
-        System.out.println(programCommand + " ");
         programCommand = programCommand.trim();
         if (programCommand.equals(""))
         {
@@ -2938,21 +2937,20 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                                 programCommand, "");
                         m_newRuler.setUniqueLabel(m_rulers);
                         m_rulers.add(m_program);
-                        m_menuBar.setRulers(m_rulers);
+                        m_menuBar.setPrograms(m_rulers, false);
                         Program.save(m_rulers, true);
-                        System.out.println("saving");
                     }
                 }
             }
             catch (GtpError e)
             {
-                System.err.println("err l.3004");
+                showError(e);
             }
             if (m_newRuler != null
                     && m_newRuler.updateInfo(getProgramName(), m_version))
             {
                 Program.save(m_rulers, true); 
-                m_menuBar.setRulers(m_rulers);
+                m_menuBar.setPrograms(m_rulers, false);
             }
             try
             {
@@ -3804,7 +3802,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_programs = Program.load(false);
         m_rulers = Program.load(true);
       //  m_menuBar.setRulers(m_rulers);
-        m_menuBar.setPrograms(m_programs);
+        m_menuBar.setPrograms(m_programs, false);
         //if (m_programCommand == null)
         //{
         //    Attach last program automatically.
