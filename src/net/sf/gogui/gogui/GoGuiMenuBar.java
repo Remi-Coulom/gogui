@@ -31,7 +31,7 @@ public class GoGuiMenuBar
 
         void actionAttachProgram(int i);
 
-        void actionAttachRuler(int index);
+        void actionAttachRuler(int i);
     }
 
     public GoGuiMenuBar(GoGuiActions actions,
@@ -167,7 +167,10 @@ public class GoGuiMenuBar
             final int index = i;
             item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        m_listener.actionAttachProgram(index);
+                        if (ruler) 
+                            m_listener.actionAttachRuler(index);
+                        else
+                            m_listener.actionAttachProgram(index);
                     }
                 });
             StringBuilder toolTip = new StringBuilder(128);
@@ -193,66 +196,6 @@ public class GoGuiMenuBar
             m_programItems.add(item);
         }
     }
-    /*
-    public void setRulers(ArrayList<Program> rulers)
-    {
-        m_menuRuler.setEnabled(! rulers.isEmpty());
-        for (int i = 0; i < m_rulerItems.size(); ++i)
-            m_menuRuler.remove(m_rulerItems.get(i));
-        if (rulers.isEmpty())
-            return;
-        for (int i = 0; i < rulers.size(); ++i)
-        {
-            Program ruler = rulers.get(i);
-            String[] mnemonicArray =
-                { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C",
-                  "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
-                  "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-            String text;
-            String mnemonic;
-            if (! Platform.isMac() && i < mnemonicArray.length)
-            {
-                mnemonic = mnemonicArray[i];
-                text = mnemonic + ": " + ruler.m_label;
-            }
-            else
-            {
-                mnemonic = "";
-                text = ruler.m_label;
-            }
-            JMenuItem item = new JMenuItem(text);
-            if (! mnemonic.equals(""))
-            {
-                KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemonic);
-                int code = keyStroke.getKeyCode();
-                item.setMnemonic(code);
-            }
-            final int index = i;
-            item.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        m_listener.actionAttachRuler(index);
-                    }
-                });
-            StringBuilder toolTip = new StringBuilder(128);
-            if (ruler.m_name != null)
-                toolTip.append(ruler.m_name);
-            if (ruler.m_version != null && ! ruler.m_version.equals("")
-                && ruler.m_version.length() < 40)
-            {
-                toolTip.append(' ');
-                toolTip.append(ruler.m_version);
-            }
-            if (ruler.m_command != null)
-            {
-                toolTip.append(" (");
-                toolTip.append(ruler.m_command);
-                toolTip.append(')');
-            }
-            item.setToolTipText(toolTip.toString());
-            m_menuRuler.add(item);
-            m_rulerItems.add(item);
-        }
-    }*/
 
     public void update(boolean isProgramAttached, boolean isTreeShown,
                        boolean isShellShown)
@@ -582,6 +525,12 @@ public class GoGuiMenuBar
                                    actions.m_actionShowVariationsSiblings);
         menuVarLabels.addRadioItem(group, actions.m_actionShowVariationsNone);
         menu.add(menuVarLabels);
+        GuiMenu menuVarSize = new GuiMenu(i18n("MEN_IMAGE_SIZE"));
+        ButtonGroup sizes = new ButtonGroup();
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize16);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize24);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize32);
+        menu.add(menuVarSize);
         menu.addSeparator();
         menu.add(createMenuConfigureTree(actions));
         menu.add(createMenuConfigureShell(actions));

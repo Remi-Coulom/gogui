@@ -160,6 +160,20 @@ public class GuiUtil
             return null;
         }
     }
+    
+    /** Return preferred size */
+    public static GameTreePanel.Size getSize()
+    {
+        Preferences prefs = Preferences.userNodeForPackage(GoGui.class);
+        int size = prefs.getInt("imagesize", 24);
+        if (size >= 32)
+            return GameTreePanel.Size.LARGE;
+        if (size >= 24)
+            return GameTreePanel.Size.NORMAL;
+        if (size >= 16)
+            return GameTreePanel.Size.SMALL;
+        return GameTreePanel.Size.TINY;
+    }
 
     /** Return a style sheet for message labels using HTML.
         @return A string with a HTML-head tag containing a style tag
@@ -191,41 +205,40 @@ public class GuiUtil
      */
     public static ImageIcon getIcon(String icon, String name)
     {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         String resource = "net/sf/gogui/images/" + icon + ".png";
         URL url = GuiUtil.class.getClassLoader().getResource(resource);
-        ImageIcon imageIcon = new ImageIcon(url,icon);
-        
         Preferences prefs = Preferences.userNodeForPackage(GoGui.class);
         int size = prefs.getInt("imagesize", -1);
         if (size < 0)
+        {
             prefs.putInt("imagesize", 24);
-        size = prefs.getInt("imagesize", 24);
+            size = 24;
+        }
         return getScaledIcon(url, icon, size);
-        
-    //   prefs.putInt("imagesize",(int)(screenSize.getWidth()*16/1400));
-    //    return getScaledIcon(url, icon);
     }
 
     private static ImageIcon getScaledIcon(URL url, String icon, int size)
     {
         String name = url.getFile();
+        String newUrl2 = url.getFile().replace("-32x32.png",".png");
+        newUrl2 = url.getFile().replace("16x16.png", ".png");
+        newUrl2 = url.getFile().replace("24x24.png", ".png");
         ImageIcon imageIcon = new ImageIcon(url,icon);
-        if (! name.contains("x")) {
+        if (! newUrl2.contains("x")) {
             if (size >= 32) {
-                String newUrl = url.getFile().replace (".png", "-32x32.png");
+                String newUrl = newUrl2.replace (".png", "-32x32.png");
                 if (new File(newUrl).exists()) {
-                    imageIcon = new ImageIcon(url.getFile().replace(".png", "-32x32.png"));
+                    imageIcon = new ImageIcon(newUrl2.replace(".png", "-32x32.png"));
                 }
             }else if (size >= 24) {
-                String newUrl = url.getFile().replace (".png", "-24x24.png");
+                String newUrl = newUrl2.replace (".png", "-24x24.png");
                 if (new File(newUrl).exists()) {
-                    imageIcon = new ImageIcon(url.getFile().replace(".png", "-24x24.png"));
+                    imageIcon = new ImageIcon(newUrl2.replace(".png", "-24x24.png"));
                 }
             }else {
                 String newUrl = url.getFile().replace (".png", "-16x16.png");
-                if (new File(newUrl).exists()) {
-                    imageIcon = new ImageIcon(url.getFile().replace(".png", "-16x16.png"));
+                if (new File(newUrl2).exists()) {
+                    imageIcon = new ImageIcon(newUrl2.replace(".png", "-16x16.png"));
                 }
             }
         }

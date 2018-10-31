@@ -303,6 +303,21 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionHelp(); } };
 
+    public final GuiAction m_actionImageSize16 =
+        new GuiAction("16px") {
+            public void actionPerformed(ActionEvent e) {
+                m_goGui.actionImageSize16(); } };
+                
+    public final GuiAction m_actionImageSize24 =
+        new GuiAction("24px") {
+             public void actionPerformed(ActionEvent e) {
+                 m_goGui.actionImageSize24(); } };
+
+     public final GuiAction m_actionImageSize32 =
+         new GuiAction("32px") {
+              public void actionPerformed(ActionEvent e) {
+                  m_goGui.actionImageSize32(); } };
+
     public final GuiAction m_actionImportTextPosition =
         new GuiAction(i18n("ACT_IMPORT_TEXT_POSITION")) {
             public void actionPerformed(ActionEvent e) {

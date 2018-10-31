@@ -36,9 +36,10 @@ public class GameTreeViewer
     {
         super(owner, i18n("TIT_TREE"));
         Container contentPane = getContentPane();
+        GameTreePanel.Size size;
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.Label.NUMBER,
-                                    GameTreePanel.Size.NORMAL,
+                                    GuiUtil.getSize(),
                                     messageDialogs, m_actions);
         m_scrollPane =
             new JScrollPane(m_panel,

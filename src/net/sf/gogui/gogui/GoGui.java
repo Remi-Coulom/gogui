@@ -1008,6 +1008,24 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             updateViews(true);
         }
     }
+    
+    public void actionImageSize16()
+    {
+        m_prefs.putInt("imagesize", 16);
+        this.initGame(getBoardSize());
+    }
+    
+    public void actionImageSize24()
+    {
+        m_prefs.putInt("imagesize", 24);
+        this.initGame(getBoardSize());
+    }
+    
+    public void actionImageSize32()
+    {
+        m_prefs.putInt("imagesize", 32);
+        this.initGame(getBoardSize());
+    }
 
     public void actionImportSgfFromClipboard()
     {

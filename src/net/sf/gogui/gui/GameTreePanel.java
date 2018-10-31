@@ -482,29 +482,29 @@ public class GameTreePanel
         switch (sizeMode)
         {
         case LARGE:
-            m_nodeSize = (int)(32*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
-            m_nodeFullSize = (int)(40*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeSize = 32;//(int)(32*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeFullSize = 40;//(int)(40*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
             m_iconBlack = GuiUtil.getIcon("gogui-black-32x32", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-32x32", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-32x32", "");
             break;
         case SMALL:
-            m_nodeSize = (int)(16*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
-            m_nodeFullSize = (int)(20*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeSize = 16;//(int)(16*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeFullSize = 20;//(int)(20*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
             m_iconBlack = GuiUtil.getIcon("gogui-black-16x16", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-16x16", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-16x16", "");
             break;
         case TINY:
-            m_nodeSize = (int)(8*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
-            m_nodeFullSize = (int)(10*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeSize = 8;//(int)(8*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeFullSize = 10;//(int)(10*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
             m_iconBlack = GuiUtil.getIcon("gogui-black-8x8", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-8x8", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-8x8", "");
             break;
         case NORMAL:
-            m_nodeSize = (int)(24*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
-            m_nodeFullSize = (int)(30*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeSize = 24;//(int)(24*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
+            m_nodeFullSize = 30;//(int)(30*Toolkit.getDefaultToolkit().getScreenSize().getWidth()/1400);
             m_iconBlack = GuiUtil.getIcon("gogui-black-24x24", "");
             m_iconWhite = GuiUtil.getIcon("gogui-white-24x24", "");
             m_iconSetup = GuiUtil.getIcon("gogui-setup-24x24", "");
