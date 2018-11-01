@@ -3702,6 +3702,27 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void initGame(int size)
     {
         int oldSize = getBoardSize();
+
+        if (m_gameRuler != null)
+        {
+            int rulerSize = 0;
+
+            try
+            {
+                rulerSize = GenericBoard.getBoardSize(m_gameRuler);
+            }
+            catch (GtpError e)
+            {
+            }
+
+            if (rulerSize != size)
+            {
+                m_gameRuler = null;
+                ((Board)getBoard()).detachGameRuler();
+                ((Board)getBoard()).clear();
+            }
+        }
+
         if (size != oldSize)
         {
             // Clear analyze command when board size changes, because eplist
@@ -3947,12 +3968,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         initGame(size);
         initGtp();
-        if (m_gameRuler != null)
-        {
-            m_gameRuler = null;
-            ((Board)getBoard()).detachGameRuler();
-            ((Board)getBoard()).clear();
-        }
         updateFromGoBoard();
         setTitle();
         setTitleFromProgram();
