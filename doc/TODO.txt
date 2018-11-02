@@ -1,0 +1,20 @@
+=============================================================================
+Rules
+=============================================================================
+ Bugs:
+  - Attach new rules + new program -> illegal move
+  - Don't allow pass when it is not legal
+
+ Features:
+  - When attaching a program that has different rules -> use it as own rules
+  - Rules menu inside Game
+  - Disable features that don't work when a rules program is attached:
+    - board size
+    - handicap
+    - score
+  - Rules in gogui-twogtp
+
+=============================================================================
+Other
+=============================================================================
+ - High-resolution icons
