@@ -214,32 +214,33 @@ public class GuiUtil
             prefs.putInt("imagesize", 24);
             size = 24;
         }
-        if (! url.getFile().contains("x"))
+        //if (! url.getFile().contains("x"))
             return getScaledIcon(url, icon, size);
-        else
-            return new ImageIcon(url,icon);
+        //else
+        //    return new ImageIcon(url,icon);
     }
 
     private static ImageIcon getScaledIcon(URL url, String icon, int size)
     {
         String newUrl2 = url.getFile();
         ImageIcon imageIcon = new ImageIcon(url,icon);
-        if (! newUrl2.contains("x")) {
-            if (size >= 32) {
-                String newUrl = newUrl2.replace (".png", "-32x32.png");
-                if (new File(newUrl).exists()) {
-                    imageIcon = new ImageIcon(newUrl);
-                }
-            }else if (size >= 24) {
-                String newUrl = newUrl2.replace (".png", "-24x24.png");
-                if (new File(newUrl).exists()) {
-                    imageIcon = new ImageIcon(newUrl);
-                }
-            }else {
-                String newUrl = url.getFile().replace (".png", "-16x16.png");
-                if (new File(newUrl).exists()) {
-                    imageIcon = new ImageIcon(newUrl);
-                }
+        newUrl2 = newUrl2.replace("-32x32", "");
+        newUrl2 = newUrl2.replace("-24x24","");
+        newUrl2 = newUrl2.replace("-16x16","");
+        if (size >= 32) {
+            String newUrl = newUrl2.replace (".png", "-32x32.png");
+            if (new File(newUrl).exists()) {
+                imageIcon = new ImageIcon(newUrl);
+            }
+        }else if (size >= 24) {
+            String newUrl = newUrl2.replace (".png", "-24x24.png");
+            if (new File(newUrl).exists()) {
+                imageIcon = new ImageIcon(newUrl);
+            }
+        }else {
+            String newUrl = url.getFile().replace (".png", "-16x16.png");
+            if (new File(newUrl).exists()) {
+                imageIcon = new ImageIcon(newUrl);
             }
         }
         return imageIcon;
