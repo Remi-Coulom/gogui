@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkpad (http://www.taptrix.com/) -->
+
+<svg
+   xmlns:inkpad="http://taptrix.com/inkpad/svg_extensions"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   viewBox="0 0 365.23001 352.85999"
+   id="svg27"
+   sodipodi:docname="gogui-previous-10.svg"
+   width="365.23001"
+   height="352.85999"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview29"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="185.23"
+     inkscape:cy="173.05"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg27" />
+  <defs
+     id="defs12">
+    <linearGradient
+       id="LinearGradient"
+       y2="58.798"
+       gradientUnits="userSpaceOnUse"
+       x2="195.28"
+       gradientTransform="translate(-0.49447,-2.3361)"
+       y1="609.70001"
+       x1="524.76001">
+      <stop
+         stop-color="#ffeef2"
+         offset="0"
+         id="stop2" />
+      <stop
+         stop-opacity="0"
+         stop-color="#00ffff"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="LinearGradient_2"
+       y2="388.38"
+       gradientUnits="userSpaceOnUse"
+       x2="328.70999"
+       gradientTransform="translate(-0.16284,0.2883)"
+       y1="113.18"
+       x1="192.38">
+      <stop
+         stop-opacity=".33906"
+         stop-color="#bd0000"
+         offset="0"
+         id="stop7" />
+      <stop
+         stop-color="#ffee00"
+         offset="1"
+         id="stop9" />
+    </linearGradient>
+  </defs>
+  <g
+     id="Layer"
+     inkpad:layerName="Layer 1"
+     transform="translate(-70.77,-76.19)">
+    <path
+       d="M 70.77,252.62 C 70.77,155.18 152.53,76.19 253.38,76.19 354.24,76.194 436,155.18 436,252.62 436,350.06 354.24,429.05 253.38,429.05 152.53,429.05 70.77,350.06 70.77,252.62 Z"
+       id="path14"
+       inkscape:connector-curvature="0"
+       style="fill:#d9ac32" />
+    <path
+       d="m 158.39,310.25 c 26.09,-39.03 97.08,-160.73 97.08,-160.73 l 89.44,165.75 c -189.09,-1.46 -192.21,3.49 -186.52,-5.02 z"
+       transform="rotate(-90,234,274)"
+       id="path16"
+       inkscape:connector-curvature="0"
+       style="fill:#000000" />
+    <path
+       d="m 158.39,310.25 c 26.09,-39.03 97.08,-160.73 97.08,-160.73 l 89.44,165.75 c -189.09,-1.46 -192.21,3.49 -186.52,-5.02 z"
+       transform="rotate(-90,274,234)"
+       id="path18"
+       inkscape:connector-curvature="0"
+       style="fill:#000000" />
+    <path
+       d="m 95.06,228.08 c -4.085,23.36 202.3,40.94 255.57,-99.95 0,0 -79.06,-62.93 -183.48,-2.34 0,0 -59.14,28.23 -72.09,102.29 z"
+       id="path20"
+       inkscape:connector-curvature="0"
+       style="fill:url(#LinearGradient)" />
+    <path
+       d="m 92.85,252.24 c 0,-84.25 73.55,-152.54 164.27,-152.54 90.72,0.002 154.45,64.67 154.45,148.91 0,84.24 -63.73,156.16 -154.45,156.16 -90.72,0 -164.27,-68.29 -164.27,-152.53 z"
+       id="path22"
+       inkscape:connector-curvature="0"
+       style="fill:url(#LinearGradient_2)" />
+  </g>
+  <metadata
+     id="metadata25">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
