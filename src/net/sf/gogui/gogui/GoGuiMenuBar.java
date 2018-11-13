@@ -43,7 +43,7 @@ public class GoGuiMenuBar
         m_listener = bookmarkListener;
         add(createMenuFile(actions, recentListener));
         add(createMenuGame(actions));
-        add(createMenuRules(actions));
+        // add(createMenuRules(actions));
         add(createMenuProgram(actions));
         add(createMenuGo(actions));
         add(createMenuEdit(actions));
@@ -404,12 +404,8 @@ public class GoGuiMenuBar
         GuiMenu menu = new GuiMenu(i18n("MEN_GAME"));
         menu.add(actions.m_actionNewGame);
         menu.addSeparator();
-        //menu.add(actions.m_actionNewRuler);
-        //menu.add(actions.m_actionDetachRuler);
-        //m_menuRuler = new GuiMenu(i18n("ACT_CHANGE_GAME"));
-        //setPrograms(Program.load(true), true);
-        //menu.add(m_menuRuler);
-        //menu.addSeparator();
+        menu.add(createMenuRules(actions));
+        menu.addSeparator();
         menu.add(createBoardSizeMenu(actions));
         menu.add(createHandicapMenu(actions));
         menu.add(actions.m_actionGameInfo);
