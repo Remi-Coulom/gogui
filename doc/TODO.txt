@@ -4,6 +4,9 @@ Rules
  Bugs:
   - Attach new rules + new program -> illegal move (this bug was not fixed)
   - Clean behaviour when empty working directory (in Windows, too)
+  - No pass and scoring messages when not playing Go
+  - Detach (don't attach) game ruler when attaching a Go program
+  - Player names should be cleared when changing rules
 
  Features:
   - Dialog box when changing icon size
