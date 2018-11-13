@@ -3271,14 +3271,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     gameTreeChanged = false;
                 }
                 if (m_gameRuler != null) {
-                    try {GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
+                    GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
                     m_game.setToMove(getToMove());
-                    m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
-                } catch (GtpError e)
-                {
-                    showError(e);
                 }
-            }
             }
             boolean doCheckComputerMove
             = (! m_isSingleMove
@@ -3666,13 +3661,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             gameTreeChanged = false;
         }
         boardChangedBegin(true, gameTreeChanged);
-        if (m_gameRuler != null) {
-            try {
-                m_actions.m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
-            } catch (GtpError e)
-            {
-            }
-        }
     }
 
     private void importTextPosition(Reader reader)
@@ -3918,7 +3906,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 ConstNode node =
                         NodeUtil.findByMoveNumber(getCurrentNode(), move);
                 if (node != null)
+                {
                     m_game.gotoNode(node, m_gameRuler);
+                }
             }
             setFile(runnable.getGameFile());
             FileDialogs.setLastFile(file);

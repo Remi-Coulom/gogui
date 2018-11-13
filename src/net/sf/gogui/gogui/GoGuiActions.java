@@ -764,10 +764,7 @@ public class GoGuiActions
         m_actionNextVariation.setEnabled(hasNextVariation);
         updatePass(toMove);
         updatePlay(toMove, isProgramAttached, computerBoth, name);
-        try {
-            m_actionPass.setEnabled(GenericBoard.isPassLegal(m_gameRuler));
-        } catch (GtpError e) {
-        }
+        m_actionPass.setEnabled(m_goGui.isPassEnabled());
         m_actionPlaySingleMove.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
