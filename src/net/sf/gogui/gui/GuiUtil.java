@@ -220,19 +220,21 @@ public class GuiUtil
         resource = resource.replace("-16x16", "");
         if (size >= 32) {
             String newUrl = resource.replace (".png", "-32x32.png");
-            return getScaledIcon(newUrl,icon);
+            return getScaledIcon(resourceUnchanged, newUrl,icon);
         }else if (size >= 24) {
             String newUrl = resource.replace (".png", "-24x24.png");
-            return getScaledIcon(newUrl,icon);
+            return getScaledIcon(resourceUnchanged, newUrl,icon);
         }else {
             String newUrl = resource.replace (".png", "-16x16.png");
-            return getScaledIcon(newUrl,icon);
+            return getScaledIcon(resourceUnchanged, newUrl,icon);
         }
     }
     
-    private static ImageIcon getScaledIcon(String resource, String icon)
+    private static ImageIcon getScaledIcon(String resourceUnchanged, String resource, String icon)
     {
         URL url = GuiUtil.class.getClassLoader().getResource(resource);
+        if (url == null)
+            url = GuiUtil.class.getClassLoader().getResource(resourceUnchanged);
         ImageIcon imageIcon = new ImageIcon(url, icon);
         return imageIcon;
     }
