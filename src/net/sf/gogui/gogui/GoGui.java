@@ -260,7 +260,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             }
         };
         m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
-                this);
+                this, m_prefs.getInt("imagesize", 24));
         // enums are stored as int's for compatibility with earlier versions
         // of GoGui
         try
@@ -2895,6 +2895,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_version = m_gtp.queryVersion();
                     m_shell.setProgramVersion(m_version);
                     m_gtp.querySupportedCommands();
+                    if (m_gameRuler != null
+                        && m_gtp.isSupported("gogui-rules_game_id")
+                        && m_gameRuler.send("gogui-rules_game_id").equals(m_gtp.send("gogui-rules_game_id"))
+                        && m_gtp.isSupported("gogui-rules_board_size")
+                        && Integer.parseInt(m_gtp.send("gogui-rules_board_size")) == getBoardSize())
+                    {
+                        System.out.println("oui");
+                    }
                     m_gtp.queryInterruptSupport();
                     if (m_program == null)
                     {

@@ -37,7 +37,8 @@ public class GoGuiMenuBar
     public GoGuiMenuBar(GoGuiActions actions,
                         RecentFileMenu.Listener recentListener,
                         RecentFileMenu.Listener recentGtpListener,
-                        GoGuiMenuBar.Listener bookmarkListener)
+                        GoGuiMenuBar.Listener bookmarkListener,
+                        int size)
     {
         m_listener = bookmarkListener;
         add(createMenuFile(actions, recentListener));
@@ -46,7 +47,7 @@ public class GoGuiMenuBar
         add(createMenuProgram(actions));
         add(createMenuGo(actions));
         add(createMenuEdit(actions));
-        add(createMenuView(actions));
+        add(createMenuView(actions, size));
         m_menuBookmarks = createMenuBookmarks(actions);
         add(m_menuBookmarks);
         add(createMenuTools(actions, recentGtpListener));
@@ -506,7 +507,7 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private GuiMenu createMenuView(GoGuiActions actions)
+    private GuiMenu createMenuView(GoGuiActions actions, int size)
     {
         GuiMenu menu = new GuiMenu(i18n("MEN_VIEW"));
         menu.addCheckBoxItem(actions.m_actionToggleShowToolbar);
@@ -539,9 +540,9 @@ public class GoGuiMenuBar
         menu.add(menuVarLabels);
         GuiMenu menuVarSize = new GuiMenu(i18n("MEN_IMAGE_SIZE"));
         ButtonGroup sizes = new ButtonGroup();
-        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize16);
-        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize24);
-        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize32);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize16).setSelected(size == 16);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize24).setSelected(size == 24);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize32).setSelected(size == 32);
         menu.add(menuVarSize);
         menu.addSeparator();
         menu.add(createMenuConfigureTree(actions));

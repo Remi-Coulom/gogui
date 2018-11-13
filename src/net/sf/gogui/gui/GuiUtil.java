@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -20,11 +19,9 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import javax.swing.AbstractButton;
@@ -206,7 +203,6 @@ public class GuiUtil
     public static ImageIcon getIcon(String icon, String name)
     {
         String resource = "net/sf/gogui/images/" + icon + ".png";
-        URL url = GuiUtil.class.getClassLoader().getResource(resource);
         Preferences prefs = Preferences.userNodeForPackage(GoGui.class);
         int size = prefs.getInt("imagesize", -1);
         if (size < 0)
@@ -214,35 +210,32 @@ public class GuiUtil
             prefs.putInt("imagesize", 24);
             size = 24;
         }
-        return getScaledIcon(url, icon, size);
+        return getScaledIcon(resource, icon, size);
     }
 
-    private static ImageIcon getScaledIcon(URL url, String icon, int size)
+    private static ImageIcon getScaledIcon(String resourceUnchanged, String icon, int size)
     {
-        String newUrl2 = url.getFile();
-        ImageIcon imageIcon = new ImageIcon(url,icon);
-        newUrl2 = newUrl2.replace("-32x32", "");
-        newUrl2 = newUrl2.replace("-24x24","");
-        newUrl2 = newUrl2.replace("-16x16","");
+        String resource = resourceUnchanged.replace("-24x24", "");
+        resource = resource.replace("-32x32", "");
+        resource = resource.replace("-16x16", "");
         if (size >= 32) {
-            String newUrl = newUrl2.replace (".png", "-32x32.png");
-            if (new File(newUrl).exists()) {
-                imageIcon = new ImageIcon(newUrl);
-            }
+            String newUrl = resource.replace (".png", "-32x32.png");
+            return getScaledIcon(newUrl,icon);
         }else if (size >= 24) {
-            String newUrl = newUrl2.replace (".png", "-24x24.png");
-            if (new File(newUrl).exists()) {
-                imageIcon = new ImageIcon(newUrl);
-            }
+            String newUrl = resource.replace (".png", "-24x24.png");
+            return getScaledIcon(newUrl,icon);
         }else {
-            String newUrl = url.getFile().replace (".png", "-16x16.png");
-            if (new File(newUrl).exists()) {
-                imageIcon = new ImageIcon(newUrl);
-            }
+            String newUrl = resource.replace (".png", "-16x16.png");
+            return getScaledIcon(newUrl,icon);
         }
+    }
+    
+    private static ImageIcon getScaledIcon(String resource, String icon)
+    {
+        URL url = GuiUtil.class.getClassLoader().getResource(resource);
+        ImageIcon imageIcon = new ImageIcon(url, icon);
         return imageIcon;
     }
-
 
     /** Init look and feel.
         If parameter is empty string, no initialization will be done.
