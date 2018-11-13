@@ -4927,8 +4927,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     initGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
-                    if (m_gtp != null && !m_gtp.isSupported("gogui-rules_game_id") ||
-                        !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
+                    if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") ||
+                        !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
                         actionDetachProgram();
                     ((Board)getBoard()).clear();
                     updateViews(true);
