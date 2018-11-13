@@ -3031,7 +3031,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             return;
         int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
         boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
-        boolean gameFinished = (bothPassed || m_resigned);
+        boolean gameFinished = false;
+        boolean rulerAttached = isRulerAttached();
+        try {
+            gameFinished = (bothPassed || m_resigned
+                            || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
+        } catch (GtpError e) {
+        }
         if (isComputerBoth())
         {
             if (gameFinished)
@@ -3044,7 +3050,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     return;
                 }
                 m_game.haltClock();
-                showGoFinished();
+                if (rulerAttached)
+                    showGameFinished();
+                else
+                    showGoFinished();
                 return;
             }
             generateMove(false);
@@ -3054,7 +3063,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             if (gameFinished)
             {
                 m_game.haltClock();
-                showGoFinished();
+                if (rulerAttached)
+                    showGameFinished();
+                else
+                    showGoFinished();
                 return;
             }
             else if (computerToMove())
@@ -3293,13 +3305,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             showError(e);
             clearStatus();
         }
-        if (m_gameRuler != null)
-            try {
-                if (GenericBoard.isGameOver(m_gameRuler))
-                    showGameFinished();
-            } catch (GtpError e) {
-                showError(e);
-            }
     }
 
     private boolean computerToMove()
