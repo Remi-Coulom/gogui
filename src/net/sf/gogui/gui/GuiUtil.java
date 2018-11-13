@@ -214,10 +214,7 @@ public class GuiUtil
             prefs.putInt("imagesize", 24);
             size = 24;
         }
-        //if (! url.getFile().contains("x"))
-            return getScaledIcon(url, icon, size);
-        //else
-        //    return new ImageIcon(url,icon);
+        return getScaledIcon(url, icon, size);
     }
 
     private static ImageIcon getScaledIcon(URL url, String icon, int size)

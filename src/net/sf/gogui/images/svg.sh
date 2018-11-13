@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in 8 16 24 32
+for i in 16 24 32
 do
 	for file in *.svg
 	do
