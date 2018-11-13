@@ -210,8 +210,8 @@ public class GoGuiMenuBar
         }
     }
 
-    public void update(boolean isProgramAttached, boolean isTreeShown,
-                       boolean isShellShown)
+    public void update(boolean isProgramAttached, boolean isRulerAttached,
+                       boolean isTreeShown, boolean isShellShown, GoGuiActions actions)
     {
         if (isProgramAttached)
             m_recentGtp.updateEnabled();
@@ -221,6 +221,9 @@ public class GoGuiMenuBar
         m_computerColor.setEnabled(isProgramAttached);
         m_menuViewTree.setEnabled(isTreeShown);
         m_menuViewShell.setEnabled(isShellShown);
+        m_menuBoardSize.setEnabled(!isRulerAttached);
+        m_menuHandicap.setEnabled(!isRulerAttached);
+        actions.m_actionScore.setEnabled(!isRulerAttached);
     }
 
     private final Listener m_listener;
@@ -234,6 +237,10 @@ public class GoGuiMenuBar
     private GuiMenu m_menuViewTree;
 
     private GuiMenu m_menuViewShell;
+    
+    private GuiMenu m_menuBoardSize;
+    
+    private GuiMenu m_menuHandicap;
 
     private JSeparator m_bookmarksSeparator;
 
@@ -255,16 +262,16 @@ public class GoGuiMenuBar
 
     private GuiMenu createBoardSizeMenu(GoGuiActions actions)
     {
-        GuiMenu menu = new GuiMenu(i18n("MEN_BOARDSIZE"));
+        m_menuBoardSize = new GuiMenu(i18n("MEN_BOARDSIZE"));
         ButtonGroup group = new ButtonGroup();
-        menu.addRadioItem(group, actions.m_actionBoardSize9);
-        menu.addRadioItem(group, actions.m_actionBoardSize11);
-        menu.addRadioItem(group, actions.m_actionBoardSize13);
-        menu.addRadioItem(group, actions.m_actionBoardSize15);
-        menu.addRadioItem(group, actions.m_actionBoardSize17);
-        menu.addRadioItem(group, actions.m_actionBoardSize19);
-        menu.addRadioItem(group, actions.m_actionBoardSizeOther);
-        return menu;
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSize9);
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSize11);
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSize13);
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSize15);
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSize17);
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSize19);
+        m_menuBoardSize.addRadioItem(group, actions.m_actionBoardSizeOther);
+        return m_menuBoardSize;
     }
 
     private GuiMenu createClockMenu(GoGuiActions actions)
@@ -290,18 +297,18 @@ public class GoGuiMenuBar
 
     private GuiMenu createHandicapMenu(GoGuiActions actions)
     {
-        GuiMenu menu = new GuiMenu(i18n("MEN_HANDICAP"));
+        m_menuHandicap = new GuiMenu(i18n("MEN_HANDICAP"));
         ButtonGroup group = new ButtonGroup();
-        menu.addRadioItem(group, actions.m_actionHandicapNone);
-        menu.addRadioItem(group, actions.m_actionHandicap2);
-        menu.addRadioItem(group, actions.m_actionHandicap3);
-        menu.addRadioItem(group, actions.m_actionHandicap4);
-        menu.addRadioItem(group, actions.m_actionHandicap5);
-        menu.addRadioItem(group, actions.m_actionHandicap6);
-        menu.addRadioItem(group, actions.m_actionHandicap7);
-        menu.addRadioItem(group, actions.m_actionHandicap8);
-        menu.addRadioItem(group, actions.m_actionHandicap9);
-        return menu;
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicapNone);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap2);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap3);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap4);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap5);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap6);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap7);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap8);
+        m_menuHandicap.addRadioItem(group, actions.m_actionHandicap9);
+        return m_menuHandicap;
     }
 
     private GuiMenu createMenuBookmarks(GoGuiActions actions)

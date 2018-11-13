@@ -4787,7 +4787,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void updateViews(boolean gameTreeChanged, boolean sync)
     {
         m_actions.update();
-        m_menuBar.update(isProgramAttached(), isTreeShown(), isShellShown());
+        m_menuBar.update(isProgramAttached(), isRulerAttached(), isTreeShown(), isShellShown(), m_actions);
         m_gameInfoPanel.update();
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();
@@ -4927,7 +4927,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     initGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
-                    if (!m_gtp.isSupported("gogui-rules_game_id") ||
+                    if (m_gtp != null && !m_gtp.isSupported("gogui-rules_game_id") ||
                         !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
                         actionDetachProgram();
                     ((Board)getBoard()).clear();
@@ -4943,6 +4943,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
     }
 
+    /**
+     * @return true if the Game Ruler contains a gogui-rules_setup command.
+     * (It can occur when a Game Ruler lets plural moves of the same color being played)
+     */
     public boolean isRulerSetupPossible() {
         return GenericBoard.isSetupPossible(m_gameRuler);
     }
