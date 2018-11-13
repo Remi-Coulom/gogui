@@ -2895,13 +2895,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_version = m_gtp.queryVersion();
                     m_shell.setProgramVersion(m_version);
                     m_gtp.querySupportedCommands();
-                    if (m_gameRuler != null
+                    if (! (m_gameRuler != null
                         && m_gtp.isSupported("gogui-rules_game_id")
                         && m_gameRuler.send("gogui-rules_game_id").equals(m_gtp.send("gogui-rules_game_id"))
                         && m_gtp.isSupported("gogui-rules_board_size")
                         && Integer.parseInt(m_gtp.send("gogui-rules_board_size")) == getBoardSize())
+                            && m_gtp.isSupported("gogui-rules_legal_moves"))
                     {
-                        System.out.println("oui");
+                        initGameRuler(program.m_command, program.m_workingDirectory, program.m_name);
                     }
                     m_gtp.queryInterruptSupport();
                     if (m_program == null)
@@ -3257,7 +3258,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
                 }
                 m_gtp.updateAfterGenmove(getBoard());
-           //     m_gameRulerSynchro.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
                 {
                     String disableKey =
@@ -3330,7 +3330,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private ContextMenu createContextMenu(GoPoint point)
     {
-        //boolean noProgram = (m_gtp == null);
         return new ContextMenu(point, m_guiBoard.getMark(point),
                 m_guiBoard.getMarkCircle(point),
                 m_guiBoard.getMarkSquare(point),
@@ -4556,9 +4555,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         if (m_resigned)
             return;
-        m_messageDialogs.showInfo(this,
-                i18n("MSG_GAME_FINISHED"),
-               "", false);
+        try {
+            String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
+            m_messageDialogs.showInfo(disableKey, this,
+                    i18n("MSG_GAME_FINISHED"),
+                   m_gameRuler.isSupported("gogui-rules_final_result") ?
+                   m_gameRuler.send("gogui-rules_final_result") : "", false);
+        } catch (GtpError e) {
+        }
     }
 
     private void showInfo(String mainMessage, String optionalMessage,
@@ -4923,7 +4927,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     initGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
-                    actionDetachProgram();
+                    if (!m_gtp.isSupported("gogui-rules_game_id") ||
+                        !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
+                        actionDetachProgram();
                     ((Board)getBoard()).clear();
                     updateViews(true);
                 }
