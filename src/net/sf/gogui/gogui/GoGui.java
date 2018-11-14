@@ -557,6 +557,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     saveSession();
                     detachRuler();
                     getBoard().detachGameRuler();
+                    detachProgram();
                     ConstNode root = getTree().getRootConst();
                     gotoNode(root);
                     currentNodeChanged();
@@ -1195,6 +1196,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 attachNewProgram(m_newProgram.m_command, m_newProgram);
+                if (isGtpRuler() && ! isGtpCompatibleWithGame())
+                    try {
+                        initGameRuler(m_newProgram.m_command, m_newProgram.m_workingDirectory, m_newProgram.m_name);
+                    } catch (ExecFailed e) {
+                    }
                 unprotectGui();
                 if (m_gtp == null || m_gtp.isProgramDead())
                 {
@@ -4946,5 +4952,31 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
      */
     public boolean isRulerSetupPossible() {
         return GenericBoard.isSetupPossible(m_gameRuler);
+    }
+
+    private boolean isGtpRuler() {
+        if (m_gtp == null)
+            return false;
+        ArrayList<String> commands = m_gtp.getSupportedCommands();
+        return (commands.contains("gogui-rules_game_id")
+                && commands.contains("gogui-rules_legal_moves"));
+    }
+
+    private boolean isGtpCompatibleWithGame() {
+        if (m_gtp == null)
+            return true;
+        try {
+            if (! isRulerAttached() && m_gtp.isSupported("gogui-rules_game_id") &&
+                !m_gtp.send("gogui-rules_game_id").equals("go"))
+                return false;
+            if (m_gtp.isSupported("gogui-rules_boardsize")
+                && Integer.parseInt(m_gtp.send("gogui-rules_boardsize")) == getBoardSize()
+                && m_gtp.isSupported("gogui-rules_game_id")
+                && m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
+                return true;
+        } catch (NumberFormatException e) {
+        } catch (GtpError e) {
+        }
+        return false;
     }
 }
