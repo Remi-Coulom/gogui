@@ -4921,7 +4921,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     if (newSize < 0)
                         newSize = getBoardSize();
                     m_gameRuler = m_gameRulerCopie;
-                    initGame(newSize);
+                    newGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
                     if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") ||
