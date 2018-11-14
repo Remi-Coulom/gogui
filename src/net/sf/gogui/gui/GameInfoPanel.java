@@ -47,9 +47,9 @@ public class GameInfoPanel
             panel.add(box);
             ImageIcon icon;
             if (c == BLACK)
-                icon = GuiUtil.getIcon("gogui-black-32x32", i18n("LB_BLACK"));
+                icon = GuiUtil.getUnsizedIcon("gogui-black-32x32", i18n("LB_BLACK"));
             else
-                icon = GuiUtil.getIcon("gogui-white-32x32", i18n("LB_WHITE"));
+                icon = GuiUtil.getUnsizedIcon("gogui-white-32x32", i18n("LB_WHITE"));
             m_icon.set(c, new JLabel(icon));
             m_icon.get(c).setAlignmentX(Component.CENTER_ALIGNMENT);
             box.add(m_icon.get(c));

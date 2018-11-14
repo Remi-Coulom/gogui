@@ -484,30 +484,30 @@ public class GameTreePanel
         case LARGE:
             m_nodeSize = 32;
             m_nodeFullSize = 40;
-            m_iconBlack = GuiUtil.getIcon("gogui-black-32x32", "");
-            m_iconWhite = GuiUtil.getIcon("gogui-white-32x32", "");
-            m_iconSetup = GuiUtil.getIcon("gogui-setup-32x32", "");
+            m_iconBlack = GuiUtil.getUnsizedIcon("gogui-black-32x32", "");
+            m_iconWhite = GuiUtil.getUnsizedIcon("gogui-white-32x32", "");
+            m_iconSetup = GuiUtil.getUnsizedIcon("gogui-setup-32x32", "");
             break;
         case SMALL:
             m_nodeSize = 16;
             m_nodeFullSize = 20;
-            m_iconBlack = GuiUtil.getIcon("gogui-black-16x16", "");
-            m_iconWhite = GuiUtil.getIcon("gogui-white-16x16", "");
-            m_iconSetup = GuiUtil.getIcon("gogui-setup-16x16", "");
+            m_iconBlack = GuiUtil.getUnsizedIcon("gogui-black-16x16", "");
+            m_iconWhite = GuiUtil.getUnsizedIcon("gogui-white-16x16", "");
+            m_iconSetup = GuiUtil.getUnsizedIcon("gogui-setup-16x16", "");
             break;
         case TINY:
             m_nodeSize = 8;
             m_nodeFullSize = 10;
-            m_iconBlack = GuiUtil.getIcon("gogui-black-8x8", "");
-            m_iconWhite = GuiUtil.getIcon("gogui-white-8x8", "");
-            m_iconSetup = GuiUtil.getIcon("gogui-setup-8x8", "");
+            m_iconBlack = GuiUtil.getUnsizedIcon("gogui-black-8x8", "");
+            m_iconWhite = GuiUtil.getUnsizedIcon("gogui-white-8x8", "");
+            m_iconSetup = GuiUtil.getUnsizedIcon("gogui-setup-8x8", "");
             break;
         case NORMAL:
             m_nodeSize = 24;
             m_nodeFullSize = 30;
-            m_iconBlack = GuiUtil.getIcon("gogui-black-24x24", "");
-            m_iconWhite = GuiUtil.getIcon("gogui-white-24x24", "");
-            m_iconSetup = GuiUtil.getIcon("gogui-setup-24x24", "");
+            m_iconBlack = GuiUtil.getUnsizedIcon("gogui-black-24x24", "");
+            m_iconWhite = GuiUtil.getUnsizedIcon("gogui-white-24x24", "");
+            m_iconSetup = GuiUtil.getUnsizedIcon("gogui-setup-24x24", "");
         }
 
 

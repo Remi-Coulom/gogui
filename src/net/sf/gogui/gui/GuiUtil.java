@@ -197,6 +197,14 @@ public class GuiUtil
         return MONOSPACED_FONT.getSize();
     }
 
+    public static ImageIcon getUnsizedIcon(String icon, String name)
+    {
+        String resource = "net/sf/gogui/images/" + icon + ".png";
+        URL url = GuiUtil.class.getClassLoader().getResource(resource);
+        ImageIcon imageIcon = new ImageIcon(url, icon);
+        return imageIcon;
+    }
+
     /**
      * @return the scaled image depending on the preferences.
      */
