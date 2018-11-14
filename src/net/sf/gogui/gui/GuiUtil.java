@@ -157,20 +157,6 @@ public class GuiUtil
             return null;
         }
     }
-    
-    /** Return preferred size */
-    public static GameTreePanel.Size getSize()
-    {
-        Preferences prefs = Preferences.userNodeForPackage(GoGui.class);
-        int size = prefs.getInt("imagesize", 24);
-        if (size >= 32)
-            return GameTreePanel.Size.LARGE;
-        if (size >= 24)
-            return GameTreePanel.Size.NORMAL;
-        if (size >= 16)
-            return GameTreePanel.Size.SMALL;
-        return GameTreePanel.Size.TINY;
-    }
 
     /** Return a style sheet for message labels using HTML.
         @return A string with a HTML-head tag containing a style tag
@@ -226,16 +212,13 @@ public class GuiUtil
         String resource = resourceUnchanged.replace("-24x24", "");
         resource = resource.replace("-32x32", "");
         resource = resource.replace("-16x16", "");
-        if (size >= 32) {
-            String newUrl = resource.replace (".png", "-32x32.png");
-            return getScaledIcon(resourceUnchanged, newUrl,icon);
-        }else if (size >= 24) {
-            String newUrl = resource.replace (".png", "-24x24.png");
-            return getScaledIcon(resourceUnchanged, newUrl,icon);
-        }else {
-            String newUrl = resource.replace (".png", "-16x16.png");
-            return getScaledIcon(resourceUnchanged, newUrl,icon);
+        for (int i = ICONSIZES.length -1; i >= 0; i--) {
+            if (size >= ICONSIZES[i]) {
+                String newUrl = resource.replace (".png", "-"+ICONSIZES[i] + "x" + ICONSIZES[i] + ".png");
+                return getScaledIcon(resourceUnchanged, newUrl,icon);
+            }
         }
+        return getScaledIcon(resourceUnchanged, resource, icon);
     }
     
     private static ImageIcon getScaledIcon(String resourceUnchanged, String resource, String icon)
@@ -662,6 +645,8 @@ public class GuiUtil
         new Dimension(SMALL_PAD, SMALL_PAD);
 
     private static URL s_iconURL;
+
+    private static final int[] ICONSIZES = {16,24,32,48,64};
 
     private static void handleLookAndFeelError(boolean showError, String laf)
     {

@@ -12,10 +12,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.prefs.Preferences;
+
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.gogui.GoGui;
 import net.sf.gogui.gogui.GoGuiActions;
 import net.sf.gogui.game.ConstGameTree;
 import static net.sf.gogui.gui.I18n.i18n;
@@ -31,6 +34,13 @@ public class GameTreeViewer
         void actionGotoNode(ConstNode node);
     }
 
+    private GameTreePanel.Size getTreeSize()
+    {
+        Preferences prefs = Preferences.userNodeForPackage(GoGui.class);
+        int size = prefs.getInt("gametree-size", 3);
+        return GameTreePanel.Size.values()[size];
+    }
+
     public GameTreeViewer(Frame owner, Listener listener,
                           MessageDialogs messageDialogs, GoGuiActions m_actions)
     {
@@ -39,7 +49,7 @@ public class GameTreeViewer
         GameTreePanel.Size size;
         m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.Label.NUMBER,
-                                    GuiUtil.getSize(),
+                                    getTreeSize(),
                                     messageDialogs, m_actions);
         m_scrollPane =
             new JScrollPane(m_panel,

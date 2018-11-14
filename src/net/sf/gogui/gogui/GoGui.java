@@ -1028,6 +1028,18 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         showMessageCloseGogui();
     }
 
+    public void actionImageSize48()
+    {
+        m_prefs.putInt("imagesize", 48);
+        showMessageCloseGogui();
+    }
+
+    public void actionImageSize64()
+    {
+        m_prefs.putInt("imagesize", 64);
+        showMessageCloseGogui();
+    }
+
     private void showMessageCloseGogui()
     {
         String disableKey = "net.sf.gogui.gogui.GoGui.close-gogui";

@@ -19,6 +19,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.prefs.Preferences;
+
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;

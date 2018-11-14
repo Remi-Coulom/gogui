@@ -318,6 +318,16 @@ public class GoGuiActions
               public void actionPerformed(ActionEvent e) {
                   m_goGui.actionImageSize32(); } };
 
+     public final GuiAction m_actionImageSize48 =
+        new GuiAction("48px") {
+              public void actionPerformed(ActionEvent e) {
+                  m_goGui.actionImageSize48(); } };
+
+     public final GuiAction m_actionImageSize64 =
+        new GuiAction("64px") {
+              public void actionPerformed(ActionEvent e) {
+                  m_goGui.actionImageSize64(); } };
+
     public final GuiAction m_actionImportTextPosition =
         new GuiAction(i18n("ACT_IMPORT_TEXT_POSITION")) {
             public void actionPerformed(ActionEvent e) {

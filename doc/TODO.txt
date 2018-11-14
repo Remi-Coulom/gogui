@@ -2,11 +2,9 @@
 Rules
 =============================================================================
  Bugs:
-  - No pass and scoring messages when not playing Go
   - Icon size in documentation
 
  Features:
-  - Dialog box when changing icon size
   - gogui-rules protocol documentation
   - Windows installer
   - Rules in gogui-twogtp?

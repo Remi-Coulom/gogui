@@ -546,6 +546,8 @@ public class GoGuiMenuBar
         menuVarSize.addRadioItem(sizes, actions.m_actionImageSize16).setSelected(size == 16);
         menuVarSize.addRadioItem(sizes, actions.m_actionImageSize24).setSelected(size == 24);
         menuVarSize.addRadioItem(sizes, actions.m_actionImageSize32).setSelected(size == 32);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize48).setSelected(size == 48);
+        menuVarSize.addRadioItem(sizes, actions.m_actionImageSize64).setSelected(size == 64);
         menu.add(menuVarSize);
         menu.addSeparator();
         menu.add(createMenuConfigureTree(actions));
