@@ -1009,20 +1009,29 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             updateViews(true);
         }
     }
-    
+
     public void actionImageSize16()
     {
         m_prefs.putInt("imagesize", 16);
+        showMessageCloseGogui();
     }
-    
+
     public void actionImageSize24()
     {
         m_prefs.putInt("imagesize", 24);
+        showMessageCloseGogui();
     }
-    
+
     public void actionImageSize32()
     {
         m_prefs.putInt("imagesize", 32);
+        showMessageCloseGogui();
+    }
+
+    private void showMessageCloseGogui()
+    {
+        String disableKey = "net.sf.gogui.gogui.GoGui.close-gogui";
+        m_messageDialogs.showInfo(disableKey, this, "", i18n("MSG_CLOSE_GOGUI"), true);
     }
 
     public void actionImportSgfFromClipboard()
