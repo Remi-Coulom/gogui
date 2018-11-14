@@ -3438,8 +3438,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
         m_version = null;
-        m_shell.dispose();
-        m_shell = null;
+        if (m_shell != null)
+        {
+            m_shell.dispose();
+            m_shell = null;
+        }
         if (m_analyzeDialog != null)
         {
             m_analyzeDialog.saveRecent();
@@ -4945,13 +4948,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         gotoNode(child);
                         actionTruncate(false);
                     }
+                    gotoNode(root);
                     if (newSize < 0)
                         newSize = getBoardSize();
                     m_gameRuler = m_gameRulerCopie;
                     newGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
-                    if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") ||
+                    if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") || m_gameRuler.isSupported("gogui-rules_game_id") &&
                         !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
                         actionDetachProgram();
                     ((Board)getBoard()).clear();
