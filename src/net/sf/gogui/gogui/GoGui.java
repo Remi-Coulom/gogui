@@ -4877,14 +4877,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (!f.exists())
         {
             directory = f2.getParent();
-            directory = "";
-            for (int i = command.length()-1; i >= 0; i--) {
-                if (command.charAt(i) == '/')
-                {
-                    directory = command.substring(0, i);
-                    break;
-                }
-            }
         }
         try {
             GtpClientBase m_gameRulerCopie = null;
