@@ -3457,7 +3457,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 if (m_gameRuler.isSupported("quit"))
                     m_gameRuler.send("quit");
                 if (isProgramAttached() && (! m_gtp.isSupported("gogui-rules_game_id")
-                    || ! m_gtp.send("gogui-rules_game_id").equals("go"))) {
+                    || ! m_gtp.send("gogui-rules_game_id").equals("Go"))) {
                     detachProgram();
                 }
             }
@@ -4978,7 +4978,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             return true;
         try {
             if (! isRulerAttached() && m_gtp.isSupported("gogui-rules_game_id") &&
-                !m_gtp.send("gogui-rules_game_id").equals("go"))
+                !m_gtp.send("gogui-rules_game_id").equals("Go"))
                 return false;
             if (m_gtp.isSupported("gogui-rules_boardsize")
                 && Integer.parseInt(m_gtp.send("gogui-rules_boardsize")) == getBoardSize()
