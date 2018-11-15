@@ -557,15 +557,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     saveSession();
                     detachRuler();
                     getBoard().detachGameRuler();
-                    detachProgram();
                     ConstNode root = getTree().getRootConst();
                     gotoNode(root);
                     currentNodeChanged();
                     initGame(getBoardSize());
                     m_gameRuler = null;
-                    updateViews(true);
-                    if (isProgramAttached())
-                        detachProgram();
+                    updateViews(true, true);
                 }
                 finally
                 {
@@ -2244,7 +2241,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             {
                 try {
                     boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
-                    if (isEndGame)
+                    if (isEndGame && computerToMove())
                     {
                         m_game.haltClock();
                         showGameFinished();
@@ -2466,8 +2463,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
-
-    private GtpClientBase m_gameRuler;
     
     /** State variable used between generateMove and computerMoved.
         Flag is set in actionInterrupt. */
@@ -2513,6 +2508,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private final GuiBoard m_guiBoard;
 
     private GuiGtpClient m_gtp;
+
+    private GtpClientBase m_gameRuler;
 
     private final Comment m_comment;
 
@@ -2733,7 +2730,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (m_gameRuler != null)
         {
             saveSession();
-            detachRuler();
         }
         if (! attachProgram(command, program, false, true))
         {
@@ -2876,11 +2872,9 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             gtp.setAutoNumber(m_autoNumber);
             if (ruler)
             {
-                initGameRuler(programCommand,
+                initGameRuler(program.m_command,
                         program.m_workingDirectory,
-                        gtp.getName());
-                m_gameRuler = new GuiGtpClient(gtp, this, synchronizerCallback,
-                        m_messageDialogs);
+                        program.m_name);
                 m_gameRuler.queryName();
                 m_gameRuler.queryProtocolVersion();
                 try
@@ -3456,16 +3450,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
 
     private void detachRuler()
     {
-        if (false)
-            return;
         if (m_gameRuler != null && ! m_gameRuler.isProgramDead())
         {
-            // Some programs do not handle closing the GTP stream
-            // correctly, so we send a quit before
             try
             {
                 if (m_gameRuler.isSupported("quit"))
                     m_gameRuler.send("quit");
+                if (isProgramAttached() && (! m_gtp.isSupported("gogui-rules_game_id")
+                    || ! m_gtp.send("gogui-rules_game_id").equals("go"))) {
+                    detachProgram();
+                }
             }
             catch (GtpError e)
             {
@@ -4901,16 +4895,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
-        detachRuler();
         File f = new File(directory);
-        File f2 = new File(command);
         if (!f.exists())
         {
-            directory = f2.getParent();
+            directory = System.getProperty("user.dir");
         }
         try {
             GtpClientBase m_gameRulerCopie = null;
-            boolean alreadyAttached = m_gameRuler != null;
+            boolean alreadyAttached = isRulerAttached();
             String previousGame = "";
             int previousSize = -1;
             if (alreadyAttached)
@@ -4933,22 +4925,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 GenericBoard.copyBoardState(m_gameRulerCopie, getCurrentNode(), (Board)getBoard());
                 m_gameRuler = m_gameRulerCopie;
                 getBoard().attachGameRuler(m_gameRuler);
-                gotoNode(getCurrentNode());
-                currentNodeChanged();
-                updateViews(true);
+            //    gotoNode(getCurrentNode());
+            //    updateViews(true);
             }
             else
             {
+                ConstNode root = NodeUtil.getRoot(getCurrentNode());
                 if (checkSaveGame())
                 {
-                    ConstNode root = NodeUtil.getRoot(getCurrentNode());
-                    while (root.hasChildren())
-                    {
-                        ConstNode child = root.getChildConst();
-                        gotoNode(child);
-                        actionTruncate(false);
-                    }
-                    gotoNode(root);
                     if (newSize < 0)
                         newSize = getBoardSize();
                     m_gameRuler = m_gameRulerCopie;
@@ -4959,11 +4943,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
                         actionDetachProgram();
                     ((Board)getBoard()).clear();
+                //    currentNodeChanged();
                     updateViews(true);
                 }
                 else
                 {
                     actionGotoNode(getCurrentNode());
+                    updateViews(false);
                 }
             }
         } catch (GtpError e) {
