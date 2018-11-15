@@ -4940,8 +4940,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 GenericBoard.copyBoardState(m_gameRulerCopie, getCurrentNode(), (Board)getBoard());
                 m_gameRuler = m_gameRulerCopie;
                 getBoard().attachGameRuler(m_gameRuler);
-            //    gotoNode(getCurrentNode());
-            //    updateViews(true);
             }
             else
             {
@@ -4950,6 +4948,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     if (newSize < 0)
                         newSize = getBoardSize();
                     m_gameRuler = m_gameRulerCopie;
+                    m_handicap = 0;
+                    ConstNode node = m_game.getGameInfoNode();
+                    GameInfo info = new GameInfo(node.getGameInfoConst());
+                    info.setHandicap(0);
                     newGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     GenericBoard.setInitialBoardState(m_gameRuler, (Board)getBoard());
@@ -4958,7 +4960,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         actionDetachProgram();
                     ((Board)getBoard()).setupHandicap(null);
                     ((Board)getBoard()).clear();
-                //    currentNodeChanged();
                     updateViews(true);
                 }
                 else
