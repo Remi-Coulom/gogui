@@ -2916,12 +2916,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_version = m_gtp.queryVersion();
                     m_shell.setProgramVersion(m_version);
                     m_gtp.querySupportedCommands();
-                    if (! (m_gameRuler != null
-                        && m_gtp.isSupported("gogui-rules_game_id")
-                        && m_gameRuler.send("gogui-rules_game_id").equals(m_gtp.send("gogui-rules_game_id"))
-                        && m_gtp.isSupported("gogui-rules_board_size")
-                        && Integer.parseInt(m_gtp.send("gogui-rules_board_size")) == getBoardSize())
-                            && m_gtp.isSupported("gogui-rules_legal_moves"))
+                    if (isGtpRuler() && ! isGtpCompatibleWithGame())
                     {
                         initGameRuler(program.m_command, program.m_workingDirectory, program.m_name);
                     }
@@ -4930,7 +4925,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             }
             else
             {
-                ConstNode root = NodeUtil.getRoot(getCurrentNode());
                 if (checkSaveGame())
                 {
                     if (newSize < 0)
@@ -4942,6 +4936,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") || m_gameRuler.isSupported("gogui-rules_game_id") &&
                         !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
                         actionDetachProgram();
+                    ((Board)getBoard()).setupHandicap(null);
                     ((Board)getBoard()).clear();
                 //    currentNodeChanged();
                     updateViews(true);
@@ -4970,16 +4965,18 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             return false;
         ArrayList<String> commands = m_gtp.getSupportedCommands();
         return (commands.contains("gogui-rules_game_id")
-                && commands.contains("gogui-rules_legal_moves"));
+                && commands.contains("gogui-rules_legal_moves")
+                && commands.contains("gogui-rules_side_to_move"));
     }
 
     private boolean isGtpCompatibleWithGame() {
         if (m_gtp == null)
-            return true;
+            return false;
         try {
             if (! isRulerAttached() && m_gtp.isSupported("gogui-rules_game_id") &&
-                !m_gtp.send("gogui-rules_game_id").equals("Go"))
-                return false;
+                m_gtp.send("gogui-rules_game_id").equals("Go"))
+            
+                return true;
             if (m_gtp.isSupported("gogui-rules_boardsize")
                 && Integer.parseInt(m_gtp.send("gogui-rules_boardsize")) == getBoardSize()
                 && m_gtp.isSupported("gogui-rules_game_id")
