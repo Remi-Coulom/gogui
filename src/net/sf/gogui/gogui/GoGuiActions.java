@@ -179,7 +179,7 @@ public class GoGuiActions
     public final GuiAction m_actionDetachRuler =
         new GuiAction(i18n("ACT_DETACH_PROGRAM")) {
             public void actionPerformed(ActionEvent e) {
-                m_goGui.actionDetachRuler(); } };
+                m_goGui.actionDetachRuler(true); } };
 
     public final GuiAction m_actionEnd =
         new GuiAction(i18n("ACT_END"), i18n("TT_END"),

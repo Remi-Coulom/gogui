@@ -541,7 +541,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         SwingUtilities.invokeLater(runnable);
     }
     
-    public void actionDetachRuler()
+    public void actionDetachRuler(boolean detachProgram)
     {
         if (m_gameRuler == null)
             return;
@@ -555,7 +555,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 try
                 {
                     saveSession();
-                    detachRuler();
+                    detachRuler(detachProgram);
                     getBoard().detachGameRuler();
                     ConstNode root = getTree().getRootConst();
                     gotoNode(root);
@@ -1214,11 +1214,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 attachNewProgram(m_newProgram.m_command, m_newProgram);
-                if (isGtpRuler() && ! isGtpCompatibleWithGame())
-                    try {
-                        initGameRuler(m_newProgram.m_command, m_newProgram.m_workingDirectory, m_newProgram.m_name);
-                    } catch (ExecFailed e) {
-                    }
+                if (! isGtpCompatibleWithGame())
+                    if (isGtpRuler())
+                        try {
+                            initGameRuler(m_newProgram.m_command, m_newProgram.m_workingDirectory, m_newProgram.m_name);
+                        } catch (ExecFailed e) {
+                        }
+                    else if (isRulerAttached())
+                        actionDetachRuler(false);
                 unprotectGui();
                 if (m_gtp == null || m_gtp.isProgramDead())
                 {
@@ -1289,7 +1292,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         m_messageDialogs);
                 if (m_newRuler == null)
                 {
-                    actionDetachRuler();
+                    actionDetachRuler(true);
                     return;
                 }
                 m_rulers.add(m_newRuler);
@@ -2916,10 +2919,21 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_version = m_gtp.queryVersion();
                     m_shell.setProgramVersion(m_version);
                     m_gtp.querySupportedCommands();
-                    if (isGtpRuler() && ! isGtpCompatibleWithGame())
+                    if (! isGtpCompatibleWithGame())
                     {
-                        initGameRuler(program.m_command, program.m_workingDirectory, program.m_name);
+                        if (isGtpRuler())
+                            try {
+                                initGameRuler(program.m_command, program.m_workingDirectory, program.m_name);
+                            } catch (ExecFailed e) {
+                            }
+                        else if (isRulerAttached()) {
+                            actionDetachRuler(false);
+                        }
                     }
+                    m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback,
+                            m_messageDialogs);
+                    m_gtp.queryName();
+                    m_gtp.queryProtocolVersion();
                     m_gtp.queryInterruptSupport();
                     if (m_program == null)
                     {
@@ -2958,12 +2972,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 {
                     showError(i18n("MSG_COULD_NOT_READ_ANALYZE_CONFIGURATION"), e);
                 }
+                if (m_shell != null)
+                {
                 restoreSize(m_shell, "shell");
                 m_shell.setProgramName(getProgramLabel());
                 ArrayList<String> supportedCommands =
                         (ruler ? m_gameRuler : m_gtp).getSupportedCommands();
                 m_shell.setInitialCompletions(supportedCommands);
-
+                }
                 if (! m_gtp.isGenmoveSupported())
                 {
                     m_computerBlack = false;
@@ -3443,9 +3459,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         setTitle();
     }
 
-    private void detachRuler()
+    /**
+     * @param detachProgram True if you want to detach the GTP program
+     * (will be detached only if it is not a Go program)
+     */
+    private void detachRuler(boolean detachProgram)
     {
-        if (m_gameRuler != null && ! m_gameRuler.isProgramDead())
+        if (detachProgram && m_gameRuler != null && ! m_gameRuler.isProgramDead())
         {
             try
             {
