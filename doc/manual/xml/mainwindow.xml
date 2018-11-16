@@ -298,6 +298,16 @@ Start a new game.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Rules</guimenuitem></term>
+<listitem>
+<para>
+Change the game. See <xref linkend="rules"/> for a complete documentation.
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
 <term><guisubmenu>Board Size</guisubmenu></term>
 <listitem>
 <para>
@@ -396,6 +406,9 @@ Start a program from the list of Go programs and synchronize it to the current
 game at the current position.
 If a Go program was already attached, it will be terminated, before the new
 program is started.
+If the program is not a Go program, it will be be used as its own ruler.
+Non-go programs must implement the rules' methods described in
+(see <xref linkend="rules"/>).
 </para>
 </listitem>
 </varlistentry>
@@ -761,22 +774,6 @@ Show the move numbers for all moves played so far as labels on the board.
 </listitem>
 </varlistentry>
 
-<varlistentry id="variationlabels">
-<term><guisubmenu>Variation Labels</guisubmenu></term>
-<listitem>
-<para>
-If set to <guimenuitem>Children</guimenuitem>, the first moves of all
-variations from this position will be marked with labels (also if the current
-node has only a main variation and no side variations).
-If set to <guimenuitem>Siblings</guimenuitem>, all variations from the parent
-position will be marked (not if the parent node has only a main variation and
-no side variations).
-The labels are letters starting with 'A' ('*' will be used after 'Z').
-If multiple variations start with the same move, a '>' is appended.
-</para>
-</listitem>
-</varlistentry>
-
 <varlistentry>
 <term><guimenuitem>Play Sound</guimenuitem></term>
 <listitem>
@@ -793,6 +790,32 @@ sound using the sound card.
 <listitem>
 <para>
 Use a fixed-width font in the comment field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Variation Labels</guisubmenu></term>
+<listitem>
+<para>
+If set to <guimenuitem>Children</guimenuitem>, the first moves of all
+variations from this position will be marked with labels (also if the current
+node has only a main variation and no side variations).
+If set to <guimenuitem>Siblings</guimenuitem>, all variations from the parent
+position will be marked (not if the parent node has only a main variation and
+no side variations).
+The labels are letters starting with 'A' ('*' will be used after 'Z').
+If multiple variations start with the same move, a '>' is appended.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Icon Size</guimenuitem></term>
+<listitem>
+<para>
+Set the size of the GoGui icons in the user's preferences. The application
+should be closed to apply the modifications.
 </para>
 </listitem>
 </varlistentry>

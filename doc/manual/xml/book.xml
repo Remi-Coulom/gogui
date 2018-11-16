@@ -29,6 +29,7 @@
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
 <!ENTITY setup SYSTEM "setup.xml">
 <!ENTITY tools SYSTEM "tools.xml">
+<!ENTITY rules SYSTEM "rules.xml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY xmlformat SYSTEM "xmlformat.xml">
 ]>
@@ -61,6 +62,7 @@ GoGui is a graphical interface to programs that play the game of Go.
 &setup;
 &interrupt;
 &tools;
+&rules;
 <appendix id="appendix-reference">
 <title>Reference</title>
 &reference-gogui;
