@@ -4994,6 +4994,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 && m_gtp.isSupported("gogui-rules_game_id")
                 && m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
                 return true;
+            if (isRulerAttached() && !m_gtp.isSupported("gogui-rules_legal_moves"))
+            {
+                return true;
+            }
         } catch (NumberFormatException e) {
         } catch (GtpError e) {
         }
