@@ -4,6 +4,41 @@
 <revhistory>
 
 <revision>
+<revnumber>1.5.0</revnumber>
+<date>2018-11-16</date>
+<authorinitials>Sazuna</authorinitials>
+<revdescription>
+<itemizedlist>
+
+<listitem>
+<simpara>
+GTP protocol extension to support alternative game rules.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Wait a little for program output before displaying popup.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Edit commands in Tree contextual menu.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+New menu item <guisubmenu>View</guisubmenu> / <guisubmenu>Icon Size</guisubmenu>
+</simpara>
+</listitem>
+
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.4.UNKNOWN</revnumber>
 <date></date>
 <authorinitials>enz</authorinitials>
