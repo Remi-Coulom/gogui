@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://web.resource.org/cc/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="svg2" viewBox="0 0 388.94 390.87" version="1.0">
+  <defs id="defs4">
+    <linearGradient id="linearGradient7337" y2="552.1" gradientUnits="userSpaceOnUse" x2="368.21" gradientTransform="matrix(1.102 0 0 1.102 -39.833 -25.291)" y1="476.65" x1="368.21">
+      <stop id="stop3420" stop-color="#fff" stop-opacity=".39216" offset="0"/>
+      <stop id="stop3422" stop-color="#fff" stop-opacity="0" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient7340" y2="465.47" gradientUnits="userSpaceOnUse" x2="366.43" gradientTransform="matrix(1.102 0 0 1.102 -39.833 -25.291)" y1="638.79" x1="366.43">
+      <stop id="stop3371" stop-color="#6a8fc6" offset="0"/>
+      <stop id="stop3373" stop-color="#97b9ec" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient7347" y2="327.84" gradientUnits="userSpaceOnUse" x2="366.69" gradientTransform="matrix(1.102 0 0 1.102 -39.833 -25.291)" y1="640.22" x1="366.69">
+      <stop id="stop7470" stop-color="#c9c9c9" offset="0"/>
+      <stop id="stop7472" stop-color="#fff" offset="1"/>
+    </linearGradient>
+  </defs>
+  <g id="layer2" transform="translate(-174.44 -290.74)">
+    <g id="g8429">
+      <path id="path4555" d="m520.46 487.66l-151.55-151.66-151.54 151.66v179.82c0 1.75 0.36 3.41 1 4.92s1.54 2.88 2.69 4.02c1.14 1.15 2.51 2.04 4.02 2.68s3.17 1.01 4.92 1.01h277.83c1.75 0 3.41-0.37 4.92-1.01s2.88-1.53 4.02-2.68c1.15-1.14 2.04-2.51 2.68-4.02s1.01-3.17 1.01-4.92v-179.82z" style="color:#000000" fill="url(#linearGradient7347)"/>
+      <path id="path4498" d="m527.61 441.84l-145.4-145.62c-1.79-1.79-3.96-3.21-6.26-4.14s-4.73-1.38-7.26-1.34c-2.43 0.03-4.84 0.52-7.04 1.45s-4.2 2.3-5.92 4.03l-145.51 145.62v52.97l158.69-158.81 158.7 158.81v-52.97z" style="color:#000000" fill="#f2f2f2"/>
+      <path id="path4553" d="m520.46 434.69l-138.25-138.47c-1.79-1.79-3.96-3.21-6.26-4.14s-4.73-1.38-7.26-1.34c-2.43 0.03-4.84 0.52-7.04 1.45s-4.2 2.3-5.92 4.03l-138.36 138.47v52.97l151.54-151.66 151.55 151.66v-52.97z" style="color:#000000" fill="#b3b3b3"/>
+      <path id="path4559" d="m229.98 315.98c-1.74 0-3.37 0.4-4.89 1.04-1.51 0.64-2.88 1.5-4.02 2.65-1.15 1.14-2.05 2.52-2.69 4.03s-1 3.18-1 4.92v159.04l67.05-67.12v-91.92c0-1.74-0.36-3.41-1-4.92s-1.54-2.89-2.68-4.03c-1.15-1.15-2.52-2.01-4.03-2.65-1.52-0.64-3.18-1.04-4.93-1.04h-41.81z" style="color:#000000" fill="#a00"/>
+      <path id="rect3345" d="m368.69 290.74c-4.87 0.07-9.52 2.03-12.96 5.48l-175.8 175.91c-7.32 7.31-7.32 19.17 0 26.48 7.31 7.32 19.17 7.32 26.49 0l162.49-162.61 162.5 162.61c7.32 7.32 19.18 7.32 26.49 0 7.31-7.31 7.31-19.17 0-26.48l-175.69-175.91c-3.58-3.58-8.46-5.56-13.52-5.48z" style="color:#000000" fill="#4c4c4c"/>
+      <path id="path4557" d="m441.78 680.11h-145.73v-179.82c0-1.75 0.36-3.41 1-4.92s1.54-2.88 2.68-4.02c1.15-1.15 2.52-2.04 4.03-2.68s3.17-1.01 4.92-1.01h120.47c1.75 0 3.41 0.37 4.92 1.01s2.88 1.53 4.02 2.68c1.15 1.14 2.05 2.51 2.69 4.02s1 3.17 1 4.92v179.82z" style="color:#000000" stroke-opacity="0" fill="url(#linearGradient7340)"/>
+      <path id="path3377" d="m319.69 498.68c-1.74 0-3.41 0.35-4.92 0.99s-2.89 1.55-4.03 2.69-2.01 2.52-2.65 4.03-1.03 3.18-1.03 4.92v69.64h0.31c2.9 11 29.33-24.45 61.54-24.45 32.2 0 58.67 35.45 61.57 24.45h0.28v-69.64c0-1.74-0.36-3.41-1-4.92s-1.55-2.89-2.69-4.03-2.52-2.05-4.03-2.69-3.18-0.99-4.92-0.99h-98.43z" style="color:#000000" fill="url(#linearGradient7337)"/>
+      <path id="path3431" d="m417.86 568.08a14.286 14.286 0 1 1 -28.57 0 14.286 14.286 0 1 1 28.57 0z" style="color:#000000" fill="#4c4c4c" transform="matrix(1.102 0 0 1.102 -29.723 -42.136)"/>
+      <path id="path3434" opacity=".5" d="m415.02 572.47c-6.3 0-11.44 5.1-11.44 11.4 0 4.29 2.5 7.9 6 9.85-0.2-0.35-0.53-0.62-0.69-1-0.58-1.36-0.9-2.86-0.9-4.44 0-1.57 0.32-3.08 0.9-4.44 0.58-1.37 1.44-2.58 2.48-3.62 1.03-1.03 2.25-1.86 3.61-2.44 1.37-0.58 2.87-0.9 4.45-0.9 1.57 0 3.07 0.32 4.44 0.9 0.37 0.16 0.64 0.46 1 0.65-1.95-3.51-5.56-5.96-9.85-5.96z" style="color:#000000" fill="#e6e6e6"/>
+    </g>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>House</dc:title>
+        <dc:date>2007-02-25T19:30:21</dc:date>
+        <dc:description>A house icon.</dc:description>
+        <dc:source>http://openclipart.org/detail/3318/house-by-barretr</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>barretr</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>house</rdf:li>
+            <rdf:li>icon</rdf:li>
+            <rdf:li>image</rdf:li>
+            <rdf:li>media</rdf:li>
+            <rdf:li>png</rdf:li>
+            <rdf:li>public domain</rdf:li>
+            <rdf:li>svg</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
