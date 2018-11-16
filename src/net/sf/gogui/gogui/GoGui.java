@@ -2219,7 +2219,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     boolean isLegalMove = GenericBoard.isLegalMove(m_gameRuler, Move.get(getToMove(), p));
                     if (!isLegalMove)
                     {
-                        String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
+                        String disableKey = "net.sf.gogui.gogui.GoGui.illegal-move";
                         m_messageDialogs.showInfo(disableKey, this,
                                 i18n("MSG_ILLEGAL_MOVE"),
                                 "", false);
@@ -2919,6 +2919,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_version = m_gtp.queryVersion();
                     m_shell.setProgramVersion(m_version);
                     m_gtp.querySupportedCommands();
+                    m_gtp.queryInterruptSupport();
                     if (! isGtpCompatibleWithGame())
                     {
                         if (isGtpRuler())
@@ -2930,11 +2931,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                             actionDetachRuler(false);
                         }
                     }
-                    m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback,
-                            m_messageDialogs);
                     m_gtp.queryName();
                     m_gtp.queryProtocolVersion();
-                    m_gtp.queryInterruptSupport();
                     if (m_program == null)
                     {
                         m_program =
@@ -3586,6 +3584,20 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (getClock().isInitialized()
                 && NodeUtil.isTimeLeftKnown(getCurrentNode(), toMove))
             GtpUtil.sendTimeLeft(m_gtp, getClock(), toMove);
+        if (m_gameRuler != null)
+        {
+            try {
+                boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
+                if (isEndGame && computerToMove())
+                {
+                    m_game.haltClock();
+                    showGameFinished();
+                    return;
+                }
+            } catch (GtpError e) {
+                showError(e);
+            }
+        }
         m_game.startClock();
         runLengthyCommand(command, callback);
     }
@@ -3738,27 +3750,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private void initGame(int size)
     {
         int oldSize = getBoardSize();
-
-        if (m_gameRuler != null)
-        {
-            int rulerSize = 0;
-
-            try
-            {
-                rulerSize = GenericBoard.getBoardSize(m_gameRuler);
-            }
-            catch (GtpError e)
-            {
-            }
-
-            if (rulerSize != size)
-            {
-                m_gameRuler = null;
-                ((Board)getBoard()).detachGameRuler();
-                ((Board)getBoard()).clear();
-            }
-        }
-
         if (size != oldSize)
         {
             // Clear analyze command when board size changes, because eplist

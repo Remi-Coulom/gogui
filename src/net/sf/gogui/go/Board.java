@@ -199,11 +199,6 @@ implements ConstBoard
         @return The color to move. */
     public GoColor getToMove()
     {
-        if (isGameRulerAttached())
-            try {
-                return GenericBoard.getSideToMove(m_gameRuler, getLastMove());
-            } catch (GtpError e) {
-            }
         return m_toMove;
     }
 

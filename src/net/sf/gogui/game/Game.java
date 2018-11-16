@@ -129,10 +129,6 @@ public class Game
         assert NodeUtil.getRoot(node) == getRoot();
         m_current = (Node)node;
         updateBoard();
-        if (gameRuler != null)
-        {
-            GenericBoard.copyBoardState(gameRuler, node, m_board);
-        }
     }
 
     public void haltClock()
@@ -429,6 +425,7 @@ public class Game
         m_boardUpdater.update(m_tree, m_current, m_board);
         if (m_board.isGameRulerAttached())
             GenericBoard.copyBoardState(m_board.getGameRuler(), m_current, m_board);
+        m_board.setToMove(getToMove());
     }
 
     private void updateClock()
