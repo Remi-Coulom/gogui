@@ -489,11 +489,9 @@ implements ConstBoard
         private void executeGameRules(Board board) throws GtpError
         {
             GoPoint p = m_move.getPoint();
-            GoColor c = m_move.getColor();
             if(p != null)
             {
                 m_oldColor = board.getColor(p);
-                board.setColor(p, c);
             }
             m_oldToMove = board.m_toMove;
         }
