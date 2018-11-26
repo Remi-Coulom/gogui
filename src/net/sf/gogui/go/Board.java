@@ -80,14 +80,6 @@ implements ConstBoard
     {
         return m_captured.get(c);
     }
-    
-    /** Get the initial position if a game ruler is attached.
-     * @return "" if the initial position is empty or no game ruler is attached.
-     */
-    public String getInitialPosition()
-    {
-        return m_initialPosition;
-    }
 
     /** Get state of a point on the board.
         @return BLACK, WHITE or EMPTY */
@@ -218,22 +210,12 @@ implements ConstBoard
     public void attachGameRuler(GtpClientBase gameRuler)
     {
         m_gameRuler = gameRuler;
-        m_initialPosition = "";
-        if (m_gameRuler.isSupported("gogui-rules_board"))
-            try {
-                String initialPosition = m_gameRuler.send("gogui-rules_board");
-                if (initialPosition.contains("O") ||
-                        initialPosition.contains("X")){
-                    m_initialPosition = initialPosition;
-                }
-            } catch (GtpError e) {
-            }
+        GenericBoard.setInitialBoardState(m_gameRuler, this);
     }
     
     public void detachGameRuler()
     {
         m_gameRuler = null;
-        m_initialPosition = "";
     }
 
     public boolean isGameRulerAttached() {
@@ -511,7 +493,6 @@ implements ConstBoard
                 board.setColor(p, c);
             }
             m_oldToMove = board.m_toMove;
-            board.setToMove(GenericBoard.getSideToMove(board.m_gameRuler, m_move));
         }
 
         private void executeGo(Board board)
@@ -605,8 +586,6 @@ implements ConstBoard
         = new BlackWhiteSet<PointList>(new PointList(), new PointList());
 
     private boolean m_isSetupHandicap;
-    
-    private String m_initialPosition = "";
 
     private boolean isSingleStoneSingleLib(GoPoint point, GoColor color)
     {
