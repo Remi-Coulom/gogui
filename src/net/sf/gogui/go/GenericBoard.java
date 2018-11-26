@@ -189,7 +189,7 @@ public final class GenericBoard {
     }
 
     /**
-     * Clears the ruler board and plays moves from the begining.
+     * Clears the ruler board and plays moves from the beginning.
      * Then copy the ruler board changes to the board.
      */
     public static void copyBoardState(GtpClientBase gameRuler, ConstNode node, Board board)
