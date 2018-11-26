@@ -4945,7 +4945,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     info.setHandicap(0);
                     newGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
-                    GenericBoard.playFromBeginning(m_gameRuler, new ArrayList<>(), (Board)getBoard());
                     if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") || m_gameRuler.isSupported("gogui-rules_game_id") &&
                         !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
                         actionDetachProgram();
