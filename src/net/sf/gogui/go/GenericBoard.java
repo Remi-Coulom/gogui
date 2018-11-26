@@ -134,17 +134,6 @@ public final class GenericBoard {
         }
         GenericBoard.setup(rulerBoardState, board, size);
     }
-    
-    /**
-     * Clears the game ruler and set the initial position of the game ruler on the board
-     */
-    public static void setInitialBoardState(GtpClientBase gameRuler, Board board)
-    {
-        try {
-            GenericBoard.setup(gameRuler.send("gogui-rules_board"), board, board.getSize());
-        } catch (GtpError e) {
-        }
-    }
 
     private static void setup(String position, Board board, int size)
     {
@@ -217,7 +206,7 @@ public final class GenericBoard {
         }
     }
 
-    private static void playFromBeginning(GtpClientBase gameRuler, ArrayList<Move> moves, Board board) throws GtpError {
+    public static void playFromBeginning(GtpClientBase gameRuler, ArrayList<Move> moves, Board board) throws GtpError {
         gameRuler.sendClearBoard(board.getSize());
         for (int i = moves.size() - 1; i >= 0; i--)
         {

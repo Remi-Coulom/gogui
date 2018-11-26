@@ -210,7 +210,10 @@ implements ConstBoard
     public void attachGameRuler(GtpClientBase gameRuler)
     {
         m_gameRuler = gameRuler;
-        GenericBoard.setInitialBoardState(m_gameRuler, this);
+        try {
+            GenericBoard.playFromBeginning(m_gameRuler, new ArrayList<>(), this);
+        } catch (GtpError e) {
+        }
     }
     
     public void detachGameRuler()
@@ -308,7 +311,7 @@ implements ConstBoard
         }
         if (isGameRulerAttached())
             try {
-                GenericBoard.setInitialBoardState(m_gameRuler, this);
+                GenericBoard.playFromBeginning(m_gameRuler, new ArrayList<>(),this);
                 m_toMove = GenericBoard.getSideToMove(m_gameRuler, Move.get(BLACK, null));
             } catch (GtpError e) {
             }
