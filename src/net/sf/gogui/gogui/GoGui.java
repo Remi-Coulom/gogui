@@ -2213,6 +2213,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
                     if (isEndGame)
                     {
+                        m_game.haltClock();
                         showGameFinished();
                         return;
                     }
@@ -2240,21 +2241,6 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 return;
             Move move = Move.get(getToMove(), p);
             humanMoved(move);
-            if (m_gameRuler != null)
-            {
-                try {
-                    boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
-                    if (isEndGame && computerToMove())
-                    {
-                        m_game.haltClock();
-                        showGameFinished();
-                        return;
-                    }
-                } catch (GtpError e) {
-                    showError(e);
-                }
-            }
-            
         }
     }
 
@@ -3090,16 +3076,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         else
         {
-            if (gameFinished)
+            if (gameFinished())
             {
-                m_game.haltClock();
-                if (rulerAttached)
-                    showGameFinished();
-                else
-                    showGoFinished();
                 return;
             }
-            else if (computerToMove())
+            if (! gameFinished && computerToMove())
                 generateMove(false);
         }
     }
@@ -3527,19 +3508,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         if (! synchronizeProgram())
             return;
-        if (m_gameRuler != null)
-        {
-            try {
-                boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
-                if (isEndGame)
-                {
-                    showGameFinished();
-                    return;
-                }
-            } catch (GtpError e) {
-                showError(e);
-            }
-        }
+        if (gameFinished())
+            return;
         GoColor toMove = getToMove();
         ConstNode node = getCurrentNode();
         ConstNode father = node.getFatherConst();
@@ -3584,20 +3554,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (getClock().isInitialized()
                 && NodeUtil.isTimeLeftKnown(getCurrentNode(), toMove))
             GtpUtil.sendTimeLeft(m_gtp, getClock(), toMove);
-        if (m_gameRuler != null)
-        {
-            try {
-                boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
-                if (isEndGame && computerToMove())
-                {
-                    m_game.haltClock();
-                    showGameFinished();
-                    return;
-                }
-            } catch (GtpError e) {
-                showError(e);
-            }
-        }
+        if (gameFinished())
+            return;
         m_game.startClock();
         runLengthyCommand(command, callback);
     }
@@ -4999,6 +4957,23 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             }
         } catch (NumberFormatException e) {
         } catch (GtpError e) {
+        }
+        return false;
+    }
+
+    private boolean gameFinished() {
+        if (! isRulerAttached())
+            return false;
+        try {
+            boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
+            if (isEndGame)
+            {
+                m_game.haltClock();
+                showGameFinished();
+                return true;
+            }
+        } catch (GtpError e) {
+            showError(e);
         }
         return false;
     }
