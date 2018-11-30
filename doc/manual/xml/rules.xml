@@ -88,7 +88,7 @@ by the GTP program. It must begin with an uppurcase letter and then contain
 only lowercase characters.
 Example :<programlisting>
 gogui-rules_game_id
-    = Othello
+= Othello
 </programlisting>
 </simpara>
 </listitem>
@@ -104,15 +104,15 @@ Other characters are ignored.
 This command will be used to display the board in GoGui.
 Example :<programlisting>
 gogui-rules_board
-    = . . . . . . . . .
-      . . X . O . X . .
-      . X . . . . . . .
-      . . O . . . . O .
-      . . . . . . . O .
-      . O . X . . O X .
-      . . O X . . . X .
-      . X O . . X O X .
-      . . . . . O . . .
+= . . . . . . . . .
+  . . X . O . X . .
+  . X . . . . . . .
+  . . O . . . . O .
+  . . . . . . . O .
+  . O . X . . O X .
+  . . O X . . . X .
+  . X O . . X O X .
+  . . . . . O . . .
 </programlisting>
 </simpara>
 </listitem>
@@ -127,7 +127,7 @@ the board size of the game. The board in GoGui will always be non-resizable
 when a ruler program is attached.
 Example :<programlisting>
 gogui-rules_board_size
-    = 15
+= 15
 </programlisting>
 </simpara>
 </listitem>
@@ -149,10 +149,10 @@ to pass.
 If no move is possible, the game ends.
 Example :<programlisting>
 gogui-rules_legal_moves
-    = A1 A2 A3 A5 A6 A7 A9 B1 B2 B4 B5 B6
-      B8 C1 C2 C6 C7 C8 D2 D4 D5 D7 D8 E1
-      E2 E4 E6 E7 F6 F8 F9 G2 G3 G5 G6 G7
-      G8 H1 H5 H6 H9 J1 J3 J4 J5 J7 J8 pass
+= A1 A2 A3 A5 A6 A7 A9 B1 B2 B4 B5 B6
+  B8 C1 C2 C6 C7 C8 D2 D4 D5 D7 D8 E1
+  E2 E4 E6 E7 F6 F8 F9 G2 G3 G5 G6 G7
+  G8 H1 H5 H6 H9 J1 J3 J4 J5 J7 J8 pass
 </programlisting>
 </simpara>
 </listitem>
@@ -167,7 +167,7 @@ The command must return a string beginning with <userinput>'b'</userinput>,
 </userinput>.
 Example :<programlisting>
 gogui-rules_side_to_move
-    = white
+= white
 </programlisting>
 </simpara>
 </listitem>
@@ -177,14 +177,14 @@ gogui-rules_side_to_move
 <term><command>gogui-rules_final_result</command></term>
 <listitem>
 <simpara>
-The result of this command is a string that will be shown in a dialog box once
-the game finishes. This is the only way to notice about the game result when a
+The result of this command is a string that will be shown in a dialog box when
+the game is over. This is the only way to notice about the game result when a
 ruler program is attached since the <guimenuitem>Score</guimenuitem> menu is
 disabled.
 Example :<programlisting>
 gogui-rules_final_result
-    = White wins by 4 points. Final score
-      is B 30 and W 34.
+= White wins by 4 points. Final score
+  is B 30 and W 34.
 </programlisting>
 </simpara>
 </listitem>

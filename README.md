@@ -1,5 +1,5 @@
-Crazy GoGui
-===========
+GoGui
+=====
 
 GoGui is a graphical interface to programs that play the game of Go.
 
