@@ -240,7 +240,7 @@ public class TwoGtp
 
                     public void receivedStdErr(String s)
                     {
-                        appendDebugToCommentBuffer(BLACK, s);
+                        appendDebugToCommentBuffer(isAlternated() ? WHITE : BLACK , s);
                     }
 
                     public void sentCommand(String s) { }
@@ -253,7 +253,7 @@ public class TwoGtp
 
                     public void receivedStdErr(String s)
                     {
-                        appendDebugToCommentBuffer(WHITE, s);
+                        appendDebugToCommentBuffer(isAlternated() ?  BLACK : WHITE, s);
                     }
 
                     public void sentCommand(String s) { }
