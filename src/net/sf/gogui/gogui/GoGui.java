@@ -2986,6 +2986,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             clearStatus();
         }
+        if (isRulerAttached() && isGtpCompatibleWithGame())
+            gotoNode(getCurrentNode());
         currentNodeChanged();
         return true;
     }
@@ -4946,15 +4948,12 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 m_gtp.send("gogui-rules_game_id").equals("Go"))
             
                 return true;
-            if (m_gtp.isSupported("gogui-rules_boardsize")
-                && Integer.parseInt(m_gtp.send("gogui-rules_boardsize")) == getBoardSize()
+            if (isRulerAttached()
+                && m_gtp.isSupported("gogui-rules_board_size")
+                && Integer.parseInt(m_gtp.send("gogui-rules_board_size")) == getBoardSize()
                 && m_gtp.isSupported("gogui-rules_game_id")
                 && m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
                 return true;
-            if (isRulerAttached() && !m_gtp.isSupported("gogui-rules_legal_moves"))
-            {
-                return true;
-            }
         } catch (NumberFormatException e) {
         } catch (GtpError e) {
         }
