@@ -121,7 +121,7 @@ public final class GenericBoard {
             return;
         String rulerBoardState = "";
         try {
-            rulerBoardState = gameRuler.send("gogui-rules_board");;
+            rulerBoardState = gameRuler.send("gogui-rules_board");
         } catch (GtpError e) {
             return;
         }

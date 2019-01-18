@@ -662,7 +662,7 @@ public class TwoGtp
     private void handicap(GtpCommand cmd) throws GtpError
     {
         String arg = cmd.getArg();
-	int handicap = cmd.getIntArg(0);
+        int handicap = cmd.getIntArg(0);
         if (handicap != m_handicap)
             throw new GtpError("handicap is fixed at " + m_handicap);
     }
