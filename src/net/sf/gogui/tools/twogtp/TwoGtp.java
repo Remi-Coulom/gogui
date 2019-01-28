@@ -495,14 +495,6 @@ public class TwoGtp
         double cpuTimeWhite = m_white.getAndClearCpuTime();
         double realTimeBlack = m_realTime.get(BLACK);
         double realTimeWhite = m_realTime.get(WHITE);
-        if (isAlternated())
-        {
-            resultBlack = inverseResult(resultBlack);
-            resultWhite = inverseResult(resultWhite);
-            resultReferee = inverseResult(resultReferee);
-            realTimeBlack = m_realTime.get(WHITE);
-            realTimeWhite = m_realTime.get(BLACK);
-        }
         // If a program is dead we wait for a few seconds, because it
         // could be because the TwoGtp process was killed and we don't
         // want to write a result in this case.
@@ -524,15 +516,6 @@ public class TwoGtp
         String whiteCommand = m_white.getProgramCommand();
         String blackVersion = m_black.getVersion();
         String whiteVersion = m_white.getVersion();
-        if (isAlternated())
-        {
-            nameBlack = m_white.getLabel();
-            nameWhite = m_black.getLabel();
-            blackCommand = m_white.getProgramCommand();
-            whiteCommand = m_black.getProgramCommand();
-            blackVersion = m_white.getVersion();
-            whiteVersion = m_black.getVersion();
-        }
         m_game.setPlayer(BLACK, nameBlack);
         m_game.setPlayer(WHITE, nameWhite);
         if (m_referee != null)
@@ -570,6 +553,14 @@ public class TwoGtp
         comment.append("\nDate: ");
         comment.append(StringUtil.getDate());
         m_game.setComment(comment.toString(), getTree().getRootConst());
+        if (isAlternated())
+        {
+            resultBlack = inverseResult(resultBlack);
+            resultWhite = inverseResult(resultWhite);
+            resultReferee = inverseResult(resultReferee);
+            realTimeBlack = m_realTime.get(WHITE);
+            realTimeWhite = m_realTime.get(BLACK);
+        }
         int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
         if (m_resultFile != null)
             m_resultFile.addResult(m_gameIndex, m_game, resultBlack,
