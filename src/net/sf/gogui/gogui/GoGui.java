@@ -2217,14 +2217,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 return;
             if (! checkCommandInProgress())
                 return;
-            if (m_gameRuler != null)
+            if (isRulerAttached())
             {
                 try {
                     boolean isEndGame = GenericBoard.isGameOver(m_gameRuler);
                     if (isEndGame)
                     {
                         m_game.haltClock();
-                        showGameFinished();
                         return;
                     }
                     boolean isLegalMove = GenericBoard.isLegalMove(m_gameRuler, Move.get(getToMove(), p));
@@ -3676,6 +3675,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             {
                 GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
                 m_game.setToMove(getToMove());
+                if (gameFinished())
+                    return;
             }
         }
         else
