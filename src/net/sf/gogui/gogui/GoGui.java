@@ -2020,6 +2020,16 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         return name;
     }
 
+    public String getRulerName()
+    {
+        String name = null;
+        if (m_gameRuler != null)
+            name = m_gameRuler.getName();
+        if (name == null)
+            name = i18n("MSG_UNKNOWN_PROGRAM_NAME");
+        return name;
+    }
+
     public int getNumberPrograms()
     {
         return m_programs.size();
@@ -2716,7 +2726,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     
     private boolean attachNewRuler(String command, Program program)
     {
-        if (m_gameRuler != null)
+        if (m_gtp != null)
         {
             saveSession();
         }
@@ -2888,7 +2898,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 {
                 }
                 if (m_ruler != null
-                        && m_ruler.updateInfo(getProgramName(), program.m_version))
+                        && m_ruler.updateInfo(getRulerName(), program.m_version))
                 {
                     Program.save(m_rulers, true);
                     m_menuBar.setPrograms(m_rulers, true);
@@ -3431,7 +3441,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         if (m_analyzeDialog != null)
         {
-            m_analyzeDialog.saveRecent();
+            // m_analyzeDialog.saveRecent(); //already called in dispose()
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
@@ -3454,6 +3464,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     m_gameRuler.send("quit");
                 if (isProgramAttached() && (! m_gtp.isSupported("gogui-rules_game_id")
                     || ! m_gtp.send("gogui-rules_game_id").equals("Go"))) {
+                    saveSession();
                     detachProgram();
                 }
             }
@@ -3715,7 +3726,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             // Clear analyze command when board size changes, because eplist
             // could contain points out of board)
             clearAnalyzeCommand();
-            saveSession();
+            //saveSession();
             m_guiBoard.initSize(size);
             restoreMainWindow(size);
             JLayeredPane layeredPane = getLayeredPane();
