@@ -4,6 +4,35 @@
 <revhistory>
 
 <revision>
+<revnumber>1.5.1</revnumber>
+<date>2019-04-12</date>
+<authorinitials>Sazuna</authorinitials>
+<revdescription>
+<itemizedlist>
+
+<listitem>
+<simpara>
+Correct sgf result written by gogui-twogtp.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Display other games' results.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Keep gtp shell and analyze dialog opened after changing program.
+</simpara>
+</listitem>
+
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.5.0</revnumber>
 <date>2018-11-16</date>
 <authorinitials>Sazuna</authorinitials>
