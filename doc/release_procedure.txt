@@ -1,16 +1,23 @@
+@AUTHOR Sazuna
+@LAST_UPDATE 2019.04.24
+
 =============================================================================
 Documentation
 =============================================================================
-set version number...
-release notes...
+set version number in /build.xml file.
+write release notes in doc/manual/xml/news.xml.
+if a new important feature is added, add it in doc/manual/xml.
 
 =============================================================================
 Prepare Windows installer
 =============================================================================
+first compile gogui with the ant command.
+for each jar file generated in /lib, create an executable using launch4j (version 2, do not use v3 or higher) and put it in the /windows/l4j folder.
+use NSIS to create gogui-VERSION-install.exe, passing /windows/nsis/install.nsis.in as the generating file.
 
 =============================================================================
 Tag release with git
 =============================================================================
-git tag v1.5.0
+git tag <version>
 git push github
 git push
