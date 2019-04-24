@@ -12,12 +12,12 @@ if a new important feature is added, add it in doc/manual/xml.
 Prepare Windows installer
 =============================================================================
 first compile gogui with the ant command.
-for each jar file generated in /lib, create an executable using launch4j (version 2, do not use v3 or higher) and put it in the /windows/l4j folder.
-use NSIS to create gogui-VERSION-install.exe, passing /windows/nsis/install.nsis.in as the generating file.
+for each jar file generated in /lib, create an executable using launch4j and put it in the /windows/l4j folder.
+use NSIS (version 2, do not use v3 or higher) to create gogui-VERSION-install.exe, passing /windows/nsis/install.nsis.in as the generating file.
 
 =============================================================================
-Tag release with git
+Tag release with git and publish in github
 =============================================================================
 git tag <version>
-git push github
-git push
+git push github <version>
++ "draft a new release" on github (add .exe produced by NSIS)
