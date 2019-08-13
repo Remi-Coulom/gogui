@@ -316,6 +316,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_toolBar = new GoGuiToolBar(this);
         if (m_programCommand != null && m_programCommand.trim().equals(""))
             m_programCommand = null;
+        if (m_programCommand != null)
+            m_program = new Program(program, program, "", m_programCommand, "");
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
         protectGui(); // Show wait cursor
