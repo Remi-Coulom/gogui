@@ -3079,20 +3079,13 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     return;
                 }
                 m_game.haltClock();
-                if (rulerAttached)
-                    showGameFinished();
-                else
-                    showGoFinished();
-                return;
             }
             generateMove(false);
         }
         else
         {
             if (gameFinished())
-            {
                 return;
-            }
             if (! gameFinished && computerToMove())
                 generateMove(false);
         }
@@ -3317,6 +3310,22 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 if (m_gameRuler != null) {
                     GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
                     m_game.setToMove(getToMove());
+                }
+                int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
+                boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
+                boolean gameFinished = false;
+                boolean rulerAttached = isRulerAttached();
+                try {
+                    gameFinished = (bothPassed || m_resigned
+                                    || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
+                } catch (GtpError e) {
+                }
+                if (gameFinished)
+                {
+                    if (rulerAttached)
+                        showGameFinished();
+                    else
+                        showGoFinished();
                 }
             }
             boolean doCheckComputerMove
@@ -3672,7 +3681,10 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         {
             newNodeCreated = true;
             m_game.play(move);
-            
+            int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
+            boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
+            if (bothPassed && !isRulerAttached())
+                showGoFinished();
             if (m_gameRuler != null)
             {
                 GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
