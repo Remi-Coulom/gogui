@@ -45,6 +45,8 @@ public class Analyze
 
         public Statistics m_win = new Statistics();
 
+        public Statistics m_draw = new Statistics();
+
         public Histogram m_histo = new Histogram(-1000, 1000, 10);
     }
 
@@ -113,6 +115,7 @@ public class Analyze
         boolean hasResult = false;
         boolean hasScore = false;
         boolean win = false;
+        boolean draw = false;
         double score = 0f;
         String s = result.trim();
         try
@@ -141,6 +144,13 @@ public class Analyze
                         hasScore = true;
                     }
                 }
+                else if (s.startsWith("0"))
+                {
+                    hasResult = true;
+                    draw = true;
+                    score = 0;
+                    hasScore = true;
+                }
                 else if (! s.equals(""))
                     System.err.println("Ignored invalid result: " + result);
             }
@@ -157,8 +167,18 @@ public class Analyze
             hasScore = false;
         }
         statistics.m_unknownResult.add(hasResult ? 0 : 1);
-        if (hasResult)
-            statistics.m_win.add(win ? 1 : 0);
+        if (hasResult) {
+            if (win) {
+                statistics.m_win.add(1);
+                statistics.m_draw.add(0);
+            } else if (draw) {
+                statistics.m_win.add(0.5);
+                statistics.m_draw.add(1);
+            } else {
+                statistics.m_win.add(0);
+                statistics.m_draw.add(0);
+            }
+        }
         statistics.m_unknownScore.add(hasScore ? 0 : 1);
         if (hasScore)
             statistics.m_histo.add(score);
@@ -361,6 +381,9 @@ public class Analyze
         if (statistics.m_win.getCount() > 0)
             writeHtmlRowPercentData(out, "Black wins", statistics.m_win,
                                     format);
+        if (statistics.m_draw.getCount() > 0)
+            writeHtmlRowPercentData(out, "Draws", statistics.m_draw,
+                                    format);
         out.print("<tr><th align=\"left\">Unknown result"
                   + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownResult.getMean() * 100)
@@ -439,28 +462,37 @@ public class Analyze
         Statistics winBlack = m_statisticsBlack.m_win;
         Statistics winWhite = m_statisticsWhite.m_win;
         Statistics winReferee = m_statisticsReferee.m_win;
+        Statistics drawBlack = m_statisticsBlack.m_draw;
+        Statistics drawWhite = m_statisticsWhite.m_draw;
+        Statistics drawReferee = m_statisticsReferee.m_draw;
         Statistics unknownBlack = m_statisticsBlack.m_unknownScore;
         Statistics unknownWhite = m_statisticsWhite.m_unknownScore;
         Statistics unknownReferee = m_statisticsReferee.m_unknownScore;
-        out.print("#GAMES\tERR\tDUP\tUSED\tRES_B\tERR_B\tWIN_B\tERRW_B\t"
-                  + "UNKN_B\tRES_W\tERR_W\tWIN_W\tERRW_W\tUNKN_W\t"
-                  + "RES_R\tERR_R\tWIN_R\tERRW_R\tUNKN_R\n" +
+        out.print("#GAMES\tERR\tDUP\tUSED\tRES_B\tERR_B\tWIN_B\tDRAW_B\tERRW_B\t"
+                  + "UNKN_B\tRES_W\tERR_W\tWIN_W\tDRAW_W\tERRW_W\tUNKN_W\t"
+                  + "RES_R\tERR_R\tWIN_R\tDRAW_R\tERRW_R\tUNKN_R\n" +
                   m_games + "\t" + m_errors + "\t" + m_duplicates + "\t"
                   + m_gamesUsed
                   + "\t" + format1.format(histoBlack.getMean())
                   + "\t" + format1.format(histoBlack.getError())
                   + "\t" + format2.format(winBlack.getMean())
                   + "\t" + format2.format(winBlack.getError())
+                  + "\t" + format2.format(drawBlack.getMean())
+                  + "\t" + format2.format(drawBlack.getError())
                   + "\t" + format2.format(unknownBlack.getMean())
                   + "\t" + format1.format(histoWhite.getMean())
                   + "\t" + format1.format(histoWhite.getError())
                   + "\t" + format2.format(winWhite.getMean())
                   + "\t" + format2.format(winWhite.getError())
+                  + "\t" + format2.format(drawWhite.getMean())
+                  + "\t" + format2.format(drawWhite.getError())
                   + "\t" + format2.format(unknownWhite.getMean())
                   + "\t" + format1.format(histoReferee.getMean())
                   + "\t" + format1.format(histoReferee.getError())
                   + "\t" + format2.format(winReferee.getMean())
                   + "\t" + format2.format(winReferee.getError())
+                  + "\t" + format2.format(drawReferee.getMean())
+                  + "\t" + format2.format(drawReferee.getError())
                   + "\t" + format2.format(unknownReferee.getMean())
                   + "\n");
         out.close();
