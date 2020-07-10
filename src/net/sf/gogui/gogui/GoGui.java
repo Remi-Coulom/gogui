@@ -140,9 +140,9 @@ import net.sf.gogui.version.Version;
 public class GoGui
 extends JFrame
 implements AnalyzeDialog.Listener, GuiBoard.Listener,
-            GameTreeViewer.Listener, GtpShell.Listener,
-            ScoreDialog.Listener, GoGuiMenuBar.Listener,
-            ContextMenu.Listener, LiveGfx.Listener
+GameTreeViewer.Listener, GtpShell.Listener,
+ScoreDialog.Listener, GoGuiMenuBar.Listener,
+ContextMenu.Listener, LiveGfx.Listener
 {
     public enum Orientation
     {
@@ -165,11 +165,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     }
 
     public GoGui(String program, File file, int move, String time,
-                 boolean verbose, boolean initComputerColor,
-                 boolean computerBlack, boolean computerWhite, boolean auto,
-                 boolean register, String gtpFile, String gtpCommand,
-                 File analyzeCommandsFile)
-        throws GtpError, ErrorMessage
+            boolean verbose, boolean initComputerColor,
+            boolean computerBlack, boolean computerWhite, boolean auto,
+            boolean register, String gtpFile, String gtpCommand,
+            File analyzeCommandsFile)
+                    throws GtpError, ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
@@ -378,7 +378,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_prefs.putInt("program", index);
         actionAttachProgram(m_programs.get(index));
     }
-    
+
     public void actionAttachRuler(int index)
     {
         Program ruler = m_rulers.get(index);
@@ -542,7 +542,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         };
         SwingUtilities.invokeLater(runnable);
     }
-    
+
     public void actionDetachRuler(boolean detachProgram)
     {
         if (m_gameRuler == null)
@@ -1258,7 +1258,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             } 
         });
     }
-    
+
     public void actionNewRuler()
     {
         m_newRuler = new Program("", "", "", "", "");
@@ -1950,7 +1950,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         if (! getCurrentNode().hasFather())
             return;
         if (showMessage)
-            {
+        {
             String disableKey = "net.sf.gogui.gogui.GoGui.truncate";
             if (! m_messageDialogs.showQuestion(disableKey, this,
                     i18n("MSG_TRUNCATE"),
@@ -2208,7 +2208,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 return;
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
             Komi komi = getGameInfo().getKomi();
-	    int handicap = getGameInfo().getHandicap();
+            int handicap = getGameInfo().getHandicap();
             m_scoreDialog.showScore(m_countScore, komi, handicap);
         }
         else if (modifiedSelect)
@@ -2347,7 +2347,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     {
         return (m_gtp != null);
     }
-    
+
     public boolean isRulerAttached()
     {
         return (m_gameRuler != null);
@@ -2463,7 +2463,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
-    
+
     /** State variable used between generateMove and computerMoved.
         Flag is set in actionInterrupt. */
     private boolean m_interruptComputerBoth;
@@ -2562,7 +2562,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private String m_lastAnalyzeCommand;
 
     private String m_programCommand;
-    
+
     private String m_rulerCommand;
 
     private String m_titleFromProgram;
@@ -2582,7 +2582,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         Can be null even if a program is attached, if only m_programName
         is known. */
     private Program m_program;
-    
+
     private Program m_ruler;
 
     /** Program currently being edited in actionNewProgram() */
@@ -2602,7 +2602,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
     private ArrayList<Bookmark> m_bookmarks;
 
     private ArrayList<Program> m_programs;
-    
+
     private ArrayList<Program> m_rulers;
 
     private ShowAnalyzeText m_showAnalyzeText;
@@ -2724,7 +2724,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         updateViews(false);
         return true;
     }
-    
+
     private boolean attachNewRuler(String command, Program program)
     {
         if (m_gtp != null)
@@ -2797,7 +2797,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             public void receivedInvalidResponse(String s)
             {
                 if (! ruler)
-                    {
+                {
                     if (m_shell == null)
                         return;
                     boolean invokeLater = true;
@@ -2897,6 +2897,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 }
                 catch (GtpError e)
                 {
+                    showError(e);
                 }
                 if (m_ruler != null
                         && m_ruler.updateInfo(getRulerName(), program.m_version))
@@ -2922,6 +2923,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                         if (isGtpRuler())
                             try {
                                 initGameRuler(program.m_command, program.m_workingDirectory, program.m_name);
+                                attachNewRuler(program.m_name, program);
+
                             } catch (ExecFailed e) {
                             }
                         else if (isRulerAttached()) {
@@ -2969,11 +2972,11 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 }
                 if (m_shell != null)
                 {
-                restoreSize(m_shell, "shell");
-                m_shell.setProgramName(getProgramLabel());
-                ArrayList<String> supportedCommands =
-                        (ruler ? m_gameRuler : m_gtp).getSupportedCommands();
-                m_shell.setInitialCompletions(supportedCommands);
+                    restoreSize(m_shell, "shell");
+                    m_shell.setProgramName(getProgramLabel());
+                    ArrayList<String> supportedCommands =
+                            (ruler ? m_gameRuler : m_gtp).getSupportedCommands();
+                    m_shell.setInitialCompletions(supportedCommands);
                 }
                 if (! m_gtp.isGenmoveSupported())
                 {
@@ -3064,7 +3067,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         boolean rulerAttached = isRulerAttached();
         try {
             gameFinished = (bothPassed || m_resigned
-                            || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
+                    || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
         } catch (GtpError e) {
         }
         if (isComputerBoth())
@@ -3317,7 +3320,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 boolean rulerAttached = isRulerAttached();
                 try {
                     gameFinished = (bothPassed || m_resigned
-                                    || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
+                            || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
                 } catch (GtpError e) {
                 }
                 if (gameFinished)
@@ -3473,7 +3476,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                 if (m_gameRuler.isSupported("quit"))
                     m_gameRuler.send("quit");
                 if (isProgramAttached() && (! m_gtp.isSupported("gogui-rules_game_id")
-                    || ! m_gtp.send("gogui-rules_game_id").equals("Go"))) {
+                        || ! m_gtp.send("gogui-rules_game_id").equals("Go"))) {
                     saveSession();
                     detachProgram();
                 }
@@ -3829,7 +3832,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         m_menuBar.setBookmarks(m_bookmarks);
         m_programs = Program.load(false);
         m_rulers = Program.load(true);
-      //  m_menuBar.setRulers(m_rulers);
+        //  m_menuBar.setRulers(m_rulers);
         m_menuBar.setPrograms(m_programs, false);
         //if (m_programCommand == null)
         //{
@@ -3891,7 +3894,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInfo().getKomi();
-	int handicap = getGameInfo().getHandicap();
+        int handicap = getGameInfo().getHandicap();
         m_scoreDialog.showScore(m_countScore, komi, handicap);
         m_scoreDialog.setVisible(true);
         showStatus(i18n("STAT_SCORE"));
@@ -4580,8 +4583,8 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
             m_messageDialogs.showInfo(disableKey, this,
                     i18n("MSG_GAME_FINISHED"),
-                   m_gameRuler.isSupported("gogui-rules_final_result") ?
-                   m_gameRuler.send("gogui-rules_final_result") : "", false);
+                    m_gameRuler.isSupported("gogui-rules_final_result") ?
+                            m_gameRuler.send("gogui-rules_final_result") : "", false);
         } catch (GtpError e) {
         }
     }
@@ -4884,7 +4887,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
         }
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
-    
+
     private void initGameRuler(String command, String directory, String name) throws ExecFailed
     {
         File f = new File(directory);
@@ -4932,7 +4935,7 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
                     newGame(newSize);
                     getBoard().attachGameRuler(m_gameRuler);
                     if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") || m_gameRuler.isSupported("gogui-rules_game_id") &&
-                        !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
+                            !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))
                         actionDetachProgram();
                     ((Board)getBoard()).setupHandicap(null);
                     ((Board)getBoard()).clear();
@@ -4971,14 +4974,14 @@ implements AnalyzeDialog.Listener, GuiBoard.Listener,
             return false;
         try {
             if (! isRulerAttached() && m_gtp.isSupported("gogui-rules_game_id") &&
-                m_gtp.send("gogui-rules_game_id").equals("Go"))
-            
+                    m_gtp.send("gogui-rules_game_id").toUpperCase().equals("GO"))
+
                 return true;
             if (isRulerAttached()
-                && m_gtp.isSupported("gogui-rules_board_size")
-                && Integer.parseInt(m_gtp.send("gogui-rules_board_size")) == getBoardSize()
-                && m_gtp.isSupported("gogui-rules_game_id")
-                && m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
+                    && m_gtp.isSupported("gogui-rules_board_size")
+                    && Integer.parseInt(m_gtp.send("gogui-rules_board_size")) == getBoardSize()
+                    && m_gtp.isSupported("gogui-rules_game_id")
+                    && m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
                 return true;
         } catch (NumberFormatException e) {
         } catch (GtpError e) {
