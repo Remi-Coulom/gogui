@@ -3692,8 +3692,6 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 GenericBoard.sendPlay(m_gameRuler, (Board)getBoard(), move);
                 m_game.setToMove(getToMove());
-                if (gameFinished())
-                    return;
             }
         }
         else
