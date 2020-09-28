@@ -137,50 +137,60 @@ public final class GenericBoard {
 
     private static void setup(String position, Board board, int size)
     {
-        int nbChar = 0;
-        PointList blacksSetup = new PointList();
-        PointList whitesSetup = new PointList();
-        PointList emptySetup = new PointList();
-        for (int i = 0; i < size; i++) {
-            int j = -1;
-            char c = ' ';
-            do {
+        try
+        {
+            int nbChar = 0;
+            PointList blacksSetup = new PointList();
+            PointList whitesSetup = new PointList();
+            PointList emptySetup = new PointList();
+            for (int i = 0; i < size; i++) {
+                int j = -1;
+                char c = ' ';
                 do {
-                    c = position.charAt(nbChar);
-                    nbChar++;
-                }while (c != 'X'&& c != 'O' && c != '.' && c != '\n');
-                if (c != '\n')
-                {
-                    j++;
-                }
-                if ( c == 'X')
-                {
-                    GoPoint black = GoPoint.get(j, size-i-1);
-                    if (board.getColor(black) != BLACK)
+                    do
                     {
-                        blacksSetup.add(black);
+                        c = position.charAt(nbChar);
+                        nbChar++;
                     }
-                }
-                else if (c == 'O')
-                {
-                    GoPoint white = GoPoint.get(j, size-i-1);
-                    if (board.getColor(white) != WHITE)
+                    while (c != 'X'&& c != 'O' && c != '.' && c != '\n');
+
+                    if (c != '\n')
                     {
-                        whitesSetup.add(white);
+                        j++;
                     }
-                }
-                else if (c == '.')
-                {
-                    GoPoint empty = GoPoint.get(j, size-i-1);
-                    if (board.getColor(empty) != EMPTY) {
-                        emptySetup.add(empty);
+
+                    if ( c == 'X')
+                    {
+                        GoPoint black = GoPoint.get(j, size-i-1);
+                        if (board.getColor(black) != BLACK)
+                        {
+                            blacksSetup.add(black);
+                        }
                     }
-                }
-            } while (j < size-1);
+                    else if (c == 'O')
+                    {
+                        GoPoint white = GoPoint.get(j, size-i-1);
+                        if (board.getColor(white) != WHITE)
+                        {
+                            whitesSetup.add(white);
+                        }
+                    }
+                    else if (c == '.')
+                    {
+                        GoPoint empty = GoPoint.get(j, size-i-1);
+                        if (board.getColor(empty) != EMPTY) {
+                            emptySetup.add(empty);
+                        }
+                    }
+                } while (j < size-1);
+            }
+            board.setPoints(blacksSetup, BLACK);
+            board.setPoints(whitesSetup, WHITE);
+            board.setPoints(emptySetup, EMPTY);
         }
-        board.setPoints(blacksSetup, BLACK);
-        board.setPoints(whitesSetup, WHITE);
-        board.setPoints(emptySetup, EMPTY);
+        catch (Exception e)
+        {
+        }
     }
 
     public static boolean isSetupPossible(GtpClientBase gameRuler)
