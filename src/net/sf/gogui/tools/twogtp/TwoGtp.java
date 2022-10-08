@@ -510,18 +510,31 @@ public class TwoGtp
             }
         }
 
+        if (m_referee != null)
+            m_game.setResult(resultReferee);
+        else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
+            m_game.setResult(resultBlack);
+        // If KataGo is playing, we'll trust the KataGo score.
+        else if (m_black.getLabel().toLowerCase().contains("katago"))
+            m_game.setResult(resultBlack);
+        else if (m_white.getLabel().toLowerCase().contains("katago"))
+            m_game.setResult(resultWhite);
         String nameBlack = m_black.getLabel();
         String nameWhite = m_white.getLabel();
         String blackCommand = m_black.getProgramCommand();
         String whiteCommand = m_white.getProgramCommand();
         String blackVersion = m_black.getVersion();
         String whiteVersion = m_white.getVersion();
+        if (isAlternated()) {
+          nameBlack = m_white.getLabel();
+          nameWhite = m_black.getLabel();
+          blackCommand = m_white.getProgramCommand();
+          whiteCommand = m_black.getProgramCommand();
+          blackVersion = m_white.getVersion();
+          whiteVersion = m_black.getVersion();
+        }
         m_game.setPlayer(BLACK, nameBlack);
         m_game.setPlayer(WHITE, nameWhite);
-        if (m_referee != null)
-            m_game.setResult(resultReferee);
-        else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
-            m_game.setResult(resultBlack);
         String host = Platform.getHostInfo();
         StringBuilder comment = new StringBuilder();
         comment.append("Black command: ");
@@ -538,9 +551,9 @@ public class TwoGtp
             comment.append(m_openingFile);
         }
         comment.append("\nResult[Black]: ");
-        comment.append(resultBlack);
+        comment.append(isAlternated() ? resultWhite : resultBlack);
         comment.append("\nResult[White]: ");
-        comment.append(resultWhite);
+        comment.append(isAlternated() ? resultBlack : resultWhite);
         if (m_referee != null)
         {
             comment.append("\nReferee: ");
