@@ -516,6 +516,14 @@ public class TwoGtp
         String whiteCommand = m_white.getProgramCommand();
         String blackVersion = m_black.getVersion();
         String whiteVersion = m_white.getVersion();
+        if (isAlternated()) {
+          nameBlack = m_white.getLabel();
+          nameWhite = m_black.getLabel();
+          blackCommand = m_white.getProgramCommand();
+          whiteCommand = m_black.getProgramCommand();
+          blackVersion = m_white.getVersion();
+          whiteVersion = m_black.getVersion();
+        }
         m_game.setPlayer(BLACK, nameBlack);
         m_game.setPlayer(WHITE, nameWhite);
         if (m_referee != null)
@@ -538,9 +546,9 @@ public class TwoGtp
             comment.append(m_openingFile);
         }
         comment.append("\nResult[Black]: ");
-        comment.append(resultBlack);
+        comment.append(isAlternated() ? resultWhite : resultBlack);
         comment.append("\nResult[White]: ");
-        comment.append(resultWhite);
+        comment.append(isAlternated() ? resultBlack : resultWhite);
         if (m_referee != null)
         {
             comment.append("\nReferee: ");
