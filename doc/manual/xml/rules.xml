@@ -119,6 +119,19 @@ gogui-rules_board
 </varlistentry>
 
 <varlistentry>
+<term><command>gogui-rules_captured_count</command></term>
+<listitem>
+<simpara>
+Number of stones captured for each player. The output of this command is two integers, separated by a space. The first number is the number of stones captured by Black, and the second number is the number of stones captured by White.
+Example :<programlisting>
+gogui-rules_captured_count
+= 0 1
+</programlisting>
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><command>gogui-rules_board_size</command></term>
 <listitem>
 <simpara>

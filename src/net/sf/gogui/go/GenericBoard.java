@@ -133,6 +133,22 @@ public final class GenericBoard {
             return;
         }
         GenericBoard.setup(rulerBoardState, board, size);
+
+        if (gameRuler.isSupported("gogui-rules_captured_count"))
+        {
+           try
+           {
+               String captured = gameRuler.send("gogui-rules_captured_count");
+               String[] numbers = captured.split(" ");
+               if (numbers.length > 0)
+                   board.setCaptured(GoColor.WHITE, Integer.parseInt(numbers[0]));
+               if (numbers.length > 1)
+                   board.setCaptured(GoColor.BLACK, Integer.parseInt(numbers[1]));
+           }
+           catch (GtpError e)
+           {
+           }
+        }
     }
 
     private static void setup(String position, Board board, int size)
@@ -225,7 +241,6 @@ public final class GenericBoard {
         GenericBoard.copyRulerBoardState(gameRuler, board);
     }
 
-    
     //Makes the constructor unavailable.
     private GenericBoard()
     {

@@ -81,6 +81,11 @@ implements ConstBoard
         return m_captured.get(c);
     }
 
+    public void setCaptured(GoColor c, int count)
+    {
+        m_captured.set(c, count);
+    }
+
     /** Get state of a point on the board.
         @return BLACK, WHITE or EMPTY */
     public GoColor getColor(GoPoint p)
