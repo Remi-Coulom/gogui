@@ -4,6 +4,29 @@
 <revhistory>
 
 <revision>
+<revnumber>1.5.2</revnumber>
+<date>20??-??-??</date>
+<authorinitials>Rémi</authorinitials>
+<revdescription>
+<itemizedlist>
+
+<listitem>
+<simpara>
+Fix wrong player names in sgf from gogui-twogtp -alternate (issue #9, thanks @tomtseng)
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+New gogui-rules_captured_count command.
+</simpara>
+</listitem>
+
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.5.1</revnumber>
 <date>2019-04-12</date>
 <authorinitials>Sazuna</authorinitials>
