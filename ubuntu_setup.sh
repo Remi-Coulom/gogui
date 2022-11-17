@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-sudo apt install ant xsltproc docbook-xsl inkscape
+sudo apt install ant xsltproc docbook-xsl inkscape openjdk-11-jdk
 
 cd /tmp
 wget https://www.randelshofer.ch/quaqua/files/quaqua-8.0.nested.zip
