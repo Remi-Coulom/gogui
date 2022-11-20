@@ -10,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -29,6 +31,7 @@ import java.io.StringReader;
 import java.net.URL;
 import static java.text.MessageFormat.format;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
@@ -39,6 +42,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.TransferHandler;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
@@ -3822,6 +3826,35 @@ ContextMenu.Listener, LiveGfx.Listener
                     actionBackward(-scale * n);
             }
         });
+
+	this.setTransferHandler(new TransferHandler () {
+		@Override
+		public boolean canImport(TransferHandler.TransferSupport support) {
+		    for (DataFlavor flavor : support.getDataFlavors()) {
+			if (flavor.isFlavorJavaFileListType()) {
+			    return true;
+			}
+		    }
+		    return false;
+		}
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public boolean importData(TransferHandler.TransferSupport support) {
+		    if (!this.canImport(support))
+			return false;
+
+		    try {
+			List<File> files = (List<File>) support.getTransferable()
+			    .getTransferData(DataFlavor.javaFileListFlavor);
+			loadFile(files.get(0), -1);
+		    } catch (UnsupportedFlavorException | IOException ex) {
+			return false;
+		    }
+
+		    return true;
+		}
+	    });
 
         GuiUtil.removeKeyBinding(m_splitPane, "F8");
         GuiAction.registerAll(getLayeredPane());
