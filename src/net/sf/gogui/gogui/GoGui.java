@@ -3827,34 +3827,34 @@ ContextMenu.Listener, LiveGfx.Listener
             }
         });
 
-	this.setTransferHandler(new TransferHandler () {
-		@Override
-		public boolean canImport(TransferHandler.TransferSupport support) {
-		    for (DataFlavor flavor : support.getDataFlavors()) {
-			if (flavor.isFlavorJavaFileListType()) {
-			    return true;
-			}
-		    }
-		    return false;
-		}
+        this.setTransferHandler(new TransferHandler () {
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport support) {
+                for (DataFlavor flavor : support.getDataFlavors()) {
+                    if (flavor.isFlavorJavaFileListType()) {
+                        return true;
+                    }
+                }
+                return false;
+            }
 
-		@Override
-		@SuppressWarnings("unchecked")
-		public boolean importData(TransferHandler.TransferSupport support) {
-		    if (!this.canImport(support))
-			return false;
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean importData(TransferHandler.TransferSupport support) {
+                if (!this.canImport(support))
+                    return false;
 
-		    try {
-			List<File> files = (List<File>) support.getTransferable()
-			    .getTransferData(DataFlavor.javaFileListFlavor);
-			loadFile(files.get(0), -1);
-		    } catch (UnsupportedFlavorException | IOException ex) {
-			return false;
-		    }
+                try {
+                    List<File> files = (List<File>) support.getTransferable()
+                            .getTransferData(DataFlavor.javaFileListFlavor);
+                    actionOpenFile(files.get(0));
+                } catch (UnsupportedFlavorException | IOException ex) {
+                    return false;
+                }
 
-		    return true;
-		}
-	    });
+                return true;
+            }
+        });
 
         GuiUtil.removeKeyBinding(m_splitPane, "F8");
         GuiAction.registerAll(getLayeredPane());
