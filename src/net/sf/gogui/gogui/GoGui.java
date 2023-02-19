@@ -2219,8 +2219,6 @@ ContextMenu.Listener, LiveGfx.Listener
             m_guiBoard.contextMenu(p);
         else
         {
-            if (getBoard().getColor(p) != EMPTY)
-                return;
             if (! checkCommandInProgress())
                 return;
             if (isRulerAttached())
@@ -2245,6 +2243,8 @@ ContextMenu.Listener, LiveGfx.Listener
                     showError(e);
                 }
             }
+            else if (getBoard().getColor(p) != EMPTY)
+                return;
             if (getBoard().isSuicide(getToMove(), p)
                     && ! showQuestion(i18n("MSG_SUICIDE"), i18n("MSG_SUICIDE_2"),
                             i18n("LB_SUICIDE"),false))
