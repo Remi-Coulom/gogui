@@ -3264,7 +3264,7 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 GoPoint point = GtpUtil.parsePoint(response, getBoardSize());
                 ConstBoard board = getBoard();
-                if (point != null)
+                if (point != null && m_gameRuler == null)
                 {
                     if (board.getColor(point) != EMPTY)
                     {
