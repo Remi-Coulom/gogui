@@ -150,7 +150,7 @@ public final class GoPoint
         {
             if (xxChar >= 'J')
                 --xxChar;
-            x = x * 25 + xxChar - 'A';
+            x = (x + 1) * 25 + xxChar - 'A';
             number_offset = 2;
         }
 
