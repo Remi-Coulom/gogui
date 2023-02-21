@@ -134,13 +134,23 @@ public class SgfWriter
         return moveNumber;
     }
 
+    private static char sgfLetter(int x)
+    {
+        if (x >= 0 && x < 26)
+            return (char)('a' + x);
+        else if (x >= 26 && x < 52)
+            return (char)('A' + x - 26);
+        else
+            return '?';
+    }
+
     private String getPoint(GoPoint p)
     {
         if (p == null)
             return "";
-        int x = 'a' + p.getX();
-        int y = 'a' + (m_size - p.getY() - 1);
-        return "" + (char)x + (char)y;
+        int x = p.getX();
+        int y = m_size - p.getY() - 1;
+        return "" + sgfLetter(x) + sgfLetter(y);
     }
 
     private String getPointValue(GoPoint point)
