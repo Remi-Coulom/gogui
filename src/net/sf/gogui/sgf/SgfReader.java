@@ -665,16 +665,26 @@ public final class SgfReader
         }
     }
 
+    private static int parseCoordinate(char c)
+    {
+        if (c >= 'a' && c <= 'z')
+            return c - 'a';
+        else if (c >= 'A' && c <= 'Z')
+            return 26 + c - 'A';
+        else
+            return 0;
+    }
+
     /** Parse point value.
         @return Point or null, if pass move
         @throw SgfError On invalid value */
     private GoPoint parsePoint(String s) throws SgfError
     {
-        s = s.trim().toLowerCase(Locale.ENGLISH);
+        s = s.trim();
         if (s.equals(""))
             return null;
         if (s.length() > 2
-            || (s.length() == 2 && (s.charAt(1) < 'a' || s.charAt(1) > 'z')))
+            || (s.length() == 2 && (s.charAt(1) >= '0' && s.charAt(1) <= '9')))
         {
             // Try human-readable encoding as used by SmartGo
             try
@@ -691,8 +701,8 @@ public final class SgfReader
         int boardSize = getBoardSize();
         if (s.equals("tt") && boardSize <= 19)
             return null;
-        int x = s.charAt(0) - 'a';
-        int y = boardSize - (s.charAt(1) - 'a') - 1;
+        int x = parseCoordinate(s.charAt(0));
+        int y = boardSize - parseCoordinate(s.charAt(1)) - 1;
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
         {
             if (x == boardSize && y == -1)
