@@ -255,7 +255,7 @@ public final class GoPoint
                 s_points[x][y] = new GoPoint(x, y);
     }
 
-    private char xToChar(int x)
+    private static char xToChar(int x)
     {
         char xChar = (char)('A' + x);
         if (xChar >= 'I')
@@ -263,23 +263,24 @@ public final class GoPoint
         return xChar;
     }
 
+    public static String xToString(int x)
+    {
+        if (x < 25)
+        {
+            return "" + xToChar(x);
+        }
+        else
+        {
+            return "" + xToChar(x / 25 - 1) + xToChar(x % 25);
+        }
+    }
+
     private GoPoint(int x, int y)
     {
         m_x = x;
         m_y = y;
 
-        String x_string;
-
-        if (x <= 25)
-        {
-            x_string = "" + xToChar(x);
-        }
-        else
-        {
-            x_string = "" + xToChar(x / 25) + xToChar(x % 25);
-        }
-
-        m_string = x_string + Integer.toString(m_y + 1);
+        m_string = xToString(m_x) + Integer.toString(m_y + 1);
         m_index = getIndex(x, y);
     }
 }

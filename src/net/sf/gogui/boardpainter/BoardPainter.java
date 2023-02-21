@@ -264,10 +264,9 @@ public class BoardPainter
         setFont(graphics, m_fieldSize);
         int offset = (m_fieldSize + m_fieldOffset) / 2;
         Point point;
-        char c = 'A';
         for (int x = 0; x < m_size; ++x)
         {
-            String string = Character.toString(c);
+            String string = GoPoint.xToString(x);
             point = getLocation(x, 0);
             if (m_flipHorizontal)
                 point.y -= offset;
@@ -280,9 +279,6 @@ public class BoardPainter
             else
                 point.y -= offset;
             drawLabel(graphics, point, string);
-            ++c;
-            if (c == 'I')
-                ++c;
         }
         for (int y = 0; y < m_size; ++y)
         {
