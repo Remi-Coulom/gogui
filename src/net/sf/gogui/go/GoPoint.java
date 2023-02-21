@@ -15,9 +15,8 @@ public final class GoPoint
     implements Comparable<GoPoint>
 {
     /** Maximum board size.
-        Set such that all points can be converted to strings with one letter
-        and a number, i.e. the largest point is Z25. */
-    public static final int MAX_SIZE = 25;
+        This is the limit supported by the sgf format. */
+    public static final int MAX_SIZE = 52;
 
     /** Default board size. */
     public static final int DEFAULT_SIZE = 19;
@@ -139,14 +138,26 @@ public final class GoPoint
             return null;
         if (string.length() < 2)
             throw new InvalidPointException(string);
+
         char xChar = string.charAt(0);
         if (xChar >= 'J')
             --xChar;
         int x = xChar - 'A';
+
+        int number_offset = 1;
+        char xxChar = string.charAt(1);
+        if (xxChar >= 'A' && xxChar <= 'Z' && xxChar != 'I')
+        {
+            if (xxChar >= 'J')
+                --xxChar;
+            x = x * 25 + xxChar - 'A';
+            number_offset = 2;
+        }
+
         int y;
         try
         {
-            y = Integer.parseInt(string.substring(1)) - 1;
+            y = Integer.parseInt(string.substring(number_offset)) - 1;
         }
         catch (NumberFormatException e)
         {
@@ -244,14 +255,31 @@ public final class GoPoint
                 s_points[x][y] = new GoPoint(x, y);
     }
 
+    private char xToChar(int x)
+    {
+        char xChar = (char)('A' + x);
+        if (xChar >= 'I')
+            ++xChar;
+        return xChar;
+    }
+
     private GoPoint(int x, int y)
     {
         m_x = x;
         m_y = y;
-        char xChar = (char)('A' + x);
-        if (xChar >= 'I')
-            ++xChar;
-        m_string = xChar + Integer.toString(m_y + 1);
+
+        String x_string;
+
+        if (x <= 25)
+        {
+            x_string = "" + xToChar(x);
+        }
+        else
+        {
+            x_string = "" + xToChar(x / 25) + xToChar(x % 25);
+        }
+
+        m_string = x_string + Integer.toString(m_y + 1);
         m_index = getIndex(x, y);
     }
 }
