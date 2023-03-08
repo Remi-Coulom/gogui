@@ -45,7 +45,7 @@ public final class BoardPainterUtil
                                   Map<String,String> metaData)
         throws IOException
     {
-        Iterator iter = ImageIO.getImageWritersBySuffix("png");
+        Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix("png");
         ImageWriter writer = (ImageWriter)iter.next();
         IIOMetadata meta = null;
         if (metaData != null)
