@@ -12,7 +12,6 @@ import net.sf.gogui.game.ConstGameInfo;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;

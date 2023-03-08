@@ -7,17 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import javax.swing.JMenuItem;
-
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.GenericBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gtp.GtpClientBase;
-import net.sf.gogui.gtp.GtpError;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
@@ -854,8 +849,6 @@ public class GoGuiActions
         m_actionTruncateChildren.setEnabled(hasChildren);
     }
     
-    private GtpClientBase m_gameRuler;
-
     private final GoGui m_goGui;
 
     private static final int SHORTCUT
@@ -867,8 +860,6 @@ public class GoGuiActions
 
     private void updateClockResume(ConstClock clock)
     {
-        boolean enabled = false;
-        String desc = null;
         if (! clock.isRunning() && clock.getToMove() != null)
         {
             m_actionClockResume.setEnabled(true);
@@ -914,7 +905,6 @@ public class GoGuiActions
                                  boolean isInterruptSupported,
                                  boolean isCommandInProgress, String name)
     {
-        String desc;
         if (isProgramAttached)
         {
             if (! isInterruptSupported)

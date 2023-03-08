@@ -49,8 +49,6 @@ public class GoGuiToolBar
 
     private final GoGui m_goGui;
 
-    private final GoGuiActions m_actions;
-
     private AbstractButton addButton(AbstractButton button)
     {
         button.setFocusable(false);

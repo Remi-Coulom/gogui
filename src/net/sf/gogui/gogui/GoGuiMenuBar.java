@@ -14,7 +14,6 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gui.GuiMenu;
-import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Program;
 import net.sf.gogui.gui.RecentFileMenu;
