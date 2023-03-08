@@ -23,6 +23,7 @@ public class BlackWhiteSet<T>
     {
         if (object == null || object.getClass() != getClass())
             return false;
+        @SuppressWarnings("unchecked")
         BlackWhiteSet<T> set = (BlackWhiteSet<T>)object;
         return (ObjectUtil.equals(set.m_elementBlack, m_elementBlack)
                 && ObjectUtil.equals(set.m_elementWhite, m_elementWhite));

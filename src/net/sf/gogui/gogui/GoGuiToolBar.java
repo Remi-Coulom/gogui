@@ -21,7 +21,6 @@ public class GoGuiToolBar
     {
         m_goGui = goGui;
         GoGuiActions actions = m_goGui.getActions();
-        m_actions = actions;
         addButton(actions.m_actionOpen);
         addButton(actions.m_actionSave);
         addButton(actions.m_actionNewGame);
