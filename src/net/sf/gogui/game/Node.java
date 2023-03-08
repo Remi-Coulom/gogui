@@ -238,7 +238,7 @@ public final class Node
     {
         if (getNumberChildren() == 1)
             return (Node)m_children;
-        return (Node)((ArrayList)m_children).get(i);
+        return ((ArrayList<Node>)m_children).get(i);
     }
 
     /** Get child node (const).
@@ -378,7 +378,7 @@ public final class Node
             return 0;
         if (m_children instanceof Node)
             return 1;
-        return ((ArrayList)m_children).size();
+        return ((ArrayList<Node>)m_children).size();
     }
 
     /** Color to play if explicitely set.
@@ -527,7 +527,7 @@ public final class Node
             m_children = null;
         else if (numberChildren >= 2)
         {
-            ArrayList list = (ArrayList)m_children;
+            ArrayList<Node> list = (ArrayList<Node>)m_children;
             list.remove(child);
             if (numberChildren == 2)
                 m_children = list.get(0);
