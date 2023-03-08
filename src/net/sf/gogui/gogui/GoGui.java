@@ -3086,6 +3086,8 @@ ContextMenu.Listener, LiveGfx.Listener
                     return;
                 }
                 m_game.haltClock();
+                showGameFinished();
+                return;
             }
             generateMove(false);
         }
@@ -4603,6 +4605,8 @@ ContextMenu.Listener, LiveGfx.Listener
     private void showGameFinished()
     {
         if (m_resigned)
+            return;
+        if (m_gameRuler == null)
             return;
         try {
             String disableKey = "net.sf.gogui.gogui.GoGui.game-finished";
