@@ -52,7 +52,7 @@ public class GtpEngine
     {
         cmd.checkArgNone();
         StringBuilder response = cmd.getResponse();
-        Iterator it = m_commands.keySet().iterator();
+        Iterator<String> it = m_commands.keySet().iterator();
         while (it.hasNext())
         {
             response.append(it.next());
