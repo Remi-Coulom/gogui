@@ -19,7 +19,6 @@ import java.net.URL;
 import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
-import net.sf.gogui.gogui.GoGui.Orientation;
 
 /** Draws a board. */
 public class BoardPainter

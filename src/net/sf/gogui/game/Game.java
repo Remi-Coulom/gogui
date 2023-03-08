@@ -12,7 +12,6 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClientBase;
-import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.ObjectUtil;
 
 /** Manages a tree, board, current node and clock. */

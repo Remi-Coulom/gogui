@@ -12,8 +12,6 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
-import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gui.MessageDialogs;
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater
