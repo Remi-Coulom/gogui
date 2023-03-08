@@ -3320,18 +3320,12 @@ ContextMenu.Listener, LiveGfx.Listener
                 }
                 int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
                 boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
-                boolean gameFinished = false;
+                boolean gameFinished = bothPassed || m_resigned;
                 boolean rulerAttached = isRulerAttached();
-                try {
-                    gameFinished = (bothPassed || m_resigned
-                            || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
-                } catch (GtpError e) {
-                }
+
                 if (gameFinished)
                 {
-                    if (rulerAttached)
-                        showGameFinished();
-                    else
+                    if (!rulerAttached)
                         showGoFinished();
                 }
             }
