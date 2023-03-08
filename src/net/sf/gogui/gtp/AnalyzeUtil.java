@@ -50,20 +50,26 @@ public final class AnalyzeUtil
             // panes in a later version of GoGui, so we silently accept it
             return null;
         }
-        Scanner scanner = new Scanner(line);
         Result result = new Result();
-        try
         {
-            result.m_typeInfo = scanner.next("^\\[[^\\]]*\\]");
-            line = line.substring(result.m_typeInfo.length()).trim();
-            result.m_typeInfo =
-                result.m_typeInfo.substring(1, result.m_typeInfo.length() - 1);
-        }
-        catch (NoSuchElementException e)
-        {
-            // Treat unknown types as string for compatibiliy with future
-            // types
-            result.m_typeInfo = "string";
+            Scanner scanner = new Scanner(line);
+
+            try
+            {
+                result.m_typeInfo = scanner.next("^\\[[^\\]]*\\]");
+                line = line.substring(result.m_typeInfo.length()).trim();
+                result.m_typeInfo = result.m_typeInfo.substring(1, result.m_typeInfo.length() - 1);
+            }
+            catch (NoSuchElementException e)
+            {
+                // Treat unknown types as string for compatibiliy with future
+                // types
+                result.m_typeInfo = "string";
+            }
+            finally
+            {
+                scanner.close();
+            }
         }
         int pos = line.indexOf(' ');
         if (pos < 0)
