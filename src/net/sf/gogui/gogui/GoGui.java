@@ -4101,7 +4101,7 @@ ContextMenu.Listener, LiveGfx.Listener
         String sizeString = Session.getSizeString(size);
 
         setState(Frame.NORMAL);
-        m_session.restoreLocation(this, "main-" + Session.getSizeString(size));
+        m_session.restoreLocation(this, "main-" + sizeString);
         String path = "windows/main/size-" + sizeString + "/fieldsize";
         int fieldSize = m_prefs.getInt(path, -1);
         if (fieldSize > 0)
