@@ -4097,19 +4097,21 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private void restoreLocation(JDialog dialog, String name)
     {
-        m_session.restoreLocation(dialog, this, name + "-" + getBoardSize());
+        m_session.restoreLocation(dialog, this, name + "-" + Session.getSizeString(getBoardSize()));
     }
 
     private void restoreMainWindow(int size)
     {
+        String sizeString = Session.getSizeString(size);
+
         setState(Frame.NORMAL);
-        m_session.restoreLocation(this, "main-" + size);
-        String path = "windows/main/size-" + size + "/fieldsize";
+        m_session.restoreLocation(this, "main-" + Session.getSizeString(size));
+        String path = "windows/main/size-" + sizeString + "/fieldsize";
         int fieldSize = m_prefs.getInt(path, -1);
         if (fieldSize > 0)
             m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
                     fieldSize));
-        path = "windows/main/size-" + size + "/comment";
+        path = "windows/main/size-" + sizeString + "/comment";
         int width = m_prefs.getInt(path + "/width", -1);
         int height = m_prefs.getInt(path + "/height", -1);
         Dimension preferredCommentSize = null;
@@ -4137,7 +4139,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private void restoreSize(JDialog dialog, String name)
     {
-        m_session.restoreSize(dialog, this, name + "-" + getBoardSize());
+        m_session.restoreSize(dialog, this, name + "-" + Session.getSizeString(getBoardSize()));
     }
 
     private void runLengthyCommand(String cmd, Runnable callback)
@@ -4207,6 +4209,8 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private void saveSession()
     {
+        String sizeString = Session.getSizeString(getBoardSize());
+
         if (m_shell != null)
             m_shell.saveHistory();
         if (m_analyzeDialog != null)
@@ -4225,17 +4229,17 @@ ContextMenu.Listener, LiveGfx.Listener
             saveSizeAndVisible(m_shell, "shell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
-        m_session.saveLocation(this, "main-" + getBoardSize());
+        m_session.saveLocation(this, "main-" + sizeString);
         if (GuiUtil.isNormalSizeMode(this))
         {
-            String name = "windows/main/size-" + getBoardSize() + "/fieldsize";
+            String name = "windows/main/size-" + sizeString + "/fieldsize";
             int fieldSize = m_guiBoard.getFieldSize().width;
             if (fieldSize == 0) // BoardPainter was never invoked
                 return;
             m_prefs.putInt(name, fieldSize);
-            name = "windows/main/size-" + getBoardSize() + "/comment/width";
+            name = "windows/main/size-" + sizeString + "/comment/width";
             m_prefs.putInt(name, m_comment.getWidth());
-            name = "windows/main/size-" + getBoardSize() + "/comment/height";
+            name = "windows/main/size-" + sizeString + "/comment/height";
             m_prefs.putInt(name, m_comment.getHeight());
         }
         // GoGui's program logic does currently not depend on syncing the
@@ -4255,7 +4259,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private void saveLocation(JDialog dialog, String name)
     {
-        m_session.saveLocation(dialog, this, name + "-" + getBoardSize());
+        m_session.saveLocation(dialog, this, name + "-" + Session.getSizeString(getBoardSize()));
     }
 
     private void saveSizeAndVisible(JDialog dialog, String name)

@@ -17,6 +17,16 @@ import net.sf.gogui.util.StringUtil;
 */
 public final class Session
 {
+    private static boolean sameForAllSizes = false;
+
+    public static String getSizeString(int size)
+    {
+        if (sameForAllSizes)
+            return "all_sizes";
+        else
+            return String.valueOf(size);
+    }
+
     /** Constructor.
         @param path Absolute path for saving the preferences using
         java.util.prefs.
