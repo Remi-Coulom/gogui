@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.BoardUpdater;
-import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.gamefile.GameReader;

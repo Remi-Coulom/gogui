@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -19,7 +18,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -32,14 +30,9 @@ import javax.swing.Scrollable;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.Game;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.gogui.GoGui;
 import net.sf.gogui.gogui.GoGuiActions;
-import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.util.ErrorMessage;
 
 import static net.sf.gogui.gui.I18n.i18n;
 

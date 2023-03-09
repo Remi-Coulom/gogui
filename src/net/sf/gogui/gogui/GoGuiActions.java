@@ -12,7 +12,6 @@ import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
-import net.sf.gogui.gtp.GtpClientBase;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
