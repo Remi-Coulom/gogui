@@ -2731,10 +2731,6 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private boolean attachNewRuler(String command, Program program)
     {
-        if (m_gtp != null)
-        {
-            saveSession();
-        }
         if (! attachProgram(command, program, false, true))
         {
             m_prefs.putInt("ruler", -1);
