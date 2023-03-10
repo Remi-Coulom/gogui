@@ -2933,6 +2933,17 @@ ContextMenu.Listener, LiveGfx.Listener
                     }
                     m_gtp.queryName();
                     m_gtp.queryProtocolVersion();
+
+                    if (m_gtp.isSupported("gogui-rules_board_size"))
+                    {
+                     int size = Integer.parseInt(m_gtp.send("gogui-rules_board_size"));
+
+                     if (size != getBoardSize())
+                     {
+                        actionBoardSize(size);
+                     }
+                    }
+
                     if (m_program == null)
                     {
                         m_program =
