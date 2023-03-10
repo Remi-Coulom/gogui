@@ -83,7 +83,8 @@ public class Platform
     /** Check if the platform is Mac OS X. */
     public static boolean isMac()
     {
-        return s_isMac;
+        //return s_isMac;
+        return false;
     }
 
     /** Check if the platform is Unix. */

@@ -12,7 +12,19 @@
 
 <listitem>
 <simpara>
+Don't use Quaqua anymore, which should fix some crashes on macOS.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
 Support for large boards up to 52x52.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Support for drag-and-drop of sgf files into gogui.
 </simpara>
 </listitem>
 
@@ -25,6 +37,12 @@ Fix wrong player names in sgf from gogui-twogtp -alternate (issue #9, thanks @to
 <listitem>
 <simpara>
 New gogui-rules_captured_count command.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Minor fixes and improvements.
 </simpara>
 </listitem>
 

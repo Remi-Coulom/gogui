@@ -42,9 +42,6 @@ Build file for Apache Ant (http://ant.apache.org/)
 <available file="${docbook-xsl.dir}" type="dir"
 	   property="docbook.xsl-available"/>
 <available file="${docbook.dtd-4.2}" property="docbook.dtd-4.2-available"/>
-<condition property="quaqua.available">
-  <available file="lib/quaqua.jar"/>
-</condition>
 
 <zipfileset id="distfiles-src" prefix="gogui-${version}" dir="."
   includes="
@@ -69,11 +66,6 @@ Build file for Apache Ant (http://ant.apache.org/)
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist.in
  mac/packaging/PkgInfo
- mac/src/com/apple/eawt/Application.java
- mac/src/com/apple/eawt/ApplicationEvent.java
- mac/src/com/apple/eawt/ApplicationListener.java
- mac/src/com/apple/eawt/ApplicationAdapter.java
- mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
  sgf/openings/9x9/README.html
  sgf/openings/9x9/*.sgf
  sgf/openings/19x19/README.html
@@ -148,18 +140,6 @@ Build file for Apache Ant (http://ant.apache.org/)
   gogui-twogtp.jar
 "/>
 
-<target name="check-quaqua" unless="quaqua.ignore">
-  <fail unless="quaqua.available">
-lib/quaqua.jar not found.
-Please download the Quaqua Look and Feel (http://www.randelshofer.ch/quaqua)
-and copy the file quaqua.jar from the distribution to lib/quaqua.jar. The
-last version tested with GoGui was:
-http://www.randelshofer.ch/quaqua/files/quaqua-5.2.1.nested.zip
-To compile GoGui with limited Mac support, you can invoke ant with the
-option -Dquaqua.ignore=true.
-  </fail>
-</target>
-
 <target name="clean" depends="clean-build-dir"
  description="Delete class and jar files built by target all">
 <delete failonerror="false" includeEmptyDirs="true">
@@ -188,7 +168,6 @@ option -Dquaqua.ignore=true.
 <fileset dir="build/depcache"/>
 <fileset dir="build/depcache-test"/>
 <fileset dir="build/manifests"/>
-<fileset dir="build/specialmac"/>
 <fileset dir="build/test"/>
 <fileset dir="build/GoGui.app"/>
 <fileset dir="build" includes="GoGui*.dmg"/>
@@ -217,14 +196,6 @@ option -Dquaqua.ignore=true.
 <copy todir="build/classes/net/sf/gogui/doc">
 <fileset dir="doc/manual/html" includes="*.html *.png"/>
 </copy>
-<mkdir dir="build/specialmac"/>
-<javac srcdir="mac/src" destdir="build/specialmac" source="1.8"
- deprecation="true" classpath="build/classes" listfiles="yes"
- includeAntRuntime="false"
- includes="
-  net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
-  com/apple/eawt/*.java
-"/>
 </target>
 
 <target name="depend">
@@ -385,12 +356,6 @@ with "location" replaced by the location of the file docbookx.dtd.
 </exec>
 </target>
 
-<target name="gogui-manifest-classpath" unless="quaqua.ignore">
-  <manifest file="build/manifests/gogui.mf" mode="update">
-    <attribute name="Class-Path" value="quaqua.jar"/>
-  </manifest>
-</target>
-
 <target name="gogui-manifest">
   <mkdir dir="build"/>
   <mkdir dir="build/manifests"/>
@@ -402,7 +367,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 </target>
 
 <target name="gogui.jar"
-	depends="compile,check-quaqua,gogui-manifest,gogui-manifest-classpath">
+	depends="compile,gogui-manifest">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" manifest="build/manifests/gogui.mf"
      compress="true" level="9">
@@ -430,9 +395,6 @@ with "location" replaced by the location of the file docbookx.dtd.
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
  net/sf/gogui/xml/*.class
-"/>
-<fileset dir="build/specialmac" includes="
- net/sf/gogui/specialmac/*.class
 "/>
 </jar>
 </target>
@@ -500,12 +462,6 @@ with "location" replaced by the location of the file docbookx.dtd.
   </jar>
 </target>
 
-<target name="gogui-display-manifest-classpath" unless="quaqua.ignore">
-  <manifest file="build/manifests/gogui-display.mf" mode="update">
-    <attribute name="Class-Path" value="quaqua.jar"/>
-  </manifest>
-</target>
-
 <target name="gogui-display-manifest">
   <mkdir dir="build"/>
   <mkdir dir="build/manifests"/>
@@ -517,7 +473,7 @@ with "location" replaced by the location of the file docbookx.dtd.
 </target>
 
 <target name="gogui-display.jar"
-	depends="compile,check-quaqua,gogui-display-manifest,gogui-display-manifest-classpath">
+	depends="compile,gogui-display-manifest">
   <mkdir dir="lib"/>
   <jar destfile="lib/gogui-display.jar"
        manifest="build/manifests/gogui-display.mf" compress="true" level="9">
