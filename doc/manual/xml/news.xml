@@ -5,7 +5,7 @@
 
 <revision>
 <revnumber>1.5.2</revnumber>
-<date>20??-??-??</date>
+<date>2023-03-14</date>
 <authorinitials>Rémi</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -24,13 +24,13 @@ Support for large boards up to 52x52.
 
 <listitem>
 <simpara>
-Support for drag-and-drop of sgf files into gogui.
+Drag-and-drop of sgf files (thanks to @zakki)
 </simpara>
 </listitem>
 
 <listitem>
 <simpara>
-Fix wrong player names in sgf from gogui-twogtp -alternate (issue #9, thanks @tomtseng)
+Fix wrong player names in sgf from gogui-twogtp -alternate (issue #9, thanks to @tomtseng)
 </simpara>
 </listitem>
 
