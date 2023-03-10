@@ -11,9 +11,8 @@ games such as renju, gomoku, or Othello.
 </para>
 
 <para>
-It is compulsory that the ruler program implements the extension command
-<userinput>gogui-analyze_commands</userinput>, which allows GoGui to query which
-analyze commands are supported when a new program is attached.
+The ruler program must indicate the command it supports with
+<userinput>list_commands</userinput>.
 </para>
 
 <section>
@@ -28,7 +27,7 @@ Start a program from the list of ruler programs and synchronize it to the
 current game at the current position.
 If a ruler was already attached, it will be terminated, before the new
 ruler is started.
-If the ruler is another game than its predecessor, the position is cleared
+If the ruler is for a game different from its predecessor, the position is cleared
 from the ruler's initial position (called by
 <userinput>gogui-rules_board</userinput>).
 </para>
@@ -48,10 +47,10 @@ Terminate the currently attached ruler program.
 <term><guisubmenu>New Program</guisubmenu></term>
 <listitem>
 <para>
-Add a new Go program to the list of available Go programs.
+Add a new ruler program.
 The name field should contain a label for the
 <guisubmenu>Attach</guisubmenu> menu.
-The command field should contain the command to run the Go program.
+The command field should contain the command to run the ruler program.
 </para>
 </listitem>
 </varlistentry>
@@ -60,7 +59,7 @@ The command field should contain the command to run the Go program.
 <term><guisubmenu>Edit Programs</guisubmenu></term>
 <listitem>
 <para>
-Edit the list of available Go programs.
+Edit the list of available ruler programs.
 </para>
 </listitem>
 </varlistentry>
@@ -72,9 +71,7 @@ Edit the list of available Go programs.
 <section>
 <title>Requirements</title>
 <para>
-To work with this version of GoGui, it is required that the GTP program
-possesses the following methods (of the format
-<command>gogui-rules_[command_name]</command>) :
+A ruler program must support the followin commands:
 </para>
 
 <variablelist>
@@ -84,7 +81,7 @@ possesses the following methods (of the format
 <listitem>
 <simpara>
 The response of the command is a string that specifies the game that is managed
-by the GTP program. It must begin with an uppurcase letter and then contain
+by the GTP program. It must begin with an uppercase letter and then contain
 only lowercase characters.
 Example :<programlisting>
 gogui-rules_game_id
@@ -156,7 +153,7 @@ The command is used to determine the moves that the player will be able to play
 The command result must necessarily be a string of the following syntax :
 "A1 B9 C5 C6 pass".
 The character 'I' must not be used. The 8th letter is 'H' and the 9th letter is
-'J' like in the Go standards. The figures start with 1 instead of 0.
+'J' like in the Go standards. Numbers start with 1 instead of 0.
 Pass must appear in response to this command if the player is allowed
 to pass.
 If no move is possible, the game ends.
