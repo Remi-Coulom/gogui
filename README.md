@@ -19,16 +19,18 @@ graphically on the board, or open dialog boxes to set engine parameters.
 Screenshots
 -----------
 
-Here is an example of policy visualization thanks to analyze commands:
+Policy visualization with to analyze commands:
+
 ![gogui_policy](https://www.kayufu.com/files/go_policy.png)
 
-Here is an example of a chess engine displaying its board in gogui:
+Chess engine displaying its board:
+
 ![gogui_chess](https://www.kayufu.com/files/gogui_chess.jpg)
 
 Download and Install
 --------------------
 
-Here is a [link to the latest release](https://github.com/Remi-Coulom/gogui/releases/tag/v1.5.1).
+[Link to the latest release](https://github.com/Remi-Coulom/gogui/releases/latest).
 
 Starting from version 1.5.2, GoGui is distributed as a zip file containing its
 source code as well as the compiled jars. In order to run GoGui, a [Java
