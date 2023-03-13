@@ -5,7 +5,7 @@
 
 <revision>
 <revnumber>1.5.2</revnumber>
-<date>2023-03-14</date>
+<date>2023-03-13</date>
 <authorinitials>Rémi</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -19,6 +19,12 @@ Don't use Quaqua anymore, which should fix some crashes on macOS.
 <listitem>
 <simpara>
 Support for large boards up to 52x52.
+</simpara>
+</listitem>
+
+<listitem>
+<simpara>
+Support for games with moving pieces such as chess or ataxx
 </simpara>
 </listitem>
 

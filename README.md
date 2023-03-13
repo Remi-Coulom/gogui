@@ -16,7 +16,14 @@ extend GoGui with new custom commands that can be used to display information
 graphically on the board, or open dialog boxes to set engine parameters.
  - Tools such as [gogui-twogtp](https://www.kayufu.com/gogui/reference-twogtp.html) can be used to run matches between two programs and collect statistics.
 
+Screenshots
+-----------
+
+Here is an example of policy visualization thanks to analyze commands:
 ![gogui_policy](https://www.kayufu.com/files/go_policy.png)
+
+Here is an example of a chess engine displaying its board in gogui:
+![gogui_chess](https://www.kayufu.com/files/gogui_chess.jpg)
 
 Download and Install
 --------------------
