@@ -16,6 +16,8 @@ extend GoGui with new custom commands that can be used to display information
 graphically on the board, or open dialog boxes to set engine parameters.
  - Tools such as [gogui-twogtp](https://www.kayufu.com/gogui/reference-twogtp.html) can be used to run matches between two programs and collect statistics.
 
+![gogui_policy](https://www.kayufu.com/files/go_policy.png)
+
 Download and Install
 --------------------
 
