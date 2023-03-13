@@ -37,7 +37,7 @@ source code as well as the compiled jars. In order to run GoGui, a [Java
 Runtime Environment](https://www.java.com/) must be installed on your machine.
 The jars are located in the lib subdirectory. For linux, executable scripts are
 located in the bin subdirectory. Your operating system may make you jump
-through hoops to let your execute the code because of the security risk of
+through hoops to let you execute the code because of the security risk of
 running software downloaded from the internet.
 
 Note
