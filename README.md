@@ -11,7 +11,7 @@ format, and letting humans play against the AI, GoGui offers many interesting
 features for AI developers:
 
  - A GTP engine can define
-[Analyze Commands](https://www.kayufu.com/gogui/analyze.html). This will
+[analyze commands](https://www.kayufu.com/gogui/analyze.html). This will
 extend GoGui with new custom commands that can be used to display information
 graphically on the board, or open dialog boxes to set engine parameters.
  - Tools such as [gogui-twogtp](https://www.kayufu.com/gogui/reference-twogtp.html) can be used to run matches between two programs and collect statistics.
@@ -19,7 +19,7 @@ graphically on the board, or open dialog boxes to set engine parameters.
 Screenshots
 -----------
 
-Policy visualization with to analyze commands:
+Policy visualization with analyze commands:
 
 ![gogui_policy](https://www.kayufu.com/files/go_policy.png)
 
