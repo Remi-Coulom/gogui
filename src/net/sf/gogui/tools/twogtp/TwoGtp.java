@@ -275,7 +275,7 @@ public class TwoGtp
 
     private boolean m_debugToComment;
 
-    private int m_maxMoves = 1000;
+    private int m_maxMoves = -1;
 
     private int m_gameIndex;
 
