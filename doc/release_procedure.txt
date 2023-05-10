@@ -18,4 +18,4 @@ Tag release with git and publish in github
 =============================================================================
 git tag <version>
 git push github <version>
-+ "draft a new release" on github (add .exe produced by NSIS)
++ "draft a new release" on github (add .zip)
