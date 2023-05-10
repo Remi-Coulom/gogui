@@ -9,16 +9,9 @@ write release notes in doc/manual/xml/news.xml.
 if a new important feature is added, add it in doc/manual/xml.
 
 =============================================================================
-Prepare Windows installer
+Prepare zip for distribution
 =============================================================================
-first compile gogui with the ant command (in linux), and copy .jar to Windows.
-
-generate windows/l4j/gogui.xml (replace @VERSION@ by version number).
-
-run l4j for each .xml in windows/l4j.
-
-produce windows/nsis/install.nsis from install.nsis.in (replace @VERSION@).
-use NSIS (version 2, do not use v3 or higher) to create gogui-VERSION-install.exe, passing /windows/nsis/install.nsis as the generating file.
+run ./binary_distrib.sh in the root of the repo.
 
 =============================================================================
 Tag release with git and publish in github
