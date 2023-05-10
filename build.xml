@@ -482,6 +482,8 @@ with "location" replaced by the location of the file docbookx.dtd.
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/go/*.properties
+ net/sf/gogui/gogui/*.class
+ net/sf/gogui/gogui/*.properties
  net/sf/gogui/gui/*.class
  net/sf/gogui/gui/*.png
  net/sf/gogui/gui/*.properties
