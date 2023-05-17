@@ -16,6 +16,6 @@ run ./binary_distrib.sh in the root of the repo.
 =============================================================================
 Tag release with git and publish in github
 =============================================================================
-git tag <version>
+git tag <version> (eg git tag v1.5.3)
 git push github <version>
 + "draft a new release" on github (add .zip)
