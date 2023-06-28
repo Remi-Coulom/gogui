@@ -40,7 +40,7 @@ located in the bin subdirectory. Your operating system may make you jump
 through hoops to let you execute the code because of the security risk of
 running software downloaded from the internet.
 
-Building from source
+Building from Source
 --------------------
 
 Commands for building gogui from source in Ubuntu can be found in [ubuntu_setup.sh](ubuntu_setup.sh). You may have to adjust this script to build on other systems.
