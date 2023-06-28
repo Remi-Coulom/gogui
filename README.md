@@ -40,6 +40,11 @@ located in the bin subdirectory. Your operating system may make you jump
 through hoops to let you execute the code because of the security risk of
 running software downloaded from the internet.
 
+Building from source
+--------------------
+
+Commands for building gogui from source in Ubuntu can be found in [ubuntu_setup.sh](ubuntu_setup.sh). You may have to adjust this script to build on other systems.
+
 Note
 ----
 GoGui was initially developed by [Markus Enzenberger](https://github.com/enz), and hosted on [sourceforge](http://gogui.sourceforge.net/).
