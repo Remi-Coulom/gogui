@@ -23,8 +23,8 @@ public final class HtmlUtil
         buffer.append(applicationName);
         buffer.append(' ');
         buffer.append(Version.get());
-        buffer.append(" (<a href=\"http://gogui.sf.net\">"
-                      + "http://gogui.sf.net</a>)</small></i></p>\n");
+        buffer.append(" (<a href=\"https://github.com/Remi-Coulom/gogui\">"
+                      + "https://github.com/Remi-Coulom/gogui</a>)</small></i></p>\n");
         return buffer.toString();
     }
 
@@ -41,7 +41,7 @@ public final class HtmlUtil
         buffer.append(applicationName);
         buffer.append(' ');
         buffer.append(Version.get());
-        buffer.append(" (http://gogui.sf.net)\">\n");
+        buffer.append(" (https://github.com/Remi-Coulom/gogui)\">\n");
         return buffer.toString();
     }
 

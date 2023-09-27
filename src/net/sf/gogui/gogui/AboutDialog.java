@@ -135,10 +135,7 @@ public final class AboutDialog
 
     private JPanel createPanelGoGui()
     {
-        URL imageUrl = getImage("project-support.png");
-        String projectUrl = "http://gogui.sf.net";
-        String supportUrl =
-            "https://www.paypal.com/cgi-bin/webscr?item_name=Donation+to+GoGui&cmd=_donations&business=enz%40users.sourceforge.net";
+        String projectUrl = "https://github.com/Remi-Coulom/gogui";
         return createPanel("<p align=\"center\"><img src=\""
                            + getImage("gogui-48x48.png") + "\"></p>" +
                            "<p align=\"center\"><b>" +
@@ -154,11 +151,7 @@ public final class AboutDialog
                            XmlUtil.escapeText(i18n("MSG_ABOUT_COPY")) + "<br>" +
                            "<a href=\"" + projectUrl + "\">" + projectUrl +
                            "</a><br>" +
-                           "</p>" +
-                           "<p align=\"center\">" +
-                           "<a href=\"" + supportUrl + "\">"
-                           + "<img src=\"" + imageUrl
-                           + "\" border=\"0\"></a>" + "</p>");
+                           "</p>");
     }
 
     private JPanel createPanelJava()
