@@ -116,6 +116,18 @@ gogui-rules_board
 </varlistentry>
 
 <varlistentry>
+<term><command>gogui-rules_board_gfx</command></term>
+<listitem>
+<simpara>
+        The response of the command is a gfx analyze command string. It can be
+        used to display game-specific graphics on the board. For instance, a
+        chess program can use this command to display square colors and piece
+        labels.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><command>gogui-rules_captured_count</command></term>
 <listitem>
 <simpara>

@@ -4,6 +4,23 @@
 <revhistory>
 
 <revision>
+<revnumber>1.5.4</revnumber>
+<date>2023-11-??</date>
+<authorinitials>Rémi</authorinitials>
+<revdescription>
+<itemizedlist>
+
+<listitem>
+<simpara>
+Add support for automatic game-specific board graphics with the new gogui-rules_board_gfx command.
+</simpara>
+</listitem>
+
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>1.5.3</revnumber>
 <date>2023-05-10</date>
 <authorinitials>Rémi</authorinitials>

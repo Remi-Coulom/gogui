@@ -4905,6 +4905,15 @@ ContextMenu.Listener, LiveGfx.Listener
                 m_showMoveNumbers);
         if (! showLastMove || getCurrentNode().getMove() == null)
             m_guiBoard.markLastMove(null);
+
+        if (isRulerAttached() && m_gameRuler.isSupported("gogui-rules_board_gfx"))
+        {
+            try {
+                String response = m_gameRuler.send("gogui-rules_board_gfx");
+                AnalyzeShow.showGfx(response, m_guiBoard, m_statusBar, null);
+            } catch (GtpError e) {
+            }
+        }
     }
 
     private void updateGuiBoard()
