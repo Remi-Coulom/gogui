@@ -1,7 +1,8 @@
 #!/bin/sh
 
 JAVA_DEFAULT=java
-GOGUI_LIB=`dirname "$0"`/../lib
+DIR="$(dirname "$(readlink -f "$0")")"
+GOGUI_LIB=$DIR/../lib
 # Fix path if running Cygwin environment on Windows
 if [ -f /usr/bin/cygpath ]; then
     GOGUI_LIB=`cygpath -w "$GOGUI_LIB"`
