@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/gogui-adapter.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-statistics.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-server.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-display.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-client.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-thumbnailer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-twogtp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-terminal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-dummy.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-convert.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gogui-regress.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
