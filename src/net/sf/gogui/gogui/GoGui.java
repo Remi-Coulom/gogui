@@ -407,9 +407,15 @@ ContextMenu.Listener, LiveGfx.Listener
     {
         if (! checkStateChangePossible())
             return;
-        boolean protectGui = (m_gtp != null
-                && (n > 1 || ! m_gtp.isSupported("undo")));
+        boolean protectGui = false;
         actionGotoNode(NodeUtil.backward(getCurrentNode(), n), protectGui);
+
+        if (m_gtp != null && m_gtp.isSupported("gogui-action_backward")) {
+            try {
+                AnalyzeShow.showGfx(m_gtp.send("gogui-action_backward " + n), m_guiBoard, m_statusBar, null);
+            } catch (GtpError ignored) {
+            }
+        }
     }
 
     public void actionBeginning()
@@ -857,8 +863,15 @@ ContextMenu.Listener, LiveGfx.Listener
     {
         if (! checkStateChangePossible())
             return;
-        boolean protectGui = (m_gtp != null && n > 1);
+        boolean protectGui = false;
         actionGotoNode(NodeUtil.forward(getCurrentNode(), n), protectGui);
+
+        if (m_gtp != null && m_gtp.isSupported("gogui-action_forward")) {
+            try {
+                AnalyzeShow.showGfx(m_gtp.send("gogui-action_forward " + n), m_guiBoard, m_statusBar, null);
+            } catch (GtpError ignored) {
+            }
+        }
     }
 
     public void actionGameInfo()
