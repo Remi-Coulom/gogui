@@ -3687,7 +3687,7 @@ ContextMenu.Listener, LiveGfx.Listener
         if (size != oldSize)
         {
             // Clear analyze command when board size changes, because eplist
-            // could contain points out of board)
+            // could contain points out of board
             clearAnalyzeCommand();
             //saveSession();
             m_guiBoard.initSize(size);
