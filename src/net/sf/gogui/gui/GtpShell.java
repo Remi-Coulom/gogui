@@ -401,9 +401,6 @@ public class GtpShell
         box.add(panel);
         box.add(Box.createVerticalGlue());
         m_comboBox = new JComboBox();
-        if (Platform.isMac())
-            // Workaround for bug in Quaqua Look and Feel 3.6.11
-            m_comboBox.setMaximumRowCount(7);
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
         m_textField.setFocusTraversalKeysEnabled(false);
@@ -471,7 +468,7 @@ public class GtpShell
     private void findBestCompletion()
     {
         String text = m_textField.getText().trim();
-        if (text.equals(""))
+        if (text.isEmpty())
             return;
         String bestCompletion = null;
         for (int i = 0; i < m_history.size(); ++i)
@@ -508,10 +505,8 @@ public class GtpShell
     {
         String text = m_textField.getText();
         text = text.replaceAll("^ *", "");
-        ArrayList<String> completions = new ArrayList<String>(128);
-        for (int i = 0; i < m_history.size(); ++i)
-        {
-            String c = m_history.get(i);
+        ArrayList<String> completions = new ArrayList<>(128);
+        for (String c : m_history) {
             if (c.startsWith(text))
                 completions.add(c);
         }
@@ -519,7 +514,7 @@ public class GtpShell
         if (m_disableCompletions)
             return;
         int size = completions.size();
-        if (text.length() > 0
+        if (!text.isEmpty()
             && (size > 1 || (size == 1 && ! text.equals(completions.get(0)))))
             m_comboBox.showPopup();
         else
