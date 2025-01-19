@@ -295,8 +295,8 @@ public final class AnalyzeDialog
         m_list.setVisibleRowCount(25);
         m_list.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
-                    int modifiers = e.getModifiers();
-                    int mask = ActionEvent.ALT_MASK;
+                    int modifiers = e.getModifiersEx();
+                    int mask = KeyEvent.ALT_DOWN_MASK;
                     if (e.getClickCount() == 2 || ((modifiers & mask) != 0))
                         runCommand();
                 }

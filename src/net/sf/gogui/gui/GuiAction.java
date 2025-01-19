@@ -23,7 +23,7 @@ public abstract class GuiAction
     extends AbstractAction
 {
     public static final ArrayList<GuiAction> s_allActions
-        = new ArrayList<GuiAction>();
+        = new ArrayList<>();
 
     public GuiAction(String name)
     {
@@ -65,7 +65,7 @@ public abstract class GuiAction
             putValue(AbstractAction.SHORT_DESCRIPTION, desc);
         if (accel != null)
             putValue(AbstractAction.ACCELERATOR_KEY,
-                     getKeyStroke(accel.intValue(), modifier));
+                     getKeyStroke(accel, modifier));
         if (icon != null)
             putValue(AbstractAction.SMALL_ICON, GuiUtil.getIcon(icon, name));
         s_allActions.add(this);
@@ -102,10 +102,7 @@ public abstract class GuiAction
 
     public final void setDescription(String desc)
     {
-        if (desc == null)
-            putValue(AbstractAction.SHORT_DESCRIPTION, null);
-        else
-            putValue(AbstractAction.SHORT_DESCRIPTION, desc);
+        putValue(AbstractAction.SHORT_DESCRIPTION, desc);
     }
 
     public void setDescription(String desc, Object... args)
@@ -115,13 +112,13 @@ public abstract class GuiAction
 
     public void setSelected(boolean selected)
     {
-        putValue("selected", Boolean.valueOf(selected));
+        putValue("selected", selected);
     }
 
     private static final int SHORTCUT
         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-    private String m_nameWithMnemonic;
+    final private String m_nameWithMnemonic;
 
     private static KeyStroke getKeyStroke(int keyCode, int modifier)
     {

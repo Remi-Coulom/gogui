@@ -12,11 +12,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -3821,8 +3817,8 @@ ContextMenu.Listener, LiveGfx.Listener
                 if (isCommandInProgress())
                     return;
                 int n = e.getWheelRotation();
-                int mod = e.getModifiers();
-                int scale = (mod == ActionEvent.SHIFT_MASK ? 10 : 1);
+                int mod = e.getModifiersEx();
+                int scale = (mod == KeyEvent.SHIFT_DOWN_MASK ? 10 : 1);
                 if (n > 0)
                     actionForward(scale * n);
                 else

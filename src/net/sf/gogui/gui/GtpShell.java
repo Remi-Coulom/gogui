@@ -412,7 +412,7 @@ public class GtpShell
                 public void keyReleased(KeyEvent e)
                 {
                     int c = e.getKeyCode();
-                    int mod = e.getModifiers();
+                    int mod = e.getModifiersEx();
                     if (c == KeyEvent.VK_ESCAPE)
                         return;
                     else if (c == KeyEvent.VK_TAB)
@@ -421,10 +421,10 @@ public class GtpShell
                         popupCompletions();
                     }
                     else if (c == KeyEvent.VK_PAGE_UP
-                             && mod == ActionEvent.SHIFT_MASK)
+                             && mod == KeyEvent.SHIFT_DOWN_MASK)
                         scrollPage(true);
                     else if (c == KeyEvent.VK_PAGE_DOWN
-                             && mod == ActionEvent.SHIFT_MASK)
+                             && mod == KeyEvent.SHIFT_DOWN_MASK)
                         scrollPage(false);
                     else if (c == KeyEvent.VK_ENTER
                              && ! m_comboBox.isPopupVisible())

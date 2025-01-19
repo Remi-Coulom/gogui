@@ -320,10 +320,10 @@ public final class GuiBoard
                         fieldClicked(point, true);
                     else
                     {
-                        int modifiers = e.getModifiers();
-                        int mask = (ActionEvent.CTRL_MASK
-                                    | ActionEvent.ALT_MASK
-                                    | ActionEvent.META_MASK);
+                        int modifiers = e.getModifiersEx();
+                        int mask = (KeyEvent.CTRL_DOWN_MASK
+                                    | KeyEvent.ALT_DOWN_MASK
+                                    | KeyEvent.META_DOWN_MASK);
                         boolean modifiedSelect = ((modifiers & mask) != 0);
                         fieldClicked(point, modifiedSelect);
                     }
@@ -811,12 +811,12 @@ public final class GuiBoard
     private void keyPressed(KeyEvent event)
     {
         int code = event.getKeyCode();
-        int modifiers = event.getModifiers();
+        int modifiers = event.getModifiersEx();
         if (code == KeyEvent.VK_ENTER)
         {
-            int mask = (ActionEvent.CTRL_MASK
-                        | ActionEvent.ALT_MASK
-                        | ActionEvent.META_MASK);
+            int mask = (KeyEvent.CTRL_DOWN_MASK
+                        | KeyEvent.ALT_DOWN_MASK
+                        | KeyEvent.META_DOWN_MASK);
             boolean modifiedSelect = ((modifiers & mask) != 0);
             if (getShowCursor() && m_cursor != null)
                 fieldClicked(m_cursor, modifiedSelect);
