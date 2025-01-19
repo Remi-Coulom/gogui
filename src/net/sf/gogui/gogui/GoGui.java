@@ -169,7 +169,7 @@ ContextMenu.Listener, LiveGfx.Listener
             boolean computerBlack, boolean computerWhite, boolean auto,
             boolean register, String gtpFile, String gtpCommand,
             File analyzeCommandsFile)
-                    throws GtpError, ErrorMessage
+                    throws ErrorMessage
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
@@ -218,10 +218,7 @@ ContextMenu.Listener, LiveGfx.Listener
                 m_game.setComment(comment);
                 // Cannot call updateViews, which calls
                 // Comment.setComment(), in comment callback
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        updateViews(false);
-                    } });
+                SwingUtilities.invokeLater(() -> updateViews(false));
             }
 
             public void textSelected(String text)
@@ -248,17 +245,8 @@ ContextMenu.Listener, LiveGfx.Listener
         });
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtil.setGoIcon(this);
-        RecentFileMenu.Listener recentListener = new RecentFileMenu.Listener()
-        {
-            public void fileSelected(String label, File file) {
-                actionOpenFile(file);
-            }
-        };
-        RecentFileMenu.Listener recentGtp = new RecentFileMenu.Listener() {
-            public void fileSelected(String label, File file) {
-                actionSendFile(file);
-            }
-        };
+        RecentFileMenu.Listener recentListener = (label, file2) -> actionOpenFile(file2);
+        RecentFileMenu.Listener recentGtp = (label, file1) -> actionSendFile(file1);
         m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
                 this, m_prefs.getInt("imagesize", 24));
         // enums are stored as int's for compatibility with earlier versions
@@ -314,17 +302,14 @@ ContextMenu.Listener, LiveGfx.Listener
         setMinimumSize();
         m_programCommand = program;
         m_toolBar = new GoGuiToolBar(this);
-        if (m_programCommand != null && m_programCommand.trim().equals(""))
+        if (m_programCommand != null && m_programCommand.trim().isEmpty())
             m_programCommand = null;
         if (m_programCommand != null)
             m_program = new Program(program, program, "", m_programCommand, "");
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
         protectGui(); // Show wait cursor
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                initialize(m_actions);
-            } });
+        SwingUtilities.invokeLater(() -> initialize(m_actions));
     }
 
     public void actionAbout()
@@ -384,7 +369,7 @@ ContextMenu.Listener, LiveGfx.Listener
         Program ruler = m_rulers.get(index);
         try {
             initGameRuler(ruler.m_command, ruler.m_workingDirectory, ruler.m_label);
-        } catch (ExecFailed e) {
+        } catch (ExecFailed ignored) {
         }
         if (m_gameRuler != null)
         {
@@ -397,16 +382,14 @@ ContextMenu.Listener, LiveGfx.Listener
         if (! checkCommandInProgress())
             return;
         protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    attachNewProgram(program.m_command, program);
-                }
-                finally
-                {
-                    unprotectGui();
-                }
+        Runnable runnable = () -> {
+            try
+            {
+                attachNewProgram(program.m_command, program);
+            }
+            finally
+            {
+                unprotectGui();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -526,18 +509,16 @@ ContextMenu.Listener, LiveGfx.Listener
             return;
         m_prefs.putInt("program", -1);
         protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    saveSession();
-                    detachProgram();
-                    updateViews(false);
-                }
-                finally
-                {
-                    unprotectGui();
-                }
+        Runnable runnable = () -> {
+            try
+            {
+                saveSession();
+                detachProgram();
+                updateViews(false);
+            }
+            finally
+            {
+                unprotectGui();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -552,24 +533,22 @@ ContextMenu.Listener, LiveGfx.Listener
         m_prefs.putInt("ruler", -1);
         m_prefs.putInt("program", -1);
         protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    saveSession();
-                    detachRuler(detachProgram);
-                    getBoard().detachGameRuler();
-                    ConstNode root = getTree().getRootConst();
-                    gotoNode(root);
-                    currentNodeChanged();
-                    initGame(getBoardSize());
-                    m_gameRuler = null;
-                    updateViews(true, true);
-                }
-                finally
-                {
-                    unprotectGui();
-                }
+        Runnable runnable = () -> {
+            try
+            {
+                saveSession();
+                detachRuler(detachProgram);
+                getBoard().detachGameRuler();
+                ConstNode root = getTree().getRootConst();
+                gotoNode(root);
+                currentNodeChanged();
+                initGame(getBoardSize());
+                m_gameRuler = null;
+                updateViews(true, true);
+            }
+            finally
+            {
+                unprotectGui();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -620,7 +599,7 @@ ContextMenu.Listener, LiveGfx.Listener
     {
         BookmarkEditor editor = new BookmarkEditor();
         ObjectListEditor<Bookmark> listEditor =
-                new ObjectListEditor<Bookmark>();
+                new ObjectListEditor<>();
         if (! listEditor.edit(this, i18n("TIT_EDIT_BOOKMARKS"), m_bookmarks,
                 editor, m_messageDialogs))
             return;
@@ -646,7 +625,7 @@ ContextMenu.Listener, LiveGfx.Listener
     public void actionEditPrograms(boolean ruler)
     {
         ProgramEditor editor = new ProgramEditor();
-        ObjectListEditor<Program> listEditor = new ObjectListEditor<Program>();
+        ObjectListEditor<Program> listEditor = new ObjectListEditor<>();
         if (! listEditor.edit(this, i18n("TIT_EDIT_PROGRAMS"), ruler ? m_rulers : m_programs,
                 editor, m_messageDialogs))
             return;
@@ -768,57 +747,55 @@ ContextMenu.Listener, LiveGfx.Listener
             return;
         protectGui();
         showStatus(i18n("STAT_FIND_SEARCHING_COMMENTS"));
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    ConstNode root = getTree().getRootConst();
-                    ConstNode currentNode = getCurrentNode();
-                    ConstNode node =
-                            NodeUtil.findInComments(currentNode, m_pattern);
-                    boolean cancel = false;
-                    if (node == null && getCurrentNode() != root)
-                    {
-                        unprotectGui();
-                        if (showQuestion(i18n("MSG_FIND_CONTINUE"),
-                                i18n("MSG_FIND_CONTINUE_2"),
-                                i18n("LB_FIND_CONTINUE"), false))
-                        {
-                            protectGui();
-                            node = root;
-                            if (! NodeUtil.commentContains(node,
-                                    m_pattern))
-                                node =
-                                NodeUtil.findInComments(node,
-                                        m_pattern);
-                        }
-                        else
-                            cancel = true;
-                    }
-                    if (! cancel)
-                    {
-                        if (node == null)
-                        {
-                            unprotectGui();
-                            showInfo(i18n("MSG_FIND_NOT_FOUND"),
-                                    format(i18n("MSG_FIND_NOT_FOUND_2"),
-                                            m_pattern),
-                                    false);
-                            m_pattern = null;
-                        }
-                        else
-                        {
-                            gotoNode(node);
-                            boardChangedBegin(false, false);
-                            m_comment.markAll(m_pattern);
-                        }
-                    }
-                }
-                finally
+        Runnable runnable = () -> {
+            try
+            {
+                ConstNode root = getTree().getRootConst();
+                ConstNode currentNode = getCurrentNode();
+                ConstNode node =
+                        NodeUtil.findInComments(currentNode, m_pattern);
+                boolean cancel = false;
+                if (node == null && getCurrentNode() != root)
                 {
                     unprotectGui();
-                    clearStatus();
+                    if (showQuestion(i18n("MSG_FIND_CONTINUE"),
+                            i18n("MSG_FIND_CONTINUE_2"),
+                            i18n("LB_FIND_CONTINUE"), false))
+                    {
+                        protectGui();
+                        node = root;
+                        if (! NodeUtil.commentContains(node,
+                                m_pattern))
+                            node =
+                            NodeUtil.findInComments(node,
+                                    m_pattern);
+                    }
+                    else
+                        cancel = true;
                 }
+                if (! cancel)
+                {
+                    if (node == null)
+                    {
+                        unprotectGui();
+                        showInfo(i18n("MSG_FIND_NOT_FOUND"),
+                                format(i18n("MSG_FIND_NOT_FOUND_2"),
+                                        m_pattern),
+                                false);
+                        m_pattern = null;
+                    }
+                    else
+                    {
+                        gotoNode(node);
+                        boardChangedBegin(false, false);
+                        m_comment.markAll(m_pattern);
+                    }
+                }
+            }
+            finally
+            {
+                unprotectGui();
+                clearStatus();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -830,49 +807,47 @@ ContextMenu.Listener, LiveGfx.Listener
             return;
         protectGui();
         showStatus(i18n("STAT_FIND_SEARCHING_COMMENTS"));
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    ConstNode root = getTree().getRootConst();
-                    ConstNode currentNode = getCurrentNode();
-                    ConstNode node = NodeUtil.findNextComment(currentNode);
-                    boolean cancel = false;
-                    if (node == null && getCurrentNode() != root)
-                    {
-                        unprotectGui();
-                        if (showQuestion(i18n("MSG_FIND_CONTINUE"),
-                                i18n("MSG_FIND_CONTINUE_2"),
-                                i18n("LB_FIND_CONTINUE"), false))
-                        {
-                            protectGui();
-                            node = root;
-                            if (! node.hasComment())
-                                node = NodeUtil.findNextComment(node);
-                        }
-                        else
-                            cancel = true;
-                    }
-                    if (! cancel)
-                    {
-                        if (node == null)
-                        {
-                            unprotectGui();
-                            showInfo(i18n("MSG_FIND_NO_COMMENT_FOUND"),
-                                    null, false);
-                        }
-                        else
-                        {
-                            gotoNode(node);
-                            boardChangedBegin(false, false);
-                        }
-                    }
-                }
-                finally
+        Runnable runnable = () -> {
+            try
+            {
+                ConstNode root = getTree().getRootConst();
+                ConstNode currentNode = getCurrentNode();
+                ConstNode node = NodeUtil.findNextComment(currentNode);
+                boolean cancel = false;
+                if (node == null && getCurrentNode() != root)
                 {
                     unprotectGui();
-                    clearStatus();
+                    if (showQuestion(i18n("MSG_FIND_CONTINUE"),
+                            i18n("MSG_FIND_CONTINUE_2"),
+                            i18n("LB_FIND_CONTINUE"), false))
+                    {
+                        protectGui();
+                        node = root;
+                        if (! node.hasComment())
+                            node = NodeUtil.findNextComment(node);
+                    }
+                    else
+                        cancel = true;
                 }
+                if (! cancel)
+                {
+                    if (node == null)
+                    {
+                        unprotectGui();
+                        showInfo(i18n("MSG_FIND_NO_COMMENT_FOUND"),
+                                null, false);
+                    }
+                    else
+                    {
+                        gotoNode(node);
+                        boardChangedBegin(false, false);
+                    }
+                }
+            }
+            finally
+            {
+                unprotectGui();
+                clearStatus();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -925,7 +900,7 @@ ContextMenu.Listener, LiveGfx.Listener
         updateViews(true);
         String variation = bookmark.m_variation;
         ConstNode node = getTree().getRootConst();
-        if (! variation.equals(""))
+        if (!variation.isEmpty())
         {
             node = NodeUtil.findByVariation(node, variation);
             if (node == null)
@@ -966,13 +941,11 @@ ContextMenu.Listener, LiveGfx.Listener
             return;
         if (protectGui)
             protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                gotoNode(node);
-                boardChangedBegin(false, false);
-                if (protectGui)
-                    unprotectGui();
-            }
+        Runnable runnable = () -> {
+            gotoNode(node);
+            boardChangedBegin(false, false);
+            if (protectGui)
+                unprotectGui();
         };
         if (protectGui)
             SwingUtilities.invokeLater(runnable);
@@ -1220,7 +1193,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     if (isGtpRuler())
                         try {
                             initGameRuler(m_newProgram.m_command, m_newProgram.m_workingDirectory, m_newProgram.m_name);
-                        } catch (ExecFailed e) {
+                        } catch (ExecFailed ignored) {
                         }
                     else if (isRulerAttached())
                         actionDetachRuler(false);
@@ -1347,19 +1320,17 @@ ContextMenu.Listener, LiveGfx.Listener
         final boolean protectGui = (m_gtp != null);
         if (protectGui)
             protectGui();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                loadFile(file, -1);
-                boardChangedBegin(false, true);
-                if (protectGui)
-                    unprotectGui();
-            }
+        SwingUtilities.invokeLater(() -> {
+            loadFile(file, -1);
+            boardChangedBegin(false, true);
+            if (protectGui)
+                unprotectGui();
         });
     }
 
     public boolean isPassEnabled() {
         try {
-            return (m_gameRuler == null || m_gameRuler != null && GenericBoard.isPassLegal(m_gameRuler));
+            return m_gameRuler == null || GenericBoard.isPassLegal(m_gameRuler);
         } catch (GtpError e) {
             return true;
         }
@@ -1425,16 +1396,14 @@ ContextMenu.Listener, LiveGfx.Listener
         if (! checkCommandInProgress())
             return;
         protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
-                {
-                    attachNewProgram(m_programCommand, m_program);
-                }
-                finally
-                {
-                    unprotectGui();
-                }
+        Runnable runnable = () -> {
+            try
+            {
+                attachNewProgram(m_programCommand, m_program);
+            }
+            finally
+            {
+                unprotectGui();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -1454,36 +1423,34 @@ ContextMenu.Listener, LiveGfx.Listener
                 return;
         }
         protectGui();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try
+        Runnable runnable = () -> {
+            try
+            {
+                File file;
+                if (fromSnapshot)
+                    file = m_parameterSnapshot;
+                else
                 {
-                    File file;
-                    if (fromSnapshot)
-                        file = m_parameterSnapshot;
-                    else
+                    try
                     {
-                        try
-                        {
-                            file = File.createTempFile("gogui-param",
-                                    ".gtp");
-                        }
-                        catch (IOException e)
-                        {
-                            showError(i18n("MSG_PARAM_TMP_FILE_ERROR"), e);
-                            return;
-                        }
-                        if (! saveParameters(file))
-                            return;
+                        file = File.createTempFile("gogui-param",
+                                ".gtp");
                     }
-                    if (! attachNewProgram(m_programCommand, m_program))
+                    catch (IOException e)
+                    {
+                        showError(i18n("MSG_PARAM_TMP_FILE_ERROR"), e);
                         return;
-                    sendGtpFile(file);
+                    }
+                    if (! saveParameters(file))
+                        return;
                 }
-                finally
-                {
-                    unprotectGui();
-                }
+                if (! attachNewProgram(m_programCommand, m_program))
+                    return;
+                sendGtpFile(file);
+            }
+            finally
+            {
+                unprotectGui();
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -1606,11 +1573,7 @@ ContextMenu.Listener, LiveGfx.Listener
         }
         if (m_gtp.isSupported("final_status_list"))
         {
-            Runnable callback = new Runnable() {
-                public void run() {
-                    scoreContinue();
-                }
-            };
+            Runnable callback = this::scoreContinue;
             runLengthyCommand("final_status_list dead", callback);
         }
         else
@@ -1648,11 +1611,7 @@ ContextMenu.Listener, LiveGfx.Listener
         }
         if (! synchronizeProgram())
             return;
-        Runnable callback = new Runnable() {
-            public void run() {
-                endLengthyCommand(isCritical, showError);
-            }
-        };
+        Runnable callback = () -> endLengthyCommand(isCritical, showError);
         m_gtp.send(command, callback);
         beginLengthyCommand();
     }
@@ -2199,7 +2158,7 @@ ContextMenu.Listener, LiveGfx.Listener
                 pointListArg.add(p);
             m_guiBoard.clearAllSelect();
             GuiBoardUtil.setSelect(m_guiBoard, pointListArg, true);
-            if (modifiedSelect && pointListArg.size() > 0)
+            if (modifiedSelect && !pointListArg.isEmpty())
                 analyzeBegin(false);
         }
         else if (m_scoreMode && ! modifiedSelect)
@@ -2389,7 +2348,7 @@ ContextMenu.Listener, LiveGfx.Listener
     private class ShowInvalidResponse
     implements Runnable
     {
-        public ShowInvalidResponse(String line)
+        public ShowInvalidResponse(String ignoredLine)
         {
         }
 
@@ -2518,7 +2477,7 @@ ContextMenu.Listener, LiveGfx.Listener
     /** File corresponding to the current game. */
     private GameFile m_gameFile;
 
-    private File m_initialFile;
+    private final File m_initialFile;
 
     private final GameInfoPanel m_gameInfoPanel;
 
@@ -2605,7 +2564,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private ArrayList<Program> m_rulers;
 
-    private ShowAnalyzeText m_showAnalyzeText;
+    private final ShowAnalyzeText m_showAnalyzeText;
 
     /** Timer used to delay the message error while the computer is thinking*/
     private long time;
@@ -2655,7 +2614,7 @@ ContextMenu.Listener, LiveGfx.Listener
             else if (m_analyzeCommand.needsPointListArg())
             {
                 ConstPointList list = m_analyzeCommand.getPointListArg();
-                if (list.size() > 0)
+                if (!list.isEmpty())
                     pointArg = list.get(list.size() - 1);
             }
             if (type == AnalyzeType.PARAM)
@@ -2670,9 +2629,9 @@ ContextMenu.Listener, LiveGfx.Listener
                 showText = response;
             if (showText != null)
             {
-                if (showText.indexOf("\n") < 0)
+                if (!showText.contains("\n"))
                 {
-                    if (isTextType && showText.trim().equals(""))
+                    if (isTextType && showText.trim().isEmpty())
                         showText = i18n("STAT_ANALYZE_TEXT_EMPTY_RESPONSE");
                     showStatus(format(i18n("STAT_ANALYZE_TEXT_RESPONSE"),
                             title, showText));
@@ -2725,17 +2684,16 @@ ContextMenu.Listener, LiveGfx.Listener
         return true;
     }
 
-    private boolean attachNewRuler(String command, Program program)
+    private void attachNewRuler(String command, Program program)
     {
         if (! attachProgram(command, program, false, true))
         {
             m_prefs.putInt("ruler", -1);
             updateViews(false);
-            return false;
+            return;
         }
         toFrontLater();
         updateViews(false);
-        return true;
     }
 
     /** Attach program.
@@ -2748,7 +2706,7 @@ ContextMenu.Listener, LiveGfx.Listener
             boolean register, boolean ruler)
     {
         programCommand = programCommand.trim();
-        if (programCommand.equals(""))
+        if (programCommand.isEmpty())
             return false;
         if (ruler) {
             m_ruler = program;
@@ -2777,17 +2735,13 @@ ContextMenu.Listener, LiveGfx.Listener
             m_shell.setCommandCompletion(m_commandCompletion);
         }
         GtpClient.InvalidResponseCallback invalidResponseCallback =
-                new GtpClient.InvalidResponseCallback()
-        {
-            public void show(String line)
-            {
-                Runnable runnable = new ShowInvalidResponse(line);
-                if (SwingUtilities.isEventDispatchThread())
-                    runnable.run();
-                else
-                    GuiUtil.invokeAndWait(runnable);
-            }
-        };
+                line -> {
+                    Runnable runnable = new ShowInvalidResponse(line);
+                    if (SwingUtilities.isEventDispatchThread())
+                        runnable.run();
+                    else
+                        GuiUtil.invokeAndWait(runnable);
+                };
         GtpClient.IOCallback ioCallback = new GtpClient.IOCallback()
         {
             public void receivedInvalidResponse(String s)
@@ -2845,15 +2799,13 @@ ContextMenu.Listener, LiveGfx.Listener
 
             private final LineReader m_lineReader = new LineReader();
 
-            private LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
+            private final LiveGfx m_liveGfx = new LiveGfx(GoGui.this);
         };
         GtpSynchronizer.Listener synchronizerCallback =
-                new GtpSynchronizer.Listener() {
-            public void moveNumberChanged(int moveNumber) {
-                String text = "[" + moveNumber + "]";
-                m_statusBar.immediatelyPaintMoveText(text);
-            }
-        };
+                moveNumber -> {
+                    String text = "[" + moveNumber + "]";
+                    m_statusBar.immediatelyPaintMoveText(text);
+                };
         try
         {
             showStatusImmediately(i18n("STAT_ATTACHING_PROGRAM"));
@@ -2921,7 +2873,7 @@ ContextMenu.Listener, LiveGfx.Listener
                                 initGameRuler(program.m_command, program.m_workingDirectory, program.m_name);
                                 attachNewRuler(program.m_name, program);
 
-                            } catch (ExecFailed e) {
+                            } catch (ExecFailed ignored) {
                             }
                         else if (isRulerAttached()) {
                             actionDetachRuler(false);
@@ -2955,7 +2907,7 @@ ContextMenu.Listener, LiveGfx.Listener
                         }
                     }
                 }
-                catch (GtpError e)
+                catch (GtpError ignored)
                 {
                 }
                 if (m_program != null
@@ -2967,9 +2919,9 @@ ContextMenu.Listener, LiveGfx.Listener
                 try
                 {
                     String programAnalyzeCommands
-                    = GtpClientUtil.getAnalyzeCommands(ruler ? m_gameRuler : m_gtp);
+                    = GtpClientUtil.getAnalyzeCommands(m_gtp);
                     m_analyzeCommands
-                    = AnalyzeDefinition.read((ruler ? m_gameRuler : m_gtp).getSupportedCommands(),
+                    = AnalyzeDefinition.read(m_gtp.getSupportedCommands(),
                             m_analyzeCommandsFile,
                             programAnalyzeCommands);
                 }
@@ -2982,7 +2934,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     restoreSize(m_shell, "shell");
                     m_shell.setProgramName(getProgramLabel());
                     ArrayList<String> supportedCommands =
-                            (ruler ? m_gameRuler : m_gtp).getSupportedCommands();
+                            m_gtp.getSupportedCommands();
                     m_shell.setInitialCompletions(supportedCommands);
                 }
                 if (! m_gtp.isGenmoveSupported())
@@ -2991,10 +2943,10 @@ ContextMenu.Listener, LiveGfx.Listener
                     m_computerWhite = false;
                 }
                 initGtp();
-                if (! m_gtpFile.equals(""))
+                if (!m_gtpFile.isEmpty())
                     sendGtpFile(new File(m_gtpFile));
             }
-            if (! (ruler ? m_rulerCommand : m_gtpCommand).equals(""))
+            if (!(ruler ? m_rulerCommand : m_gtpCommand).isEmpty())
                 sendGtpString(m_gtpCommand);
             setTitle();
         }
@@ -3075,7 +3027,7 @@ ContextMenu.Listener, LiveGfx.Listener
         try {
             gameFinished = (bothPassed || m_resigned
                     || rulerAttached && GenericBoard.isGameOver(m_gameRuler));
-        } catch (GtpError e) {
+        } catch (GtpError ignored) {
         }
         if (isComputerBoth())
         {
@@ -3225,16 +3177,14 @@ ContextMenu.Listener, LiveGfx.Listener
             return;
         saveSession();
         setVisible(false);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                if (m_gtp != null)
-                {
-                    m_analyzeCommand = null;
-                    detachProgram();
-                }
-                dispose();
-                System.exit(0);
+        SwingUtilities.invokeLater(() -> {
+            if (m_gtp != null)
+            {
+                m_analyzeCommand = null;
+                detachProgram();
             }
+            dispose();
+            System.exit(0);
         });
     }
 
@@ -3409,7 +3359,7 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 m_thumbnailCreator.create(file);
             }
-            catch (ErrorMessage e)
+            catch (ErrorMessage ignored)
             {
             }
         }
@@ -3440,7 +3390,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     if (m_gtp.isSupported("quit"))
                         m_gtp.send("quit");
                 }
-                catch (GtpError e)
+                catch (GtpError ignored)
                 {
                 }
                 m_gtp.close();
@@ -3484,7 +3434,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     detachProgram();
                 }
             }
-            catch (GtpError e)
+            catch (GtpError ignored)
             {
             }
             m_gameRuler.close();
@@ -3573,13 +3523,7 @@ ContextMenu.Listener, LiveGfx.Listener
         }
         m_isSingleMove = isSingleMove;
         m_interruptComputerBoth = false;
-        Runnable callback = new Runnable()
-        {
-            public void run()
-            {
-                computerMoved();
-            }
-        };
+        Runnable callback = this::computerMoved;
         if (getClock().isInitialized()
                 && NodeUtil.isTimeLeftKnown(getCurrentNode(), toMove))
             GtpUtil.sendTimeLeft(m_gtp, getClock(), toMove);
@@ -3806,24 +3750,22 @@ ContextMenu.Listener, LiveGfx.Listener
     private void initialize(GoGuiActions m_actions)
     {
         m_guiBoard.setListener(this);
-        m_guiBoard.addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                // Silently ignore mouse wheel events if command in
-                // progress because it is easy to generate multiple events
-                // while using the wheel and if an analyze command is
-                // enabled to automatically run after each board change,
-                // actionForward() and actionBackward() would pop up an
-                // error dialog if the analyze command is still in progress
-                if (isCommandInProgress())
-                    return;
-                int n = e.getWheelRotation();
-                int mod = e.getModifiersEx();
-                int scale = (mod == KeyEvent.SHIFT_DOWN_MASK ? 10 : 1);
-                if (n > 0)
-                    actionForward(scale * n);
-                else
-                    actionBackward(-scale * n);
-            }
+        m_guiBoard.addMouseWheelListener(e -> {
+            // Silently ignore mouse wheel events if command in
+            // progress because it is easy to generate multiple events
+            // while using the wheel and if an analyze command is
+            // enabled to automatically run after each board change,
+            // actionForward() and actionBackward() would pop up an
+            // error dialog if the analyze command is still in progress
+            if (isCommandInProgress())
+                return;
+            int n = e.getWheelRotation();
+            int mod = e.getModifiersEx();
+            int scale = (mod == KeyEvent.SHIFT_DOWN_MASK ? 10 : 1);
+            if (n > 0)
+                actionForward(scale * n);
+            else
+                actionBackward(-scale * n);
         });
 
         this.setTransferHandler(new TransferHandler () {
@@ -4356,7 +4298,7 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 in.close();
             }
-            catch (IOException e)
+            catch (IOException ignored)
             {
             }
         }
@@ -4433,7 +4375,7 @@ ContextMenu.Listener, LiveGfx.Listener
     private void setResult(String result)
     {
         String oldResult = getGameInfo().get(StringInfo.RESULT);
-        if (! (oldResult == null || oldResult.equals("")
+        if (! (oldResult == null || oldResult.isEmpty()
                 || oldResult.equals(result))
                 && ! showQuestion(format(i18n("MSG_REPLACE_RESULT"), oldResult,
                         result),
@@ -4575,7 +4517,7 @@ ContextMenu.Listener, LiveGfx.Listener
         else
         {
             mainMessage = i18n("MSG_COMMAND_FAILED");
-            if (e.getMessage().trim().equals(""))
+            if (e.getMessage().trim().isEmpty())
                 optionalMessage =
                 format(i18n("MSG_COMMAND_FAILED_2"), e.getCommand());
             else
@@ -4621,7 +4563,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     i18n("MSG_GAME_FINISHED"),
                     m_gameRuler.isSupported("gogui-rules_final_result") ?
                             m_gameRuler.send("gogui-rules_final_result") : "", false);
-        } catch (GtpError e) {
+        } catch (GtpError ignored) {
         }
     }
 
@@ -4750,7 +4692,7 @@ ContextMenu.Listener, LiveGfx.Listener
         if (m_gtp.isProgramDead())
         {
             String mainMessage = format(i18n("MSG_PROGRAM_TERMINATED"), name);
-            String optionalMessage = "";
+            String optionalMessage;
             if (m_shell.isLastTextNonGTP())
             {
                 showShell();
@@ -4792,7 +4734,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     command = formatCommand(e.getCommand());
                 String message = e.getMessage();
                 String response = null;
-                if (! message.trim().equals(""))
+                if (!message.trim().isEmpty())
                     response = message;
                 String optionalMessage;
                 if (command == null)
@@ -4819,12 +4761,9 @@ ContextMenu.Listener, LiveGfx.Listener
     {
         // Calling toFront() directly does not give the focus to this
         // frame, if dialogs are open
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run()
-            {
-                requestFocus();
-                toFront();
-            }
+        SwingUtilities.invokeLater(() -> {
+            requestFocus();
+            toFront();
         });
     }
 
@@ -4852,8 +4791,7 @@ ContextMenu.Listener, LiveGfx.Listener
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();
         updateGuiBoard();
-        getRootPane().putClientProperty("windowModified",
-                Boolean.valueOf(isModified()));
+        getRootPane().putClientProperty("windowModified", isModified());
         setTitle();
         GoGuiUtil.updateMoveText(m_statusBar, getGame());
         m_statusBar.setSetupMode(m_setupMode);
@@ -4869,18 +4807,16 @@ ContextMenu.Listener, LiveGfx.Listener
                 {
                     protectGui();
                     showStatus(i18n("STAT_UPDATING_TREE"));
-                    Runnable runnable = new Runnable() {
-                        public void run() {
-                            try
-                            {
-                                m_gameTreeViewer.update(getTree(),
-                                        getCurrentNode());
-                            }
-                            finally
-                            {
-                                unprotectGui();
-                                clearStatus();
-                            }
+                    Runnable runnable = () -> {
+                        try
+                        {
+                            m_gameTreeViewer.update(getTree(),
+                                    getCurrentNode());
+                        }
+                        finally
+                        {
+                            unprotectGui();
+                            clearStatus();
                         }
                     };
                     SwingUtilities.invokeLater(runnable);
@@ -4907,7 +4843,7 @@ ContextMenu.Listener, LiveGfx.Listener
             try {
                 String response = m_gameRuler.send("gogui-rules_board_gfx");
                 AnalyzeShow.showGfx(response, m_guiBoard, m_statusBar, null);
-            } catch (GtpError e) {
+            } catch (GtpError ignored) {
             }
         }
     }
@@ -4941,7 +4877,7 @@ ContextMenu.Listener, LiveGfx.Listener
             directory = System.getProperty("user.dir");
         }
         try {
-            GtpClientBase m_gameRulerCopie = null;
+            GtpClientBase m_gameRulerCopie;
             boolean alreadyAttached = isRulerAttached();
             String previousGame = "";
             int previousSize = -1;
@@ -4953,13 +4889,11 @@ ContextMenu.Listener, LiveGfx.Listener
             m_gameRulerCopie = new GtpClient(command,
                     new File(directory),
                     false,null);
-            String newGame = "";
-            int newSize = -1;
             m_gameRulerCopie.querySupportedCommands();
             m_gameRulerCopie.queryInterruptSupport();
-            newGame = GenericBoard.getGameId(m_gameRulerCopie);
-            newSize = GenericBoard.getBoardSize(m_gameRulerCopie);
-            if (previousGame.equals(newGame) && !previousGame.equals("")
+            String newGame = GenericBoard.getGameId(m_gameRulerCopie);
+            int newSize = GenericBoard.getBoardSize(m_gameRulerCopie);
+            if (previousGame.equals(newGame) && !previousGame.isEmpty()
                     && previousSize==newSize && previousSize > 0)
             {
                 GenericBoard.copyBoardState(m_gameRulerCopie, getCurrentNode(), (Board)getBoard());
@@ -5019,7 +4953,7 @@ ContextMenu.Listener, LiveGfx.Listener
             return false;
         try {
             if (! isRulerAttached() && m_gtp.isSupported("gogui-rules_game_id") &&
-                    m_gtp.send("gogui-rules_game_id").toUpperCase().equals("GO"))
+                    m_gtp.send("gogui-rules_game_id").equalsIgnoreCase("GO"))
 
                 return true;
             if (isRulerAttached()
@@ -5028,8 +4962,7 @@ ContextMenu.Listener, LiveGfx.Listener
                     && m_gtp.isSupported("gogui-rules_game_id")
                     && m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id")))
                 return true;
-        } catch (NumberFormatException e) {
-        } catch (GtpError e) {
+        } catch (NumberFormatException | GtpError ignored) {
         }
         return false;
     }
