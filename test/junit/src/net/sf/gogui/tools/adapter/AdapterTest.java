@@ -17,7 +17,7 @@ import net.sf.gogui.util.StreamCopy;
 public final class AdapterTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

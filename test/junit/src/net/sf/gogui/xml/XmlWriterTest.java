@@ -14,7 +14,7 @@ import net.sf.gogui.go.Move;
 public final class XmlWriterTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

@@ -5,7 +5,7 @@ package net.sf.gogui.go;
 public final class KomiTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -17,8 +17,8 @@ public final class KomiTest
 
     public void testEquals() throws InvalidKomiException
     {
-        assertTrue((new Komi(0)).equals(new Komi(0)));
-        assertTrue((new Komi(6.5)).equals(new Komi(6.5)));
+        assertEquals((new Komi(0)), new Komi(0));
+        assertEquals((new Komi(6.5)), new Komi(6.5));
         assertFalse((new Komi(0)).equals(new Komi(6.5)));
         assertFalse((new Komi(6.5)).equals(new Komi(6)));
         assertFalse((new Komi(6.5)).equals(new Komi(5.5)));

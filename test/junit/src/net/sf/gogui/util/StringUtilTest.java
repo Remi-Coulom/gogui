@@ -8,7 +8,7 @@ import java.util.Locale;
 public final class StringUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -46,11 +46,11 @@ public final class StringUtilTest
     public void testSplit()
     {
         String[] s = StringUtil.split("1//23/ ", '/');
-        assertEquals(s.length, 4);
-        assertEquals(s[0], "1");
-        assertEquals(s[1], "");
-        assertEquals(s[2], "23");
-        assertEquals(s[3], " ");
+        assertEquals(4, s.length);
+        assertEquals("1", s[0]);
+        assertEquals("", s[1]);
+        assertEquals("23", s[2]);
+        assertEquals(" ", s[3]);
     }
 
     public void testSplitArguments1()

@@ -30,7 +30,7 @@ public final class GtpEngineConnection
                     {
                         m_engine.mainLoop(in, out);
                     }
-                    catch (IOException e)
+                    catch (IOException ignored)
                     {
                     }
                 }
@@ -53,7 +53,7 @@ public final class GtpEngineConnection
         throw new GtpError("unknown command");
     }
 
-    private GtpClient m_gtp;
+    private final GtpClient m_gtp;
 
-    private GtpEngine m_engine;
+    private final GtpEngine m_engine;
 }

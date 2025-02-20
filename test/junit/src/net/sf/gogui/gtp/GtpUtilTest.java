@@ -9,7 +9,7 @@ import net.sf.gogui.go.PointList;
 public final class GtpUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -46,15 +46,15 @@ public final class GtpUtilTest
     public void getTimeSettingsCommand()
     {
         TimeSettings settings = new TimeSettings(60000);
-        assertEquals(GtpUtil.getTimeSettingsCommand(settings),
-                     "time_settings 60 0 0");
+        assertEquals("time_settings 60 0 0",
+                GtpUtil.getTimeSettingsCommand(settings));
         settings = new TimeSettings(0, 60000, 10);
-        assertEquals(GtpUtil.getTimeSettingsCommand(settings),
-                     "time_settings 0 60 10");
+        assertEquals("time_settings 0 60 10",
+                GtpUtil.getTimeSettingsCommand(settings));
         settings = new TimeSettings(30000, 60000, 10);
-        assertEquals(GtpUtil.getTimeSettingsCommand(settings),
-                     "time_settings 30 60 10");
-        assertEquals(GtpUtil.getTimeSettingsCommand(null),
-                     "time_settings 0 1 0");
+        assertEquals("time_settings 30 60 10",
+                GtpUtil.getTimeSettingsCommand(settings));
+        assertEquals("time_settings 0 1 0",
+                GtpUtil.getTimeSettingsCommand(null));
     }
 }

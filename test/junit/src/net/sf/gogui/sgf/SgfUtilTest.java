@@ -5,7 +5,7 @@ package net.sf.gogui.sgf;
 public final class SgfUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

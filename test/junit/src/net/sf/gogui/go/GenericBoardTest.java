@@ -17,7 +17,7 @@ import net.sf.gogui.gtp.GtpError;
 public final class GenericBoardTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -74,8 +74,8 @@ public final class GenericBoardTest
             m = Move.get(WHITE, GoPoint.get(15, 13));
             gameRuler.sendPlay(m);
             GenericBoard.copyRulerBoardState(gameRuler, board);
-            assertTrue(board.getColor(GoPoint.get(18, 18)).equals(BLACK));
-            assertTrue(board.getColor(GoPoint.get(15, 13)).equals(WHITE));
+            assertEquals(BLACK, board.getColor(GoPoint.get(18, 18)));
+            assertEquals(WHITE, board.getColor(GoPoint.get(15, 13)));
             assertFalse(board.getColor(GoPoint.get(13, 15)).equals(WHITE));
             gameRuler.sendPlay(m);
         } catch (GtpError e) {
@@ -88,17 +88,17 @@ public final class GenericBoardTest
         gameRuler();
         Move m = Move.get(BLACK, GoPoint.get(18, 18));
         GenericBoard.sendPlay(gameRuler, board, m);
-        assertTrue(board.getColor(GoPoint.get(18,18)).equals(BLACK));
+        assertEquals(BLACK, board.getColor(GoPoint.get(18, 18)));
     }
     
     public void testSynchroSideToMove()
     {
         gameRuler();
-        assertEquals(board.getToMove(), BLACK);
+        assertEquals(BLACK, board.getToMove());
         Move m = Move.get(BLACK, GoPoint.get(18, 18));
         GenericBoard.sendPlay(gameRuler, board,  m);
-        assertEquals(board.getToMove(), WHITE);
+        assertEquals(WHITE, board.getToMove());
         GenericBoard.sendPlay(gameRuler, board, m);
-        assertEquals(board.getToMove(), BLACK);
+        assertEquals(BLACK, board.getToMove());
     }
 }

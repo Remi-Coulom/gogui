@@ -8,7 +8,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 public final class MoveTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -22,11 +22,11 @@ public final class MoveTest
     {
         Move blackPass = Move.getPass(BLACK);
         assertNull(blackPass.getPoint());
-        assertSame(blackPass.getColor(), BLACK);
+        assertSame(BLACK, blackPass.getColor());
         assertSame(Move.get(BLACK, null), blackPass);
         Move whitePass = Move.getPass(WHITE);
         assertNull(whitePass.getPoint());
-        assertSame(whitePass.getColor(), WHITE);
+        assertSame(WHITE, whitePass.getColor());
         assertSame(Move.get(WHITE, null), whitePass);
     }
 

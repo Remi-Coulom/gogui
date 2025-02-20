@@ -10,7 +10,7 @@ import java.io.OutputStream;
 public final class StreamCopyTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

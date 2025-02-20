@@ -16,7 +16,7 @@ import net.sf.gogui.util.ErrorMessage;
 public final class XmlReaderTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

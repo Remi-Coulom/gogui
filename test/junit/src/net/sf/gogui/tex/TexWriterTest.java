@@ -13,7 +13,7 @@ import net.sf.gogui.go.GoPoint;
 public final class TexWriterTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -37,8 +37,8 @@ public final class TexWriterTest
                       null);
         String s = out.toString();
         //System.err.println(s);
-        assertTrue(s.indexOf("\\stone[\\markma]{black}{a}{1}") >= 0);
-        assertTrue(s.indexOf("\\markpos{\\markma}{a}{2}") >= 0);
+        assertTrue(s.contains("\\stone[\\markma]{black}{a}{1}"));
+        assertTrue(s.contains("\\markpos{\\markma}{a}{2}"));
     }
 
     /** Test that a comment is appended for skipped second move on same
@@ -56,6 +56,6 @@ public final class TexWriterTest
         new TexWriter(null, out, game.getTree());
         String s = out.toString();
         //System.err.println(s);
-        assertTrue(s.indexOf("\\stone[5]{black}~at~\\stone[1]{black}") >= 0);
+        assertTrue(s.contains("\\stone[5]{black}~at~\\stone[1]{black}"));
     }
 }

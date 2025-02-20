@@ -5,7 +5,7 @@ package net.sf.gogui.util;
 public final class ObjectUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(Object args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

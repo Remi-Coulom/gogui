@@ -12,7 +12,7 @@ import net.sf.gogui.go.Move;
 public final class NodeUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -24,8 +24,8 @@ public final class NodeUtilTest
 
     public void testBackward()
     {
-        assertTrue(NodeUtil.backward(m_node10, 2) == m_node1);
-        assertTrue(NodeUtil.backward(m_node3, 10) == m_node0);
+        assertSame(NodeUtil.backward(m_node10, 2), m_node1);
+        assertSame(NodeUtil.backward(m_node3, 10), m_node0);
     }
 
     public void testCommentContains()
@@ -41,24 +41,24 @@ public final class NodeUtilTest
 
     public void testFindByMoveNumber()
     {
-        assertTrue(NodeUtil.findByMoveNumber(m_node0, 1) == m_node2);
-        assertTrue(NodeUtil.findByMoveNumber(m_node0, 2) == m_node3);
-        assertTrue(NodeUtil.findByMoveNumber(m_node4, 2) == m_node3);
-        assertTrue(NodeUtil.findByMoveNumber(m_node0, 3) == m_node5);
+        assertSame(NodeUtil.findByMoveNumber(m_node0, 1), m_node2);
+        assertSame(NodeUtil.findByMoveNumber(m_node0, 2), m_node3);
+        assertSame(NodeUtil.findByMoveNumber(m_node4, 2), m_node3);
+        assertSame(NodeUtil.findByMoveNumber(m_node0, 3), m_node5);
         assertNull(NodeUtil.findByMoveNumber(m_node0, 4));
-        assertTrue(NodeUtil.findByMoveNumber(m_node0, 0) == m_node0);
+        assertSame(NodeUtil.findByMoveNumber(m_node0, 0), m_node0);
         assertNull(NodeUtil.findByMoveNumber(m_node0, -1));
-        assertTrue(NodeUtil.findByMoveNumber(m_node7, 1) == m_node8);
+        assertSame(NodeUtil.findByMoveNumber(m_node7, 1), m_node8);
     }
 
     public void testFindByVariation()
     {
-        assertTrue(NodeUtil.findByVariation(m_node0, "") == m_node0);
-        assertTrue(NodeUtil.findByVariation(m_node0, "1") == m_node2);
-        assertTrue(NodeUtil.findByVariation(m_node0, "2") == m_node7);
+        assertSame(NodeUtil.findByVariation(m_node0, ""), m_node0);
+        assertSame(NodeUtil.findByVariation(m_node0, "1"), m_node2);
+        assertSame(NodeUtil.findByVariation(m_node0, "2"), m_node7);
         assertNull(NodeUtil.findByVariation(m_node0, "3"));
-        assertTrue(NodeUtil.findByVariation(m_node0, "2.1") == m_node8);
-        assertTrue(NodeUtil.findByVariation(m_node0, "2.2") == m_node9);
+        assertSame(NodeUtil.findByVariation(m_node0, "2.1"), m_node8);
+        assertSame(NodeUtil.findByVariation(m_node0, "2.2"), m_node9);
         assertNull(NodeUtil.findByVariation(m_node0, "foobar"));
         assertNull(NodeUtil.findByVariation(m_node0, "123.4"));
         assertNull(NodeUtil.findByVariation(m_node0, "0"));
@@ -66,67 +66,66 @@ public final class NodeUtilTest
 
     public void testGetBackToMainVariation()
     {
-        assertTrue(NodeUtil.getBackToMainVariation(m_node1) == m_node1);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node5) == m_node5);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node7) == m_node2);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node8) == m_node2);
-        assertTrue(NodeUtil.getBackToMainVariation(m_node9) == m_node2);
+        assertSame(NodeUtil.getBackToMainVariation(m_node1), m_node1);
+        assertSame(NodeUtil.getBackToMainVariation(m_node5), m_node5);
+        assertSame(NodeUtil.getBackToMainVariation(m_node7), m_node2);
+        assertSame(NodeUtil.getBackToMainVariation(m_node8), m_node2);
+        assertSame(NodeUtil.getBackToMainVariation(m_node9), m_node2);
     }
 
     public void testGetChildrenMoves()
     {
         ConstPointList moves = NodeUtil.getChildrenMoves(m_node7);
-        assertEquals(moves.size(), 3);
-        assertTrue(moves.get(0) == GoPoint.get(0, 0));
-        assertTrue(moves.get(1) == GoPoint.get(0, 0));
-        assertTrue(moves.get(2) == GoPoint.get(0, 1));
+        assertEquals(3, moves.size());
+        assertSame(moves.get(0), GoPoint.get(0, 0));
+        assertSame(moves.get(1), GoPoint.get(0, 0));
+        assertSame(moves.get(2), GoPoint.get(0, 1));
     }
 
     public void testGetChildWithMove()
     {
-        assertTrue(NodeUtil.getChildWithMove(m_node7,
-                                             Move.get(BLACK, 0, 0))
-                   == m_node8);
+        assertSame(NodeUtil.getChildWithMove(m_node7,
+                Move.get(BLACK, 0, 0)), m_node8);
         assertNull(NodeUtil.getChildWithMove(m_node7,
                                              Move.get(BLACK, 2, 3)));
     }
 
     public void testGetDepth()
     {
-        assertEquals(NodeUtil.getDepth(m_node0), 0);
-        assertEquals(NodeUtil.getDepth(m_node2), 2);
-        assertEquals(NodeUtil.getDepth(m_node6), 6);
-        assertEquals(NodeUtil.getDepth(m_node8), 3);
+        assertEquals(0, NodeUtil.getDepth(m_node0));
+        assertEquals(2, NodeUtil.getDepth(m_node2));
+        assertEquals(6, NodeUtil.getDepth(m_node6));
+        assertEquals(3, NodeUtil.getDepth(m_node8));
     }
 
     public void testGetLast()
     {
-        assertTrue(NodeUtil.getLast(m_node1) == m_node6);
-        assertTrue(NodeUtil.getLast(m_node7) == m_node8);
-        assertTrue(NodeUtil.getLast(m_node10) == m_node10);
+        assertSame(NodeUtil.getLast(m_node1), m_node6);
+        assertSame(NodeUtil.getLast(m_node7), m_node8);
+        assertSame(NodeUtil.getLast(m_node10), m_node10);
     }
 
     public void testGetMoveNumber()
     {
-        assertEquals(NodeUtil.getMoveNumber(m_node0), 0);
-        assertEquals(NodeUtil.getMoveNumber(m_node1), 0);
-        assertEquals(NodeUtil.getMoveNumber(m_node2), 1);
-        assertEquals(NodeUtil.getMoveNumber(m_node3), 2);
-        assertEquals(NodeUtil.getMoveNumber(m_node4), 2);
-        assertEquals(NodeUtil.getMoveNumber(m_node5), 3);
-        assertEquals(NodeUtil.getMoveNumber(m_node6), 3);
+        assertEquals(0, NodeUtil.getMoveNumber(m_node0));
+        assertEquals(0, NodeUtil.getMoveNumber(m_node1));
+        assertEquals(1, NodeUtil.getMoveNumber(m_node2));
+        assertEquals(2, NodeUtil.getMoveNumber(m_node3));
+        assertEquals(2, NodeUtil.getMoveNumber(m_node4));
+        assertEquals(3, NodeUtil.getMoveNumber(m_node5));
+        assertEquals(3, NodeUtil.getMoveNumber(m_node6));
     }
 
     public void testGetMovesLeft()
     {
-        assertEquals(NodeUtil.getMovesLeft(m_node0), 3);
-        assertEquals(NodeUtil.getMovesLeft(m_node1), 3);
-        assertEquals(NodeUtil.getMovesLeft(m_node2), 2);
-        assertEquals(NodeUtil.getMovesLeft(m_node3), 1);
-        assertEquals(NodeUtil.getMovesLeft(m_node4), 1);
-        assertEquals(NodeUtil.getMovesLeft(m_node5), 0);
-        assertEquals(NodeUtil.getMovesLeft(m_node6), 0);
-        assertEquals(NodeUtil.getMovesLeft(m_node7), 1);
+        assertEquals(3, NodeUtil.getMovesLeft(m_node0));
+        assertEquals(3, NodeUtil.getMovesLeft(m_node1));
+        assertEquals(2, NodeUtil.getMovesLeft(m_node2));
+        assertEquals(1, NodeUtil.getMovesLeft(m_node3));
+        assertEquals(1, NodeUtil.getMovesLeft(m_node4));
+        assertEquals(0, NodeUtil.getMovesLeft(m_node5));
+        assertEquals(0, NodeUtil.getMovesLeft(m_node6));
+        assertEquals(1, NodeUtil.getMovesLeft(m_node7));
     }
 
     public void testSubtreeSize()
@@ -137,13 +136,13 @@ public final class NodeUtilTest
     public void testTruncateChildren()
     {
         Node node = new Node();
-        assertEquals(node.getNumberChildren(), 0);
+        assertEquals(0, node.getNumberChildren());
         NodeUtil.truncateChildren(node);
         node.append(new Node());
         node.append(new Node());
-        assertEquals(node.getNumberChildren(), 2);
+        assertEquals(2, node.getNumberChildren());
         NodeUtil.truncateChildren(node);
-        assertEquals(node.getNumberChildren(), 0);
+        assertEquals(0, node.getNumberChildren());
     }
 
     /** Create a small test tree.

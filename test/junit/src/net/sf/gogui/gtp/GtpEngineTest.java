@@ -5,7 +5,7 @@ package net.sf.gogui.gtp;
 public final class GtpEngineTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

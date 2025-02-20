@@ -10,7 +10,7 @@ import net.sf.gogui.gtp.GtpExpectEngine;
 public final class StatisticsTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

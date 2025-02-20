@@ -11,7 +11,7 @@ import net.sf.gogui.go.Move;
 public final class GameTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -21,7 +21,7 @@ public final class GameTest
         return new junit.framework.TestSuite(GameTest.class);
     }
 
-    public static void testSetComment()
+    public void testSetComment()
     {
         Game game = new Game(19);
         String comment = "foo";
@@ -34,7 +34,7 @@ public final class GameTest
         assertTrue(game.isModified());
     }
 
-    public static void testSetLabel()
+    public void testSetLabel()
     {
         Game game = new Game(19);
         GoPoint p = GoPoint.get(0, 0);
@@ -48,7 +48,7 @@ public final class GameTest
         assertTrue(game.isModified());
     }
 
-    public static void testSetToMove()
+    public void testSetToMove()
     {
         Game game = new Game(19);
         game.setToMove(WHITE);
@@ -59,7 +59,7 @@ public final class GameTest
     /** Test removing a stone in the root node.
         It should just remove the setup stone from the node, but not add a
         removal (empty setup stone). */
-    public static void testSetupEmptyInRoot()
+    public void testSetupEmptyInRoot()
     {
         Game game = new Game(19);
         ConstNode node = game.getCurrentNode();
@@ -75,7 +75,7 @@ public final class GameTest
     }
 
     /** Test that clock is initialized with time settings. */
-    public static void testTimeSettingsInit()
+    public void testTimeSettingsInit()
     {
         TimeSettings timeSettings = new TimeSettings(600000);
         Game game = new Game(19, null, null, null, timeSettings);
@@ -83,7 +83,7 @@ public final class GameTest
     }
 
     /** Test that clock is updated after time settings changed. */
-    public static void testTimeSettingsUpdate()
+    public void testTimeSettingsUpdate()
     {
         TimeSettings timeSettings = new TimeSettings(600000);
         Game game = new Game(19, null, null, null, timeSettings);
@@ -93,7 +93,7 @@ public final class GameTest
         ConstGameInfo oldInfo = game.getGameInfo(root);
         GameInfo newInfo = new GameInfo(oldInfo);
         TimeSettings newTimeSettings = new TimeSettings(300000);
-        assertTrue(! newTimeSettings.equals(timeSettings));
+        assertFalse(newTimeSettings.equals(timeSettings));
         newInfo.setTimeSettings(newTimeSettings);
         game.setGameInfo(newInfo, root);
         assertEquals(newTimeSettings, game.getClock().getTimeSettings());

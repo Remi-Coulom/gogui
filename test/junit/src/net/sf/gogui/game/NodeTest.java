@@ -11,7 +11,7 @@ import net.sf.gogui.go.GoPoint;
 public final class NodeTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -30,21 +30,21 @@ public final class NodeTest
         root.append(node);
         node.append(child1);
         node.append(child2);
-        assertEquals(root.getNumberChildren(), 1);
-        assertEquals(node.getNumberChildren(), 2);
-        assertEquals(child1.getNumberChildren(), 0);
-        assertEquals(child2.getNumberChildren(), 0);
-        assertTrue(root.getChild() == node);
-        assertTrue(node.getChild() == child1);
+        assertEquals(1, root.getNumberChildren());
+        assertEquals(2, node.getNumberChildren());
+        assertEquals(0, child1.getNumberChildren());
+        assertEquals(0, child2.getNumberChildren());
+        assertSame(root.getChild(), node);
+        assertSame(node.getChild(), child1);
         assertNull(child1.getChild());
         assertNull(child2.getChild());
-        assertEquals(root.getChildIndex(node), 0);
-        assertEquals(node.getChildIndex(child1), 0);
-        assertEquals(node.getChildIndex(child2), 1);
+        assertEquals(0, root.getChildIndex(node));
+        assertEquals(0, node.getChildIndex(child1));
+        assertEquals(1, node.getChildIndex(child2));
         assertNull(root.getFather());
-        assertTrue(node.getFather() == root);
-        assertTrue(child1.getFather() == node);
-        assertTrue(child2.getFather() == node);
+        assertSame(node.getFather(), root);
+        assertSame(child1.getFather(), node);
+        assertSame(child2.getFather(), node);
     }
 
     public void testIsChildOf()

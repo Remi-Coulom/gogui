@@ -7,7 +7,7 @@ import java.util.Iterator;
 public final class PointListTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

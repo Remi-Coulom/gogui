@@ -29,7 +29,7 @@ public final class GtpExpectEngine
 
     public String getNextExpectedCommand()
     {
-        if (m_commands.size() == 0)
+        if (m_commands.isEmpty())
             return null;
         return m_commands.get(0);
     }
@@ -41,14 +41,14 @@ public final class GtpExpectEngine
     public boolean isExpectQueueEmpty()
     {
         assert m_commands.size() == m_responses.size();
-        return m_commands.size() == 0;
+        return m_commands.isEmpty();
     }
 
     public void handleCommand(GtpCommand cmd) throws GtpError
     {
         assert m_commands.size() == m_responses.size();
         String line = cmd.getLine();
-        if (m_commands.size() == 0)
+        if (m_commands.isEmpty())
             throw new GtpError("unexpected command: " + line);
         if (line.equals(m_commands.get(0)))
         {
@@ -60,7 +60,7 @@ public final class GtpExpectEngine
                                + line);
     }
 
-    private ArrayList<String> m_commands = new ArrayList<String>();
+    private final ArrayList<String> m_commands = new ArrayList<String>();
 
-    private ArrayList<String> m_responses = new ArrayList<String>();
+    private final ArrayList<String> m_responses = new ArrayList<String>();
 }

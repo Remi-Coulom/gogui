@@ -28,7 +28,7 @@ import net.sf.gogui.version.Version;
 public final class SgfReaderTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -191,38 +191,38 @@ public final class SgfReaderTest
     public void checkFF4Example(SgfReader reader) throws Exception
     {
         GameTree tree = reader.getTree();
-        assertEquals(tree.getBoardSize(), 19);
+        assertEquals(19, tree.getBoardSize());
         ConstNode root = tree.getRoot();
-        assertEquals(NodeUtil.subtreeSize(root), 54);
-        assertEquals(root.getNumberChildren(), 5);
+        assertEquals(54, NodeUtil.subtreeSize(root));
+        assertEquals(5, root.getNumberChildren());
         ConstNode node;
         node = root.getChildConst(1);
-        assertEquals(node.getNumberChildren(), 1);
+        assertEquals(1, node.getNumberChildren());
         checkSetup(node, 16, 16, 0);
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 1);
+        assertEquals(1, node.getNumberChildren());
         checkSetup(node, 0, 0, 9);
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 1);
+        assertEquals(1, node.getNumberChildren());
         checkSetup(node, 1, 1, 0);
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 0);
-        assertEquals(node.getPlayer(), WHITE);
+        assertEquals(0, node.getNumberChildren());
+        assertEquals(WHITE, node.getPlayer());
         node = root.getChildConst(2);
-        assertEquals(node.getNumberChildren(), 1);
+        assertEquals(1, node.getNumberChildren());
         checkSetup(node, 35, 37, 0);
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 1);
-        assertEquals(node.getMarkedConst(MarkType.MARK).size(), 9);
-        assertEquals(node.getMarkedConst(MarkType.CIRCLE).size(), 9);
-        assertEquals(node.getMarkedConst(MarkType.SQUARE).size(), 9);
-        assertEquals(node.getMarkedConst(MarkType.TRIANGLE).size(), 9);
-        assertEquals(node.getMarkedConst(MarkType.SELECT).size(), 9);
-        assertEquals(node.getMarkedConst(MarkType.TERRITORY_BLACK).size(), 18);
-        assertEquals(node.getMarkedConst(MarkType.TERRITORY_WHITE).size(), 19);
+        assertEquals(1, node.getNumberChildren());
+        assertEquals(9, node.getMarkedConst(MarkType.MARK).size());
+        assertEquals(9, node.getMarkedConst(MarkType.CIRCLE).size());
+        assertEquals(9, node.getMarkedConst(MarkType.SQUARE).size());
+        assertEquals(9, node.getMarkedConst(MarkType.TRIANGLE).size());
+        assertEquals(9, node.getMarkedConst(MarkType.SELECT).size());
+        assertEquals(18, node.getMarkedConst(MarkType.TERRITORY_BLACK).size());
+        assertEquals(19, node.getMarkedConst(MarkType.TERRITORY_WHITE).size());
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 1);
-        assertEquals(node.getLabelsUnmodifiable().size(), 22);
+        assertEquals(1, node.getNumberChildren());
+        assertEquals(22, node.getLabelsUnmodifiable().size());
         checkLabel(node, "D17", "1");
         checkLabel(node, "F17", "2");
         checkLabel(node, "O17", "3");
@@ -246,34 +246,34 @@ public final class SgfReaderTest
         checkLabel(node, "N2", "1234567");
         checkLabel(node, "N1", "12345678");
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 0);
+        assertEquals(0, node.getNumberChildren());
         checkSgfProperty(node, "AR", "aa:sc", "sa:ac", "aa:sa", "aa:ac",
                          "cd:cj", "gd:md", "fh:ij", "kj:nh");
         checkSgfProperty(node, "DD", "kq:os", "dq:hs");
         checkSgfProperty(node, "LN", "pj:pd", "nf:ff", "ih:fj", "kh:nj");
         node = root.getChildConst(3);
-        assertEquals(node.getNumberChildren(), 6);
+        assertEquals(6, node.getNumberChildren());
         // Note: These test rely on the fact that the line endings in the FF4
         // file were not auto-replaced by some versioning system
-        assertEquals(node.getComment(),
-                     "There are hard linebreaks & soft linebreaks.\n" +
-                     "Soft linebreaks are linebreaks preceeded by '\\' like"
-                     + " this one >ok<. Hard line breaks are all other"
-                     + " linebreaks.\n" +
-                     "Soft linebreaks are converted to >nothing<, i.e."
-                     + " removed.\n" +
-                     "\n" +
-                     "Note that linebreaks are coded differently on different"
-                     + " systems.\n" +
-                     "\n" +
-                     "Examples (>ok< shouldn't be split):\n" +
-                     "\n" +
-                     "linebreak 1 \"\\n\": >ok<\n" +
-                     "linebreak 2 \"\\n\\r\": >ok<\n" +
-                     "linebreak 3 \"\\r\\n\": >ok<\n" +
-                     "linebreak 4 \"\\r\": >ok<");
+        assertEquals("There are hard linebreaks & soft linebreaks.\n" +
+        "Soft linebreaks are linebreaks preceeded by '\\' like"
+        + " this one >ok<. Hard line breaks are all other"
+        + " linebreaks.\n" +
+        "Soft linebreaks are converted to >nothing<, i.e."
+        + " removed.\n" +
+        "\n" +
+        "Note that linebreaks are coded differently on different"
+        + " systems.\n" +
+        "\n" +
+        "Examples (>ok< shouldn't be split):\n" +
+        "\n" +
+        "linebreak 1 \"\\n\": >ok<\n" +
+        "linebreak 2 \"\\n\\r\": >ok<\n" +
+        "linebreak 3 \"\\r\\n\": >ok<\n" +
+        "linebreak 4 \"\\r\": >ok<",
+                node.getComment());
         node = node.getChildConst();
-        assertEquals(node.getNumberChildren(), 4);
+        assertEquals(4, node.getNumberChildren());
     }
 
     private void checkLabel(ConstNode node, String pointString, String label)
@@ -295,9 +295,9 @@ public final class SgfReaderTest
     private void checkSetup(ConstNode node, int black, int white, int empty)
         throws InvalidPointException
     {
-        assertEquals(node.getSetup(BLACK).size(), black);
-        assertEquals(node.getSetup(WHITE).size(), white);
-        assertEquals(node.getSetup(EMPTY).size(), empty);
+        assertEquals(black, node.getSetup(BLACK).size());
+        assertEquals(white, node.getSetup(WHITE).size());
+        assertEquals(empty, node.getSetup(EMPTY).size());
         assertNull(node.getMove());
     }
 

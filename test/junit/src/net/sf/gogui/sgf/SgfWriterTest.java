@@ -13,7 +13,7 @@ import net.sf.gogui.go.Komi;
 public final class SgfWriterTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -30,7 +30,7 @@ public final class SgfWriterTest
         GameInfo info = tree.getRoot().getGameInfo();
         info.setKomi(new Komi(6.5));
         String s = writeToString(tree);
-        assertTrue(s.indexOf("KM[6.5]") >= 0);
+        assertTrue(s.contains("KM[6.5]"));
     }
 
     /** Test that komi property is written if both handicap and komi are
@@ -42,8 +42,8 @@ public final class SgfWriterTest
         info.setKomi(new Komi(4));
         info.setHandicap(4);
         String s = writeToString(tree);
-        assertTrue(s.indexOf("HA[4]") >= 0);
-        assertTrue(s.indexOf("KM[4]") >= 0);
+        assertTrue(s.contains("HA[4]"));
+        assertTrue(s.contains("KM[4]"));
     }
 
     public void testWriteTimeSettings() throws Exception
@@ -52,8 +52,8 @@ public final class SgfWriterTest
         TimeSettings settings = new TimeSettings(3600000, 60000, 10);
         tree.getRoot().getGameInfo().setTimeSettings(settings);
         String s = writeToString(tree);
-        assertTrue(s.indexOf("TM[3600]") >= 0);
-        assertTrue(s.indexOf("OT[10 moves / 1 min]") >= 0);
+        assertTrue(s.contains("TM[3600]"));
+        assertTrue(s.contains("OT[10 moves / 1 min]"));
     }
 
     private static String writeToString(ConstGameTree tree)

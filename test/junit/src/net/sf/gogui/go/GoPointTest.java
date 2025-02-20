@@ -5,7 +5,7 @@ package net.sf.gogui.go;
 public final class GoPointTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -60,7 +60,7 @@ public final class GoPointTest
         checkInvalid("A100", 25);
         checkInvalid("C10", 9);
         PointList points = GoPoint.parsePointList("  R15 PASS T19 ", 19);
-        assertEquals(points.size(), 3);
+        assertEquals(3, points.size());
         checkPoint(points.get(0), 16, 14);
         assertNull(points.get(1));
         checkPoint(points.get(2), 18, 18);
@@ -69,21 +69,21 @@ public final class GoPointTest
     public void testToString()
     {
         assertEquals(GoPoint.toString((GoPoint)null), "PASS");
-        assertEquals(GoPoint.toString(getPoint(0, 0)), "A1");
-        assertEquals(getPoint(7, 4).toString(), "H5");
-        assertEquals(getPoint(8, 4).toString(), "J5");
-        assertEquals(getPoint(18, 18).toString(), "T19");
-        assertEquals(getPoint(9, 20).toString(), "K21");
-        assertEquals(getPoint(9, 20).toString(), "K21");
+        assertEquals("A1", GoPoint.toString(getPoint(0, 0)));
+        assertEquals("H5", getPoint(7, 4).toString());
+        assertEquals("J5", getPoint(8, 4).toString());
+        assertEquals("T19", getPoint(18, 18).toString());
+        assertEquals("K21", getPoint(9, 20).toString());
+        assertEquals("K21", getPoint(9, 20).toString());
         assertEquals(GoPoint.toString((PointList)null), "(null)");
         PointList v = new PointList();
-        assertEquals(GoPoint.toString(v), "");
+        assertEquals("", GoPoint.toString(v));
         v.add(getPoint(0, 0));
-        assertEquals(GoPoint.toString(v), "A1");
+        assertEquals("A1", GoPoint.toString(v));
         v.add(getPoint(3, 4));
-        assertEquals(GoPoint.toString(v), "A1 D5");
+        assertEquals("A1 D5", GoPoint.toString(v));
         v.add(getPoint(0, 18));
-        assertEquals(GoPoint.toString(v), "A1 D5 A19");
+        assertEquals("A1 D5 A19", GoPoint.toString(v));
     }
 
     public void testUnique()
@@ -104,7 +104,7 @@ public final class GoPointTest
             GoPoint.parsePoint(string, boardSize);
             fail();
         }
-        catch (InvalidPointException e)
+        catch (InvalidPointException ignored)
         {
         }
     }

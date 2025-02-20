@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public final class TableUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -51,7 +51,7 @@ public final class TableUtilTest
         TableUtil.appendRow(to, from, 1);
         assertEquals(2, to.getNumberRows());
         assertEquals("21", to.get(0, 1));
-        assertEquals(null, to.get(1, 1));
+        assertNull(to.get(1, 1));
 
     }
 
@@ -60,7 +60,7 @@ public final class TableUtilTest
         Histogram histo = new Histogram(-1, 1, 1);
         histo.add(0);
         Table table = TableUtil.fromHistogram(histo, "");
-        assertEquals(table.getNumberColumns(), 2);
-        assertEquals(table.getNumberRows(), 1);
+        assertEquals(2, table.getNumberColumns());
+        assertEquals(1, table.getNumberRows());
     }
 }

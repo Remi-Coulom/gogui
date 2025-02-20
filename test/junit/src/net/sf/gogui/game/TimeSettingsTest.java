@@ -7,7 +7,7 @@ import net.sf.gogui.util.ErrorMessage;
 public final class TimeSettingsTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

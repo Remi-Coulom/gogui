@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public final class OptionsTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -19,7 +19,7 @@ public final class OptionsTest
 
     public void testBasic() throws ErrorMessage
     {
-        String specs[] = {
+        String[] specs = {
             "flag1",
             "value1:",
             "value2:",
@@ -27,7 +27,7 @@ public final class OptionsTest
             "value3:",
             "value4:"
         };
-        String args[] = {
+        String[] args = {
             "arg1",
             "-value1", "42",
             "-flag2",
@@ -40,23 +40,23 @@ public final class OptionsTest
         assertTrue(opt.contains("flag2"));
         assertTrue(opt.contains("value1"));
         assertFalse(opt.contains("value2"));
-        assertEquals(opt.get("value1"), "42");
-        assertEquals(opt.getInteger("value1"), 42);
-        assertEquals(opt.getInteger("value2", -98), -98);
-        assertEquals(opt.getLong("value3"), -9223372036854775807L);
+        assertEquals("42", opt.get("value1"));
+        assertEquals(42, opt.getInteger("value1"));
+        assertEquals(-98, opt.getInteger("value2", -98));
+        assertEquals(-9223372036854775807L, opt.getLong("value3"));
         ArrayList<String> arguments = opt.getArguments();
-        assertEquals(arguments.size(), 2);
-        assertEquals(arguments.get(0), "arg1");
-        assertEquals(arguments.get(1), "arg2");
+        assertEquals(2, arguments.size());
+        assertEquals("arg1", arguments.get(0));
+        assertEquals("arg2", arguments.get(1));
     }
 
     public void testCheckNoArguments() throws ErrorMessage
     {
-        String specs[] = {
+        String[] specs = {
             "option:"
         };
         {
-            String args[] = {
+            String[] args = {
                 "-option", "value",
                 "arg"
             };
@@ -73,7 +73,7 @@ public final class OptionsTest
             assertTrue(errorThrown);
         }
         {
-            String args[] = {
+            String[] args = {
                 "-option", "value"
             };
             Options opt = new Options(args, specs);
@@ -90,11 +90,11 @@ public final class OptionsTest
 
     public void testStopParsing() throws ErrorMessage
     {
-        String specs[] = { "flag1", "value1:", "value2:", "flag2" };
-        String args[] = { "-value1", "foo", "--", "-arg1" };
+        String[] specs = { "flag1", "value1:", "value2:", "flag2" };
+        String[] args = { "-value1", "foo", "--", "-arg1" };
         Options opt = new Options(args, specs);
         ArrayList<String> arguments = opt.getArguments();
-        assertEquals(arguments.size(), 1);
-        assertEquals(arguments.get(0), "-arg1");
+        assertEquals(1, arguments.size());
+        assertEquals("-arg1", arguments.get(0));
     }
 }

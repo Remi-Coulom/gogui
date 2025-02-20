@@ -38,5 +38,5 @@ public final class GtpEngineClient
     {
     }
 
-    private GtpEngine m_engine;
+    private final GtpEngine m_engine;
 }

@@ -7,7 +7,7 @@ import java.io.File;
 public final class FileUtilTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -20,7 +20,7 @@ public final class FileUtilTest
     public void testGetExtension()
     {
         assertEquals("bar", FileUtil.getExtension(new File("foo.bar")));
-        assertEquals(null, FileUtil.getExtension(new File("foo")));
+        assertNull(FileUtil.getExtension(new File("foo")));
     }
 
     public void testGetRelativeURI()

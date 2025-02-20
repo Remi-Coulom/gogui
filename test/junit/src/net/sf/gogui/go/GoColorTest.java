@@ -9,7 +9,7 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 public final class GoColorTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }

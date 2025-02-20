@@ -8,7 +8,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 public final class ClockTest
     extends junit.framework.TestCase
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
@@ -29,8 +29,8 @@ public final class ClockTest
     {
         m_clock.setTimeSettings(new TimeSettings(30000, 10000, 5));
         m_clock.reset();
-        assertTrue(! m_clock.isInByoyomi(BLACK));
-        assertTrue(! m_clock.isInByoyomi(WHITE));
+        assertFalse(m_clock.isInByoyomi(BLACK));
+        assertFalse(m_clock.isInByoyomi(WHITE));
         assertEquals(30000, m_clock.getTimeLeft(BLACK));
         assertEquals(30000, m_clock.getTimeLeft(WHITE));
     }
