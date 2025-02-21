@@ -56,22 +56,12 @@ import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.gamefile.GameFile;
 import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.gamefile.GameWriter;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtil;
-import net.sf.gogui.go.ConstBoard;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.CountScore;
-import net.sf.gogui.go.GenericBoard;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.InvalidKomiException;
-import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
-import net.sf.gogui.go.Score;
+
 import net.sf.gogui.go.Score.ScoringMethod;
 import static net.sf.gogui.gogui.I18n.i18n;
 import net.sf.gogui.gtp.AnalyzeCommand;
@@ -202,11 +192,11 @@ ContextMenu.Listener, LiveGfx.Listener
         m_innerPanel = new JPanel(new BorderLayout());
         contentPane.add(m_innerPanel, BorderLayout.CENTER);
         m_infoPanel = new JPanel(new BorderLayout());
-        m_game = new Game(boardSize);
+        m_game = new Game(new BoardParameters(boardSize));
         m_gameInfoPanel = new GameInfoPanel(m_game);
         m_gameInfoPanel.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfoPanel, BorderLayout.NORTH);
-        m_guiBoard = new GuiBoard(boardSize);
+        m_guiBoard = new GuiBoard(new BoardParameters(boardSize));
         m_showAnalyzeText = new ShowAnalyzeText(this, m_guiBoard);
 
         m_statusBar = new StatusBar();
@@ -429,7 +419,7 @@ ContextMenu.Listener, LiveGfx.Listener
     {
         if (! checkCommandInProgress())
             return;
-        actionNewGame(size);
+        actionNewGame(new BoardParameters(size, size, "rect"));
         m_prefs.putInt("boardsize", size);
     }
 
@@ -548,7 +538,7 @@ ContextMenu.Listener, LiveGfx.Listener
                 ConstNode root = getTree().getRootConst();
                 gotoNode(root);
                 currentNodeChanged();
-                initGame(getBoardSize());
+                initGame(getBoardParameters());
                 m_gameRuler = null;
                 updateViews(true, true);
             }
@@ -990,7 +980,7 @@ ContextMenu.Listener, LiveGfx.Listener
         {
             m_computerBlack = false;
             m_computerWhite = false;
-            newGame(getBoardSize());
+            newGame(getBoardParameters());
             updateViews(true);
         }
     }
@@ -1054,7 +1044,7 @@ ContextMenu.Listener, LiveGfx.Listener
         {
             showError(i18n("MSG_IMPORT_FAILED"), e);
         }
-        m_guiBoard.initSize(getBoard().getSize());
+        m_guiBoard.initSize(getBoard().getParameters());
         initGtp();
         m_computerBlack = false;
         m_computerWhite = false;
@@ -1155,17 +1145,17 @@ ContextMenu.Listener, LiveGfx.Listener
 
     public void actionNewGame()
     {
-        actionNewGame(getBoardSize());
+        actionNewGame(getBoardParameters());
     }
 
-    public void actionNewGame(int size)
+    public void actionNewGame(BoardParameters parameters)
     {
         if (! checkStateChangePossible())
             return;
         if (! checkSaveGame())
             return;
         setFile(null);
-        newGame(size);
+        newGame(parameters);
         if (m_gtp != null && ! m_gtp.isGenmoveSupported())
         {
             m_computerBlack = false;
@@ -2897,11 +2887,11 @@ ContextMenu.Listener, LiveGfx.Listener
 
                     if (m_gtp.isSupported("gogui-rules_board_size"))
                     {
-                     int size = Integer.parseInt(m_gtp.send("gogui-rules_board_size"));
+                     BoardParameters parameters = BoardParameters.get(m_gtp.send("gogui-rules_board_size"));
 
-                     if (size != getBoardSize())
+                     if (!parameters.equals(getBoardParameters()))
                      {
-                        actionBoardSize(size);
+                        actionBoardSize(parameters.width()); // TODO: For now, we only support square boards
                      }
                     }
 
@@ -3048,7 +3038,7 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 if (m_auto)
                 {
-                    newGame(getBoardSize());
+                    newGame(getBoardParameters());
                     updateViews(true, true);
                     checkComputerMove();
                     return;
@@ -3551,9 +3541,17 @@ ContextMenu.Listener, LiveGfx.Listener
         return m_game.getBoard();
     }
 
+    /** Get the board width.
+     * Will eventually be replaced by getBoardParameters()
+        @return Board size (aka BoardParameters.width) */
     private int getBoardSize()
     {
-        return m_game.getSize();
+        return m_game.getParameters().size();
+    }
+
+    private BoardParameters getBoardParameters()
+    {
+        return m_game.getParameters();
     }
 
     private ConstClock getClock()
@@ -3687,24 +3685,24 @@ ContextMenu.Listener, LiveGfx.Listener
         {
             showError(i18n("MSG_IMPORT_FAILED"), e);
         }
-        m_guiBoard.initSize(getBoard().getSize());
+        m_guiBoard.initSize(getBoard().getParameters());
         initGtp();
         m_computerBlack = false;
         m_computerWhite = false;
         boardChangedBegin(false, true);
     }
 
-    private void initGame(int size)
+    private void initGame(BoardParameters parameters)
     {
-        int oldSize = getBoardSize();
-        if (size != oldSize)
+        BoardParameters oldParameters = getBoardParameters();
+        if (!parameters.equals(oldParameters))
         {
             // Clear analyze command when board size changes, because eplist
             // could contain points out of board
             clearAnalyzeCommand();
             //saveSession();
-            m_guiBoard.initSize(size);
-            restoreMainWindow(size);
+            m_guiBoard.initSize(parameters);
+            restoreMainWindow(parameters.width()); // TODO: Change to parameters when we support non-square boards
             JLayeredPane layeredPane = getLayeredPane();
             if (layeredPane.isVisible())
             {
@@ -3713,21 +3711,21 @@ ContextMenu.Listener, LiveGfx.Listener
             }
         }
         Komi komi = (m_handicap == 0 ? getPrefsKomi() : new Komi(0));
-        ConstPointList handicap = Board.getHandicapStones(size, m_handicap);
+        ConstPointList handicap = Board.getHandicapStones(parameters.width(), m_handicap);  // TODO: Change to parameters when we support non-square boards
         if (handicap == null)
             showWarning(i18n("MSG_HANDICAP_UNDEFINED"),
                     format(i18n("MSG_HANDICAP_UNDEFINED_2"), m_handicap,
-                            size), false);
-        m_game.init(size, komi, handicap, m_prefs.get("rules", ""),
+                            parameters.width()), false);    // TODO: Change to width & height when we support non-square boards
+        m_game.init(parameters, komi, handicap, m_prefs.get("rules", ""),
                 m_timeSettings);
-        if (size != oldSize)
+        if (!parameters.equals(oldParameters))
         {
             if (m_shell != null)
                 restoreSize(m_shell, "shell");
             if (m_analyzeDialog != null)
             {
                 restoreSize(m_analyzeDialog, "analyze");
-                m_analyzeDialog.setBoardSize(size);
+                m_analyzeDialog.setBoardSize(parameters.width());   // TODO: Change to parameters when we support non-square boards
             }
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "tree");
@@ -3783,7 +3781,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
         this.setTransferHandler(new TransferHandler () {
             @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
+            public boolean canImport(TransferSupport support) {
                 for (DataFlavor flavor : support.getDataFlavors()) {
                     if (flavor.isFlavorJavaFileListType()) {
                         return true;
@@ -3794,7 +3792,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
             @Override
             @SuppressWarnings("unchecked")
-            public boolean importData(TransferHandler.TransferSupport support) {
+            public boolean importData(TransferSupport support) {
                 if (!this.canImport(support))
                     return false;
 
@@ -3830,9 +3828,9 @@ ContextMenu.Listener, LiveGfx.Listener
         //    }
         //}
         if (m_initialFile == null)
-            newGame(getBoardSize());
+            newGame(getBoardParameters());
         else
-            newGameFile(getBoardSize(), m_move);
+            newGameFile(getBoardParameters(), m_move);
         if (! m_prefs.getBoolean("show-info-panel", true))
             showInfoPanel(false);
         if (m_prefs.getBoolean("show-toolbar", true))
@@ -3907,13 +3905,14 @@ ContextMenu.Listener, LiveGfx.Listener
             LoadFileRunnable runnable = new LoadFileRunnable(file);
             if (file.length() > 500000)
             {
-                newGame(getBoardSize()); // Frees space if already large tree
+                newGame(getBoardParameters()); // Frees space if already large tree
                 GuiUtil.runProgress(this, i18n("LB_LOADING"), runnable);
             }
             else
                 runnable.run(null);
             GameTree tree = runnable.getTree();
-            initGame(tree.getBoardSize());
+            int size = tree.getBoardSize();
+            initGame(new BoardParameters(size, size, "rect")); // TODO: Needs to be changed when we support non-square boards
             m_menuBar.addRecent(file);
             m_game.init(tree);
             initGtp();
@@ -3967,9 +3966,9 @@ ContextMenu.Listener, LiveGfx.Listener
         return true;
     }
 
-    private void newGame(int size)
+    private void newGame(BoardParameters parameters)
     {
-        initGame(size);
+        initGame(parameters);
         initGtp();
         updateFromGoBoard();
         setTitle();
@@ -3977,9 +3976,9 @@ ContextMenu.Listener, LiveGfx.Listener
         clearStatus();
     }
 
-    private void newGameFile(int size, int move)
+    private void newGameFile(BoardParameters parameters, int move)
     {
-        initGame(size);
+        initGame(parameters);
         if (! loadFile(m_initialFile, move))
             m_gameFile = null;
     }
@@ -4267,7 +4266,7 @@ ContextMenu.Listener, LiveGfx.Listener
     {
         if (m_gtp == null)
             return;
-        java.io.BufferedReader in;
+        BufferedReader in;
         in = new BufferedReader(reader);
         try
         {
@@ -4518,7 +4517,7 @@ ContextMenu.Listener, LiveGfx.Listener
             else
                 optionalMessage = i18n("MSG_PROGRAM_TERMINATED_4");
         }
-        else if (e instanceof GtpClient.ExecFailed)
+        else if (e instanceof ExecFailed)
         {
             mainMessage = i18n("MSG_COULD_NOT_EXECUTE");
             if (StringUtil.isEmpty(e.getMessage()))
@@ -4893,11 +4892,11 @@ ContextMenu.Listener, LiveGfx.Listener
             GtpClientBase m_gameRulerCopie;
             boolean alreadyAttached = isRulerAttached();
             String previousGame = "";
-            int previousSize = -1;
+            BoardParameters previousParameters = new BoardParameters(-1, -1, "rect");
             if (alreadyAttached)
             {
                 previousGame = GenericBoard.getGameId(m_gameRuler);
-                previousSize = GenericBoard.getBoardSize(m_gameRuler);
+                previousParameters = GenericBoard.getBoardParameters(m_gameRuler);
             }
             m_gameRulerCopie = new GtpClient(command,
                     new File(directory),
@@ -4905,9 +4904,11 @@ ContextMenu.Listener, LiveGfx.Listener
             m_gameRulerCopie.querySupportedCommands();
             m_gameRulerCopie.queryInterruptSupport();
             String newGame = GenericBoard.getGameId(m_gameRulerCopie);
-            int newSize = GenericBoard.getBoardSize(m_gameRulerCopie);
-            if (previousGame.equals(newGame) && !previousGame.isEmpty()
-                    && previousSize==newSize && previousSize > 0)
+            BoardParameters newParameters = GenericBoard.getBoardParameters(m_gameRulerCopie);
+            if (previousGame.equals(newGame) &&
+                    !previousGame.isEmpty() &&
+                    previousParameters.equals(newParameters) &&
+                    previousParameters.width() > 0)
             {
                 GenericBoard.copyBoardState(m_gameRulerCopie, getCurrentNode(), (Board)getBoard());
                 m_gameRuler = m_gameRulerCopie;
@@ -4917,14 +4918,14 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 if (checkSaveGame())
                 {
-                    if (newSize < 0)
-                        newSize = getBoardSize();
+                    if (newParameters.width() < 0)
+                        newParameters = getBoardParameters();
                     m_gameRuler = m_gameRulerCopie;
                     m_handicap = 0;
                     ConstNode node = m_game.getGameInfoNode();
                     GameInfo info = new GameInfo(node.getGameInfoConst());
                     info.setHandicap(0);
-                    newGame(newSize);
+                    newGame(newParameters);
                     getBoard().attachGameRuler(m_gameRuler);
                     if (m_gtp != null && (!m_gtp.isSupported("gogui-rules_game_id") || m_gameRuler.isSupported("gogui-rules_game_id") &&
                             !m_gtp.send("gogui-rules_game_id").equals(m_gameRuler.send("gogui-rules_game_id"))))

@@ -99,11 +99,13 @@ public final class GenericBoard {
         }
     }
     
-    public static int getBoardSize(GtpClientBase gameRuler) throws GtpError
+    public static BoardParameters getBoardParameters(GtpClientBase gameRuler) throws GtpError
     {
         if (!gameRuler.isSupported("gogui-rules_board_size"))
-            return -1;
-        return Integer.parseInt(gameRuler.send("gogui-rules_board_size"));
+            return new BoardParameters(-1, -1, "rect");
+
+        String response = gameRuler.send("gogui-rules_board_size");
+        return BoardParameters.get(response);
     }
     
     public static String getGameId(GtpClientBase gameRuler) throws GtpError
@@ -126,14 +128,15 @@ public final class GenericBoard {
             return;
         }
         if (rulerBoardState.equals("")) return;
-        int size = 0;
+
+        BoardParameters parameters;
         try {
-            size = GenericBoard.getBoardSize(gameRuler);
+            parameters = GenericBoard.getBoardParameters(gameRuler);
         } catch (GtpError e) {
             return;
         }
-        GenericBoard.setup(rulerBoardState, board, size);
 
+        GenericBoard.setup(rulerBoardState, board, parameters);
         if (gameRuler.isSupported("gogui-rules_captured_count"))
         {
            try
@@ -151,7 +154,7 @@ public final class GenericBoard {
         }
     }
 
-    private static void setup(String position, Board board, int size)
+    private static void setup(String position, Board board, BoardParameters parameters)
     {
         try
         {
@@ -159,7 +162,7 @@ public final class GenericBoard {
             PointList blacksSetup = new PointList();
             PointList whitesSetup = new PointList();
             PointList emptySetup = new PointList();
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < parameters.height(); i++) {
                 int j = -1;
                 char c = ' ';
                 do {
@@ -177,7 +180,7 @@ public final class GenericBoard {
 
                     if ( c == 'X')
                     {
-                        GoPoint black = GoPoint.get(j, size-i-1);
+                        GoPoint black = GoPoint.get(j, parameters.height()-i-1);
                         if (board.getColor(black) != BLACK)
                         {
                             blacksSetup.add(black);
@@ -185,7 +188,7 @@ public final class GenericBoard {
                     }
                     else if (c == 'O')
                     {
-                        GoPoint white = GoPoint.get(j, size-i-1);
+                        GoPoint white = GoPoint.get(j, parameters.height()-i-1);
                         if (board.getColor(white) != WHITE)
                         {
                             whitesSetup.add(white);
@@ -193,12 +196,12 @@ public final class GenericBoard {
                     }
                     else if (c == '.')
                     {
-                        GoPoint empty = GoPoint.get(j, size-i-1);
+                        GoPoint empty = GoPoint.get(j, parameters.height()-i-1);
                         if (board.getColor(empty) != EMPTY) {
                             emptySetup.add(empty);
                         }
                     }
-                } while (j < size-1);
+                } while (j < parameters.width()-1);
             }
             board.setPoints(blacksSetup, BLACK);
             board.setPoints(whitesSetup, WHITE);
@@ -233,7 +236,7 @@ public final class GenericBoard {
     }
 
     public static void playFromBeginning(GtpClientBase gameRuler, ArrayList<Move> moves, Board board) throws GtpError {
-        gameRuler.sendClearBoard(board.getSize());
+        gameRuler.sendClearBoard(board.getParameters().size());
         for (int i = moves.size() - 1; i >= 0; i--)
         {
             gameRuler.sendPlay(moves.get(i));

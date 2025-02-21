@@ -10,14 +10,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtil;
-import net.sf.gogui.go.ConstBoard;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
+
 import net.sf.gogui.sgf.SgfReader;
 
 /** Find duplicates in games. */
@@ -125,8 +121,8 @@ public final class Compare
             GameTree tree = reader.getTree();
             int size = tree.getBoardSize();
             if (board == null)
-                board = new Board(size);
-            else if (size != board.getSize())
+                board = new Board(new BoardParameters(size));
+            else if (size != board.getParameters().size())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
             ArrayList<Placement> moves = getPlacements(tree.getRoot());

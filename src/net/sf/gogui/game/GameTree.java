@@ -40,7 +40,7 @@ public class GameTree
         if (handicap != null)
         {
             info.setHandicap(handicap.size());
-            if (handicap.size() > 0)
+            if (!handicap.isEmpty())
             {
                 m_root.addStones(BLACK, handicap);
                 m_root.setPlayer(WHITE);

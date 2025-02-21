@@ -3,15 +3,12 @@
 package net.sf.gogui.game;
 
 import java.util.ArrayList;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
+
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater
@@ -23,7 +20,7 @@ public class BoardUpdater
 
     public void update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
-        board.init(tree.getBoardSize());
+        board.init(new BoardParameters(tree.getBoardSize())); // TODO: GameTree should probably have width & height
         int handicap = tree.getGameInfoConst(currentNode).getHandicap();
         NodeUtil.getPathToRoot(currentNode, m_nodes);
         int nuMoves = 0;

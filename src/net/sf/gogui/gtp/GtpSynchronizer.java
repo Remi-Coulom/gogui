@@ -5,17 +5,13 @@ package net.sf.gogui.gtp;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstBoard;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 import static net.sf.gogui.go.GoColor.WHITE_BLACK;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Move;
+
 import net.sf.gogui.util.ObjectUtil;
 
 /** Synchronizes a GTP engine with a Go board.
@@ -61,11 +57,11 @@ public class GtpSynchronizer
     {
         initSupportedCommands();
         m_isOutOfSync = true;
-        int size = board.getSize();
+        BoardParameters parameters = board.getParameters();
         m_engineState = null;
-        m_gtp.sendBoardsize(size);
-        m_engineState = new Board(size);
-        m_gtp.sendClearBoard(size);
+        m_gtp.sendBoardsize(parameters.size());
+        m_engineState = new Board(parameters);
+        m_gtp.sendClearBoard(parameters.size());
         sendGameInfo(komi, timeSettings);
         ConstBoard targetState = computeTargetState(board);
         setup(targetState);
@@ -187,12 +183,12 @@ public class GtpSynchronizer
         Fills in passes between moves of same color if m_fillPasses. */
     private Board computeTargetState(ConstBoard board) throws GtpError
     {
-        int size = board.getSize();
-        Board targetState = new Board(size);
+        BoardParameters parameters = board.getParameters();
+        Board targetState = new Board(parameters);
         ConstPointList setupBlack = board.getSetup(BLACK);
         ConstPointList setupWhite = board.getSetup(WHITE);
         GoColor setupPlayer = board.getSetupPlayer();
-        if (setupBlack.size() > 0 || setupWhite.size() > 0)
+        if (!setupBlack.isEmpty() || !setupWhite.isEmpty())
         {
             targetState.clear();
             boolean isHandicap = board.isSetupHandicap();

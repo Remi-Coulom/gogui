@@ -33,7 +33,7 @@ public interface ConstBoard
 
     GoColor getSetupPlayer();
 
-    int getSize();
+    BoardParameters getParameters();
 
     void getStones(GoPoint p, GoColor color, PointList stones);
 
@@ -58,4 +58,6 @@ public interface ConstBoard
     void attachGameRuler(GtpClientBase gameRuler);
 
     void detachGameRuler();
+
+    int getSize();
 }

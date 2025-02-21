@@ -40,11 +40,10 @@ implements ConstBoard
     }
 
     /** Constructor.
-        @param boardSize The board size (number of points per row / column)
-        in the range from one to GoPoint.MAX_SIZE */
-    public Board(int boardSize)
+        @param parameters The board parameters (width, height and geometry) */
+    public Board(BoardParameters parameters)
     {
-        init(boardSize);
+        init(parameters);
     }
 
     /** Check for two consecutive passes.
@@ -62,7 +61,7 @@ implements ConstBoard
         @return true, if the point is on the board */
     public boolean contains(GoPoint point)
     {
-        return point.isOnBoard(getSize());
+        return point.isOnBoard(getParameters().size()); // TODO: For now, will have to change for rectangular boards
     }
 
     /** Get points adjacent to a point.
@@ -163,11 +162,18 @@ implements ConstBoard
         return m_setupPlayer;
     }
 
-    /** Get board size.
-        @return The board size. */
+    /** Get board parameters (width, height, geometry).
+        @return The board parameters. */
+    public BoardParameters getParameters()
+    {
+        return m_parameters;
+    }
+
+    /** Get board size. Needed for compatibility with square boards.
+        @return The board size (aka parameters.width) */
     public int getSize()
     {
-        return m_size;
+        return m_parameters.size();
     }
 
     /** Get stones of a block. */
@@ -199,16 +205,15 @@ implements ConstBoard
         return m_toMove;
     }
 
-    /** Initialize the board for a given board size.
-        For changing the board size.
+    /** Initialize the board for a given board parameters.
+        For changing the board size or geometry.
         Also calls clear().
-        @param size The new board size (number of points per
-        row / column) in the range from one to GoPoint.MAX_SIZE */
-    public void init(int size)
+        @param parameters The new board parameters (width, height and geometry) */
+    public void init(BoardParameters parameters)
     {
-        m_size = size;
-        m_mark = new Marker(m_size);
-        m_constants = BoardConstants.get(size);
+        m_parameters = parameters;
+        m_mark = new Marker(parameters.width()); // TODO: For now, will have to change for rectangular boards
+        m_constants = BoardConstants.get(parameters.width()); // TODO: For now, will have to change for rectangular boards
         clear();
     }
 
@@ -240,7 +245,7 @@ implements ConstBoard
         if (getColor(p) != EMPTY)
             return false;
         play(c, p);
-        boolean result = (getKilled().size() > 0 || getSuicide().size() > 0);
+        boolean result = (!getKilled().isEmpty() || !getSuicide().isEmpty());
         undo();
         return result;
     }
@@ -268,8 +273,8 @@ implements ConstBoard
     public boolean isModified()
     {
         return (! m_stack.isEmpty()
-                || m_setup.get(BLACK).size() > 0
-                || m_setup.get(WHITE).size() > 0
+                || !m_setup.get(BLACK).isEmpty()
+                || !m_setup.get(WHITE).isEmpty()
                 || m_toMove != BLACK);
     }
 
@@ -292,7 +297,7 @@ implements ConstBoard
         if (getColor(p) != EMPTY)
             return false;
         play(c, p);
-        boolean result = (getSuicide().size() > 0);
+        boolean result = (!getSuicide().isEmpty());
         undo();
         return result;
     }
@@ -560,7 +565,7 @@ implements ConstBoard
 
     private Marker m_mark;
 
-    private int m_size;
+    private BoardParameters m_parameters;
 
     private final BlackWhiteSet<Integer> m_captured
         = new BlackWhiteSet<Integer>(0, 0);

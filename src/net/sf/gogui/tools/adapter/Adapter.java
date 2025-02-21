@@ -15,18 +15,12 @@ import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.gamefile.GameReader;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtil;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.InvalidKomiException;
-import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Move;
-import net.sf.gogui.go.PointList;
+
 import net.sf.gogui.gtp.GtpCallback;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
@@ -103,14 +97,14 @@ public class Adapter
     {
         cmd.checkNuArg(1);
         int size = cmd.getIntArg(0, 1, GoPoint.MAX_SIZE);
-        m_board.init(size);
+        m_board.init(new BoardParameters(size));
         synchronize();
     }
 
     public void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        m_board.init(m_board.getSize());
+        m_board.init(m_board.getParameters());
         synchronize();
     }
 
@@ -403,7 +397,7 @@ public class Adapter
     {
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        m_board = new Board(size);
+        m_board = new Board(new BoardParameters(size));
         registerCommands(noScore, version1);
         synchronize();
     }

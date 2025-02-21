@@ -18,11 +18,11 @@ public final class BoardUtil
         board. */
     public static void copy(Board target, ConstBoard source)
     {
-        target.init(source.getSize());
+        target.init(source.getParameters());
         ConstPointList setupBlack = source.getSetup(BLACK);
         ConstPointList setupWhite = source.getSetup(WHITE);
         GoColor setupPlayer = source.getSetupPlayer();
-        if (setupBlack.size() > 0 || setupWhite.size() > 0)
+        if (!setupBlack.isEmpty() || !setupWhite.isEmpty())
         {
             if (source.isSetupHandicap())
                 target.setupHandicap(setupBlack);

@@ -11,8 +11,6 @@ import net.sf.gogui.go.GoPoint;
     @see GuiBoard */
 public interface ConstGuiBoard
 {
-    int getBoardSize();
-
     ConstField getFieldConst(GoPoint p);
 
     Dimension getFieldSize();
@@ -36,4 +34,8 @@ public interface ConstGuiBoard
     boolean getShowGrid();
 
     int getWidth();
+
+    int getHeight();
+
+    int getBoardSize();
 }

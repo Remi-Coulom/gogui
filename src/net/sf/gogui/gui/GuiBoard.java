@@ -25,10 +25,10 @@ import javax.swing.JPanel;
 import net.sf.gogui.boardpainter.BoardPainter;
 import net.sf.gogui.boardpainter.ConstField;
 import net.sf.gogui.boardpainter.Field;
-import net.sf.gogui.go.BoardConstants;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.EMPTY;
-import net.sf.gogui.go.GoPoint;
+
 import net.sf.gogui.gogui.GoGui.Orientation;
 import net.sf.gogui.util.ObjectUtil;
 
@@ -63,12 +63,12 @@ public final class GuiBoard
     }
 
     /** Constructor.
-        @param size The board size. */
-    public GuiBoard(int size)
+        @param parameters The board parameters (width, height and geometry). */
+    public GuiBoard(BoardParameters parameters)
     {
         m_painter = new BoardPainter();
         setPreferredFieldSize();
-        initSize(size);
+        initSize(parameters);
     }
 
     /** Clear every kind of markup. */
@@ -266,10 +266,11 @@ public final class GuiBoard
         return m_showGrid;
     }
 
-    /** Change the board size.
-        @param size The new board size. */
-    public void initSize(int size)
+    /** Change the board sizes.
+        @param parameters The parameters containing the new width adn height. */
+    public void initSize(BoardParameters parameters)
     {
+        int size = parameters.width(); // TODO: Use width and height
         assert size > 0 && size <= GoPoint.MAX_SIZE;
         m_size = size;
         m_constants = BoardConstants.get(size);

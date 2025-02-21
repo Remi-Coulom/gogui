@@ -2,15 +2,10 @@
 
 package net.sf.gogui.game;
 
-import net.sf.gogui.go.ConstBoard;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GenericBoard;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.EMPTY;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Move;
+
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.util.ObjectUtil;
 
@@ -18,23 +13,23 @@ import net.sf.gogui.util.ObjectUtil;
 public class Game
     implements ConstGame
 {
-    public Game(int boardSize)
+    public Game(BoardParameters parameters)
     {
-        this(boardSize, null, null, "", null);
+        this(parameters, null, null, "", null);
     }
 
-    public Game(int boardSize, Komi komi, ConstPointList handicap,
+    public Game(BoardParameters parameters, Komi komi, ConstPointList handicap,
                 String rules, TimeSettings timeSettings)
     {
-        m_board = new Board(boardSize);
+        m_board = new Board(parameters);
         m_clock = new Clock();
-        init(boardSize, komi, handicap, rules, timeSettings);
+        init(parameters, komi, handicap, rules, timeSettings);
     }
 
     public Game(GameTree tree)
     {
         int boardSize = tree.getBoardSize();
-        m_board = new Board(boardSize);
+        m_board = new Board(new BoardParameters(boardSize));
         m_clock = new Clock();
         init(tree);
     }
@@ -105,9 +100,9 @@ public class Game
         return m_tree.getRoot();
     }
 
-    public int getSize()
+    public BoardParameters getParameters()
     {
-        return m_board.getSize();
+        return m_board.getParameters();
     }
 
     public GoColor getToMove()
@@ -142,10 +137,10 @@ public class Game
         return m_clockNode;
     }
 
-    public final void init(int boardSize, Komi komi, ConstPointList handicap,
+    public final void init(BoardParameters parameters, Komi komi, ConstPointList handicap,
                            String rules, TimeSettings timeSettings)
     {
-        init(new GameTree(boardSize, komi, handicap, rules, timeSettings));
+        init(new GameTree(parameters.width(), komi, handicap, rules, timeSettings)); // TODO: GameTree should probably take width & height as parameters
     }
 
     public final void init(GameTree tree)
@@ -178,7 +173,7 @@ public class Game
     {
         ConstGameInfo info = getGameInfo(m_current);
         m_tree = NodeUtil.makeTreeFromPosition(info, m_board);
-        m_board.init(m_board.getSize());
+        m_board.init(m_board.getParameters());
         m_current = m_tree.getRoot();
         updateBoard();
         setModified();

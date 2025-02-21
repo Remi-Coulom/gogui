@@ -15,12 +15,10 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInfo;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtil;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK_WHITE;
-import net.sf.gogui.go.Move;
-import net.sf.gogui.go.GoPoint;
+
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpResponseFormatError;
@@ -38,7 +36,7 @@ public class Terminal
     public Terminal(String program, int size, boolean verbose)
         throws Exception
     {
-        if (program.equals(""))
+        if (program.isEmpty())
             throw new Exception("No program set");
         m_verbose = verbose;
         m_gtp = new GtpClient(program, null, verbose, this);
@@ -68,7 +66,7 @@ public class Terminal
                 if (line == null)
                     break;
                 line = line.trim();
-                if (line.equals(""))
+                if (line.isEmpty())
                     continue;
                 if (handleCommand(line))
                     break;
@@ -222,7 +220,7 @@ public class Terminal
 
     private void initGame(int size)
     {
-        m_board = new Board(size);
+        m_board = new Board(new BoardParameters(size)); // TODO: Need reworking
         m_tree = new GameTree(size, null, null, null, null);
         setCurrentNode(m_tree.getRoot());
     }

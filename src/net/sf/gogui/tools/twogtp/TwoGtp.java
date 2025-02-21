@@ -8,16 +8,11 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.go.BlackWhiteSet;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstBoard;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.InvalidKomiException;
-import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Move;
+
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
@@ -57,7 +52,7 @@ public class TwoGtp
         m_referee = referee;
         if (m_referee != null)
             m_allPrograms.add(m_referee);
-        if (observer.equals(""))
+        if (observer.isEmpty())
             m_observer = null;
         else
         {
@@ -75,7 +70,7 @@ public class TwoGtp
         m_verbose = verbose;
         m_timeSettings = timeSettings;
         m_resultFile = resultFile;
-        initGame(size);
+        initGame(new BoardParameters(m_size));
     }
 
     public void autoPlay() throws Exception
@@ -85,7 +80,7 @@ public class TwoGtp
         {
             try
             {
-                newGame(m_size);
+                newGame(new BoardParameters(m_size));
                 while (! gameOver())
                 {
                     response.setLength(0);
@@ -360,7 +355,7 @@ public class TwoGtp
     private void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        newGame(m_size);
+        newGame(new BoardParameters(m_size));
     }
 
     private void cmdGenmove(GtpCommand cmd) throws GtpError
@@ -578,9 +573,9 @@ public class TwoGtp
                                    cpuTimeWhite);
     }
 
-    private void initGame(int size) throws GtpError
+    private void initGame(BoardParameters parameters) throws GtpError
     {
-        m_game = new Game(size, m_komi, Board.getHandicapStones(size, m_handicap), null, null);
+        m_game = new Game(parameters, m_komi, Board.getHandicapStones(parameters.width(), m_handicap), null, null); // TODO: GetHandicapStones should take width & height as parameters
         m_realTime.set(BLACK, 0.);
         m_realTime.set(WHITE, 0.);
         // Clock is not needed
@@ -604,7 +599,7 @@ public class TwoGtp
             m_openingFile = m_openings.getFilename();
             if (m_verbose)
                 System.err.println("Loaded opening " + m_openingFile);
-            if (m_openings.getBoardSize() != size)
+            if (m_openings.getBoardSize() != parameters.width()) // TODO: Need rework
                 throw new GtpError("Wrong board size: " + m_openingFile);
             m_game.init(m_openings.getTree());
             m_game.setKomi(m_komi);
@@ -666,7 +661,7 @@ public class TwoGtp
             throw new GtpError("handicap is fixed at " + m_handicap);
     }
 
-    private void newGame(int size) throws GtpError
+    private void newGame(BoardParameters parameters) throws GtpError
     {
         if (m_resultFile != null)
             m_gameIndex = m_resultFile.getNextGameIndex();
@@ -686,7 +681,7 @@ public class TwoGtp
         }
         m_black.getAndClearCpuTime();
         m_white.getAndClearCpuTime();
-        initGame(size);
+        initGame(parameters);
         m_gameSaved = false;
         if (m_timeSettings != null)
             sendIfSupported("time_settings",
@@ -742,7 +737,7 @@ public class TwoGtp
             GoPoint point = null;
             try
             {
-                point = GtpUtil.parsePoint(responseGenmove, board.getSize());
+                point = GtpUtil.parsePoint(responseGenmove, board.getParameters().size()); // TODO : Need rework
             }
             catch (GtpResponseFormatError e)
             {

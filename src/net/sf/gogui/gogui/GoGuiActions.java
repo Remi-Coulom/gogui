@@ -715,7 +715,7 @@ public class GoGuiActions
         boolean isRulerAttached = m_goGui.isRulerAttached();
         boolean isRulerSetupPossible = m_goGui.isRulerSetupPossible();
         ConstClock clock = game.getClock();
-        int boardSize = game.getSize();
+        int boardSize = game.getParameters().size();
         GoColor toMove = game.getToMove();
         m_actionBackToMainVariation.setEnabled(! isInMain);
         m_actionBackward.setEnabled(hasFather);

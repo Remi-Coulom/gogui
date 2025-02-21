@@ -11,13 +11,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
+
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.EMPTY;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.Move;
+
 import net.sf.gogui.gtp.GtpCallback;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
@@ -45,7 +44,7 @@ public class Display
     {
         super(null);
         m_size = GoPoint.DEFAULT_SIZE;
-        m_board = new Board(m_size);
+        m_board = new Board(new BoardParameters(m_size));
         m_frame = new JFrame();
         m_frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         WindowAdapter windowAdapter = new WindowAdapter() {
@@ -55,7 +54,7 @@ public class Display
             };
         m_frame.addWindowListener(windowAdapter);
         Container contentPane = m_frame.getContentPane();
-        m_guiBoard = new GuiBoard(m_size);
+        m_guiBoard = new GuiBoard(new BoardParameters(m_size));
         m_guiBoard.setListener(new GuiBoard.Listener() {
                 public void contextMenu(GoPoint point, Component invoker,
                                         int x, int y)
@@ -266,10 +265,10 @@ public class Display
             {
                 public void run()
                 {
-                    m_board.init(m_size);
+                    m_board.init(new BoardParameters(m_size));  // TODO: Need reworking
                     if (m_guiBoard.getBoardSize() != m_size)
                     {
-                        m_guiBoard.initSize(m_size);
+                        m_guiBoard.initSize(new BoardParameters(m_size)); // TODO: Need reworking
                         m_frame.pack();
                     }
                     updateFromGoBoard();

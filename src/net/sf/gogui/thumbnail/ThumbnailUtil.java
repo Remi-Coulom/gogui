@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.go.BoardParameters;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
 import static net.sf.gogui.go.GoColor.BLACK;
@@ -107,7 +108,7 @@ public final class ThumbnailUtil
         @see #getPosition() */
     public static ConstBoard getPosition(ConstGameTree tree)
     {
-        Board board = new Board(tree.getBoardSize());
+        Board board = new Board(new BoardParameters(tree.getBoardSize())); // TODO: GameTree should have width and height
         new BoardUpdater().update(tree, getNode(tree), board);
         return board;
     }

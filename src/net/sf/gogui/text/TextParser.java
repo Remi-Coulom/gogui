@@ -5,12 +5,11 @@ package net.sf.gogui.text;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.GoColor;
+
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.PointList;
 
 /** Parse Go positions from ASCII text.
     Can handle a variety of formats. Black stones can be represented by 'X',
@@ -52,7 +51,7 @@ public class TextParser
                 if (isBoardRow(line, true))
                     break;
             }
-            m_board = new Board(m_width);
+            m_board = new Board(new BoardParameters(m_width));
             checkToPlay(line);
             parseBoardRow(line, m_board.getSize() - 1);
             int i = 2;
@@ -137,7 +136,7 @@ public class TextParser
     private void increaseBoardSize()
     {
         int newSize = m_board.getSize() + 1;
-        Board newBoard = new Board(newSize);
+        Board newBoard = new Board(new BoardParameters(newSize));
         PointList black = new PointList();
         PointList white = new PointList();
         for (GoPoint p : m_board)
@@ -261,12 +260,12 @@ public class TextParser
 
     private void shiftBoardDown(int deltaY)
     {
-        int size = m_board.getSize();
-        Board newBoard = new Board(size);
+        BoardParameters parameters = m_board.getParameters();
+        Board newBoard = new Board(parameters);
         PointList black = new PointList();
         PointList white = new PointList();
-        for (int y = 0; y < size - deltaY; ++y)
-            for (int x = 0; x < size; ++x)
+        for (int y = 0; y < parameters.size() - deltaY; ++y)    // TODO : Use width & height instead of size
+            for (int x = 0; x < parameters.size(); ++x)
             {
                 GoColor c = m_board.getColor(GoPoint.get(x, y + deltaY));
                 GoPoint p = GoPoint.get(x, y);
