@@ -5,6 +5,7 @@ package net.sf.gogui.go;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
 

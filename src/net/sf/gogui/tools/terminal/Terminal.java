@@ -19,10 +19,7 @@ import net.sf.gogui.go.*;
 
 import static net.sf.gogui.go.GoColor.BLACK_WHITE;
 
-import net.sf.gogui.gtp.GtpClient;
-import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpResponseFormatError;
-import net.sf.gogui.gtp.GtpUtil;
+import net.sf.gogui.gtp.*;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;

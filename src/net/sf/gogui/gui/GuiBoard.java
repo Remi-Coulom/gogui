@@ -30,6 +30,7 @@ import net.sf.gogui.go.*;
 import static net.sf.gogui.go.GoColor.EMPTY;
 
 import net.sf.gogui.gogui.GoGui.Orientation;
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.util.ObjectUtil;
 
 /** Graphical display of a Go board.

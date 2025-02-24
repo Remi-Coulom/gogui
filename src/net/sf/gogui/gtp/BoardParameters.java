@@ -1,4 +1,4 @@
-package net.sf.gogui.go;
+package net.sf.gogui.gtp;
 
 import java.util.Objects;
 
@@ -24,7 +24,7 @@ public final class BoardParameters {
     public String geometry() { return m_geometry; }
 
     /** Factory method for creating a BoardParameters.
-     @param input String with the board parameters
+     @param input String with the board parameters given by the gogui-rules_board_size command
      @return Unique reference to a BoardParameters with parsed values */
     public static BoardParameters get(String input)
     {

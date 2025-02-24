@@ -14,6 +14,7 @@ import net.sf.gogui.go.*;
 
 import static net.sf.gogui.go.GoColor.BLACK_WHITE_EMPTY;
 
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.sgf.SgfReader;
 
 /** Find duplicates in games. */

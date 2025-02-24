@@ -4,6 +4,7 @@ package net.sf.gogui.go;
 
 import java.util.Iterator;
 
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.gtp.GtpClientBase;
 
 /** Const functions of go.Board.

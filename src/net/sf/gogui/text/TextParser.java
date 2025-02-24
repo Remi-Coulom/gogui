@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 import net.sf.gogui.go.*;
+import net.sf.gogui.gtp.BoardParameters;
 
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;

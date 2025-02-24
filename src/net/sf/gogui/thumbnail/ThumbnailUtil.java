@@ -7,7 +7,7 @@ import java.io.IOException;
 import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.go.BoardParameters;
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
 import static net.sf.gogui.go.GoColor.BLACK;

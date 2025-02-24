@@ -21,15 +21,7 @@ import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
 
-import net.sf.gogui.gtp.GtpCallback;
-import net.sf.gogui.gtp.GtpClient;
-import net.sf.gogui.gtp.GtpClientBase;
-import net.sf.gogui.gtp.GtpCommand;
-import net.sf.gogui.gtp.GtpEngine;
-import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpResponseFormatError;
-import net.sf.gogui.gtp.GtpSynchronizer;
-import net.sf.gogui.gtp.GtpUtil;
+import net.sf.gogui.gtp.*;
 import net.sf.gogui.util.ErrorMessage;
 
 /** GTP adapter for logging or protocol translations. */

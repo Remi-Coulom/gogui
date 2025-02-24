@@ -2,8 +2,7 @@
 
 package net.sf.gogui.game;
 
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardParameters;
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 

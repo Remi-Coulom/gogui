@@ -64,19 +64,9 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 
 import net.sf.gogui.go.Score.ScoringMethod;
 import static net.sf.gogui.gogui.I18n.i18n;
-import net.sf.gogui.gtp.AnalyzeCommand;
-import net.sf.gogui.gtp.AnalyzeDefinition;
-import net.sf.gogui.gtp.AnalyzeType;
-import net.sf.gogui.gtp.AnalyzeUtil;
-import net.sf.gogui.gtp.GtpClient;
-import net.sf.gogui.gtp.GtpClientUtil;
-import net.sf.gogui.gtp.GtpCommand;
-import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpClientBase;
+
+import net.sf.gogui.gtp.*;
 import net.sf.gogui.gtp.GtpClient.ExecFailed;
-import net.sf.gogui.gtp.GtpResponseFormatError;
-import net.sf.gogui.gtp.GtpSynchronizer;
-import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeDialog;
 import net.sf.gogui.gui.AnalyzeShow;
 import net.sf.gogui.gui.BoardSizeDialog;
