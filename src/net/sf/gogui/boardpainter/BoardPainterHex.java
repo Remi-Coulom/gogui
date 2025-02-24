@@ -16,42 +16,8 @@ public class BoardPainterHex
 {
     public BoardPainterHex()
     {
+        System.out.println("Using Hex Painter");
         loadBackground("net/sf/gogui/images/wood.png");
-    }
-
-    /** Draw a board into graphics object.
-        @param graphics The graphics object.
-        @param field The fields.
-        @param width The width/height of the image.
-        @param showGrid Show grid coordinates. */
-    public void draw(Graphics graphics, ConstField[][] field, int width,
-                     boolean showGrid)
-    {
-        if (graphics instanceof Graphics2D)
-        {
-            Graphics2D graphics2D = (Graphics2D)graphics;
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-        m_width = width;
-        m_size = field.length;
-        if (m_constants == null || m_constants.getSize() != m_size)
-            m_constants = BoardConstants.get(m_size);
-        assert m_size <= GoPoint.MAX_SIZE;
-        double borderSize;
-        if (showGrid)
-            borderSize = BORDER_SIZE;
-        else
-            borderSize = BORDER_SIZE_NOGRID;
-        m_fieldSize =
-            Math.round((float)Math.floor(width / (m_size + 2 * borderSize)));
-        m_fieldOffset = (width - m_size * m_fieldSize) / 2;
-        drawBackground(graphics);
-        drawGrid(graphics);
-        if (showGrid)
-            drawGridLabels(graphics);
-        drawShadows(graphics, field);
-        drawFields(graphics, field);
     }
 
     public Point getCenter(int x, int y)
@@ -132,50 +98,61 @@ public class BoardPainterHex
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_OFF);
         }
+
+        graphics.setColor(Color.black);
         for (int y = 0; y < m_size; ++y)
         {
-            if (y == 0 || y == m_size - 1)
-                graphics.setColor(Color.black);
-            else
-                graphics.setColor(m_gridColor);
-            Point left = getCenter(0, y);
-            Point right = getCenter(m_size - 1, y);
-            graphics.drawLine(left.x, left.y, right.x, right.y);
+            for (int x = 0; x < m_size; ++x)
+            {
+                Polygon hex = getHex(getLocation(x, y), m_fieldSize);
+                graphics.drawPolygon(hex);
+            }
         }
-        for (int x = 0; x < m_size; ++x)
-        {
-            if (x == 0 || x == m_size - 1)
-                graphics.setColor(Color.black);
-            else
-                graphics.setColor(m_gridColor);
-            Point top = getCenter(x, 0);
-            Point bottom = getCenter(x, m_size - 1);
-            graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
-        }
+
         if (graphics instanceof Graphics2D)
         {
             Graphics2D graphics2D = (Graphics2D)graphics;
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        int r;
-        if (m_fieldSize <= 7)
-            return;
-        else if (m_fieldSize <= 33)
-            r = 1;
-        else if (m_fieldSize <= 60)
-            r = 2;
-        else
-            r = 3;
-        for (int x = 0; x < m_size; ++x)
-            if (m_constants.isHandicapLine(x))
-                for (int y = 0; y < m_size; ++y)
-                    if (m_constants.isHandicapLine(y))
-                    {
-                        Point point = getCenter(x, y);
-                        graphics.fillOval(point.x - r, point.y - r,
-                                          2 * r + 1, 2 * r + 1);
-                    }
+    }
+
+    private Polygon getHex(Point point, int size)
+    {
+        int[] xpoints = new int[6];
+        int[] ypoints = new int[6];
+
+        int center_x = size / 2;
+        int center_y = size / 2;
+        int offset = size / 2;
+
+        xpoints[0] = center_x - offset;     ypoints[0] = center_y;
+        xpoints[1] = center_x - offset / 2; ypoints[1] = center_y + offset;
+        xpoints[2] = center_x + offset / 2; ypoints[2] = center_y + offset;
+        xpoints[3] = center_x + offset;     ypoints[3] = center_y;
+        xpoints[4] = center_x + offset / 2; ypoints[4] = center_y - offset;
+        xpoints[5] = center_x - offset / 2; ypoints[5] = center_y - offset;
+
+        Polygon hex = new Polygon(xpoints, ypoints, 6);
+        hex.translate(point.x, point.y);
+
+        return hex;
+
+        /*int[] xpoints = new int[4];
+        int[] ypoints = new int[4];
+
+        int center_x = size / 2;
+        int center_y = size / 2;
+        int offset = size / 2;
+
+        xpoints[0] = center_x - offset; ypoints[0] = center_y;
+        xpoints[1] = center_x;          ypoints[1] = center_y + offset;
+        xpoints[2] = center_x + offset; ypoints[2] = center_y;
+        xpoints[3] = center_x;          ypoints[3] = center_y - offset;
+
+        Polygon square = new Polygon(xpoints, ypoints, 4);
+        square.translate(point.x, point.y);
+        return square;*/
     }
 
     protected void drawGridLabels(Graphics graphics)
