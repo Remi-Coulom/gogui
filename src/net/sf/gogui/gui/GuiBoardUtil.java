@@ -292,7 +292,7 @@ public final class GuiBoardUtil
     {
         guiBoard.clearAllMarkup();
         for (GoPoint p : points)
-            if (p != null && p.isOnBoard(guiBoard.getBoardSize()))
+            if (p != null && p.isOnBoard(guiBoard.getParameters().getDimension()))
                 guiBoard.setMarkSquare(p, true);
     }
 

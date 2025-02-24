@@ -2,6 +2,7 @@
 
 package net.sf.gogui.go;
 
+import java.awt.*;
 import java.util.Locale;
 import net.sf.gogui.util.StringUtil;
 
@@ -109,11 +110,11 @@ public final class GoPoint
         return m_y;
     }
 
-    public boolean isOnBoard(int size)
+    public boolean isOnBoard(Dimension dimension)
     {
-        assert size > 0;
-        assert size <= MAX_SIZE;
-        return (m_x < size && m_y < size);
+        assert dimension.width > 0 && dimension.width <= MAX_SIZE;
+        assert dimension.height > 0 && dimension.height <= MAX_SIZE;
+        return (m_x < dimension.width && m_y < dimension.height);
     }
 
     /** Return point left.

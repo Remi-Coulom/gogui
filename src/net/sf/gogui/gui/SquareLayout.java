@@ -34,7 +34,7 @@ public class SquareLayout
         Insets insets = parent.getInsets();
         size.width -= insets.left + insets.right;
         size.height -= insets.top + insets.bottom;
-        int len = size.width < size.height ? size.width : size.height;
+        int len = Math.min(size.width, size.height);
         int x = (size.width - len) / 2;
         int y = (size.height - len) / 2;
         parent.getComponent(0).setBounds(x + insets.left, y + insets.top,

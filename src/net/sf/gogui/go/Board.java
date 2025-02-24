@@ -2,6 +2,7 @@
 
 package net.sf.gogui.go;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -62,7 +63,7 @@ implements ConstBoard
         @return true, if the point is on the board */
     public boolean contains(GoPoint point)
     {
-        return point.isOnBoard(getParameters().size()); // TODO: For now, will have to change for rectangular boards
+        return point.isOnBoard(getParameters().getDimension()); // TODO: For now, will have to change for rectangular boards
     }
 
     /** Get points adjacent to a point.
@@ -170,8 +171,17 @@ implements ConstBoard
         return m_parameters;
     }
 
+    /** Get board dimensions.
+     *
+     *   @return The board dimensions (parameters.width & parameters.height) */
+    public Dimension getDimension()
+    {
+        return m_parameters.getDimension();
+    }
+
     /** Get board size. Needed for compatibility with square boards.
-        @return The board size (aka parameters.width) */
+     *
+     *  @return The board size (parameters.width) */
     public int getSize()
     {
         return m_parameters.size();
@@ -213,8 +223,8 @@ implements ConstBoard
     public void init(BoardParameters parameters)
     {
         m_parameters = parameters;
-        m_mark = new Marker(parameters.width()); // TODO: For now, will have to change for rectangular boards
-        m_constants = BoardConstants.get(parameters.width()); // TODO: For now, will have to change for rectangular boards
+        m_mark = new Marker(parameters.size()); // TODO: For now, will have to change for rectangular boards
+        m_constants = BoardConstants.get(parameters.size()); // TODO: For now, will have to change for rectangular boards
         clear();
     }
 

@@ -141,7 +141,7 @@ public class Game
     public final void init(BoardParameters parameters, Komi komi, ConstPointList handicap,
                            String rules, TimeSettings timeSettings)
     {
-        init(new GameTree(parameters.width(), komi, handicap, rules, timeSettings)); // TODO: GameTree should probably take width & height as parameters
+        init(new GameTree(parameters.size(), komi, handicap, rules, timeSettings)); // TODO: GameTree should probably take width & height as parameters
     }
 
     public final void init(GameTree tree)

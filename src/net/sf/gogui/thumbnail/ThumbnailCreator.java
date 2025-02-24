@@ -23,6 +23,7 @@ import net.sf.gogui.gamefile.GameReader;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.sgf.SgfError;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
@@ -45,7 +46,7 @@ public final class ThumbnailCreator
     public ThumbnailCreator(boolean verbose)
     {
         m_verbose = verbose;
-        m_painter = new BoardPainter();
+        m_painter = GuiBoard.getPainter(""); // TODO : Only supports Rectangle Boards
     }
 
     /** Create thumbnail at standard location.

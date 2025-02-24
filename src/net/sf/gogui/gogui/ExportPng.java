@@ -2,7 +2,7 @@
 
 package net.sf.gogui.gogui;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +13,11 @@ import net.sf.gogui.boardpainter.BoardPainterUtil;
 import net.sf.gogui.boardpainter.ConstField;
 import net.sf.gogui.go.GoPoint;
 import static net.sf.gogui.gogui.I18n.i18n;
+
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.FileDialogs;
+import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.MessageDialogs;
 
 public final class ExportPng
@@ -57,11 +60,12 @@ public final class ExportPng
                                          messageDialogs);
         if (file == null)
             return;
-        BoardPainter painter = new BoardPainter();
-        int size = guiBoard.getBoardSize();
-        ConstField[][] fields = new ConstField[size][size];
-        for (int x = 0; x < size; ++x)
-            for (int y = 0; y < size; ++y)
+        BoardParameters parameters = guiBoard.getParameters();
+        BoardPainter painter = GuiBoard.getPainter(parameters.geometry());
+        Dimension dimension = parameters.getDimension();
+        ConstField[][] fields = new ConstField[dimension.width][dimension.height];
+        for (int x = 0; x < dimension.width; ++x)
+            for (int y = 0; y < dimension.height; ++y)
                 fields[x][y] = guiBoard.getFieldConst(GoPoint.get(x, y));
         BufferedImage image
             = BoardPainterUtil.getImage(painter, fields, width, width);

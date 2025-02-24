@@ -22,9 +22,8 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import javax.swing.JPanel;
-import net.sf.gogui.boardpainter.BoardPainter;
-import net.sf.gogui.boardpainter.ConstField;
-import net.sf.gogui.boardpainter.Field;
+
+import net.sf.gogui.boardpainter.*;
 import net.sf.gogui.go.*;
 
 import static net.sf.gogui.go.GoColor.EMPTY;
@@ -67,16 +66,15 @@ public final class GuiBoard
         @param parameters The board parameters (width, height and geometry). */
     public GuiBoard(BoardParameters parameters)
     {
-        m_painter = new BoardPainter();
         setPreferredFieldSize();
-        initSize(parameters);
+        init(parameters);
     }
 
     /** Clear every kind of markup. */
     public void clearAll()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 setFieldBackground(GoPoint.get(x, y), null);
         clearAllCrossHair();
         clearAllMarkup();
@@ -91,15 +89,15 @@ public final class GuiBoard
     /** Clear all crosshairs. */
     public void clearAllCrossHair()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 setCrossHair(GoPoint.get(x, y), false);
     }
 
     public void clearAllInfluence()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 clearInfluence(GoPoint.get(x, y));
     }
 
@@ -107,8 +105,8 @@ public final class GuiBoard
         Clears mark, circle, square, triangle on all points. */
     public void clearAllMarkup()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
             {
                 GoPoint point = GoPoint.get(x, y);
                 setMark(point, false);
@@ -121,32 +119,32 @@ public final class GuiBoard
     /** Clear all selected points. */
     public void clearAllSelect()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 setSelect(GoPoint.get(x, y), false);
     }
 
     /** Clear all labels. */
     public void clearAllLabels()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 setLabel(GoPoint.get(x, y), "");
     }
 
     /** Clear all shadow stones. */
     public void clearAllGhostStones()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 setGhostStone(GoPoint.get(x, y), null);
     }
 
     /** Clear all territory. */
     public void clearAllTerritory()
     {
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
+        for (int x = 0; x < m_dimension.width; ++x)
+            for (int y = 0; y < m_dimension.height; ++y)
                 setTerritory(GoPoint.get(x, y), EMPTY);
     }
 
@@ -163,11 +161,15 @@ public final class GuiBoard
         m_panel.contextMenu(point);
     }
 
-    /** Get current board size. */
+    /** Get current board size.
+     * Will eventually be replaced by getParameters
+     * */
     public int getBoardSize()
     {
-        return m_size;
+        return m_dimension.width;
     }
+
+    public BoardParameters getParameters() { return m_parameters; }
 
     /** Return a field.
         Returns only a const interface to the field, the field state should
@@ -267,100 +269,140 @@ public final class GuiBoard
         return m_showGrid;
     }
 
-    /** Change the board sizes.
-        @param parameters The parameters containing the new width adn height. */
-    public void initSize(BoardParameters parameters)
+    /** Change the board size and/or geometry
+        @param parameters The news parameters. */
+    public void init(BoardParameters parameters)
     {
-        int size = parameters.width(); // TODO: Use width and height
-        assert size > 0 && size <= GoPoint.MAX_SIZE;
-        m_size = size;
-        m_constants = BoardConstants.get(size);
-        m_field = new Field[size][size];
+        m_parameters = parameters;
+
+        m_painter = getPainter(m_parameters.geometry());
+        initSize(m_parameters.getDimension());
+
         removeAll();
-        m_cursor = null;
+
+        initPanel();
         setLayout(new SquareLayout());
-        m_panel = new BoardPanel();
-        m_panel.addFocusListener(new FocusAdapter() {
-                public void focusGained(FocusEvent event) {
-                    if (getShowCursor())
-                        setCursor(m_cursor, true);
-                }
-
-                public void focusLost(FocusEvent event) {
-                    if (getShowCursor())
-                        setCursor(m_cursor, false);
-                }
-            });
-        addFocusListener(new FocusAdapter() {
-                public void focusGained(FocusEvent event) {
-                    m_panel.requestFocusInWindow();
-                }
-            });
-        add(m_panel);
-        m_panel.requestFocusInWindow();
-        m_panel.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent event) {
-                    GuiBoard.this.keyPressed(event);
-                }
-            });
-        m_panel.addMouseListener(new MouseAdapter() {
-                public void mousePressed(MouseEvent e) {
-                    GoPoint point = m_panel.getPoint(e);
-                    if (point == null)
-                        return;
-                    // mousePressed and mouseReleased (platform dependency)
-                    if (e.isPopupTrigger())
-                    {
-                        contextMenu(point);
-                        return;
-                    }
-                    int button = e.getButton();
-                    int count = e.getClickCount();
-                    if (button != MouseEvent.BUTTON1)
-                        return;
-                    if (count == 2)
-                        fieldClicked(point, true);
-                    else
-                    {
-                        int modifiers = e.getModifiersEx();
-                        int mask = (KeyEvent.CTRL_DOWN_MASK
-                                    | KeyEvent.ALT_DOWN_MASK
-                                    | KeyEvent.META_DOWN_MASK);
-                        boolean modifiedSelect = ((modifiers & mask) != 0);
-                        fieldClicked(point, modifiedSelect);
-                    }
-                }
-
-                public void mouseReleased(MouseEvent e) {
-                    GoPoint point = m_panel.getPoint(e);
-                    if (point == null)
-                        return;
-                    if (e.isPopupTrigger())
-                    {
-                        contextMenu(point);
-                        return;
-                    }
-                }
-            });
-        m_panel.addMouseMotionListener(new MouseMotionAdapter() {
-                public void mouseMoved(MouseEvent e) {
-                    m_panel.setToolTipText(null);
-                    GoPoint point = m_panel.getPoint(e);
-                    if (point == null)
-                        return;
-                    String label = getField(point).getLabel();
-                    if (label != null && label.length() > 3)
-                        m_panel.setToolTipText(label);
-                }
-            });
-        for (int y = size - 1; y >= 0; --y)
-            for (int x = 0; x < size; ++x)
-                m_field[x][y] = new Field();
+        m_cursor = null;
+        setCursor(GoPoint.get(m_dimension.width / 2, m_dimension.height / 2));
         m_lastMove = null;
-        setCursor(GoPoint.get(m_size / 2, m_size / 2));
+
         revalidate();
         m_dirty = new Rectangle(0, 0, getWidth(), getHeight());
         repaint();
+    }
+
+    /**
+     * Returns a new painter depending on the geometry
+     * @param geometry The geometry of the board (rect or hex)
+     * @return The corresponding painter
+     */
+    public static BoardPainter getPainter(String geometry)
+    {
+        if (geometry.equals("rect"))
+            return new BoardPainterRect();
+        else if (geometry.equals("hex"))
+            return new BoardPainterHex();
+        else {
+            System.err.println("Unknown geometry: " + geometry);
+            return new BoardPainterRect();
+        }
+    }
+
+    /** Initialize the board with a new size.
+        @param dimension The new dimension (width & height) of the board.
+     */
+    private void initSize(Dimension dimension)
+    {
+        assert dimension.width > 0 && dimension.width <= GoPoint.MAX_SIZE;
+        assert dimension.height > 0 && dimension.height <= GoPoint.MAX_SIZE;
+
+        m_dimension = dimension;
+        m_constants = BoardConstants.get(m_dimension.width); // TODO: This will not work for squared boards
+        m_field = new Field[dimension.width][dimension.height];
+        for (int y = dimension.height - 1; y >= 0; --y)
+            for (int x = 0; x < dimension.width; ++x)
+                m_field[x][y] = new Field();
+    }
+
+    /**
+     * Initialize the Board panel and the mouse listeners
+     */
+    private void initPanel()
+    {
+        m_panel = new BoardPanel();
+        m_panel.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent event) {
+                if (getShowCursor())
+                    setCursor(m_cursor, true);
+            }
+
+            public void focusLost(FocusEvent event) {
+                if (getShowCursor())
+                    setCursor(m_cursor, false);
+            }
+        });
+        addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent event) {
+                m_panel.requestFocusInWindow();
+            }
+        });
+        add(m_panel);
+        m_panel.requestFocusInWindow();
+        m_panel.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent event) {
+                GuiBoard.this.keyPressed(event);
+            }
+        });
+        m_panel.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                GoPoint point = m_panel.getPoint(e);
+                if (point == null)
+                    return;
+                // mousePressed and mouseReleased (platform dependency)
+                if (e.isPopupTrigger())
+                {
+                    contextMenu(point);
+                    return;
+                }
+                int button = e.getButton();
+                int count = e.getClickCount();
+                if (button != MouseEvent.BUTTON1)
+                    return;
+                if (count == 2)
+                    fieldClicked(point, true);
+                else
+                {
+                    int modifiers = e.getModifiersEx();
+                    int mask = (KeyEvent.CTRL_DOWN_MASK
+                            | KeyEvent.ALT_DOWN_MASK
+                            | KeyEvent.META_DOWN_MASK);
+                    boolean modifiedSelect = ((modifiers & mask) != 0);
+                    fieldClicked(point, modifiedSelect);
+                }
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                GoPoint point = m_panel.getPoint(e);
+                if (point == null)
+                    return;
+                if (e.isPopupTrigger())
+                {
+                    contextMenu(point);
+                    return;
+                }
+            }
+        });
+        m_panel.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseMoved(MouseEvent e) {
+                m_panel.setToolTipText(null);
+                GoPoint point = m_panel.getPoint(e);
+                if (point == null)
+                    return;
+                String label = getField(point).getLabel();
+                if (label != null && label.length() > 3)
+                    m_panel.setToolTipText(label);
+            }
+        });
     }
 
     /** Mark point of last move on the board.
@@ -425,7 +467,7 @@ public final class GuiBoard
         @param point New location of the cursor. */
     public void setCursor(GoPoint point)
     {
-        if (point != null && ! point.isOnBoard(m_size))
+        if (point != null && ! point.isOnBoard(m_dimension))
             point = null;
         if (! GoPoint.equals(m_cursor, point))
         {
@@ -713,11 +755,14 @@ public final class GuiBoard
 
         public final void setPreferredFieldSize()
         {
-            int preferredFieldSize = getPreferredFieldSize().width;
-            setPreferredSize(BoardPainter.getPreferredSize(preferredFieldSize,
-                                                          m_size, m_showGrid));
-            int minimumSize = 4 * m_size + 2;
-            setMinimumSize(new Dimension(minimumSize, minimumSize));
+            int preferredWidthSize = getPreferredFieldSize().width;
+            int preferredHeightSize = getPreferredFieldSize().height;
+
+            setPreferredSize(BoardPainter.getPreferredSize(preferredWidthSize, preferredHeightSize,
+                                                          m_dimension, m_showGrid));
+            int minimumWidthSize = 4 * m_dimension.width + 2;
+            int minimumHeightSize = 4 * m_dimension.height + 2;
+            setMinimumSize(new Dimension(minimumWidthSize, minimumHeightSize));
         }
     }
 
@@ -735,7 +780,9 @@ public final class GuiBoard
 
     private int m_imageWidth;
 
-    private int m_size;
+    private Dimension m_dimension;
+
+    private BoardParameters m_parameters;
 
     private BoardConstants m_constants;
 
@@ -749,9 +796,9 @@ public final class GuiBoard
 
     private GoPoint m_lastMove;
 
-    private final BoardPainter m_painter;
+    private BoardPainter m_painter;
 
-    private Field m_field[][];
+    private Field[][] m_field;
 
     private Image m_image;
 
@@ -832,13 +879,13 @@ public final class GuiBoard
         if (code == KeyEvent.VK_DOWN)
         {
             if (m_flipHorizontal)
-                point = point.up(m_size);
+                point = point.up(m_dimension.height);
             else
                 point = point.down();
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getY()))
                     if (m_flipHorizontal)
-                        point = point.up(m_size);
+                        point = point.up(m_dimension.height);
                     else
                         point = point.down();
         }
@@ -847,24 +894,24 @@ public final class GuiBoard
             if (m_flipHorizontal)
                 point = point.down();
             else
-                point = point.up(m_size);
+                point = point.up(m_dimension.height);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getY()))
                     if (m_flipHorizontal)
                         point = point.down();
                     else
-                        point = point.up(m_size);
+                        point = point.up(m_dimension.height);
         }
         else if (code == KeyEvent.VK_LEFT)
         {
             if (m_flipVertical)
-                point = point.right(m_size);
+                point = point.right(m_dimension.width);
             else
                 point = point.left();
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getX()))
                     if (m_flipVertical)
-                        point = point.right(m_size);
+                        point = point.right(m_dimension.width);
                     else
                         point = point.left();
         }
@@ -873,13 +920,13 @@ public final class GuiBoard
             if (m_flipVertical)
                 point = point.left();
             else
-                point = point.right(m_size);
+                point = point.right(m_dimension.width);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getX()))
                     if (m_flipVertical)
                         point = point.left();
                     else
-                        point = point.right(m_size);
+                        point = point.right(m_dimension.width);
         }
         setCursor(point);
     }

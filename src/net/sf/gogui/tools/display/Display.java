@@ -262,7 +262,7 @@ public class Display
                     m_board.init(new BoardParameters(m_size));  // TODO: Need reworking
                     if (m_guiBoard.getBoardSize() != m_size)
                     {
-                        m_guiBoard.initSize(new BoardParameters(m_size)); // TODO: Need reworking
+                        m_guiBoard.init(new BoardParameters(m_size)); // TODO: Need reworking
                         m_frame.pack();
                     }
                     updateFromGoBoard();

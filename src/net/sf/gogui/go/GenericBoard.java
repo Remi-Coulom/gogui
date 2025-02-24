@@ -5,6 +5,7 @@ package net.sf.gogui.go;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import net.sf.gogui.game.ConstNode;
@@ -39,7 +40,7 @@ public final class GenericBoard {
     public static boolean isGameOver(GtpClientBase gameRuler) throws GtpError {
         if (! gameRuler.isSupported("gogui-rules_legal_moves"))
             return false;
-        return getLegalMoves(gameRuler).equals("");
+        return getLegalMoves(gameRuler).isEmpty();
     }
 
     /**
@@ -137,7 +138,7 @@ public final class GenericBoard {
             return;
         }
 
-        GenericBoard.setup(rulerBoardState, board, parameters);
+        GenericBoard.setup(rulerBoardState, board, parameters.getDimension());
         if (gameRuler.isSupported("gogui-rules_captured_count"))
         {
            try
@@ -155,7 +156,7 @@ public final class GenericBoard {
         }
     }
 
-    private static void setup(String position, Board board, BoardParameters parameters)
+    private static void setup(String position, Board board, Dimension dimension)
     {
         try
         {
@@ -163,7 +164,7 @@ public final class GenericBoard {
             PointList blacksSetup = new PointList();
             PointList whitesSetup = new PointList();
             PointList emptySetup = new PointList();
-            for (int i = 0; i < parameters.height(); i++) {
+            for (int i = 0; i < dimension.height; i++) {
                 int j = -1;
                 char c = ' ';
                 do {
@@ -181,7 +182,7 @@ public final class GenericBoard {
 
                     if ( c == 'X')
                     {
-                        GoPoint black = GoPoint.get(j, parameters.height()-i-1);
+                        GoPoint black = GoPoint.get(j, dimension.height-i-1);
                         if (board.getColor(black) != BLACK)
                         {
                             blacksSetup.add(black);
@@ -189,7 +190,7 @@ public final class GenericBoard {
                     }
                     else if (c == 'O')
                     {
-                        GoPoint white = GoPoint.get(j, parameters.height()-i-1);
+                        GoPoint white = GoPoint.get(j, dimension.height-i-1);
                         if (board.getColor(white) != WHITE)
                         {
                             whitesSetup.add(white);
@@ -197,12 +198,12 @@ public final class GenericBoard {
                     }
                     else if (c == '.')
                     {
-                        GoPoint empty = GoPoint.get(j, parameters.height()-i-1);
+                        GoPoint empty = GoPoint.get(j, dimension.height-i-1);
                         if (board.getColor(empty) != EMPTY) {
                             emptySetup.add(empty);
                         }
                     }
-                } while (j < parameters.width()-1);
+                } while (j < dimension.width-1);
             }
             board.setPoints(blacksSetup, BLACK);
             board.setPoints(whitesSetup, WHITE);

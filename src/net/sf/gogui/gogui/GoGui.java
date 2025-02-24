@@ -1034,7 +1034,7 @@ ContextMenu.Listener, LiveGfx.Listener
         {
             showError(i18n("MSG_IMPORT_FAILED"), e);
         }
-        m_guiBoard.initSize(getBoard().getParameters());
+        m_guiBoard.init(getBoard().getParameters());
         initGtp();
         m_computerBlack = false;
         m_computerWhite = false;
@@ -2881,7 +2881,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
                      if (!parameters.equals(getBoardParameters()))
                      {
-                        actionBoardSize(parameters.width()); // TODO: For now, we only support square boards
+                        actionBoardSize(parameters.size()); // TODO: For now, we only support square boards
                      }
                     }
 
@@ -3675,7 +3675,7 @@ ContextMenu.Listener, LiveGfx.Listener
         {
             showError(i18n("MSG_IMPORT_FAILED"), e);
         }
-        m_guiBoard.initSize(getBoard().getParameters());
+        m_guiBoard.init(getBoard().getParameters());
         initGtp();
         m_computerBlack = false;
         m_computerWhite = false;
@@ -3691,8 +3691,8 @@ ContextMenu.Listener, LiveGfx.Listener
             // could contain points out of board
             clearAnalyzeCommand();
             //saveSession();
-            m_guiBoard.initSize(parameters);
-            restoreMainWindow(parameters.width()); // TODO: Change to parameters when we support non-square boards
+            m_guiBoard.init(parameters);
+            restoreMainWindow(parameters.size()); // TODO: Change to parameters when we support non-square boards
             JLayeredPane layeredPane = getLayeredPane();
             if (layeredPane.isVisible())
             {
@@ -3701,11 +3701,11 @@ ContextMenu.Listener, LiveGfx.Listener
             }
         }
         Komi komi = (m_handicap == 0 ? getPrefsKomi() : new Komi(0));
-        ConstPointList handicap = Board.getHandicapStones(parameters.width(), m_handicap);  // TODO: Change to parameters when we support non-square boards
+        ConstPointList handicap = Board.getHandicapStones(parameters.size(), m_handicap);  // TODO: Change to parameters when we support non-square boards
         if (handicap == null)
             showWarning(i18n("MSG_HANDICAP_UNDEFINED"),
                     format(i18n("MSG_HANDICAP_UNDEFINED_2"), m_handicap,
-                            parameters.width()), false);    // TODO: Change to width & height when we support non-square boards
+                            parameters.size()), false);    // TODO: Change to width & height when we support non-square boards
         m_game.init(parameters, komi, handicap, m_prefs.get("rules", ""),
                 m_timeSettings);
         if (!parameters.equals(oldParameters))
@@ -3715,7 +3715,7 @@ ContextMenu.Listener, LiveGfx.Listener
             if (m_analyzeDialog != null)
             {
                 restoreSize(m_analyzeDialog, "analyze");
-                m_analyzeDialog.setBoardSize(parameters.width());   // TODO: Change to parameters when we support non-square boards
+                m_analyzeDialog.setBoardSize(parameters.size());   // TODO: Change to parameters when we support non-square boards
             }
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "tree");
@@ -4898,7 +4898,7 @@ ContextMenu.Listener, LiveGfx.Listener
             if (previousGame.equals(newGame) &&
                     !previousGame.isEmpty() &&
                     previousParameters.equals(newParameters) &&
-                    previousParameters.width() > 0)
+                    previousParameters.size() > 0)
             {
                 GenericBoard.copyBoardState(m_gameRulerCopie, getCurrentNode(), (Board)getBoard());
                 m_gameRuler = m_gameRulerCopie;
@@ -4908,7 +4908,7 @@ ContextMenu.Listener, LiveGfx.Listener
             {
                 if (checkSaveGame())
                 {
-                    if (newParameters.width() < 0)
+                    if (newParameters.size() < 0)
                         newParameters = getBoardParameters();
                     m_gameRuler = m_gameRulerCopie;
                     m_handicap = 0;

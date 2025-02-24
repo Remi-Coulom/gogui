@@ -1,26 +1,25 @@
 package net.sf.gogui.gtp;
 
+import java.awt.*;
 import java.util.Objects;
 
 /** Parameters (width, height, geometry) of the board, given by gogui-rules_board_size command */
 public final class BoardParameters {
 
     public BoardParameters(int mSize) {
-        m_width = mSize;
-        m_height = mSize;
+        m_dimension = new Dimension(mSize, mSize);
         m_geometry = m_geometryOptions[0];
     }
 
     public BoardParameters(int mWidth, int mHeight, String mGeometry) {
-        m_width = mWidth;
-        m_height = mHeight;
+        m_dimension = new Dimension(mWidth, mHeight);
         m_geometry = getValidGeometry(mGeometry);
     }
 
-    public int width() { return m_width; }
-    public int height() { return m_height; }
-    /** Needed for compatibility with square boards */
-    public int size() { return m_width; }
+    public Dimension getDimension() { return m_dimension; }
+    /** Needed for compatibility with square boards
+     * Will eventually be removed */
+    public int size() { return m_dimension.width; }
     public String geometry() { return m_geometry; }
 
     /** Factory method for creating a BoardParameters.
@@ -49,19 +48,21 @@ public final class BoardParameters {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BoardParameters that = (BoardParameters) o;
-        return m_width == that.m_width && m_height == that.m_height && Objects.equals(m_geometry, that.m_geometry);
+        return m_dimension.width == that.m_dimension.width &&
+                m_dimension.height == that.m_dimension.height &&
+                Objects.equals(m_geometry, that.m_geometry);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(m_width, m_height, m_geometry);
+        return Objects.hash(m_dimension.width, m_dimension.height, m_geometry);
     }
 
-    /** The width of the board (given by gogui-rules_board_size command) */
-    private final int m_width;
-
-    /** The height of the board (Default as m_width if not given by gogui-rules_board_size command) */
-    private final int m_height;
+    /** The dimensions of the board
+     *  The width of the board is given by the gogui-rules_board_size command
+     *  The height of the board defaults as the width if not given by gogui-rules_board_size command
+     * */
+    private final Dimension m_dimension;
 
     /** The geometry of the board (rect by default or hex for hexagonal games)*/
     private final String m_geometry;
