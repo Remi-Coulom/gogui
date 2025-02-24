@@ -21,7 +21,7 @@ public final class BoardTest
 
     public void testBothPassed()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         assertFalse(board.bothPassed());
         board.play(BLACK, GoPoint.get(0, 0));
         assertFalse(board.bothPassed());
@@ -35,7 +35,7 @@ public final class BoardTest
 
     public void testCapture()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         board.play(BLACK, GoPoint.get(0, 0));
         board.play(BLACK, GoPoint.get(1, 0));
         board.play(WHITE, GoPoint.get(0, 1));
@@ -52,7 +52,7 @@ public final class BoardTest
 
     public void testContains()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         assertTrue(board.contains(GoPoint.get(0, 0)));
         assertTrue(board.contains(GoPoint.get(0, 18)));
         assertTrue(board.contains(GoPoint.get(18, 0)));
@@ -66,7 +66,7 @@ public final class BoardTest
     /** Test Board.getKilled(). */
     public void testGetKilled()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         // 4 . . . . .
         // 3 . . O . .
         // 2 O O @ O .
@@ -96,7 +96,7 @@ public final class BoardTest
     /** Test Board.getSuicide(). */
     public void testGetSuicide()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         // 4 . . . .
         // 3 O . . .
         // 2 @ O . .
@@ -121,7 +121,7 @@ public final class BoardTest
     /** Test Board.isKo(). */
     public void testIsKo()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         // 3 . . . .
         // 2 @ O . .
         // 1 . @ O .
@@ -144,7 +144,7 @@ public final class BoardTest
 
     public void testIsSuicide()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         assertFalse(board.isSuicide(WHITE, GoPoint.get(0, 0)));
         board.play(BLACK, GoPoint.get(0, 1));
         assertFalse(board.isSuicide(WHITE, GoPoint.get(0, 0)));
@@ -160,7 +160,7 @@ public final class BoardTest
 
     public void testGetLastMove()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         assertNull(board.getLastMove());
         board.play(BLACK, GoPoint.get(0, 0));
         assertEquals(Move.get(BLACK, 0, 0), board.getLastMove());
@@ -173,7 +173,7 @@ public final class BoardTest
         Also tests that the old stone is correctly restored. */
     public void testPlayOnOccupied()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         GoPoint point = GoPoint.get(0, 0);
         board.play(WHITE, point);
         board.play(BLACK, point);
@@ -184,7 +184,7 @@ public final class BoardTest
     /** Test that setup does not cause suicide. */
     public void testSetupSuicide()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         board.play(BLACK, GoPoint.get(1, 0));
         board.play(BLACK, GoPoint.get(0, 1));
         board.setup(null, new PointList(GoPoint.get(0, 0)), BLACK);
@@ -194,7 +194,7 @@ public final class BoardTest
     /** Test that setup does not capture anything. */
     public void testSetupCapture()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         board.play(BLACK, GoPoint.get(1, 0));
         board.play(WHITE, GoPoint.get(2, 0));
         board.play(BLACK, GoPoint.get(0, 1));
@@ -205,7 +205,7 @@ public final class BoardTest
 
     public void testSetupHandicap()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         PointList stones = new PointList();
         stones.add(GoPoint.get(4, 4));
         stones.add(GoPoint.get(5, 5));
@@ -218,7 +218,7 @@ public final class BoardTest
 
     public void testToMove()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         assertEquals(BLACK, board.getToMove());
         board.play(BLACK, GoPoint.get(0, 0));
         assertEquals(WHITE, board.getToMove());
@@ -228,7 +228,7 @@ public final class BoardTest
 
     public void testUndo()
     {
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         board.play(BLACK, GoPoint.get(0, 0));
         board.undo();
         assertEquals(EMPTY, board.getColor(GoPoint.get(0, 0)));

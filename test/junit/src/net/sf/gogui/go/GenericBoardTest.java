@@ -42,7 +42,7 @@ public final class GenericBoardTest
         } catch (GtpError e) {
             e.printStackTrace();
         }
-        board = new Board(19);
+        board = new Board(new BoardParameters(19));
         gameTree = new GameTree();
         game = new Game(gameTree);
     }

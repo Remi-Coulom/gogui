@@ -5,6 +5,8 @@ package net.sf.gogui.game;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
+
+import net.sf.gogui.go.BoardParameters;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
@@ -23,7 +25,7 @@ public final class GameTest
 
     public void testSetComment()
     {
-        Game game = new Game(19);
+        Game game = new Game(new BoardParameters(19));
         String comment = "foo";
         game.setComment(comment);
         assertTrue(game.isModified());
@@ -36,7 +38,7 @@ public final class GameTest
 
     public void testSetLabel()
     {
-        Game game = new Game(19);
+        Game game = new Game(new BoardParameters(19));
         GoPoint p = GoPoint.get(0, 0);
         String label = "foo";
         game.setLabel(p, label);
@@ -50,7 +52,7 @@ public final class GameTest
 
     public void testSetToMove()
     {
-        Game game = new Game(19);
+        Game game = new Game(new BoardParameters(19));
         game.setToMove(WHITE);
         assertTrue(game.isModified());
         assertEquals(WHITE, game.getCurrentNode().getPlayer());
@@ -61,7 +63,7 @@ public final class GameTest
         removal (empty setup stone). */
     public void testSetupEmptyInRoot()
     {
-        Game game = new Game(19);
+        Game game = new Game(new BoardParameters(19));
         ConstNode node = game.getCurrentNode();
         GoPoint p = GoPoint.get(0, 0);
         game.setup(p, BLACK);
@@ -78,7 +80,7 @@ public final class GameTest
     public void testTimeSettingsInit()
     {
         TimeSettings timeSettings = new TimeSettings(600000);
-        Game game = new Game(19, null, null, null, timeSettings);
+        Game game = new Game(new BoardParameters(19), null, null, null, timeSettings);
         assertEquals(timeSettings, game.getClock().getTimeSettings());
     }
 
@@ -86,7 +88,7 @@ public final class GameTest
     public void testTimeSettingsUpdate()
     {
         TimeSettings timeSettings = new TimeSettings(600000);
-        Game game = new Game(19, null, null, null, timeSettings);
+        Game game = new Game(new BoardParameters(19), null, null, null, timeSettings);
         ConstNode root = game.getRoot();
         game.play(Move.get(BLACK, null));
         assertNotSame(root, game.getCurrentNode());

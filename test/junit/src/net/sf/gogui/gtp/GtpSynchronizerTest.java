@@ -4,13 +4,10 @@ package net.sf.gogui.gtp;
 
 import java.io.IOException;
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.go.Board;
-import net.sf.gogui.go.ConstPointList;
-import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.*;
+
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
-import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.PointList;
 
 public final class GtpSynchronizerTest
     extends junit.framework.TestCase
@@ -29,7 +26,7 @@ public final class GtpSynchronizerTest
     {
         m_expect = new GtpExpectEngine(null);
         m_gtp = new GtpEngineClient(m_expect);
-        m_board = new Board(19);
+        m_board = new Board(new BoardParameters(19));
     }
 
     public void testBasic() throws GtpError

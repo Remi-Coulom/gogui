@@ -5,6 +5,8 @@ package net.sf.gogui.game;
 import net.sf.gogui.go.Board;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
+
+import net.sf.gogui.go.BoardParameters;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
@@ -43,7 +45,7 @@ public final class BoardUpdaterTest
         child.addStone(WHITE, GoPoint.get(2, 5));
         child.addStone(BLACK, GoPoint.get(3, 1));
         root.append(child);
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         m_updater.update(tree, child, board);
         assertEquals(BLACK, board.getColor(GoPoint.get(1, 1)));
         assertEquals(BLACK, board.getColor(GoPoint.get(1, 2)));
@@ -75,7 +77,7 @@ public final class BoardUpdaterTest
         Node node3 = new Node();
         node2.append(node3);
         node3.addStone(BLACK, GoPoint.get(3, 3));
-        Board board = new Board(19);
+        Board board = new Board(new BoardParameters(19));
         m_updater.update(tree, node3, board);
         assertEquals(BLACK, board.getColor(GoPoint.get(3, 3)));
     }
