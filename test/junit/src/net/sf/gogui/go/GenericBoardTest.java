@@ -9,6 +9,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClient.ExecFailed;
 import net.sf.gogui.gtp.GtpError;

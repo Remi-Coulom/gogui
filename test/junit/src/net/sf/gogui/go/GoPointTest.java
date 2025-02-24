@@ -2,6 +2,8 @@
 
 package net.sf.gogui.go;
 
+import java.awt.*;
+
 public final class GoPointTest
     extends junit.framework.TestCase
 {
@@ -38,13 +40,15 @@ public final class GoPointTest
 
     public void testIsOnBoard()
     {
-        assertTrue(getPoint(0, 0).isOnBoard(9));
-        assertTrue(getPoint(18, 18).isOnBoard(19));
-        assertTrue(getPoint(0, 18).isOnBoard(19));
-        assertTrue(getPoint(18, 0).isOnBoard(19));
-        assertFalse(getPoint(19, 19).isOnBoard(19));
-        assertFalse(getPoint(0, 19).isOnBoard(19));
-        assertFalse(getPoint(19, 0).isOnBoard(19));
+        assertTrue(getPoint(0, 0).isOnBoard(new Dimension(9, 9)));
+        assertTrue(getPoint(18, 18).isOnBoard(new Dimension(19, 19)));
+        assertTrue(getPoint(0, 18).isOnBoard(new Dimension(19, 19)));
+        assertTrue(getPoint(18, 0).isOnBoard(new Dimension(19, 19)));
+        assertFalse(getPoint(19, 19).isOnBoard(new Dimension(19, 19)));
+        assertFalse(getPoint(0, 19).isOnBoard(new Dimension(19, 19)));
+        assertFalse(getPoint(19, 0).isOnBoard(new Dimension(19, 19)));
+        assertFalse(getPoint(10, 0).isOnBoard(new Dimension(1, 19)));
+        assertFalse(getPoint(0, 10).isOnBoard(new Dimension(19, 1)));
     }
 
     public void testParse() throws InvalidPointException

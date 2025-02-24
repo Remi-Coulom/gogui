@@ -10,6 +10,7 @@ import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.PointList;
+import net.sf.gogui.gtp.BoardParameters;
 
 public final class ThumbnailUtilTest
     extends junit.framework.TestCase
@@ -27,7 +28,7 @@ public final class ThumbnailUtilTest
     /** Test that getNode() return the last position in a game. */
     public void testGetNodeGame()
     {
-        Game game = new Game(19);
+        Game game = new Game(new BoardParameters(19));
         game.play(Move.get(BLACK, 15, 15));
         game.play(Move.get(WHITE, 3, 3));
         ConstNode root = game.getTree().getRootConst();
@@ -42,7 +43,7 @@ public final class ThumbnailUtilTest
         PointList handicap = new PointList();
         handicap.add(GoPoint.get(3, 3));
         handicap.add(GoPoint.get(15, 15));
-        Game game = new Game(19, null, handicap, "", null);
+        Game game = new Game(new BoardParameters(19), null, handicap, "", null);
         game.play(Move.get(WHITE, 2, 5));
         game.play(Move.get(BLACK, 5, 2));
         ConstNode root = game.getTree().getRootConst();
@@ -54,7 +55,7 @@ public final class ThumbnailUtilTest
         black and white setup stones. */
     public void testGetNodeSetup()
     {
-        Game game = new Game(19);
+        Game game = new Game(new BoardParameters(19));
         game.setup(GoPoint.get(0, 0), BLACK);
         game.setup(GoPoint.get(1, 0), WHITE);
         game.play(Move.get(BLACK, 1, 0));

@@ -1,6 +1,6 @@
 package net.sf.gogui.gtp;
 
-import net.sf.gogui.go.BoardParameters;
+import net.sf.gogui.gtp.BoardParameters;
 
 public class BoardParametersTest
         extends junit.framework.TestCase {

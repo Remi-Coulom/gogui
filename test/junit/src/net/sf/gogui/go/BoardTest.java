@@ -6,6 +6,8 @@ import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import static net.sf.gogui.go.GoColor.EMPTY;
 
+import net.sf.gogui.gtp.BoardParameters;
+
 public final class BoardTest
     extends junit.framework.TestCase
 {

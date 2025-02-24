@@ -2,6 +2,7 @@
 
 package net.sf.gogui.tex;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.go.Board;
@@ -9,6 +10,7 @@ import net.sf.gogui.go.Move;
 import static net.sf.gogui.go.GoColor.BLACK;
 import static net.sf.gogui.go.GoColor.WHITE;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gtp.BoardParameters;
 
 public final class TexWriterTest
     extends junit.framework.TestCase
@@ -25,10 +27,10 @@ public final class TexWriterTest
 
     public void testMarkup()
     {
-        int size = 19;
-        Board board = new Board(size);
-        String[][] markLabel = new String[size][size];
-        boolean[][] mark = new boolean[size][size];
+        Board board = new Board(new BoardParameters(19));
+        Dimension dimension = board.getDimension();
+        String[][] markLabel = new String[dimension.width][];
+        boolean[][] mark = new boolean[dimension.width][dimension.height];
         board.play(BLACK, GoPoint.get(0, 0));
         mark[0][0] = true;
         mark[0][1] = true;
@@ -45,8 +47,7 @@ public final class TexWriterTest
         point. */
     public void testTwoMovesOnPoint()
     {
-        int size = 2;
-        Game game = new Game(size);
+        Game game = new Game(new BoardParameters(2));
         game.play(Move.get(BLACK, 0, 1));
         game.play(Move.get(WHITE, 1, 1));
         game.play(Move.get(BLACK, 0, 0));
