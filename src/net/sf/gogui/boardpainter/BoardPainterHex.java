@@ -35,8 +35,8 @@ public class BoardPainterHex
         if (! m_flipHorizontal)
             y = m_size - 1 - y;
         Point point = new Point();
-        point.x = m_fieldOffset + x * m_fieldSize;
-        point.y = m_fieldOffset + y * m_fieldSize;
+        point.x = m_fieldOffset + x * m_fieldSize + y * m_fieldSize / 2;
+        point.y = m_fieldOffset + y * m_fieldSize * 3 / 4;
         return point;
     }
 
@@ -57,17 +57,6 @@ public class BoardPainterHex
         if (! m_flipHorizontal)
             y = m_size - 1 - y;
         return GoPoint.get(x, y);
-    }
-
-    protected void drawBackground(Graphics graphics)
-    {
-        if (m_image == null)
-        {
-            graphics.setColor(new Color(212, 167, 102));
-            graphics.fillRect(0, 0, m_width, m_width);
-        }
-        else
-            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
     }
 
     protected void drawFields(Graphics graphics, ConstField[][] field)
@@ -126,12 +115,20 @@ public class BoardPainterHex
         int center_y = size / 2;
         int offset = size / 2;
 
-        xpoints[0] = center_x - offset;     ypoints[0] = center_y;
+        xpoints[0] = center_x;          ypoints[0] = center_y - offset;
+        xpoints[1] = center_x + offset; ypoints[1] = center_y - offset / 2;
+        xpoints[2] = center_x + offset; ypoints[2] = center_y + offset / 2;
+        xpoints[3] = center_x;          ypoints[3] = center_y + offset;
+        xpoints[4] = center_x - offset; ypoints[4] = center_y + offset / 2;
+        xpoints[5] = center_x - offset; ypoints[5] = center_y - offset / 2;
+
+
+        /*xpoints[0] = center_x - offset;     ypoints[0] = center_y;
         xpoints[1] = center_x - offset / 2; ypoints[1] = center_y + offset;
         xpoints[2] = center_x + offset / 2; ypoints[2] = center_y + offset;
         xpoints[3] = center_x + offset;     ypoints[3] = center_y;
         xpoints[4] = center_x + offset / 2; ypoints[4] = center_y - offset;
-        xpoints[5] = center_x - offset / 2; ypoints[5] = center_y - offset;
+        xpoints[5] = center_x - offset / 2; ypoints[5] = center_y - offset;*/
 
         Polygon hex = new Polygon(xpoints, ypoints, 6);
         hex.translate(point.x, point.y);

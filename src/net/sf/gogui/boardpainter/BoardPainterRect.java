@@ -54,14 +54,6 @@ public class BoardPainterRect
         return GoPoint.get(x, y);
     }
 
-    protected void drawBackground(Graphics graphics) {
-        if (m_image == null) {
-            graphics.setColor(new Color(212, 167, 102));
-            graphics.fillRect(0, 0, m_width, m_width);
-        } else
-            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
-    }
-
     protected void drawFields(Graphics graphics, ConstField[][] field) {
         assert field.length == m_size;
         for (int x = 0; x < m_size; ++x) {

@@ -95,7 +95,13 @@ public abstract class BoardPainter
         drawFields(graphics, field);
     }
 
-    protected abstract void drawBackground(Graphics graphics);
+    protected void drawBackground(Graphics graphics) {
+        if (m_image == null) {
+            graphics.setColor(new Color(212, 167, 102));
+            graphics.fillRect(0, 0, m_width, m_width);
+        } else
+            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
+    }
 
     protected abstract void drawFields(Graphics graphics, ConstField[][] field);
 
@@ -170,8 +176,10 @@ public abstract class BoardPainter
     /** Preferred border size (in fraction of field size) if grid is drawn. */
     protected static final double BORDER_SIZE_NOGRID = 0.2;
 
+    /** Size of a field in pixels. */
     protected int m_fieldSize;
 
+    /** Offset of the board from the border of the screen */
     protected int m_fieldOffset;
 
     protected boolean m_flipHorizontal = false;
