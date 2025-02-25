@@ -54,7 +54,7 @@ public class BoardPainterHex
 
         if (x < 0 || y < 0)
             return null;
-        if (x >= m_size || y >= m_size)
+        if (x >= m_size - 1  || y >= m_size - 1)
             return null;
 
         if (m_flipVertical)
