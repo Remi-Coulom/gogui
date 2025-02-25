@@ -84,8 +84,7 @@ public abstract class BoardPainter
             borderSize = BORDER_SIZE;
         else
             borderSize = BORDER_SIZE_NOGRID;
-        m_fieldSize =
-            Math.round((float)Math.floor(width / (m_size + 2 * borderSize)));
+        m_fieldSize = calcFieldSize(width, m_size, borderSize);
         m_fieldOffset = (width - m_size * m_fieldSize) / 2;
         drawBackground(graphics);
         drawGrid(graphics);
@@ -118,8 +117,9 @@ public abstract class BoardPainter
 
     protected abstract void drawLabel(Graphics graphics, Point location, String string);
 
-
     public abstract Point getCenter(int x, int y);
+
+    protected abstract int calcFieldSize(int imageWidth, int fieldWidth, double borderSize);
 
     public int getFieldSize()
     {

@@ -20,6 +20,11 @@ public class BoardPainterHex
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
+    protected int calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
+    {
+        return Math.round((float)Math.floor(imageWidth / (2f * (fieldWidth + 2 * borderSize))));
+    }
+
     public Point getCenter(int x, int y)
     {
         Point point = getLocation(x, y);

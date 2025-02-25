@@ -18,6 +18,11 @@ public class BoardPainterRect
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
+    protected int calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
+    {
+        return Math.round((float)Math.floor(imageWidth / (fieldWidth + 2 * borderSize)));
+    }
+
     public Point getCenter(int x, int y) {
         Point point = getLocation(x, y);
         point.x += m_fieldSize / 2;
