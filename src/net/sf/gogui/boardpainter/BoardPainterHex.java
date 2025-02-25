@@ -36,7 +36,7 @@ public class BoardPainterHex
             y = m_size - 1 - y;
         Point point = new Point();
         point.x = m_fieldOffset + x * m_fieldSize + y * m_fieldSize / 2;
-        point.y = m_fieldOffset + y * m_fieldSize * 3 / 4;
+        point.y = m_fieldOffset + (int)(y * 0.75f * m_fieldSize / SQRT);
         return point;
     }
 
@@ -46,16 +46,22 @@ public class BoardPainterHex
             return null;
         int x = (int)point.getX() - m_fieldOffset;
         int y = (int)point.getY() - m_fieldOffset;
+
+        y = y / (int)(0.75f * m_fieldSize / SQRT);
+        if (y % 2 == 1)
+            x -= m_fieldSize / 2;
+        x = x / m_fieldSize - y / 2;
+
         if (x < 0 || y < 0)
             return null;
-        x = x / m_fieldSize;
-        y = y / m_fieldSize;
         if (x >= m_size || y >= m_size)
             return null;
+
         if (m_flipVertical)
             x = m_size - 1 - x;
         if (! m_flipHorizontal)
             y = m_size - 1 - y;
+
         return GoPoint.get(x, y);
     }
 
@@ -111,16 +117,16 @@ public class BoardPainterHex
         int[] xpoints = new int[6];
         int[] ypoints = new int[6];
 
-        int center_x = size / 2;
-        int center_y = size / 2;
-        int offset = size / 2;
+        float center_x = size / 2f;
+        float center_y = size / 2f;
+        float offset = size / 2f;
 
-        xpoints[0] = center_x;          ypoints[0] = center_y - offset;
-        xpoints[1] = center_x + offset; ypoints[1] = center_y - offset / 2;
-        xpoints[2] = center_x + offset; ypoints[2] = center_y + offset / 2;
-        xpoints[3] = center_x;          ypoints[3] = center_y + offset;
-        xpoints[4] = center_x - offset; ypoints[4] = center_y + offset / 2;
-        xpoints[5] = center_x - offset; ypoints[5] = center_y - offset / 2;
+        xpoints[0] = (int)center_x;             ypoints[0] = (int)(center_y - offset / SQRT);
+        xpoints[1] = (int)(center_x + offset);  ypoints[1] = (int)(center_y - offset / 2);
+        xpoints[2] = (int)(center_x + offset);  ypoints[2] = (int)(center_y + offset / 2);
+        xpoints[3] = (int)center_x;             ypoints[3] = (int)(center_y + offset / SQRT);
+        xpoints[4] = (int)(center_x - offset);  ypoints[4] = (int)(center_y + offset / 2);
+        xpoints[5] = (int)(center_x - offset);  ypoints[5] = (int)(center_y - offset / 2);
 
 
         /*xpoints[0] = center_x - offset;     ypoints[0] = center_y;
@@ -230,4 +236,6 @@ public class BoardPainterHex
         int y = stringHeight + (m_fieldSize - stringHeight) / 2;
         graphics.drawString(string, location.x + x, location.y + y);
     }
+
+    private static final double SQRT = Math.sqrt(3) / 2f;
 }
