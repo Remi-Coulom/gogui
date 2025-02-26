@@ -84,8 +84,8 @@ public abstract class BoardPainter
             borderSize = BORDER_SIZE;
         else
             borderSize = BORDER_SIZE_NOGRID;
-        m_fieldSize = calcFieldSize(width, m_size, borderSize);
-        m_fieldOffset = (width - m_size * m_fieldSize) / 2;
+        calcFieldSize(width, m_size, borderSize);
+        calcFieldOffset(width, m_size, m_fieldSize);
         drawBackground(graphics);
         drawGrid(graphics);
         if (showGrid)
@@ -119,7 +119,9 @@ public abstract class BoardPainter
 
     public abstract Point getCenter(int x, int y);
 
-    protected abstract int calcFieldSize(int imageWidth, int fieldWidth, double borderSize);
+    protected abstract void calcFieldSize(int imageWidth, int fieldWidth, double borderSize);
+
+    protected abstract void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize);
 
     public int getFieldSize()
     {
@@ -176,11 +178,10 @@ public abstract class BoardPainter
     /** Preferred border size (in fraction of field size) if grid is drawn. */
     protected static final double BORDER_SIZE_NOGRID = 0.2;
 
-    /** Size of a field in pixels. */
+    /**
+     * Size of one field in pixels.
+     */
     protected int m_fieldSize;
-
-    /** Offset of the board from the border of the screen */
-    protected int m_fieldOffset;
 
     protected boolean m_flipHorizontal = false;
 

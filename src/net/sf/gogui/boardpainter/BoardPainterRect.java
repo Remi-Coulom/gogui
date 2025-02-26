@@ -18,9 +18,14 @@ public class BoardPainterRect
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
-    protected int calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
+    protected void calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
     {
-        return Math.round((float)Math.floor(imageWidth / (fieldWidth + 2 * borderSize)));
+        m_fieldSize = Math.round((float)Math.floor(imageWidth / (fieldWidth + 2 * borderSize)));
+    }
+
+    protected void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize)
+    {
+        m_fieldOffset = (imageWidth - fieldWidth * fieldSize) / 2;
     }
 
     public Point getCenter(int x, int y) {
@@ -196,4 +201,9 @@ public class BoardPainterRect
         int y = stringHeight + (m_fieldSize - stringHeight) / 2;
         graphics.drawString(string, location.x + x, location.y + y);
     }
+
+    /**
+     * Offset of the board from the border of the screen
+     */
+    private int m_fieldOffset;
 }

@@ -20,9 +20,15 @@ public class BoardPainterHex
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
-    protected int calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
+    protected void calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
     {
-        return Math.round((float)Math.floor(imageWidth / (2f * (fieldWidth + 2 * borderSize))));
+        m_fieldSize = Math.round((float)Math.floor(imageWidth / (1.5f * (fieldWidth + 2 * borderSize))));
+    }
+
+    protected void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize)
+    {
+        m_fieldOffsetX =  (imageWidth - (fieldSize * fieldWidth + fieldSize * fieldWidth / 2))/2;
+        m_fieldOffsetY = (imageWidth - fieldSize * fieldWidth)/2;
     }
 
     public Point getCenter(int x, int y)
@@ -40,8 +46,8 @@ public class BoardPainterHex
         if (! m_flipHorizontal)
             y = m_size - 1 - y;
         Point point = new Point();
-        point.x = m_fieldOffset + x * m_fieldSize + y * m_fieldSize / 2;
-        point.y = m_fieldOffset + (int)(y * 0.75f * m_fieldSize / SQRT);
+        point.x = m_fieldOffsetX + x * m_fieldSize + y * m_fieldSize / 2;
+        point.y = m_fieldOffsetY + (int)(y * 0.75f * m_fieldSize / SQRT);
         return point;
     }
 
@@ -49,8 +55,8 @@ public class BoardPainterHex
     {
         if (m_fieldSize == 0)
             return null;
-        int x = (int)point.getX() - m_fieldOffset;
-        int y = (int)point.getY() - m_fieldOffset;
+        int x = (int)point.getX() - m_fieldOffsetX;
+        int y = (int)point.getY() - m_fieldOffsetY;
 
         y = y / (int)(0.75f * m_fieldSize / SQRT);
         if (y % 2 == 1)
@@ -169,7 +175,7 @@ public class BoardPainterHex
             return;
         graphics.setColor(m_gridLabelColor);
         setFont(graphics, m_fieldSize);
-        int offset = (m_fieldSize + m_fieldOffset) / 2;
+        int offset = (m_fieldSize + m_fieldOffsetX) / 2;
         Point point;
         for (int x = 0; x < m_size; ++x)
         {
@@ -243,4 +249,8 @@ public class BoardPainterHex
     }
 
     private static final double SQRT = Math.sqrt(3) / 2f;
+
+    /** Offsets of the board from the border of the screen */
+    private int m_fieldOffsetX;
+    private int m_fieldOffsetY;
 }
