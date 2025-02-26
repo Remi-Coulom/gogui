@@ -2,11 +2,9 @@
 
 package net.sf.gogui.boardpainter;
 
-import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoPoint;
 
 import java.awt.*;
-import java.net.URL;
 
 import static net.sf.gogui.go.GoColor.EMPTY;
 
@@ -20,22 +18,22 @@ public class BoardPainterHex
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
-    protected void calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
+    protected void calcCellSize(int imageWidth, int fieldLength, float borderSize)
     {
-        m_fieldSize = (int) Math.round(imageWidth / (1.5f * (fieldWidth + 2 * borderSize)));
+        m_cellSize = Math.round(imageWidth / (1.5f * (fieldLength + 2 * borderSize)));
     }
 
-    protected void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize)
+    protected void calcFieldOffset(int imageWidth, int fieldLength, int cellSize)
     {
-        m_fieldOffsetX =  (imageWidth - (fieldSize * fieldWidth + fieldSize * fieldWidth / 2))/2;
-        m_fieldOffsetY = (imageWidth - fieldSize * fieldWidth)/2;
+        m_fieldOffsetX = Math.round((imageWidth - (cellSize * fieldLength + cellSize * fieldLength / 2f)) / 2f);
+        m_fieldOffsetY = Math.round((imageWidth - cellSize * fieldLength) / 2f);
     }
 
     public Point getCenter(int x, int y)
     {
         Point point = getLocation(x, y);
-        point.x += m_fieldSize / 2;
-        point.y += m_fieldSize / 2;
+        point.x += m_cellSize / 2;
+        point.y += m_cellSize / 2;
         return point;
     }
 
@@ -46,26 +44,37 @@ public class BoardPainterHex
         if (! m_flipHorizontal)
             y = m_size - 1 - y;
         Point point = new Point();
-        point.x = m_fieldOffsetX + x * m_fieldSize + y * m_fieldSize / 2;
-        point.y = m_fieldOffsetY + (int)(y * 0.75f * m_fieldSize / SQRT);
+        point.x = m_fieldOffsetX + x * m_cellSize + y * m_cellSize / 2;
+        point.y = m_fieldOffsetY + Math.round((y * 0.75f * m_cellSize / SQRT));
         return point;
     }
 
     public GoPoint getPoint(Point point)
     {
-        if (m_fieldSize == 0)
+        if (m_cellSize == 0 || m_hexes == null)
             return null;
-        int x = (int)point.getX() - m_fieldOffsetX;
+        /*int x = (int)point.getX() - m_fieldOffsetX;
         int y = (int)point.getY() - m_fieldOffsetY;
 
-        y = y / (int)(0.75f * m_fieldSize / SQRT);
+        y = (int) (y / Math.round((0.75f * m_cellSize / SQRT)));
         if (y % 2 == 1)
-            x -= m_fieldSize / 2;
-        x = x / m_fieldSize - y / 2;
+            x -= m_cellSize / 2;
+        x = x / m_cellSize - y / 2;*/
 
-        if (x < 0 || y < 0)
-            return null;
-        if (x >= m_size - 1  || y >= m_size - 1)
+        int x = -1;
+        int y = -1;
+        for (int i = 0; i < m_hexes.length; i++)
+        {
+            if (m_hexes[i].contains(point))
+            {
+                x = i % m_size;
+                y = i / m_size;
+                break;
+            }
+        }
+        System.out.println("x: " + x + " y: " + y);
+
+        if (x == -1 || y == -1)
             return null;
 
         if (m_flipVertical)
@@ -85,7 +94,7 @@ public class BoardPainterHex
             for (int y = 0; y < m_size; ++y)
             {
                 Point location = getLocation(x, y);
-                field[x][y].draw(graphics, m_fieldSize, location.x,
+                field[x][y].draw(graphics, m_cellSize, location.x,
                                  location.y, m_image, m_width);
             }
         }
@@ -93,7 +102,7 @@ public class BoardPainterHex
 
     protected void drawGrid(Graphics graphics)
     {
-        if (m_fieldSize < 2)
+        if (m_cellSize < 2)
             return;
         graphics.setColor(Color.darkGray);
         if (graphics instanceof Graphics2D)
@@ -106,12 +115,15 @@ public class BoardPainterHex
         }
 
         graphics.setColor(Color.black);
+        m_hexes = new Polygon[m_size * m_size];
         for (int y = 0; y < m_size; ++y)
         {
             for (int x = 0; x < m_size; ++x)
             {
-                Polygon hex = getHex(getLocation(x, y), m_fieldSize);
-                graphics.drawPolygon(hex);
+                // Calc the index for a bottom left 0;0 board
+                int index = x + (m_size - 1 - y) * m_size;
+                m_hexes[index] = getHex(getLocation(x, y), m_cellSize);
+                graphics.drawPolygon(m_hexes[index]);
             }
         }
 
@@ -128,16 +140,16 @@ public class BoardPainterHex
         int[] xpoints = new int[6];
         int[] ypoints = new int[6];
 
-        int center_x = Math.round(size / 2f);
-        int center_y = Math.round(size / 2f);
-        int offset = Math.round(size / 2f);
+        float center_x = size / 2f;
+        float center_y = size / 2f;
+        float offset = size / 2f;
 
-        xpoints[0] = center_x;               ypoints[0] = (int)Math.round((center_y - offset / SQRT));
-        xpoints[1] = center_x + offset;      ypoints[1] = (int)Math.round((center_y - offset / SQRT / 2));
-        xpoints[2] = center_x + offset;      ypoints[2] = (int)Math.round((center_y + offset / SQRT / 2));
-        xpoints[3] = center_x;               ypoints[3] = (int)Math.round((center_y + offset / SQRT));
-        xpoints[4] = center_x - offset;      ypoints[4] = (int)Math.round((center_y + offset / SQRT / 2));
-        xpoints[5] = center_x - offset;      ypoints[5] = (int)Math.round((center_y - offset / SQRT / 2));
+        xpoints[0] = Math.round(center_x);               ypoints[0] = Math.round((center_y - offset / SQRT));
+        xpoints[1] = Math.round(center_x + offset);      ypoints[1] = Math.round((center_y - offset / SQRT / 2));
+        xpoints[2] = Math.round(center_x + offset);      ypoints[2] = Math.round((center_y + offset / SQRT / 2));
+        xpoints[3] = Math.round(center_x);               ypoints[3] = Math.round((center_y + offset / SQRT));
+        xpoints[4] = Math.round(center_x - offset);      ypoints[4] = Math.round((center_y + offset / SQRT / 2));
+        xpoints[5] = Math.round(center_x - offset);      ypoints[5] = Math.round((center_y - offset / SQRT / 2));
 
 
         /*xpoints[0] = center_x - offset;     ypoints[0] = center_y;
@@ -171,11 +183,11 @@ public class BoardPainterHex
 
     protected void drawGridLabels(Graphics graphics)
     {
-        if (m_fieldSize < 15)
+        if (m_cellSize < 15)
             return;
         graphics.setColor(m_gridLabelColor);
-        setFont(graphics, m_fieldSize);
-        int offset = (m_fieldSize + m_fieldOffsetX) / 2;
+        setFont(graphics, m_cellSize);
+        int offset = (m_cellSize + m_fieldOffsetX) / 2;
         Point point;
         for (int x = 0; x < m_size; ++x)
         {
@@ -213,14 +225,14 @@ public class BoardPainterHex
 
     protected void drawShadows(Graphics graphics, ConstField[][] field)
     {
-        if (m_fieldSize <= 5)
+        if (m_cellSize <= 5)
             return;
         Graphics2D graphics2D =
             graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
         if (graphics2D == null)
             return;
         graphics2D.setComposite(COMPOSITE_3);
-        int size = m_fieldSize - 2 * Field.getStoneMargin(m_fieldSize);
+        int size = m_cellSize - 2 * Field.getStoneMargin(m_cellSize);
         int offsetX = getShadowOffset() / 2; // Relates to stone gradient
         int offsetY = getShadowOffset();
         for (int x = 0; x < m_size; ++x)
@@ -243,14 +255,17 @@ public class BoardPainterHex
         FontMetrics metrics = graphics.getFontMetrics();
         int stringWidth = metrics.stringWidth(string);
         int stringHeight = metrics.getAscent();
-        int x = Math.max((m_fieldSize - stringWidth) / 2, 0);
-        int y = stringHeight + (m_fieldSize - stringHeight) / 2;
+        int x = Math.max((m_cellSize - stringWidth) / 2, 0);
+        int y = stringHeight + (m_cellSize - stringHeight) / 2;
         graphics.drawString(string, location.x + x, location.y + y);
     }
 
-    private static final double SQRT = Math.sqrt(3) / 2f;
+    private static final float SQRT = (float) (Math.sqrt(3) / 2f);
 
     /** Offsets of the board from the border of the screen */
     private int m_fieldOffsetX;
     private int m_fieldOffsetY;
+
+    /** Hexagons field */
+    private Polygon[] m_hexes;
 }

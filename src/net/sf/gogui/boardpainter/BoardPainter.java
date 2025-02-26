@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -16,7 +15,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.net.URL;
-import static net.sf.gogui.go.GoColor.EMPTY;
+
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
 
@@ -79,13 +78,13 @@ public abstract class BoardPainter
         if (m_constants == null || m_constants.getSize() != m_size)
             m_constants = BoardConstants.get(m_size);
         assert m_size <= GoPoint.MAX_SIZE;
-        double borderSize;
+        float borderSize;
         if (showGrid)
             borderSize = BORDER_SIZE;
         else
             borderSize = BORDER_SIZE_NOGRID;
-        calcFieldSize(width, m_size, borderSize);
-        calcFieldOffset(width, m_size, m_fieldSize);
+        calcCellSize(width, m_size, borderSize);
+        calcFieldOffset(width, m_size, m_cellSize);
         drawBackground(graphics);
         drawGrid(graphics);
         if (showGrid)
@@ -112,24 +111,34 @@ public abstract class BoardPainter
 
     public int getShadowOffset()
     {
-        return (m_fieldSize  - 2 * Field.getStoneMargin(m_fieldSize)) / 12;
+        return (m_cellSize - 2 * Field.getStoneMargin(m_cellSize)) / 12;
     }
 
     protected abstract void drawLabel(Graphics graphics, Point location, String string);
 
     public abstract Point getCenter(int x, int y);
 
-    protected abstract void calcFieldSize(int imageWidth, int fieldWidth, double borderSize);
+    protected abstract void calcCellSize(int imageWidth, int fieldLength, float borderSize);
 
-    protected abstract void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize);
+    protected abstract void calcFieldOffset(int imageWidth, int fieldLength, int cellSize);
 
-    public int getFieldSize()
+    public int getCellSize()
     {
-        return m_fieldSize;
+        return m_cellSize;
     }
 
+    /** Get the coordinates in pixels of the center of the cell at x, y.
+     *  @param x The x-coordinate of the cell (from 0 to m_size - 1).
+     *  @param y The y-coordinate of the cell (from 0 to m_size - 1).
+     *  @return The coordinates in pixels of the center of the cell.
+     * */
     public abstract Point getLocation(int x, int y);
 
+    /**
+     * Get the GoPoint at the given pixel coordinates.
+     * @param point The pixel coordinates.
+     * @return The GoPoint at the given pixel coordinates, or null if outside the board.
+     */
     public abstract GoPoint getPoint(Point point);
 
     protected static Image loadImage(URL url)
@@ -173,15 +182,15 @@ public abstract class BoardPainter
     }
 
     /** Preferred border size (in fraction of field size) if grid is drawn. */
-    protected static final double BORDER_SIZE = 0.6;
+    protected static final float BORDER_SIZE = 0.6f;
 
     /** Preferred border size (in fraction of field size) if grid is drawn. */
-    protected static final double BORDER_SIZE_NOGRID = 0.2;
+    protected static final float BORDER_SIZE_NOGRID = 0.2f;
 
     /**
-     * Size of one field in pixels.
+     * Size of one cell in pixels.
      */
-    protected int m_fieldSize;
+    protected int m_cellSize;
 
     protected boolean m_flipHorizontal = false;
 

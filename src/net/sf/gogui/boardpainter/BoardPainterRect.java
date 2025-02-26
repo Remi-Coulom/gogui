@@ -2,11 +2,9 @@
 
 package net.sf.gogui.boardpainter;
 
-import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoPoint;
 
 import java.awt.*;
-import java.net.URL;
 
 import static net.sf.gogui.go.GoColor.EMPTY;
 
@@ -18,20 +16,20 @@ public class BoardPainterRect
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
-    protected void calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
+    protected void calcCellSize(int imageWidth, int fieldLength, float borderSize)
     {
-        m_fieldSize = Math.round((float)Math.floor(imageWidth / (fieldWidth + 2 * borderSize)));
+        m_cellSize = Math.round((float)Math.floor(imageWidth / (fieldLength + 2 * borderSize)));
     }
 
-    protected void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize)
+    protected void calcFieldOffset(int imageWidth, int fieldLength, int cellSize)
     {
-        m_fieldOffset = (imageWidth - fieldWidth * fieldSize) / 2;
+        m_fieldOffset = (imageWidth - fieldLength * cellSize) / 2;
     }
 
     public Point getCenter(int x, int y) {
         Point point = getLocation(x, y);
-        point.x += m_fieldSize / 2;
-        point.y += m_fieldSize / 2;
+        point.x += m_cellSize / 2;
+        point.y += m_cellSize / 2;
         return point;
     }
 
@@ -41,20 +39,20 @@ public class BoardPainterRect
         if (!m_flipHorizontal)
             y = m_size - 1 - y;
         Point point = new Point();
-        point.x = m_fieldOffset + x * m_fieldSize;
-        point.y = m_fieldOffset + y * m_fieldSize;
+        point.x = m_fieldOffset + x * m_cellSize;
+        point.y = m_fieldOffset + y * m_cellSize;
         return point;
     }
 
     public GoPoint getPoint(Point point) {
-        if (m_fieldSize == 0)
+        if (m_cellSize == 0)
             return null;
         int x = (int) point.getX() - m_fieldOffset;
         int y = (int) point.getY() - m_fieldOffset;
         if (x < 0 || y < 0)
             return null;
-        x = x / m_fieldSize;
-        y = y / m_fieldSize;
+        x = x / m_cellSize;
+        y = y / m_cellSize;
         if (x >= m_size || y >= m_size)
             return null;
         if (m_flipVertical)
@@ -70,14 +68,14 @@ public class BoardPainterRect
             assert field[x].length == m_size;
             for (int y = 0; y < m_size; ++y) {
                 Point location = getLocation(x, y);
-                field[x][y].draw(graphics, m_fieldSize, location.x,
+                field[x][y].draw(graphics, m_cellSize, location.x,
                         location.y, m_image, m_width);
             }
         }
     }
 
     protected void drawGrid(Graphics graphics) {
-        if (m_fieldSize < 2)
+        if (m_cellSize < 2)
             return;
         graphics.setColor(Color.darkGray);
         if (graphics instanceof Graphics2D) {
@@ -111,11 +109,11 @@ public class BoardPainterRect
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
         int r;
-        if (m_fieldSize <= 7)
+        if (m_cellSize <= 7)
             return;
-        else if (m_fieldSize <= 33)
+        else if (m_cellSize <= 33)
             r = 1;
-        else if (m_fieldSize <= 60)
+        else if (m_cellSize <= 60)
             r = 2;
         else
             r = 3;
@@ -130,11 +128,11 @@ public class BoardPainterRect
     }
 
     protected void drawGridLabels(Graphics graphics) {
-        if (m_fieldSize < 15)
+        if (m_cellSize < 15)
             return;
         graphics.setColor(m_gridLabelColor);
-        setFont(graphics, m_fieldSize);
-        int offset = (m_fieldSize + m_fieldOffset) / 2;
+        setFont(graphics, m_cellSize);
+        int offset = (m_cellSize + m_fieldOffset) / 2;
         Point point;
         for (int x = 0; x < m_size; ++x) {
             String string = GoPoint.xToString(x);
@@ -169,14 +167,14 @@ public class BoardPainterRect
     }
 
     protected void drawShadows(Graphics graphics, ConstField[][] field) {
-        if (m_fieldSize <= 5)
+        if (m_cellSize <= 5)
             return;
         Graphics2D graphics2D =
                 graphics instanceof Graphics2D ? (Graphics2D) graphics : null;
         if (graphics2D == null)
             return;
         graphics2D.setComposite(COMPOSITE_3);
-        int size = m_fieldSize - 2 * Field.getStoneMargin(m_fieldSize);
+        int size = m_cellSize - 2 * Field.getStoneMargin(m_cellSize);
         int offsetX = getShadowOffset() / 2; // Relates to stone gradient
         int offsetY = getShadowOffset();
         for (int x = 0; x < m_size; ++x)
@@ -197,8 +195,8 @@ public class BoardPainterRect
         FontMetrics metrics = graphics.getFontMetrics();
         int stringWidth = metrics.stringWidth(string);
         int stringHeight = metrics.getAscent();
-        int x = Math.max((m_fieldSize - stringWidth) / 2, 0);
-        int y = stringHeight + (m_fieldSize - stringHeight) / 2;
+        int x = Math.max((m_cellSize - stringWidth) / 2, 0);
+        int y = stringHeight + (m_cellSize - stringHeight) / 2;
         graphics.drawString(string, location.x + x, location.y + y);
     }
 

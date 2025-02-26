@@ -182,7 +182,7 @@ public final class GuiBoard
 
     public Dimension getFieldSize()
     {
-        int size = m_painter.getFieldSize();
+        int size = m_painter.getCellSize();
         return new Dimension(size, size);
     }
 
@@ -713,9 +713,9 @@ public final class GuiBoard
             dirty.x = location.x;
             dirty.y = location.y;
             int offset = m_painter.getShadowOffset()
-                - Field.getStoneMargin(m_painter.getFieldSize());
-            dirty.width = m_painter.getFieldSize() + offset;
-            dirty.height = m_painter.getFieldSize() + offset;
+                - Field.getStoneMargin(m_painter.getCellSize());
+            dirty.width = m_painter.getCellSize() + offset;
+            dirty.height = m_painter.getCellSize() + offset;
             addDirty(dirty);
             Rectangle oldDirty = m_dirty;
             m_dirty = dirty;
@@ -731,8 +731,8 @@ public final class GuiBoard
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            dirty.width = m_painter.getFieldSize();
-            dirty.height = m_painter.getFieldSize();
+            dirty.width = m_painter.getCellSize();
+            dirty.height = m_painter.getCellSize();
             addDirty(dirty);
             repaint(dirty);
         }
@@ -746,9 +746,9 @@ public final class GuiBoard
             dirty.x = location.x;
             dirty.y = location.y;
             int offset = m_painter.getShadowOffset()
-                - Field.getStoneMargin(m_painter.getFieldSize());
-            dirty.width = m_painter.getFieldSize() + offset;
-            dirty.height = m_painter.getFieldSize() + offset;
+                - Field.getStoneMargin(m_painter.getCellSize());
+            dirty.width = m_painter.getCellSize() + offset;
+            dirty.height = m_painter.getCellSize() + offset;
             addDirty(dirty);
             repaint(dirty);
         }
