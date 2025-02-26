@@ -53,13 +53,6 @@ public class BoardPainterHex
     {
         if (m_cellSize == 0 || m_hexes == null)
             return null;
-        /*int x = (int)point.getX() - m_fieldOffsetX;
-        int y = (int)point.getY() - m_fieldOffsetY;
-
-        y = (int) (y / Math.round((0.75f * m_cellSize / SQRT)));
-        if (y % 2 == 1)
-            x -= m_cellSize / 2;
-        x = x / m_cellSize - y / 2;*/
 
         int x = -1;
         int y = -1;
@@ -72,7 +65,6 @@ public class BoardPainterHex
                 break;
             }
         }
-        System.out.println("x: " + x + " y: " + y);
 
         if (x == -1 || y == -1)
             return null;
@@ -83,21 +75,6 @@ public class BoardPainterHex
             y = m_size - 1 - y;
 
         return GoPoint.get(x, y);
-    }
-
-    protected void drawFields(Graphics graphics, ConstField[][] field)
-    {
-        assert field.length == m_size;
-        for (int x = 0; x < m_size; ++x)
-        {
-            assert field[x].length == m_size;
-            for (int y = 0; y < m_size; ++y)
-            {
-                Point location = getLocation(x, y);
-                field[x][y].draw(graphics, m_cellSize, location.x,
-                                 location.y, m_image, m_width);
-            }
-        }
     }
 
     protected void drawGrid(Graphics graphics)
@@ -181,83 +158,8 @@ public class BoardPainterHex
         return square;*/
     }
 
-    protected void drawGridLabels(Graphics graphics)
-    {
-        if (m_cellSize < 15)
-            return;
-        graphics.setColor(m_gridLabelColor);
-        setFont(graphics, m_cellSize);
-        int offset = (m_cellSize + m_fieldOffsetX) / 2;
-        Point point;
-        for (int x = 0; x < m_size; ++x)
-        {
-            String string = GoPoint.xToString(x);
-            point = getLocation(x, 0);
-            if (m_flipHorizontal)
-                point.y -= offset;
-            else
-                point.y += offset;
-            drawLabel(graphics, point, string);
-            point = getLocation(x, m_size - 1);
-            if (m_flipHorizontal)
-                point.y += offset;
-            else
-                point.y -= offset;
-            drawLabel(graphics, point, string);
-        }
-        for (int y = 0; y < m_size; ++y)
-        {
-            String string = Integer.toString(y + 1);
-            point = getLocation(0, y);
-            if (m_flipVertical)
-                point.x += offset;
-            else
-                point.x -= offset;
-            drawLabel(graphics, point, string);
-            point = getLocation(m_size - 1, y);
-            if (m_flipVertical)
-                point.x -= offset;
-            else
-                point.x += offset;
-            drawLabel(graphics, point, string);
-        }
-    }
-
-    protected void drawShadows(Graphics graphics, ConstField[][] field)
-    {
-        if (m_cellSize <= 5)
-            return;
-        Graphics2D graphics2D =
-            graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
-        if (graphics2D == null)
-            return;
-        graphics2D.setComposite(COMPOSITE_3);
-        int size = m_cellSize - 2 * Field.getStoneMargin(m_cellSize);
-        int offsetX = getShadowOffset() / 2; // Relates to stone gradient
-        int offsetY = getShadowOffset();
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
-            {
-                if (field[x][y].getColor() == EMPTY)
-                    continue;
-                Point location = getCenter(x, y);
-                graphics.setColor(Color.black);
-                graphics.fillOval(location.x - size / 2 + offsetX,
-                                  location.y - size / 2 + offsetY,
-                                  size, size);
-            }
-        graphics.setPaintMode();
-    }
-
-    protected void drawLabel(Graphics graphics, Point location,
-                           String string)
-    {
-        FontMetrics metrics = graphics.getFontMetrics();
-        int stringWidth = metrics.stringWidth(string);
-        int stringHeight = metrics.getAscent();
-        int x = Math.max((m_cellSize - stringWidth) / 2, 0);
-        int y = stringHeight + (m_cellSize - stringHeight) / 2;
-        graphics.drawString(string, location.x + x, location.y + y);
+    protected void drawGridLabels(Graphics graphics) {
+        drawGridLabels(graphics, m_fieldOffsetX);
     }
 
     private static final float SQRT = (float) (Math.sqrt(3) / 2f);

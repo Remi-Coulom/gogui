@@ -2,22 +2,13 @@
 
 package net.sf.gogui.boardpainter;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.net.URL;
 
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
+
+import static net.sf.gogui.go.GoColor.EMPTY;
 
 /** Draws a board. */
 public abstract class BoardPainter
@@ -101,20 +92,103 @@ public abstract class BoardPainter
             graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
     }
 
-    protected abstract void drawFields(Graphics graphics, ConstField[][] field);
-
     protected abstract void drawGrid(Graphics graphics);
 
     protected abstract void drawGridLabels(Graphics graphics);
 
-    protected abstract void drawShadows(Graphics graphics, ConstField[][] field);
-
-    public int getShadowOffset()
+    protected void drawGridLabels(Graphics graphics, int fieldOffset)
     {
-        return (m_cellSize - 2 * Field.getStoneMargin(m_cellSize)) / 12;
+        if (m_cellSize < 15)
+            return;
+        graphics.setColor(m_gridLabelColor);
+        setFont(graphics, m_cellSize);
+        int offset = (m_cellSize + fieldOffset) / 2;
+        Point point;
+        for (int x = 0; x < m_size; ++x) {
+            String string = GoPoint.xToString(x);
+            point = getLocation(x, 0);
+            if (m_flipHorizontal)
+                point.y -= offset;
+            else
+                point.y += offset;
+            drawLabel(graphics, point, string);
+            point = getLocation(x, m_size - 1);
+            if (m_flipHorizontal)
+                point.y += offset;
+            else
+                point.y -= offset;
+            drawLabel(graphics, point, string);
+        }
+        for (int y = 0; y < m_size; ++y) {
+            String string = Integer.toString(y + 1);
+            point = getLocation(0, y);
+            if (m_flipVertical)
+                point.x += offset;
+            else
+                point.x -= offset;
+            drawLabel(graphics, point, string);
+            point = getLocation(m_size - 1, y);
+            if (m_flipVertical)
+                point.x -= offset;
+            else
+                point.x += offset;
+            drawLabel(graphics, point, string);
+        }
     }
 
-    protected abstract void drawLabel(Graphics graphics, Point location, String string);
+    protected void drawLabel(Graphics graphics, Point location, String string)
+    {
+        FontMetrics metrics = graphics.getFontMetrics();
+        int stringWidth = metrics.stringWidth(string);
+        int stringHeight = metrics.getAscent();
+        int x = Math.max((m_cellSize - stringWidth) / 2, 0);
+        int y = stringHeight + (m_cellSize - stringHeight) / 2;
+        graphics.drawString(string, location.x + x, location.y + y);
+    }
+
+    protected void drawShadows(Graphics graphics, ConstField[][] field)
+    {
+        if (m_cellSize <= 5)
+            return;
+        Graphics2D graphics2D =
+                graphics instanceof Graphics2D ? (Graphics2D) graphics : null;
+        if (graphics2D == null)
+            return;
+        graphics2D.setComposite(COMPOSITE_3);
+        int size = m_cellSize - 2 * Field.getStoneMargin(m_cellSize);
+        int offsetX = getShadowOffset() / 2; // Relates to stone gradient
+        int offsetY = getShadowOffset();
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y) {
+                if (field[x][y].getColor() == EMPTY)
+                    continue;
+                Point location = getCenter(x, y);
+                graphics.setColor(Color.black);
+                graphics.fillOval(location.x - size / 2 + offsetX,
+                        location.y - size / 2 + offsetY,
+                        size, size);
+            }
+        graphics.setPaintMode();
+    }
+
+    protected void drawFields(Graphics graphics, ConstField[][] field)
+    {
+        assert field.length == m_size;
+        for (int x = 0; x < m_size; ++x)
+        {
+            assert field[x].length == m_size;
+            for (int y = 0; y < m_size; ++y)
+            {
+                Point location = getLocation(x, y);
+                field[x][y].draw(graphics, m_cellSize, location.x,
+                        location.y, m_image, m_width);
+            }
+        }
+    }
+
+    public int getShadowOffset() {
+        return (m_cellSize - 2 * Field.getStoneMargin(m_cellSize)) / 12;
+    }
 
     public abstract Point getCenter(int x, int y);
 
@@ -127,10 +201,10 @@ public abstract class BoardPainter
         return m_cellSize;
     }
 
-    /** Get the coordinates in pixels of the center of the cell at x, y.
+    /** Get the coordinates in pixels of the top left cell at x, y.
      *  @param x The x-coordinate of the cell (from 0 to m_size - 1).
      *  @param y The y-coordinate of the cell (from 0 to m_size - 1).
-     *  @return The coordinates in pixels of the center of the cell.
+     *  @return The coordinates in pixels of the top left of the cell.
      * */
     public abstract Point getLocation(int x, int y);
 
