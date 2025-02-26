@@ -2,16 +2,7 @@
 
 package net.sf.gogui.boardpainter;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Point2D;
 import net.sf.gogui.go.GoColor;
@@ -23,8 +14,9 @@ import static net.sf.gogui.go.GoColor.EMPTY;
 public class Field
     implements ConstField
 {
-    public Field()
+    public Field(String geometry)
     {
+        m_geometry = geometry;
     }
 
     public void clearInfluence()
@@ -52,7 +44,7 @@ public class Field
             drawStone(m_color, false);
         if (m_ghostStone != null)
             drawStone(m_ghostStone, true);
-        if (m_label != null && ! m_label.equals(""))
+        if (m_label != null && !m_label.isEmpty())
             drawLabel(x, y, graphics, boardImage, boardWidth);
         if (m_territory != EMPTY && m_graphics2D != null)
             drawTerritoryGraphics2D();
@@ -223,6 +215,8 @@ public class Field
         m_territory = color;
     }
 
+    private String m_geometry;
+
     private boolean m_crossHair;
 
     private boolean m_cursor;
@@ -363,7 +357,16 @@ public class Field
     {
         setComposite(COMPOSITE_5);
         m_graphics.setColor(m_fieldColor);
-        m_graphics.fillRect(0, 0, m_size, m_size);
+        if (m_geometry.equals("rect"))
+            m_graphics.fillRect(0, 0, m_size, m_size);
+        else if (m_geometry.equals("hex"))
+        {
+            Polygon hex = BoardPainterHex.getHex(new Point(0, 0), m_size);
+            System.out.println("Polygon points: " + hex.npoints);
+            m_graphics.fillPolygon(hex);
+        }
+        else
+            System.err.println("Unknown geometry: " + m_geometry);
         m_graphics.setPaintMode();
     }
 

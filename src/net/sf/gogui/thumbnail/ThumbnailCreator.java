@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -101,7 +102,7 @@ public final class ThumbnailCreator
             for (int x = 0; x < size; ++x)
                 for (int y = 0; y < size; ++y)
                 {
-                    fields[x][y] = new Field();
+                    fields[x][y] = new Field(m_painter.getGeometry());
                     GoColor color = board.getColor(GoPoint.get(x, y));
                     fields[x][y].setColor(color);
                 }

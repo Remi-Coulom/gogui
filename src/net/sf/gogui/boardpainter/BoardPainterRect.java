@@ -13,6 +13,7 @@ public class BoardPainterRect
         extends BoardPainter {
     public BoardPainterRect() {
         System.out.println("Using Rect Painter");
+        m_geometry = "rect";
         loadBackground("net/sf/gogui/images/wood.png");
     }
 

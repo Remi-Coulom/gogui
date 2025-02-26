@@ -255,6 +255,12 @@ public abstract class BoardPainter
         m_flipVertical = flipVertical;
     }
 
+    public String getGeometry() {
+        return m_geometry;
+    }
+
+    protected String m_geometry;
+
     /** Preferred border size (in fraction of field size) if grid is drawn. */
     protected static final float BORDER_SIZE = 0.6f;
 

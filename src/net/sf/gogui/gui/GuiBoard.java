@@ -276,7 +276,7 @@ public final class GuiBoard
         m_parameters = parameters;
 
         m_painter = getPainter(m_parameters.geometry());
-        initSize(m_parameters.getDimension());
+        initSize(m_parameters.getDimension(), m_parameters.geometry());
 
         removeAll();
 
@@ -311,7 +311,7 @@ public final class GuiBoard
     /** Initialize the board with a new size.
         @param dimension The new dimension (width & height) of the board.
      */
-    private void initSize(Dimension dimension)
+    private void initSize(Dimension dimension, String geometry)
     {
         assert dimension.width > 0 && dimension.width <= GoPoint.MAX_SIZE;
         assert dimension.height > 0 && dimension.height <= GoPoint.MAX_SIZE;
@@ -321,7 +321,7 @@ public final class GuiBoard
         m_field = new Field[dimension.width][dimension.height];
         for (int y = dimension.height - 1; y >= 0; --y)
             for (int x = 0; x < dimension.width; ++x)
-                m_field[x][y] = new Field();
+                m_field[x][y] = new Field(geometry);
     }
 
     /**

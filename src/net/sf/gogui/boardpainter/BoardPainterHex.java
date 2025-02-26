@@ -15,6 +15,7 @@ public class BoardPainterHex
     public BoardPainterHex()
     {
         System.out.println("Using Hex Painter");
+        m_geometry = "hex";
         loadBackground("net/sf/gogui/images/wood.png");
     }
 
@@ -112,7 +113,7 @@ public class BoardPainterHex
         }
     }
 
-    private Polygon getHex(Point point, int size)
+    public static Polygon getHex(Point point, int size)
     {
         int[] xpoints = new int[6];
         int[] ypoints = new int[6];
