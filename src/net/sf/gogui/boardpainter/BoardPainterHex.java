@@ -22,7 +22,7 @@ public class BoardPainterHex
 
     protected void calcFieldSize(int imageWidth, int fieldWidth, double borderSize)
     {
-        m_fieldSize = Math.round((float)Math.floor(imageWidth / (1.5f * (fieldWidth + 2 * borderSize))));
+        m_fieldSize = (int) Math.round(imageWidth / (1.5f * (fieldWidth + 2 * borderSize)));
     }
 
     protected void calcFieldOffset(int imageWidth, int fieldWidth, int fieldSize)
@@ -128,16 +128,16 @@ public class BoardPainterHex
         int[] xpoints = new int[6];
         int[] ypoints = new int[6];
 
-        float center_x = size / 2f;
-        float center_y = size / 2f;
-        float offset = size / 2f;
+        int center_x = Math.round(size / 2f);
+        int center_y = Math.round(size / 2f);
+        int offset = Math.round(size / 2f);
 
-        xpoints[0] = (int)center_x;             ypoints[0] = (int)(center_y - offset / SQRT);
-        xpoints[1] = (int)(center_x + offset);  ypoints[1] = (int)(center_y - offset / 2);
-        xpoints[2] = (int)(center_x + offset);  ypoints[2] = (int)(center_y + offset / 2);
-        xpoints[3] = (int)center_x;             ypoints[3] = (int)(center_y + offset / SQRT);
-        xpoints[4] = (int)(center_x - offset);  ypoints[4] = (int)(center_y + offset / 2);
-        xpoints[5] = (int)(center_x - offset);  ypoints[5] = (int)(center_y - offset / 2);
+        xpoints[0] = center_x;               ypoints[0] = (int)Math.round((center_y - offset / SQRT));
+        xpoints[1] = center_x + offset;      ypoints[1] = (int)Math.round((center_y - offset / SQRT / 2));
+        xpoints[2] = center_x + offset;      ypoints[2] = (int)Math.round((center_y + offset / SQRT / 2));
+        xpoints[3] = center_x;               ypoints[3] = (int)Math.round((center_y + offset / SQRT));
+        xpoints[4] = center_x - offset;      ypoints[4] = (int)Math.round((center_y + offset / SQRT / 2));
+        xpoints[5] = center_x - offset;      ypoints[5] = (int)Math.round((center_y - offset / SQRT / 2));
 
 
         /*xpoints[0] = center_x - offset;     ypoints[0] = center_y;
