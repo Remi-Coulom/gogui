@@ -51,8 +51,8 @@ public final class GenericBoard {
         if (! gameRuler.isSupported("gogui-rules_legal_moves"))
             return false;
         String legalMoves = getLegalMoves(gameRuler);
-        return (move.getColor().equals(GenericBoard.getSideToMove(gameRuler, move)) && (legalMoves.contains(move.getPoint().toString())
-                || legalMoves.contains("pass") && move.getPoint() == null));
+        return ((legalMoves.contains("pass") && move.getPoint() == null) ||
+                (move.getColor().equals(GenericBoard.getSideToMove(gameRuler, move)) && legalMoves.matches(".*\\b(" + move.getPoint() + ")\\b.*")));
     }
 
     public static String getLegalMoves(GtpClientBase gameRuler) throws GtpError
