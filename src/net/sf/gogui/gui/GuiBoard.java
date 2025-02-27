@@ -358,6 +358,7 @@ public final class GuiBoard
                 GoPoint point = m_panel.getPoint(e);
                 if (point == null)
                     return;
+
                 // mousePressed and mouseReleased (platform dependency)
                 if (e.isPopupTrigger())
                 {

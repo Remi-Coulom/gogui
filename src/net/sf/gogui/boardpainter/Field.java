@@ -362,6 +362,8 @@ public class Field
         else if (m_geometry.equals("hex"))
         {
             Polygon hex = BoardPainterHex.getHex(new Point(0, 0), m_size);
+            Rectangle bound = hex.getBounds();
+            m_graphics.setClip(bound);
             m_graphics.fillPolygon(hex);
         }
         else
