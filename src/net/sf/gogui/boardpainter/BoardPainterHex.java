@@ -82,15 +82,6 @@ public class BoardPainterHex
     {
         if (m_cellSize < 2)
             return;
-        graphics.setColor(Color.darkGray);
-        if (graphics instanceof Graphics2D)
-        {
-            // Temporarily disable antialiasing, which causes lines to
-            // appear too thick with OpenJDK (version 6b09)
-            Graphics2D graphics2D = (Graphics2D)graphics;
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_OFF);
-        }
 
         graphics.setColor(Color.black);
         m_hexes = new Polygon[m_size * m_size];
@@ -101,15 +92,26 @@ public class BoardPainterHex
                 // Calc the index for a bottom left 0;0 board
                 int index = x + (m_size - 1 - y) * m_size;
                 m_hexes[index] = getHex(getLocation(x, y), m_cellSize);
+
+                // Corrects the points coordinates to match the neighbors
+                // Needed to avoid lines being doubled up
+                {
+                    if (y > 1) {
+                        if (m_hexes[index].ypoints[2] != m_hexes[index + m_size].ypoints[0])
+                            m_hexes[index].ypoints[2] = m_hexes[index + m_size].ypoints[0];
+                        if (m_hexes[index].ypoints[3] != m_hexes[index + m_size].ypoints[5])
+                            m_hexes[index].ypoints[3] = m_hexes[index + m_size].ypoints[5];
+                    }
+                    if (x > 0) {
+                        if (m_hexes[index].xpoints[4] != m_hexes[index - 1].xpoints[2]) {
+                            m_hexes[index].xpoints[4] = m_hexes[index - 1].xpoints[2];
+                            m_hexes[index].xpoints[5] = m_hexes[index - 1].xpoints[1];
+                        }
+                    }
+                }
+
                 graphics.drawPolygon(m_hexes[index]);
             }
-        }
-
-        if (graphics instanceof Graphics2D)
-        {
-            Graphics2D graphics2D = (Graphics2D)graphics;
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_ON);
         }
     }
 
