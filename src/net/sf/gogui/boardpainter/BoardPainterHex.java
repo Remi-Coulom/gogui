@@ -165,6 +165,11 @@ public class BoardPainterHex
         drawGridLabels(graphics, m_fieldOffsetX);
     }
 
+    protected Polygon getPolygon(int x, int y)
+    {
+        return m_hexes[x + (m_size - 1 - y) * m_size];
+    }
+
     private static final float SQRT = (float) (Math.sqrt(3) / 2f);
 
     /** Offsets of the board from the border of the screen */

@@ -320,8 +320,9 @@ public final class GuiBoard
         m_constants = BoardConstants.get(m_dimension.width); // TODO: This will not work for squared boards
         m_field = new Field[dimension.width][dimension.height];
         for (int y = dimension.height - 1; y >= 0; --y)
-            for (int x = 0; x < dimension.width; ++x)
+            for (int x = 0; x < dimension.width; ++x) {
                 m_field[x][y] = new Field(geometry);
+            }
     }
 
     /**

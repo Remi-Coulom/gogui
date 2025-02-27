@@ -120,6 +120,8 @@ public class BoardPainterRect
         drawGridLabels(graphics, m_fieldOffset);
     }
 
+    protected Polygon getPolygon(int x, int y) { return null; }
+
     /**
      * Offset of the board from the border of the screen
      */

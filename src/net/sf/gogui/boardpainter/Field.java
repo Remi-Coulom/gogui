@@ -37,7 +37,7 @@ public class Field
             m_graphics2D = null;
         m_size = size;
         if (m_fieldColor != null)
-            drawFieldColor();
+            drawFieldColor(x, y);
         if (m_territory != EMPTY && m_graphics2D == null)
             drawTerritoryGraphics();
         if (m_color != EMPTY)
@@ -215,7 +215,16 @@ public class Field
         m_territory = color;
     }
 
-    private String m_geometry;
+    public void setPolygon(Polygon polygon)
+    {
+        m_polygon = polygon;
+    }
+
+    /** Graphics object for drawing the field.
+        This is set by the draw method and should not be used otherwise. */
+    private Polygon m_polygon;
+
+    private final String m_geometry;
 
     private boolean m_crossHair;
 
@@ -353,7 +362,7 @@ public class Field
         m_graphics.setPaintMode();
     }
 
-    private void drawFieldColor()
+    private void drawFieldColor(int x, int y)
     {
         setComposite(COMPOSITE_5);
         m_graphics.setColor(m_fieldColor);
@@ -361,10 +370,11 @@ public class Field
             m_graphics.fillRect(0, 0, m_size, m_size);
         else if (m_geometry.equals("hex"))
         {
-            Polygon hex = BoardPainterHex.getHex(new Point(0, 0), m_size);
-            Rectangle bound = hex.getBounds();
+            assert m_polygon != null;
+            m_polygon.translate(-x , -y);
+            Rectangle bound = m_polygon.getBounds();
             m_graphics.setClip(bound);
-            m_graphics.fillPolygon(hex);
+            m_graphics.fillPolygon(m_polygon);
         }
         else
             System.err.println("Unknown geometry: " + m_geometry);
@@ -424,7 +434,7 @@ public class Field
             boardGraphics.drawImage(boardImage, 0, 0, boardWidth, boardWidth,
                                     null);
             if (m_fieldColor != null)
-                drawFieldColor();
+                drawFieldColor(fieldX, fieldY);
             boardGraphics.setClip(oldBoardClip);
             m_graphics.setColor(Color.black);
         }

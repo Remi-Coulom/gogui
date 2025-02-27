@@ -2,9 +2,8 @@
 
 package net.sf.gogui.boardpainter;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
+
 import net.sf.gogui.go.GoColor;
 
 /** Const functions of Field.
@@ -39,4 +38,6 @@ public interface ConstField
     GoColor getTerritory();
 
     boolean isInfluenceSet();
+
+    void setPolygon(Polygon polygon);
 }

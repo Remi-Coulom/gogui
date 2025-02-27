@@ -180,11 +180,14 @@ public abstract class BoardPainter
             for (int y = 0; y < m_size; ++y)
             {
                 Point location = getLocation(x, y);
+                field[x][y].setPolygon(getPolygon(x, y));
                 field[x][y].draw(graphics, m_cellSize, location.x,
                         location.y, m_image, m_width);
             }
         }
     }
+
+    protected abstract Polygon getPolygon(int x, int y);
 
     public int getShadowOffset() {
         return (m_cellSize - 2 * Field.getStoneMargin(m_cellSize)) / 12;
