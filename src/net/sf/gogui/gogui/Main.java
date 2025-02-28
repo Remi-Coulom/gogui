@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import net.infotrek.util.prefs.FilePreferencesFactory;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtil;
 import static net.sf.gogui.gui.GuiUtil.insertLineBreaks;
@@ -37,6 +39,10 @@ public final class Main
     /** GoGui main function. */
     public static void main(String[] args)
     {
+        // Change the system PreferencesFactory to use our custom one
+        System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
+        System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, GoGui.DEFAULT_CONFIGURATION_FILE);
+
         GoGuiSettings settings;
         try
         {

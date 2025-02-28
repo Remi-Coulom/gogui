@@ -40,6 +40,9 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.WindowConstants;
+
+import net.infotrek.util.prefs.FilePreferencesFactory;
+
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstGameInfo;
@@ -2523,8 +2526,9 @@ ContextMenu.Listener, LiveGfx.Listener
 
     private AnalyzeDialog m_analyzeDialog;
 
-    private final Preferences m_prefs =
-            Preferences.userNodeForPackage(getClass());
+    public static final String DEFAULT_CONFIGURATION_FILE = ".gogui-prefs";
+
+    private final Preferences m_prefs = Preferences.userNodeForPackage(getClass());
 
     private ScoreDialog m_scoreDialog;
 

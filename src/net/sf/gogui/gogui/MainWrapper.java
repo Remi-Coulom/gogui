@@ -4,6 +4,8 @@ package net.sf.gogui.gogui;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import net.infotrek.util.prefs.FilePreferencesFactory;
 import net.sf.gogui.util.ErrorMessage;
 
 /** Wrapper for starting GoGui.
@@ -23,6 +25,11 @@ public final class MainWrapper
         // last tested versions 1.2.2 and 1.3.16) and Wine can be useful to
         // test the Windows installer for GoGui on Linux.
         System.setProperty("sun.java2d.noddraw", "true");
+
+        // Change the system PreferencesFactory to use our custom one
+        System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
+        System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, GoGui.DEFAULT_CONFIGURATION_FILE);
+
         GoGuiSettings settings;
         try
         {
