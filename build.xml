@@ -395,6 +395,7 @@ with "location" replaced by the location of the file docbookx.dtd.
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
  net/sf/gogui/xml/*.class
+ net/infotrek/util/prefs/*.class
 "/>
 </jar>
 </target>
@@ -675,6 +676,7 @@ with "location" replaced by the location of the file docbookx.dtd.
   net/sf/gogui/tools/server.*,
   net/sf/gogui/tools/thumbnailer.*,
   net/sf/gogui/tools/twogtp.*,
+  net/infotrek/util/prefs.*
 ">
 <tag name="bug" scope="all" description="Bugs:"/>
 <tag name="todo" scope="all" description="To do:"/>
