@@ -4,12 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.AbstractPreferences;
@@ -122,9 +117,16 @@ public class FilePreferences extends AbstractPreferences
           String propKey = (String) pnen.nextElement();
           if (propKey.startsWith(path)) {
             String subKey = propKey.substring(path.length());
-            // Only load immediate descendants
-            if (subKey.indexOf('.') == -1) {
+
+            // Load immediate descendants
+            if (subKey.indexOf('.') == -1)
               root.put(subKey, p.getProperty(propKey));
+
+            // Or create a subnode if not registered yet
+            else {
+              String subnode = subKey.substring(0, subKey.indexOf('.'));
+              if (!Arrays.asList(childrenNamesSpi()).contains(subnode))
+                childSpi(subnode);
             }
           }
         }

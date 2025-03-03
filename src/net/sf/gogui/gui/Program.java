@@ -3,6 +3,7 @@
 package net.sf.gogui.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 import static net.sf.gogui.gui.I18n.i18n;
 import net.sf.gogui.util.PrefUtil;
@@ -58,9 +59,12 @@ public final class Program
     {
         ArrayList<Program> programs = new ArrayList<Program>();
         String type = (gameRuler ? "ruler" : "program");
+
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type);
-        if (prefs == null)
+        if (prefs == null) {
+            System.err.println("Could not find prefs for " + type);
             return programs;
+        }
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
@@ -87,8 +91,10 @@ public final class Program
     {
         String type = (gameRuler ? "ruler" : "program");
         Preferences prefs = PrefUtil.createNode("net/sf/gogui/gui/" + type);
-        if (prefs == null)
+        if (prefs == null) {
+            System.err.println("Could not create node " + "net/sf/gogui/gui/" + type);
             return;
+        }
         prefs.putInt("size", programs.size());
         for (int i = 0; i < programs.size(); ++i)
         {

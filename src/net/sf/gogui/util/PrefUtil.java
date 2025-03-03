@@ -2,7 +2,9 @@
 
 package net.sf.gogui.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
 
@@ -53,8 +55,10 @@ public final class PrefUtil
         Preferences prefs = Preferences.userRoot();
         try
         {
-            if (! prefs.nodeExists(path))
+            if (! prefs.nodeExists(path)) {
+                System.err.println("Node " + path + " does not exists");
                 return null;
+            }
         }
         catch (BackingStoreException e)
         {

@@ -33,7 +33,6 @@ public class FilePreferencesFactory implements PreferencesFactory
   {
     if (rootPreferences == null) {
       log.finer("Instantiating root preferences");
- 
       rootPreferences = new FilePreferences(null, "");
     }
     return rootPreferences;
