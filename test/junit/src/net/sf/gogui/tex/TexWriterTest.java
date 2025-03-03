@@ -29,7 +29,7 @@ public final class TexWriterTest
     {
         Board board = new Board(new BoardParameters(19));
         Dimension dimension = board.getDimension();
-        String[][] markLabel = new String[dimension.width][];
+        String[][] markLabel = new String[dimension.width][dimension.height];
         boolean[][] mark = new boolean[dimension.width][dimension.height];
         board.play(BLACK, GoPoint.get(0, 0));
         mark[0][0] = true;
