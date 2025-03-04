@@ -96,20 +96,20 @@ gogui-rules_game_id
 <listitem>
 <simpara>
 The response of the command is a board of string containing '.' for an empty
-intersection of the Goban, 'X' for a black stone or 'O' for a white stone.
+intersection of the Goban, 'X' for a black stone or 'O' for a white stone and '?' for a removed intersection (For Yavalath for example).
 Other characters are ignored.
 This command will be used to display the board in GoGui.
 Example :<programlisting>
 gogui-rules_board
-= . . . . . . . . .
-  . . X . O . X . .
+= ? ? . . . . . . .
+  ? . X . O . X . .
   . X . . . . . . .
   . . O . . . . O .
   . . . . . . . O .
   . O . X . . O X .
   . . O X . . . X .
-  . X O . . X O X .
-  . . . . . O . . .
+  . X O . . X O X ?
+  . . . . . O . ? ?
 </programlisting>
 </simpara>
 </listitem>
