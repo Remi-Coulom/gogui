@@ -56,7 +56,6 @@ public final class PrefUtil
         try
         {
             if (! prefs.nodeExists(path)) {
-                System.err.println("Node " + path + " does not exists");
                 return null;
             }
         }
