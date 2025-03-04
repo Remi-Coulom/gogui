@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** Player color / state of a point on the board (black, white, empty). */
+/** Player color / state of a point on the board (black, white, empty or removed). */
 public enum GoColor
 {
     /** Black stone or black player. */
@@ -79,6 +79,30 @@ public enum GoColor
         {
             return EMPTY;
         }
+    },
+
+    /** Removed intersection. */
+    REMOVED
+    {
+        public String getCapitalizedName()
+        {
+            return "Removed";
+        }
+
+        public String getUppercaseLetter()
+        {
+            return "R";
+        }
+
+        public boolean isBlackWhite()
+        {
+            return false;
+        }
+
+        public GoColor otherColor()
+        {
+            return REMOVED;
+        }
     };
 
     public static final List<GoColor> BLACK_WHITE;
@@ -89,21 +113,11 @@ public enum GoColor
 
     static
     {
-        List<GoColor> blackWhite = new ArrayList<GoColor>(2);
-        blackWhite.add(BLACK);
-        blackWhite.add(WHITE);
-        BLACK_WHITE = Collections.unmodifiableList(blackWhite);
+        BLACK_WHITE = List.of(BLACK, WHITE);
 
-        List<GoColor> whiteBlack = new ArrayList<GoColor>(2);
-        whiteBlack.add(WHITE);
-        whiteBlack.add(BLACK);
-        WHITE_BLACK = Collections.unmodifiableList(whiteBlack);
+        WHITE_BLACK = List.of(WHITE, BLACK);
 
-        List<GoColor> blackWhiteEmpty = new ArrayList<GoColor>(3);
-        blackWhiteEmpty.add(BLACK);
-        blackWhiteEmpty.add(WHITE);
-        blackWhiteEmpty.add(EMPTY);
-        BLACK_WHITE_EMPTY = Collections.unmodifiableList(blackWhiteEmpty);
+        BLACK_WHITE_EMPTY = List.of(BLACK, WHITE, EMPTY);
     }
 
     /** Return color name if used for specifying player.

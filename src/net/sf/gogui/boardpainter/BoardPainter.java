@@ -8,7 +8,7 @@ import java.net.URL;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
 
-import static net.sf.gogui.go.GoColor.EMPTY;
+import static net.sf.gogui.go.GoColor.*;
 
 /** Draws a board. */
 public abstract class BoardPainter
@@ -77,7 +77,7 @@ public abstract class BoardPainter
         calcCellSize(width, m_size, borderSize);
         calcFieldOffset(width, m_size, m_cellSize);
         drawBackground(graphics);
-        drawGrid(graphics);
+        drawGrid(graphics, field);
         if (showGrid)
             drawGridLabels(graphics);
         drawShadows(graphics, field);
@@ -92,7 +92,7 @@ public abstract class BoardPainter
             graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
     }
 
-    protected abstract void drawGrid(Graphics graphics);
+    protected abstract void drawGrid(Graphics graphics, ConstField[][] field);
 
     protected abstract void drawGridLabels(Graphics graphics);
 
@@ -160,7 +160,7 @@ public abstract class BoardPainter
         int offsetY = getShadowOffset();
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y) {
-                if (field[x][y].getColor() == EMPTY)
+                if (field[x][y].getColor() == EMPTY || field[x][y].getColor() == REMOVED)
                     continue;
                 Point location = getCenter(x, y);
                 graphics.setColor(Color.black);

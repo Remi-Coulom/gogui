@@ -7,6 +7,7 @@ import net.sf.gogui.go.GoPoint;
 import java.awt.*;
 
 import static net.sf.gogui.go.GoColor.EMPTY;
+import static net.sf.gogui.go.GoColor.REMOVED;
 
 /** Draws a board. */
 public class BoardPainterHex
@@ -59,7 +60,7 @@ public class BoardPainterHex
         int y = -1;
         for (int i = 0; i < m_hexes.length; i++)
         {
-            if (m_hexes[i].contains(point))
+            if (m_hexes[i] != null && m_hexes[i].contains(point))
             {
                 x = i % m_size;
                 y = i / m_size;
@@ -78,7 +79,7 @@ public class BoardPainterHex
         return GoPoint.get(x, y);
     }
 
-    protected void drawGrid(Graphics graphics)
+    protected void drawGrid(Graphics graphics, ConstField[][] field)
     {
         if (m_cellSize < 2)
             return;
@@ -89,28 +90,38 @@ public class BoardPainterHex
         {
             for (int x = 0; x < m_size; ++x)
             {
-                // Calc the index for a bottom left 0;0 board
-                int index = x + (m_size - 1 - y) * m_size;
-                m_hexes[index] = getHex(getLocation(x, y), m_cellSize);
+                if (field[y][x].getColor() != REMOVED) {
+                    // Calc the index for a bottom left 0;0 board
+                    int index = x + (m_size - 1 - y) * m_size;
+                    m_hexes[index] = getHex(getLocation(x, y), m_cellSize);
 
-                // Corrects the points coordinates to match the neighbors
-                // Needed to avoid lines being doubled up
-                {
-                    if (y > 1) {
-                        if (m_hexes[index].ypoints[2] != m_hexes[index + m_size].ypoints[0])
-                            m_hexes[index].ypoints[2] = m_hexes[index + m_size].ypoints[0];
-                        if (m_hexes[index].ypoints[3] != m_hexes[index + m_size].ypoints[5])
-                            m_hexes[index].ypoints[3] = m_hexes[index + m_size].ypoints[5];
-                    }
-                    if (x > 0) {
-                        if (m_hexes[index].xpoints[4] != m_hexes[index - 1].xpoints[2]) {
-                            m_hexes[index].xpoints[4] = m_hexes[index - 1].xpoints[2];
-                            m_hexes[index].xpoints[5] = m_hexes[index - 1].xpoints[1];
+                    // Corrects the points coordinates to match the neighbors
+                    // Needed to avoid lines being doubled up
+                    {
+                        if (y > 1) {
+                            try {
+                                if (m_hexes[index].ypoints[2] != m_hexes[index + m_size].ypoints[0])
+                                    m_hexes[index].ypoints[2] = m_hexes[index + m_size].ypoints[0];
+                                if (m_hexes[index].ypoints[3] != m_hexes[index + m_size].ypoints[5])
+                                    m_hexes[index].ypoints[3] = m_hexes[index + m_size].ypoints[5];
+                            }
+                            catch (NullPointerException ignore) {
+                            }
+                        }
+                        if (x > 0) {
+                            try {
+                                if (m_hexes[index].xpoints[4] != m_hexes[index - 1].xpoints[2]) {
+                                    m_hexes[index].xpoints[4] = m_hexes[index - 1].xpoints[2];
+                                    m_hexes[index].xpoints[5] = m_hexes[index - 1].xpoints[1];
+                                }
+                            }
+                            catch (NullPointerException ignore) {
+                            }
                         }
                     }
-                }
 
-                graphics.drawPolygon(m_hexes[index]);
+                    graphics.drawPolygon(m_hexes[index]);
+                }
             }
         }
     }

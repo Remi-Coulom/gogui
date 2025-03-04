@@ -2,19 +2,16 @@
 
 package net.sf.gogui.go;
 
-import static net.sf.gogui.go.GoColor.BLACK;
-import static net.sf.gogui.go.GoColor.WHITE;
-
 import java.awt.*;
 import java.util.ArrayList;
 
 import net.sf.gogui.game.ConstNode;
 
-import static net.sf.gogui.go.GoColor.EMPTY;
-
 import net.sf.gogui.gtp.BoardParameters;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
+
+import static net.sf.gogui.go.GoColor.*;
 
 /**
  * final class containing the methods used if a gtp gameRuler is attached
@@ -164,6 +161,7 @@ public final class GenericBoard {
             PointList blacksSetup = new PointList();
             PointList whitesSetup = new PointList();
             PointList emptySetup = new PointList();
+            PointList removedSetup = new PointList();
             for (int i = 0; i < dimension.height; i++) {
                 int j = -1;
                 char c = ' ';
@@ -173,7 +171,7 @@ public final class GenericBoard {
                         c = position.charAt(nbChar);
                         nbChar++;
                     }
-                    while (c != 'X'&& c != 'O' && c != '.' && c != '\n');
+                    while (c != 'X' && c != 'O' && c != '.' && c != '?' && c != '\n');
 
                     if (c != '\n')
                     {
@@ -203,13 +201,20 @@ public final class GenericBoard {
                             emptySetup.add(empty);
                         }
                     }
+                    else if (c == '?')
+                    {
+                        GoPoint removed = GoPoint.get(j, dimension.height-i-1);
+                        if (board.getColor(removed) != REMOVED)
+                            removedSetup.add(removed);
+                    }
                 } while (j < dimension.width-1);
             }
             board.setPoints(blacksSetup, BLACK);
             board.setPoints(whitesSetup, WHITE);
             board.setPoints(emptySetup, EMPTY);
+            board.setPoints(removedSetup, REMOVED);
         }
-        catch (Exception e)
+        catch (Exception ignored)
         {
         }
     }

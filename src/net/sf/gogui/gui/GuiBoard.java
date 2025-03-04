@@ -2,14 +2,7 @@
 
 package net.sf.gogui.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
@@ -836,7 +829,7 @@ public final class GuiBoard
                                + m_dirty.y + " " + m_dirty.width + " "
                                + m_dirty.height);
         Graphics graphics = m_image.getGraphics();
-        graphics.setClip(m_dirty);
+        //graphics.setClip(m_dirty);
         m_painter.draw(graphics, m_field, m_imageWidth, m_showGrid);
         m_dirty = null;
     }

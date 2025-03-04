@@ -63,7 +63,7 @@ public class BoardPainterRect
         return GoPoint.get(x, y);
     }
 
-    protected void drawGrid(Graphics graphics) {
+    protected void drawGrid(Graphics graphics, ConstField[][] field) {
         if (m_cellSize < 2)
             return;
         graphics.setColor(Color.darkGray);
