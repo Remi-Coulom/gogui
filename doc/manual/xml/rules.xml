@@ -145,11 +145,11 @@ gogui-rules_captured_count
 <listitem>
 <simpara>
 The response of the command is a string containing an integer that specifies
-the board size of the game. The board in GoGui will always be non-resizable
+the board size of the game and eventually the geometry of the board (rect or hex). The board in GoGui will always be non-resizable
 when a ruler program is attached.
 Example :<programlisting>
 gogui-rules_board_size
-= 15
+= 15 hex
 </programlisting>
 </simpara>
 </listitem>
