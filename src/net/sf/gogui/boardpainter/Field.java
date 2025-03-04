@@ -375,6 +375,7 @@ public class Field
             Rectangle bound = m_polygon.getBounds();
             m_graphics.setClip(bound);
             m_graphics.fillPolygon(m_polygon);
+            m_polygon.translate(x , y);
         }
         else
             System.err.println("Unknown geometry: " + m_geometry);
