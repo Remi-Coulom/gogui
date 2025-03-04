@@ -21,7 +21,7 @@ public class BoardUpdater
 
     public void update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
-        board.init(new BoardParameters(tree.getBoardSize())); // TODO: GameTree should probably have width & height
+        board.init(new BoardParameters(tree.getBoardSize(), tree.getBoardSize(), board.getParameters().geometry())); // TODO: GameTree should probably have width & height
         int handicap = tree.getGameInfoConst(currentNode).getHandicap();
         NodeUtil.getPathToRoot(currentNode, m_nodes);
         int nuMoves = 0;

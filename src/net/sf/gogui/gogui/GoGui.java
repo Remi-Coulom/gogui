@@ -408,6 +408,12 @@ ContextMenu.Listener, LiveGfx.Listener
         actionBackward(NodeUtil.getDepth(getCurrentNode()));
     }
 
+    private void newBoard(BoardParameters parameters)
+    {
+        actionNewGame(parameters);
+        m_prefs.putInt("boardsize", parameters.size());
+    }
+
     public void actionBoardSize(int size)
     {
         if (! checkCommandInProgress())
@@ -1031,7 +1037,7 @@ ContextMenu.Listener, LiveGfx.Listener
         {
             SgfReader reader = new SgfReader(in, null, null, 0);
             GameTree tree = reader.getTree();
-            m_game.init(tree);
+            m_game.init(getBoard().getParameters(), tree);
         }
         catch (SgfError e)
         {
@@ -2882,10 +2888,9 @@ ContextMenu.Listener, LiveGfx.Listener
                     if (m_gtp.isSupported("gogui-rules_board_size"))
                     {
                      BoardParameters parameters = BoardParameters.get(m_gtp.send("gogui-rules_board_size"));
-
                      if (!parameters.equals(getBoardParameters()))
                      {
-                        actionBoardSize(parameters.size()); // TODO: For now, we only support square boards
+                         newBoard(parameters);
                      }
                     }
 
@@ -3673,7 +3678,7 @@ ContextMenu.Listener, LiveGfx.Listener
             parser.parse(reader);
             GameTree tree =
                     NodeUtil.makeTreeFromPosition(null, parser.getBoard());
-            m_game.init(tree);
+            m_game.init(getBoard().getParameters(), tree);
         }
         catch (ParseError e)
         {
@@ -3906,9 +3911,10 @@ ContextMenu.Listener, LiveGfx.Listener
                 runnable.run(null);
             GameTree tree = runnable.getTree();
             int size = tree.getBoardSize();
-            initGame(new BoardParameters(size, size, "rect")); // TODO: Needs to be changed when we support non-square boards
+            BoardParameters parameters = new BoardParameters(size, size, "rect");  // TODO: Needs to be changed when we support non-square boards
+            initGame(parameters);
             m_menuBar.addRecent(file);
-            m_game.init(tree);
+            m_game.init(parameters, tree);
             initGtp();
             if (move > 0)
             {

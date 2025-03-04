@@ -596,7 +596,7 @@ public class TwoGtp
                 System.err.println("Loaded opening " + m_openingFile);
             if (m_openings.getBoardSize() != parameters.size()) // TODO: Need rework
                 throw new GtpError("Wrong board size: " + m_openingFile);
-            m_game.init(m_openings.getTree());
+            m_game.init(parameters, m_openings.getTree());
             m_game.setKomi(m_komi);
             m_lastOpeningNode = NodeUtil.getLast(getTree().getRootConst());
             // TODO: Check that root node contains no setup stones, if

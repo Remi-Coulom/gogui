@@ -32,7 +32,7 @@ public class Game
         int boardSize = tree.getBoardSize();
         m_board = new Board(new BoardParameters(boardSize));
         m_clock = new Clock();
-        init(tree);
+        init(m_board.getParameters(), tree);
     }
 
     /** Add a mark property to current node. */
@@ -141,14 +141,14 @@ public class Game
     public final void init(BoardParameters parameters, Komi komi, ConstPointList handicap,
                            String rules, TimeSettings timeSettings)
     {
-        init(new GameTree(parameters.size(), komi, handicap, rules, timeSettings)); // TODO: GameTree should probably take width & height as parameters
+        init(parameters, new GameTree(parameters.size(), komi, handicap, rules, timeSettings)); // TODO: GameTree should probably take width & height as parameters
     }
 
-    public final void init(GameTree tree)
+    public final void init(BoardParameters parameters, GameTree tree)
     {
         m_tree = tree;
         m_current = m_tree.getRoot();
-        updateBoard();
+        updateBoard(parameters);
         updateClock();
         m_clock.reset();
         m_clock.halt();
@@ -421,6 +421,12 @@ public class Game
         if (m_board.isGameRulerAttached())
             GenericBoard.copyBoardState(m_board.getGameRuler(), m_current, m_board);
         m_board.setToMove(getToMove());
+    }
+
+    private void updateBoard(BoardParameters parameters)
+    {
+        m_board.init(parameters);
+        updateBoard();
     }
 
     private void updateClock()
