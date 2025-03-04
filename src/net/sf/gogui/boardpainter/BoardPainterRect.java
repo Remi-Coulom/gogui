@@ -117,7 +117,7 @@ public class BoardPainterRect
     }
 
     protected void drawGridLabels(Graphics graphics) {
-        drawGridLabels(graphics, m_fieldOffset);
+        drawGridLabels(graphics, m_fieldOffset, 0);
     }
 
     protected Polygon getPolygon(int x, int y) { return null; }

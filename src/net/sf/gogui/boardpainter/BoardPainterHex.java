@@ -173,7 +173,7 @@ public class BoardPainterHex
     }
 
     protected void drawGridLabels(Graphics graphics) {
-        drawGridLabels(graphics, m_fieldOffsetX);
+        drawGridLabels(graphics, m_fieldOffsetX, m_cellSize / 2);
     }
 
     protected Polygon getPolygon(int x, int y)

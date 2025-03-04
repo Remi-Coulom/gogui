@@ -96,42 +96,44 @@ public abstract class BoardPainter
 
     protected abstract void drawGridLabels(Graphics graphics);
 
-    protected void drawGridLabels(Graphics graphics, int fieldOffset)
+    protected void drawGridLabels(Graphics graphics, int fieldOffset, int xOffset)
     {
         if (m_cellSize < 15)
             return;
         graphics.setColor(m_gridLabelColor);
         setFont(graphics, m_cellSize);
-        int offset = (m_cellSize + fieldOffset) / 2;
+        int flipOffset = (m_cellSize + fieldOffset) / 2;
         Point point;
         for (int x = 0; x < m_size; ++x) {
             String string = GoPoint.xToString(x);
             point = getLocation(x, 0);
+            point.x += xOffset;
             if (m_flipHorizontal)
-                point.y -= offset;
+                point.y -= flipOffset;
             else
-                point.y += offset;
+                point.y += flipOffset;
             drawLabel(graphics, point, string);
             point = getLocation(x, m_size - 1);
+            point.x -= xOffset;
             if (m_flipHorizontal)
-                point.y += offset;
+                point.y += flipOffset;
             else
-                point.y -= offset;
+                point.y -= flipOffset;
             drawLabel(graphics, point, string);
         }
         for (int y = 0; y < m_size; ++y) {
             String string = Integer.toString(y + 1);
             point = getLocation(0, y);
             if (m_flipVertical)
-                point.x += offset;
+                point.x += flipOffset;
             else
-                point.x -= offset;
+                point.x -= flipOffset;
             drawLabel(graphics, point, string);
             point = getLocation(m_size - 1, y);
             if (m_flipVertical)
-                point.x -= offset;
+                point.x -= flipOffset;
             else
-                point.x += offset;
+                point.x += flipOffset;
             drawLabel(graphics, point, string);
         }
     }
