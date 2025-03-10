@@ -21,15 +21,15 @@ Screenshots
 
 Policy visualization with analyze commands:
 
-![gogui_policy](https://github.com/Remi-Coulom/gogui/Screenshot/go_policy.png)
+![gogui_policy](screenshot/go_policy.png)
 
 Hexagonal Board for Hex and Yavalath:
-
-![gogui_hex](https://github.com/Remi-Coulom/gogui/Screenshot/hex.png) ![gogui_yavalath](https://github.com/Remi-Coulom/gogui/Screenshot/yavalath.png)
+![gogui_hex](screenshot/hex.png)
+![gogui_yavalath](screenshot/yavalath.png)
 
 Chess engine displaying its board:
 
-![gogui_chess](https://github.com/Remi-Coulom/gogui/Screenshot/gogui_chess.jpg)
+![gogui_chess](screenshot/gogui_chess.jpg)
 
 Download and Install
 --------------------
