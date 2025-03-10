@@ -2,6 +2,9 @@
 
 package net.sf.gogui.gui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.prefs.Preferences;
@@ -60,11 +63,24 @@ public final class Program
         ArrayList<Program> programs = new ArrayList<Program>();
         String type = (gameRuler ? "ruler" : "program");
 
+        // Try to load exported programs
+        if (!gameRuler) {
+            String path = System.getProperty("user.home") + File.separator + ".gogui-programs";
+            try {
+                FileInputStream prefsFile = new FileInputStream(path);
+                Preferences.importPreferences(prefsFile);
+            }
+            catch (Exception ignored)
+            {
+            }
+        }
+
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type);
         if (prefs == null) {
             System.err.println("Could not find prefs for " + type);
             return programs;
         }
+
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {

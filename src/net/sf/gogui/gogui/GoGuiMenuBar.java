@@ -374,6 +374,7 @@ public class GoGuiMenuBar
         menu.add(actions.m_actionExportPng);
         menu.add(actions.m_actionExportTextPosition);
         menu.add(actions.m_actionExportTextPositionToClipboard);
+        menu.add(actions.m_actionExportPrograms);
         return menu;
     }
 

@@ -211,6 +211,11 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionExportTextPositionToClipboard(); } };
 
+    public final GuiAction m_actionExportPrograms =
+            new GuiAction(i18n("ACT_EXPORT_PROGRAMS")) {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionExportPrograms(); } };
+
     public final GuiAction m_actionFind =
         new GuiAction(i18n("ACT_FIND"), null, KeyEvent.VK_F) {
             public void actionPerformed(ActionEvent e) {

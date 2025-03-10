@@ -110,13 +110,7 @@ import net.sf.gogui.text.TextParser;
 import net.sf.gogui.text.ParseError;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
-import net.sf.gogui.util.ErrorMessage;
-import net.sf.gogui.util.FileUtil;
-import net.sf.gogui.util.ObjectUtil;
-import net.sf.gogui.util.LineReader;
-import net.sf.gogui.util.Platform;
-import net.sf.gogui.util.ProgressShow;
-import net.sf.gogui.util.StringUtil;
+import net.sf.gogui.util.*;
 import net.sf.gogui.version.Version;
 
 /** Graphical user interface to a Go program. */
@@ -717,6 +711,21 @@ ContextMenu.Listener, LiveGfx.Listener
     public void actionExportTextPositionToClipboard()
     {
         GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false, false));
+    }
+
+    public void actionExportPrograms()
+    {
+        String path = System.getProperty("user.home") + File.separator + ".gogui-programs";
+        try {
+            FileOutputStream prefsFile = new FileOutputStream(path);
+            Preferences programs = PrefUtil.getNode("net/sf/gogui/gui/program");
+            programs.exportSubtree(prefsFile);
+            showInfo("Programs list exported", "", false);
+        }
+        catch (Exception e)
+        {
+            showError(i18n("MSG_EXPORT_FAILED"), e);
+        }
     }
 
     public void actionFind()
