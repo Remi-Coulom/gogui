@@ -4,6 +4,28 @@
 <revhistory>
 
 <revision>
+    <revnumber>1.6.0</revnumber>
+    <date>2025-03-11</date>
+    <authorinitials>Rémi</authorinitials>
+    <revdescription>
+        <itemizedlist>
+
+            <listitem>
+                <simpara>
+                    Add support for hexagonal games like hex or yavalath (see gogui-rules_board_size for more details)
+                </simpara>
+            </listitem>
+            <listitem>
+                <simpara>
+                    Preferences are now stored in a file (resets older preferences) and programs list can be exported
+                </simpara>
+            </listitem>
+
+        </itemizedlist>
+    </revdescription>
+</revision>
+
+<revision>
 <revnumber>1.5.4</revnumber>
 <date>2023-11-14</date>
 <authorinitials>Rémi</authorinitials>
