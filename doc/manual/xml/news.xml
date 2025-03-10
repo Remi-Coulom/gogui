@@ -17,7 +17,7 @@
             </listitem>
             <listitem>
                 <simpara>
-                    Preferences are now stored in a file (resets older preferences) and programs list can be exported
+                    Preferences are now stored in a file (resets older preferences) and programs list can be exported (issue #7)
                 </simpara>
             </listitem>
 
