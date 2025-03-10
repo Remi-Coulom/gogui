@@ -16,21 +16,6 @@ extend GoGui with new custom commands that can be used to display information
 graphically on the board, or open dialog boxes to set engine parameters.
  - Tools such as [gogui-twogtp](https://www.kayufu.com/gogui/reference-twogtp.html) can be used to run matches between two programs and collect statistics.
 
-Screenshots
------------
-
-Policy visualization with analyze commands:
-
-![gogui_policy](screenshot/go_policy.png)
-
-Hexagonal Board for Hex and Yavalath:
-![gogui_hex](screenshot/hex.png)
-![gogui_yavalath](screenshot/yavalath.png)
-
-Chess engine displaying its board:
-
-![gogui_chess](screenshot/gogui_chess.jpg)
-
 Download and Install
 --------------------
 
@@ -48,6 +33,21 @@ Building from Source
 --------------------
 
 Commands for building gogui from source in Ubuntu can be found in [ubuntu_setup.sh](ubuntu_setup.sh). You may have to adjust this script to build on other systems.
+
+Screenshots
+-----------
+
+Policy visualization with analyze commands:
+
+![gogui_policy](screenshot/go_policy.png)
+
+Hexagonal Board for Hex and Yavalath:
+![gogui_hex](screenshot/hex.png)
+![gogui_yavalath](screenshot/yavalath.png)
+
+Chess engine displaying its board:
+
+![gogui_chess](screenshot/gogui_chess.jpg)
 
 Note
 ----
