@@ -5,7 +5,7 @@ Build file for Apache Ant (http://ant.apache.org/)
 
 <project name="GoGui" default="build">
 
-<property name="version" value="1.5.4"/>
+<property name="version" value="1.6.0"/>
 
 <tstamp>
   <format property="dstamp" pattern="yyyy-MM-dd" timezone="UCT"/>
@@ -180,7 +180,7 @@ Build file for Apache Ant (http://ant.apache.org/)
 <target name="compile" depends="depend,version,doc">
 <mkdir dir="build"/>
 <mkdir dir="build/classes"/>
-<javac srcdir="src" destdir="build/classes" source="1.8" target="1.8"
+<javac srcdir="src" destdir="build/classes" source="8" target="8" release="8"
  deprecation="true" debug="true" listfiles="yes" includeAntRuntime="false">
 <compilerarg value="-Xlint:unchecked"/>
 </javac>

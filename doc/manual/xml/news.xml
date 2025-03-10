@@ -12,7 +12,7 @@
 
             <listitem>
                 <simpara>
-                    Add support for hexagonal games like hex or yavalath (see gogui-rules_board_size for more details)
+                    Add support for games with hexagonal board tiling
                 </simpara>
             </listitem>
             <listitem>

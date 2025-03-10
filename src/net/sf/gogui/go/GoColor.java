@@ -113,11 +113,21 @@ public enum GoColor
 
     static
     {
-        BLACK_WHITE = List.of(BLACK, WHITE);
+        List<GoColor> blackWhite = new ArrayList<GoColor>(2);
+        blackWhite.add(BLACK);
+        blackWhite.add(WHITE);
+        BLACK_WHITE = Collections.unmodifiableList(blackWhite);
 
-        WHITE_BLACK = List.of(WHITE, BLACK);
+        List<GoColor> whiteBlack = new ArrayList<GoColor>(2);
+        whiteBlack.add(WHITE);
+        whiteBlack.add(BLACK);
+        WHITE_BLACK = Collections.unmodifiableList(whiteBlack);
 
-        BLACK_WHITE_EMPTY = List.of(BLACK, WHITE, EMPTY);
+        List<GoColor> blackWhiteEmpty = new ArrayList<GoColor>(3);
+        blackWhiteEmpty.add(BLACK);
+        blackWhiteEmpty.add(WHITE);
+        blackWhiteEmpty.add(EMPTY);
+        BLACK_WHITE_EMPTY = Collections.unmodifiableList(blackWhiteEmpty);
     }
 
     /** Return color name if used for specifying player.
