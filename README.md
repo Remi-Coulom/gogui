@@ -42,8 +42,10 @@ Policy visualization with analyze commands:
 ![gogui_policy](screenshot/go_policy.png)
 
 Hexagonal Board for Hex and Yavalath:
-![gogui_hex](screenshot/hex.png)
-![gogui_yavalath](screenshot/yavalath.png)
+<p float="left">
+  <img src="screenshot/hex.png" width="49%" />
+  <img src="screenshot/yavalath.png" width="49%" />
+</p>
 
 Chess engine displaying its board:
 
