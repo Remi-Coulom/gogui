@@ -467,6 +467,7 @@ public class GoGuiMenuBar
         menu.add(actions.m_actionImportTextPosition);
         menu.add(actions.m_actionImportTextPositionFromClipboard);
         menu.add(actions.m_actionImportSgfFromClipboard);
+        menu.add(actions.m_actionImportPrograms);
         return menu;
     }
 

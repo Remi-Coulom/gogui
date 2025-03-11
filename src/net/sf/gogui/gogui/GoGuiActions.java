@@ -342,6 +342,11 @@ public class GoGuiActions
             public void actionPerformed(ActionEvent e) {
                 m_goGui.actionImportSgfFromClipboard(); } };
 
+    public final GuiAction m_actionImportPrograms =
+            new GuiAction(i18n("ACT_IMPORT_PROGRAMS")) {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionImportPrograms(); } };
+
     public final GuiAction m_actionInterrupt =
         (Platform.isMac() ?
          /* Don't use escape shortcut on Mac, produces a wrong

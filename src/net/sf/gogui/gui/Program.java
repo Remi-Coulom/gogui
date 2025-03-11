@@ -63,18 +63,6 @@ public final class Program
         ArrayList<Program> programs = new ArrayList<Program>();
         String type = (gameRuler ? "ruler" : "program");
 
-        // Try to load exported programs
-        if (!gameRuler) {
-            String path = System.getProperty("user.home") + File.separator + ".gogui-programs";
-            try {
-                FileInputStream prefsFile = new FileInputStream(path);
-                Preferences.importPreferences(prefsFile);
-            }
-            catch (Exception ignored)
-            {
-            }
-        }
-
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type);
         if (prefs == null) {
             System.err.println("Could not find prefs for " + type);

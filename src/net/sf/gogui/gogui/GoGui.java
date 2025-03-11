@@ -13,17 +13,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URL;
 import static java.text.MessageFormat.format;
 import java.util.ArrayList;
@@ -1091,6 +1081,24 @@ ContextMenu.Listener, LiveGfx.Listener
             showError(i18n("MSG_NO_TEXT_IN_CLIPBOARD"), "", false);
         else
             importTextPosition(new StringReader(text));
+    }
+
+    public void actionImportPrograms()
+    {
+        File file = FileDialogs.showOpen(this, i18n("TIT_IMPORT_PROGRAMS"));
+        if (file == null)
+            return;
+
+        try {
+            FileInputStream prefsFile = new FileInputStream(file);
+            Preferences.importPreferences(prefsFile);
+            m_programs = Program.load(false);
+            m_menuBar.setPrograms(m_programs, false);
+        }
+        catch (Exception e)
+        {
+            showError(i18n("MSG_IMPORT_FAILED"), e);
+        }
     }
 
     public void actionInterrupt()
