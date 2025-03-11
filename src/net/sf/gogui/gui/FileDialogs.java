@@ -17,10 +17,12 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,11 +33,14 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.sf.gogui.gamefile.GameFileFilter;
+import net.sf.gogui.gamefile.ProgramFileFilter;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
+
 import static net.sf.gogui.gui.I18n.i18n;
 
 /** File dialogs. */
@@ -43,32 +48,43 @@ public final class FileDialogs
 {
     public static File showOpen(Component parent, String title)
     {
-        return showFileChooser(parent, Type.FILE_OPEN, null, false, title);
+        return showFileChooser(parent, Type.FILE_OPEN, null, FILTER.NONE, title);
     }
 
     public static File showOpenSgf(Component parent)
     {
-        return showFileChooser(parent, Type.FILE_OPEN, null, true, null);
+        return showFileChooser(parent, Type.FILE_OPEN, s_lastSGFFile, FILTER.SGF, null);
+    }
+
+    public static File showOpenProgram(Component parent, String title)
+    {
+        return showFileChooser(parent, Type.FILE_OPEN, s_lastProgramFile, FILTER.XML, title);
     }
 
     public static File showSave(Component parent, String title,
                                 MessageDialogs messageDialogs)
     {
-        return showFileChooserSave(parent, null, false, title,
+        return showFileChooserSave(parent, null, FILTER.NONE, title,
                                    messageDialogs);
     }
 
     public static File showSaveSgf(Frame parent,
                                    MessageDialogs messageDialogs)
     {
-        return showFileChooserSave(parent, s_lastFile, true, null,
+        return showFileChooserSave(parent, s_lastSGFFile, FILTER.SGF, null,
                                    messageDialogs);
+    }
+
+    public static File showSaveProgram(Frame parent, String title, MessageDialogs messageDialogs)
+    {
+        return showFileChooserSave(parent, s_lastProgramFile, FILTER.XML, title,
+                                    messageDialogs);
     }
 
     /** File selection, unknown whether for load or save. */
     public static File showSelectFile(Component parent, String title)
     {
-        return showFileChooser(parent, Type.FILE_SELECT, s_lastFile, false,
+        return showFileChooser(parent, Type.FILE_SELECT, s_lastFile, FILTER.NONE,
                                title);
     }
 
@@ -93,6 +109,13 @@ public final class FileDialogs
         FILE_SELECT
     }
 
+    private enum FILTER
+    {
+        SGF,
+        XML,
+        NONE
+    }
+
     /** Use native AWT-dialogs.
         They are used on Mac OS X because JFileChooser looks too different
         from the native dialogs (Java 1.5), and on Windows because
@@ -102,6 +125,8 @@ public final class FileDialogs
         (Platform.isMac() || Platform.isWindows());
 
     private static File s_lastFile;
+    private static File s_lastSGFFile;
+    private static File s_lastProgramFile;
 
     /** Make constructor unavailable; class is for namespace only. */
     private FileDialogs()
@@ -121,7 +146,7 @@ public final class FileDialogs
     }
 
     private static File showFileChooser(Component parent, Type type,
-                                        File lastFile, boolean setSgfFilter,
+                                        File lastFile, FILTER filter,
                                         String title)
     {
         // Use native dialogs for some platforms. but not for type select
@@ -129,20 +154,20 @@ public final class FileDialogs
         if (NATIVE_DIALOGS && type != Type.FILE_SELECT)
         {
             Frame frame = findParentFrame(parent);
-            return showFileChooserAWT(frame, type, title);
+            return showFileChooserAWT(frame, type, filter, title);
         }
-        return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
+        return showFileChooserSwing(parent, type, lastFile, filter,
                                     title);
     }
 
     private static File showFileChooserSave(Component parent,
                                             File lastFile,
-                                            boolean setSgfFilter,
+                                            FILTER filter,
                                             String title,
                                             MessageDialogs messageDialogs)
     {
         File file = showFileChooser(parent, Type.FILE_SAVE, lastFile,
-                                    setSgfFilter, title);
+                                    filter, title);
         if (NATIVE_DIALOGS)
             // Overwrite warning is already part of FileDialog
             return file;
@@ -159,7 +184,7 @@ public final class FileDialogs
                                                   i18n("LB_REPLACE"), true))
                 {
                     file = showFileChooser(parent, Type.FILE_SAVE, lastFile,
-                                           setSgfFilter, title);
+                                           filter, title);
                     continue;
                 }
             }
@@ -168,7 +193,7 @@ public final class FileDialogs
         return file;
     }
 
-    private static File showFileChooserAWT(Frame parent, Type type,
+    private static File showFileChooserAWT(Frame parent, Type type, FILTER filter,
                                            String title)
     {
         FileDialog dialog = new FileDialog(parent);
@@ -192,15 +217,17 @@ public final class FileDialogs
             mode = FileDialog.SAVE;
         dialog.setMode(mode);
         /* Commented out, because there is no way to change the filter by the
-           user (at least not on Linux)
-        if (setSgfFilter)
-            dialog.setFilenameFilter(new FilenameFilter() {
-                    public boolean accept(File dir, String name)
-                    {
-                        return name.toLowerCase().endsWith("sgf");
-                    }
-                });
-        */
+           user (at least not on Linux) */
+        switch (filter)
+        {
+            case SGF:
+                dialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith("sgf"));
+                break;
+
+            case XML:
+                dialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith("xml"));
+
+        }
         //dialog.setLocationRelativeTo(parent); // Java <= 1.4
         dialog.setLocationByPlatform(true);
         dialog.setVisible(true);
@@ -211,11 +238,11 @@ public final class FileDialogs
 
     private static File showFileChooserSwing(Component parent, Type type,
                                              File lastFile,
-                                             boolean setSgfFilter,
+                                             FILTER filter,
                                              String title)
     {
         JFileChooser chooser;
-        if (s_lastFile == null)
+        if (lastFile == null)
         {
             if (Platform.isMac())
                 // user.dir is application directory on Mac, which is bad
@@ -226,22 +253,33 @@ public final class FileDialogs
                 chooser = new JFileChooser(System.getProperty("user.dir"));
         }
         else
-            chooser = new JFileChooser(s_lastFile);
+            chooser = new JFileChooser(lastFile);
         chooser.setMultiSelectionEnabled(false);
-        javax.swing.filechooser.FileFilter filter = new GameFileFilter();
-        chooser.addChoosableFileFilter(filter);
-        if (setSgfFilter)
+
+        switch (filter)
         {
-            chooser.setFileFilter(filter);
-            if (ThumbnailPlatform.checkThumbnailSupport())
-            {
-                SgfPreview preview = new SgfPreview();
-                chooser.setAccessory(preview);
-                chooser.addPropertyChangeListener(preview);
-            }
+            case SGF:
+                javax.swing.filechooser.FileFilter SGTFilter = new GameFileFilter();
+                chooser.addChoosableFileFilter(SGTFilter);
+                chooser.setFileFilter(SGTFilter);
+                if (ThumbnailPlatform.checkThumbnailSupport())
+                {
+                    SgfPreview preview = new SgfPreview();
+                    chooser.setAccessory(preview);
+                    chooser.addPropertyChangeListener(preview);
+                }
+                break;
+
+            case XML:
+                javax.swing.filechooser.FileFilter XMFilter = new ProgramFileFilter();
+                chooser.addChoosableFileFilter(XMFilter);
+                chooser.setFileFilter(XMFilter);
+                break;
+
+            default:
+                chooser.setFileFilter(chooser.getAcceptAllFileFilter());
         }
-        else
-            chooser.setFileFilter(chooser.getAcceptAllFileFilter());
+
         if (type == Type.FILE_SAVE)
         {
             if (lastFile != null && lastFile.isFile() && lastFile.exists())
@@ -264,8 +302,20 @@ public final class FileDialogs
         }
         if (ret != JFileChooser.APPROVE_OPTION)
             return null;
+
         File file = chooser.getSelectedFile();
-        s_lastFile = file;
+
+        switch (filter) {
+            case SGF:
+                s_lastSGFFile = file;
+                break;
+
+            case XML:
+                if (!Objects.equals(FileUtil.getExtension(file), "xml"))
+                    file = new File(file + ".xml");
+                s_lastProgramFile = file;
+                break;
+        }
         return file;
     }
 }

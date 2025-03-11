@@ -705,7 +705,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
     public void actionExportPrograms()
     {
-        File file = showSave(i18n("MSG_EXPORT_PROGRAMS"));
+        File file = showSaveProgram(i18n("MSG_EXPORT_PROGRAMS"));
         if (file == null)
             return;
         try {
@@ -1085,7 +1085,7 @@ ContextMenu.Listener, LiveGfx.Listener
 
     public void actionImportPrograms()
     {
-        File file = FileDialogs.showOpen(this, i18n("TIT_IMPORT_PROGRAMS"));
+        File file = FileDialogs.showOpenProgram(this, i18n("TIT_IMPORT_PROGRAMS"));
         if (file == null)
             return;
 
@@ -4649,6 +4649,11 @@ ContextMenu.Listener, LiveGfx.Listener
     private File showSave(String title)
     {
         return FileDialogs.showSave(this, title, m_messageDialogs);
+    }
+
+    private File showSaveProgram(String title)
+    {
+        return FileDialogs.showSaveProgram(this, title, m_messageDialogs);
     }
 
     private void showShell()
