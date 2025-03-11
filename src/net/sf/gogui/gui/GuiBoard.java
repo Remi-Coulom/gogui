@@ -296,7 +296,7 @@ public final class GuiBoard
         else if (geometry.equals("hex"))
             return new BoardPainterHex();
         else {
-            System.err.println("Unknown geometry: " + geometry);
+            System.err.println("Unknown geometry, defaulting to Rect");
             return new BoardPainterRect();
         }
     }
