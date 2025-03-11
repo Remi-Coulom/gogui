@@ -715,12 +715,14 @@ ContextMenu.Listener, LiveGfx.Listener
 
     public void actionExportPrograms()
     {
-        String path = System.getProperty("user.home") + File.separator + ".gogui-programs";
+        File file = showSave(i18n("MSG_EXPORT_PROGRAMS"));
+        if (file == null)
+            return;
         try {
-            FileOutputStream prefsFile = new FileOutputStream(path);
+            FileOutputStream prefsFile = new FileOutputStream(file);
             Preferences programs = PrefUtil.getNode("net/sf/gogui/gui/program");
-            programs.exportSubtree(prefsFile);
-            showInfo("Programs list exported", "", false);
+            if (programs != null)
+                programs.exportSubtree(prefsFile);
         }
         catch (Exception e)
         {
