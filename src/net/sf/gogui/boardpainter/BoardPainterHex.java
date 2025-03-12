@@ -15,7 +15,6 @@ public class BoardPainterHex
 {
     public BoardPainterHex()
     {
-        System.out.println("Using Hex Painter");
         m_geometry = "hex";
         loadBackground("net/sf/gogui/images/wood.png");
     }

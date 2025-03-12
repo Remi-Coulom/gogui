@@ -65,7 +65,6 @@ public final class Program
 
         Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/" + type);
         if (prefs == null) {
-            System.err.println("Could not find prefs for " + type);
             return programs;
         }
 
