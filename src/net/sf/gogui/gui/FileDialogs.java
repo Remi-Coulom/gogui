@@ -48,7 +48,7 @@ public final class FileDialogs
 {
     public static File showOpen(Component parent, String title)
     {
-        return showFileChooser(parent, Type.FILE_OPEN, null, FILTER.NONE, title);
+        return showFileChooser(parent, Type.FILE_OPEN, s_lastFile, FILTER.NONE, title);
     }
 
     public static File showOpenSgf(Component parent)
@@ -232,6 +232,10 @@ public final class FileDialogs
                     dialog.setDirectory(s_lastProgramFile.getParent());
                 break;
 
+            default:
+                if (s_lastFile != null)
+                    dialog.setDirectory(s_lastFile.getParent());
+                break;
         }
         //dialog.setLocationRelativeTo(parent); // Java <= 1.4
         dialog.setLocationByPlatform(true);
