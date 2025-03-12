@@ -97,7 +97,7 @@ public class BoardPainterHex
                     // Corrects the points coordinates to match the neighbors
                     // Needed to avoid lines being doubled up
                     {
-                        if (y > 1) {
+                        if (y > 0) {
                             try {
                                 if (m_hexes[index].ypoints[2] != m_hexes[index + m_size].ypoints[0])
                                     m_hexes[index].ypoints[2] = m_hexes[index + m_size].ypoints[0];
@@ -153,22 +153,6 @@ public class BoardPainterHex
         hex.translate(point.x, point.y);
 
         return hex;
-
-        /*int[] xpoints = new int[4];
-        int[] ypoints = new int[4];
-
-        int center_x = size / 2;
-        int center_y = size / 2;
-        int offset = size / 2;
-
-        xpoints[0] = center_x - offset; ypoints[0] = center_y;
-        xpoints[1] = center_x;          ypoints[1] = center_y + offset;
-        xpoints[2] = center_x + offset; ypoints[2] = center_y;
-        xpoints[3] = center_x;          ypoints[3] = center_y - offset;
-
-        Polygon square = new Polygon(xpoints, ypoints, 4);
-        square.translate(point.x, point.y);
-        return square;*/
     }
 
     protected void drawGridLabels(Graphics graphics) {
