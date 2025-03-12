@@ -222,10 +222,15 @@ public final class FileDialogs
         {
             case SGF:
                 dialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith("sgf"));
+                if (s_lastSGFFile != null)
+                    dialog.setDirectory(s_lastSGFFile.getParent());
                 break;
 
             case XML:
                 dialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith("xml"));
+                if (s_lastProgramFile != null)
+                    dialog.setDirectory(s_lastProgramFile.getParent());
+                break;
 
         }
         //dialog.setLocationRelativeTo(parent); // Java <= 1.4
@@ -278,6 +283,7 @@ public final class FileDialogs
 
             default:
                 chooser.setFileFilter(chooser.getAcceptAllFileFilter());
+                break;
         }
 
         if (type == Type.FILE_SAVE)
@@ -314,6 +320,10 @@ public final class FileDialogs
                 if (!Objects.equals(FileUtil.getExtension(file), "xml"))
                     file = new File(file + ".xml");
                 s_lastProgramFile = file;
+                break;
+
+            default:
+                s_lastFile = file;
                 break;
         }
         return file;
