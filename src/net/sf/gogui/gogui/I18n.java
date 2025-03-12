@@ -13,7 +13,7 @@ final class I18n
         return s_bundle.getString(key);
     }
 
-    private static ResourceBundle s_bundle =
+    private static final ResourceBundle s_bundle =
         ResourceBundle.getBundle("net.sf.gogui.gogui.text",
                                  Locale.getDefault());
 
