@@ -194,6 +194,15 @@ but parses the text selection copied to the clipboard.
 </listitem>
 </varlistentry>
 
+ <varlistentry>
+  <term><guisubmenu>Import</guisubmenu> / <guimenuitem>Programs</guimenuitem></term>
+  <listitem>
+   <para>
+    Import a programs' list from an exported xml file
+   </para>
+  </listitem>
+ </varlistentry>
+
 <varlistentry>
 <term><guisubmenu>Export</guisubmenu> / <guimenuitem>SGF Position</guimenuitem></term>
 <listitem>
@@ -260,6 +269,15 @@ Export the current position as a text diagram to the clipboard.
 </para>
 </listitem>
 </varlistentry>
+
+ <varlistentry>
+  <term><guisubmenu>Export</guisubmenu> / <guimenuitem>Programs</guimenuitem></term>
+  <listitem>
+   <para>
+    Export all the programs in a xml file.
+   </para>
+  </listitem>
+ </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Print</guimenuitem></term>
