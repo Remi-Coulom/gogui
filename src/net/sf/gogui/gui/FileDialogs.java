@@ -149,15 +149,7 @@ public final class FileDialogs
                                         File lastFile, FILTER filter,
                                         String title)
     {
-        // Use native dialogs for some platforms. but not for type select
-        // There is no native dialog for select
-        if (NATIVE_DIALOGS && type != Type.FILE_SELECT)
-        {
-            Frame frame = findParentFrame(parent);
-            return showFileChooserAWT(frame, type, filter, title);
-        }
-        return showFileChooserSwing(parent, type, lastFile, filter,
-                                    title);
+        return showFileChooserSwing(parent, type, lastFile, filter, title);
     }
 
     private static File showFileChooserSave(Component parent,
@@ -191,58 +183,6 @@ public final class FileDialogs
             break;
         }
         return file;
-    }
-
-    private static File showFileChooserAWT(Frame parent, Type type, FILTER filter,
-                                           String title)
-    {
-        FileDialog dialog = new FileDialog(parent);
-        if (title == null)
-        {
-            switch (type)
-            {
-            case FILE_OPEN:
-                title = i18n("TIT_OPEN");
-                break;
-            case FILE_SAVE:
-                title = i18n("TIT_SAVE");
-                break;
-            default:
-                assert false;
-            }
-        }
-        dialog.setTitle(title);
-        int mode = FileDialog.LOAD;
-        if (type == Type.FILE_SAVE)
-            mode = FileDialog.SAVE;
-        dialog.setMode(mode);
-        /* Commented out, because there is no way to change the filter by the
-           user (at least not on Linux) */
-        switch (filter)
-        {
-            case SGF:
-                dialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith("sgf"));
-                if (s_lastSGFFile != null)
-                    dialog.setDirectory(s_lastSGFFile.getParent());
-                break;
-
-            case XML:
-                dialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith("xml"));
-                if (s_lastProgramFile != null)
-                    dialog.setDirectory(s_lastProgramFile.getParent());
-                break;
-
-            default:
-                if (s_lastFile != null)
-                    dialog.setDirectory(s_lastFile.getParent());
-                break;
-        }
-        //dialog.setLocationRelativeTo(parent); // Java <= 1.4
-        dialog.setLocationByPlatform(true);
-        dialog.setVisible(true);
-        if (dialog.getFile() == null)
-            return null;
-        return new File(dialog.getDirectory(), dialog.getFile());
     }
 
     private static File showFileChooserSwing(Component parent, Type type,
