@@ -5,7 +5,7 @@
 
 <revision>
     <revnumber>1.6.0</revnumber>
-    <date>2025-03-11</date>
+    <date>2025-03-12</date>
     <authorinitials>Rémi</authorinitials>
     <revdescription>
         <itemizedlist>
@@ -17,7 +17,12 @@
             </listitem>
             <listitem>
                 <simpara>
-                    Preferences are now stored in a file (resets older preferences) and programs list can be exported (issue #7)
+                    Preferences are now stored in ~/.gogui-prefs (if you were using a previous version of gogui, its settings will be reset)
+                </simpara>
+            </listitem>
+            <listitem>
+                <simpara>
+                    Ability to export and import the list of programs
                 </simpara>
             </listitem>
 
