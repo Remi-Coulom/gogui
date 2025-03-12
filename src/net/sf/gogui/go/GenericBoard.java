@@ -49,7 +49,7 @@ public final class GenericBoard {
             return false;
         String legalMoves = getLegalMoves(gameRuler);
         return ((legalMoves.contains("pass") && move.getPoint() == null) ||
-                (move.getColor().equals(GenericBoard.getSideToMove(gameRuler, move)) && legalMoves.matches(".*\\b(" + move.getPoint() + ")\\b.*")));
+                (move.getColor().equals(GenericBoard.getSideToMove(gameRuler, move)) && legalMoves.matches("(?s).*\\b(" + move.getPoint() + ")\\b.*")));
     }
 
     public static String getLegalMoves(GtpClientBase gameRuler) throws GtpError
@@ -80,7 +80,7 @@ public final class GenericBoard {
             gameRuler.sendPlay(move);
             GenericBoard.copyRulerBoardState(gameRuler, board);
             GenericBoard.setToMove(gameRuler, board, move);
-        } catch (GtpError e) {
+        } catch (GtpError ignored) {
         }
     }
 
@@ -126,7 +126,7 @@ public final class GenericBoard {
         } catch (GtpError e) {
             return;
         }
-        if (rulerBoardState.equals("")) return;
+        if (rulerBoardState.isEmpty()) return;
 
         BoardParameters parameters;
         try {
@@ -147,7 +147,7 @@ public final class GenericBoard {
                if (numbers.length > 1)
                    board.setCaptured(GoColor.BLACK, Integer.parseInt(numbers[1]));
            }
-           catch (GtpError e)
+           catch (GtpError ignored)
            {
            }
         }
@@ -230,7 +230,7 @@ public final class GenericBoard {
      */
     public static void copyBoardState(GtpClientBase gameRuler, ConstNode node, Board board)
     {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
         while (node.hasFather())
         {
             moves.add(node.getMove());
@@ -238,7 +238,7 @@ public final class GenericBoard {
         }
         try {
             GenericBoard.playFromBeginning(gameRuler, moves, board);
-        } catch (GtpError e) {
+        } catch (GtpError ignored) {
         }
     }
 
