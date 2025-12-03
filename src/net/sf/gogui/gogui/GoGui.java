@@ -2937,6 +2937,10 @@ ContextMenu.Listener, LiveGfx.Listener
                     Program.save(m_programs, false);
                     m_menuBar.setPrograms(m_programs, false);
                 }
+                // Send gogui version on startup
+                if (m_gtp.isSupported("gogui-version"))
+                    m_gtp.send("gogui-version " + Version.get());
+                // Get supported analyze commands
                 try
                 {
                     String programAnalyzeCommands
